@@ -68,7 +68,7 @@ export const NotionPageHeader: React.FC<{
                   link.url = currentPath.slice(0, -suffix.length)
                   return (
                     <components.Link
-                      href={link.url}
+                      href={currentPath.slice(0, -suffix.length)}
                       key={index}
                       className={cs(styles.navLink, 'breadcrumb', 'button')}
                     >
@@ -78,10 +78,10 @@ export const NotionPageHeader: React.FC<{
                 } else {
                   // if no, keep the link title as "English"
                   link.title = 'English'
-                  // and keep the link pageId as it is
+                  link.url = currentPath.slice(0, +suffix.length)
                   return (
                     <components.Link
-                      href={link.url}
+                      href={currentPath.slice(0, +suffix.length)}
                       key={index}
                       className={cs(styles.navLink, 'breadcrumb', 'button')}
                     >
