@@ -79,7 +79,6 @@ export const NotionPageHeader: React.FC<{
                   // if no, keep the link title as "English"
                   link.title = 'English'
                   // and keep the link pageId as it is
-                  link.url = link.url
                   return (
                     <components.Link
                       href={link.url}
