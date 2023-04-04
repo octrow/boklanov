@@ -37,12 +37,10 @@ const ToggleThemeButton = () => {
 export const NotionPageHeader: React.FC<{
   block: types.CollectionViewPageBlock | types.PageBlock
 }> = ({ block }) => {
-  const router = useRouter()
-  const { pathname } = router
-  // check if pathname has a subpath or not
-  const hasSubpath = pathname.includes('/')
   const { components, mapPageUrl } = useNotionContext()
-
+  const router = useRouter() // get the router object
+  const currentPath = router.asPath // get the current path
+  const suffix = '-en' // define the suffix
 
   if (navigationStyle === 'default') {
     return <Header block={block} />
@@ -60,14 +58,29 @@ export const NotionPageHeader: React.FC<{
                 return null
               }
 
+              // check if the link title is "English"
+              if (link.title === 'English') {
+                // check if the current path ends with "-en"
+                if (currentPath.endsWith(suffix)) {
+                  // if yes, change the link title to "Russian"
+                  link.title = 'Russian'
+                  // and change the link pageId to the current page without "-en"
+                  link.pageId = currentPath.slice(0, -suffix.length)
+                } else {
+                  // if no, keep the link title as "English"
+                  link.title = 'English'
+                  // and keep the link pageId as it is
+                  link.pageId = link.pageId
+                }
+              }
               if (link.pageId) {
                 return (
                   <components.PageLink
-                    href={mapPageUrl(link.pageId + (hasSubpath ? '-en' : ''))}
+                    href={mapPageUrl(link.pageId)}
                     key={index}
                     className={cs(styles.navLink, 'breadcrumb', 'button')}
                   >
-                    {hasSubpath ? 'English' : link.title}
+                    {link.title}
                   </components.PageLink>
                 )
               } else {
