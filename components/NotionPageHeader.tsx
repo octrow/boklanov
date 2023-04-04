@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useRouter } from 'next/router'
 
 import * as types from 'notion-types'
 import { IoMoonSharp } from '@react-icons/all-files/io5/IoMoonSharp'
@@ -36,7 +37,12 @@ const ToggleThemeButton = () => {
 export const NotionPageHeader: React.FC<{
   block: types.CollectionViewPageBlock | types.PageBlock
 }> = ({ block }) => {
+  const router = useRouter()
+  const { pathname } = router
+  // check if pathname has a subpath or not
+  const hasSubpath = pathname.includes('/')
   const { components, mapPageUrl } = useNotionContext()
+
 
   if (navigationStyle === 'default') {
     return <Header block={block} />
@@ -57,11 +63,11 @@ export const NotionPageHeader: React.FC<{
               if (link.pageId) {
                 return (
                   <components.PageLink
-                    href={mapPageUrl(link.pageId)}
+                    href={mapPageUrl(link.pageId + (hasSubpath ? '-en' : ''))}
                     key={index}
                     className={cs(styles.navLink, 'breadcrumb', 'button')}
                   >
-                    {link.title}
+                    {hasSubpath ? 'English' : link.title}
                   </components.PageLink>
                 )
               } else {
