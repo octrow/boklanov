@@ -65,12 +65,30 @@ export const NotionPageHeader: React.FC<{
                   // if yes, change the link title to "Russian"
                   link.title = 'Russian'
                   // and change the link pageId to the current page without "-en"
-                  link.pageId = currentPath.slice(0, -suffix.length)
+                  link.url = currentPath.slice(0, -suffix.length)
+                  return (
+                    <components.Link
+                      href={link.url}
+                      key={index}
+                      className={cs(styles.navLink, 'breadcrumb', 'button')}
+                    >
+                      {link.title}
+                    </components.Link>
+                  )
                 } else {
                   // if no, keep the link title as "English"
                   link.title = 'English'
                   // and keep the link pageId as it is
-                  link.pageId = link.pageId
+                  link.url = link.url
+                  return (
+                    <components.Link
+                      href={link.url}
+                      key={index}
+                      className={cs(styles.navLink, 'breadcrumb', 'button')}
+                    >
+                      {link.title}
+                    </components.Link>
+                  )
                 }
               }
               if (link.pageId) {
