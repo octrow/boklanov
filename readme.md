@@ -6,7 +6,7 @@
 
 Config: [site.config.ts](./site.config.ts)
 
-**Requirements**: Node.js >= 20 (Next.js 15, React 19, TypeScript 5.9)
+**Requirements**: Node.js >= 22 (Next.js 15, React 19, TypeScript 5.9)
 
 1. Clone repo
 2. Edit [site.config.ts](./site.config.ts) - set `rootNotionPageId`
