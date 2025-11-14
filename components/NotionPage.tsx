@@ -9,7 +9,7 @@ import { PageBlock } from 'notion-types'
 import { formatDate, getBlockTitle, getPageProperty } from 'notion-utils'
 import BodyClassName from 'react-body-classname'
 import { NotionRenderer } from 'react-notion-x'
-import TweetEmbed from 'react-tweet-embed'
+import { Tweet as ReactTweet } from 'react-tweet'
 import { useSearchParam } from 'react-use'
 
 import * as config from '@/lib/config'
@@ -98,7 +98,7 @@ const Modal = dynamic(
 )
 
 const Tweet = ({ id }: { id: string }) => {
-  return <TweetEmbed tweetId={id} />
+  return <ReactTweet id={id} />
 }
 
 const propertyLastEditedTimeValue = (
@@ -202,6 +202,16 @@ export const NotionPage: React.FC<types.PageProps> = ({
 
   const footer = React.useMemo(() => <Footer />, [])
 
+  // Add important objects to the window global for easy debugging
+  React.useEffect(() => {
+    if (!config.isServer) {
+      const g = window as any
+      g.pageId = pageId
+      g.recordMap = recordMap
+      g.block = block
+    }
+  }, [pageId, recordMap, block])
+
   if (router.isFallback) {
     return <Loading />
   }
@@ -219,14 +229,6 @@ export const NotionPage: React.FC<types.PageProps> = ({
     rootNotionPageId: site.rootNotionPageId,
     recordMap
   })
-
-  if (!config.isServer) {
-    // add important objects to the window global for easy debugging
-    const g = window as any
-    g.pageId = pageId
-    g.recordMap = recordMap
-    g.block = block
-  }
 
   const canonicalPageUrl =
     !config.isDev && getCanonicalPageUrl(site, recordMap)(pageId)
