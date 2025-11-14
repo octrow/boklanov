@@ -6,7 +6,9 @@
 
 **All config is defined in [site.config.ts](./site.config.ts).**
 
-This project requires a recent version of Node.js (we recommend >= 16).
+This project requires **Node.js >= 24** (we recommend the latest LTS version).
+
+> **Note**: This project has been upgraded to use the latest versions of Next.js 15, React 19, and TypeScript 5.9, which require Node.js v24 or higher.
 
 1. Fork / clone this repo
 2. Change a few values in [site.config.ts](./site.config.ts)
