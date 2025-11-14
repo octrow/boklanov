@@ -14,7 +14,8 @@ export default siteConfig({
   author: 'Roman Boklanov',
 
   // open graph metadata (optional)
-  description: 'Портфолио режиссерских и актёрских работ Романа Бокланова, личный сайт',
+  description:
+    'Портфолио режиссерских и актёрских работ Романа Бокланова, личный сайт',
 
   // social usernames (optional)
   // instagram: 'boklanovroman',
@@ -50,7 +51,7 @@ export default siteConfig({
   //    '/Jagger-Jagger': '20a595cc8c4843d7b4281e4b56fc6ff4',
   //    '/Jagger-Jagger-en': '616c45a046534a0e8e47c6b4a45a4f26',
   //    '/Nikita-looking-for-the-sea': 'd42689bd05c2410db6c679d1b575088e',
-  //    '/Nikita-looking-for-the-sea-en': '310ad30a540f4ab282a55f5308f63303',    
+  //    '/Nikita-looking-for-the-sea-en': '310ad30a540f4ab282a55f5308f63303',
   //    '/Aiaccio': 'e3a5503b611f4e0db3973d489b2b010a',
   //    '/Aiaccio-en': '6f9f7b00c42d4c9d961ac0a5454b1240',
   //    '/Plaster': 'd9a81d6aa35f42ebacfc04d68b7c6141',
