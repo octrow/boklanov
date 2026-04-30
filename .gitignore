@@ -37,3 +37,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# claude code local settings (project skills are committed; local settings are not)
+.claude/settings.local.json
+
+# python bytecode (from skill scripts)
+__pycache__/
+*.pyc
