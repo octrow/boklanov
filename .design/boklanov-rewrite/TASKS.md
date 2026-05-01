@@ -730,49 +730,51 @@ production build before D1.
 
 ### Round 2 — Theatrical move (~1.5–2 days, after R2 / before D1)
 
-- [ ] **DA-2.A — Production credits block (§3.B)**: Reframe the
-  existing credits component on `ProductionDetail` as a leader-dot
-  table — role left, name right, dotted spacer. Use semantic
-  `<dl><dt>…</dt><dd>…</dd></dl>` (skill rule "semantic HTML before
-  ARIA"). Section header is just `CREDITS` via the `<Cue>` system.
-  Cast block is a sub-block under main credits with a hairline
-  rule between. **No troupe claim** — Roman has no permanent
-  company; each production is the producing-theatre's cast. **No
-  puppet-as-cast naming** (A6 NOPE).
+- [x] **DA-2.A — Production credits block (§3.B)**: ✅ done
+  `0bebf3c` (2026-05-02). Replaced `<ul>` credits with `<dl>` leader
+  grid: `<dt className={creditsRole}>` / `<dd className={creditsName}>`,
+  two-column grid on ≥768px (`minmax(140px,1fr) 2fr`), hairline rule
+  between rows. `<Cue>` header (`CREDITS` / `кредиты`) above the `<dl>`.
+  `.creditsLink` class for `<a>` inside `<dd>` — oxblood hover underline.
+  No troupe claim; no puppet-as-cast naming (A6 NOPE).
 
-- [ ] **DA-2.B — Theatre slate (§3.F)**: Upgrade the existing
-  right-rail spec sheet to a bordered slate. Hairline border
-  (`--rule-strong`), inset padding, mono throughout, `font-variant-
-  numeric: tabular-nums`. Add a `PRODUCTION 14 / 24` index line tied
-  to the §3.A folio system. Add `TOURING` field for Plinth → reads
-  `SOLO`.
+- [x] **DA-2.B — Theatre slate (§3.F)**: ✅ done `0bebf3c`
+  (2026-05-02). Replaced `.specSheet` / `.specItem` with `.slate`
+  bordered box (desktop ≥1024px only; `display:none` on mobile — chips
+  row in prose column carries same data for screen readers).
+  `.slateHeader` shows `PRODUCTION 01 / 24` index derived via
+  `getAllProductions(locale).findIndex(p => p.slug === slug)`.
+  Rows: YEAR / RUN / AGE / COUNTRY / TOURING (TOURING · SOLO appears
+  only when `production.tour.length > 0`). `aria-hidden="true"`.
 
-- [ ] **DA-2.C — Staging geography (§3.G.1)**: New mono row on
-  `/about` between bio prose and lineage block, plus a compressed
-  echo on home directly below the artistic statement. Cities
-  (locked, chronological order of first commission):
+- [x] **DA-2.C — Staging geography (§3.G.1)**: ✅ done `0bebf3c`
+  (2026-05-02). `/about/page.tsx`: new `<section className={geographySection}>`
+  between bio and milestones — `tAbout('stagedIn')` label + city list.
+  Home `page.tsx`: compressed echo `<p className={geographyEcho}>`
+  after statement, `aria-hidden="true"`. City list locked:
   `СПБ · МОСКВА · АЛМАТЫ · БРЕМЕН · ВЕНА · БЕРЛИН · ТАШКЕНТ`.
-  Section label **locked past-tense 2026-05-02**: RU `ГДЕ СТАВИЛ`,
-  EN `STAGED IN`, DE `INSZENIERTE IN`. Past-tense is the only form
-  that's literally truthful for both the Russian cities (worked
-  there, can't currently) and the active commissions
-  (already-staged productions still play). Each city hover-links
-  to `/productions?city=<slug>` — reuses existing C4 URL state.
+  Labels past-tense: RU `ГДЕ СТАВИЛ` · EN `STAGED IN` · DE `INSZENIERTE IN`.
+  No city links (C4 has no `city=` filter param — links deferred).
+  New `about` i18n namespace in all three locales (`stagedIn`,
+  `chronology`, `lineage`). About page `milestonesLabel` / `lineageLabel`
+  refactored to `tAbout('chronology')` / `tAbout('lineage')`.
 
-- [ ] **DA-2.D — Plinth tour band (§3.G.2)**: Add a `tour[]` array
-  to `bury-me-behind-the-baseboard/index.mdx` frontmatter (seed
-  list: `London · Edinburgh · Bern · Wien · Almaty · Lisboa ·
-  Porto · Luxembourg · Alicante`; Roman extends in Phase 8).
-  Render a band above the photo gallery on the Plinth's detail
-  page only — `ON TOUR` label, mono caps, hairline rules above and
-  below, no city links. **If `tour[]` is empty/missing, the band
-  hides** (no broken-state). Year range omitted by default until
-  Roman gives one.
+- [x] **DA-2.D — Plinth tour band (§3.G.2)**: ✅ done `0bebf3c`
+  (2026-05-02). `tour[]` wired in `lib/content.ts` `merge()` with
+  `pick(overlay.tour, fm.tour ?? [])` — overlay wins, so seed data
+  lives in `metadata.yml` (not `index.mdx` which is gitignored).
+  Seed 9 cities added to
+  `content/productions/bury-me-behind-the-baseboard/metadata.yml`.
+  `<section className={tourBand}>` inserted above gallery section
+  on the production detail page — `t('onTour')` label + cities joined
+  by ` · `. Hides when `tour.length === 0`. New `productionDetail.onTour`
+  key in all three locales.
 
-- [ ] **DA-2.E — Premiere mark on cards (N1)**: Replace `year` slot
-  on `<ProductionCard>` mono meta row with `PREM YYYY·MM` (data
-  already in `metadata.yml.premiereDate` from Q8). Pure CSS + one
-  template change.
+- [x] **DA-2.E — Premiere mark on cards (N1)**: ✅ done `0bebf3c`
+  (2026-05-02). `components/ProductionCard.tsx`: replaced bare
+  `production.year` in the meta row with `premMark = production.year ?
+  \`PREM ${production.year}\` : null`. No CSS change needed — mono caps
+  already applied.
 
 ### Round 3 — The opening cue (~1 day, after D1, optional)
 

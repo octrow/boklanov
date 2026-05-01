@@ -1,4 +1,4 @@
-# Handoff prompt — boklanov.ru rewrite, Phase 7.5 Round 1 → R2 → D1 → Round 2 → D1 → Round 3
+# Handoff prompt — boklanov.ru rewrite, Phase 7.5 Round 3
 
 Paste the block below into a fresh Claude Code conversation in the
 `boklanov` repo (branch `rewrite/v2`) to continue.
@@ -19,220 +19,319 @@ Roman Boklanov (puppet / object / family theatre, 30+ productions).
 2. Roman has **not been in Russia since the 2022 mobilisation**.
    Productions he directed in Russia before 2022 (e.g. the Plinth at
    БТК) remain part of the body of work, but no copy on the site may
-   claim present-tense work in Russia. The colophon is therefore
-   city-free; staging-geography labels use past-tense.
+   claim present-tense work in Russia. Colophon is city-free;
+   staging-geography labels use past-tense.
 
-**All code work through Phase 7.5 Round 1 is done. Build is clean.**
-24 productions × 3 locales = 72 detail routes, plus per-locale chrome.
-`strictNullChecks` + ESLint pass. I5 (signature gesture v1) is cut.
-Both the `DESIGN_REVIEW.md` list and the post-R1 manual-QA findings
-(Q1–Q7 + Q8) are fully exhausted. Phase 7.5 Round 1 (DA-1.A folio +
-DA-1.B cue numbers + DA-1.C edition stamp) is ✅ shipped.
+**Current state — Phase 7.5 Rounds 1 + 2 shipped, Round 3 is next.**
+
+Round 1 (`c7a1b50`, 2026-05-02):
+- `lib/folio.ts` — `folioFor(pathname, productions)` → `{ sectionKey, index? }`
+- `components/Cue.tsx` + `Cue.module.css` — section cue marks
+- `SiteHeader`: folio band above wordmark row; accepts `productions` prop
+- `SiteFooter`: `<small class="colophon">` edition stamp; `footer.colophon` i18n key
+- `/about`, `/awards`, `/productions/[slug]`: section heads wrapped in `<Cue>`
+- `messages/{ru,en,de}.json`: new `footer` namespace with `colophon` key
+
+Round 2 (`0bebf3c`, 2026-05-02):
+- DA-2.A — credits `<dl>` leader grid + CREDITS Cue header
+- DA-2.B — theatre slate in right rail (bordered box, PRODUCTION 01/24 index,
+  TOURING · SOLO row for Plinth)
+- DA-2.C — `ГДЕ СТАВИЛ / STAGED IN` section on `/about`; home echo below statement;
+  new `about` i18n namespace; about-page label strings moved to `tAbout()`
+- DA-2.D — `tour[]` in `merge()` with overlay support; 9 seed cities in
+  `bury-me-behind-the-baseboard/metadata.yml`; ON TOUR band above gallery
+- DA-2.E — `PREM 2021` on production cards (was bare `2021`)
+
+**Build state:** clean. No uncommitted edits. `npm run build` passes.
 
 **Next milestones, in order:**
-1. ~~**Phase 7.5 Round 1** — folio + cue numbers + year-only colophon~~ ✅ **done 2026-05-02**
-2. **R2 real-device QA** (Daniil + Roman) — tests Round 1 chrome
-   alongside the existing build.
-3. **Phase 7.5 Round 2** — production credits reframe + theatre slate
-   + two-geographies (`/about` staging row + Plinth tour band) +
-   premiere-mark cards (~1.5–2 days).
-4. **D1 Vercel preview** — push to staging, share URL with Roman.
-5. **Phase 7.5 Round 3** — slate-strike gesture paired with static
-   edition-frame fallback for `prefers-reduced-motion` (~1 day,
-   behind `?gesture=off` flag for first 48h).
-6. **Phase 8** — Authoring handoff (Obsidian + R2). Locked in
-   `CONTENT_WORKFLOW.md`. Runs after Phase 7 cutover.
+1. ~~**Phase 7.5 Round 1**~~ ✅ **done** (`c7a1b50`)
+2. ~~**Phase 7.5 Round 2**~~ ✅ **done** (`0bebf3c`)
+3. **R2 real-device QA** — manual pass by Daniil + Roman on real
+   hardware. Claude cannot run this. See R2 checklist below.
+4. **D1 Vercel preview** — push `rewrite/v2` to GitHub, connect Vercel,
+   set `NEXT_PUBLIC_BASE_URL`. Can begin before R2 sign-off.
+5. **Phase 7.5 Round 3** — DA-3.A slate-strike + edition-frame fallback.
+   After D1, behind `?gesture=off` for first 48h. **Implement this now**
+   if D1 has already been done; otherwise queue it.
+6. **Phase 8** — Authoring handoff (Obsidian + R2). After D4 cutover.
 
-### What's landed (full history)
+---
 
-**Foundation (F1–F8):** App Router shell, i18n (next-intl v4), self-hosted
-fonts (Lora + JetBrains Mono + Inter), sync pipeline, content loader, base
-styles.
+### Phase 7.5 Round 3 — full implementation brief
 
-**Core UI (C1–C11):** ProductionCard + Grid, Production detail (72 routes
-post-Q1: 24 productions × 3 locales), Home, Filter panel + URL state,
-About + lineage, Awards, Press, Contact, Archive, Layout shell, Cmd-K
-palette.
+One task. Ships as a single PR after D1.
 
-**Phase 5 SEO/OG (S1–S5):** sitemap (hreflang RU↔EN), robots, RSS
-(RU+EN), JSON-LD `Person` + `CreativeWork`, OG ImageResponse (1200×630),
-PostHog `booking_cta_click` only, DE chrome translations.
+#### DA-3.A — Slate-strike + edition-frame fallback (§4.1.A + §4.1.C)
 
-**Phase 6 Interactions + Polish (I1, I4, P1, P2, P3):**
-- I1 — unified `--shadow-focus` ring across all interactive elements.
-- I4 — empty + loading + error states (LQIP, clear-all, not-found).
-- I5 — 🚫 cut formally in R1 per `DESIGN.md` §13.
-- P1 — mobile-first layout pass (44px touch targets, on-screen Cmd-K trigger).
-- P2 — accessibility pass (contrast AA, landmarks, focus trap, alt text).
-- P3 — Lighthouse mobile ≥ 95 (woff2 subsets, next/image AVIF/WebP, LCP
-  preload, locale-aware font preloads).
+**What it is:**
+A 320ms one-shot CSS animation on the home page's first paint only.
+The wordmark "slate top" — a thin pseudo-element — drops 1.5em onto
+the wordmark's baseline while a hairline rule fades in beneath it.
+Reads as a theatre-programme opening cue, not a SaaS hero animation.
 
-**Review + R1.fix (`73620e6`, `871f287`):** zero `DESIGN.md` §11
-anti-patterns; desktop sticky CTA in real right rail; cover/title
-separator; filter group labels; ThemeToggle SVG, search × suppression,
-LQIP gating.
+**Gated by:**
+1. `sessionStorage.firstPaintDone` — animation fires once per session;
+   subsequent navigations show end-state statically.
+2. `?gesture=off` query param — disables the animation entirely for the
+   first 48h after D1, so the team can screenshot end-state vs
+   animated-state for design review.
+3. `prefers-reduced-motion: reduce` — falls through to the static
+   edition-frame fallback (identical end-state, no motion).
 
-**Final polish (`09d5005`):** mono spec sheet in right rail above sticky
-CTA (sticky as a unit); gallery masonry via `columns: 2`; wordmark
-token parity.
+**Static fallback (edition-frame, §4.1.C):**
+The end-state of the animation must be visually indistinguishable from
+the static version. The "edition frame" is just the wordmark sitting
+on its hairline rule with no motion. This is the `prefers-reduced-motion`
+and `?gesture=off` state. It must ship in the same PR as the animation.
 
-**Phase 6.6 — Post-R1 manual QA fixes (Q1–Q7), 2026-05-02:**
-- Q1 (`10f951f`) — sync filters non-production sub-pages
-  (`NON_PRODUCTION_SLUGS`: `contacts`, `roman-boklanov-english`,
-  `puppet-director`, `total-fest-dialogs`). Detail routes 84 → 72.
-- Q2 (`10f951f`) — RU↔EN merge fixed: `rowLocale()` driven by CSV slug
-  suffix (no body sniffing); `MANUAL_SIBLING_PAIRS` attaches Cyrillic-only
-  orphan rows (`Сахарный ребёнок`, `Каштанка`) to their EN sibling's
-  group. `sugar-kid` / `jagger-jagger` / `kasztanka` now have correct
-  `{ ru, en }` title pairs.
-- Q3 (`b3bded7`) — synopsis extractor strips `[X](Y)` and Notion's
-  nested `[[X]](Y)`, skips URL-only / promo / cast-list paragraphs,
-  strips `<aside>` HTML.
-- Q4 (`fdbae94`) — awards extracted from RU body (canonical), `/u`
-  flag on emoji char classes (`🏅` press-citation lines no longer
-  leak), year clamped 1990–2030, `isPersonLink()` filter on
-  `/pers/` URLs and Cyrillic "First Last" patterns. Overlay path
-  added: `lib/content.ts` now `pick`s `overlay.awards` over
-  `fm.awards`, and the metadata stub emits the auto-extracted list
-  as commented-out lines for hand-fixes.
-- Q5 (`99299de`) — about-page chronology corrected. Previous
-  `2003 РГИСИ` and `2008 БТК director` were impossible (Roman born
-  1993). Replaced with five anchored dates (1993 DOB, 2017/2018
-  performer awards, 2020 BTK premiere, 2022 return to Almaty).
-- Q6 (`8dae0b2`) — no-poster ProductionCard fallback re-composed as
-  newspaper title-card: title flush top-left, hairline rule below,
-  mono year mark. Replaces the bottom-fade gradient that read
-  placeholder-y at grid scale.
-- Q7 (`c7647bf`) — `/contact` reordered: Telegram + Instagram are
-  now the oxblood primaries side-by-side; mailto demoted to
-  hairline secondary. Brief D8 + IA §Contact updated. Production-
-  detail sticky CTA stays mailto (booking magnet, brief D1).
+---
 
-### Read these first, in order
+**Step 1 — Home page component:**
 
-1. `.design/boklanov-rewrite/TASKS.md` — canonical task list. All code items ✅.
-   Next open items: R2 + D1.
-2. `.design/boklanov-rewrite/DESIGN_REVIEW.md` — R1 verdict (fully resolved;
-   reference only).
-3. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
-   D8 reordered 2026-05-01.
-4. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
-5. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy
-   (§Contact reordered to match D8 revision).
-6. `content/README.md` — authoring workflow + the new `awards`
-   overlay path.
-7. `PLAN.md` (repo root)
-8. `.design/boklanov-rewrite/photo-audit.md`
-9. `.design/boklanov-rewrite/HANDOFF.md`
-10. `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` — **✅ locked
-    2026-05-02.** Source of truth = **F (Obsidian + obsidian-git,
-    vault = repo)**; image hosting = **Cloudflare R2** with
-    `cdn.boklanov.com`; `metadata.yml` overlay **folded into MDX
-    frontmatter** in Phase 8.3 (one-shot merge, single source of
-    truth per field); editorial workflow = trust-on-publish +
-    `draft` branch; Roman onboarded via mini-guide
-    `content/AUTHORING.ru.md`. **Decap CMS (C) deferred as a future
-    second admin surface** (Phase 9), not rejected. Migration plan in
-    §6 (~2.5 days), activates after Phase 7 cutover. Tasks in
-    `TASKS.md` § Phase 8.
-11. `.design/boklanov-rewrite/DESIGN_AMBITION.md` — **✅ locked
-    2026-05-02.** Phase 7.5 fingerprint moves (folio, cue numbers,
-    production credits reframed, theatre slate, two-geographies, year-
-    only colophon, slate-strike + edition-frame gesture pair). All §10
-    / §11 questions resolved; locks recorded in §0.5. Round 1 ships
-    before R2; Round 2 after R2 / before D1; Round 3 after D1 behind
-    `?gesture=off` flag. Cuts: §3.D specimen-hero, §3.J errata-404,
-    §4.1.B string-line. Pending only the section-label choice for
-    §3.G.1 (`ГДЕ СТАВИЛ` recommended) and Roman's full Plinth tour list. **Already
-    cross-references the Phase 8 content-workflow lock** in its §0.
+In `app/[locale]/page.tsx`, import and render a new Client Component
+`<SlateStrike>` that wraps the `.hero` section:
+
+```tsx
+import { SlateStrike } from '@/components/SlateStrike'
+
+// Inside the return, replace:
+<section className={styles.hero}>
+  <h1 className={styles.wordmark}>{wordmark}</h1>
+  ...
+</section>
+
+// With:
+<SlateStrike>
+  <section className={styles.hero}>
+    <h1 className={styles.wordmark}>{wordmark}</h1>
+    ...
+  </section>
+</SlateStrike>
+```
+
+**Step 2 — `components/SlateStrike.tsx`:**
+
+```tsx
+'use client'
+
+import * as React from 'react'
+import { useSearchParams } from 'next/navigation'
+
+import styles from './SlateStrike.module.css'
+
+export function SlateStrike({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams()
+  const gestureOff = searchParams.get('gesture') === 'off'
+
+  const [animate, setAnimate] = React.useState(false)
+
+  React.useEffect(() => {
+    if (gestureOff) return
+    if (typeof sessionStorage === 'undefined') return
+    if (sessionStorage.getItem('firstPaintDone')) return
+    sessionStorage.setItem('firstPaintDone', '1')
+    setAnimate(true)
+  }, [gestureOff])
+
+  return (
+    <div className={animate ? `${styles.slate} ${styles.slateAnimate}` : styles.slate}>
+      {children}
+    </div>
+  )
+}
+```
+
+**Step 3 — `components/SlateStrike.module.css`:**
+
+```css
+/* Edition-frame wrapper — static end-state for reduced-motion + gesture=off. */
+.slate {
+  position: relative;
+}
+
+/* Hairline rule below the wordmark — this is the edition-frame (§4.1.C).
+   It exists in both the static and animated states; only the animation
+   differs. Positioned by the wordmark's natural flow, not absolutely. */
+.slate::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  /* Static: immediately visible. Animation overrides opacity below. */
+  opacity: 1;
+  margin-top: var(--space-2);
+}
+
+/* ── Animation ──────────────────────────────────────────────────────────
+   Only added by JS when sessionStorage.firstPaintDone is absent AND
+   gesture != 'off' AND prefers-reduced-motion is not 'reduce'.
+   prefers-reduced-motion is handled by the @media query below — it
+   removes the animation keyframes, leaving the static end-state. */
+
+@keyframes slateTopDrop {
+  from {
+    /* Pseudo-element starts 1.5em above the wordmark baseline */
+    transform: translateY(-1.5em);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ruleFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.slateAnimate::before {
+  /* The "slate top" — thin horizontal mark dropping onto wordmark */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--rule-strong);
+  transform-origin: top left;
+
+  animation: slateTopDrop var(--duration-slate, 320ms) var(--easing-default) forwards;
+}
+
+.slateAnimate::after {
+  /* Edition-frame hairline fades in after the drop */
+  opacity: 0;
+  animation: ruleFadeIn var(--duration-slate, 320ms) var(--easing-default)
+    calc(var(--duration-slate, 320ms) * 0.6) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slateAnimate::before,
+  .slateAnimate::after {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+```
+
+**Step 4 — Add CSS custom property to `app/globals.css`:**
+
+```css
+/* Slate-strike timing — can be overridden by ?gesture=off state or tests */
+--duration-slate: 320ms;
+```
+
+**Step 5 — Wrap `<SlateStrike>` in a Suspense boundary** (required
+because `useSearchParams` is a client hook that opts into dynamic
+rendering):
+
+In `app/[locale]/page.tsx`:
+
+```tsx
+import * as React from 'react'
+import { Suspense } from 'react'
+
+// …
+
+return (
+  <main className={styles.page}>
+    <Suspense fallback={null}>
+      <SlateStrike>
+        <section className={styles.hero}>
+          …
+        </section>
+      </SlateStrike>
+    </Suspense>
+    {/* rest of page */}
+  </main>
+)
+```
+
+**Step 6 — Verify end-states:**
+- Static (`?gesture=off`): wordmark sits on hairline rule, no animation.
+  Identical to current page + a hairline rule below `.hero`.
+- Animated (first visit, no flag): slate-top drops, rule fades in.
+- Reduced-motion: same as static.
+- Subsequent visits (sessionStorage set): same as static.
+
+---
+
+### i18n changes for Round 3
+
+None — DA-3.A is purely visual/structural. No new translation keys.
+
+---
 
 ### R2 scope (real-device QA — requires Daniil + Roman)
 
-R2 is a manual pass on real hardware, not something Claude can run. The
-scenarios and checklist are in `TASKS.md` § R2. Key scenario:
+Manual pass on real hardware. Checklist:
 
-> iPhone SE (375px) · open link from Instagram DM · 90 seconds · RU locale
-> → home → featured strip → tap a production → reach booking CTA → tap it.
+**Round 2 chrome (new in the last build `0bebf3c`):**
+- Credits block on production detail: leader-dot `<dl>` table with CREDITS
+  cue header. No troupe claim.
+- Theatre slate in right rail: bordered box, `PRODUCTION 01/24` header, key/value
+  rows. `TOURING · SOLO` appears on the Plinth's page.
+- `/about` staging-geography row (`ГДЕ СТАВИЛ` / `STAGED IN`): 7 city
+  names in mono between bio and chronology sections.
+- Home: compressed city echo below statement, above featured strip.
+- Production cards: year now reads `PREM 2021`, not bare `2021`.
+- Plinth detail: `ON TOUR / В ГАСТРОЛЯХ` band above gallery with 9 cities.
 
-Devices: iPhone SE, iPhone 14 Pro, iPad, 13" laptop, 27" desktop.
+**Round 1 chrome:**
+- Folio band visible above header wordmark on section pages (PRODUCTIONS,
+  О РЕЖИССЁРЕ, etc.); hidden on home. `01 / 24` index on production detail.
+- Cue marks (`CUE I`, `CUE II`, …) above sections on `/about`, `/awards`,
+  `/productions/[slug]`.
+- `2026 EDITION` / `2026 ИЗДАНИЕ` stamp at bottom of every page footer.
 
-**Also check during R2:**
-- Sticky CTA appears in right rail from landing on desktop (R1.fix #1).
-- Spec sheet (year/duration/age/country) visible in right rail above CTA
-  on desktop.
-- Gallery images retain original aspect ratios (masonry, not cropped grid).
-- Cover/title editorial breath consistent on pages without poster credit.
-- Filter group labels readable on tablet (≥768px).
-- ThemeToggle sun/moon glyphs legible.
-- LQIP blur resolves on first featured card in production (not just dev build).
-- **(post-Q6)** No-poster cards on `/productions` read as deliberate
-  title-cards (title top-left, hairline rule, mono year), not as
-  missing assets.
-- **(post-Q7)** `/contact` shows Telegram + Instagram side-by-side as
-  oxblood primaries on desktop; mailto + copy-email demoted to
-  secondary under "or by email" subhead.
-- **(post-Q3)** Production-detail synopsis blocks render real prose
-  (or are absent) — no raw `[https://…](https://…)` strings.
-- **(post-Q4)** `/awards` is RU-canonical: zero language mixing, zero
-  person names, zero out-of-range years.
+**Existing checks (carry over from R1 QA list):**
+- Sticky CTA right-rail visible on desktop from landing.
+- Gallery masonry (original aspect ratios, not cropped).
+- No-poster cards read as title-cards, not placeholders.
+- `/contact`: TG + IG oxblood primaries; mailto secondary.
+- Synopsis prose (no raw Markdown links).
+- Awards page: zero language mixing.
 
-### Open content tasks (Roman to confirm before R2 sign-off)
+---
 
-These were left in the docs because Claude can't independently verify
-them:
+### D1 scope (Vercel preview — can begin before R2 sign-off)
 
-- Year of RGISI enrolment + year first directed at BTK — flag in
-  `content/about/{ru,en}.mdx` comment block.
-- Two festival-in-plain-prose awards the heuristic can't extract —
-  hand-overlay via the new `awards:` block in
-  `content/productions/cinderella/metadata.yml` (festival is КУКАРТ)
-  and `content/productions/sugar-kid/metadata.yml` (festival is
-  V Всероссийский молодежный театральный фестиваль им. В.С. Золотухина).
-- Photographer credits per gallery image (brief Q1).
-- Tech rider / press kit PDFs where they exist (brief Q2).
-
-### D1 scope (Vercel preview — can begin before R2 completes)
-
-```
-D1 — Vercel preview from `rewrite/v2`
-```
-
-- Push branch to GitHub → connect to Vercel project.
-- Set `NEXT_PUBLIC_BASE_URL` env var (Vercel URL or boklanov.com).
-- Set `NEXT_PUBLIC_POSTHOG_KEY` if PostHog is enabled.
-- Verify Cyrillic fonts render on real Vercel edge (not just localhost).
+- Push branch → connect Vercel project.
+- Set `NEXT_PUBLIC_BASE_URL` env var.
+- Set `NEXT_PUBLIC_POSTHOG_KEY` if PostHog enabled.
+- Verify Cyrillic fonts render on Vercel edge (not just localhost).
 - Share preview URL with Roman.
 
 After D1: D2 hosting decision, D3 domain, D4 cutover.
 
-### Phase 8 scope (authoring handoff — queued behind Phase 7)
+---
 
-> Locked 2026-05-02 in `CONTENT_WORKFLOW.md`. Don't start until D4
-> cutover is complete (Phase 8 mutates the content pipeline; mixing
-> with Phase 7 risks broken deploys).
+### Phase 8 scope (authoring handoff — queued behind Phase 7 cutover)
 
-`TASKS.md` § Phase 8 has the five sub-tasks (~2.5 days total):
+Locked 2026-05-02 in `CONTENT_WORKFLOW.md`. Tasks in `TASKS.md` § Phase 8.
+~2.5 days: vault layout + Obsidian config (8.1), R2 image migration (8.2),
+fold metadata.yml overlay into MDX frontmatter (8.3), `AUTHORING.ru.md`
+guide (8.4), Cyrillic-only-Name orphan audit (8.5).
 
-1. **8.1** Vault layout + Properties schema for Obsidian (`.obsidian/`
-   committed; `mdx-as-md` plugin; `scripts/lint-mdx.ts` rejecting
-   `![[wikilinks]]`).
-2. **8.2** R2 image migration (`cdn.boklanov.com` custom domain;
-   `rclone sync` one-shot; `<Image>` `src` rewritten via `CDN_BASE`
-   env var; `npm run upload-images` wrapper).
-3. **8.3** Fold `metadata.yml` overlay into MDX frontmatter
-   (`scripts/fold-overlay.ts` one-shot merge, `git rm`); simplify
-   `lib/content.ts` to single-read frontmatter; retire
-   `scripts/sync-from-notion.ts` → `scripts/_legacy/`; archive
-   `notion-data/`.
-4. **8.4** Write `content/AUTHORING.ru.md` from skeleton in
-   CONTENT_WORKFLOW.md §6.5; rewrite `content/README.md` to point
-   at it.
-5. **8.5** Cyrillic-only-Name orphan audit (`Сахарный ребёнок`,
-   `Каштанка`, …) — Roman confirms in Properties panel; log in
-   `.design/boklanov-rewrite/orphan-audit-2026-05.md`.
+Phase 9 (Decap CMS) is deferred — activate only when Roman asks.
 
-Phase 9 (Decap CMS layered onto the same vault) is **deferred** —
-activate only when Roman explicitly asks for browser editing.
+---
+
+### Open content tasks (Roman to confirm before R2 sign-off)
+
+- Year of RGISI enrolment + year first directed at BTK — flag in
+  `content/about/{ru,en}.mdx` comment block.
+- Two festival-in-plain-prose awards: hand-overlay via `awards:` block
+  in `content/productions/cinderella/metadata.yml` (КУКАРТ) and
+  `content/productions/sugar-kid/metadata.yml` (V Всероссийский…).
+- Photographer credits per gallery image (brief Q1).
+- Canonical Plinth tour city list (Roman extends `tour[]` in Phase 8).
+
+---
 
 ### Important constraints (do not violate)
 
@@ -243,29 +342,26 @@ activate only when Roman explicitly asks for browser editing.
   no `rounded-2xl shadow-xl` (`DESIGN.md` §11 anti-patterns).
 - Analytics: only `booking_cta_click` — never expand autocapture.
 - I5 is **cut**, not deferred.
-- Awards / press: original-language only (DESIGN §3). RU is canonical
-  for festival names; international festivals stay Latin in both
-  locales.
-- The production-detail sticky booking CTA stays mailto — D1 booking
-  magnet. Don't flip it to TG/IG without explicit sign-off; the
-  prefilled subject + body is the conversion driver.
+- Awards / press: original-language only (DESIGN §3).
+- The production-detail sticky booking CTA stays mailto.
+- Staging geography labels are **past-tense** (`ГДЕ СТАВИЛ` /
+  `STAGED IN`). Never present-tense ("stages in" / "ставит в").
+- No city links in the staging-geography row — C4 has no `city=`
+  filter parameter.
+- DA-3.A (slate-strike) **must ship paired with the static edition-frame**
+  as the `prefers-reduced-motion` fallback — both must render an
+  identical end-state visually.
+
+---
 
 ### Recent commits on `rewrite/v2` for context
 
 ```
-09e75b3  docs: mark phase 6.6 (Q1–Q7) as ✅ done in PLAN.md
-c7647bf  contact: TG + IG primary, email demoted (Q7)
-8dae0b2  ProductionCard: brutalist no-poster fallback (Q6)
-99299de  content: correct about-page chronology (Q5)
-fdbae94  sync: clean awards extraction (Q4)
-b3bded7  sync: clean synopsis extraction (Q3)
-10f951f  sync: filter non-productions + pair orphan RU siblings (Q1, Q2)
-9689e90  docs: brief D8 reorder + IA + readme rewrite
-09d5005  polish: spec sheet in right rail, gallery masonry, wordmark token
-871f287  polish: ThemeToggle SVG, search × suppression, LQIP gating
-73620e6  R1.fix: sticky CTA right rail, cover/title rule, filter group labels
+0bebf3c  feat: Phase 7.5 Round 2 — credits dl, theatre slate, staging geography, tour band, premiere mark
+c7a1b50  feat: Phase 7.5 Round 1 — folio + cue numbers + edition stamp
+8eaacf1  docs: research — content authoring workflow options
+33d9c75  production-detail: surface theatre + credits + premiere + tickets (Q8)
+08f54c0  docs: refresh all planning docs to current state
 ```
 
-**All DESIGN_REVIEW.md items and Q1–Q7 are resolved.** No further code
-work is needed before R2. If R2 surfaces new issues, track them in
-TASKS.md and land fixes before D1.
+**Build state:** clean. No uncommitted edits.
