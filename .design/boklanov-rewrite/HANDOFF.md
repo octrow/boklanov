@@ -1,7 +1,7 @@
-# Handoff prompt — boklanov.ru rewrite, mid-Foundation
+# Handoff prompt — boklanov.ru rewrite, finish F8 and start Phase 4
 
 Paste the block below into a fresh Claude Code conversation in the
-`boklanov` repo (branch `rewrite/v2`) to continue from F4.
+`boklanov` repo (branch `rewrite/v2`) to continue after the rate limit.
 
 ---
 
@@ -11,16 +11,15 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 `rewrite/v2`. This is a Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
-**Foundation phases F1–F4 are committed and verified.** I need you to
-pick up at **F5** and continue through **F8**. After that, Phase 4 (Core
-UI vertical slices C1–C11) begins.
+**Foundation phases F1 through F7 are committed and verified.**
+However, the previous session hit a rate limit right in the middle of executing **F8** (cutting the legacy renderer). The working tree might have staged deletions (like `pages/robots.txt.tsx`, `styles/global.css`), but the F8 cleanup is incomplete.
+
+I need you to **finish F8** to complete the Foundation phase, and then move immediately into **Phase 4 (Core UI: C1 and C2)**.
 
 ### Read these first, in order
 
 1. `.design/boklanov-rewrite/TASKS.md` — the canonical ordered task
-   list. Top of the file has a **Progress log** table showing what's
-   done and which commits landed it. Each F-task has acceptance prose
-   beneath the checklist.
+   list. Top of the file has a **Progress log** table. Each F-task and C-task has acceptance prose beneath the checklist.
 2. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15
    decisions, §5 tokens, §7 frontmatter shape, §6 content audit).
    **Source of truth for any visual or content question.**
@@ -35,83 +34,51 @@ UI vertical slices C1–C11) begins.
 
 ### What's already in the repo
 
-- **App Router shell** (`app/[locale]/{layout,page}.tsx`) — async
-  params (Next 15), `<html lang>` set per route, `NextIntlClientProvider`
-  wrapping children. Page is a smoke test using inline styles + tokens.
-- **i18n** (`i18n/routing.ts`, `i18n/request.ts`, `middleware.ts`,
-  `messages/{ru,en,de}.json`) — next-intl v4, `localePrefix: 'as-needed'`,
-  `defaultLocale: 'ru'`. Three nav keys per locale.
-- **Self-hosted fonts** in `public/fonts/` — Lora 400/500/600 (+ 400
-  italic), Inter 500 woff2 (400/600 keep existing TTFs), JetBrains
-  Mono 400/500. `@font-face` block at the top of `app/globals.css`
-  with Google-Fonts canonical `unicode-range` splits.
-- **Sync pipeline** (`scripts/sync-from-notion.ts`, `npm run sync`) —
-  parses `notion-data/Роман Бокланов/` into `content/productions/<slug>.mdx`
-  + `content/productions-index.json` + `public/productions/<slug>/`.
-  29 paired productions; 22 have posters. Generated outputs are
-  gitignored — re-run `npm run sync` to rebuild.
-
-### Tech debt parked during F1–F4 (must clean up by F8)
-
-- `next.config.js`: `typescript.ignoreBuildErrors: true` and
-  `eslint.ignoreDuringBuilds: true` while the legacy Notion renderer
-  is still in the tree.
-- `components/NotionPage.tsx`: `@ts-nocheck` plus
-  `mapPageUrl(site!, recordMap!, ...)` non-null assertions on line 182.
-- `pages/p/[pageId].tsx`: legacy renderer was renamed from
-  `pages/[pageId].tsx` to dodge a slug-name collision with
-  `app/[locale]/`. F8 deletes this file along with the rest of the
-  legacy renderer.
-- `next.config.js` has the legacy `react`/`react-dom` webpack alias
-  removed (it broke RSC). If F8 reintroduces issues, leave it gone.
+- **App Router shell & i18n** (`app/[locale]/{layout,page}.tsx`, `i18n/`) — RU default at `/`, EN/DE prefixed.
+- **Sync pipeline & manual overlays (F4 & F5)** — `scripts/sync-from-notion.ts` parses the local export, emits `index.mdx` + `metadata.yml` (preserved manual-pass data) to `content/productions/<slug>/`.
+- **Content loader API (F6)** — `lib/content.ts` exposes `getAllProductions()`, `getProduction()`. Tested and working.
+- **Base styles & fonts (F7)** — Self-hosted Lora/Inter/JetBrains Mono + warm editorial CSS reset injected into `app/globals.css`.
+- **next.config.js** — `serverExternalPackages: ['gray-matter']` added to fix bundling.
 
 ### Your task
 
-Work through **F5 → F6 → F7 → F8** in that order. For each:
+Work through **Finishing F8 → C1 → C2** in that order.
 
-1. Read the task line in `TASKS.md` for full acceptance criteria.
-2. Implement.
-3. Verify (build / dev server / type-check, as appropriate).
-4. Commit with a focused message (see existing commits on `rewrite/v2`
-   for tone — phase tag, what changed, what was verified).
-5. Update the Progress log table at the top of `TASKS.md` with the
-   commit SHA and any non-obvious notes.
-6. Tick the `[ ]` → `[x]` on the F-task line.
+1. **Finish F8 (Cut Legacy Renderer):**
+   - Run `git status` to see what the previous session deleted before timing out.
+   - Delete the remaining legacy files: `pages/` (except `api/social-image.tsx` which we port later), `components/Notion*.tsx`, `components/PageA*.tsx`, `lib/notion*.ts`, `lib/get-site-map.ts`, `lib/preview-images.ts`, `lib/resolve-notion-page.ts`, `lib/map-*.ts`, `styles/notion.css`, `styles/prism-theme.css`.
+   - Remove legacy dependencies from `package.json`: `react-notion-x`, `notion-client`, `notion-types`, `notion-utils`.
+   - **Crucial Tech Debt:** Remove `typescript.ignoreBuildErrors: true` and `eslint.ignoreDuringBuilds: true` from `next.config.js`.
+   - Run `npx next build` to verify the App Router shell is perfectly type-clean.
+   - Commit F8 and update the Progress log.
+2. **C1 (Production Card + Grid):** Build the canonical `<ProductionCard>` and `<ProductionGrid>` components. Read DESIGN.md §7.2 for exact anatomy. Render them at `app/[locale]/productions/page.tsx`.
+3. **C2 (Production Detail Page):** Build `app/[locale]/productions/[slug]/page.tsx`. Layout strictly follows DESIGN.md §7.3.
 
-**F5** generates per-production `metadata.yml` overlays so Roman can
-fill in photo credits, lineage, form, etc. without touching the
-generated MDX. **F6** is the loader API every page route will call.
-**F7** is the global reset + base styles (replaces the legacy
-`styles/global.css` Notion-themed block). **F8** is the irreversible
-deletion of the legacy renderer; do not run it until F1–F7 are green
-**and** at least one App Router page renders real content from the
-loader (a quick smoke at `app/[locale]/productions/page.tsx` is fine).
+For each task: implement, verify (build/dev server), commit with a focused message, update the Progress log table in `TASKS.md`, and check the `[ ]` box.
 
 ### Constraints from the brief (do not violate)
 
-- No live Notion API anywhere in build or runtime. All content comes
-  from `notion-data/` via `scripts/sync-from-notion.ts`.
+- No live Notion API anywhere.
 - Aesthetic: warm editorial + brutalist metadata. Reject AI-purple
   gradients, glassmorphism, `rounded-2xl shadow-xl`, hero video,
   bento grids, generic Tailwind shape language. Sharp corners,
   hairline rules, mono captions.
-- Oxblood `#6B0F0F` is reserved for the booking CTA only.
+- Oxblood `#6B0F0F` is reserved for the booking CTA and primary hover underlines only.
 - Three locales (`ru`, `en`, `de`); RU canonical at `/`.
-- `lib/content.ts` is pure functions over the merged content tree —
-  no I/O outside build.
+- Component grammar: Read DESIGN.md carefully. Do not invent drop-shadows or border-radii not specified in the tokens.
 
 ### Recent commits on `rewrite/v2` for context
 
 ```
+728ea69  F7: app/globals.css reset + base styles (warm editorial)
+34514c2  F6: lib/content.ts — content loader API
+ea58b40  F5: metadata.yml overlay + manual-pass workflow
 65f0d22  F4: scripts/sync-from-notion.ts — local export → MDX pipeline
 a0c89a4  F3: locale routing + RU default (next-intl v4)
 06af4f7  F2: self-host Lora + Inter Medium + JetBrains Mono (woff2 + OFL)
-234e22d  Phase 2 + F1: design tokens, brief reconciliation, App Router shell
-5606e21  Phase 1: design brief + photo audit
-c4968e9  Phase 0: install design skills and create rewrite branch
 ```
 
-Proceed with F5.
+Proceed with finishing F8.
 
 ---
 
@@ -122,8 +89,4 @@ Proceed with F5.
   context isn't bloated by paste.
 - If the new conversation drifts on aesthetic or scope, paste back the
   "Constraints from the brief" block.
-- If a phase needs more than one commit, that's fine — `TASKS.md`
-  Progress log can list multiple SHAs.
-- After F8 lands: drop `typescript.ignoreBuildErrors`,
-  `eslint.ignoreDuringBuilds`, and the entire `pages/` directory in a
-  single follow-up commit, and verify `npx next build` is type-clean.
+- Phase 4 (C1/C2) is the visual core of the site. Make sure Claude closely reads `DESIGN.md` for spacing, typography scale tokens, and the `<ProductionCard>` anatomy.

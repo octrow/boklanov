@@ -41,12 +41,12 @@ Date: 2026-04-30
 | F2 — Self-hosted fonts | ✅ done | `06af4f7` | Lora 400/500/600 + 400 italic, Inter 500 (woff2), JetBrains Mono 400/500. Inter 400/600 keep existing TTFs. unicode-range splits keep Cyrillic off `/en`+`/de` |
 | F3 — Locale routing | ✅ done | `a0c89a4` | next-intl v4, RU canonical at `/`, EN/DE prefixed. `/ru` → 307 → `/`. `<html lang>` per route |
 | F4 — sync-from-notion | ✅ done | `65f0d22` | 29 paired productions, 22 with posters. RU+EN merge by `-en` slug suffix. Generated outputs gitignored — re-run `npm run sync` |
-| F5 — metadata.yml overlay | ⏳ next | — | — |
-| F6 — content loader | ⏳ pending | — | — |
-| F7 — base styles + reset | ⏳ pending | — | — |
-| F8 — cut legacy renderer | ⏳ pending | — | only after F1–F7 land |
+| F5 — metadata.yml overlay | ✅ done | `ea58b40` | — |
+| F6 — content loader | ✅ done | `34514c2` | — |
+| F7 — base styles + reset | ✅ done | `728ea69` | — |
+| F8 — cut legacy renderer | ✅ done | _pending_ | `pages/`, legacy `components/`, `lib/notion*.ts`, `lib/config.ts`, `lib/types.ts`, `site.config.ts`, `styles/notion.css`, `styles/prism-theme.css`, `styles/global.css` deleted. `react-notion-x` + `notion-{client,types,utils}` removed (plus transitively-only-Notion deps). `next.config.js` ignoreBuildErrors / ignoreDuringBuilds dropped — `npx next build` clean under strictNullChecks. `pages/api/social-image.tsx` stubbed (501) until S3. |
 
-**Foundation = 4 / 8 done.** Phase 4 (Core UI vertical slices) is gated on
+**Foundation = 8 / 8 done.** Phase 4 (Core UI vertical slices) is gated on
 F6 + F7. F8 is gated on Phase 4 having at least one App Router page
 rendering real content.
 
@@ -116,7 +116,7 @@ rendering real content.
   Notion's `--bg-color`). Set `:focus-visible` ring to `--shadow-focus`
   globally. _Replaces `styles/global.css`._
 
-- [ ] **F8 — Cut the legacy renderer**: Remove `react-notion-x`,
+- [x] **F8 — Cut the legacy renderer**: Remove `react-notion-x`,
   `notion-client`, `notion-types`, `notion-utils` from deps. Delete
   `pages/[pageId].tsx`, `pages/index.tsx`, `pages/feed.tsx`, all
   `components/Notion*.tsx`, `components/PageA*.tsx`, `lib/notion*.ts`,

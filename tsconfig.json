@@ -54,7 +54,6 @@
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
-    "site.config.ts",
     ".next/types/**/*.ts"
   ]
 }
