@@ -25,6 +25,10 @@
     "roleReader": "Leser",
     "roleAll": "alle"
   },
+  "press": {
+    "title": "Presse",
+    "empty": "Keine Pressematerialien"
+  },
   "awards": {
     "title": "Auszeichnungen",
     "empty": "Keine Auszeichnungsdaten"
