@@ -142,6 +142,25 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
       onClose()
       return
     }
+    if (e.key === 'Tab') {
+      // Trap focus inside the dialog.
+      const dialog = e.currentTarget as HTMLElement
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last?.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first?.focus()
+      }
+      return
+    }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setActiveIdx((i) => Math.min(i + 1, results.length - 1))
@@ -189,13 +208,14 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
             onChange={(e) => setQuery(e.target.value)}
             className={styles.input}
             placeholder="Search…"
+            aria-label="Search"
             autoComplete="off"
             spellCheck={false}
           />
         </div>
 
         {query.trim() && (
-          <div className={styles.results} role="listbox">
+          <div className={styles.results} role="listbox" aria-label="Search results">
             {grouped.length === 0 ? (
               <p className={styles.noResults}>No results</p>
             ) : (

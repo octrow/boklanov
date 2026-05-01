@@ -68,7 +68,7 @@
 .noResults {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
-  color: var(--ink-faint);
+  color: var(--ink-mute);
   padding: var(--space-5) var(--space-4);
   margin: 0;
 }
@@ -88,7 +88,7 @@
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-mute);
   padding: var(--space-3) var(--space-4) var(--space-2);
   margin: 0;
 }

@@ -17,14 +17,14 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         {/* Col 1: Nav */}
-        <div className={styles.col}>
+        <nav className={styles.col} aria-label="Footer navigation">
           <Link href="/productions" className={styles.footerLink}>{t('productions')}</Link>
           <Link href="/about" className={styles.footerLink}>{t('about')}</Link>
           <Link href="/awards" className={styles.footerLink}>{t('awards')}</Link>
           <Link href="/press" className={styles.footerLink}>{t('press')}</Link>
           <Link href="/contact" className={styles.footerLink}>{t('contact')}</Link>
           <Link href="/archive" className={styles.footerLink}>{t('archive')}</Link>
-        </div>
+        </nav>
 
         {/* Col 2: Social */}
         <div className={styles.col}>

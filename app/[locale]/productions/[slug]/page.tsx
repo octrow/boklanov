@@ -200,7 +200,13 @@ export default async function ProductionDetailPage({
         <figure className={styles.cover}>
           <img
             src={production.poster.src}
-            alt={`${production.role} ${titleRu ?? titleEn ?? slug}`}
+            alt={[
+              production.role,
+              titleRu ?? titleEn ?? slug,
+              production.theatre.name ?? production.theatre.shortName,
+              production.year
+            ].filter(Boolean).join(', ')
+              + (production.poster.credit ? ` (${production.poster.credit})` : '')}
             loading='eager'
             decoding='async'
           />

@@ -61,7 +61,7 @@ export function SiteHeader() {
 
         {/* Controls: locale switcher + theme toggle (desktop) */}
         <div className={styles.controls}>
-          <div className={styles.localeSwitcher} aria-label="Language">
+          <nav className={styles.localeSwitcher} aria-label="Language">
             {LOCALES.map((loc) => (
               <Link
                 key={loc}
@@ -76,7 +76,7 @@ export function SiteHeader() {
                 {loc.toUpperCase()}
               </Link>
             ))}
-          </div>
+          </nav>
           <ThemeToggle />
         </div>
 

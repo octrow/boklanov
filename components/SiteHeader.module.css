@@ -118,7 +118,8 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
   letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-faint);
+  /* --ink-mute (5.46:1 on paper) not --ink-faint (2.86:1 — fails AA for interactive links). */
+  color: var(--ink-mute);
   text-decoration: none;
   padding: 2px 0;
   transition: color var(--duration-fast) var(--easing-default);

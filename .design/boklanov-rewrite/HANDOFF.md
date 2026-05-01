@@ -12,17 +12,17 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
 **Foundation (F1–F8), Core UI (C1–C11), Phase 5 SEO/OG (S1–S5), and
-Phase 6 interactions (I1, I4) are all committed and verified.** The site
-builds clean under `strictNullChecks` + ESLint. 110 static pages
+Phase 6 interactions (I1, I4, P1, P2) are all committed and verified.**
+The site builds clean under `strictNullChecks` + ESLint. 110 static pages
 pre-render successfully (sitemap.xml + robots.txt included).
 
-**I1 and I4 are complete.** Next up is P1 (mobile-first layout pass),
-then P2 (accessibility pass) and P3 (Lighthouse ≥ 95). In TASKS.md order.
+**P1 and P2 are complete.** Next up is P3 (Lighthouse mobile ≥ 95). In
+TASKS.md order.
 
 ### Read these first, in order
 
 1. `.design/boklanov-rewrite/TASKS.md` — canonical ordered task list.
-   Progress log at the top. P1–P3 are the open tasks.
+   Progress log at the top. P3 is the only open polish task.
 2. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
 3. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
 4. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy.
@@ -58,24 +58,30 @@ then P2 (accessibility pass) and P3 (Lighthouse ≥ 95). In TASKS.md order.
   `data-ph-event` delegation
 - S5 — DE chrome translations: all 44 keys complete in `messages/de.json`
 
-**Phase 6 Interactions (I1, I4):**
+**Phase 6 Interactions + Polish (I1, I4, P1, P2):**
 - I1 — Unified `--shadow-focus` ring (paper gap + oxblood) across all
-  interactive elements; eliminated double-ring from per-component `outline`
-  overrides. Oxblood hover parity on CTAs + press links. pressLink
-  transition added. — commit `df6dda1`
-- I4 — `ProductionGrid` empty state: "no match · clear" with inline
-  oxblood reset button (only when `hasActiveFilters`). LQIP blur-up:
-  `poster.lqip` loaded from `public/productions/<slug>/lqip.json`; CSS
-  background on card covers — no spinner. `app/[locale]/not-found.tsx`
-  with RU/EN/DE translations. — commit `7b691c6`
+  interactive elements; oxblood hover parity on CTAs + press links.
+  — commit `df6dda1`
+- I4 — `ProductionGrid` empty state + LQIP blur-up + `not-found.tsx`.
+  — commit `7b691c6`
+- P1 — Mobile-first layout pass: `CommandPaletteContext` exposes
+  `toggle()`; `SiteHeader` renders 44×44px search icon button on mobile
+  (on-screen Cmd-K trigger). Touch targets ≥44px fixed across filter chips,
+  clearAll, mobile nav drawer links, locale links in drawer, contact
+  copyButton, home viewAll ghost link, ProductionGrid emptyReset.
+  Contact mailtoButton full-width on mobile. — commit `7ba8106`
+- P2 — Accessibility pass: locale links contrast fixed (--ink-faint 2.86:1
+  → --ink-mute 5.46:1); CommandPalette groupLabel/noResults same fix.
+  localeSwitcher div→nav, footer nav col→nav. CommandPalette: aria-label on
+  input + listbox, Tab focus trap. Alt text: full DESIGN §12 format (role,
+  title, theatre, year, photographer) in ProductionCard + detail cover.
+  Decorative sep spans aria-hidden. hreflang RU↔EN confirmed, DE excluded.
 
 ### Key open tasks
 
 ```
-P1 — Mobile-first layout pass (375px, 44px touch targets, sticky CTA,
-     Cmd-K on-screen button on mobile)
-P2 — Accessibility pass (contrast 4.5:1, alt text, hreflang, axe-core)
 P3 — Lighthouse mobile ≥ 95 (font subsetting, critical CSS, AVIF/WebP)
+R1 — /design-review against the brief (depends on P1–P3)
 ```
 
 ### Important constraints (do not violate)
@@ -90,14 +96,11 @@ P3 — Lighthouse mobile ≥ 95 (font subsetting, critical CSS, AVIF/WebP)
 ### Recent commits on `rewrite/v2` for context
 
 ```
+(P2 commit — see git log)  P2: accessibility pass — contrast, landmarks, focus trap, alt text
+7ba8106  P1: mobile-first layout pass — touch targets + Cmd-K on-screen button
 7b691c6  I4: empty + loading + error states — lqip, clear-all, not-found
 df6dda1  I1: hover & focus audit — unified shadow-focus ring, oxblood hover parity
 25aeef9  docs: mark S1–S5 done in TASKS.md progress log — Phase 5 complete
-8b59b4a  docs: update HANDOFF.md — S1–S5 shipped, entry point now Phase 6
-5939803  S5: mark DE chrome translations complete
-19c79ad  S4: PostHog analytics — booking-CTA clicks only
-bda0628  S3: per-production OG images + page metadata
-4a66296  S2: JSON-LD schemas — Person on /about, CreativeWork on production detail
 ```
 
-Proceed with P1 (mobile-first layout pass).
+Proceed with P3 (Lighthouse mobile ≥ 95).

@@ -184,7 +184,7 @@ export function FilteredProductionsPanel({
         {/* Form — multi-select (only show options present in data) */}
         {availableForms.length > 0 && (
           <>
-            <span className={styles.sep}>·</span>
+            <span className={styles.sep} aria-hidden="true">·</span>
             <div className={styles.group} role='group'>
               {availableForms.map((form) => (
                 <button
@@ -218,7 +218,7 @@ export function FilteredProductionsPanel({
         {/* Country — multi-select (hidden when data has only one country) */}
         {availableCountries.length > 1 && (
           <>
-            <span className={styles.sep}>·</span>
+            <span className={styles.sep} aria-hidden="true">·</span>
             <div className={styles.group} role='group'>
               {availableCountries.map((code) => (
                 <button

@@ -51,7 +51,7 @@ export function ProductionCard({ production }: ProductionCardProps) {
     .join(' · ')
 
   // Alt format from DESIGN §12: {role} {title}, {theatre}, {year} ({photographer})
-  const alt = [
+  const altBase = [
     production.role,
     titleRu ?? titleEn ?? production.slug,
     theatre,
@@ -59,6 +59,9 @@ export function ProductionCard({ production }: ProductionCardProps) {
   ]
     .filter(Boolean)
     .join(', ')
+  const alt = production.poster.credit
+    ? `${altBase} (${production.poster.credit})`
+    : altBase
 
   const coverStyle = production.poster.lqip
     ? { backgroundImage: `url(${production.poster.lqip})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' }
