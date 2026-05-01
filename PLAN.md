@@ -10,10 +10,11 @@
 > | 1 — Discovery & brief | ✅ done | `.design/boklanov-rewrite/{DESIGN_BRIEF, INFORMATION_ARCHITECTURE, TASKS}.md` |
 > | 2 — Visual identity & DESIGN.md | ✅ done | `DESIGN.md`, `app/globals.css`, `.design/boklanov-rewrite/tokens.{md,css}` |
 > | 3 — Content migration (F1–F8) | ✅ done | `scripts/sync-from-notion.ts`, `content/productions/<slug>/`, `lib/content.ts`. Notion deps fully removed in F8. |
-> | 4 — Frontend rebuild | ✅ done (11 / 11) | C1–C11 all committed. Layout shell, Cmd-K palette, theme toggle, lang switch shipped. 108 static pages × 3 locales. Last commit: `ab2ce8b`. |
-> | 5 — i18n + SEO + OG | ⏳ pending | next-intl wired; sitemap/RSS/JSON-LD/OG-port pending in S1–S5 |
-> | 6 — Design review | ⏳ pending | R1 against the brief after C-tasks land |
-> | 7 — Deploy + cutover | ⏳ pending | D1–D4 |
+> | 4 — Frontend rebuild | ✅ done (11 / 11) | C1–C11 all committed. Layout shell, Cmd-K palette, theme toggle, lang switch shipped. 110 static pages × 3 locales. Last commit: `ab2ce8b`. |
+> | 5 — i18n + SEO + OG | ✅ done (5 / 5) | S1–S5 shipped. Sitemap (105 URLs, hreflang RU↔EN), robots, RSS (RU+EN), JSON-LD `Person` + `CreativeWork`, `app/api/og/[slug]`, PostHog `booking_cta_click` only, DE chrome translations complete. |
+> | 6 — Polish & interactions | ✅ done (5 / 5) | I1, I4, P1, P2, P3 shipped. **I5 (signature gesture) cut formally in R1** per `DESIGN.md` §13. Last commit: `6ddb466`. |
+> | 6.5 — Design review + R1.fix | ✅ done | `DESIGN_REVIEW.md`. Zero §11 anti-patterns. R1.fix: sticky-CTA right-rail grid, cover→title rule, filter group labels, ThemeToggle SVG, search × suppression, LQIP gating. Commits `73620e6` `871f287`. |
+> | 7 — Deploy + cutover | ⏳ pending | **R2 real-device QA** (unblocked) → D1 Vercel preview → D2 hosting → D3 domain → D4 cutover |
 >
 > Decisions D1–D6 from §7 are all **confirmed migrate / editorial /
 > next-intl / repo MDX / no Anthropic Design / .ru status quo**. Aesthetic
