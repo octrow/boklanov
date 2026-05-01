@@ -1,0 +1,34 @@
+/* DESIGN.md §6 + §15.1 — productions grid.
+   1-col mobile, 2-col ≥768px, 3-col ≥1024px. Gutters 20/24/32 per
+   tokens. */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--gutter-mobile);
+  row-gap: var(--space-7);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--gutter-desktop);
+  }
+}
+
+.empty {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  padding: var(--space-7) 0;
+  text-align: left;
+}

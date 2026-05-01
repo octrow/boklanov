@@ -3,5 +3,9 @@
     "productions": "Inszenierungen",
     "about": "über",
     "contact": "Kontakt"
+  },
+  "productions": {
+    "title": "Inszenierungen",
+    "empty": "Keine Inszenierungen passen zu diesen Filtern"
   }
 }

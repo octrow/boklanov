@@ -3,5 +3,9 @@
     "productions": "productions",
     "about": "about",
     "contact": "contact"
+  },
+  "productions": {
+    "title": "productions",
+    "empty": "No productions match these filters"
   }
 }

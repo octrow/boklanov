@@ -1,0 +1,107 @@
+/* DESIGN.md §7.2 — Production card.
+   Warm-editorial body + brutalist mono metadata. No radius, no shadow,
+   hover reveals oxblood underline under the RU title only. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 0 var(--space-5);
+  text-decoration: none;
+  color: inherit;
+  /* Hairline rule between rows of the grid. Last-row strays read as a
+     newspaper rule, not a bug. */
+  border-bottom: 1px solid var(--rule);
+}
+
+.card:focus-visible {
+  /* The default :focus-visible ring is oxblood + paper gap; let it sit
+     proud of the cover. */
+  outline-offset: 4px;
+}
+
+.cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-sunken);
+  overflow: hidden;
+}
+
+.coverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Typographic fallback for productions without a poster — DESIGN §5.3:
+   "deliberate treatment, never a placeholder". */
+.coverFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-5);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--ink);
+  /* Subtle texture so the fallback reads intentional. */
+  background:
+    linear-gradient(180deg, transparent 60%, var(--paper-raised) 100%),
+    var(--paper-sunken);
+}
+
+.titleRu {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--ink);
+  margin: 0;
+  /* Underline sits below the baseline; oxblood reveal on card hover. */
+  display: inline;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size var(--duration-fast) var(--easing-default);
+  padding-bottom: 2px;
+}
+
+.card:hover .titleRu,
+.card:focus-visible .titleRu {
+  background-size: 100% 1px;
+}
+
+.titleEn {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--ink-mute);
+  margin: 0;
+}
+
+.meta {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: 0;
+  /* Wrap gracefully on narrow viewports; preserve the · separators. */
+  word-break: break-word;
+}
+
+.titleStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-1);
+}
+
+.metaWrap {
+  padding: 0 var(--space-1);
+}

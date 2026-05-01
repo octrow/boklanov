@@ -44,9 +44,15 @@ Date: 2026-04-30
 | F5 — metadata.yml overlay | ✅ done | `ea58b40` | — |
 | F6 — content loader | ✅ done | `34514c2` | — |
 | F7 — base styles + reset | ✅ done | `728ea69` | — |
-| F8 — cut legacy renderer | ✅ done | _pending_ | `pages/`, legacy `components/`, `lib/notion*.ts`, `lib/config.ts`, `lib/types.ts`, `site.config.ts`, `styles/notion.css`, `styles/prism-theme.css`, `styles/global.css` deleted. `react-notion-x` + `notion-{client,types,utils}` removed (plus transitively-only-Notion deps). `next.config.js` ignoreBuildErrors / ignoreDuringBuilds dropped — `npx next build` clean under strictNullChecks. `pages/api/social-image.tsx` stubbed (501) until S3. |
+| F8 — cut legacy renderer | ✅ done | `93c5afd` | `pages/`, legacy `components/`, `lib/notion*.ts`, `lib/config.ts`, `lib/types.ts`, `site.config.ts`, `styles/notion.css`, `styles/prism-theme.css`, `styles/global.css` deleted. `react-notion-x` + `notion-{client,types,utils}` removed (plus transitively-only-Notion deps). `next.config.js` ignoreBuildErrors / ignoreDuringBuilds dropped — `npx next build` clean under strictNullChecks. `pages/api/social-image.tsx` stubbed (501) until S3. |
 
-**Foundation = 8 / 8 done.** Phase 4 (Core UI vertical slices) is gated on
+**Foundation = 8 / 8 done.**
+
+### Core UI
+
+| Task | Status | Commit | Notes |
+|------|--------|--------|-------|
+| C1 — Production card + grid | ✅ done | _pending_ | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. | Phase 4 (Core UI vertical slices) is gated on
 F6 + F7. F8 is gated on Phase 4 having at least one App Router page
 rendering real content.
 
@@ -130,7 +136,7 @@ rendering real content.
 
 ## Core UI (Phase 4 — vertical slices in DESIGN.md §15 order)
 
-- [ ] **C1 — Production card + grid**: Single `<ProductionCard>` per
+- [x] **C1 — Production card + grid**: Single `<ProductionCard>` per
   DESIGN.md §7.2 — 4:5 cover (no radius, no border), Lora RU title,
   Inter EN subtitle in `--ink-mute`, mono metadata row
   `theatre · year · ageRating · countryCode`, hairline rule between cards.
