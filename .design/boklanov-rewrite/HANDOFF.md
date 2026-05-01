@@ -1,4 +1,4 @@
-# Handoff prompt — boklanov.ru rewrite, R2 real-device QA → D1 Vercel preview
+# Handoff prompt — boklanov.ru rewrite, Phase 7.5 Round 1 → R2 → D1 → Round 2 → D1 → Round 3
 
 Paste the block below into a fresh Claude Code conversation in the
 `boklanov` repo (branch `rewrite/v2`) to continue.
@@ -11,12 +11,37 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 `rewrite/v2`. This is a Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
-**All code work through Q1–Q7 post-R1 fixes is done. Build is clean.**
+**Two structural facts that affect copy and proposals:**
+1. Roman is a director **without a permanent troupe**. He stages
+   productions at producing theatres (Бремен · Алматы · Вена · Берлин ·
+   Ташкент …) and tours one solo show, *Похороните меня за плинтусом*
+   ("the Plinth"), alone — no company travels with him.
+2. Roman has **not been in Russia since the 2022 mobilisation**.
+   Productions he directed in Russia before 2022 (e.g. the Plinth at
+   БТК) remain part of the body of work, but no copy on the site may
+   claim present-tense work in Russia. The colophon is therefore
+   city-free; staging-geography labels use past-tense.
+
+**All code work through Phase 7.5 Round 1 is done. Build is clean.**
 24 productions × 3 locales = 72 detail routes, plus per-locale chrome.
-`strictNullChecks` + ESLint pass. I5 is cut. Both the `DESIGN_REVIEW.md`
-list and the post-R1 manual-QA findings (Q1–Q7) are fully exhausted.
-The next milestone is **R2 real-device QA** (Daniil + Roman), then
-**D1 Vercel preview**.
+`strictNullChecks` + ESLint pass. I5 (signature gesture v1) is cut.
+Both the `DESIGN_REVIEW.md` list and the post-R1 manual-QA findings
+(Q1–Q7 + Q8) are fully exhausted. Phase 7.5 Round 1 (DA-1.A folio +
+DA-1.B cue numbers + DA-1.C edition stamp) is ✅ shipped.
+
+**Next milestones, in order:**
+1. ~~**Phase 7.5 Round 1** — folio + cue numbers + year-only colophon~~ ✅ **done 2026-05-02**
+2. **R2 real-device QA** (Daniil + Roman) — tests Round 1 chrome
+   alongside the existing build.
+3. **Phase 7.5 Round 2** — production credits reframe + theatre slate
+   + two-geographies (`/about` staging row + Plinth tour band) +
+   premiere-mark cards (~1.5–2 days).
+4. **D1 Vercel preview** — push to staging, share URL with Roman.
+5. **Phase 7.5 Round 3** — slate-strike gesture paired with static
+   edition-frame fallback for `prefers-reduced-motion` (~1 day,
+   behind `?gesture=off` flag for first 48h).
+6. **Phase 8** — Authoring handoff (Obsidian + R2). Locked in
+   `CONTENT_WORKFLOW.md`. Runs after Phase 7 cutover.
 
 ### What's landed (full history)
 
@@ -96,6 +121,30 @@ token parity.
    (§Contact reordered to match D8 revision).
 6. `content/README.md` — authoring workflow + the new `awards`
    overlay path.
+7. `PLAN.md` (repo root)
+8. `.design/boklanov-rewrite/photo-audit.md`
+9. `.design/boklanov-rewrite/HANDOFF.md`
+10. `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` — **✅ locked
+    2026-05-02.** Source of truth = **F (Obsidian + obsidian-git,
+    vault = repo)**; image hosting = **Cloudflare R2** with
+    `cdn.boklanov.com`; `metadata.yml` overlay **folded into MDX
+    frontmatter** in Phase 8.3 (one-shot merge, single source of
+    truth per field); editorial workflow = trust-on-publish +
+    `draft` branch; Roman onboarded via mini-guide
+    `content/AUTHORING.ru.md`. **Decap CMS (C) deferred as a future
+    second admin surface** (Phase 9), not rejected. Migration plan in
+    §6 (~2.5 days), activates after Phase 7 cutover. Tasks in
+    `TASKS.md` § Phase 8.
+11. `.design/boklanov-rewrite/DESIGN_AMBITION.md` — **✅ locked
+    2026-05-02.** Phase 7.5 fingerprint moves (folio, cue numbers,
+    production credits reframed, theatre slate, two-geographies, year-
+    only colophon, slate-strike + edition-frame gesture pair). All §10
+    / §11 questions resolved; locks recorded in §0.5. Round 1 ships
+    before R2; Round 2 after R2 / before D1; Round 3 after D1 behind
+    `?gesture=off` flag. Cuts: §3.D specimen-hero, §3.J errata-404,
+    §4.1.B string-line. Pending only the section-label choice for
+    §3.G.1 (`ГДЕ СТАВИЛ` recommended) and Roman's full Plinth tour list. **Already
+    cross-references the Phase 8 content-workflow lock** in its §0.
 
 ### R2 scope (real-device QA — requires Daniil + Roman)
 
@@ -155,6 +204,35 @@ D1 — Vercel preview from `rewrite/v2`
 - Share preview URL with Roman.
 
 After D1: D2 hosting decision, D3 domain, D4 cutover.
+
+### Phase 8 scope (authoring handoff — queued behind Phase 7)
+
+> Locked 2026-05-02 in `CONTENT_WORKFLOW.md`. Don't start until D4
+> cutover is complete (Phase 8 mutates the content pipeline; mixing
+> with Phase 7 risks broken deploys).
+
+`TASKS.md` § Phase 8 has the five sub-tasks (~2.5 days total):
+
+1. **8.1** Vault layout + Properties schema for Obsidian (`.obsidian/`
+   committed; `mdx-as-md` plugin; `scripts/lint-mdx.ts` rejecting
+   `![[wikilinks]]`).
+2. **8.2** R2 image migration (`cdn.boklanov.com` custom domain;
+   `rclone sync` one-shot; `<Image>` `src` rewritten via `CDN_BASE`
+   env var; `npm run upload-images` wrapper).
+3. **8.3** Fold `metadata.yml` overlay into MDX frontmatter
+   (`scripts/fold-overlay.ts` one-shot merge, `git rm`); simplify
+   `lib/content.ts` to single-read frontmatter; retire
+   `scripts/sync-from-notion.ts` → `scripts/_legacy/`; archive
+   `notion-data/`.
+4. **8.4** Write `content/AUTHORING.ru.md` from skeleton in
+   CONTENT_WORKFLOW.md §6.5; rewrite `content/README.md` to point
+   at it.
+5. **8.5** Cyrillic-only-Name orphan audit (`Сахарный ребёнок`,
+   `Каштанка`, …) — Roman confirms in Properties panel; log in
+   `.design/boklanov-rewrite/orphan-audit-2026-05.md`.
+
+Phase 9 (Decap CMS layered onto the same vault) is **deferred** —
+activate only when Roman explicitly asks for browser editing.
 
 ### Important constraints (do not violate)
 

@@ -1,5 +1,27 @@
 # `content/` — production data
 
+> **Status note (2026-05-02).** The workflow described below is the
+> **current** state (Notion → sync → MDX + `metadata.yml` overlay).
+> A future state was locked in
+> `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` on 2026-05-02:
+>
+> - **Phase 8** (after Phase 7 cutover, ~2.5 days) replaces Notion
+>   with **Obsidian + obsidian-git, vault = repo**. Roman edits MDX
+>   directly; no sync script.
+> - `metadata.yml` is **folded into MDX frontmatter** in Phase 8.3 —
+>   single source of truth per field. `lib/content.ts` overlay merge
+>   collapses to a plain frontmatter read.
+> - Images move to **Cloudflare R2** (`cdn.boklanov.com`) in
+>   Phase 8.2; `public/productions/` shrinks to LQIPs only.
+> - Roman onboarding lives in `content/AUTHORING.ru.md` (Phase 8.4),
+>   replacing this README's Notion-centric workflow.
+> - **Decap CMS is deferred** as a future second admin surface on
+>   the same vault.
+>
+> Until Phase 8 ships, edit via the Notion + sync flow below. After
+> Phase 8 ships, this README will be rewritten and `metadata.yml`
+> sections will be deleted.
+
 This directory holds the merged content that page routes render. The
 shape is:
 

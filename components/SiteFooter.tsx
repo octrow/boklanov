@@ -11,6 +11,7 @@ const INSTAGRAM_URL = 'https://instagram.com/roman_boklanov'
 
 export async function SiteFooter({ locale }: { locale: Locale }) {
   const t = await getTranslations('nav')
+  const tFooter = await getTranslations('footer')
   const year = new Date().getFullYear()
 
   return (
@@ -61,6 +62,12 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
           </span>
         </div>
       </div>
+
+      {/* DA-1.C — Edition stamp (§3.H). Year-only colophon — no cities, no
+          version mark. Static; changes only when the edition rolls over. */}
+      <small className={styles.colophon}>
+        {tFooter('colophon')}
+      </small>
     </footer>
   )
 }

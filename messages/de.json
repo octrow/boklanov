@@ -69,5 +69,8 @@
     "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
     "home": "Startseite",
     "productions": "alle Inszenierungen"
+  },
+  "footer": {
+    "colophon": "AUSGABE 2026"
   }
 }

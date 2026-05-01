@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
+import { Cue } from '@/components/Cue'
 import type { Locale } from '@/i18n/routing'
 
 import styles from './page.module.css'
@@ -161,7 +162,9 @@ export default async function AboutPage({
       {/* Milestones timeline */}
       {milestones.length > 0 && (
         <section className={styles.milestonesSection}>
-          <p className={styles.lineageHeading}>{milestonesLabel}</p>
+          <Cue mark="CUE I" first>
+            <h2 className={styles.lineageHeading}>{milestonesLabel}</h2>
+          </Cue>
           <div className={styles.milestones}>
             {milestones.map((m) => (
               <div key={m.year} className={styles.milestone}>
@@ -176,7 +179,9 @@ export default async function AboutPage({
       {/* Lineage block */}
       {lineage.length > 0 && (
         <section className={styles.lineageSection}>
-          <p className={styles.lineageHeading}>{lineageLabel}</p>
+          <Cue mark="CUE II" first>
+            <h2 className={styles.lineageHeading}>{lineageLabel}</h2>
+          </Cue>
           <div className={styles.lineageGrid}>
             {lineage.map((item) => (
               <div key={item.key} className={styles.lineageCard}>

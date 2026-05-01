@@ -334,6 +334,15 @@ design must actively reject:
 If a Phase-4 prompt produces any of these, reject and re-prompt with this list
 attached.
 
+**§11 vs. Phase-7.5 fingerprints.** `.design/boklanov-rewrite/DESIGN_AMBITION.md`
+proposes a set of "editorial fingerprint" moves (folio header, cue numbers,
+production credits reframed as playbill, theatre slate, two-geographies,
+year-only colophon, paired slate-strike + edition-frame gesture). Each move
+has been individually checked against this anti-pattern list; the audit lives
+in `DESIGN_AMBITION.md` §13.1. None of the locked moves violate §11. If a
+future addition feels like it does, the audit table is the place to argue it
+out — not by silently softening §11 itself.
+
 ---
 
 ## 12. Accessibility floor
@@ -353,10 +362,19 @@ Non-negotiable in v1:
 
 ---
 
-## 13. The signature gesture (deferred to Phase 4)
+## 13. The signature gesture (cut in R1; reopened in DESIGN_AMBITION §4)
 
-Brief Q3. One subtle paper-cut or string-line transition on home-page first
-paint. Decision deferred to Phase 4 prototypes. **Constraints:**
+Brief Q3. Originally specified as one subtle paper-cut or string-line
+transition on home-page first paint. **Cut formally in R1** (PLAN Phase
+6, I5) on the rationale that "the site survives without a signature
+gesture; it doesn't survive a gimmick."
+
+`.design/boklanov-rewrite/DESIGN_AMBITION.md` §4 reopens the question
+narrowly with three concrete proposals (slate-strike, string-pull,
+edition-frame) and a recommended curator test before re-shipping it.
+**The cut still stands** until Round 1 + Round 2 from that doc land
+and the chrome is calibrated. Constraints from the original brief
+remain non-negotiable if the gesture is rebuilt:
 
 - Total duration ≤ 400ms.
 - Runs once on first paint, never on scroll, never on navigation.

@@ -71,3 +71,20 @@
   color: var(--ink-faint);
   text-transform: lowercase;
 }
+
+/* ── Edition stamp — DA-1.C (§3.H) ───────────────────────────────────── */
+
+.colophon {
+  display: block;
+  max-width: var(--max-width-page);
+  margin: var(--space-6) auto 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  font-style: normal;
+}

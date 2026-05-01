@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import * as React from 'react'
 
+import { Cue } from '@/components/Cue'
 import { countryCode } from '@/components/ProductionCard'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -365,7 +366,9 @@ export default async function ProductionDetailPage({
         {/* 7. Photos */}
         {production.gallery.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+            <Cue mark="CUE I" first>
+              <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+            </Cue>
             <div className={styles.gallery}>
               {production.gallery.map((g, i) => (
                 <figure key={`${g.src}-${i}`} className={styles.galleryItem}>
@@ -395,7 +398,9 @@ export default async function ProductionDetailPage({
             current data only has links, so render press as a list. */}
         {production.press.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionLabel}>{t('press')}</h2>
+            <Cue mark="CUE II" first>
+              <h2 className={styles.sectionLabel}>{t('press')}</h2>
+            </Cue>
             <ul className={styles.pressList}>
               {production.press.map((p) => (
                 <li key={p.url} className={styles.pressItem}>
@@ -419,7 +424,9 @@ export default async function ProductionDetailPage({
         {/* 9. Awards */}
         {production.awards.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionLabel}>{t('awards')}</h2>
+            <Cue mark="CUE III" first>
+              <h2 className={styles.sectionLabel}>{t('awards')}</h2>
+            </Cue>
             <ul className={styles.awardList}>
               {production.awards.map((a, i) => (
                 <li key={`${a.name}-${i}`} className={styles.awardItem}>
@@ -436,7 +443,9 @@ export default async function ProductionDetailPage({
         {(production.theatre.url ||
           production.externalLinks.length > 0) && (
           <section className={styles.section}>
-            <h2 className={styles.sectionLabel}>{t('links')}</h2>
+            <Cue mark="CUE IV" first>
+              <h2 className={styles.sectionLabel}>{t('links')}</h2>
+            </Cue>
             <ul className={styles.linksList}>
               {production.theatre.url && (
                 <li className={styles.linksItem}>

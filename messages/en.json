@@ -69,5 +69,8 @@
     "body": "The page you're looking for doesn't exist or has been moved.",
     "home": "home",
     "productions": "all productions"
+  },
+  "footer": {
+    "colophon": "2026 EDITION"
   }
 }

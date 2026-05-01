@@ -9,6 +9,44 @@
   background: var(--paper);
 }
 
+/* ── Folio band (DA-1.A) ──────────────────────────────────────────────── */
+
+.folio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 6px var(--gutter-mobile);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule);
+  font-variant-numeric: tabular-nums;
+}
+
+.folioSep {
+  opacity: 0.5;
+}
+
+.folioIndex {
+  color: var(--ink-mute);
+}
+
+@media (min-width: 768px) {
+  .folio {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .folio {
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+  }
+}
+
 .inner {
   display: flex;
   align-items: center;

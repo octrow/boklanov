@@ -31,6 +31,23 @@ The rewrite addresses both.
 
 ## 2. Primary user and jobs to be done
 
+> **Annotation 2026-05-02 (does not modify locked decisions D1–D15).**
+> Two production-context facts surfaced after the brief was locked,
+> recorded here so downstream copy work doesn't drift:
+>
+> 1. **Roman has no permanent troupe.** He directs at producing
+>    theatres (Бремен · Алматы · Вена · Берлин · Ташкент · …) and
+>    tours one solo show alone (*Похороните меня за плинтусом*).
+>    Per-production credits belong to the producing theatre, not to
+>    a "Roman company." Consequence applied in
+>    `DESIGN_AMBITION.md` §3.B.
+> 2. **Roman has not been in Russia since the 2022 mobilisation.**
+>    Productions he directed in Russia before 2022 stay on the site
+>    as part of the body of work; copy must not claim present-tense
+>    work in Russia. Consequence applied in `DESIGN_AMBITION.md`
+>    §3.G.1 (tense-neutral section labels) and §3.H (year-only
+>    colophon, no city pairing).
+
 **#1 user:** a **theatre director or curator** (probably Russian-speaking) in a
 European city — **Berlin, Bremen, Vienna, London, Alicante, Bern, Hamburg,
 Munich** — opening the link from an Instagram DM or a colleague's email,
@@ -65,10 +82,10 @@ site.
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | D1  | **Site goal:** booking magnet first, EPK second, archive third.                                                                                       |
 | D2  | **Primary user:** theatre director / curator, RU-speaking, EU cities, mobile, 90s.                                                                    |
-| D3  | **Content source:** Notion stays editor-of-record. `scripts/sync-from-notion.ts` regenerates `content/productions/*.mdx` at build. MDX is generated, never hand-edited. |
+| D3  | **Content source:** Notion stays editor-of-record. `scripts/sync-from-notion.ts` regenerates `content/productions/*.mdx` at build. MDX is generated, never hand-edited. _**Superseded 2026-05-02** by `CONTENT_WORKFLOW.md` lock: in Phase 8 the source of truth becomes **Obsidian + obsidian-git, vault = repo**; MDX becomes hand-edited; the sync script is retired to `scripts/_legacy/`._ |
 | D4  | **Bilingual:** RU + EN parity for everything programmers care about. **DE = UI-chrome only for v1**; promote to full DE bios for the 5–6 most-toured productions in v2. Press clippings stay in original language with no translation. |
 | D5  | **IA:** single Productions index, default-filtered to `role=director`. Acting/co-direction/readings tucked behind a toggle. Curator-default landing opens with a short artistic statement and 4–6 hand-curated featured shows above the filterable grid. |
-| D6  | **Content metadata:** heuristic extraction (age rating, year, country flags) from MD on first sync into `metadata.yml`; hand-fix the 20% the heuristic misses. Roman never edits the metadata file. |
+| D6  | **Content metadata:** heuristic extraction (age rating, year, country flags) from MD on first sync into `metadata.yml`; hand-fix the 20% the heuristic misses. Roman never edits the metadata file. _**Superseded 2026-05-02** by `CONTENT_WORKFLOW.md` lock: in Phase 8.3 `metadata.yml` is folded one-shot into MDX frontmatter (single source of truth per field); the overlay file is deleted; Roman edits frontmatter directly via Obsidian Properties panel._ |
 | D7  | **Production page layout:** cover · title (RU + smaller EN/DE) · age/year/duration/country chips · 1-line synopsis · credits · "Watch / listen" CTA + "Tech rider (PDF)" + "Press kit (ZIP)" when present · photos with credit on hover · critic quotes · awards · external theatre links · sticky "Email Roman about touring this show" CTA. |
 | D8  | **Contact / booking:** **revised 2026-05-01.** On the standalone `/contact` page, **Telegram + Instagram are primary** (Roman responds there fastest); prefilled mailto + plain-text copy-pasteable email demoted to secondary. No form, no backend. The **sticky booking CTA on `/productions/[slug]` stays mailto** — that CTA is a booking magnet (brief D1) and benefits from a prefilled subject + body that Telegram cannot replicate cleanly. _Original phrasing: "prefilled mailto primary + Telegram + Instagram secondary." Reordered after R1 manual QA._ |
 | D9  | **Search & recommends:** Cmd-K palette across productions, awards, press, theatres, cities, with transliterated index. Recommends 3 cards by `same age bucket + same theatre form + same lineage (Кудашов / БТК)`. |

@@ -6,6 +6,18 @@ Scope: Home, Productions index, one Production detail (`/productions/lina-marlin
 Date: 2026-05-01
 Build under review: branch `rewrite/v2`, head `6ddb466` (P3)
 
+> **Status (2026-05-02):** R1 is fully resolved (all Must-Fix and
+> Should-Fix items shipped in `73620e6` `871f287` `09d5005`). This
+> document is **reference only** — kept as the historical record of
+> what R1 found and how it was closed.
+>
+> A retrospective evaluation against this baseline ("the chrome reads
+> as a generic editorial template") is captured in
+> `.design/boklanov-rewrite/DESIGN_AMBITION.md`, locked 2026-05-02 as
+> Phase 7.5. R1's verdict ("zero §11 anti-patterns shipped") still
+> stands; Phase 7.5 adds editorial fingerprints **on top** of the R1
+> baseline, it does not relitigate it.
+
 ---
 
 ## Screenshots Captured

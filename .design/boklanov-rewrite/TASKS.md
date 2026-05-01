@@ -691,6 +691,202 @@ production build before D1.
 
 ---
 
+## Phase 7.5 — Editorial fingerprints (DESIGN_AMBITION)
+
+> Locked 2026-05-02 in `.design/boklanov-rewrite/DESIGN_AMBITION.md`
+> §0.5. Three rounds elevating the chrome from "generic editorial"
+> to "theatre programme" while staying inside `DESIGN.md` §11
+> anti-patterns. Brief is unchanged. Total ~3.5 days, sequenced
+> alongside R2 / D1 — does not block deploy.
+>
+> **Sequence:** Round 1 → R2 → Round 2 → D1 → Round 3.
+
+### Round 1 — Publication chrome (~1 day, ships **before R2**)
+
+- [x] **DA-1.A — Folio (§3.A)**: `lib/folio.ts` — `folioFor(pathname,
+  productions)` → `{ sectionKey, index? }`. `<div class="folio"
+  aria-hidden="true">` inserted above the `.inner` row in
+  `SiteHeader.tsx`; shows `SECTION ⟶ 01 / 24` on section pages,
+  hidden on home. `SiteHeader` now accepts `productions: { slug }[]`
+  prop; layout passes `productions.map(p => ({slug: p.slug}))`.
+  `.folio` CSS in `SiteHeader.module.css` — mono caps, `--font-size-chip`,
+  `--letter-spacing-wide`, `--ink-faint`, `font-variant-numeric: tabular-nums`.
+  No new tokens.
+
+- [x] **DA-1.B — Cue numbers (§3.C)**: New `components/Cue.tsx` +
+  `components/Cue.module.css`. `<Cue mark="CUE I">` wraps section
+  heads on `/about` (CUE I chronology / CUE II lineage), `/awards`
+  (CUE I–N per production group), `/productions/[slug]` (CUE I photos /
+  CUE II press / CUE III awards / CUE IV links). `<span>` is
+  `aria-hidden="true"` — `<h2>` carries the screen-reader name. `first`
+  prop suppresses top margin when Cue opens a padded section.
+
+- [x] **DA-1.C — Edition stamp (§3.H, year-only)**: `<small
+  className={styles.colophon}>{tFooter('colophon')}</small>` added to
+  `SiteFooter.tsx` after the 3-column `.inner`, before closing
+  `<footer>`. i18n in new `footer` namespace:
+  RU `2026 ИЗДАНИЕ`, EN `2026 EDITION`, DE `AUSGABE 2026`.
+  Year-only — no cities, no version mark (A14.1 → γ).
+
+### Round 2 — Theatrical move (~1.5–2 days, after R2 / before D1)
+
+- [ ] **DA-2.A — Production credits block (§3.B)**: Reframe the
+  existing credits component on `ProductionDetail` as a leader-dot
+  table — role left, name right, dotted spacer. Use semantic
+  `<dl><dt>…</dt><dd>…</dd></dl>` (skill rule "semantic HTML before
+  ARIA"). Section header is just `CREDITS` via the `<Cue>` system.
+  Cast block is a sub-block under main credits with a hairline
+  rule between. **No troupe claim** — Roman has no permanent
+  company; each production is the producing-theatre's cast. **No
+  puppet-as-cast naming** (A6 NOPE).
+
+- [ ] **DA-2.B — Theatre slate (§3.F)**: Upgrade the existing
+  right-rail spec sheet to a bordered slate. Hairline border
+  (`--rule-strong`), inset padding, mono throughout, `font-variant-
+  numeric: tabular-nums`. Add a `PRODUCTION 14 / 24` index line tied
+  to the §3.A folio system. Add `TOURING` field for Plinth → reads
+  `SOLO`.
+
+- [ ] **DA-2.C — Staging geography (§3.G.1)**: New mono row on
+  `/about` between bio prose and lineage block, plus a compressed
+  echo on home directly below the artistic statement. Cities
+  (locked, chronological order of first commission):
+  `СПБ · МОСКВА · АЛМАТЫ · БРЕМЕН · ВЕНА · БЕРЛИН · ТАШКЕНТ`.
+  Section label **locked past-tense 2026-05-02**: RU `ГДЕ СТАВИЛ`,
+  EN `STAGED IN`, DE `INSZENIERTE IN`. Past-tense is the only form
+  that's literally truthful for both the Russian cities (worked
+  there, can't currently) and the active commissions
+  (already-staged productions still play). Each city hover-links
+  to `/productions?city=<slug>` — reuses existing C4 URL state.
+
+- [ ] **DA-2.D — Plinth tour band (§3.G.2)**: Add a `tour[]` array
+  to `bury-me-behind-the-baseboard/index.mdx` frontmatter (seed
+  list: `London · Edinburgh · Bern · Wien · Almaty · Lisboa ·
+  Porto · Luxembourg · Alicante`; Roman extends in Phase 8).
+  Render a band above the photo gallery on the Plinth's detail
+  page only — `ON TOUR` label, mono caps, hairline rules above and
+  below, no city links. **If `tour[]` is empty/missing, the band
+  hides** (no broken-state). Year range omitted by default until
+  Roman gives one.
+
+- [ ] **DA-2.E — Premiere mark on cards (N1)**: Replace `year` slot
+  on `<ProductionCard>` mono meta row with `PREM YYYY·MM` (data
+  already in `metadata.yml.premiereDate` from Q8). Pure CSS + one
+  template change.
+
+### Round 3 — The opening cue (~1 day, after D1, optional)
+
+- [ ] **DA-3.A — Slate-strike (§4.1.A) + edition-frame fallback
+  (§4.1.C)**: 320ms one-shot CSS animation on home first paint,
+  gated by `sessionStorage.firstPaintDone` so it doesn't recur on
+  navigation. Wordmark "slate top" pseudo-element drops 1.5em onto
+  baseline + hairline rule fades in. **Must ship paired with the
+  static edition-frame** as the `prefers-reduced-motion: reduce`
+  fallback — both render identical end-state visually. Behind a
+  `?gesture=off` query flag for first 48h post-deploy so we can
+  capture a comparison screenshot for design review.
+
+### Cuts (do not build)
+
+- ❌ §3.D specimen-hero (watermark) — deferred indefinitely. Highest
+  risk of "too clever," lowest brief-margin (A8).
+- ❌ §3.J errata 404 — vanishingly small audience (A8).
+- ❌ §4.1.B string-line pull — reads as a progress bar.
+- 💤 §3.E marginalia — deferred. Above 1280px only; needs a real
+  desktop test cohort post-R2 to evaluate.
+- 💤 §13.4 N2 run-of-show row — deferred to post-D1, optional.
+
+### Sequencing within Phase 7.5
+
+- DA-1.A · 1.B · 1.C are independent; can land in one PR or three.
+- DA-2.* are independent of each other but all depend on Round 1
+  shipping (cue system is reused by 2.A's `CREDITS` header).
+- DA-3.A can ship behind a flag any time after Round 1; honest
+  evaluation is post-D1 with the curator test described in
+  `DESIGN_AMBITION.md` §4.2.
+
+---
+
+## Phase 8 — Authoring handoff (Obsidian + R2)
+
+> Locked 2026-05-02 in `.design/boklanov-rewrite/CONTENT_WORKFLOW.md`.
+> **Source of truth: F (Obsidian + obsidian-git, vault = repo).**
+> **Image hosting: R2** (`cdn.boklanov.com`).
+> **`metadata.yml` overlay folded into MDX frontmatter** (Phase 8.3
+> one-shot merge; overlay deprecated, single source of truth per field).
+> **Editorial workflow:** trust-on-publish + `draft` branch.
+> **Decap (C) deferred** as a later second admin surface — see Phase 9.
+> Total ~2.5 days. Runs after Phase 7 deploy.
+
+- [ ] **8.1 — Vault layout + Properties schema (½ day)**: Register
+  `.mdx` as markdown in Obsidian (community plugin or `app.json`).
+  Configure Obsidian Properties to render canonical frontmatter keys
+  (`title`, `titleEn`, `year`, `theatre`, `premiereDate`, `featured`,
+  `public`, `tags`, `synopsis`, …) as typed form fields with Cyrillic
+  labels. Commit `.obsidian/community-plugins.json` so any clone
+  inherits config. Add `scripts/lint-mdx.ts` failing the build on
+  Obsidian-flavoured `![[wikilink]]`.
+
+- [ ] **8.2 — R2 image migration (½ day)**: Provision R2 bucket
+  `boklanov-content`, public-read access, custom domain
+  `cdn.boklanov.com`, auto-SSL. One-shot
+  `rclone sync public/productions/ r2://boklanov-content/productions/`.
+  Introduce `CDN_BASE` env var; rewrite `<Image>` `src` paths to
+  `${CDN_BASE}/productions/<slug>/...`. Keep LQIPs / blurhashes inline
+  in MDX. Author `npm run upload-images` — a thin `wrangler r2 object
+  put` wrapper Roman calls before commit.
+
+- [ ] **8.3 — Fold overlay + retire Notion sync (½ day)**: Write
+  `scripts/fold-overlay.ts` — one-shot merge of every non-null
+  `metadata.yml` field into `index.mdx` frontmatter (overlay-wins),
+  then `git rm` each `metadata.yml`. Simplify `lib/content.ts` —
+  drop `pick(overlay, fm)` and all `overlay.*` references; reads
+  reduce to plain frontmatter. Move
+  `scripts/sync-from-notion.ts` → `scripts/_legacy/` with header
+  `// frozen 2026-05-02; do not re-run`. Move `notion-data/` to
+  `archive/notion-export-2026-05` branch (frees ~250 MB on `main`).
+  Replace `npm run sync` with
+  `echo "sync retired; edit in Obsidian"`. Rewrite
+  `content/README.md` to point at `AUTHORING.ru.md`.
+
+- [ ] **8.4 — `content/AUTHORING.ru.md` mini-guide (½ day)**: Write
+  the Russian-language onboarding for Roman from the skeleton in
+  CONTENT_WORKFLOW.md §6.5. Cover: install (desktop + mobile), open
+  vault, edit Properties, edit prose, commit + push, draft branch,
+  add new productions, swap photos via `npm run upload-images`,
+  troubleshooting. Daniil walks through it once async (Telegram or
+  recorded video). Replaces the Notion-centric flow in
+  `content/README.md`.
+
+- [ ] **8.5 — Cyrillic-only-Name orphan audit (½ day)**: Open every
+  production whose RU title was synthesized via
+  `MANUAL_SIBLING_PAIRS` (`Сахарный ребёнок`, `Каштанка`, …) in
+  Obsidian. Roman confirms or corrects via Properties panel; one
+  commit per production. Capture the audit log in
+  `.design/boklanov-rewrite/orphan-audit-2026-05.md`. One-shot,
+  never repeated.
+
+---
+
+## Phase 9 — Decap CMS layer (deferred; activate on demand)
+
+> **Not on the active roadmap.** Activation triggers (any one):
+> Roman travels and finds Obsidian Mobile insufficient; a second
+> contributor refuses to install Obsidian; browser-based copy-edits
+> become friction. Plan in CONTENT_WORKFLOW.md §6B (~2 days when
+> activated). Locks: `editorial_workflow: false`, `backend.branch:
+> draft` from day one, no `_diagnostics.md`.
+
+- [ ] **9.1 — Decap setup**: `public/admin/{index.html,config.yml}`,
+  GitHub OAuth via free Vercel serverless function.
+- [ ] **9.2 — Schema mapping**: collections mirror Phase 8.3
+  flattened MDX frontmatter; Cyrillic field labels.
+- [ ] **9.3 — Media library wired to R2**: S3-compatible endpoint
+  → same R2 bucket Phase 8.2 created.
+- [ ] **9.4 — Append "веб-редактор" section to AUTHORING.ru.md**.
+
+---
+
 ## Sequencing notes
 
 - **F1 → F8 are sequential within Phase 3.** F4 is the longest single

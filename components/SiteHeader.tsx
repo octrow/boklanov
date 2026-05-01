@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { Link, usePathname } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { folioFor } from '@/lib/folio'
 
 import { CommandPaletteContext } from './CommandPaletteProvider'
 import { ThemeToggle } from './ThemeToggle'
@@ -18,12 +19,18 @@ const WORDMARKS: Record<Locale, string> = {
   de: 'roman boklanov'
 }
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  productions: { slug: string }[]
+}
+
+export function SiteHeader({ productions }: SiteHeaderProps) {
   const locale = useLocale() as Locale
   const t = useTranslations('nav')
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const { toggle: toggleSearch } = React.useContext(CommandPaletteContext)
+
+  const folio = folioFor(pathname, productions)
 
   const navLinks = [
     { href: '/productions' as const, label: t('productions') },
@@ -36,6 +43,19 @@ export function SiteHeader() {
 
   return (
     <header className={styles.header}>
+      {folio.sectionKey && (
+        <div className={styles.folio} aria-hidden="true">
+          <span className={styles.folioSection}>
+            {t(folio.sectionKey as Parameters<typeof t>[0]).toUpperCase()}
+          </span>
+          {folio.index && (
+            <>
+              <span className={styles.folioSep}>⟶</span>
+              <span className={styles.folioIndex}>{folio.index}</span>
+            </>
+          )}
+        </div>
+      )}
       <div className={styles.inner}>
         {/* Wordmark */}
         <Link href="/" className={styles.wordmark}>

@@ -154,6 +154,14 @@ or a bento grid. The work speaks; the statement frames it.
 
 ### Production detail `/productions/[slug]`
 
+> **Phase 7.5 addition (DESIGN_AMBITION.md §3.G.2).** On the
+> `/productions/bury-me-behind-the-baseboard` route only, an `ON TOUR`
+> band renders above the photo gallery, listing the Plinth solo-show
+> tour stops. Driven by a `tour[]` array on the production's MDX
+> frontmatter; if empty, the band hides. No new URL, no new route —
+> just a per-production data block. Roman tours this show alone, no
+> troupe, so the band carries no cast information.
+
 Follows the D7 layout exactly:
 
 1. **Cover** — full-bleed photo (or title-rendered poster if no cover image exists). No parallax.
@@ -181,8 +189,16 @@ Follows the D7 layout exactly:
 1. **Portrait** — full-width or 50% column on desktop. Real production/press photo, not a headshot.
 2. **Bio lead** — 1-paragraph curatorial intro, Lora.
 3. **Long-form bio** — prose, Inter body. Covers artistic lineage: Кудашов → БТК → РГИСИ.
-4. **Education / key dates** — timeline component, JetBrains Mono dates. Not a CV dump; 6–8 key milestones.
-5. **Theatres worked with** — logo/name grid or plain list with links.
+4. **Staging geography (Phase 7.5, DESIGN_AMBITION §3.G.1)** — single mono row of cities where
+   Roman has directed productions, in chronological order of first commission:
+   `СПБ · МОСКВА · АЛМАТЫ · БРЕМЕН · ВЕНА · БЕРЛИН · ТАШКЕНТ`. Section label **locked past-tense
+   2026-05-02**: RU `ГДЕ СТАВИЛ` · EN `STAGED IN` · DE `INSZENIERTE IN`. Past-tense is the only
+   form that's literally truthful for both the Russian cities (Roman cannot work there since
+   the 2022 mobilisation, but the productions exist) and the active commissions (already-staged
+   productions still play). Each city hover-links to `/productions?city=<slug>` — reuses the
+   existing C4 filter URL state.
+5. **Education / key dates** — timeline component, JetBrains Mono dates. Not a CV dump; 6–8 key milestones.
+6. **Theatres worked with** — logo/name grid or plain list with links.
 
 No awards list here — awards live at `/awards`.
 
