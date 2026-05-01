@@ -122,6 +122,30 @@
   margin: var(--space-4) 0 0;
 }
 
+.theatreLink {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--easing-default);
+}
+
+.theatreLink:hover {
+  border-bottom-color: var(--accent);
+}
+
+.theatreLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.premiereDate {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: var(--space-1) 0 0;
+}
+
 /* 3. Chips row. */
 .chips {
   list-style: none;
@@ -153,6 +177,60 @@
   color: var(--ink);
   margin: 0 0 var(--space-7);
   max-width: 60ch;
+}
+
+/* 5. Credits — DESIGN §7.3: JetBrains Mono, two-column on tablet+,
+      role on left, name on right. */
+.creditsBlock {
+  margin: 0 0 var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+
+.creditsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.creditsItem {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-1);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  line-height: var(--line-height-snug);
+}
+
+@media (min-width: 768px) {
+  .creditsItem {
+    grid-template-columns: minmax(180px, 1fr) 2fr;
+    gap: var(--space-4);
+  }
+}
+
+.creditsRole {
+  color: var(--ink-mute);
+}
+
+.creditsName {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--easing-default);
+}
+
+a.creditsName:hover {
+  border-bottom-color: var(--accent);
+}
+
+a.creditsName:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 /* 6. Action bar. */

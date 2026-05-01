@@ -73,10 +73,32 @@ Date: 2026-04-30
 > `c7647bf` (Q7 contact TG+IG primary). Production-detail routes
 > dropped 84 → 72 (4 bogus slugs × 3 locales). Zero language
 > pollution in awards. 24 productions clean. Build clean.
+>
+> **2026-05-02 — Q8: production-detail content depth.** Daniil
+> noticed that `/productions/sugar-kid` showed only title + chips +
+> one-line synopsis despite the source MD carrying a full credit
+> set, theatre attribution, premiere date, and tickets URL. Root
+> cause: `extractTheatre` only matched БТК; no extractor existed
+> for credits / premiere / tickets; the MDX body was loaded into
+> `prod.body` but never reached the DOM. Fix landed: generic
+> `extractTheatre` (4 → 6 productions covered), new `extractCredits`
+> (per-locale, walks bold-label + cast list patterns), new
+> `extractPremiereDate` and `extractTicketsUrl`. Page now renders a
+> Credits section per DESIGN §7.3 (mono two-column, role on left,
+> name on right with oxblood hover underline on linked names),
+> theatre name in title block links to `theatre.url`, premiere
+> date appears under theatre, Tickets button in the action bar.
+> `lib/content.ts` types extended; overlay paths added so
+> hand-fixes survive resync. Build clean.
+>
 > **R2 real-device QA is unblocked.** Two known follow-ups in this
 > doc: festival-in-plain-prose awards for cinderella + sugar-kid
 > need hand-overlay via the new `metadata.yml` `awards:` block;
 > Roman to confirm RGISI / first-BTK milestone years before R2.
+> Open content: 18 productions still show no theatre line because
+> their MD source has no `[Name](url)` theatre link — Roman can
+> add a `theatre:` block in the per-production `metadata.yml` to
+> fill this in.
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
@@ -569,6 +591,62 @@ production build before D1.
   no longer queue as "missing assets". Title in fallback is
   `aria-hidden` because the visible `<h3>` below the cover already
   names the show, so screen readers don't double-read.
+
+- [x] **Q8 — Production detail page rendered too thin a slice of the
+  Notion source.** ✅ done. User flagged that
+  `/productions/sugar-kid` (and others) showed only title + chips +
+  one-line synopsis even though `notion-data/.../Сахарный
+  ребёнок….md` carries a full credit set, theatre attribution,
+  premiere date, and tickets URL. Root cause: the detail page
+  rendered eight structured frontmatter fields and **never** the
+  MDX body (which holds the credits / cast / theatre prose), so all
+  that content was dead-data. `extractTheatre` only matched БТК;
+  no `extractCredits`, no `extractPremiereDate`, no
+  `extractTicketsUrl` existed at all.
+  _Fix shipped:_
+  - `extractTheatre` rewritten as a generic three-step heuristic:
+    BTK fast-path → inline-context pattern (`театра [Name](url)`
+    catches `ARTиШОК`, `Старый дом`) → first link whose text
+    contains "театр" / "theatre" / "theater". Search restricted to
+    body content BEFORE the first `Пресса` / `Награды` heading;
+    candidate length capped at 60 chars; person-link patterns
+    (`/pers/` URLs, "First Last" Cyrillic / Latin pairs) filtered.
+    Coverage: 4 → 6 productions get a theatre line (BTK ×3 + new:
+    `Новый Молодежный Нижнетагильский театр`, `Baltic House Theatre`,
+    `ARTиШОК`). The other 18 have no theatre link in their MD source.
+  - New `extractCredits()` walks `**Role:** Value` and
+    `**Role -** Value` lines plus the cast section under
+    `В спектакле участвуют` / `Actor` / `Cast` / `Состав`. Skips
+    metadata labels (Tickets, Premiere, Age, Duration, Category).
+    Cast members get the trigger label as their role; later credits
+    bring full names with optional URLs. Per-locale: extracted
+    separately from RU and EN bodies so role labels read in source
+    language (Режиссёр / Director, Художник / Artist).
+  - `extractPremiereDate()` returns the trimmed date string; per-
+    locale (RU and EN format differently). Initial regex form
+    captured `:` because non-greedy `+?` plus optional `:?` found a
+    1-char shortest match — fixed by anchoring with the `m` flag
+    and proper line boundaries.
+  - `extractTicketsUrl()` returns the URL from
+    `**Tickets:** [...](url)` / `**Билеты:** [...](url)` lines
+    (handles Notion's nested `[[label]](url)` form).
+  - `lib/content.ts`: `Production` and `ProductionView` extended
+    with `credits`, `premiereDate`, `ticketsUrl`. `merge()` adds
+    overlay paths for `theatre`, `credits`, `premiereDate`,
+    `ticketsUrl` — hand-fixes survive resync. `project()` picks
+    per-locale credits and premiere date with RU→EN fallback.
+  - `app/[locale]/productions/[slug]/page.tsx` renders three new
+    page sections: theatre name in title block links to
+    `theatre.url`; premiere-date line under theatre; **Credits
+    section** between synopsis and action bar (DESIGN §7.3 #5 —
+    JetBrains Mono, two-column ≥768px, role on left, name on
+    right, oxblood hover underline on linked names); **Tickets
+    button** added to the action bar. New `tickets` translation
+    key in all three locales. Verified post-resync: sugar-kid
+    shows theatre, credits (Ринат Кияков director / Анастасия
+    Копылова designer / Роман Бокланов puppetry director / cast),
+    premiere date "10 октября 2022 г." in RU, tickets button.
+    Lina-Marlina shows 14 RU credit entries. Build clean.
 
 - [x] **Q7 — Contact-page primary action is now Telegram + Instagram,
   not mailto.** ✅ done (conservative scope per the recommendation

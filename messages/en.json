@@ -10,7 +10,7 @@
   },
   "home": {
     "heroMeta": "director · puppet theatre · theatre of objects",
-    "statement": "Shows about people and things — for children, teenagers, and the adults who love them. Roman Boklanov works between Almaty, Saint Petersburg, and Europe.",
+    "statement": "Shows about people and things — for children, teenagers, and the adults. Roman Boklanov works between Bremen, Viena and Almaty.",
     "featuredLabel": "selected works",
     "allLabel": "productions",
     "viewAll": "all productions →"
@@ -55,6 +55,7 @@
   },
   "productionDetail": {
     "watchListen": "Watch / listen",
+    "tickets": "Buy tickets",
     "techRider": "Tech rider (PDF)",
     "pressKit": "Press kit (ZIP)",
     "photos": "Photos",

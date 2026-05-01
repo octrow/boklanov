@@ -164,6 +164,7 @@ export default async function ProductionDetailPage({
   ]
     .filter(Boolean)
     .join(' · ')
+  const theatreUrl = production.theatre.url
 
   // Sticky CTA mailto: pre-filled per brief D7. Subject names the show; body
   // hints what we want from a touring inquiry. EN body — most curators write
@@ -246,7 +247,25 @@ export default async function ProductionDetailPage({
           {titleRu && <h1 className={styles.titleRu}>{titleRu}</h1>}
           {showEn && <p className={styles.titleEn}>{titleEn}</p>}
           {showDe && <p className={styles.titleDe}>{titleDe}</p>}
-          {theatreLine && <p className={styles.theatre}>{theatreLine}</p>}
+          {theatreLine && (
+            <p className={styles.theatre}>
+              {theatreUrl ? (
+                <a
+                  className={styles.theatreLink}
+                  href={theatreUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  {theatreLine}
+                </a>
+              ) : (
+                theatreLine
+              )}
+            </p>
+          )}
+          {production.premiereDate && (
+            <p className={styles.premiereDate}>{production.premiereDate}</p>
+          )}
         </header>
 
         {/* 3. Chips row */}
@@ -265,8 +284,40 @@ export default async function ProductionDetailPage({
           <p className={styles.synopsis}>{production.synopsis}</p>
         )}
 
+        {/* 5. Credits — DESIGN §7.3: JetBrains Mono, two-column on tablet+,
+              role on left, name on right. */}
+        {production.credits.length > 0 && (
+          <section className={styles.creditsBlock}>
+            <ul className={styles.creditsList}>
+              {production.credits.map((c, i) => (
+                <li
+                  key={`${c.role}-${c.name}-${i}`}
+                  className={styles.creditsItem}
+                >
+                  <span className={styles.creditsRole}>{c.role}</span>
+                  {c.url ? (
+                    <a
+                      className={styles.creditsName}
+                      href={c.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {c.name}
+                    </a>
+                  ) : (
+                    <span className={styles.creditsName}>{c.name}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* 6. Action bar — hide buttons whose assets are missing. */}
-        {(videoUrl || production.techRider || production.pressKit) && (
+        {(videoUrl ||
+          production.ticketsUrl ||
+          production.techRider ||
+          production.pressKit) && (
           <div className={styles.actionBar}>
             {videoUrl && (
               <a
@@ -276,6 +327,16 @@ export default async function ProductionDetailPage({
                 rel='noreferrer noopener'
               >
                 {t('watchListen')}
+              </a>
+            )}
+            {production.ticketsUrl && (
+              <a
+                className={`${styles.btn} ${styles.btnSecondary}`}
+                href={production.ticketsUrl}
+                target='_blank'
+                rel='noreferrer noopener'
+              >
+                {t('tickets')}
               </a>
             )}
             {production.techRider && (

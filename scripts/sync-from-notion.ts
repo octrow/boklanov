@@ -58,6 +58,12 @@ interface CsvRow {
   Tags: string
 }
 
+interface CreditEntry {
+  role: string
+  name: string
+  url?: string
+}
+
 interface Production {
   slug: string
   notionIds: { ru?: string; en?: string }
@@ -72,11 +78,14 @@ interface Production {
     url?: string
   }
   year?: number
+  premiereDate?: { ru?: string; en?: string }
+  ticketsUrl?: string
   ageRating?: string
   durationMin?: number
   role: string
   form: string[]
   lineage: string[]
+  credits: { ru: CreditEntry[]; en: CreditEntry[] }
   poster: { src: string | null; credit: null }
   gallery: Array<{ src: string; credit: null; caption: null }>
   videos: Array<{ provider: string; id: string }>
@@ -185,18 +194,189 @@ function extractForm(tags: string): string[] {
   return Array.from(new Set(out))
 }
 
+// Hosts that are NEVER a theatre — videos, socials, music platforms,
+// link-aggregator landing pages.
+const NON_THEATRE_HOST_RE =
+  /^https?:\/\/(?:www\.)?(?:youtu\.be|youtube\.com|vimeo\.com|instagram\.com|t\.me|telegram\.me|vk\.com|facebook\.com|music\.yandex|tilda\.ws)/i
+
+function isPersonContext(text: string, url: string): boolean {
+  if (/\/(?:pers|actors|people|peoples|user)\//i.test(url)) return true
+  if (/^[А-ЯЁ][а-яё-]+\s+[А-ЯЁ][а-яё-]+$/u.test(text)) return true
+  if (/^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(text)) return true
+  return false
+}
+
+function cleanLinkText(s: string): string {
+  // Strip leading/trailing single brackets Notion's `[[label]](url)` form
+  // leaves behind, plus residual bold/whitespace.
+  return s.replace(/^\[+|\]+$/g, '').replace(/\*\*/g, '').trim()
+}
+
+function looksLikeProperName(s: string): boolean {
+  // Theatre proper noun should start with an uppercase letter or digit —
+  // rejects Russian preposition phrases like "в театр" / "в большой
+  // театр" that Notion sometimes wraps as ticket-link text.
+  return /^[A-ZА-ЯЁ\d]/.test(s)
+}
+
+// Theatre proper-noun length cap — anything longer is almost certainly
+// a press-article title or a synopsis sentence that contains "театр".
+const THEATRE_NAME_MAX_LEN = 60
+
 function extractTheatre(body: string): Production['theatre'] {
-  // Look for known short-names. Brief D5 lineage: BTK / РГИСИ / Кудашов.
-  const t: Production['theatre'] = {}
+  // BTK takes priority — its city/country are stable, so we hardcode them.
   if (/Большой театр кукол|Bolshoi Puppet|БТК|BTK/i.test(body)) {
-    t.name = 'Большой театр кукол'
-    t.shortName = 'БТК'
-    t.city = 'Saint Petersburg'
-    t.country = 'RU'
+    const t: Production['theatre'] = {
+      name: 'Большой театр кукол',
+      shortName: 'БТК',
+      city: 'Saint Petersburg',
+      country: 'RU'
+    }
     const url = body.match(/(https?:\/\/(?:www\.)?puppets\.ru\/[^\s)]+)/)
     if (url) t.url = url[1]
+    return t
   }
-  return t
+  // Restrict the search to body content BEFORE the press / awards / cast
+  // section headings. Theatre identification is metadata that lives near
+  // the top; everything below those headings is press-article titles or
+  // award festival names that contain "театр" but aren't the theatre.
+  const sectionStop = body.search(
+    /^#+\s*(?:пресса|press|пресса\s*о|press\s+about|награды|awards|nominations|номинации|премии)/im
+  )
+  const head = sectionStop > 0 ? body.slice(0, sectionStop) : body
+
+  // (a) Inline-context pattern: "театра [Name](url)" / "theatre [Name](url)".
+  // Catches productions where the theatre's proper name doesn't itself
+  // contain the word "театр" (e.g. ARTиШОК, Старый дом).
+  const inlineRe =
+    /(?:театр[аеу]?|theatre|theater)\s+\[(\*\*)?([^\]]+?)(\*\*)?\]\(([^)]+)\)/i
+  const inline = head.match(inlineRe)
+  if (inline) {
+    const text = cleanLinkText(inline[2])
+    const url = inline[4]
+    if (
+      text &&
+      text.length <= THEATRE_NAME_MAX_LEN &&
+      looksLikeProperName(text) &&
+      !NON_THEATRE_HOST_RE.test(url) &&
+      !isPersonContext(text, url)
+    ) {
+      return { name: text, url }
+    }
+  }
+  // (b) Walk every `[text](url)` link and return the first whose text
+  // itself contains "театр" / "theatre" / "theater".
+  const linkRe = /\[(\*\*)?([^\]]+?)(\*\*)?\]\(([^)]+)\)/g
+  for (const m of head.matchAll(linkRe)) {
+    const text = cleanLinkText(m[2])
+    const url = m[4]
+    if (!/^https?:\/\//.test(url)) continue
+    if (NON_THEATRE_HOST_RE.test(url)) continue
+    if (isPersonContext(text, url)) continue
+    if (!/театр|theatre|theater/i.test(text)) continue
+    if (text.length > THEATRE_NAME_MAX_LEN) continue
+    if (!looksLikeProperName(text)) continue
+    return { name: text, url }
+  }
+  return {}
+}
+
+// Bold-label lines that aren't credits — meta fields handled elsewhere
+// or just not interesting on the page.
+const SKIP_CREDIT_LABELS =
+  /^(?:tickets?|билет[ыа]?|website|сайт|premiere|премьера|age(?:\s+restrictions)?|возраст|возрастные(?:\s+ограничения)?|duration|продолжительность|category|категория|description|описание|тэги|tags)$/i
+
+// Lines that signal the start of a cast list. Subsequent non-blank,
+// non-bold-label lines until the next bold-label or heading get treated
+// as cast members.
+const CAST_TRIGGER =
+  /(?:^|\s)(?:актер|актриса|actor|cast|состав|в\s+спектакле\s+(?:участву|занят|играют)|in\s+the\s+performance|в\s+ролях)/i
+
+function extractCredits(body: string): CreditEntry[] {
+  const credits: CreditEntry[] = []
+  const lines = body.split('\n')
+  // Bold label, optional separator (`:`, `-`, em/en dash), then value.
+  const labelLine = /^\*\*([^*]+?)\*\*\s*[:\-–—]?\s*(.*)$/
+  let castRoleLabel = ''
+  let inCast = false
+
+  function pushOne(role: string, raw: string) {
+    const linkMatches = [...raw.matchAll(/\[([^\]]+?)\]\(([^)]+)\)/g)]
+    if (linkMatches.length > 0) {
+      for (const lm of linkMatches) {
+        const name = lm[1].replace(/\*\*/g, '').replace(/[,.;]+$/, '').trim()
+        if (!name) continue
+        credits.push({ role, name, url: lm[2] })
+      }
+      return
+    }
+    // Plain text — could be one name or "Name1, Name2" list
+    const parts = raw
+      .replace(/\*\*/g, '')
+      .split(/[,;](?![^()]*\))/) // split on commas not inside parens
+      .map((p) => p.trim())
+      .filter(Boolean)
+    for (const p of parts) {
+      if (p.length < 2 || p.length > 200) continue
+      credits.push({ role, name: p })
+    }
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) continue
+    if (line.startsWith('#') || line.startsWith('!')) {
+      inCast = false
+      continue
+    }
+    const m = line.match(labelLine)
+    if (m) {
+      const role = m[1].trim().replace(/[:.\-–—]+$/, '').trim()
+      const value = m[2].trim()
+      if (CAST_TRIGGER.test(role)) {
+        castRoleLabel = role
+        if (value) pushOne(role, value)
+        else inCast = true
+        continue
+      }
+      if (SKIP_CREDIT_LABELS.test(role)) {
+        inCast = false
+        continue
+      }
+      if (value) pushOne(role, value)
+      // After a non-cast credit, reset cast state
+      inCast = false
+      continue
+    }
+    if (inCast) {
+      // Stop if this line begins a new bold label (was caught above)
+      // or a heading. Otherwise treat it as a cast row.
+      pushOne(castRoleLabel, line)
+    }
+    if (credits.length >= 50) break
+  }
+  return credits
+}
+
+function extractTicketsUrl(body: string): string | undefined {
+  // Match `**Tickets:** [...](url)` / `**Билеты:** [...](url)` / `**Билеты: [...](url)**`.
+  const re = /\*\*\s*(?:tickets?|билет[ыа]?)\s*:?\s*\*?\*?\s*\[?\[?[^\]]*\]?\]?\(([^)]+)\)/i
+  const m = body.match(re)
+  return m?.[1]
+}
+
+function extractPremiereDate(body: string): string | undefined {
+  // Match a line beginning with `**Premiere:**` or `**Премьера:**` and
+  // capture everything after the closing bold marker. The `m` flag is
+  // mandatory: without it, the previous non-greedy + optional `:?` form
+  // collapsed to capturing just `:` because the engine found a 1-char
+  // shortest match before the closing `**`.
+  const lineRe =
+    /^\*\*\s*(?:premiere|премьера)\s*:?\s*\*\*\s*(.+?)\s*$/im
+  const m = body.match(lineRe)
+  if (!m) return undefined
+  const raw = m[1].trim().replace(/\s+/g, ' ').replace(/[*]/g, '').slice(0, 80)
+  return raw || undefined
 }
 
 function extractLineage(theatre: Production['theatre'], body: string): string[] {
@@ -621,6 +801,7 @@ async function main() {
       role: 'director',
       form: [],
       lineage: [],
+      credits: { ru: [], en: [] },
       poster: { src: null, credit: null },
       gallery: [],
       videos: [],
@@ -699,6 +880,27 @@ async function main() {
     // into the awards list.
     const awardsBody = prod.body.ru || prod.body.en || primaryBody
     prod.awards = extractAwards(awardsBody)
+
+    // Per-locale credits — render in source language so role labels read
+    // naturally to a curator browsing in that locale.
+    prod.credits = {
+      ru: prod.body.ru ? extractCredits(prod.body.ru) : [],
+      en: prod.body.en ? extractCredits(prod.body.en) : []
+    }
+    // Per-locale premiere date — formatted strings differ between RU/EN.
+    const premiereRu = prod.body.ru ? extractPremiereDate(prod.body.ru) : undefined
+    const premiereEn = prod.body.en ? extractPremiereDate(prod.body.en) : undefined
+    if (premiereRu || premiereEn) {
+      prod.premiereDate = {
+        ...(premiereRu ? { ru: premiereRu } : {}),
+        ...(premiereEn ? { en: premiereEn } : {})
+      }
+    }
+    // Tickets URL — language-agnostic. Prefer whichever body has it first.
+    const ticketsUrl =
+      extractTicketsUrl(prod.body.ru ?? '') ||
+      extractTicketsUrl(prod.body.en ?? '')
+    if (ticketsUrl) prod.ticketsUrl = ticketsUrl
 
     // 6. Copy images.
     if (primaryMd.folder) {

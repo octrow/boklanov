@@ -10,7 +10,7 @@
   },
   "home": {
     "heroMeta": "Regisseur · Figurentheater · Objekttheater",
-    "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen, die sie lieben. Roman Boklanov arbeitet zwischen Almaty, Sankt Petersburg und Europa.",
+    "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
     "featuredLabel": "ausgewählte Werke",
     "allLabel": "Inszenierungen",
     "viewAll": "alle Inszenierungen →"
@@ -55,6 +55,7 @@
   },
   "productionDetail": {
     "watchListen": "Ansehen / hören",
+    "tickets": "Tickets kaufen",
     "techRider": "Tech-Rider (PDF)",
     "pressKit": "Pressekit (ZIP)",
     "photos": "Fotos",

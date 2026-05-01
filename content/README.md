@@ -78,6 +78,10 @@ The fields the auto-sync **can't** infer reliably. Currently:
 | `synopsis.de` | German synopsis | Same |
 | `videos[]` | Extra video URLs (Vimeo, etc.) | Auto-extract only catches YouTube |
 | `awards[]` | Override the auto-extracted award list | Heuristic can't extract festivals that sit in unmarked plain prose (no link, no quote). The metadata stub emits the auto-extracted list as commented-out lines — uncomment + edit to override (see Q4 follow-ups in `.design/boklanov-rewrite/TASKS.md`). Setting this replaces the entire list, overlay-wins. |
+| `theatre` | Theatre attribution `{ name, shortName?, city?, country?, url? }` | Sync only auto-extracts theatres that have a `[Name](url)` link in the MD body before the press / awards section. 18 of 24 productions need this filled in by hand. |
+| `credits` | `{ ru: [...], en: [...] }` arrays of `{ role, name, url? }` | Sync extracts these heuristically from `**Role:** Value` lines and the cast section. If a credit comes out wrong (or you want to reorder them), drop the corrected list here, overlay-wins. |
+| `premiereDate` | Per-locale date string `{ ru?, en? }` | Sync reads `**Премьера:**` / `**Premiere:**` lines. Override here if the source MD lacks this line or has a typo. |
+| `ticketsUrl` | Single URL string | Sync reads `**Билеты:** [...](url)`. Override if you want a different ticketing destination. |
 
 Each `metadata.yml` has every field as a stub — fill what you have,
 leave the rest as `null` or `[]`. The loader treats `null` / `[]` as

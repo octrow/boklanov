@@ -40,6 +40,12 @@ export interface GalleryItem {
   caption: { ru: string | null; en: string | null; de?: string | null }
 }
 
+export interface CreditEntry {
+  role: string
+  name: string
+  url?: string
+}
+
 export interface Production {
   slug: string
   notionIds: { ru?: string; en?: string }
@@ -54,11 +60,14 @@ export interface Production {
     url?: string
   }
   year?: number
+  premiereDate?: { ru?: string; en?: string; de?: string | null }
+  ticketsUrl?: string | null
   ageRating?: string | null
   durationMin?: number | null
   role: string
   form: string[]
   lineage: string[]
+  credits: { ru: CreditEntry[]; en: CreditEntry[]; de?: CreditEntry[] }
   poster: { src: string | null; credit: string | null; lqip: string | null; width: number | null; height: number | null }
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
@@ -72,10 +81,13 @@ export interface Production {
 }
 
 /** Locale-projected view returned by getAllProductions / getProduction. */
-export interface ProductionView extends Omit<Production, 'title' | 'synopsis' | 'body'> {
+export interface ProductionView
+  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate'> {
   title: string
   synopsis: string
   body: string
+  credits: CreditEntry[]
+  premiereDate: string | null
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
@@ -195,13 +207,28 @@ function merge(
       de: pick(overlaySynopsis.de, (fm.synopsis as any)?.de ?? null)
     },
     body: extractBodies(rawMdx),
-    theatre: fm.theatre ?? {},
+    theatre: pick(
+      overlay.theatre as Production['theatre'] | undefined,
+      fm.theatre ?? {}
+    ),
     year: fm.year,
+    premiereDate: pick(
+      overlay.premiereDate as Production['premiereDate'] | undefined,
+      fm.premiereDate ?? undefined
+    ),
+    ticketsUrl: pick(
+      overlay.ticketsUrl as string | null | undefined,
+      fm.ticketsUrl ?? null
+    ),
     ageRating: pick(overlay.ageRating as string | null, fm.ageRating ?? null),
     durationMin: pick(overlay.durationMin as number | null, fm.durationMin ?? null),
     role: pick(overlay.role as string, fm.role ?? 'director'),
     form: pick(overlay.form as string[], fm.form ?? []),
     lineage: pick(overlay.lineage as string[], fm.lineage ?? []),
+    credits: pick(
+      overlay.credits as Production['credits'] | undefined,
+      fm.credits ?? { ru: [], en: [] }
+    ),
     poster: {
       src: fm.poster?.src ?? null,
       credit: pick(overlayPoster.credit, fm.poster?.credit ?? null),
@@ -262,13 +289,27 @@ function project(p: Production, locale: Locale): ProductionView {
     p.body.ru ||
     p.body.en ||
     ''
+  // Credits & premiere date: per-locale with RU→EN fallback, mirroring
+  // the press/awards "original language" rule. DE chrome falls through
+  // to RU credits (v1 has no DE bodies — that's a v2 fill).
+  const credits =
+    (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
+    (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??
+    (p.credits.ru?.length ? p.credits.ru : p.credits.en ?? [])
+  const premiereDate =
+    p.premiereDate?.[locale as 'ru' | 'en'] ??
+    p.premiereDate?.ru ??
+    p.premiereDate?.en ??
+    null
 
-  const { title: _t, synopsis: _s, body: _b, ...rest } = p
+  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, ...rest } = p
   return {
     ...rest,
     title: t!,
     synopsis: s!,
     body: b,
+    credits,
+    premiereDate,
     titles: p.title
   }
 }
