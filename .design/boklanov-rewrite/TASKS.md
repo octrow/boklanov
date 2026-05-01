@@ -533,18 +533,21 @@ production build before D1.
   unverified anchors (year of RGISI enrolment, year first directed
   at BTK) for Roman to confirm before R2.
 
-- [ ] **Q6 — Missing-poster fallback feels placeholder-y at grid
-  scale.** `components/ProductionCard.module.css:39-56` renders a
-  paper-sunken gradient with display title at the bottom — adequate
-  per DESIGN.md §5.3 individually, but on `/productions` where ~17 of
-  29 cards lack posters, the rows of identical fallbacks read as
-  "missing assets" rather than as the **deliberate typographic
-  treatment** the brief calls for. _Fix:_ harden the fallback into a
-  brutalist treatment: hairline frame, display title at top-left
-  (not bottom), mono spec line below it (`theatre · year ·
-  ageRating`), so the card looks composed even without imagery.
-  Optionally vary the paper-sunken tone slightly across cards to
-  break the queue rhythm.
+- [x] **Q6 — Missing-poster fallback feels placeholder-y at grid
+  scale.** ✅ done. Re-composed the fallback as a newspaper
+  title-card. Title moved from bottom-flush to top-flush, set in
+  display Lora at `--font-size-xl`. A hairline rule (`1px solid
+  var(--rule)`) underlines the title, and the production year sits
+  below it in JetBrains Mono caps at `--font-size-chip` with
+  `--letter-spacing-meta`. Removed the bottom-fade gradient — the
+  rule + mono mark do the editorial work without needing a tonal
+  trick. Background stays `--paper-sunken` per DESIGN §5.3. The
+  card now reads as a composed title-card whether or not a poster
+  exists — visible in the post-fix grid where the ~12 poster-less
+  cards (filtered by `getAllProductions().filter(p => !p.poster.src)`)
+  no longer queue as "missing assets". Title in fallback is
+  `aria-hidden` because the visible `<h3>` below the cover already
+  names the show, so screen readers don't double-read.
 
 - [ ] **Q7 — Contact-page primary action is now Telegram + Instagram,
   not mailto.** Per user directive 2026-05-01: Roman prefers initial

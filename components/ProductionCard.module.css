@@ -37,22 +37,38 @@
 }
 
 /* Typographic fallback for productions without a poster — DESIGN §5.3:
-   "deliberate treatment, never a placeholder". */
+   "deliberate treatment, never a placeholder". The composition is a
+   newspaper title-card: display headline flush top-left, hairline rule
+   under it, mono year as the brutalist mark. Aria-hidden because the
+   visible <h3> title below the cover already carries the name. */
 .coverFallback {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: var(--space-3);
   padding: var(--space-5);
+  background: var(--paper-sunken);
+}
+
+.coverFallbackTitle {
   font-family: var(--font-family-display);
   font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-tight);
   color: var(--ink);
-  /* Subtle texture so the fallback reads intentional. */
-  background:
-    linear-gradient(180deg, transparent 60%, var(--paper-raised) 100%),
-    var(--paper-sunken);
+  margin: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.coverFallbackYear {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--ink-mute);
 }
 
 .titleRu {

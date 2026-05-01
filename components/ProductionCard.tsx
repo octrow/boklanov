@@ -84,7 +84,14 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
           />
         ) : (
           <div className={styles.coverFallback} aria-hidden='true'>
-            {titleRu ?? titleEn ?? production.slug}
+            <h4 className={styles.coverFallbackTitle}>
+              {titleRu ?? titleEn ?? production.slug}
+            </h4>
+            {production.year && (
+              <span className={styles.coverFallbackYear}>
+                {production.year}
+              </span>
+            )}
           </div>
         )}
       </div>
