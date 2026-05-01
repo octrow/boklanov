@@ -460,18 +460,30 @@ production build before D1.
   unsluggable RU rows: add the row's `Name` and target slug to
   `MANUAL_SIBLING_PAIRS`._
 
-- [ ] **Q3 — Synopsis renders as raw Markdown when it contains a
-  link.** `/productions/the-giving-tree` shows the literal string
-  `[.be/br5rNxuUbVo)` because `content/productions/the-giving-tree/
-  index.mdx:10` is `synopsis.ru: "[https://youtu.be/br5rNxuUbVo](https://youtu.be/br5rNxuUbVo)"`
-  and the detail page at `app/[locale]/productions/[slug]/page.tsx:265`
-  drops `{production.synopsis}` as a plain string with no Markdown
-  pass. Per DESIGN.md §7.3 the synopsis is a single-line prose
-  sentence — Markdown URL is meaningless content here. _Fix:_ in sync,
-  unwrap `[X](Y)` → `Y` (or strip entirely) when emitting `synopsis`,
-  and reject any synopsis that is just a URL by falling back to empty.
-  Then run `npm run sync` and audit all 28 productions for similar
-  pollution.
+- [x] **Q3 — Synopsis renders as raw Markdown when it contains a
+  link.** ✅ done. Root cause was upstream of the page render: the
+  sync's `extractSynopsis()` was picking the first MD paragraph that
+  cleared a 60-char floor *measured against the raw MD source*, so
+  `[https://youtu.be/...](url)` (URL doubled as link text) and
+  `**Tickets: [[website]](url)**` cleared the floor on length alone
+  and got emitted into `synopsis`. Three productions hit it
+  (`sugar-kid`, `the-giving-tree`, `the-old-man-and-the-sea`).
+  _Fix shipped:_ `scripts/sync-from-notion.ts` now (a) strips
+  Markdown link syntax `[X](Y)` and Notion's nested `[[X]](Y)`
+  variant before measuring length; (b) skips paragraphs that are
+  URL-only or start with promo-tag prefixes (`tickets`/`билеты`/
+  `premiere`/`премьера`/`age`/`возраст`/`duration`/`продолжительность`/
+  `category`); (c) skips Notion-style cast lists (paragraphs with
+  ≥3 internal newlines where the majority of lines have a
+  role–name dash separator); (d) strips `<aside>`/`<details>` HTML
+  tags Notion emits around editorial blurbs. Verified post-resync:
+  `sugar-kid` now has real RU+EN prose synopses; `the-giving-tree`
+  is empty in both locales (correct — its body is metadata + cast
+  list only); `the-old-man-and-the-sea` has the real EN director's
+  quote. Audit across all 24 productions: zero remaining pollution.
+  _Note for later:_ `lib/content.ts:230-238` extracts MDX body into
+  `production.body`, but the detail page never renders it — dead
+  data path. Not blocking; flag for v2 cleanup.
 
 - [ ] **Q4 — Awards page mixes RU and EN strings.** `/awards` shows
   some festival names in Cyrillic, some in Latin, some with mojibake

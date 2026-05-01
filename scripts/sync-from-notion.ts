@@ -250,16 +250,61 @@ function extractAwards(body: string): Production['awards'] {
   return out
 }
 
+function stripInlineMd(s: string): string {
+  // [[text]](url) → text  (Notion's nested-bracket form for `[website]` link)
+  // [text](url)   → text
+  // Then drop bold markers (**), backticks, HTML tags Notion emits for
+  // asides, and collapse whitespace runs.
+  return s
+    .replace(/\[\[([^\]]+)\]\]\([^)]+\)/g, '$1')
+    .replace(/\[([^\]]*)\]\([^)]+\)/g, '$1')
+    .replace(/<\/?(?:aside|details|summary|figure|figcaption)[^>]*>/gi, '')
+    .replace(/\*\*/g, '')
+    .replace(/`/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function isUrlOrPromoOnly(plain: string): boolean {
+  // After stripping MD, paragraph is just a URL (Notion auto-linkifies bare
+  // URLs, so a synopsis-position paragraph that's only `https://…` is noise).
+  if (/^https?:\/\/\S+$/i.test(plain)) return true
+  // Ticket / premiere / age / duration meta lines are not prose. The MD
+  // body usually has these as standalone paragraphs near the top — Notion
+  // surfaces them as bolded labels with values or links. Skip explicitly so
+  // they don't masquerade as synopsis text just because the URL pushes them
+  // over the 60-char floor.
+  if (/^(tickets?|билеты|website|сайт|premiere|премьера|age|возраст|duration|продолжительность|category|категория)\b[\s:;.\-]/i.test(plain)) {
+    return true
+  }
+  return false
+}
+
+function looksLikeCastList(rawParagraph: string): boolean {
+  // Notion exports cast lists as a single "paragraph" with internal newlines
+  // — `Имя – Роль\nИмя – Роль\n…`. Real prose paragraphs come as one
+  // wrapped line. Heuristic: ≥ 3 internal newlines AND a majority of those
+  // lines contain a role-name separator (em-dash / en-dash / hyphen).
+  const lines = rawParagraph.split('\n').map((l) => l.trim()).filter(Boolean)
+  if (lines.length < 3) return false
+  const sep = lines.filter((l) => /\s[–—-]\s/.test(l)).length
+  return sep >= Math.ceil(lines.length / 2)
+}
+
 function extractSynopsis(body: string): string {
-  // First non-empty paragraph that isn't a heading/quote/image.
+  // First non-empty paragraph that isn't a heading/quote/image, and that
+  // contains real prose (not a URL, ticket-promo line, or cast list).
   const paras = body.split(/\n\s*\n/)
   for (const p of paras) {
     const trimmed = p.trim()
     if (!trimmed) continue
     if (trimmed.startsWith('#') || trimmed.startsWith('>') || trimmed.startsWith('!['))
       continue
-    if (trimmed.length < 60) continue
-    return trimmed.replace(/\n+/g, ' ').slice(0, 600)
+    if (looksLikeCastList(trimmed)) continue
+    const plain = stripInlineMd(trimmed)
+    if (plain.length < 60) continue
+    if (isUrlOrPromoOnly(plain)) continue
+    return plain.slice(0, 600)
   }
   return ''
 }
