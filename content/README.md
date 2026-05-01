@@ -29,9 +29,23 @@ content/
    script:
 
    - parses the markdown body and `_all.csv` index
-   - merges RU + EN siblings into one record (by stripping `-en` slug suffix)
+   - **filters non-production sub-pages** via `NON_PRODUCTION_SLUGS`
+     (contact page, bio mirror, role overviews, festival listings —
+     edit the set in the script when a new orphan slips through)
+   - merges RU + EN siblings into one record by stripping the
+     `-en` / `-eng` slug suffix; orphan Cyrillic-only rows whose
+     CSV `Slug` is empty get attached to their EN sibling via
+     `MANUAL_SIBLING_PAIRS` (see the script for the table)
+   - resolves locale from the CSV slug suffix (`-en` / `-eng` → EN,
+     otherwise Cyrillic-name detection); body content is **not**
+     used to detect locale because EN pages often quote Russian
+     cast lists and would mis-classify
    - heuristic-extracts `year`, `durationMin`, `ageRating`, `theatre`,
-     `role`, `form`, `lineage`, `awards`, `press`, `videos`
+     `role`, `form`, `lineage`, `awards` (RU body preferred for
+     canonical festival names per DESIGN §3), `press`, `videos`
+   - cleans synopsis text — strips `[X](Y)` and Notion's nested
+     `[[X]](Y)` link forms, skips URL-only / promo / cast-list
+     paragraphs, strips `<aside>` HTML
    - copies images to `public/productions/<slug>/`
    - generates an LQIP (low-quality blurred placeholder) for the poster
    - writes `content/productions/<slug>/index.mdx` (frontmatter + body)
@@ -63,6 +77,7 @@ The fields the auto-sync **can't** infer reliably. Currently:
 | `title.de` | German title | Only filled for v2 priority shows |
 | `synopsis.de` | German synopsis | Same |
 | `videos[]` | Extra video URLs (Vimeo, etc.) | Auto-extract only catches YouTube |
+| `awards[]` | Override the auto-extracted award list | Heuristic can't extract festivals that sit in unmarked plain prose (no link, no quote). The metadata stub emits the auto-extracted list as commented-out lines — uncomment + edit to override (see Q4 follow-ups in `.design/boklanov-rewrite/TASKS.md`). Setting this replaces the entire list, overlay-wins. |
 
 Each `metadata.yml` has every field as a stub — fill what you have,
 leave the rest as `null` or `[]`. The loader treats `null` / `[]` as

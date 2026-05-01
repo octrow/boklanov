@@ -46,7 +46,7 @@ Date: 2026-04-30
 > visible from landing; (2) `.titleBlock` top rule added. Optional Should-Fix
 > also landed: filter group labels (РОЛЬ/ФОРМА/ВОЗРАСТ/СТРАНА) above chip
 > groups on ≥768px. Polish commit: ThemeToggle sun/moon SVG, search ×
-> suppression, LQIP gating on `poster.src`. 110 pages, build clean.
+> suppression, LQIP gating on `poster.src`. Build clean.
 >
 > **2026-05-01 — Final polish complete** (`09d5005`). All remaining
 > `DESIGN_REVIEW.md` items exhausted: Should-Fix #1: mono spec sheet in right
@@ -55,7 +55,28 @@ Date: 2026-04-30
 > Could-Improve #2: gallery masonry via CSS `columns: 2` on tablet+ — original
 > aspect ratios preserved. Could-Improve #5: SiteHeader wordmark
 > `letter-spacing` raw value → `var(--letter-spacing-tight)` token. Build
-> clean at 110 pages. **DESIGN_REVIEW.md fully resolved. Only R2 + D1 remain.**
+> clean. **DESIGN_REVIEW.md fully resolved.**
+>
+> **2026-05-01 — Post-R1 manual QA (Daniil) surfaced Q1–Q7.** Sync emits
+> non-production sub-pages (Q1); RU↔EN merge silently leaks EN string
+> into `title.ru` (Q2); synopsis renders raw Markdown URL (Q3); awards
+> page mixes RU/EN strings with junk entries (Q4); about-page chronology
+> dates impossible (Q5); poster-less fallback reads placeholder-y (Q6);
+> Roman responds faster on TG/IG than email (Q7). Full task list
+> appended below. **Blocks R2 sign-off; D1 preview can still proceed
+> in parallel.**
+>
+> **2026-05-02 — Q1–Q7 all shipped.** Commits `10f951f` (Q1 + Q2 sync
+> filter and RU↔EN merge), `b3bded7` (Q3 synopsis), `fdbae94` (Q4
+> awards + overlay path in `lib/content.ts`), `99299de` (Q5 about
+> chronology), `8dae0b2` (Q6 brutalist no-poster fallback),
+> `c7647bf` (Q7 contact TG+IG primary). Production-detail routes
+> dropped 84 → 72 (4 bogus slugs × 3 locales). Zero language
+> pollution in awards. 24 productions clean. Build clean.
+> **R2 real-device QA is unblocked.** Two known follow-ups in this
+> doc: festival-in-plain-prose awards for cinderella + sugar-kid
+> need hand-overlay via the new `metadata.yml` `awards:` block;
+> Roman to confirm RGISI / first-BTK milestone years before R2.
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
@@ -109,13 +130,13 @@ Date: 2026-04-30
 | Task | Status | Commit | Notes |
 |------|--------|--------|-------|
 | C1 — Production card + grid | ✅ done | `11fc081` | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. |
-| C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. |
+| C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). _Detail page count post-Q1: 24 productions × 3 locales = 72 routes (was 84 before bogus slugs filtered)._ |
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
 | C4 — Filter panel + URL state | ✅ done | `05600f1` | `<FilteredProductionsPanel>` Client Component with useSearchParams. Role radio (director default), form/age-bucket/country multi-select. Chips: JetBrains Mono uppercase, 2px radius, active = paper-raised + rule-strong border. Clear-all = oxblood only. Suspense boundary keeps build fully SSG. |
 | C5 — About + lineage | ✅ done | `cb0aaab` | `app/[locale]/about/page.tsx`: Lora display heading, Inter bio at 65ch (first para as Lora lead), mono milestones timeline, lineage grid (Кудашов/БТК/РГИСИ) in paper-sunken cards. Inline loader with RU→EN→DE fallback. `content/about/{ru,en}.mdx` with portrait/milestones/lineage frontmatter. |
 | C6 — Awards | ✅ done | `c7b80c5` | `app/[locale]/awards/page.tsx`: Lora page heading lowercase, awards aggregated from `getAllProductions()`, grouped by production with Lora `--font-size-xl` grouping header linked to detail page. Each award row: mono year (>1900 guard) · name · city/category. Hairline rules between groups and rows. 3 locales × SSG. |
 | C7 — Press | ✅ done | `2225975` | `app/[locale]/press/page.tsx`: card grid (1/2-col), Lora italic blockquote pull-quote (article title), mono outlet attribution with oxblood underline hover. Outlet falls back to URL domain. Mono production reference link. 3 locales × SSG. |
-| C8 — Contact | ✅ done | `292552f` | `app/[locale]/contact/page.tsx`: oxblood primary mailto button (locale-aware subject), mono email address + `CopyEmailButton` Client Component (flashes "✓" on copy), Telegram + Instagram mono secondary links. No form, no backend. 3 locales × SSG. |
+| C8 — Contact | ✅ done | `292552f`; reordered `c7647bf` | `app/[locale]/contact/page.tsx`. Original C8: oxblood primary mailto + mono Telegram/Instagram secondary. **Reordered post-Q7 (2026-05-02):** Telegram + Instagram are now the oxblood primaries (side-by-side ≥768px), mailto demoted to hairline-bordered secondary under a mono "or by email" subhead. `CopyEmailButton` Client Component flashes "✓" on copy. PostHog `booking_cta_click` fires on all three channels with `data-ph-channel`. No form, no backend. 3 locales × SSG. |
 | C9 — Archive | ✅ done | `40dec94` | `app/[locale]/archive/page.tsx`: filters out `role=director`, year-ascending mono table (year · title · theatre · role). Hairline rules. Theatre column hidden below 480px. 3 locales × SSG. |
 | C10 — Layout shell | ✅ done | `941fcdf` | `<SiteHeader>` (Client Component): Lora wordmark left, mono nav links centre (≥768px), locale switcher (RU/EN/DE) + `<ThemeToggle>` right; hamburger drawer on mobile; hairline rule below. Anti-flash theme script in `<head>`. `<SiteFooter>` (Server Component): three mono columns — nav · social · copyright. Wired into `app/[locale]/layout.tsx`. |
 | C11 — Cmd-K palette | ✅ done | `ab2ce8b` | `<CommandPaletteProvider>` (Client): global Cmd+K/Ctrl+K listener, lazy-loads palette via `next/dynamic`. Search index built server-side via `lib/search.ts buildSearchIndex()`. `<CommandPalette>`: JetBrains Mono input on `--paper-raised`, hairline border, results grouped (PRODUCTIONS/AWARDS/PRESS/THEATRES/CITIES) with mono-caps labels, ↑↓ keyboard navigation, Cyr↔Lat transliteration. |

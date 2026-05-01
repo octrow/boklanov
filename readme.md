@@ -11,12 +11,13 @@ Bilingual RU/EN with German chrome. Static, content-owned, editorial.
 ---
 
 ## Stack
-
 - **Framework:** Next.js 15 (App Router) + React 19 + TypeScript 5.9 (strict)
 - **i18n:** `next-intl` v4 — RU canonical at `/`, EN at `/en`, DE at `/de`
 - **Content:** MDX per production + per-production `metadata.yml` overlay,
-  loaded by `lib/content.ts`. No CMS, no runtime API. 110 pages × 3 locales
-  pre-rendered statically.
+  loaded by `lib/content.ts`. No CMS, no runtime API. Statically
+  prerendered — 24 productions × 3 locales = 72 detail pages, plus
+  per-locale chrome (home, about, awards, press, contact, archive,
+  productions grid).
 - **Styling:** CSS Modules + design tokens (`app/globals.css`, custom
   properties only — no Tailwind, no styled-components)
 - **Typography:** self-hosted Lora (display) + Inter (body) + JetBrains Mono
@@ -190,16 +191,16 @@ vercel deploy --prod
 This repo carries its own design + execution paper trail. If you're
 picking it up cold, read in this order:
 
-| Doc                                                          | What it tells you                                       |
-| ------------------------------------------------------------ | ------------------------------------------------------- |
-| `PLAN.md`                                                    | High-level rewrite strategy + phase status table        |
-| `.design/boklanov-rewrite/DESIGN_BRIEF.md`                   | Locked decisions D1–D15 (the *why*)                    |
-| `DESIGN.md`                                                  | Visual identity, component grammar, anti-patterns       |
-| `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md`       | Routes, navigation, content hierarchy, URL strategy     |
-| `.design/boklanov-rewrite/TASKS.md`                          | Operational checklist (per-phase tasks + open Q1–Q7)    |
-| `.design/boklanov-rewrite/DESIGN_REVIEW.md`                  | R1 review against the brief (frozen 2026-05-01)        |
-| `.design/boklanov-rewrite/photo-audit.md`                    | Coverage audit of the local Notion export               |
-| `content/README.md`                                          | Authoring workflow detail                               |
+| Doc                                                    | What it tells you                                    |
+|--------------------------------------------------------|------------------------------------------------------|
+| `PLAN.md`                                              | High-level rewrite strategy + phase status table     |
+| `.design/boklanov-rewrite/DESIGN_BRIEF.md`             | Locked decisions D1–D15 (the *why*)                  |
+| `DESIGN.md`                                            | Visual identity, component grammar, anti-patterns    |
+| `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` | Routes, navigation, content hierarchy, URL strategy  |
+| `.design/boklanov-rewrite/TASKS.md`                    | Operational checklist (per-phase tasks + open Q1–Q7) |
+| `.design/boklanov-rewrite/DESIGN_REVIEW.md`            | R1 review against the brief (frozen 2026-05-01)      |
+| `.design/boklanov-rewrite/photo-audit.md`              | Coverage audit of the local Notion export            |
+| `content/README.md`                                    | Authoring workflow detail                            |
 
 Open R2-blocking issues live in `TASKS.md` § "Post-R1 QA findings".
 
