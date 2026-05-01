@@ -253,6 +253,87 @@ async function copyImage(
   return filename
 }
 
+function buildMetadataStub(prod: Production): string {
+  // The overlay schema. Anything set here wins over MDX frontmatter at load
+  // time (lib/content.ts in F6). The stub is the manual-pass checklist.
+  // Leave fields as `null` or `[]` — the loader treats those as "no overlay".
+  const galleryStub = prod.gallery.map((g) => ({
+    src: g.src,
+    credit: null,
+    caption: { ru: null, en: null }
+  }))
+  const titleRu = prod.title.ru ?? prod.title.en ?? prod.slug
+  return `# Manual-pass overlay for: ${titleRu}
+#
+# Edit this file to fill in the fields the auto-sync can't infer.
+# The content loader (lib/content.ts) merges this on top of the MDX
+# frontmatter at build time — anything you set here wins.
+#
+# DO NOT delete fields you don't want to set; leave them as null / [].
+# Leaving a field commented out also works.
+#
+# See content/README.md for the full workflow.
+
+# Editor's choice for the home-page featured row (4–6 max site-wide).
+featured: ${prod.featured ? 'true' : 'false'}
+
+# Photo credits — one entry per gallery image. \`src\` matches the path the
+# sync emitted; copy/paste from index.mdx if needed.
+gallery:
+${
+  galleryStub.length === 0
+    ? '  []'
+    : galleryStub
+        .map(
+          (g) =>
+            `  - src: ${g.src}\n    credit: null            # photographer name\n    caption:\n      ru: null\n      en: null`
+        )
+        .join('\n')
+}
+
+# Poster credit (often the same photographer; sometimes a designer).
+poster:
+  credit: null
+
+# Production form — controls filtering + recommends. Pick from:
+#   puppet | object | solo | ensemble | family | reading | sketch
+# Auto-detect filled: ${JSON.stringify(prod.form)}
+form: ${prod.form.length ? JSON.stringify(prod.form) : '[]'}
+
+# Lineage — for the recommends algorithm (brief D9). Pick from:
+#   btk | rgisi | kudashov | dotheatre | ...
+# Auto-detect filled: ${JSON.stringify(prod.lineage)}
+lineage: ${prod.lineage.length ? JSON.stringify(prod.lineage) : '[]'}
+
+# Director / co-director / performer / reader / sketch
+# Auto-detect filled: ${prod.role}
+role: ${prod.role}
+
+# Age rating: 0+ | 3+ | 6+ | 12+ | 16+ | 18+ (auto: ${prod.ageRating ?? 'null'})
+ageRating: ${prod.ageRating ? JSON.stringify(prod.ageRating) : 'null'}
+
+# Duration in minutes (auto: ${prod.durationMin ?? 'null'})
+durationMin: ${prod.durationMin ?? 'null'}
+
+# External assets — paths or URLs. Leave null if absent.
+techRider: null   # /productions/${prod.slug}/tech-rider.pdf
+pressKit:  null   # /productions/${prod.slug}/press-kit.zip
+
+# DE title (only fill for v2 priority shows).
+title:
+  de: null
+
+# DE synopsis (only fill for v2 priority shows).
+synopsis:
+  de: null
+
+# Extra video URLs the sync didn't catch (Vimeo, etc.).
+# videos:
+#   - { provider: vimeo, id: "123456789" }
+videos: []
+`
+}
+
 async function makeLqip(srcPath: string): Promise<string | null> {
   try {
     const buf = await sharp(srcPath)
@@ -272,10 +353,19 @@ async function makeLqip(srcPath: string): Promise<string | null> {
 
 async function main() {
   // 1. Reset output dirs.
-  fs.rmSync(CONTENT_DIR, { recursive: true, force: true })
+  //    - public/productions/ is fully regenerated (images come from notion-data)
+  //    - content/productions/<slug>/index.mdx is regenerated
+  //    - content/productions/<slug>/metadata.yml is PRESERVED (manual edits live there)
   fs.rmSync(PUBLIC_DIR, { recursive: true, force: true })
-  fs.mkdirSync(CONTENT_DIR, { recursive: true })
   fs.mkdirSync(PUBLIC_DIR, { recursive: true })
+  fs.mkdirSync(CONTENT_DIR, { recursive: true })
+  if (fs.existsSync(CONTENT_DIR)) {
+    for (const entry of fs.readdirSync(CONTENT_DIR, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue
+      const idx = path.join(CONTENT_DIR, entry.name, 'index.mdx')
+      if (fs.existsSync(idx)) fs.rmSync(idx)
+    }
+  }
 
   // 2. Parse CSV index — strip BOM.
   const csvRaw = fs.readFileSync(CSV_PATH, 'utf8').replace(/^﻿/, '')
@@ -293,7 +383,7 @@ async function main() {
     if (!row.Public || row.Public.toLowerCase() !== 'yes') continue
     const rawSlug = (row.Slug || slugify(row.Name)).toLowerCase()
     if (!rawSlug) continue
-    const slug = rawSlug.replace(/-en$/, '')
+    const slug = rawSlug.replace(/-(en|eng)$/, '')
     const list = groups.get(slug) ?? []
     list.push(row)
     groups.set(slug, list)
@@ -474,8 +564,15 @@ async function main() {
 
   console.log(`[sync] productions built: ${productions.length}`)
 
-  // 7. Write MDX files.
+  // 7. Write MDX + metadata.yml stub for each production.
+  //    Layout per F5:
+  //      content/productions/<slug>/index.mdx     — regenerated each sync
+  //      content/productions/<slug>/metadata.yml  — stub on first sync, then
+  //                                                  hand-edited; never overwritten
   for (const prod of productions) {
+    const dir = path.join(CONTENT_DIR, prod.slug)
+    fs.mkdirSync(dir, { recursive: true })
+
     const { body, ...frontmatterFields } = prod
     const fm = yaml.stringify(frontmatterFields, { lineWidth: 0 })
     const ruBody = body.ru ?? ''
@@ -496,7 +593,14 @@ ${ruBody.trim()}
 ${enBody.trim()}
 </Locale>
 `
-    fs.writeFileSync(path.join(CONTENT_DIR, `${prod.slug}.mdx`), mdx)
+    fs.writeFileSync(path.join(dir, 'index.mdx'), mdx)
+
+    // metadata.yml: write a stub ONLY if absent. Hand-edits survive resync.
+    const metaPath = path.join(dir, 'metadata.yml')
+    if (!fs.existsSync(metaPath)) {
+      const stub = buildMetadataStub(prod)
+      fs.writeFileSync(metaPath, stub)
+    }
   }
 
   // 8. Index file for the loader.
