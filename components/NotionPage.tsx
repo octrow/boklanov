@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck — legacy Notion renderer, deleted in F8
 import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -179,7 +181,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
     if (lite) params.lite = lite
 
     const searchParams = new URLSearchParams(params)
-    return mapPageUrl(site, recordMap, searchParams)
+    return mapPageUrl(site!, recordMap!, searchParams)
   }, [site, recordMap, lite])
 
   const keys = Object.keys(recordMap?.block || {})
