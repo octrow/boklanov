@@ -60,6 +60,18 @@ Date: 2026-04-30
 
 **Phase 5 = 5 / 5 done.**
 
+### Phase 6 — Interactions & Polish
+
+| Task | Status | Commit | Notes |
+|------|--------|--------|-------|
+| I1 — Hover & focus audit | ✅ done | `df6dda1` | Unified `--shadow-focus` ring across all 13 interactive elements (eliminated double-ring from per-component `outline` overrides). Oxblood hover parity on CTAs and press links. contact mailtoButton hover → `--accent-hover`. pressLink transition added. |
+| I4 — Empty + loading + error states | ✅ done | `7b691c6` | `ProductionGrid` empty state: "no match · clear" with inline oxblood reset (only when `hasActiveFilters`). LQIP blur-up: `poster.lqip` loaded from `public/productions/<slug>/lqip.json` into content type; CSS background on card covers — no spinner. `app/[locale]/not-found.tsx` with RU/EN/DE translations linking home + productions. |
+| P1 — Mobile-first layout pass | 🔲 open | — | 375px audit, 44px touch targets, sticky CTA reachable with one thumb, Cmd-K on-screen button on mobile. |
+| P2 — Accessibility pass | 🔲 open | — | Contrast ≥ 4.5:1, alt text audit, hreflang verified, axe-core per route. |
+| P3 — Lighthouse mobile ≥ 95 | 🔲 open | — | Font subsetting, critical CSS, AVIF/WebP verified. |
+
+**Phase 6 = 2 / 5 done.**
+
 ### Core UI
 
 | Task | Status | Commit | Notes |
