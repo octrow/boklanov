@@ -58,5 +58,11 @@
     "awards": "Auszeichnungen",
     "links": "Links",
     "bookingCta": "Roman zu einer Tournee schreiben"
+  },
+  "notFound": {
+    "heading": "seite nicht gefunden",
+    "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "home": "Startseite",
+    "productions": "alle Inszenierungen"
   }
 }

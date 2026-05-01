@@ -60,9 +60,13 @@ export function ProductionCard({ production }: ProductionCardProps) {
     .filter(Boolean)
     .join(', ')
 
+  const coverStyle = production.poster.lqip
+    ? { backgroundImage: `url(${production.poster.lqip})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' }
+    : undefined
+
   return (
     <Link href={`/productions/${production.slug}`} className={styles.card}>
-      <div className={styles.cover}>
+      <div className={styles.cover} style={coverStyle}>
         {production.poster.src ? (
           <img
             className={styles.coverImg}

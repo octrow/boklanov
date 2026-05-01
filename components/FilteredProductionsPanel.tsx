@@ -47,6 +47,7 @@ export interface FilterLabels {
   roleAll: string
   clearAll: string
   emptyLabel: string
+  clearAllLabel: string
 }
 
 export interface FilteredProductionsPanelProps {
@@ -241,7 +242,12 @@ export function FilteredProductionsPanel({
         )}
       </div>
 
-      <ProductionGrid productions={filtered} emptyLabel={labels.emptyLabel} />
+      <ProductionGrid
+        productions={filtered}
+        emptyLabel={labels.emptyLabel}
+        clearAllLabel={hasActiveFilters ? labels.clearAllLabel : undefined}
+        onClearAll={hasActiveFilters ? clearAll : undefined}
+      />
     </div>
   )
 }

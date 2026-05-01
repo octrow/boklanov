@@ -30,7 +30,8 @@ export default async function ProductionsIndexPage({
     roleReader: t('roleReader'),
     roleAll: t('roleAll'),
     clearAll: t('clearAll'),
-    emptyLabel: t('empty')
+    emptyLabel: t('empty'),
+    clearAllLabel: t('clearAll')
   }
 
   return (

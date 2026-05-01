@@ -243,11 +243,11 @@ when the legacy renderer was deleted. The build is clean under
 
 ## Interactions & States
 
-- [ ] **I1 — Hover & focus states**: Audit every interactive element to
-  ensure (a) oxblood underline reveal at 150ms on primary links and
-  CTAs, (b) `--shadow-focus` ring on every focusable element, (c) no
-  card-lift, no shadow growth, no glow. Covers: hover, focus-visible,
-  active, disabled. _Depends on C1–C10._
+- [x] **I1 — Hover & focus states**: Unified `--shadow-focus` ring (paper
+  gap + oxblood) across all 13 interactive elements; eliminated double-ring
+  from component outline overrides. Oxblood hover parity on CTAs and press
+  links. contact mailtoButton hover fixed to `--accent-hover`. pressLink
+  transition added. _commit `df6dda1`_
 
 - [x] **I2 — Theme toggle + persistence**: `<ThemeToggle>` Client
   Component writes `[data-theme]` to `<html>`, persists to
@@ -260,11 +260,12 @@ when the legacy renderer was deleted. The build is clean under
   All three locales show on every route (SSG covers all). _Shipped in
   C10, commit `941fcdf`_
 
-- [ ] **I4 — Empty + loading + error states**: Empty filter results in
-  `ProductionGrid` (mono "no productions match these filters · clear
-  all"). Image loading uses lqip placeholders from F4 (no spinner per
-  brief §8). Error pages: `app/[locale]/not-found.tsx` linking back to
-  `/productions` and `/`. _Depends on C1–C9._
+- [x] **I4 — Empty + loading + error states**: `ProductionGrid` empty state
+  shows "no match · clear" with inline oxblood reset button (only when active
+  filters exist). LQIP blur-up loaded from `public/productions/<slug>/lqip.json`
+  into `poster.lqip` and rendered as CSS background on card covers — no
+  spinner. `app/[locale]/not-found.tsx` with RU/EN/DE translations linking
+  home + productions. _commit see below_
 
 - [ ] **I5 — Signature gesture (brief Q3, design.md §13)**: Prototype
   paper-cut transition vs string-line vs no-gesture on home-page first

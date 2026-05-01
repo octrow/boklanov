@@ -58,5 +58,11 @@
     "awards": "Awards",
     "links": "Links",
     "bookingCta": "Email Roman about touring this show"
+  },
+  "notFound": {
+    "heading": "page not found",
+    "body": "The page you're looking for doesn't exist or has been moved.",
+    "home": "home",
+    "productions": "all productions"
   }
 }

@@ -28,6 +28,7 @@ import type { Locale } from '@/i18n/routing'
 // ---------------------------------------------------------------------------
 
 const CONTENT_DIR = path.resolve(process.cwd(), 'content', 'productions')
+const LQIP_DIR = path.resolve(process.cwd(), 'public', 'productions')
 
 // ---------------------------------------------------------------------------
 // Types — public shape consumed by page routes
@@ -58,7 +59,7 @@ export interface Production {
   role: string
   form: string[]
   lineage: string[]
-  poster: { src: string | null; credit: string | null }
+  poster: { src: string | null; credit: string | null; lqip: string | null }
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{ name: string; category?: string; year?: number; city?: string }>
@@ -112,7 +113,19 @@ function loadAll(): Production[] {
       ? (yaml.parse(fs.readFileSync(metaPath, 'utf8')) ?? {})
       : {}
 
-    out.push(merge(frontmatter as Partial<Production>, overlay, raw))
+    const prod = merge(frontmatter as Partial<Production>, overlay, raw)
+
+    const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
+    if (fs.existsSync(lqipPath)) {
+      try {
+        const lqipData = JSON.parse(fs.readFileSync(lqipPath, 'utf8')) as { poster?: string }
+        prod.poster.lqip = lqipData.poster ?? null
+      } catch {
+        // malformed lqip.json — ignore
+      }
+    }
+
+    out.push(prod)
   }
 
   // Stable sort: featured first, then year desc, then slug.
@@ -185,7 +198,8 @@ function merge(
     lineage: pick(overlay.lineage as string[], fm.lineage ?? []),
     poster: {
       src: fm.poster?.src ?? null,
-      credit: pick(overlayPoster.credit, fm.poster?.credit ?? null)
+      credit: pick(overlayPoster.credit, fm.poster?.credit ?? null),
+      lqip: null  // filled by loadAll() after merge
     },
     gallery: galleryMerged,
     videos: [
