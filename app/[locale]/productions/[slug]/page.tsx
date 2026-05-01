@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import * as React from 'react'
@@ -83,6 +84,43 @@ function creativeWorkSchema(production: ProductionView, slug: string, locale: Lo
   }
 
   return schema
+}
+
+type Props = { params: Promise<{ locale: Locale; slug: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params
+  const production = getProduction(slug, locale)
+  if (!production) return {}
+
+  const base = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+  const url = locale === 'ru' ? `${base}/productions/${slug}` : `${base}/${locale}/productions/${slug}`
+  const ogImage = `${base}/api/og/${slug}`
+
+  return {
+    title: production.title,
+    description: production.synopsis || undefined,
+    alternates: {
+      canonical: url,
+      languages: {
+        ru: `${base}/productions/${slug}`,
+        en: `${base}/en/productions/${slug}`,
+      },
+    },
+    openGraph: {
+      title: production.titles.ru ?? production.title,
+      description: production.synopsis || undefined,
+      url,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: production.titles.ru ?? production.title }],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: production.titles.ru ?? production.title,
+      description: production.synopsis || undefined,
+      images: [ogImage],
+    },
+  }
 }
 
 export function generateStaticParams() {

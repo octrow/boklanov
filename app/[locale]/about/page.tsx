@@ -2,6 +2,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 
 import matter from 'gray-matter'
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
@@ -63,6 +64,34 @@ function loadAbout(locale: Locale): {
 }
 
 const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const { paragraphs } = loadAbout(locale)
+  const description = paragraphs[0] ?? undefined
+
+  const url = locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`
+  const name = locale === 'ru' ? 'Роман Бокланов — о режиссёре' : locale === 'de' ? 'Roman Boklanov — über' : 'Roman Boklanov — about'
+
+  return {
+    title: name,
+    description,
+    alternates: {
+      canonical: url,
+      languages: { ru: `${BASE}/about`, en: `${BASE}/en/about` },
+    },
+    openGraph: {
+      title: name,
+      description,
+      url,
+      type: 'profile',
+    },
+  }
+}
 
 function personSchema(locale: Locale, description: string) {
   return {
