@@ -28,8 +28,12 @@ const COUNTRY_TO_CODE: Record<string, string> = {
 function countryCode(name?: string): string | null {
   if (!name) return null
   const trimmed = name.trim()
+  // Accept ISO-2 codes already in the data (some metadata.yml uses RU/DE/...).
+  if (/^[A-Z]{2}$/.test(trimmed)) return trimmed
   return COUNTRY_TO_CODE[trimmed] ?? null
 }
+
+export { countryCode }
 
 export interface ProductionCardProps {
   production: ProductionView

@@ -52,7 +52,8 @@ Date: 2026-04-30
 
 | Task | Status | Commit | Notes |
 |------|--------|--------|-------|
-| C1 — Production card + grid | ✅ done | _pending_ | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. | Phase 4 (Core UI vertical slices) is gated on
+| C1 — Production card + grid | ✅ done | `11fc081` | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. |
+| C2 — Production detail | ✅ done | _pending_ | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. | Phase 4 (Core UI vertical slices) is gated on
 F6 + F7. F8 is gated on Phase 4 having at least one App Router page
 rendering real content.
 
@@ -147,7 +148,7 @@ rendering real content.
   in mono. _Depends on F1, F3, F6, F7. Establishes aesthetic — review
   before C2._
 
-- [ ] **C2 — Production detail page**: `app/[locale]/productions/[slug]/page.tsx`,
+- [x] **C2 — Production detail page**: `app/[locale]/productions/[slug]/page.tsx`,
   layout per DESIGN.md §7.3 (cover → title block → chips → synopsis →
   credits → action bar → photos → critic quotes → awards → external
   links → sticky CTA). Sticky `Email Roman about touring this show`

@@ -1,0 +1,348 @@
+/* DESIGN.md §7.3 — production detail page (the money page).
+   Layout is mobile-first single column; on ≥1024px the sticky booking CTA
+   parks on the right column. */
+
+.page {
+  position: relative;
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+  padding-bottom: var(--space-10);
+}
+
+/* 1. Cover — full-bleed, original aspect ratio. */
+.cover {
+  margin: 0;
+  width: 100%;
+  max-width: var(--max-width-wide);
+  margin-left: auto;
+  margin-right: auto;
+}
+.cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: var(--paper-sunken);
+}
+.coverCredit {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  padding: var(--space-2) var(--gutter-mobile);
+}
+
+/* The reading column. Sticky CTA shares the wrapper but is positioned
+   relative to .page on desktop. */
+.column {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-7) var(--gutter-mobile) 0;
+}
+
+@media (min-width: 768px) {
+  .column {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+  .coverCredit {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .column {
+    /* Reserve the right column for the sticky CTA on desktop. */
+    max-width: 720px;
+    margin-left: max(var(--gutter-desktop), calc((100% - var(--max-width-content)) / 2));
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: var(--gutter-desktop);
+    padding-top: var(--space-8);
+  }
+  .coverCredit {
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+  }
+}
+
+/* 2. Title block. */
+.titleBlock {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.titleRu {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--ink);
+  margin: 0;
+}
+
+.titleEn {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-md);
+  color: var(--ink-mute);
+  margin: var(--space-2) 0 0;
+}
+
+.titleDe {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  color: var(--ink-faint);
+  margin: var(--space-1) 0 0;
+}
+
+.theatre {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: var(--space-4) 0 0;
+}
+
+/* 3. Chips row. */
+.chips {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--paper-sunken);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--border-radius-sm);
+}
+
+/* 4. One-line synopsis. */
+.synopsis {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+  color: var(--ink);
+  margin: 0 0 var(--space-7);
+  max-width: 60ch;
+}
+
+/* 6. Action bar. */
+.actionBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-8);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+
+.btnPrimary {
+  background: var(--accent);
+  color: var(--paper);
+  border: 1px solid var(--accent);
+}
+.btnPrimary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btnSecondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+}
+.btnSecondary:hover {
+  background: var(--paper-raised);
+}
+
+/* Sections (photos, press, awards, links). */
+.section {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-6);
+  margin-bottom: var(--space-7);
+}
+
+.sectionLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-5);
+}
+
+/* 7. Photos — masonry-ish: original aspect ratios preserved. */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+@media (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.galleryItem {
+  margin: 0;
+}
+.galleryItem img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--paper-sunken);
+}
+.galleryCredit {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  padding-top: var(--space-2);
+}
+
+/* 8/9/10 — flat lists in mono, hairline rules between rows. */
+.pressList,
+.awardList,
+.linksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pressItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--rule);
+}
+.pressItem:last-child {
+  border-bottom: none;
+}
+.pressLink {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+  color: var(--ink);
+  text-decoration-color: transparent;
+}
+.pressLink:hover {
+  text-decoration-color: var(--accent);
+}
+.pressOutlet {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+}
+
+.awardItem {
+  display: grid;
+  grid-template-columns: 5ch 1fr;
+  column-gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink);
+}
+.awardItem:last-child {
+  border-bottom: none;
+}
+.awardYear {
+  color: var(--ink-mute);
+}
+.awardName {
+  color: var(--ink);
+}
+.awardCity {
+  grid-column: 2;
+  color: var(--ink-mute);
+}
+
+.linksItem {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  padding: var(--space-2) 0;
+}
+
+/* 11. Sticky booking CTA.
+   Mobile: full-width pinned to viewport bottom.
+   Desktop ≥1024px: parks in the right column.
+*/
+.stickyCta {
+  position: fixed;
+  left: var(--gutter-mobile);
+  right: var(--gutter-mobile);
+  bottom: var(--space-4);
+  z-index: var(--z-sticky);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--border-radius-sm);
+
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--duration-fast) var(--easing-default);
+}
+.stickyCta:hover {
+  background: var(--accent-hover);
+}
+
+@media (min-width: 1024px) {
+  .stickyCta {
+    /* Pin to the top of the right column once it scrolls into view. The
+       .page wrapper provides the sticky context. */
+    position: sticky;
+    top: var(--space-7);
+    /* Float to the right rail, sized to the desktop column reservation. */
+    margin-left: auto;
+    margin-right: var(--gutter-desktop);
+    margin-top: calc(-1 * var(--space-9));
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 280px;
+    min-height: 56px;
+    box-shadow: none;
+  }
+}

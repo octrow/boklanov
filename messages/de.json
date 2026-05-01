@@ -7,5 +7,15 @@
   "productions": {
     "title": "Inszenierungen",
     "empty": "Keine Inszenierungen passen zu diesen Filtern"
+  },
+  "productionDetail": {
+    "watchListen": "Ansehen / hören",
+    "techRider": "Tech-Rider (PDF)",
+    "pressKit": "Pressekit (ZIP)",
+    "photos": "Fotos",
+    "press": "Presse",
+    "awards": "Auszeichnungen",
+    "links": "Links",
+    "bookingCta": "Roman zu einer Tournee schreiben"
   }
 }

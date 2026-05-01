@@ -7,5 +7,15 @@
   "productions": {
     "title": "productions",
     "empty": "No productions match these filters"
+  },
+  "productionDetail": {
+    "watchListen": "Watch / listen",
+    "techRider": "Tech rider (PDF)",
+    "pressKit": "Press kit (ZIP)",
+    "photos": "Photos",
+    "press": "Press",
+    "awards": "Awards",
+    "links": "Links",
+    "bookingCta": "Email Roman about touring this show"
   }
 }
