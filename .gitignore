@@ -49,6 +49,5 @@ __pycache__/
 # Source of truth lives in notion-data/. Re-run `npm run sync` to rebuild.
 # metadata.yml files are PRESERVED across sync runs and committed — they
 # carry hand-edited overlay data the loader merges on top of frontmatter.
-/content/productions/*/index.mdx
-/content/productions-index.json
-/public/productions/
+# NOTE: generated content IS committed so Vercel can build without notion-data/.
+# Un-generated locally → re-run `npm run sync` → commit the diff.

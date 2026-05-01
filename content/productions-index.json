@@ -1,0 +1,430 @@
+[
+  {
+    "slug": "bury-me-behind-the-baseboard",
+    "title": {
+      "ru": "Похороните меня за плинтусом",
+      "en": "Bury Me Behind the Baseboard"
+    },
+    "year": 2021,
+    "role": "performer",
+    "form": [
+      "solo"
+    ],
+    "lineage": [
+      "btk",
+      "kudashov"
+    ],
+    "featured": true,
+    "poster": "/productions/bury-me-behind-the-baseboard/poster.jpg",
+    "ageRating": "18+",
+    "theatre": "БТК",
+    "country": "RU"
+  },
+  {
+    "slug": "jagger-jagger",
+    "title": {
+      "ru": "Джаггер, Джаггер!",
+      "en": "Jagger, Jagger"
+    },
+    "year": 2021,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/jagger-jagger/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "the-ape-star",
+    "title": {
+      "ru": "Меня удочерила Горилла",
+      "en": "The Ape Star"
+    },
+    "year": 2020,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/the-ape-star/poster.jpg",
+    "ageRating": "6+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "plaster",
+    "title": {
+      "ru": "Гипс",
+      "en": "Plaster"
+    },
+    "year": 2021,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/plaster/poster.jpg",
+    "ageRating": "12+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "aiaccio",
+    "title": {
+      "ru": "Айяччо: история одного клоуна",
+      "en": "Aiaccio"
+    },
+    "year": 2021,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [
+      "btk",
+      "kudashov"
+    ],
+    "featured": true,
+    "poster": "/productions/aiaccio/poster.jpg",
+    "theatre": "БТК",
+    "country": "RU"
+  },
+  {
+    "slug": "going-in-twos",
+    "title": {
+      "ru": "Идём вдвоём",
+      "en": "Going in twos"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/going-in-twos/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "wee-little-havroshechka",
+    "title": {
+      "ru": "Крошечка-Хаврошечка",
+      "en": "Wee Little Havroshechka"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/wee-little-havroshechka/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "typisch-bar",
+    "title": {
+      "ru": "Медведь в своём репертуаре",
+      "en": "Typisch bär"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/typisch-bar/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "cinderella",
+    "title": {
+      "ru": "Золушка",
+      "en": "Cinderella "
+    },
+    "year": 2021,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/cinderella/poster.jpg",
+    "ageRating": "4+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "pre-theatre",
+    "title": {
+      "ru": "ДОТЕАТР",
+      "en": "DOTHEATRE"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/pre-theatre/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "commedia-dell-arte",
+    "title": {
+      "ru": "Комедия Дель-Арте",
+      "en": "Commedia dell'arte"
+    },
+    "year": 2018,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [
+      "btk"
+    ],
+    "featured": true,
+    "poster": "/productions/commedia-dell-arte/poster.jpg",
+    "theatre": "БТК",
+    "country": "RU"
+  },
+  {
+    "slug": "sea-day-suitcase",
+    "title": {
+      "ru": "Чемодан для моря",
+      "en": "Suitcase for the sea"
+    },
+    "year": 2019,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/sea-day-suitcase/poster.webp",
+    "ageRating": "3+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "lika-and-beam",
+    "title": {
+      "ru": "Лика и луч",
+      "en": "Lika and ray"
+    },
+    "year": 2019,
+    "role": "director",
+    "form": [
+      "ensemble"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/lika-and-beam/poster.jpg",
+    "ageRating": "5+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "online",
+    "title": {
+      "en": "Online "
+    },
+    "year": 2020,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": null,
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "nikita-looking-for-the-sea",
+    "title": {
+      "ru": "Никита ищет море",
+      "en": "Nikita looking for the sea"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/nikita-looking-for-the-sea/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "holiday-recipe",
+    "title": {
+      "ru": "Рецепт праздника",
+      "en": "Holiday recipe (eng|esp)"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "puppet",
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/holiday-recipe/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "beware-of-the-dog",
+    "title": {
+      "ru": "Осторожно, злая собака!!!",
+      "en": "Beware of the Dog!"
+    },
+    "year": 2023,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/beware-of-the-dog/poster.jpg",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "sugar-kid",
+    "title": {
+      "ru": "Сахарный ребёнок",
+      "en": "Sugar Kid"
+    },
+    "year": 2022,
+    "role": "director",
+    "form": [
+      "puppet",
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": null,
+    "ageRating": "6+",
+    "theatre": "Новый Молодежный Нижнетагильский театр",
+    "country": null
+  },
+  {
+    "slug": "kasztanka",
+    "title": {
+      "ru": "Каштанка",
+      "en": "Kasztanka"
+    },
+    "year": 2020,
+    "role": "director",
+    "form": [
+      "puppet"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/kasztanka/poster.jpg",
+    "ageRating": "6+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "the-old-man-and-the-sea",
+    "title": {
+      "en": "The Old Man and the Sea"
+    },
+    "year": 2020,
+    "role": "director",
+    "form": [
+      "puppet",
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/the-old-man-and-the-sea/poster.jpg",
+    "theatre": "Baltic House Theatre",
+    "country": null
+  },
+  {
+    "slug": "lina-marlina",
+    "title": {
+      "ru": "Лина-Марлина",
+      "en": "Lina-Marlina"
+    },
+    "year": 2023,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": true,
+    "poster": "/productions/lina-marlina/poster.webp",
+    "theatre": "ARTиШОК",
+    "country": null
+  },
+  {
+    "slug": "the-giving-tree",
+    "title": {
+      "ru": "Щедрое дерево",
+      "en": "The Giving Tree"
+    },
+    "year": 2024,
+    "role": "director",
+    "form": [
+      "puppet",
+      "family"
+    ],
+    "lineage": [],
+    "featured": false,
+    "poster": "/productions/the-giving-tree/poster.jpg",
+    "ageRating": "12+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "oskar-und-die-dame-in-rosa",
+    "title": {
+      "ru": " Оскар и Розовая дама",
+      "en": "Oskar und die Dame in Rosa"
+    },
+    "year": 2023,
+    "role": "director",
+    "form": [
+      "family"
+    ],
+    "lineage": [],
+    "featured": false,
+    "poster": "/productions/oskar-und-die-dame-in-rosa/poster.jpg",
+    "ageRating": "14+",
+    "theatre": null,
+    "country": null
+  },
+  {
+    "slug": "richters-fairytale",
+    "title": {
+      "en": "Richter’s Fairytale (eng|deu)"
+    },
+    "year": 2024,
+    "role": "director",
+    "form": [
+      "puppet"
+    ],
+    "lineage": [],
+    "featured": false,
+    "poster": "/productions/richters-fairytale/poster.jpg",
+    "ageRating": "18+",
+    "theatre": null,
+    "country": null
+  }
+]
