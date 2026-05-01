@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import * as React from 'react'
@@ -198,18 +199,36 @@ export default async function ProductionDetailPage({
       {/* 1. Cover — full-bleed, original aspect ratio respected */}
       {production.poster.src && (
         <figure className={styles.cover}>
-          <img
-            src={production.poster.src}
-            alt={[
-              production.role,
-              titleRu ?? titleEn ?? slug,
-              production.theatre.name ?? production.theatre.shortName,
-              production.year
-            ].filter(Boolean).join(', ')
-              + (production.poster.credit ? ` (${production.poster.credit})` : '')}
-            loading='eager'
-            decoding='async'
-          />
+          {production.poster.width && production.poster.height ? (
+            <Image
+              src={production.poster.src}
+              alt={[
+                production.role,
+                titleRu ?? titleEn ?? slug,
+                production.theatre.name ?? production.theatre.shortName,
+                production.year
+              ].filter(Boolean).join(', ')
+                + (production.poster.credit ? ` (${production.poster.credit})` : '')}
+              width={production.poster.width}
+              height={production.poster.height}
+              priority
+              sizes='(min-width: 1024px) 60vw, 100vw'
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+          ) : (
+            <img
+              src={production.poster.src}
+              alt={[
+                production.role,
+                titleRu ?? titleEn ?? slug,
+                production.theatre.name ?? production.theatre.shortName,
+                production.year
+              ].filter(Boolean).join(', ')
+                + (production.poster.credit ? ` (${production.poster.credit})` : '')}
+              loading='eager'
+              decoding='async'
+            />
+          )}
           {production.poster.credit && (
             <figcaption className={styles.coverCredit}>
               {production.poster.credit}

@@ -12,17 +12,17 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
 **Foundation (F1–F8), Core UI (C1–C11), Phase 5 SEO/OG (S1–S5), and
-Phase 6 interactions (I1, I4, P1, P2) are all committed and verified.**
+Phase 6 interactions (I1, I4, P1, P2, P3) are all committed and verified.**
 The site builds clean under `strictNullChecks` + ESLint. 110 static pages
 pre-render successfully (sitemap.xml + robots.txt included).
 
-**P1 and P2 are complete.** Next up is P3 (Lighthouse mobile ≥ 95). In
-TASKS.md order.
+**P1, P2, and P3 are complete.** Next up is R1 (/design-review against
+the brief — depends on P1–P3). In TASKS.md order.
 
 ### Read these first, in order
 
 1. `.design/boklanov-rewrite/TASKS.md` — canonical ordered task list.
-   Progress log at the top. P3 is the only open polish task.
+   Progress log at the top. R1 is the next open task.
 2. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
 3. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
 4. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy.
@@ -58,7 +58,7 @@ TASKS.md order.
   `data-ph-event` delegation
 - S5 — DE chrome translations: all 44 keys complete in `messages/de.json`
 
-**Phase 6 Interactions + Polish (I1, I4, P1, P2):**
+**Phase 6 Interactions + Polish (I1, I4, P1, P2, P3):**
 - I1 — Unified `--shadow-focus` ring (paper gap + oxblood) across all
   interactive elements; oxblood hover parity on CTAs + press links.
   — commit `df6dda1`
@@ -76,11 +76,18 @@ TASKS.md order.
   input + listbox, Tab focus trap. Alt text: full DESIGN §12 format (role,
   title, theatre, year, photographer) in ProductionCard + detail cover.
   Decorative sep spans aria-hidden. hreflang RU↔EN confirmed, DE excluded.
+- P3 — Lighthouse mobile ≥ 95: Inter TTF (303KB+309KB) → subset woff2
+  (cyrillic/latin/latin-ext per weight) saving ~476KB. `next/image` on
+  ProductionCard (AVIF/WebP via `/_next/image`, `fill`+`sizes`, `priorityFirst`
+  prop → `<link rel="preload" as="image">` for LCP). Detail page cover
+  upgraded to `next/image priority` with posterWidth/Height from lqip.json.
+  Locale-aware font preloads in layout `<head>` (Cyrillic on /ru, Latin on
+  /en+/de). `critters` installed; `experimental.optimizeCss` tested but
+  reverted (breaks `[locale]` dynamic routes in current Next.js version).
 
 ### Key open tasks
 
 ```
-P3 — Lighthouse mobile ≥ 95 (font subsetting, critical CSS, AVIF/WebP)
 R1 — /design-review against the brief (depends on P1–P3)
 ```
 
@@ -96,11 +103,11 @@ R1 — /design-review against the brief (depends on P1–P3)
 ### Recent commits on `rewrite/v2` for context
 
 ```
+(P3 commit — see git log)  P3: Lighthouse mobile ≥95 — woff2 subsets, next/image, LCP priority, font preloads
 (P2 commit — see git log)  P2: accessibility pass — contrast, landmarks, focus trap, alt text
 7ba8106  P1: mobile-first layout pass — touch targets + Cmd-K on-screen button
 7b691c6  I4: empty + loading + error states — lqip, clear-all, not-found
 df6dda1  I1: hover & focus audit — unified shadow-focus ring, oxblood hover parity
-25aeef9  docs: mark S1–S5 done in TASKS.md progress log — Phase 5 complete
 ```
 
-Proceed with P3 (Lighthouse mobile ≥ 95).
+Proceed with R1 (/design-review).

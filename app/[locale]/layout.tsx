@@ -45,6 +45,19 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Preload the display font (wordmark + headings) and body font used
+            above the fold. Subset choice: Cyrillic for RU, Latin otherwise. */}
+        {locale === 'ru' ? (
+          <>
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/lora-cyrillic-400.woff2' crossOrigin='anonymous' />
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-cyrillic-400.woff2' crossOrigin='anonymous' />
+          </>
+        ) : (
+          <>
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/lora-latin-400.woff2' crossOrigin='anonymous' />
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-latin-400.woff2' crossOrigin='anonymous' />
+          </>
+        )}
       </head>
       <body>
         <NextIntlClientProvider>

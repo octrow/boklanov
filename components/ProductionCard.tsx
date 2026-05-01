@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
@@ -37,9 +38,10 @@ export { countryCode }
 
 export interface ProductionCardProps {
   production: ProductionView
+  priority?: boolean
 }
 
-export function ProductionCard({ production }: ProductionCardProps) {
+export function ProductionCard({ production, priority = false }: ProductionCardProps) {
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
   const showEn = !!titleEn && titleEn !== titleRu
@@ -71,12 +73,14 @@ export function ProductionCard({ production }: ProductionCardProps) {
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
         {production.poster.src ? (
-          <img
+          <Image
             className={styles.coverImg}
             src={production.poster.src}
             alt={alt}
-            loading='lazy'
-            decoding='async'
+            fill
+            sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+            style={{ objectFit: 'cover' }}
+            priority={priority}
           />
         ) : (
           <div className={styles.coverFallback} aria-hidden='true'>

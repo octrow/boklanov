@@ -12,13 +12,15 @@ export interface ProductionGridProps {
   emptyLabel: string
   clearAllLabel?: string
   onClearAll?: () => void
+  priorityFirst?: boolean
 }
 
 export function ProductionGrid({
   productions,
   emptyLabel,
   clearAllLabel,
-  onClearAll
+  onClearAll,
+  priorityFirst = false
 }: ProductionGridProps) {
   if (productions.length === 0) {
     return (
@@ -37,8 +39,8 @@ export function ProductionGrid({
   }
   return (
     <div className={styles.grid}>
-      {productions.map((p) => (
-        <ProductionCard key={p.slug} production={p} />
+      {productions.map((p, i) => (
+        <ProductionCard key={p.slug} production={p} priority={priorityFirst && i === 0} />
       ))}
     </div>
   )

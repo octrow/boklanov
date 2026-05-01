@@ -43,7 +43,7 @@ export default async function HomePage({
         <>
           <section className={styles.section} aria-label={t('featuredLabel')}>
             <p className={styles.sectionLabel}>{t('featuredLabel')}</p>
-            <ProductionGrid productions={featured} emptyLabel='' />
+            <ProductionGrid productions={featured} emptyLabel='' priorityFirst />
           </section>
           <hr />
         </>

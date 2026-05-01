@@ -48,7 +48,7 @@ export default async function ProductionsIndexPage({
        */}
       <Suspense
         fallback={
-          <ProductionGrid productions={directorProductions} emptyLabel='' />
+          <ProductionGrid productions={directorProductions} emptyLabel='' priorityFirst />
         }
       >
         <FilteredProductionsPanel productions={productions} labels={labels} />

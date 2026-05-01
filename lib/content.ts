@@ -59,7 +59,7 @@ export interface Production {
   role: string
   form: string[]
   lineage: string[]
-  poster: { src: string | null; credit: string | null; lqip: string | null }
+  poster: { src: string | null; credit: string | null; lqip: string | null; width: number | null; height: number | null }
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{ name: string; category?: string; year?: number; city?: string }>
@@ -118,8 +118,14 @@ function loadAll(): Production[] {
     const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
     if (fs.existsSync(lqipPath)) {
       try {
-        const lqipData = JSON.parse(fs.readFileSync(lqipPath, 'utf8')) as { poster?: string }
+        const lqipData = JSON.parse(fs.readFileSync(lqipPath, 'utf8')) as {
+          poster?: string
+          posterWidth?: number
+          posterHeight?: number
+        }
         prod.poster.lqip = lqipData.poster ?? null
+        prod.poster.width = lqipData.posterWidth ?? null
+        prod.poster.height = lqipData.posterHeight ?? null
       } catch {
         // malformed lqip.json — ignore
       }
@@ -199,7 +205,9 @@ function merge(
     poster: {
       src: fm.poster?.src ?? null,
       credit: pick(overlayPoster.credit, fm.poster?.credit ?? null),
-      lqip: null  // filled by loadAll() after merge
+      lqip: null,    // filled by loadAll() after merge
+      width: null,   // filled by loadAll() from lqip.json posterWidth
+      height: null   // filled by loadAll() from lqip.json posterHeight
     },
     gallery: galleryMerged,
     videos: [
