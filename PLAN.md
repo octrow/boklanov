@@ -14,7 +14,8 @@
 > | 5 — i18n + SEO + OG | ✅ done (5 / 5) | S1–S5 shipped. Sitemap (105 URLs, hreflang RU↔EN), robots, RSS (RU+EN), JSON-LD `Person` + `CreativeWork`, `app/api/og/[slug]`, PostHog `booking_cta_click` only, DE chrome translations complete. |
 > | 6 — Polish & interactions | ✅ done (5 / 5) | I1, I4, P1, P2, P3 shipped. **I5 (signature gesture) cut formally in R1** per `DESIGN.md` §13. Last commit: `09d5005`. |
 > | 6.5 — Design review + R1.fix + R1.polish | ✅ done | `DESIGN_REVIEW.md`. Zero §11 anti-patterns. R1.fix: sticky-CTA right-rail grid, cover→title rule, filter group labels, ThemeToggle SVG, search × suppression, LQIP gating. R1.polish: spec sheet in right rail, gallery masonry, wordmark token. **All DESIGN_REVIEW.md items resolved.** Commits `73620e6` `871f287` `09d5005`. |
-> | 7 — Deploy + cutover | ⏳ pending | **R2 real-device QA** (unblocked) + **D1 Vercel preview** (can run in parallel) → D2 hosting → D3 domain → D4 cutover |
+> | 6.6 — Post-R1 QA findings (Q1–Q7) | 🟡 open | Surfaced 2026-05-01 during manual `next dev` walkthrough. Sync emits non-production sub-pages as productions (Q1); RU↔EN merge silently emits EN as `title.ru` for 3 records (Q2); synopsis renders raw Markdown when it contains a link (Q3); awards page mixes RU/EN strings (Q4); about-page milestone years wrong (Q5); poster-less fallback feels placeholder-y at grid scale (Q6); contact page reordering — TG+IG primary, email secondary (Q7). Full task list in `.design/boklanov-rewrite/TASKS.md` § "Post-R1 QA findings". **Blocks R2 sign-off; D1 preview can still proceed in parallel.** |
+> | 7 — Deploy + cutover | ⏳ pending | **R2 real-device QA** (blocked by Q1–Q7) + **D1 Vercel preview** (can run in parallel) → D2 hosting → D3 domain → D4 cutover |
 >
 > Decisions D1–D6 from §7 are all **confirmed migrate / editorial /
 > next-intl / repo MDX / no Anthropic Design / .ru status quo**. Aesthetic

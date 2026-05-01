@@ -90,6 +90,32 @@ interface Production {
 }
 
 // ---------------------------------------------------------------------------
+// Notion-export quirks (TASKS.md Q1, Q2 — 2026-05-01)
+// ---------------------------------------------------------------------------
+
+// Q1 — slugs that come back from Notion as Public=Yes pages but are NOT
+// productions. These are navigation / bio / role-overview / festival pages.
+// If any of these turn out to BE a production later, drop the slug here and
+// re-run sync.
+const NON_PRODUCTION_SLUGS = new Set<string>([
+  'contacts',              // /contact page mirror
+  'roman-boklanov-english', // EN bio mirror — about page, not a production
+  'puppet-director',        // role overview — references multiple shows
+  'total-fest-dialogs'      // festival listing, not a directorial production
+])
+
+// Q2 — Cyrillic-named rows where the CSV `Slug` column is empty AND
+// `slugify()` returns empty (because \w doesn't match Cyrillic). Without
+// this map the RU sibling never enters the grouping pass and the EN
+// sibling ends up as a singleton, leaking its English `Name` into
+// `title.ru`. Add a row here whenever a future re-export produces
+// another orphan pair.
+const MANUAL_SIBLING_PAIRS: Record<string, string> = {
+  'Сахарный ребёнок': 'sugar-kid',
+  Каштанка: 'kasztanka'
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -102,10 +128,15 @@ function slugify(s: string): string {
     .replace(/^-|-$/g, '')
 }
 
-function detectLocale(text: string, name: string): 'ru' | 'en' {
-  // Cyrillic in name → RU; otherwise EN. Fallback: scan body.
-  if (/[А-Яа-яЁё]/.test(name)) return 'ru'
-  if (/[А-Яа-яЁё]/.test(text.slice(0, 500))) return 'ru'
+function rowLocale(row: CsvRow): 'ru' | 'en' {
+  // Q2 — drive locale from the CSV slug suffix (Notion exports paired EN
+  // siblings with `-en` / `-eng` suffixes), falling back to Cyrillic-name
+  // detection. The previous body-content sniffing produced false positives
+  // on EN pages whose body quoted Russian text (cast lists, gallery
+  // captions) and silently overwrote `title.ru` with the EN string.
+  const slug = (row.Slug || '').toLowerCase()
+  if (/-(en|eng)$/.test(slug)) return 'en'
+  if (/[А-Яа-яЁё]/.test(row.Name)) return 'ru'
   return 'en'
 }
 
@@ -378,17 +409,35 @@ async function main() {
 
   // 3. Group rows by Slug. The CSV uses `<base>` for RU and `<base>-en`
   //    for EN — strip `-en` so siblings collapse into one record.
+  //    Q1: skip slugs in NON_PRODUCTION_SLUGS (nav / bio / festival pages).
+  //    Q2: when CSV `Slug` is empty AND slugify(Name) returns empty
+  //    (Cyrillic-only Name), look up MANUAL_SIBLING_PAIRS to attach the
+  //    row to its EN sibling's group.
   const groups = new Map<string, CsvRow[]>()
+  let droppedNonProduction = 0
+  let pairedManually = 0
   for (const row of rows) {
     if (!row.Public || row.Public.toLowerCase() !== 'yes') continue
-    const rawSlug = (row.Slug || slugify(row.Name)).toLowerCase()
+    let rawSlug = (row.Slug || slugify(row.Name)).toLowerCase()
+    if (!rawSlug && MANUAL_SIBLING_PAIRS[row.Name]) {
+      rawSlug = MANUAL_SIBLING_PAIRS[row.Name]
+      pairedManually++
+    }
     if (!rawSlug) continue
     const slug = rawSlug.replace(/-(en|eng)$/, '')
+    if (NON_PRODUCTION_SLUGS.has(slug)) {
+      droppedNonProduction++
+      continue
+    }
     const list = groups.get(slug) ?? []
     list.push(row)
     groups.set(slug, list)
   }
-  console.log(`[sync] grouped slugs: ${groups.size}`)
+  console.log(
+    `[sync] grouped slugs: ${groups.size}` +
+      ` (filtered ${droppedNonProduction} non-production rows,` +
+      ` paired ${pairedManually} unsluggable RU siblings)`
+  )
 
   // 4. Build a filename index over DB_DIR for quick lookup.
   const dbEntries = fs.readdirSync(DB_DIR)
@@ -475,7 +524,7 @@ async function main() {
         continue
       }
       const body = fs.readFileSync(found.md, 'utf8')
-      const locale = detectLocale(body, row.Name)
+      const locale = rowLocale(row)
 
       // capture notion id from filename
       const idMatch = path.basename(found.md).match(/([a-f0-9]{32})\.md$/)

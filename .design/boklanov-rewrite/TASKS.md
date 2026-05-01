@@ -415,7 +415,116 @@ when the legacy renderer was deleted. The build is clean under
   - **R1 Should-Fix #4 (LQIP/preload race on first featured card)** on a
     `next build && next start` production build — R1 saw the LQIP blur
     persist in dev mode; verify it resolves in production.
-  _Depends on R1.fix + R1.polish._
+  _Depends on R1.fix + R1.polish + Q1–Q7 (see below)._
+
+---
+
+## Post-R1 QA findings (2026-05-01)
+
+Surfaced during a manual `next dev` walkthrough by Daniil. All seven
+**block R2 sign-off** — fix in this order, then re-run R2 on a
+production build before D1.
+
+- [x] **Q1 — Sync emits non-production sub-pages as productions.**
+  ✅ done. `scripts/sync-from-notion.ts` now declares
+  `NON_PRODUCTION_SLUGS` and skips matching groups during the CSV
+  pass. Confirmed dropped: `contacts`, `roman-boklanov-english`,
+  `puppet-director` (role overview, references multiple shows),
+  `total-fest-dialogs` (festival listing, `Author` empty,
+  `Description` empty). Kept as real productions: `online`
+  (`Online ` — director-credited puppet show) and `pre-theatre`
+  (`ДОТЕАТР` / `DOTHEATRE` — director-credited reconstruction
+  piece). Sync log reports the filter count (`filtered 6
+  non-production rows`). Production-detail routes dropped from 84 →
+  72 (12 = 4 slugs × 3 locales). Their committed stub `metadata.yml`
+  files removed via `git rm -r`. _Future blocklist additions:
+  add the slug to `NON_PRODUCTION_SLUGS`, re-run `npm run sync`,
+  then `git rm -r content/productions/<slug>`._
+
+- [x] **Q2 — RU↔EN sibling merge silently emits EN string as
+  `title.ru`.** ✅ done. Two distinct sub-bugs fixed:
+  (a) `detectLocale(body, name)` was sniffing the first 500 chars of
+  body for Cyrillic and returning `'ru'` when it found any — false
+  positive on EN pages whose body quoted Russian cast names or
+  caption text, which then overwrote `prod.title.ru` with the EN
+  `Name`. Replaced with `rowLocale(row)` driven by the CSV `Slug`
+  suffix (`-en` / `-eng` → EN, otherwise Cyrillic-name detection).
+  (b) `slugify("Сахарный ребёнок")` returned empty (`\w` doesn't
+  match Cyrillic) so the RU sibling was dropped at grouping and the
+  EN sibling stayed as a singleton. Added `MANUAL_SIBLING_PAIRS`
+  table to attach orphan RU rows to their EN sibling's group:
+  `Сахарный ребёнок` → `sugar-kid`, `Каштанка` → `kasztanka`.
+  Verified: `sugar-kid`, `jagger-jagger`, `kasztanka` now have
+  correct `title: { ru: "<Cyrillic>", en: "<Latin>" }` pairs;
+  `notionIds` has both `ru` and `en` ids populated. _Future
+  unsluggable RU rows: add the row's `Name` and target slug to
+  `MANUAL_SIBLING_PAIRS`._
+
+- [ ] **Q3 — Synopsis renders as raw Markdown when it contains a
+  link.** `/productions/the-giving-tree` shows the literal string
+  `[.be/br5rNxuUbVo)` because `content/productions/the-giving-tree/
+  index.mdx:10` is `synopsis.ru: "[https://youtu.be/br5rNxuUbVo](https://youtu.be/br5rNxuUbVo)"`
+  and the detail page at `app/[locale]/productions/[slug]/page.tsx:265`
+  drops `{production.synopsis}` as a plain string with no Markdown
+  pass. Per DESIGN.md §7.3 the synopsis is a single-line prose
+  sentence — Markdown URL is meaningless content here. _Fix:_ in sync,
+  unwrap `[X](Y)` → `Y` (or strip entirely) when emitting `synopsis`,
+  and reject any synopsis that is just a URL by falling back to empty.
+  Then run `npm run sync` and audit all 28 productions for similar
+  pollution.
+
+- [ ] **Q4 — Awards page mixes RU and EN strings.** `/awards` shows
+  some festival names in Cyrillic, some in Latin, some with mojibake
+  (`\udd40 "The Sugar Child"…`). `lib/content.ts:65` types
+  `award.{name,category,city}` as flat `string`, not `{ ru, en }`.
+  Sync extracts whichever language the source MD line happened to be
+  in. _Fix options:_ (a) widen the type to `{ ru, en }`, re-extract
+  per-locale from RU and EN MD siblings, render `award[locale].name`
+  on /awards — correct but heavy; (b) normalise to RU canonical form
+  on every locale (most festival names are RU-language; international
+  festivals like "Bravo - 2022" stay Latin in both locales) — faster
+  and aligns with `DESIGN.md` §3 "press clippings stay in original
+  language". Recommend (b) for v1.
+
+- [ ] **Q5 — About-page chronology dates wrong.** Daniil flagged
+  `content/about/ru.mdx` milestones include `2003 — Поступил в РГИСИ
+  (мастерская Кудашова)` and `2020 — Переезд в Алматы` — neither year
+  matches Roman's actual timeline. _Fix:_ cross-check every milestone
+  against `notion-data/Роман Бокланов d997b20454e24c9685624e4eb254935b.md`
+  (search for "РГИСИ", "БТК", "Алматы"); correct in
+  `content/about/{ru,en}.mdx` and verify with Roman before R2.
+
+- [ ] **Q6 — Missing-poster fallback feels placeholder-y at grid
+  scale.** `components/ProductionCard.module.css:39-56` renders a
+  paper-sunken gradient with display title at the bottom — adequate
+  per DESIGN.md §5.3 individually, but on `/productions` where ~17 of
+  29 cards lack posters, the rows of identical fallbacks read as
+  "missing assets" rather than as the **deliberate typographic
+  treatment** the brief calls for. _Fix:_ harden the fallback into a
+  brutalist treatment: hairline frame, display title at top-left
+  (not bottom), mono spec line below it (`theatre · year ·
+  ageRating`), so the card looks composed even without imagery.
+  Optionally vary the paper-sunken tone slightly across cards to
+  break the queue rhythm.
+
+- [ ] **Q7 — Contact-page primary action is now Telegram + Instagram,
+  not mailto.** Per user directive 2026-05-01: Roman prefers initial
+  contact via IG/Telegram; email is fallback. Update
+  `app/[locale]/contact/page.tsx`: promote the Telegram + Instagram
+  block to primary visual weight (oxblood treatment matching the
+  current mailto button, side-by-side or stacked at full width on
+  mobile); demote mailto + copy-email row to secondary (mono, hairline
+  border). Documentation propagated:
+  `DESIGN_BRIEF.md` D8, `INFORMATION_ARCHITECTURE.md` §Contact
+  updated in this commit. **Open question for user before
+  implementation:** does this re-ordering apply to the **sticky
+  booking CTA on `/productions/[slug]`** as well? That CTA opens a
+  prefilled mailto where the subject auto-fills with the show name —
+  Telegram cannot prefill structured booking messages cleanly.
+  Recommendation: keep production-detail sticky CTA as mailto
+  (it works as a *booking magnet* per brief D1, with full subject
+  + body context); only re-order the standalone `/contact` page.
+  Confirm with user before fix lands.
 
 ---
 
