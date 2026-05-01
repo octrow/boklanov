@@ -1,0 +1,302 @@
+/* C10 — Site header. Lora wordmark left, nav centre (≥768px), locale+theme right.
+   Hairline rule below. Sticky top on every page; production detail handles its own
+   sticky CTA independently. */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--paper);
+}
+
+/* ── Folio band (DA-1.A) ──────────────────────────────────────────────── */
+
+.folio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 6px var(--gutter-mobile);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule);
+  font-variant-numeric: tabular-nums;
+}
+
+.folioSep {
+  opacity: 0.5;
+}
+
+.folioIndex {
+  color: var(--ink-mute);
+}
+
+@media (min-width: 768px) {
+  .folio {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .folio {
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--gutter-mobile);
+  height: 56px;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding: 0 var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    max-width: var(--max-width-page);
+    margin: 0 auto;
+    padding: 0 var(--gutter-desktop);
+  }
+}
+
+/* ── Wordmark ─────────────────────────────────────────────────────────── */
+
+.wordmark {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1;
+  text-transform: lowercase;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wordmark:hover {
+  color: var(--ink);
+}
+
+.wordmark:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── Desktop nav ──────────────────────────────────────────────────────── */
+
+.nav {
+  display: none;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.navLink:hover {
+  color: var(--ink);
+}
+
+.navLinkActive {
+  color: var(--ink);
+}
+
+.navLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── Controls (locale + theme) ────────────────────────────────────────── */
+
+.controls {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .controls {
+    display: flex;
+  }
+}
+
+.localeSwitcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.localeLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  /* --ink-mute (5.46:1 on paper) not --ink-faint (2.86:1 — fails AA for interactive links). */
+  color: var(--ink-mute);
+  text-decoration: none;
+  padding: 2px 0;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.localeLink:hover {
+  color: var(--ink);
+}
+
+.localeLinkActive {
+  color: var(--ink);
+}
+
+.localeLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── Mobile search button (on-screen Cmd-K trigger) ──────────────────── */
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Absorbs free space so hamburger follows directly */
+  margin-left: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  color: var(--ink-mute);
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.searchBtn:hover {
+  color: var(--ink);
+}
+
+.searchBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@media (min-width: 768px) {
+  .searchBtn {
+    display: none;
+  }
+}
+
+/* ── Hamburger ────────────────────────────────────────────────────────── */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  /* No margin-left: auto — searchBtn handles the push on mobile. */
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.hamburgerLine {
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--ink-mute);
+}
+
+/* ── Mobile nav drawer ────────────────────────────────────────────────── */
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--gutter-mobile) var(--space-6);
+  border-top: 1px solid var(--rule);
+  gap: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .mobileNav {
+    display: none;
+  }
+}
+
+.mobileNavLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  /* ≥44px touch target per DESIGN §7.5 + P1 spec. */
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.mobileNavLink:hover {
+  color: var(--ink);
+}
+
+.mobileNavLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.mobileLocaleSwitcher {
+  display: flex;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+}
+
+/* Locale links inside the mobile drawer need a larger tap target. */
+.mobileLocaleSwitcher .localeLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-1);
+}
+
+/* ── Hairline rule below header ───────────────────────────────────────── */
+
+.rule {
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--rule);
+}

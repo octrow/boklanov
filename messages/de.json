@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "productions": "Inszenierungen",
+    "about": "über",
+    "awards": "Auszeichnungen",
+    "press": "Presse",
+    "contact": "Kontakt",
+    "archive": "Archiv",
+    "search": "Suche"
+  },
+  "home": {
+    "heroMeta": "Regisseur · Figurentheater · Objekttheater",
+    "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
+    "featuredLabel": "ausgewählte Werke",
+    "allLabel": "Inszenierungen",
+    "viewAll": "alle Inszenierungen →"
+  },
+  "productions": {
+    "title": "Inszenierungen",
+    "empty": "Keine Inszenierungen passen zu diesen Filtern",
+    "filterRole": "Rolle",
+    "filterForm": "Form",
+    "filterAge": "Alter",
+    "filterCountry": "Land",
+    "clearAll": "zurücksetzen",
+    "roleDirector": "Regisseur",
+    "roleCoDirector": "Co-Regisseur",
+    "rolePerformer": "Darsteller",
+    "roleReader": "Leser",
+    "roleAll": "alle"
+  },
+  "archive": {
+    "title": "Archiv",
+    "empty": "Keine Archiveinträge",
+    "colYear": "Jahr",
+    "colTitle": "Titel",
+    "colTheatre": "Theater",
+    "colRole": "Rolle"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "telegramCta": "Auf Telegram schreiben",
+    "instagramCta": "Auf Instagram schreiben",
+    "emailLabel": "oder per E-Mail",
+    "emailCta": "Roman per E-Mail",
+    "mailtoSubject": "Zusammenarbeit / Tournee"
+  },
+  "press": {
+    "title": "Presse",
+    "empty": "Keine Pressematerialien"
+  },
+  "awards": {
+    "title": "Auszeichnungen",
+    "empty": "Keine Auszeichnungsdaten"
+  },
+  "productionDetail": {
+    "watchListen": "Ansehen / hören",
+    "tickets": "Tickets kaufen",
+    "techRider": "Tech-Rider (PDF)",
+    "pressKit": "Pressekit (ZIP)",
+    "photos": "Fotos",
+    "press": "Presse",
+    "awards": "Auszeichnungen",
+    "links": "Links",
+    "bookingCta": "Roman zu einer Tournee schreiben",
+    "credits": "Credits",
+    "onTour": "AUF TOURNEE"
+  },
+  "about": {
+    "stagedIn": "INSZENIERTE IN",
+    "chronology": "Chronologie",
+    "lineage": "Tradition"
+  },
+  "notFound": {
+    "heading": "seite nicht gefunden",
+    "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "home": "Startseite",
+    "productions": "alle Inszenierungen"
+  },
+  "footer": {
+    "colophon": "AUSGABE 2026"
+  }
+}

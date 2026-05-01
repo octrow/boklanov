@@ -1,11 +1,9 @@
 {
-  "name": "nextjs-notion-starter-kit",
+  "name": "boklanov-site",
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "The perfect starter kit for building beautiful websites with Next.js and Notion.",
-  "author": "Travis Fischer <travis@transitivebullsh.it>",
-  "repository": "transitive-bullshit/nextjs-notion-starter-kit",
+  "description": "boklanov.com / boklanov.ru — site for theatre director Roman Boklanov.",
   "license": "MIT",
   "engines": {
     "node": "22.x"
@@ -13,11 +11,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "sync": "tsx scripts/sync-from-notion.ts",
     "start": "next start",
     "deploy": "vercel deploy",
-    "deps": "run-s deps:*",
-    "deps:update": "[ -z $GITHUB_ACTIONS ] && yarn add notion-client notion-types notion-utils react-notion-x || echo 'Skipping deps:update on CI'",
-    "deps:link": "[ -z $GITHUB_ACTIONS ] && yarn link notion-client notion-types notion-utils react-notion-x || echo 'Skipping deps:link on CI'",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
@@ -26,51 +22,36 @@
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
   },
   "dependencies": {
-    "@fisch0920/use-dark-mode": "^2.4.0",
-    "@keyvhq/core": "^1.6.9",
-    "@keyvhq/redis": "^1.6.10",
-    "@react-icons/all-files": "^4.1.0",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/lora": "^5.2.8",
     "@vercel/og": "^0.0.19",
     "classnames": "^2.5.1",
-    "date-fns": "^2.30.0",
-    "expiry-map": "^2.0.0",
     "fathom-client": "^3.4.1",
-    "ky": "^1.8.1",
-    "isomorphic-unfetch": "^3.1.0",
+    "gray-matter": "^4.0.3",
     "lqip-modern": "^2.2.1",
     "next": "^15.5.3",
-    "notion-client": "^7.7.0",
-    "notion-types": "^7.7.0",
-    "notion-utils": "^7.7.0",
+    "next-intl": "^4.11.0",
+    "next-mdx-remote": "^6.0.0",
     "p-map": "^7.0.3",
-    "p-memoize": "^7.1.1",
     "posthog-js": "^1.249.4",
     "react": "^19.1.1",
-    "react-body-classname": "^1.3.1",
     "react-dom": "^19.1.1",
-    "react-notion-x": "^7.7.0",
-    "react-tweet": "^3.2.2",
-    "react-use": "^17.6.0",
-    "prismjs": "^1.30.0",
-    "rss": "^1.2.2"
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@fisch0920/config": "^1.2.1",
     "@next/bundle-analyzer": "^15.3.3",
     "@types/node": "^24.5.2",
-    "@types/prismjs": "^1.26.5",
     "@types/react": "^19.1.13",
-    "@types/react-body-classname": "^1.1.10",
-    "@types/rss": "^0.0.32",
+    "critters": "^0.0.23",
     "cross-env": "^10.0.0",
+    "csv-parse": "^6.2.1",
     "eslint": "^9.35.0",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
-  },
-  "overrides": {
-    "cacheable-request": {
-      "keyv": "npm:@keyvhq/core@~1.6.6"
-    }
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.2",
+    "yaml": "^2.8.3"
   }
 }

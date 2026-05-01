@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "productions": "productions",
+    "about": "about",
+    "awards": "awards",
+    "press": "press",
+    "contact": "contact",
+    "archive": "archive",
+    "search": "search"
+  },
+  "home": {
+    "heroMeta": "director · puppet theatre · theatre of objects",
+    "statement": "Shows about people and things — for children, teenagers, and the adults. Roman Boklanov works between Bremen, Viena and Almaty.",
+    "featuredLabel": "selected works",
+    "allLabel": "productions",
+    "viewAll": "all productions →"
+  },
+  "productions": {
+    "title": "productions",
+    "empty": "No productions match these filters",
+    "filterRole": "role",
+    "filterForm": "form",
+    "filterAge": "age",
+    "filterCountry": "country",
+    "clearAll": "clear",
+    "roleDirector": "director",
+    "roleCoDirector": "co-director",
+    "rolePerformer": "performer",
+    "roleReader": "reader",
+    "roleAll": "all"
+  },
+  "archive": {
+    "title": "archive",
+    "empty": "No archive entries",
+    "colYear": "year",
+    "colTitle": "title",
+    "colTheatre": "theatre",
+    "colRole": "role"
+  },
+  "contact": {
+    "title": "contact",
+    "telegramCta": "Message on Telegram",
+    "instagramCta": "Message on Instagram",
+    "emailLabel": "or by email",
+    "emailCta": "Email Roman",
+    "mailtoSubject": "Collaboration / touring"
+  },
+  "press": {
+    "title": "press",
+    "empty": "No press materials"
+  },
+  "awards": {
+    "title": "awards",
+    "empty": "No awards data"
+  },
+  "productionDetail": {
+    "watchListen": "Watch / listen",
+    "tickets": "Buy tickets",
+    "techRider": "Tech rider (PDF)",
+    "pressKit": "Press kit (ZIP)",
+    "photos": "Photos",
+    "press": "Press",
+    "awards": "Awards",
+    "links": "Links",
+    "bookingCta": "Email Roman about touring this show",
+    "credits": "Credits",
+    "onTour": "ON TOUR"
+  },
+  "about": {
+    "stagedIn": "STAGED IN",
+    "chronology": "chronology",
+    "lineage": "lineage"
+  },
+  "notFound": {
+    "heading": "page not found",
+    "body": "The page you're looking for doesn't exist or has been moved.",
+    "home": "home",
+    "productions": "all productions"
+  },
+  "footer": {
+    "colophon": "2026 EDITION"
+  }
+}

@@ -1,0 +1,90 @@
+/* C10 — Site footer. Three mono columns: nav | social | copyright.
+   Hairline rule above. */
+
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: var(--space-8) var(--gutter-mobile);
+  margin-top: var(--space-10);
+}
+
+@media (min-width: 768px) {
+  .footer {
+    padding: var(--space-8) var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer {
+    padding: var(--space-8) var(--gutter-desktop);
+  }
+}
+
+.inner {
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-7);
+}
+
+@media (min-width: 768px) {
+  .inner {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+/* ── Column ───────────────────────────────────────────────────────────── */
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── Links ────────────────────────────────────────────────────────────── */
+
+.footerLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.footerLink:hover {
+  color: var(--ink);
+}
+
+.footerLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── Copyright ────────────────────────────────────────────────────────── */
+
+.copyright {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+  text-transform: lowercase;
+}
+
+/* ── Edition stamp — DA-1.C (§3.H) ───────────────────────────────────── */
+
+.colophon {
+  display: block;
+  max-width: var(--max-width-page);
+  margin: var(--space-6) auto 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  font-style: normal;
+}

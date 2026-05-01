@@ -1,0 +1,69 @@
+/* Edition-frame wrapper — static end-state for reduced-motion + gesture=off. */
+.slate {
+  position: relative;
+}
+
+/* Hairline rule below the wordmark — this is the edition-frame (§4.1.C).
+   Exists in both static and animated states; only the animation differs.
+   Positioned by the wordmark's natural flow, not absolutely. */
+.slate::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  opacity: 1;
+  margin-top: var(--space-2);
+}
+
+/* ── Animation ──────────────────────────────────────────────────────────
+   Added by JS when: sessionStorage.firstPaintDone absent AND
+   gesture != 'off' AND prefers-reduced-motion is not 'reduce'.
+   The @media query below strips animation from .slateAnimate on
+   reduced-motion, leaving the identical static end-state. */
+
+@keyframes slateTopDrop {
+  from {
+    transform: translateY(-1.5em);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ruleFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.slateAnimate::before {
+  /* The "slate top" — thin horizontal mark dropping onto wordmark */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--rule-strong);
+  transform-origin: top left;
+
+  animation: slateTopDrop var(--duration-slate, 320ms) var(--easing-default) forwards;
+}
+
+.slateAnimate::after {
+  /* Edition-frame hairline fades in after the drop */
+  opacity: 0;
+  animation: ruleFadeIn var(--duration-slate, 320ms) var(--easing-default)
+    calc(var(--duration-slate, 320ms) * 0.6) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slateAnimate::before,
+  .slateAnimate::after {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

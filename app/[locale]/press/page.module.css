@@ -1,0 +1,159 @@
+/* C7 — Press page. Card grid; Lora italic pull-quote; mono outlet attribution;
+   oxblood underline on outlet link hover. Original language, no translation. */
+
+.page {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter-mobile) var(--space-9);
+}
+
+@media (min-width: 768px) {
+  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+}
+
+/* ── Page heading ────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  text-transform: lowercase;
+  margin: 0 0 var(--space-7);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.empty {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  color: var(--ink-mute);
+}
+
+/* ── Card grid ───────────────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Card ────────────────────────────────────────────────────────────── */
+
+.card {
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: var(--space-6);
+    border-right: 1px solid var(--rule);
+  }
+
+  .card:nth-child(2n) {
+    border-right: none;
+  }
+}
+
+.card:last-child {
+  border-bottom: none;
+}
+
+/* ── Blockquote pull-quote ───────────────────────────────────────────── */
+
+.quote {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-md);
+  font-style: italic;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  margin: 0;
+  padding: 0;
+}
+
+.quoteLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.quoteLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+}
+
+.quoteLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ── Card footer ─────────────────────────────────────────────────────── */
+
+.cardFooter {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.outletLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.outletLink:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  color: var(--ink);
+}
+
+.outletLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.separator {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  color: var(--ink-faint);
+}
+
+.productionRef {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+  text-decoration: none;
+}
+
+.productionRef:hover {
+  color: var(--ink-mute);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+}
+
+.productionRef:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}

@@ -1,0 +1,190 @@
+/* C5 — About page. Lora display heading, Inter prose at 65ch,
+   mono milestones, lineage block per brief D5 (Кудашов/БТК/РГИСИ). */
+
+.page {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter-mobile) var(--space-9);
+}
+
+@media (min-width: 768px) {
+  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+}
+
+/* ── Heading ─────────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  text-transform: lowercase;
+  margin: 0 0 var(--space-7);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Bio block ───────────────────────────────────────────────────────── */
+
+.bio {
+  max-width: var(--max-width-prose);
+}
+
+.bioLead {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  margin: 0 0 var(--space-5);
+}
+
+.bioParagraph {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  margin: 0 0 var(--space-5);
+}
+
+.bioParagraph:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Staging geography ───────────────────────────────────────────────── */
+
+.geographySection {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.geographyLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 var(--space-2);
+}
+
+.geographyCities {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: 0;
+}
+
+/* ── Milestones ──────────────────────────────────────────────────────── */
+
+.milestonesSection {
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--rule);
+}
+
+.milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.milestone {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.milestoneYear {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  flex-shrink: 0;
+  min-width: 3.5ch;
+}
+
+.milestoneLabel {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  color: var(--ink);
+}
+
+/* ── Lineage section ─────────────────────────────────────────────────── */
+
+.lineageSection {
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--rule);
+}
+
+.lineageHeading {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-6);
+}
+
+.lineageGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .lineageGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+.lineageCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--paper-sunken);
+}
+
+.lineageName {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--ink);
+  margin: 0;
+}
+
+.lineageRole {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+}
+
+.lineageInstitution {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+}
+
+.lineageNote {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--ink-mute);
+  margin: var(--space-2) 0 0;
+}
