@@ -65,7 +65,7 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
     ? `${altBase} (${production.poster.credit})`
     : altBase
 
-  const coverStyle = production.poster.lqip
+  const coverStyle = production.poster.src && production.poster.lqip
     ? { backgroundImage: `url(${production.poster.lqip})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' }
     : undefined
 

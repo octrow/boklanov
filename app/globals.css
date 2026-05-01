@@ -626,6 +626,13 @@ hr {
   margin: 0;
 }
 
+/* Suppress the native Chromium × clear button on search inputs. The Cmd-K
+   palette has its own dismissal pattern; the default red × clashes with the
+   muted palette and the oxblood focus ring (DESIGN_REVIEW Should-Fix #3). */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
 /* Scrollbar: warm + thin. Light + dark aware via tokens. */
 ::-webkit-scrollbar {
   width: 8px;
