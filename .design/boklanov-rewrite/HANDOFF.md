@@ -11,10 +11,10 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 `rewrite/v2`. This is a Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
-**All code work through R1.fix is committed and the build is clean.**
-110 static pages pre-render. `strictNullChecks` + ESLint pass. I5 is
-cut. The next milestone is **R2 real-device QA** (Daniil + Roman), then
-**D1 Vercel preview**.
+**All code work through the final polish commit is done. Build is clean.**
+110 static pages pre-render. `strictNullChecks` + ESLint pass. I5 is cut.
+The `DESIGN_REVIEW.md` item list is fully exhausted. The next milestone is
+**R2 real-device QA** (Daniil + Roman), then **D1 Vercel preview**.
 
 ### What's landed (full history)
 
@@ -50,12 +50,22 @@ PostHog `booking_cta_click` only, DE chrome translations.
 - Polish: ThemeToggle ●/○ → sun/moon SVG; search `×` suppressed; LQIP gated on
   `poster.src && poster.lqip`.
 
+**Final polish (`09d5005`) — all DESIGN_REVIEW items exhausted:**
+- Should-Fix #1: mono spec sheet in right rail above sticky CTA
+  (year/duration/age/country, one token per line, mono uppercase, aria-hidden).
+  `.rail` wrapper is `position:sticky` on desktop — whole right column sticks
+  as a unit from landing.
+- Could-Improve #2: gallery masonry — switched from `grid repeat(2,1fr)` to
+  `columns: 2` on tablet+. Original aspect ratios preserved (`break-inside:avoid`).
+- Could-Improve #5: SiteHeader wordmark `letter-spacing: -0.015em` →
+  `var(--letter-spacing-tight)` for token parity.
+
 ### Read these first, in order
 
-1. `.design/boklanov-rewrite/TASKS.md` — canonical task list. R1.fix ✅.
+1. `.design/boklanov-rewrite/TASKS.md` — canonical task list. All code items ✅.
    Next open items: R2 + D1.
-2. `.design/boklanov-rewrite/DESIGN_REVIEW.md` — R1 verdict (reference for
-   any remaining Should-Fix / Could-Improve items).
+2. `.design/boklanov-rewrite/DESIGN_REVIEW.md` — R1 verdict (fully resolved;
+   reference only).
 3. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
 4. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
 5. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy.
@@ -72,6 +82,9 @@ Devices: iPhone SE, iPhone 14 Pro, iPad, 13" laptop, 27" desktop.
 
 **Also check during R2:**
 - Sticky CTA appears in right rail from landing on desktop (R1.fix #1).
+- Spec sheet (year/duration/age/country) visible in right rail above CTA
+  on desktop.
+- Gallery images retain original aspect ratios (masonry, not cropped grid).
 - Cover/title editorial breath consistent on pages without poster credit.
 - Filter group labels readable on tablet (≥768px).
 - ThemeToggle sun/moon glyphs legible.
@@ -104,18 +117,13 @@ After D1: D2 hosting decision, D3 domain, D4 cutover.
 ### Recent commits on `rewrite/v2` for context
 
 ```
+09d5005  polish: spec sheet in right rail, gallery masonry, wordmark token
 871f287  polish: ThemeToggle SVG, search × suppression, LQIP gating
 73620e6  R1.fix: sticky CTA right rail, cover/title rule, filter group labels
 6ddb466  P3: Lighthouse mobile ≥95 — woff2 subsets, next/image, LCP priority
 c125fc0  P2: accessibility pass — contrast, landmarks, focus trap, alt text
-7ba8106  P1: mobile-first layout pass — touch targets + Cmd-K on-screen button
 ```
 
-If continuing code work before R2: the remaining Should-Fix and Could-Improve
-items are in `DESIGN_REVIEW.md`. The highest-value unshipped items are:
-- Could-Improve #2: gallery masonry (currently `grid 2fr` — DESIGN §9 says
-  original aspect ratios, `grid-auto-flow: dense` or CSS columns).
-- Could-Improve #5: `SiteHeader.module.css` wordmark `letter-spacing: -0.015em`
-  → `var(--letter-spacing-tight)` for token parity.
-- Should-Fix #1 (in DESIGN_REVIEW): mono "spec sheet" right-rail content above
-  the sticky CTA (year · duration · age · country, one per line).
+**All DESIGN_REVIEW.md items are now resolved.** No further code work is
+needed before R2. If R2 surfaces new issues, track them here and land fixes
+before D1.
