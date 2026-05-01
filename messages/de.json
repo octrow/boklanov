@@ -4,6 +4,13 @@
     "about": "über",
     "contact": "Kontakt"
   },
+  "home": {
+    "heroMeta": "Regisseur · Figurentheater · Objekttheater",
+    "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen, die sie lieben. Roman Boklanov arbeitet zwischen Almaty, Sankt Petersburg und Europa.",
+    "featuredLabel": "ausgewählte Werke",
+    "allLabel": "Inszenierungen",
+    "viewAll": "alle Inszenierungen →"
+  },
   "productions": {
     "title": "Inszenierungen",
     "empty": "Keine Inszenierungen passen zu diesen Filtern"

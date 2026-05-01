@@ -1,0 +1,123 @@
+/* DESIGN.md §15.3 — Home page (C3).
+   Hero: type-led Lora wordmark + mono genre meta + prose statement.
+   Featured strip: 4–6 curated cards reusing <ProductionCard>.
+   Below fold: full director productions grid (C4 adds filter UI). */
+
+.page {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--gutter-mobile);
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+  }
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+
+.hero {
+  padding: var(--space-8) 0 var(--space-7);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: var(--space-9) 0 var(--space-8);
+  }
+}
+
+/* DESIGN §10: lowercase Lora wordmark, --font-size-4xl on home hero only. */
+.wordmark {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--ink);
+  text-transform: lowercase;
+  margin: 0;
+}
+
+.heroMeta {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: var(--space-3) 0 0;
+}
+
+/* Artistic statement: Inter body, prose width, relaxed leading. */
+.statement {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  max-width: var(--max-width-prose);
+  margin: var(--space-6) 0 0;
+}
+
+/* ── Sections ──────────────────────────────────────────────────────────── */
+
+.section {
+  padding: var(--space-7) 0;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding: var(--space-8) 0;
+  }
+}
+
+/* Row with section label + ghost viewAll link. */
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+/* Standalone (not inside .sectionHead) gets bottom margin. */
+.sectionLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-5);
+}
+
+/* Inside .sectionHead the row provides the bottom spacing via margin-bottom. */
+.sectionHead .sectionLabel {
+  margin-bottom: 0;
+}
+
+/* Ghost link — DESIGN §7.5: no border, underline reveal on hover. */
+.viewAll {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.viewAll:hover {
+  color: var(--ink);
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
