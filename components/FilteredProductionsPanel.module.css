@@ -29,15 +29,41 @@
   display: none;
 }
 
-/* Filter group: a set of related chips (role / form / age / country). */
+/* Filter group: on mobile a flex row of chips; on desktop a column (label above chips). */
 .group {
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: column;
   gap: var(--space-1);
   flex-shrink: 0;
 }
 
-/* Visual separator between groups. */
+/* Inner chip row — always a horizontal flex regardless of group direction. */
+.chipRow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+}
+
+/* Mono-caps group label (РОЛЬ / ФОРМА / ВОЗРАСТ / СТРАНА).
+   Hidden on mobile; shown on desktop where groups would otherwise merge visually. */
+.groupLabel {
+  display: none;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  user-select: none;
+  padding-bottom: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .groupLabel {
+    display: block;
+  }
+}
+
+/* Visual separator between groups — shown on mobile only; labels replace it on desktop. */
 .sep {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -45,6 +71,17 @@
   flex-shrink: 0;
   user-select: none;
   padding: 0 var(--space-1);
+  align-self: center;
+}
+
+@media (min-width: 768px) {
+  .sep {
+    display: none;
+  }
+  .filterBar {
+    align-items: flex-start;
+    gap: var(--space-5);
+  }
 }
 
 /* ── Filter chip ───────────────────────────────────────────────────────── */

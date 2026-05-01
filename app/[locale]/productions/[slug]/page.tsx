@@ -237,6 +237,9 @@ export default async function ProductionDetailPage({
         </figure>
       )}
 
+      {/* .layout: on desktop becomes a CSS grid [720px content | 1fr rail].
+          .stickyCta lives in the rail column so it's visible from landing. */}
+      <div className={styles.layout}>
       <div className={styles.column}>
         {/* 2. Title block */}
         <header className={styles.titleBlock}>
@@ -397,7 +400,7 @@ export default async function ProductionDetailPage({
         )}
       </div>
 
-      {/* 11. Sticky CTA — bottom on mobile, right column on desktop ≥1024 */}
+      {/* 11. Sticky CTA — bottom on mobile, right rail on desktop ≥1024 */}
       <a
         className={styles.stickyCta}
         href={mailto}
@@ -407,6 +410,7 @@ export default async function ProductionDetailPage({
       >
         {t('bookingCta')}
       </a>
+      </div>{/* end .layout */}
     </main>
   )
 }

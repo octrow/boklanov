@@ -48,6 +48,10 @@ export interface FilterLabels {
   clearAll: string
   emptyLabel: string
   clearAllLabel: string
+  groupLabelRole: string
+  groupLabelForm: string
+  groupLabelAge: string
+  groupLabelCountry: string
 }
 
 export interface FilteredProductionsPanelProps {
@@ -154,82 +158,95 @@ export function FilteredProductionsPanel({
 
   return (
     <div className={styles.panel}>
-      {/* Filter strip — horizontally scrollable on mobile */}
+      {/* Filter strip — horizontally scrollable on mobile.
+          On desktop each group becomes a column: mono-caps label above chips. */}
       <div className={styles.filterBar} role='toolbar' aria-label='Filters'>
         {/* Role — radio group (single selection) */}
-        <div className={styles.group} role='radiogroup'>
-          {ROLE_OPTIONS.map(({ value }) => (
+        <div className={styles.group} role='radiogroup' aria-label={labels.groupLabelRole}>
+          <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelRole}</span>
+          <div className={styles.chipRow}>
+            {ROLE_OPTIONS.map(({ value }) => (
+              <button
+                key={value}
+                className={`${styles.chip} ${activeRole === value ? styles.chipActive : ''}`}
+                role='radio'
+                aria-checked={activeRole === value}
+                onClick={() =>
+                  setParam('role', value === 'director' ? null : value)
+                }
+              >
+                {roleLabelMap[value]}
+              </button>
+            ))}
             <button
-              key={value}
-              className={`${styles.chip} ${activeRole === value ? styles.chipActive : ''}`}
+              className={`${styles.chip} ${activeRole === 'all' ? styles.chipActive : ''}`}
               role='radio'
-              aria-checked={activeRole === value}
-              onClick={() =>
-                setParam('role', value === 'director' ? null : value)
-              }
+              aria-checked={activeRole === 'all'}
+              onClick={() => setParam('role', 'all')}
             >
-              {roleLabelMap[value]}
+              {labels.roleAll}
             </button>
-          ))}
-          <button
-            className={`${styles.chip} ${activeRole === 'all' ? styles.chipActive : ''}`}
-            role='radio'
-            aria-checked={activeRole === 'all'}
-            onClick={() => setParam('role', 'all')}
-          >
-            {labels.roleAll}
-          </button>
+          </div>
         </div>
 
         {/* Form — multi-select (only show options present in data) */}
         {availableForms.length > 0 && (
           <>
             <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={styles.group} role='group'>
-              {availableForms.map((form) => (
-                <button
-                  key={form}
-                  className={`${styles.chip} ${activeForms.includes(form) ? styles.chipActive : ''}`}
-                  aria-pressed={activeForms.includes(form)}
-                  onClick={() => toggleMulti('form', form, activeForms)}
-                >
-                  {form}
-                </button>
-              ))}
+            <div className={styles.group} role='group' aria-label={labels.groupLabelForm}>
+              <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelForm}</span>
+              <div className={styles.chipRow}>
+                {availableForms.map((form) => (
+                  <button
+                    key={form}
+                    className={`${styles.chip} ${activeForms.includes(form) ? styles.chipActive : ''}`}
+                    aria-pressed={activeForms.includes(form)}
+                    onClick={() => toggleMulti('form', form, activeForms)}
+                  >
+                    {form}
+                  </button>
+                ))}
+              </div>
             </div>
           </>
         )}
 
         {/* Age buckets — multi-select */}
-        <span className={styles.sep}>·</span>
-        <div className={styles.group} role='group'>
-          {AGE_BUCKETS.map(({ label, value }) => (
-            <button
-              key={value}
-              className={`${styles.chip} ${activeAges.includes(value) ? styles.chipActive : ''}`}
-              aria-pressed={activeAges.includes(value)}
-              onClick={() => toggleMulti('age', value, activeAges)}
-            >
-              {label}
-            </button>
-          ))}
+        <span className={styles.sep} aria-hidden="true">·</span>
+        <div className={styles.group} role='group' aria-label={labels.groupLabelAge}>
+          <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelAge}</span>
+          <div className={styles.chipRow}>
+            {AGE_BUCKETS.map(({ label, value }) => (
+              <button
+                key={value}
+                className={`${styles.chip} ${activeAges.includes(value) ? styles.chipActive : ''}`}
+                aria-pressed={activeAges.includes(value)}
+                onClick={() => toggleMulti('age', value, activeAges)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Country — multi-select (hidden when data has only one country) */}
         {availableCountries.length > 1 && (
           <>
             <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={styles.group} role='group'>
-              {availableCountries.map((code) => (
-                <button
-                  key={code}
-                  className={`${styles.chip} ${activeCountries.includes(code) ? styles.chipActive : ''}`}
-                  aria-pressed={activeCountries.includes(code)}
-                  onClick={() => toggleMulti('country', code, activeCountries)}
-                >
-                  {code}
-                </button>
-              ))}
+            <div className={styles.group} role='group' aria-label={labels.groupLabelCountry}>
+              <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelCountry}</span>
+              <div className={styles.chipRow}>
+                {availableCountries.map((code) => (
+                  <button
+                    key={code}
+                    className={`${styles.chip} ${activeCountries.includes(code) ? styles.chipActive : ''}`}
+                    aria-pressed={activeCountries.includes(code)}
+                    onClick={() => toggleMulti('country', code, activeCountries)}
+                  >
+                    {code}
+                  </button>
+                ))}
+              </div>
             </div>
           </>
         )}

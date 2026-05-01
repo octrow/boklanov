@@ -32,8 +32,22 @@
   padding: var(--space-2) var(--gutter-mobile);
 }
 
-/* The reading column. Sticky CTA shares the wrapper but is positioned
-   relative to .page on desktop. */
+/* Grid wrapper: on desktop splits into [content 720px] [rail 1fr].
+   Must stay overflow:visible so .stickyCta can stick to the viewport. */
+.layout {
+  /* transparent on mobile — just a block wrapper */
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 720px) 1fr;
+    align-items: start;
+    margin-left: max(var(--gutter-desktop), calc((100% - var(--max-width-content)) / 2));
+  }
+}
+
+/* The reading column. */
 .column {
   max-width: var(--max-width-content);
   margin: 0 auto;
@@ -53,9 +67,9 @@
 
 @media (min-width: 1024px) {
   .column {
-    /* Reserve the right column for the sticky CTA on desktop. */
-    max-width: 720px;
-    margin-left: max(var(--gutter-desktop), calc((100% - var(--max-width-content)) / 2));
+    /* Grid track (minmax 0, 720px) handles width — no margin hacks needed. */
+    max-width: none;
+    margin-left: 0;
     margin-right: 0;
     padding-left: 0;
     padding-right: var(--gutter-desktop);
@@ -67,9 +81,11 @@
   }
 }
 
-/* 2. Title block. */
+/* 2. Title block. Top rule ensures visual breath whether or not .coverCredit rendered. */
 .titleBlock {
+  border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
+  padding-top: var(--space-5);
   padding-bottom: var(--space-5);
   margin-bottom: var(--space-5);
 }
@@ -347,18 +363,19 @@
 
 @media (min-width: 1024px) {
   .stickyCta {
-    /* Pin to the top of the right column once it scrolls into view. The
-       .page wrapper provides the sticky context. */
+    /* Right rail sticky: starts level with the title block, stays fixed
+       while scrolling. align-self:start is required for position:sticky
+       on a grid item — prevents the element from stretching to the row height. */
     position: sticky;
     top: var(--space-7);
-    /* Float to the right rail, sized to the desktop column reservation. */
-    margin-left: auto;
+    align-self: start;
+    margin-top: var(--space-8);
+    margin-left: var(--gutter-desktop);
     margin-right: var(--gutter-desktop);
-    margin-top: calc(-1 * var(--space-9));
     left: auto;
     right: auto;
     bottom: auto;
-    width: 280px;
+    max-width: 280px;
     min-height: 56px;
     box-shadow: none;
   }

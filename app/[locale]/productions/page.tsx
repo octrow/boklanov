@@ -31,7 +31,11 @@ export default async function ProductionsIndexPage({
     roleAll: t('roleAll'),
     clearAll: t('clearAll'),
     emptyLabel: t('empty'),
-    clearAllLabel: t('clearAll')
+    clearAllLabel: t('clearAll'),
+    groupLabelRole: t('filterRole'),
+    groupLabelForm: t('filterForm'),
+    groupLabelAge: t('filterAge'),
+    groupLabelCountry: t('filterCountry')
   }
 
   return (
