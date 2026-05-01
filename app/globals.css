@@ -463,3 +463,143 @@
     --duration-slower: 0ms;
   }
 }
+
+/* ============================================================
+ * F7 — minimal reset + base styles (warm editorial)
+ * Replaces styles/global.css. No Notion-themed scrollbar; paper tones.
+ * ========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  /* Avoid layout shift when the viewport gains a scrollbar. */
+  scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  font-synthesis: none;
+  overflow-x: hidden;
+}
+
+/* Headings inherit display family + tight tracking; cards override per-block. */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
+}
+
+p {
+  margin: 0;
+}
+
+/* Editorial link: body colour, underline does the work. Hover = oxblood. */
+a {
+  color: var(--color-text-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-border-secondary);
+  text-underline-offset: 0.18em;
+  transition:
+    text-decoration-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+a:hover {
+  text-decoration-color: var(--color-accent-primary);
+}
+
+/* Default state for chrome links (nav, footer, breadcrumbs) — opt out
+   of the underline by adding class="link-bare". Cards do their own thing. */
+a.link-bare {
+  text-decoration: none;
+}
+
+/* Selection in oxblood — the only place the accent appears unprovoked. */
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+/* Focus ring: paper gap + oxblood ring. WCAG-AA on both light + dark. */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--border-radius-sm);
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Form controls inherit type — no platform fonts leaking in. */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Image defaults — block layout, no min-width quirks, sharp by default. */
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-border-primary);
+  margin: 0;
+}
+
+/* Scrollbar: warm + thin. Light + dark aware via tokens. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-tertiary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border: 2px solid var(--color-bg-tertiary);
+  border-radius: var(--border-radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-secondary) var(--color-bg-tertiary);
+}
