@@ -15,9 +15,10 @@
 }
 
 .card:focus-visible {
-  /* The default :focus-visible ring is oxblood + paper gap; let it sit
-     proud of the cover. */
-  outline-offset: 4px;
+  /* Global :focus-visible handles the paper-gap + oxblood ring via box-shadow.
+     Only override needed: clear any browser outline so the shadow ring is the
+     sole indicator. */
+  outline: none;
 }
 
 .cover {

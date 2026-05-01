@@ -51,8 +51,8 @@
 }
 
 .wordmark:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 /* ── Desktop nav ──────────────────────────────────────────────────────── */
@@ -89,8 +89,8 @@
 }
 
 .navLink:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 /* ── Controls (locale + theme) ────────────────────────────────────────── */
@@ -133,8 +133,8 @@
 }
 
 .localeLink:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 /* ── Hamburger ────────────────────────────────────────────────────────── */
@@ -160,8 +160,8 @@
 }
 
 .hamburger:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 .hamburgerLine {
@@ -202,8 +202,8 @@
 }
 
 .mobileNavLink:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 .mobileLocaleSwitcher {

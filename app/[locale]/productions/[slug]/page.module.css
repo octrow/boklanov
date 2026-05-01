@@ -182,6 +182,11 @@
   background: var(--paper-raised);
 }
 
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
 /* Sections (photos, press, awards, links). */
 .section {
   border-top: 1px solid var(--rule);
@@ -253,8 +258,15 @@
   line-height: var(--line-height-snug);
   color: var(--ink);
   text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--duration-fast) var(--easing-default);
 }
 .pressLink:hover {
+  text-decoration-color: var(--accent);
+}
+.pressLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
   text-decoration-color: var(--accent);
 }
 .pressOutlet {
@@ -326,6 +338,11 @@
 }
 .stickyCta:hover {
   background: var(--accent-hover);
+}
+
+.stickyCta:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 @media (min-width: 1024px) {

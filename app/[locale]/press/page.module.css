@@ -95,11 +95,12 @@
 .quoteLink:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
 }
 
 .quoteLink:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 /* ── Card footer ─────────────────────────────────────────────────────── */
@@ -127,8 +128,8 @@
 }
 
 .outletLink:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 .separator {
@@ -149,9 +150,10 @@
   color: var(--ink-mute);
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
 }
 
 .productionRef:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
