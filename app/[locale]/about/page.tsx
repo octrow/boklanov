@@ -62,6 +62,25 @@ function loadAbout(locale: Locale): {
   }
 }
 
+const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+
+function personSchema(locale: Locale, description: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Roman Boklanov',
+    alternateName: 'Роман Бокланов',
+    jobTitle: locale === 'ru' ? 'Театральный режиссёр' : locale === 'de' ? 'Theaterregisseur' : 'Theatre Director',
+    description,
+    url: locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`,
+    email: 'roman@boklanov.ru',
+    sameAs: [
+      'https://instagram.com/roman_boklanov',
+      'https://t.me/romanboklanov',
+    ],
+  }
+}
+
 // ── Page ────────────────────────────────────────────────────────────────
 
 export default async function AboutPage({
@@ -88,8 +107,14 @@ export default async function AboutPage({
         ? 'Chronologie'
         : 'chronology'
 
+  const schema = personSchema(locale, leadParagraph ?? '')
+
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <h1 className={styles.heading}>{t('about')}</h1>
 
       {/* Bio prose */}

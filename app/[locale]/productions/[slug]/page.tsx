@@ -5,9 +5,85 @@ import * as React from 'react'
 import { countryCode } from '@/components/ProductionCard'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
-import { getAllProductions, getProduction } from '@/lib/content'
+import { getAllProductions, getProduction, type ProductionView } from '@/lib/content'
 
 import styles from './page.module.css'
+
+const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+
+// Map theatre country code to a BCP 47 language tag for inLanguage.
+function productionLanguage(country: string | undefined): string {
+  if (!country) return 'ru'
+  const upper = country.toUpperCase()
+  if (upper === 'DE' || upper === 'AT' || upper === 'CH') return 'de'
+  if (upper === 'KZ') return 'ru'
+  return 'ru'
+}
+
+// Map ageRating to a schema.org audienceType description.
+function audienceType(ageRating: string | null | undefined): string | null {
+  if (!ageRating) return null
+  const map: Record<string, string> = {
+    '3+': 'Family, ages 3+',
+    '6+': 'Family, ages 6+',
+    '12+': 'Young adult, ages 12+',
+    '18+': 'Adult, ages 18+',
+  }
+  return map[ageRating] ?? ageRating
+}
+
+function creativeWorkSchema(production: ProductionView, slug: string, locale: Locale) {
+  const pageUrl = locale === 'ru'
+    ? `${BASE}/productions/${slug}`
+    : `${BASE}/${locale}/productions/${slug}`
+
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: production.titles.ru ?? production.titles.en ?? slug,
+    description: production.synopsis || undefined,
+    inLanguage: productionLanguage(production.theatre.country),
+    url: pageUrl,
+    director: {
+      '@type': 'Person',
+      name: 'Roman Boklanov',
+      url: `${BASE}/about`,
+    },
+  }
+
+  const altNames = [production.titles.en, production.titles.de].filter(Boolean)
+  if (altNames.length) schema.alternateName = altNames
+
+  if (production.year) schema.dateCreated = String(production.year)
+
+  const audience = audienceType(production.ageRating)
+  if (audience) {
+    schema.audience = { '@type': 'PeopleAudience', audienceType: audience }
+  }
+
+  if (production.theatre.name || production.theatre.shortName) {
+    const org: Record<string, unknown> = {
+      '@type': 'Organization',
+      name: production.theatre.name ?? production.theatre.shortName,
+    }
+    if (production.theatre.city || production.theatre.country) {
+      const addr: Record<string, string> = { '@type': 'PostalAddress' }
+      if (production.theatre.city) addr.addressLocality = production.theatre.city
+      if (production.theatre.country) addr.addressCountry = production.theatre.country
+      org.address = addr
+    }
+    if (production.theatre.url) org.url = production.theatre.url
+    schema.productionCompany = org
+  }
+
+  if (production.poster.src) {
+    schema.image = production.poster.src.startsWith('http')
+      ? production.poster.src
+      : `${BASE}${production.poster.src}`
+  }
+
+  return schema
+}
 
 export function generateStaticParams() {
   // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
@@ -73,8 +149,14 @@ export default async function ProductionDetailPage({
         ? `https://vimeo.com/${primaryVideo.id}`
         : null
 
+  const schema = creativeWorkSchema(production, slug, locale)
+
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       {/* 1. Cover — full-bleed, original aspect ratio respected */}
       {production.poster.src && (
         <figure className={styles.cover}>
