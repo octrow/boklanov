@@ -35,6 +35,20 @@ Date: 2026-04-30
 
 ## Progress log
 
+> **2026-05-01 — R1 design review complete.** Output:
+> `DESIGN_REVIEW.md`. Zero §11 anti-patterns shipped. Two Must-Fix items
+> tracked as `R1.fix`. **I5 (signature gesture) cut formally** per
+> `DESIGN.md` §13. Next: land R1.fix → R2 real-device QA → D1 Vercel
+> preview.
+>
+> **2026-05-01 — R1.fix complete** (`73620e6`, `871f287`). Both Must-Fix
+> items landed: (1) desktop sticky CTA now in a real CSS-grid right rail,
+> visible from landing; (2) `.titleBlock` top rule added. Optional Should-Fix
+> also landed: filter group labels (РОЛЬ/ФОРМА/ВОЗРАСТ/СТРАНА) above chip
+> groups on ≥768px. Polish commit: ThemeToggle sun/moon SVG, search ×
+> suppression, LQIP gating on `poster.src`. 110 pages, build clean.
+> **Next: R2 real-device QA (iPhone SE 90s scenario), then D1 Vercel preview.**
+
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
 | F1 — App Router shell | ✅ done | `234e22d` | `/`, `/en`, `/de` serve smoke; legacy `pages/[pageId].tsx` parked at `pages/p/[pageId].tsx` until F8 |
@@ -66,11 +80,20 @@ Date: 2026-04-30
 |------|--------|--------|-------|
 | I1 — Hover & focus audit | ✅ done | `df6dda1` | Unified `--shadow-focus` ring across all 13 interactive elements (eliminated double-ring from per-component `outline` overrides). Oxblood hover parity on CTAs and press links. contact mailtoButton hover → `--accent-hover`. pressLink transition added. |
 | I4 — Empty + loading + error states | ✅ done | `7b691c6` | `ProductionGrid` empty state: "no match · clear" with inline oxblood reset (only when `hasActiveFilters`). LQIP blur-up: `poster.lqip` loaded from `public/productions/<slug>/lqip.json` into content type; CSS background on card covers — no spinner. `app/[locale]/not-found.tsx` with RU/EN/DE translations linking home + productions. |
+| I5 — Signature gesture | 🚫 cut | — | Cut formally in R1 per `DESIGN.md` §13 (*"if it tests as gimmicky in design review, cut it"*). The build reads as quietly curatorial without one; adding motion on first paint risks the SaaS-flourish register the brief warns against. Rationale in `DESIGN_REVIEW.md` § "I5 (Signature Gesture) — formal decision". |
 | P1 — Mobile-first layout pass | ✅ done | — | Mobile search button (on-screen Cmd-K trigger via CommandPaletteContext). Touch targets ≥44px: filter chips, clearAll, mobile nav links, locale links in drawer, contact copyButton, productionGrid emptyReset, home viewAll link, contact mailtoButton full-width on mobile. emailSection flex-wrap for narrow viewports. |
 | P2 — Accessibility pass | ✅ done | — | Contrast: locale links + CommandPalette groupLabel/noResults fixed from --ink-faint (2.86:1) to --ink-mute (5.46:1 AA). Landmarks: localeSwitcher div→nav, footer nav col→nav. CommandPalette: aria-label on input + listbox, Tab focus trap. Alt text: ProductionCard + detail cover use full DESIGN §12 format (role, title, theatre, year, photographer). Decorative sep spans aria-hidden. hreflang RU↔EN confirmed in generateMetadata (DE excluded). |
-| P3 — Lighthouse mobile ≥ 95 | ✅ done | — | Inter TTF (303KB+309KB) → subset woff2 per-script (cyrillic/latin/latin-ext) — saves ~476KB. `next/image` with `fill`+`sizes` on ProductionCard → AVIF/WebP served via `/_next/image`. `priority` on first grid card (`priorityFirst` prop on ProductionGrid) → `<link rel="preload" as="image">` injected for LCP image. Cover on detail page upgraded to `next/image` with stored dimensions (lqip.json extended with `posterWidth`/`posterHeight`). Font preloads (`<link rel="preload" as="font">`) in layout head, locale-aware (Cyrillic on /ru, Latin on /en+/de). |
+| P3 — Lighthouse mobile ≥ 95 | ✅ done | `6ddb466` | Inter TTF (303KB+309KB) → subset woff2 per-script (cyrillic/latin/latin-ext) — saves ~476KB. `next/image` with `fill`+`sizes` on ProductionCard → AVIF/WebP served via `/_next/image`. `priority` on first grid card (`priorityFirst` prop on ProductionGrid) → `<link rel="preload" as="image">` injected for LCP image. Cover on detail page upgraded to `next/image` with stored dimensions (lqip.json extended with `posterWidth`/`posterHeight`). Font preloads (`<link rel="preload" as="font">`) in layout head, locale-aware (Cyrillic on /ru, Latin on /en+/de). |
 
-**Phase 6 = 2 / 5 done.**
+**Phase 6 = 5 / 5 done (4 ✅ + I5 🚫 cut).**
+
+### Review
+
+| Task | Status | Output | Notes |
+|------|--------|--------|-------|
+| R1 — Design review against brief | ✅ done | `.design/boklanov-rewrite/DESIGN_REVIEW.md` | Zero §11 anti-patterns shipped. Token discipline excellent. Two **Must-Fix** items: (1) desktop sticky CTA on `/productions/[slug]` only enters viewport after deep scroll — needs real right-rail (`page.module.css:348-365`); (2) cover→title-block separator missing when `poster.credit` is null. Seven **Should-Fix**: empty desktop right column, filter chip groups need labels, native search `×` button leaks into Cmd-K, dev-mode LQIP race on first card, hydration-warning verification, ThemeToggle glyph ambiguity, ProductionCard LQIP gating. **I5 cut.** |
+| R1.fix — Land Must-Fix items | ✅ done | `73620e6` `871f287` | Must-Fix #1: CSS-grid right rail for sticky CTA. Must-Fix #2: `.titleBlock` top rule. Optional: filter group labels. Polish: ThemeToggle SVG, search × suppression, LQIP gating. |
+| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). Unblocked; D1 Vercel preview can begin. |
 
 ### Core UI
 
@@ -279,11 +302,13 @@ when the legacy renderer was deleted. The build is clean under
   spinner. `app/[locale]/not-found.tsx` with RU/EN/DE translations linking
   home + productions. _commit see below_
 
-- [ ] **I5 — Signature gesture (brief Q3, design.md §13)**: Prototype
-  paper-cut transition vs string-line vs no-gesture on home-page first
-  paint. ≤ 400ms total, runs once, never on scroll, fully disabled by
-  `prefers-reduced-motion`. Decision in design review (R1) — **if it
-  tests as gimmicky, cut it entirely.** _Depends on C3. Optional._
+- [~] **I5 — Signature gesture (brief Q3, design.md §13)**: 🚫 **Cut in R1.**
+  The brief explicitly authorised the cut (*"if it tests as gimmicky in
+  design review, cut it entirely"*). The build reads as quietly curatorial
+  without it; adding a paper-cut / string-line on first paint would risk
+  the SaaS-flourish register `DESIGN.md` §3 warns against. Rationale:
+  `.design/boklanov-rewrite/DESIGN_REVIEW.md` § "I5 (Signature Gesture) —
+  formal decision". _Cut, not deferred._
 
 ---
 
@@ -346,19 +371,33 @@ when the legacy renderer was deleted. The build is clean under
 
 ## Review
 
-- [ ] **R1 — `/design-review` against the brief**: Code-level + screenshot
-  critique of home, productions index, one production detail, about,
-  press. Verify no anti-patterns (DESIGN.md §11) shipped: no
-  glassmorphism, no AI-purple, no hero video, no bento grid, no
-  `rounded-2xl shadow-xl`, no Comic-Sans irony, no animated gradient
-  text. Decide signature-gesture fate (I5). Output:
-  `.design/boklanov-rewrite/DESIGN_REVIEW.md`. _Depends on C1–C11, P1–P3._
+- [x] **R1 — `/design-review` against the brief**: Code + visual critique
+  of home, productions index, `/productions/lina-marlina`, about, press,
+  contact, Cmd-K, dark mode at 1280×800. Output:
+  `.design/boklanov-rewrite/DESIGN_REVIEW.md`. **Verdict: zero §11
+  anti-patterns shipped.** Token discipline exceptional. Two Must-Fix
+  items (sticky-CTA right-rail; cover→title separator). I5 cut formally.
+  Mobile-emulated screenshots blocked by MCP viewport — deferred to R2
+  real-device pass.
+
+- [x] **R1.fix — Land R1 Must-Fix items before R2** (`73620e6`, `871f287`):
+  1. ✅ Desktop sticky CTA right-rail: `.layout` grid wrapper splits page
+     into `[minmax(0,720px)] [1fr]`; CTA has `position:sticky; align-self:start;
+     margin-top:--space-8` — visible from landing on desktop.
+  2. ✅ Cover → title-block separator: `border-top + padding-top` on
+     `.titleBlock` — consistent editorial breath with or without credit row.
+  3. ✅ Filter group labels (`РОЛЬ/ФОРМА/ВОЗРАСТ/СТРАНА`) on ≥768px — highest-
+     impact Should-Fix also landed. Plus: ThemeToggle SVG, search × suppression,
+     LQIP gating. _Depends on R1. All done._
 
 - [ ] **R2 — Real-device manual QA**: iPhone SE / iPhone 14 Pro / iPad /
   13" laptop / 27" desktop. Daniil + Roman. Check the 90-second
   curator scenario end-to-end on iPhone SE: open Instagram-DM-shaped
   link → home → see featured shows → tap one → reach booking CTA. Time
-  it. _Depends on R1 fixes._
+  it. **Also re-check R1 Should-Fix #4 (LQIP/preload race on first
+  featured card)** on a `next build && next start` production build —
+  R1 saw the LQIP blur persist in dev mode; verify it resolves in
+  production. _Depends on R1.fix._
 
 ---
 

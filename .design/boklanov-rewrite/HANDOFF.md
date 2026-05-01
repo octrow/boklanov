@@ -1,4 +1,4 @@
-# Handoff prompt — boklanov.ru rewrite, Phase 6 (Polish & Review)
+# Handoff prompt — boklanov.ru rewrite, R2 real-device QA → D1 Vercel preview
 
 Paste the block below into a fresh Claude Code conversation in the
 `boklanov` repo (branch `rewrite/v2`) to continue.
@@ -11,85 +11,85 @@ I'm continuing the boklanov.com / boklanov.ru rewrite on branch
 `rewrite/v2`. This is a Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
-**Foundation (F1–F8), Core UI (C1–C11), Phase 5 SEO/OG (S1–S5), and
-Phase 6 interactions (I1, I4, P1, P2, P3) are all committed and verified.**
-The site builds clean under `strictNullChecks` + ESLint. 110 static pages
-pre-render successfully (sitemap.xml + robots.txt included).
+**All code work through R1.fix is committed and the build is clean.**
+110 static pages pre-render. `strictNullChecks` + ESLint pass. I5 is
+cut. The next milestone is **R2 real-device QA** (Daniil + Roman), then
+**D1 Vercel preview**.
 
-**P1, P2, and P3 are complete.** Next up is R1 (/design-review against
-the brief — depends on P1–P3). In TASKS.md order.
+### What's landed (full history)
+
+**Foundation (F1–F8):** App Router shell, i18n (next-intl v4), self-hosted
+fonts (Lora + JetBrains Mono + Inter), sync pipeline, content loader, base
+styles.
+
+**Core UI (C1–C11):** ProductionCard + Grid, Production detail (84 pages ×
+3 locales), Home, Filter panel + URL state, About + lineage, Awards, Press,
+Contact, Archive, Layout shell, Cmd-K palette.
+
+**Phase 5 SEO/OG (S1–S5):** sitemap (105 URLs, hreflang RU↔EN), robots,
+RSS (RU+EN), JSON-LD `Person` + `CreativeWork`, OG ImageResponse (1200×630),
+PostHog `booking_cta_click` only, DE chrome translations.
+
+**Phase 6 Interactions + Polish (I1, I4, P1, P2, P3):**
+- I1 — unified `--shadow-focus` ring across all interactive elements.
+- I4 — empty + loading + error states (LQIP, clear-all, not-found).
+- I5 — 🚫 cut formally in R1 per `DESIGN.md` §13.
+- P1 — mobile-first layout pass (44px touch targets, on-screen Cmd-K trigger).
+- P2 — accessibility pass (contrast AA, landmarks, focus trap, alt text).
+- P3 — Lighthouse mobile ≥ 95 (woff2 subsets, next/image AVIF/WebP, LCP
+  preload, locale-aware font preloads).
+
+**Review + R1.fix (`73620e6`, `871f287`):**
+- R1 design review complete. Zero `DESIGN.md` §11 anti-patterns.
+- R1.fix Must-Fix #1: desktop sticky CTA now in real CSS-grid right rail
+  (`[minmax(0,720px)] [1fr]`). Visible from landing — no more scroll-to-reveal.
+- R1.fix Must-Fix #2: `.titleBlock` `border-top` + `padding-top` — cover/title
+  separator present whether or not `poster.credit` rendered.
+- R1.fix optional: filter group labels (РОЛЬ/ФОРМА/ВОЗРАСТ/СТРАНА) above chip
+  groups on ≥768px. `·` separators on mobile preserved.
+- Polish: ThemeToggle ●/○ → sun/moon SVG; search `×` suppressed; LQIP gated on
+  `poster.src && poster.lqip`.
 
 ### Read these first, in order
 
-1. `.design/boklanov-rewrite/TASKS.md` — canonical ordered task list.
-   Progress log at the top. R1 is the next open task.
-2. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
-3. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
-4. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy.
-5. `.design/boklanov-rewrite/tokens.md` — token rationale.
+1. `.design/boklanov-rewrite/TASKS.md` — canonical task list. R1.fix ✅.
+   Next open items: R2 + D1.
+2. `.design/boklanov-rewrite/DESIGN_REVIEW.md` — R1 verdict (reference for
+   any remaining Should-Fix / Could-Improve items).
+3. `.design/boklanov-rewrite/DESIGN_BRIEF.md` — locked brief (D1–D15).
+4. `DESIGN.md` (repo root) — visual identity contract (§11 anti-patterns).
+5. `.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md` — URL strategy.
 
-### What's shipped (all phases)
+### R2 scope (real-device QA — requires Daniil + Roman)
 
-**Foundation:** App Router shell, i18n (next-intl v4), self-hosted fonts
-(Lora + JetBrains Mono + Inter), sync pipeline, content loader, base styles.
+R2 is a manual pass on real hardware, not something Claude can run. The
+scenarios and checklist are in `TASKS.md` § R2. Key scenario:
 
-**Core UI (C1–C11):**
-- C1 — `<ProductionCard>` + `<ProductionGrid>`
-- C2 — Production detail (84 pages × 3 locales)
-- C3 — Home page
-- C4 — Filter panel + URL state
-- C5 — About + lineage block
-- C6 — Awards page
-- C7 — Press page
-- C8 — Contact page
-- C9 — Archive page
-- C10 — Layout shell (SiteHeader + SiteFooter + theme toggle + anti-flash)
-- C11 — Cmd-K palette (lazy-loaded, grouped, Cyr↔Lat transliteration)
+> iPhone SE (375px) · open link from Instagram DM · 90 seconds · RU locale
+> → home → featured strip → tap a production → reach booking CTA → tap it.
 
-**Phase 5 SEO/OG (S1–S5):**
-- S1 — `app/sitemap.ts` (105 URLs, hreflang RU↔EN, DE no-alternate),
-  `app/robots.ts`, `app/[locale]/feed/route.ts` (RSS, RU+EN only)
-- S2 — JSON-LD: `Person` on `/about`, `CreativeWork` on each production detail
-- S3 — `app/api/og/[slug]/route.tsx` (ImageResponse, 1200×630 PNG,
-  Lora title + JetBrains Mono chips + oxblood bar), `generateMetadata`
-  wired in production detail + about pages
-- S4 — PostHog analytics: `components/Analytics.tsx`, autocapture/
-  pageview/recording disabled, only `booking_cta_click` tracked via
-  `data-ph-event` delegation
-- S5 — DE chrome translations: all 44 keys complete in `messages/de.json`
+Devices: iPhone SE, iPhone 14 Pro, iPad, 13" laptop, 27" desktop.
 
-**Phase 6 Interactions + Polish (I1, I4, P1, P2, P3):**
-- I1 — Unified `--shadow-focus` ring (paper gap + oxblood) across all
-  interactive elements; oxblood hover parity on CTAs + press links.
-  — commit `df6dda1`
-- I4 — `ProductionGrid` empty state + LQIP blur-up + `not-found.tsx`.
-  — commit `7b691c6`
-- P1 — Mobile-first layout pass: `CommandPaletteContext` exposes
-  `toggle()`; `SiteHeader` renders 44×44px search icon button on mobile
-  (on-screen Cmd-K trigger). Touch targets ≥44px fixed across filter chips,
-  clearAll, mobile nav drawer links, locale links in drawer, contact
-  copyButton, home viewAll ghost link, ProductionGrid emptyReset.
-  Contact mailtoButton full-width on mobile. — commit `7ba8106`
-- P2 — Accessibility pass: locale links contrast fixed (--ink-faint 2.86:1
-  → --ink-mute 5.46:1); CommandPalette groupLabel/noResults same fix.
-  localeSwitcher div→nav, footer nav col→nav. CommandPalette: aria-label on
-  input + listbox, Tab focus trap. Alt text: full DESIGN §12 format (role,
-  title, theatre, year, photographer) in ProductionCard + detail cover.
-  Decorative sep spans aria-hidden. hreflang RU↔EN confirmed, DE excluded.
-- P3 — Lighthouse mobile ≥ 95: Inter TTF (303KB+309KB) → subset woff2
-  (cyrillic/latin/latin-ext per weight) saving ~476KB. `next/image` on
-  ProductionCard (AVIF/WebP via `/_next/image`, `fill`+`sizes`, `priorityFirst`
-  prop → `<link rel="preload" as="image">` for LCP). Detail page cover
-  upgraded to `next/image priority` with posterWidth/Height from lqip.json.
-  Locale-aware font preloads in layout `<head>` (Cyrillic on /ru, Latin on
-  /en+/de). `critters` installed; `experimental.optimizeCss` tested but
-  reverted (breaks `[locale]` dynamic routes in current Next.js version).
+**Also check during R2:**
+- Sticky CTA appears in right rail from landing on desktop (R1.fix #1).
+- Cover/title editorial breath consistent on pages without poster credit.
+- Filter group labels readable on tablet (≥768px).
+- ThemeToggle sun/moon glyphs legible.
+- LQIP blur resolves on first featured card in production (not just dev build).
 
-### Key open tasks
+### D1 scope (Vercel preview — can begin before R2 completes)
 
 ```
-R1 — /design-review against the brief (depends on P1–P3)
+D1 — Vercel preview from `rewrite/v2`
 ```
+
+- Push branch to GitHub → connect to Vercel project.
+- Set `NEXT_PUBLIC_BASE_URL` env var (Vercel URL or boklanov.com).
+- Set `NEXT_PUBLIC_POSTHOG_KEY` if PostHog is enabled.
+- Verify Cyrillic fonts render on real Vercel edge (not just localhost).
+- Share preview URL with Roman.
+
+After D1: D2 hosting decision, D3 domain, D4 cutover.
 
 ### Important constraints (do not violate)
 
@@ -97,17 +97,25 @@ R1 — /design-review against the brief (depends on P1–P3)
 - `hreflang` on RU↔EN only — DE excluded.
 - Production-card text stays RU/EN regardless of locale.
 - No glassmorphism, no AI-purple, no hero video, no bento grid,
-  no `rounded-2xl shadow-xl` (DESIGN.md §11 anti-patterns).
+  no `rounded-2xl shadow-xl` (`DESIGN.md` §11 anti-patterns).
 - Analytics: only `booking_cta_click` — never expand autocapture.
+- I5 is **cut**, not deferred.
 
 ### Recent commits on `rewrite/v2` for context
 
 ```
-(P3 commit — see git log)  P3: Lighthouse mobile ≥95 — woff2 subsets, next/image, LCP priority, font preloads
-(P2 commit — see git log)  P2: accessibility pass — contrast, landmarks, focus trap, alt text
+871f287  polish: ThemeToggle SVG, search × suppression, LQIP gating
+73620e6  R1.fix: sticky CTA right rail, cover/title rule, filter group labels
+6ddb466  P3: Lighthouse mobile ≥95 — woff2 subsets, next/image, LCP priority
+c125fc0  P2: accessibility pass — contrast, landmarks, focus trap, alt text
 7ba8106  P1: mobile-first layout pass — touch targets + Cmd-K on-screen button
-7b691c6  I4: empty + loading + error states — lqip, clear-all, not-found
-df6dda1  I1: hover & focus audit — unified shadow-focus ring, oxblood hover parity
 ```
 
-Proceed with R1 (/design-review).
+If continuing code work before R2: the remaining Should-Fix and Could-Improve
+items are in `DESIGN_REVIEW.md`. The highest-value unshipped items are:
+- Could-Improve #2: gallery masonry (currently `grid 2fr` — DESIGN §9 says
+  original aspect ratios, `grid-auto-flow: dense` or CSS columns).
+- Could-Improve #5: `SiteHeader.module.css` wordmark `letter-spacing: -0.015em`
+  → `var(--letter-spacing-tight)` for token parity.
+- Should-Fix #1 (in DESIGN_REVIEW): mono "spec sheet" right-rail content above
+  the sticky CTA (year · duration · age · country, one per line).
