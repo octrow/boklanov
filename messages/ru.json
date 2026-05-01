@@ -25,6 +25,14 @@
     "roleReader": "читчик",
     "roleAll": "все"
   },
+  "archive": {
+    "title": "архив",
+    "empty": "Нет записей в архиве",
+    "colYear": "год",
+    "colTitle": "название",
+    "colTheatre": "театр",
+    "colRole": "роль"
+  },
   "contact": {
     "title": "контакты",
     "emailCta": "Написать Роману",

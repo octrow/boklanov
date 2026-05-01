@@ -25,6 +25,14 @@
     "roleReader": "reader",
     "roleAll": "all"
   },
+  "archive": {
+    "title": "archive",
+    "empty": "No archive entries",
+    "colYear": "year",
+    "colTitle": "title",
+    "colTheatre": "theatre",
+    "colRole": "role"
+  },
   "contact": {
     "title": "contact",
     "emailCta": "Email Roman",

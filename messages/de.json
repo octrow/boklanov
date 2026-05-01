@@ -25,6 +25,14 @@
     "roleReader": "Leser",
     "roleAll": "alle"
   },
+  "archive": {
+    "title": "Archiv",
+    "empty": "Keine Archiveinträge",
+    "colYear": "Jahr",
+    "colTitle": "Titel",
+    "colTheatre": "Theater",
+    "colRole": "Rolle"
+  },
   "contact": {
     "title": "Kontakt",
     "emailCta": "Roman schreiben",
