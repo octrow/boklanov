@@ -1,4 +1,4 @@
-# Handoff prompt — boklanov.ru rewrite, Phase 7.5 Round 3
+# Handoff prompt — boklanov.ru rewrite, post-Round 3 / D1 next
 
 Paste the block below into a fresh Claude Code conversation in the
 `boklanov` repo (branch `rewrite/v2`) to continue.
@@ -22,7 +22,7 @@ Roman Boklanov (puppet / object / family theatre, 30+ productions).
    claim present-tense work in Russia. Colophon is city-free;
    staging-geography labels use past-tense.
 
-**Current state — Phase 7.5 Rounds 1 + 2 shipped, Round 3 is next.**
+**Current state — Phase 7.5 Rounds 1 + 2 + 3 shipped. D1 Vercel preview is next.**
 
 Round 1 (`c7a1b50`, 2026-05-02):
 - `lib/folio.ts` — `folioFor(pathname, productions)` → `{ sectionKey, index? }`
@@ -42,227 +42,25 @@ Round 2 (`0bebf3c`, 2026-05-02):
   `bury-me-behind-the-baseboard/metadata.yml`; ON TOUR band above gallery
 - DA-2.E — `PREM 2021` on production cards (was bare `2021`)
 
+Round 3 (`7c26402`, 2026-05-02):
+- DA-3.A — `components/SlateStrike.tsx` + `SlateStrike.module.css`:
+  320ms one-shot slate-top drop on first paint; gated by
+  `sessionStorage.firstPaintDone`, `?gesture=off`, `prefers-reduced-motion`
+- Edition-frame (`::after` hairline rule) present in all static states
+- `<Suspense fallback={null}>` boundary wraps `<SlateStrike>` in home page
+- `--duration-slate: 320ms` token added to `globals.css`
+
 **Build state:** clean. No uncommitted edits. `npm run build` passes.
 
 **Next milestones, in order:**
 1. ~~**Phase 7.5 Round 1**~~ ✅ **done** (`c7a1b50`)
 2. ~~**Phase 7.5 Round 2**~~ ✅ **done** (`0bebf3c`)
-3. **R2 real-device QA** — manual pass by Daniil + Roman on real
+3. ~~**Phase 7.5 Round 3**~~ ✅ **done** (`7c26402`)
+4. **R2 real-device QA** — manual pass by Daniil + Roman on real
    hardware. Claude cannot run this. See R2 checklist below.
-4. **D1 Vercel preview** — push `rewrite/v2` to GitHub, connect Vercel,
+5. **D1 Vercel preview** — push `rewrite/v2` to GitHub, connect Vercel,
    set `NEXT_PUBLIC_BASE_URL`. Can begin before R2 sign-off.
-5. **Phase 7.5 Round 3** — DA-3.A slate-strike + edition-frame fallback.
-   After D1, behind `?gesture=off` for first 48h. **Implement this now**
-   if D1 has already been done; otherwise queue it.
 6. **Phase 8** — Authoring handoff (Obsidian + R2). After D4 cutover.
-
----
-
-### Phase 7.5 Round 3 — full implementation brief
-
-One task. Ships as a single PR after D1.
-
-#### DA-3.A — Slate-strike + edition-frame fallback (§4.1.A + §4.1.C)
-
-**What it is:**
-A 320ms one-shot CSS animation on the home page's first paint only.
-The wordmark "slate top" — a thin pseudo-element — drops 1.5em onto
-the wordmark's baseline while a hairline rule fades in beneath it.
-Reads as a theatre-programme opening cue, not a SaaS hero animation.
-
-**Gated by:**
-1. `sessionStorage.firstPaintDone` — animation fires once per session;
-   subsequent navigations show end-state statically.
-2. `?gesture=off` query param — disables the animation entirely for the
-   first 48h after D1, so the team can screenshot end-state vs
-   animated-state for design review.
-3. `prefers-reduced-motion: reduce` — falls through to the static
-   edition-frame fallback (identical end-state, no motion).
-
-**Static fallback (edition-frame, §4.1.C):**
-The end-state of the animation must be visually indistinguishable from
-the static version. The "edition frame" is just the wordmark sitting
-on its hairline rule with no motion. This is the `prefers-reduced-motion`
-and `?gesture=off` state. It must ship in the same PR as the animation.
-
----
-
-**Step 1 — Home page component:**
-
-In `app/[locale]/page.tsx`, import and render a new Client Component
-`<SlateStrike>` that wraps the `.hero` section:
-
-```tsx
-import { SlateStrike } from '@/components/SlateStrike'
-
-// Inside the return, replace:
-<section className={styles.hero}>
-  <h1 className={styles.wordmark}>{wordmark}</h1>
-  ...
-</section>
-
-// With:
-<SlateStrike>
-  <section className={styles.hero}>
-    <h1 className={styles.wordmark}>{wordmark}</h1>
-    ...
-  </section>
-</SlateStrike>
-```
-
-**Step 2 — `components/SlateStrike.tsx`:**
-
-```tsx
-'use client'
-
-import * as React from 'react'
-import { useSearchParams } from 'next/navigation'
-
-import styles from './SlateStrike.module.css'
-
-export function SlateStrike({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams()
-  const gestureOff = searchParams.get('gesture') === 'off'
-
-  const [animate, setAnimate] = React.useState(false)
-
-  React.useEffect(() => {
-    if (gestureOff) return
-    if (typeof sessionStorage === 'undefined') return
-    if (sessionStorage.getItem('firstPaintDone')) return
-    sessionStorage.setItem('firstPaintDone', '1')
-    setAnimate(true)
-  }, [gestureOff])
-
-  return (
-    <div className={animate ? `${styles.slate} ${styles.slateAnimate}` : styles.slate}>
-      {children}
-    </div>
-  )
-}
-```
-
-**Step 3 — `components/SlateStrike.module.css`:**
-
-```css
-/* Edition-frame wrapper — static end-state for reduced-motion + gesture=off. */
-.slate {
-  position: relative;
-}
-
-/* Hairline rule below the wordmark — this is the edition-frame (§4.1.C).
-   It exists in both the static and animated states; only the animation
-   differs. Positioned by the wordmark's natural flow, not absolutely. */
-.slate::after {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: var(--rule);
-  /* Static: immediately visible. Animation overrides opacity below. */
-  opacity: 1;
-  margin-top: var(--space-2);
-}
-
-/* ── Animation ──────────────────────────────────────────────────────────
-   Only added by JS when sessionStorage.firstPaintDone is absent AND
-   gesture != 'off' AND prefers-reduced-motion is not 'reduce'.
-   prefers-reduced-motion is handled by the @media query below — it
-   removes the animation keyframes, leaving the static end-state. */
-
-@keyframes slateTopDrop {
-  from {
-    /* Pseudo-element starts 1.5em above the wordmark baseline */
-    transform: translateY(-1.5em);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes ruleFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-.slateAnimate::before {
-  /* The "slate top" — thin horizontal mark dropping onto wordmark */
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--rule-strong);
-  transform-origin: top left;
-
-  animation: slateTopDrop var(--duration-slate, 320ms) var(--easing-default) forwards;
-}
-
-.slateAnimate::after {
-  /* Edition-frame hairline fades in after the drop */
-  opacity: 0;
-  animation: ruleFadeIn var(--duration-slate, 320ms) var(--easing-default)
-    calc(var(--duration-slate, 320ms) * 0.6) forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .slateAnimate::before,
-  .slateAnimate::after {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
-```
-
-**Step 4 — Add CSS custom property to `app/globals.css`:**
-
-```css
-/* Slate-strike timing — can be overridden by ?gesture=off state or tests */
---duration-slate: 320ms;
-```
-
-**Step 5 — Wrap `<SlateStrike>` in a Suspense boundary** (required
-because `useSearchParams` is a client hook that opts into dynamic
-rendering):
-
-In `app/[locale]/page.tsx`:
-
-```tsx
-import * as React from 'react'
-import { Suspense } from 'react'
-
-// …
-
-return (
-  <main className={styles.page}>
-    <Suspense fallback={null}>
-      <SlateStrike>
-        <section className={styles.hero}>
-          …
-        </section>
-      </SlateStrike>
-    </Suspense>
-    {/* rest of page */}
-  </main>
-)
-```
-
-**Step 6 — Verify end-states:**
-- Static (`?gesture=off`): wordmark sits on hairline rule, no animation.
-  Identical to current page + a hairline rule below `.hero`.
-- Animated (first visit, no flag): slate-top drops, rule fades in.
-- Reduced-motion: same as static.
-- Subsequent visits (sessionStorage set): same as static.
-
----
-
-### i18n changes for Round 3
-
-None — DA-3.A is purely visual/structural. No new translation keys.
 
 ---
 
@@ -270,7 +68,15 @@ None — DA-3.A is purely visual/structural. No new translation keys.
 
 Manual pass on real hardware. Checklist:
 
-**Round 2 chrome (new in the last build `0bebf3c`):**
+**Round 3 chrome (new in `7c26402`):**
+- Home page first visit (fresh session): slate-top hairline drops 1.5em
+  onto wordmark, then hairline rule fades in. Animation is ~320ms, one-shot.
+- Home page second visit (sessionStorage set): end-state only — wordmark
+  sits on hairline rule, no motion.
+- Home with `?gesture=off`: no animation at all; end-state static.
+- Reduced-motion OS setting: no animation; identical end-state.
+
+**Round 2 chrome (new in `0bebf3c`):**
 - Credits block on production detail: leader-dot `<dl>` table with CREDITS
   cue header. No troupe claim.
 - Theatre slate in right rail: bordered box, `PRODUCTION 01/24` header, key/value
@@ -305,8 +111,8 @@ Manual pass on real hardware. Checklist:
 - Set `NEXT_PUBLIC_POSTHOG_KEY` if PostHog enabled.
 - Verify Cyrillic fonts render on Vercel edge (not just localhost).
 - Share preview URL with Roman.
-
-After D1: D2 hosting decision, D3 domain, D4 cutover.
+- After D1: lift `?gesture=off` gate (or keep for 48h design review),
+  then D2 hosting decision, D3 domain, D4 cutover.
 
 ---
 
@@ -350,18 +156,18 @@ Phase 9 (Decap CMS) is deferred — activate only when Roman asks.
   filter parameter.
 - DA-3.A (slate-strike) **must ship paired with the static edition-frame**
   as the `prefers-reduced-motion` fallback — both must render an
-  identical end-state visually.
+  identical end-state visually. ✅ Done.
 
 ---
 
 ### Recent commits on `rewrite/v2` for context
 
 ```
+7c26402  feat: Phase 7.5 Round 3 — slate-strike + edition-frame fallback (DA-3.A)
 0bebf3c  feat: Phase 7.5 Round 2 — credits dl, theatre slate, staging geography, tour band, premiere mark
 c7a1b50  feat: Phase 7.5 Round 1 — folio + cue numbers + edition stamp
 8eaacf1  docs: research — content authoring workflow options
 33d9c75  production-detail: surface theatre + credits + premiere + tickets (Q8)
-08f54c0  docs: refresh all planning docs to current state
 ```
 
 **Build state:** clean. No uncommitted edits.
