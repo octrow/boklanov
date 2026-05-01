@@ -37,7 +37,7 @@
   font-family: var(--font-family-display);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
-  letter-spacing: -0.015em;
+  letter-spacing: var(--letter-spacing-tight);
   line-height: 1;
   text-transform: lowercase;
   color: var(--ink);

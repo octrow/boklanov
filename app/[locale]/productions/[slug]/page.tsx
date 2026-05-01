@@ -400,16 +400,29 @@ export default async function ProductionDetailPage({
         )}
       </div>
 
-      {/* 11. Sticky CTA — bottom on mobile, right rail on desktop ≥1024 */}
-      <a
-        className={styles.stickyCta}
-        href={mailto}
-        data-ph-event="booking_cta_click"
-        data-ph-slug={slug}
-        data-ph-locale={locale}
-      >
-        {t('bookingCta')}
-      </a>
+      {/* Rail: spec sheet (desktop only) + sticky CTA */}
+      <div className={styles.rail}>
+        {/* Spec sheet — mono metadata, one token per line. aria-hidden:
+            chips in the prose column carry the same data for screen readers. */}
+        {(production.year || production.durationMin || production.ageRating || country) && (
+          <ul className={styles.specSheet} aria-hidden="true">
+            {production.year && <li className={styles.specItem}>{production.year}</li>}
+            {production.durationMin && <li className={styles.specItem}>{production.durationMin}&thinsp;min</li>}
+            {production.ageRating && <li className={styles.specItem}>{production.ageRating}</li>}
+            {country && <li className={styles.specItem}>{country}</li>}
+          </ul>
+        )}
+        {/* 11. Sticky CTA — fixed bottom on mobile, static in sticky rail on desktop */}
+        <a
+          className={styles.stickyCta}
+          href={mailto}
+          data-ph-event="booking_cta_click"
+          data-ph-slug={slug}
+          data-ph-locale={locale}
+        >
+          {t('bookingCta')}
+        </a>
+      </div>
       </div>{/* end .layout */}
     </main>
   )

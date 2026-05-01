@@ -220,7 +220,7 @@
   margin: 0 0 var(--space-5);
 }
 
-/* 7. Photos — masonry-ish: original aspect ratios preserved. */
+/* 7. Photos — masonry: original aspect ratios, CSS columns on tablet+. */
 .gallery {
   display: grid;
   grid-template-columns: 1fr;
@@ -228,11 +228,19 @@
 }
 @media (min-width: 768px) {
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
+    display: block;
+    columns: 2;
+    column-gap: var(--space-5);
   }
 }
 .galleryItem {
   margin: 0;
+}
+@media (min-width: 768px) {
+  .galleryItem {
+    break-inside: avoid;
+    margin-bottom: var(--space-5);
+  }
 }
 .galleryItem img {
   width: 100%;
@@ -324,10 +332,56 @@
   padding: var(--space-2) 0;
 }
 
+/* Rail wrapper: holds specSheet (desktop only) + stickyCta.
+   Mobile: transparent block; stickyCta inside uses position:fixed.
+   Desktop ≥1024: sticky column aligned with the title block top. */
+.rail {
+  /* transparent on mobile */
+}
+
+@media (min-width: 1024px) {
+  .rail {
+    position: sticky;
+    top: var(--space-7);
+    align-self: start;
+    padding-top: var(--space-8);
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+}
+
+/* Spec sheet: one metadata token per line, brutalist mono.
+   Hidden on mobile — the chips row in the prose column serves mobile. */
+.specSheet {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .specSheet {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0 0 var(--space-5);
+    margin: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+.specItem {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 /* 11. Sticky booking CTA.
    Mobile: full-width pinned to viewport bottom.
-   Desktop ≥1024px: parks in the right column.
-*/
+   Desktop ≥1024px: static inside .rail (which is itself sticky). */
 .stickyCta {
   position: fixed;
   left: var(--gutter-mobile);
@@ -363,19 +417,12 @@
 
 @media (min-width: 1024px) {
   .stickyCta {
-    /* Right rail sticky: starts level with the title block, stays fixed
-       while scrolling. align-self:start is required for position:sticky
-       on a grid item — prevents the element from stretching to the row height. */
-    position: sticky;
-    top: var(--space-7);
-    align-self: start;
-    margin-top: var(--space-8);
-    margin-left: var(--gutter-desktop);
-    margin-right: var(--gutter-desktop);
+    /* .rail handles sticky + positioning. CTA is static here. */
+    position: static;
     left: auto;
     right: auto;
     bottom: auto;
-    max-width: 280px;
+    max-width: none;
     min-height: 56px;
     box-shadow: none;
   }
