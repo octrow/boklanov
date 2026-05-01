@@ -102,7 +102,8 @@
   margin-bottom: 0;
 }
 
-/* Ghost link — DESIGN §7.5: no border, underline reveal on hover. */
+/* Ghost link — DESIGN §7.5: no border, underline reveal on hover.
+   Min-height 44px ensures ≥44px touch target (P1). */
 .viewAll {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -111,6 +112,9 @@
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   transition: color var(--duration-fast) var(--easing-default);
 }
 

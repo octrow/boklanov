@@ -36,7 +36,7 @@
 }
 
 .mailtoButton {
-  display: inline-block;
+  display: block;
   padding: var(--space-4) var(--space-6);
   background: var(--accent);
   color: var(--paper);
@@ -45,7 +45,15 @@
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   letter-spacing: 0.01em;
+  text-align: center;
   transition: background var(--duration-fast) var(--easing-default);
+}
+
+@media (min-width: 768px) {
+  .mailtoButton {
+    display: inline-block;
+    text-align: left;
+  }
 }
 
 .mailtoButton:hover {
@@ -67,6 +75,7 @@
   padding: var(--space-5);
   background: var(--paper-raised);
   border: 1px solid var(--rule);
+  flex-wrap: wrap;
 }
 
 .emailAddress {
@@ -85,10 +94,13 @@
   color: var(--ink-mute);
   background: none;
   border: 1px solid var(--rule);
-  padding: 2px var(--space-3);
+  padding: var(--space-2) var(--space-3);
   cursor: pointer;
   min-width: 5ch;
-  text-align: center;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition:
     color var(--duration-fast) var(--easing-default),
     border-color var(--duration-fast) var(--easing-default);

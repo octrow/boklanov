@@ -6,6 +6,7 @@ import * as React from 'react'
 import { Link, usePathname } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 
+import { CommandPaletteContext } from './CommandPaletteProvider'
 import { ThemeToggle } from './ThemeToggle'
 import styles from './SiteHeader.module.css'
 
@@ -22,6 +23,7 @@ export function SiteHeader() {
   const t = useTranslations('nav')
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = React.useState(false)
+  const { toggle: toggleSearch } = React.useContext(CommandPaletteContext)
 
   const navLinks = [
     { href: '/productions' as const, label: t('productions') },
@@ -57,7 +59,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        {/* Controls: locale switcher + theme toggle */}
+        {/* Controls: locale switcher + theme toggle (desktop) */}
         <div className={styles.controls}>
           <div className={styles.localeSwitcher} aria-label="Language">
             {LOCALES.map((loc) => (
@@ -77,6 +79,19 @@ export function SiteHeader() {
           </div>
           <ThemeToggle />
         </div>
+
+        {/* Mobile search button — on-screen Cmd-K trigger (no Cmd key on mobile). */}
+        <button
+          type="button"
+          className={styles.searchBtn}
+          aria-label={t('search')}
+          onClick={toggleSearch}
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.25"/>
+            <line x1="11.8" y1="11.8" x2="16" y2="16" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round"/>
+          </svg>
+        </button>
 
         {/* Mobile hamburger */}
         <button

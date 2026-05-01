@@ -16,8 +16,18 @@ interface Props {
   children: React.ReactNode
 }
 
+interface CommandPaletteContextValue {
+  toggle: () => void
+}
+
+export const CommandPaletteContext = React.createContext<CommandPaletteContextValue>({
+  toggle: () => {}
+})
+
 export function CommandPaletteProvider({ items, locale, children }: Props) {
   const [open, setOpen] = React.useState(false)
+
+  const toggle = React.useCallback(() => setOpen((o) => !o), [])
 
   React.useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -31,7 +41,7 @@ export function CommandPaletteProvider({ items, locale, children }: Props) {
   }, [])
 
   return (
-    <>
+    <CommandPaletteContext.Provider value={{ toggle }}>
       {children}
       {open && (
         <CommandPalette
@@ -40,6 +50,6 @@ export function CommandPaletteProvider({ items, locale, children }: Props) {
           locale={locale}
         />
       )}
-    </>
+    </CommandPaletteContext.Provider>
   )
 }

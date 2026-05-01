@@ -137,6 +137,36 @@
   box-shadow: var(--shadow-focus);
 }
 
+/* ── Mobile search button (on-screen Cmd-K trigger) ──────────────────── */
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Absorbs free space so hamburger follows directly */
+  margin-left: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  color: var(--ink-mute);
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.searchBtn:hover {
+  color: var(--ink);
+}
+
+.searchBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@media (min-width: 768px) {
+  .searchBtn {
+    display: none;
+  }
+}
+
 /* ── Hamburger ────────────────────────────────────────────────────────── */
 
 .hamburger {
@@ -150,7 +180,7 @@
   padding: 4px;
   min-width: 44px;
   min-height: 44px;
-  margin-left: auto;
+  /* No margin-left: auto — searchBtn handles the push on mobile. */
 }
 
 @media (min-width: 768px) {
@@ -193,7 +223,11 @@
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
   text-decoration: none;
-  padding: var(--space-3) 0;
+  /* ≥44px touch target per DESIGN §7.5 + P1 spec. */
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
   border-bottom: 1px solid var(--rule);
 }
 
@@ -210,6 +244,14 @@
   display: flex;
   gap: var(--space-4);
   padding-top: var(--space-4);
+}
+
+/* Locale links inside the mobile drawer need a larger tap target. */
+.mobileLocaleSwitcher .localeLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-1);
 }
 
 /* ── Hairline rule below header ───────────────────────────────────────── */

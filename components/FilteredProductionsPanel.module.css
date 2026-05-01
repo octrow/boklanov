@@ -68,9 +68,8 @@
     background var(--duration-fast) var(--easing-default),
     border-color var(--duration-fast) var(--easing-default),
     color var(--duration-fast) var(--easing-default);
-  /* Touch target — combined with line-height the chip is ≥24px; on
-     mobile the filterBar has enough height but we add min-height here. */
-  min-height: 28px;
+  /* Touch target ≥44px on mobile per DESIGN §7.5 + P1 spec. */
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
 }
@@ -115,7 +114,7 @@
   flex-shrink: 0;
   margin-left: auto;
   transition: opacity var(--duration-fast) var(--easing-default);
-  min-height: 28px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
 }

@@ -42,7 +42,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  /* ≥44px vertical touch target on mobile; inline-flex keeps it in flow. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-1);
   transition: opacity var(--duration-fast) var(--easing-default);
 }
 
