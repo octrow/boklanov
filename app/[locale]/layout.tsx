@@ -6,9 +6,12 @@ import { notFound } from 'next/navigation'
 import * as React from 'react'
 import type { ReactNode } from 'react'
 
+import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
+import { getAllProductions } from '@/lib/content'
+import { buildSearchIndex } from '@/lib/search'
 
 // Runs synchronously before paint: reads localStorage and sets data-theme to
 // prevent a flash of wrong theme on first load.
@@ -34,6 +37,9 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
 
+  const productions = getAllProductions(locale)
+  const searchItems = buildSearchIndex(productions)
+
   return (
     <html lang={locale}>
       <head>
@@ -41,9 +47,11 @@ export default async function LocaleLayout({
       </head>
       <body>
         <NextIntlClientProvider>
-          <SiteHeader />
-          {children}
-          <SiteFooter locale={locale} />
+          <CommandPaletteProvider items={searchItems} locale={locale}>
+            <SiteHeader />
+            {children}
+            <SiteFooter locale={locale} />
+          </CommandPaletteProvider>
         </NextIntlClientProvider>
       </body>
     </html>

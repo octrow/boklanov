@@ -1,0 +1,129 @@
+/* C11 — Command palette. JetBrains Mono input on paper-raised, hairline border,
+   grouped results with mono caps labels. */
+
+/* ── Overlay ──────────────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: var(--overlay);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  padding-left: var(--gutter-mobile);
+  padding-right: var(--gutter-mobile);
+}
+
+@media (min-width: 768px) {
+  .overlay {
+    padding-top: 120px;
+  }
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────── */
+
+.modal {
+  width: 100%;
+  max-width: 600px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 160px);
+  overflow: hidden;
+}
+
+/* ── Input ────────────────────────────────────────────────────────────── */
+
+.inputWrapper {
+  border-bottom: 1px solid var(--rule);
+  padding: var(--space-4);
+}
+
+.input {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink);
+  caret-color: var(--accent);
+}
+
+.input::placeholder {
+  color: var(--ink-faint);
+}
+
+/* ── Results ──────────────────────────────────────────────────────────── */
+
+.results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.noResults {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  color: var(--ink-faint);
+  padding: var(--space-5) var(--space-4);
+  margin: 0;
+}
+
+/* ── Group ────────────────────────────────────────────────────────────── */
+
+.group {
+  border-bottom: 1px solid var(--rule);
+}
+
+.group:last-child {
+  border-bottom: none;
+}
+
+.groupLabel {
+  font-family: var(--font-family-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+  margin: 0;
+}
+
+/* ── Result row ───────────────────────────────────────────────────────── */
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  text-decoration: none;
+  cursor: pointer;
+  border-top: 1px solid transparent;
+}
+
+.result:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.resultActive {
+  background: var(--paper);
+}
+
+.resultLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink);
+}
+
+.resultMeta {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+}
