@@ -231,12 +231,20 @@ fallback. Transliteration table maps RU↔EN spelling variants ("Берлин" �
 
 ### Contact `/contact`
 
-1. **Prefilled mailto CTA** — "Написать Роману / Email Roman" → opens mail client with `to`, `subject`
-   (prefilled: "Запрос о гастролях / Touring inquiry"), and a short body template.
-2. **Plain-text email** — visually displayed and copy-pasteable. No obfuscation (the primary user is a
-   professional, not a spam bot).
-3. **Telegram** — secondary, icon + handle.
-4. **Instagram** — tertiary, icon + handle.
+> Reordered 2026-05-01 per brief D8 revision: Telegram + Instagram are now the
+> primary contact path on the standalone `/contact` page; email is the fallback.
+> The sticky booking CTA on `/productions/[slug]` remains mailto-prefilled
+> (brief D1 booking magnet) — that route is unchanged.
+
+1. **Telegram** — primary, oxblood-treatment button matching the previous
+   mailto button's visual weight. Icon + handle. Stacked at full width on mobile.
+2. **Instagram** — primary, paired with Telegram. Same visual weight.
+3. **Prefilled mailto CTA** — secondary. "Написать Роману / Email Roman" → opens
+   mail client with `to`, `subject` (prefilled: "Запрос о гастролях / Touring
+   inquiry"), and a short body template. Mono / hairline border, not oxblood.
+4. **Plain-text email** — visually displayed and copy-pasteable next to the
+   mailto button. No obfuscation (the primary user is a professional, not a
+   spam bot).
 5. **No contact form.** No backend. No CAPTCHA.
 
 ---
