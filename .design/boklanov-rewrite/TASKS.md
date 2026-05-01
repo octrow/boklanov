@@ -54,7 +54,8 @@ Date: 2026-04-30
 |------|--------|--------|-------|
 | S1 — Sitemap + robots + RSS | ✅ done | `576d401` | `app/sitemap.ts` (hreflang RU↔EN, DE no-alternate), `app/robots.ts`, `app/[locale]/feed/route.ts` (RU+EN only, DE→404). 105 sitemap URLs. Build clean. |
 | S2 — JSON-LD schemas | ✅ done | `4a66296` |
-| S3 — Per-production OG images | ✅ done | TBD | `app/api/og/[slug]/route.tsx` (Node runtime, ImageResponse). Poster or oxblood typographic fallback. Lora title + JetBrains Mono chips + accent bar. Fonts: .woff from @fontsource packages. generateMetadata on production detail + about pages. | `Person` schema on `/about` (name, jobTitle, email, sameAs). `CreativeWork` on each production detail (inLanguage, productionCompany, dateCreated, audience, image, director). Inline `<script type="application/ld+json">`. |
+| S3 — Per-production OG images | ✅ done | `bda0628` |
+| S4 — Analytics (PostHog) | ✅ done | TBD | PostHog chosen (already installed). autocapture/pageview/recording all disabled. booking_cta_click only — data-ph-event delegation. No key = silently disabled. | `app/api/og/[slug]/route.tsx` (Node runtime, ImageResponse). Poster or oxblood typographic fallback. Lora title + JetBrains Mono chips + accent bar. Fonts: .woff from @fontsource packages. generateMetadata on production detail + about pages. | `Person` schema on `/about` (name, jobTitle, email, sameAs). `CreativeWork` on each production detail (inLanguage, productionCompany, dateCreated, audience, image, director). Inline `<script type="application/ld+json">`. |
 | C1 — Production card + grid | ✅ done | `11fc081` | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. |
 | C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. |
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
@@ -310,7 +311,7 @@ when the legacy renderer was deleted. The build is clean under
   bar. **Test on Telegram preview** — that is the user-#1 share vector
   per brief §2. _Depends on F4, C2._
 
-- [ ] **S4 — Analytics pick (brief Q7)**: Decide PostHog or Fathom or
+- [x] **S4 — Analytics pick (brief Q7)**: Decide PostHog or Fathom or
   none; remove the unused dep. If kept, instrument **only the booking-
   CTA conversion** (mailto click on production detail + contact page)
   — that is the only real metric per brief Q7. _Depends on C2, C8._

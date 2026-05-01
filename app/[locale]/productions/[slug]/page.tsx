@@ -373,7 +373,13 @@ export default async function ProductionDetailPage({
       </div>
 
       {/* 11. Sticky CTA — bottom on mobile, right column on desktop ≥1024 */}
-      <a className={styles.stickyCta} href={mailto}>
+      <a
+        className={styles.stickyCta}
+        href={mailto}
+        data-ph-event="booking_cta_click"
+        data-ph-slug={slug}
+        data-ph-locale={locale}
+      >
         {t('bookingCta')}
       </a>
     </main>

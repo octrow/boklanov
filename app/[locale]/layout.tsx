@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import * as React from 'react'
 import type { ReactNode } from 'react'
 
+import { Analytics } from '@/components/Analytics'
 import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
@@ -52,6 +53,7 @@ export default async function LocaleLayout({
             {children}
             <SiteFooter locale={locale} />
           </CommandPaletteProvider>
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

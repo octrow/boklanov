@@ -36,7 +36,13 @@ export default async function ContactPage({
 
       {/* Primary: mailto button */}
       <section className={styles.primarySection}>
-        <a href={mailtoHref} className={styles.mailtoButton}>
+        <a
+          href={mailtoHref}
+          className={styles.mailtoButton}
+          data-ph-event="booking_cta_click"
+          data-ph-locale={locale}
+          data-ph-source="contact"
+        >
           {t('emailCta')}
         </a>
       </section>
