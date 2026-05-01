@@ -25,6 +25,10 @@
     "roleReader": "читчик",
     "roleAll": "все"
   },
+  "awards": {
+    "title": "награды",
+    "empty": "Нет данных о наградах"
+  },
   "productionDetail": {
     "watchListen": "Смотреть / слушать",
     "techRider": "Тех. райдер (PDF)",

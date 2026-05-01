@@ -1,0 +1,137 @@
+/* C6 — Awards page. Timeline grouped by production; mono year/name/city/category;
+   hairline rules between groups; Lora grouping headers. */
+
+.page {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter-mobile) var(--space-9);
+}
+
+@media (min-width: 768px) {
+  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+}
+
+/* ── Page heading ────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  text-transform: lowercase;
+  margin: 0 0 var(--space-7);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.empty {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  color: var(--ink-mute);
+}
+
+/* ── Groups ──────────────────────────────────────────────────────────── */
+
+.groups {
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  padding-bottom: var(--space-7);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--space-7);
+}
+
+.group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* ── Production title ────────────────────────────────────────────────── */
+
+.productionTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  margin: 0 0 var(--space-5);
+}
+
+.productionLink {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.productionLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent);
+}
+
+.productionLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Award rows ──────────────────────────────────────────────────────── */
+
+.awardsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.awardRow {
+  display: grid;
+  grid-template-columns: 4ch 1fr;
+  grid-template-areas:
+    "meta name"
+    ".    detail";
+  column-gap: var(--space-5);
+  align-items: baseline;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.awardRow:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 768px) {
+  .awardRow {
+    grid-template-columns: 4ch 1fr auto;
+    grid-template-areas: "meta name detail";
+  }
+}
+
+.awardMeta {
+  grid-area: meta;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  flex-shrink: 0;
+}
+
+.awardName {
+  grid-area: name;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink);
+}
+
+.awardDetail {
+  grid-area: detail;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+}

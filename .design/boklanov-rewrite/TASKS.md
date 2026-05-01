@@ -57,7 +57,7 @@ Date: 2026-04-30
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
 | C4 — Filter panel + URL state | ✅ done | `05600f1` | `<FilteredProductionsPanel>` Client Component with useSearchParams. Role radio (director default), form/age-bucket/country multi-select. Chips: JetBrains Mono uppercase, 2px radius, active = paper-raised + rule-strong border. Clear-all = oxblood only. Suspense boundary keeps build fully SSG. |
 | C5 — About + lineage | ✅ done | `cb0aaab` | `app/[locale]/about/page.tsx`: Lora display heading, Inter bio at 65ch (first para as Lora lead), mono milestones timeline, lineage grid (Кудашов/БТК/РГИСИ) in paper-sunken cards. Inline loader with RU→EN→DE fallback. `content/about/{ru,en}.mdx` with portrait/milestones/lineage frontmatter. |
-| C6 — Awards | ⏳ pending | — | — |
+| C6 — Awards | ✅ done | pending commit | `app/[locale]/awards/page.tsx`: Lora page heading lowercase, awards aggregated from `getAllProductions()`, grouped by production with Lora `--font-size-xl` grouping header linked to detail page. Each award row: mono year (>1900 guard) · name · city/category. Hairline rules between groups and rows. 3 locales × SSG. |
 | C7 — Press | ⏳ pending | — | — |
 | C8 — Contact | ⏳ pending | — | — |
 | C9 — Archive | ⏳ pending | — | — |

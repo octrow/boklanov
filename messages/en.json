@@ -25,6 +25,10 @@
     "roleReader": "reader",
     "roleAll": "all"
   },
+  "awards": {
+    "title": "awards",
+    "empty": "No awards data"
+  },
   "productionDetail": {
     "watchListen": "Watch / listen",
     "techRider": "Tech rider (PDF)",
