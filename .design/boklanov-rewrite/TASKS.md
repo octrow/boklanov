@@ -188,43 +188,44 @@ when the legacy renderer was deleted. The build is clean under
   three named institutions. Bio content from `content/about.{ru,en}.mdx`.
   _Depends on F3, F7._
 
-- [ ] **C6 — Awards page**: `app/[locale]/awards/page.tsx` — timeline
+- [x] **C6 — Awards page**: `app/[locale]/awards/page.tsx` — timeline
   grouped by production, mono year + name + city + category, hairline
   rules between productions, no decoration. Aggregates `awards[]` across
-  all productions via `getAllProductions()`. _Depends on F6, C1
-  (typography reuse)._
+  all productions via `getAllProductions()`. _commit `c7b80c5`_
 
-- [ ] **C7 — Press page**: `app/[locale]/press/page.tsx` — card grid,
-  Lora italic blockquote (when there's a pull-quote), mono attribution
-  (outlet · date), oxblood underline on outlet link hover. **Original
-  language only, no translation** (brief D4). Aggregates `press[]` from
-  all productions. _Depends on F6._
+- [x] **C7 — Press page**: `app/[locale]/press/page.tsx` — card grid,
+  Lora italic blockquote (article title as pull-quote), mono outlet
+  attribution (falls back to URL domain), oxblood underline on outlet
+  link hover. **Original language only, no translation** (brief D4).
+  Aggregates `press[]` from all productions. _commit `2225975`_
 
-- [ ] **C8 — Contact page**: `app/[locale]/contact/page.tsx` per brief
-  D8 — prefilled mailto button (oxblood, primary), copy-pasteable email
-  in mono with copy-button (mono caption confirms on click), Telegram
-  + Instagram secondary. **No form, no backend.** _Depends on F7._
+- [x] **C8 — Contact page**: `app/[locale]/contact/page.tsx` per brief
+  D8 — prefilled mailto button (oxblood, primary, locale-aware subject),
+  copy-pasteable email in mono + `CopyEmailButton` Client Component
+  (flashes ✓ on copy), Telegram + Instagram secondary. **No form, no
+  backend.** _commit `292552f`_
 
-- [ ] **C9 — Archive page**: `app/[locale]/archive/page.tsx` — long-tail
-  CV (readings, sketches, workshops, festival sketches per brief D5).
-  Filters out `role=director` productions. Treatment is denser than the
-  main grid: mono table-like rows, year + title + theatre + role,
-  hairline rules. _Depends on F6._
+- [x] **C9 — Archive page**: `app/[locale]/archive/page.tsx` — long-tail
+  CV (performer / co-director / reader / sketch). Filters out
+  `role=director` productions. Dense mono table: year · title · theatre
+  · role, hairline rules. Theatre column hidden below 480px.
+  _commit `40dec94`_
 
-- [ ] **C10 — Layout shell**: `<SiteHeader>` (lowercase Lora wordmark
-  left, nav links centre on ≥768px / hamburger sheet on mobile, language
-  switch + theme toggle right, hairline rule below). `<SiteFooter>`
-  (three mono columns: nav repeat, social, copyright). Wire into
-  `app/[locale]/layout.tsx`. Sticky behaviour reserved for production
-  detail; everywhere else the header is fixed-not-sticky. _Depends on
-  F3. Last so navigation links are tested against real pages._
+- [x] **C10 — Layout shell**: `<SiteHeader>` Client Component — lowercase
+  Lora wordmark left, mono nav links centre ≥768px / hamburger drawer
+  on mobile, locale switcher (RU/EN/DE) + `<ThemeToggle>` right,
+  hairline rule below. Anti-flash `<script>` in `<head>`. `<SiteFooter>`
+  Server Component — three mono columns (nav · social · copyright).
+  Wired into `app/[locale]/layout.tsx`. _commit `941fcdf`_
 
-- [ ] **C11 — Cmd-K palette (brief D9)**: `<CommandPalette>` keyboard-
-  first, mono input on `--paper-raised`, hairline border, results
-  grouped (Productions / Awards / Press / Theatres / Cities) with mono
-  caps section labels. Indexes a **transliterated** map (Кириллица ↔
-  Latin) so `bury` finds `Похороните`. Lazy-loaded on first `Cmd+K`.
-  _Depends on F6, C10. Build last in Core UI._
+- [x] **C11 — Cmd-K palette (brief D9)**: `<CommandPaletteProvider>`
+  registers global Cmd+K/Ctrl+K, lazy-loads palette via `next/dynamic`
+  (ssr: false). Search index built server-side in layout via
+  `lib/search.ts buildSearchIndex()`. `<CommandPalette>`: JetBrains Mono
+  input on `--paper-raised`, hairline border, results grouped
+  (PRODUCTIONS / AWARDS / PRESS / THEATRES / CITIES) with mono-caps
+  labels, ↑↓ keyboard navigation, Enter to navigate, Esc to close.
+  Cyr↔Lat transliteration. _commit `ab2ce8b`_
 
 ---
 
@@ -236,16 +237,16 @@ when the legacy renderer was deleted. The build is clean under
   card-lift, no shadow growth, no glow. Covers: hover, focus-visible,
   active, disabled. _Depends on C1–C10._
 
-- [ ] **I2 — Theme toggle + persistence**: Three-state toggle (system /
-  light / dark) writing `[data-theme]` to `<html>` and persisting to
-  `localStorage`. Token CSS already supports both branches; this is the
-  toggle UI + the inline `<script>` in `<head>` that prevents flash on
-  load. _Depends on F1, C10._
+- [x] **I2 — Theme toggle + persistence**: `<ThemeToggle>` Client
+  Component writes `[data-theme]` to `<html>`, persists to
+  `localStorage`. Anti-flash inline `<script>` in `<head>` prevents
+  FOUC on reload. Token CSS handles both branches. _Shipped in C10,
+  commit `941fcdf`_
 
-- [ ] **I3 — Language switch**: Toggle in header that swaps locale
-  prefix (`/` ↔ `/en` ↔ `/de`) preserving the current path. **DE
-  switches only show on routes that exist for DE** (productions list,
-  about, contact per IA). _Depends on F3, C10._
+- [x] **I3 — Language switch**: RU/EN/DE switcher in `<SiteHeader>`
+  uses next-intl `<Link locale={loc}>` preserving current pathname.
+  All three locales show on every route (SSG covers all). _Shipped in
+  C10, commit `941fcdf`_
 
 - [ ] **I4 — Empty + loading + error states**: Empty filter results in
   `ProductionGrid` (mono "no productions match these filters · clear

@@ -10,7 +10,7 @@
 > | 1 — Discovery & brief | ✅ done | `.design/boklanov-rewrite/{DESIGN_BRIEF, INFORMATION_ARCHITECTURE, TASKS}.md` |
 > | 2 — Visual identity & DESIGN.md | ✅ done | `DESIGN.md`, `app/globals.css`, `.design/boklanov-rewrite/tokens.{md,css}` |
 > | 3 — Content migration (F1–F8) | ✅ done | `scripts/sync-from-notion.ts`, `content/productions/<slug>/`, `lib/content.ts`. Notion deps fully removed in F8. |
-> | 4 — Frontend rebuild | 🟡 in progress (2 / 11) | C1 production card + grid (`11fc081`), C2 production detail (`c7d58ae`). Next: C3 home. |
+> | 4 — Frontend rebuild | ✅ done (11 / 11) | C1–C11 all committed. Layout shell, Cmd-K palette, theme toggle, lang switch shipped. 108 static pages × 3 locales. Last commit: `ab2ce8b`. |
 > | 5 — i18n + SEO + OG | ⏳ pending | next-intl wired; sitemap/RSS/JSON-LD/OG-port pending in S1–S5 |
 > | 6 — Design review | ⏳ pending | R1 against the brief after C-tasks land |
 > | 7 — Deploy + cutover | ⏳ pending | D1–D4 |
