@@ -37,18 +37,33 @@ C4–C11 in DESIGN.md §15 order.
 
 ### What's already shipped
 
-- **Foundation (F1–F8)** — App Router shell, i18n (`as-needed` prefix),
-  self-hosted fonts, sync pipeline, content loader, base styles, all
-  legacy Notion code removed. Build is type-clean under strict mode.
+- **Foundation (F1–F8)** — App Router shell, i18n (`as-needed` prefix
+  via `i18n/routing.ts` + `i18n/navigation.ts`), self-hosted Lora /
+  Inter / JetBrains Mono with Cyrillic/Latin unicode-range splits,
+  sync pipeline (`scripts/sync-from-notion.ts` over local export),
+  manual `metadata.yml` overlay, content loader (`lib/content.ts` —
+  `getAllProductions`, `getProduction`, `getRelatedProductions`),
+  warm-editorial base styles in `app/globals.css`. All legacy Notion
+  code removed in F8 (`react-notion-x` + `notion-{client,types,utils}`
+  gone, `pages/api/social-image.tsx` stubbed 501 pending S3). Build is
+  type-clean under `strictNullChecks` + ESLint.
 - **C1** — `<ProductionCard>` + `<ProductionGrid>` at
   `app/[locale]/productions/page.tsx`. 4:5 cover, Lora RU title with
-  oxblood underline reveal, mono metadata, hairline rules between
-  cards, typographic fallback when no poster. (commit `11fc081`)
+  oxblood underline reveal (linear-gradient, 150ms), Inter EN subtitle
+  in `--ink-mute`, mono `theatre · year · ageRating · countryCode`,
+  hairline rule between cards, typographic fallback when no poster.
+  Country-name → ISO-2 helper exported for reuse. (commit `11fc081`)
 - **C2** — `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3:
-  cover, title block, mono chips, italic synopsis, action bar (watch /
-  tech rider / press kit, conditional on assets), photo gallery with
-  mono credits, press list, awards grid, external links, sticky
-  oxblood mailto CTA with prefilled subject + body. (commit `c7d58ae`)
+  cover, title block (RU/EN/DE), mono chips, Lora-italic synopsis,
+  action bar (watch / tech rider / press kit, each conditional on the
+  asset existing), photo gallery with mono credits, press list, awards
+  grid, external theatre links, sticky oxblood `mailto:roman@boklanov.ru`
+  CTA with prefilled subject + body (show title, year, role; tour
+  window / venue / notes prompts). 84 detail pages × 3 locales SSG.
+  (commit `c7d58ae`)
+- **Docs aligned** — `TASKS.md` Core UI progress table; `PLAN.md`
+  status preface mapping phases to commits; `HANDOFF.md` (this file)
+  rewritten as the C3 entry point. (commit `3746c3f`)
 
 ### Your task — start with C3
 
@@ -59,8 +74,24 @@ commit with a focused message, update the Progress log table in
 
 **Crucially, before C3:** the brief calls C1 the *aesthetic
 checkpoint*. Eyeball the rendered productions list and detail page
-against DESIGN.md §3 mood-board axis and §11 anti-patterns. Fix
-grammar drift here so C3–C11 inherit a clean baseline.
+on real viewports (375 / 768 / 1024 / 1280) against DESIGN.md §3
+mood-board axis and §11 anti-patterns. Fix any grammar drift here so
+C3–C11 inherit a clean baseline. Visit `/productions` and
+`/productions/aiaccio` (a poster + chips + sticky CTA reference) and
+`/productions/nikita-looking-for-the-sea` (typographic fallback +
+empty `theatre`) — those two together cover the spread.
+
+### Concrete things worth a second look during the C1/C2 eyeball
+
+- **Sticky CTA on desktop ≥1024px** is positioned with
+  `position: sticky; margin-left: auto; margin-top: -var(--space-9)`
+  inside `.page` to land in the right rail. Confirm it sticks visibly
+  during scroll and doesn't overlap the title block on first paint.
+- **`pages/api/social-image.tsx`** is a 501 stub. S3 will rewrite it
+  to `app/api/og/[slug]/route.ts` using `lib/content.ts`. Don't try
+  to use the legacy route during C-task QA.
+- **No layout shell yet** — `app/[locale]/page.tsx` is still the F3
+  smoke page. C3 replaces it with the artistic-statement landing.
 
 ### Constraints from the brief (do not violate)
 
@@ -81,6 +112,7 @@ grammar drift here so C3–C11 inherit a clean baseline.
 ### Recent commits on `rewrite/v2` for context
 
 ```
+3746c3f  docs: sync TASKS.md / PLAN.md / HANDOFF.md with reality after C2
 c7d58ae  C2: production detail page at /[locale]/productions/[slug]
 11fc081  C1: production card + grid at /[locale]/productions
 93c5afd  F8: cut legacy Notion renderer
