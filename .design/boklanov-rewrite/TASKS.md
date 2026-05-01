@@ -57,14 +57,14 @@ Date: 2026-04-30
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
 | C4 — Filter panel + URL state | ✅ done | `05600f1` | `<FilteredProductionsPanel>` Client Component with useSearchParams. Role radio (director default), form/age-bucket/country multi-select. Chips: JetBrains Mono uppercase, 2px radius, active = paper-raised + rule-strong border. Clear-all = oxblood only. Suspense boundary keeps build fully SSG. |
 | C5 — About + lineage | ✅ done | `cb0aaab` | `app/[locale]/about/page.tsx`: Lora display heading, Inter bio at 65ch (first para as Lora lead), mono milestones timeline, lineage grid (Кудашов/БТК/РГИСИ) in paper-sunken cards. Inline loader with RU→EN→DE fallback. `content/about/{ru,en}.mdx` with portrait/milestones/lineage frontmatter. |
-| C6 — Awards | ✅ done | pending commit | `app/[locale]/awards/page.tsx`: Lora page heading lowercase, awards aggregated from `getAllProductions()`, grouped by production with Lora `--font-size-xl` grouping header linked to detail page. Each award row: mono year (>1900 guard) · name · city/category. Hairline rules between groups and rows. 3 locales × SSG. |
-| C7 — Press | ⏳ pending | — | — |
-| C8 — Contact | ⏳ pending | — | — |
-| C9 — Archive | ⏳ pending | — | — |
-| C10 — Layout shell | ⏳ pending | — | Built last so nav links target real pages. |
-| C11 — Cmd-K palette | ⏳ pending | — | — |
+| C6 — Awards | ✅ done | `c7b80c5` | `app/[locale]/awards/page.tsx`: Lora page heading lowercase, awards aggregated from `getAllProductions()`, grouped by production with Lora `--font-size-xl` grouping header linked to detail page. Each award row: mono year (>1900 guard) · name · city/category. Hairline rules between groups and rows. 3 locales × SSG. |
+| C7 — Press | ✅ done | `2225975` | `app/[locale]/press/page.tsx`: card grid (1/2-col), Lora italic blockquote pull-quote (article title), mono outlet attribution with oxblood underline hover. Outlet falls back to URL domain. Mono production reference link. 3 locales × SSG. |
+| C8 — Contact | ✅ done | `292552f` | `app/[locale]/contact/page.tsx`: oxblood primary mailto button (locale-aware subject), mono email address + `CopyEmailButton` Client Component (flashes "✓" on copy), Telegram + Instagram mono secondary links. No form, no backend. 3 locales × SSG. |
+| C9 — Archive | ✅ done | `40dec94` | `app/[locale]/archive/page.tsx`: filters out `role=director`, year-ascending mono table (year · title · theatre · role). Hairline rules. Theatre column hidden below 480px. 3 locales × SSG. |
+| C10 — Layout shell | ✅ done | `941fcdf` | `<SiteHeader>` (Client Component): Lora wordmark left, mono nav links centre (≥768px), locale switcher (RU/EN/DE) + `<ThemeToggle>` right; hamburger drawer on mobile; hairline rule below. Anti-flash theme script in `<head>`. `<SiteFooter>` (Server Component): three mono columns — nav · social · copyright. Wired into `app/[locale]/layout.tsx`. |
+| C11 — Cmd-K palette | ✅ done | `ab2ce8b` | `<CommandPaletteProvider>` (Client): global Cmd+K/Ctrl+K listener, lazy-loads palette via `next/dynamic`. Search index built server-side via `lib/search.ts buildSearchIndex()`. `<CommandPalette>`: JetBrains Mono input on `--paper-raised`, hairline border, results grouped (PRODUCTIONS/AWARDS/PRESS/THEATRES/CITIES) with mono-caps labels, ↑↓ keyboard navigation, Cyr↔Lat transliteration. |
 
-**Core UI = 2 / 11 done.**
+**Core UI = 11 / 11 done. Phase 4 complete.**
 
 **Tech-debt cleared by F8:** all three items below (`ignoreBuildErrors`,
 `@ts-nocheck` on legacy components, `pages/p/[pageId].tsx`) were retired
