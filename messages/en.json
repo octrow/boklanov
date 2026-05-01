@@ -2,7 +2,10 @@
   "nav": {
     "productions": "productions",
     "about": "about",
-    "contact": "contact"
+    "awards": "awards",
+    "press": "press",
+    "contact": "contact",
+    "archive": "archive"
   },
   "home": {
     "heroMeta": "director · puppet theatre · theatre of objects",

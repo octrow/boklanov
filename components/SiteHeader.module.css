@@ -1,0 +1,221 @@
+/* C10 — Site header. Lora wordmark left, nav centre (≥768px), locale+theme right.
+   Hairline rule below. Sticky top on every page; production detail handles its own
+   sticky CTA independently. */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--paper);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--gutter-mobile);
+  height: 56px;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding: 0 var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    max-width: var(--max-width-page);
+    margin: 0 auto;
+    padding: 0 var(--gutter-desktop);
+  }
+}
+
+/* ── Wordmark ─────────────────────────────────────────────────────────── */
+
+.wordmark {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-transform: lowercase;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wordmark:hover {
+  color: var(--ink);
+}
+
+.wordmark:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Desktop nav ──────────────────────────────────────────────────────── */
+
+.nav {
+  display: none;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.navLink:hover {
+  color: var(--ink);
+}
+
+.navLinkActive {
+  color: var(--ink);
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Controls (locale + theme) ────────────────────────────────────────── */
+
+.controls {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .controls {
+    display: flex;
+  }
+}
+
+.localeSwitcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.localeLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+  text-decoration: none;
+  padding: 2px 0;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.localeLink:hover {
+  color: var(--ink);
+}
+
+.localeLinkActive {
+  color: var(--ink);
+}
+
+.localeLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Hamburger ────────────────────────────────────────────────────────── */
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.hamburgerLine {
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--ink-mute);
+}
+
+/* ── Mobile nav drawer ────────────────────────────────────────────────── */
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--gutter-mobile) var(--space-6);
+  border-top: 1px solid var(--rule);
+  gap: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .mobileNav {
+    display: none;
+  }
+}
+
+.mobileNavLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.mobileNavLink:hover {
+  color: var(--ink);
+}
+
+.mobileNavLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mobileLocaleSwitcher {
+  display: flex;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+}
+
+/* ── Hairline rule below header ───────────────────────────────────────── */
+
+.rule {
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--rule);
+}

@@ -2,7 +2,10 @@
   "nav": {
     "productions": "Inszenierungen",
     "about": "über",
-    "contact": "Kontakt"
+    "awards": "Auszeichnungen",
+    "press": "Presse",
+    "contact": "Kontakt",
+    "archive": "Archiv"
   },
   "home": {
     "heroMeta": "Regisseur · Figurentheater · Objekttheater",

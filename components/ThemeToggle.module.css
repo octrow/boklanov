@@ -1,0 +1,24 @@
+.toggle {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  background: none;
+  border: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.toggle:hover {
+  color: var(--ink);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
