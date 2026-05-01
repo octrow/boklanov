@@ -1,7 +1,9 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
+import { Suspense } from 'react'
 
 import { ProductionGrid } from '@/components/ProductionGrid'
+import { SlateStrike } from '@/components/SlateStrike'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
@@ -34,15 +36,19 @@ export default async function HomePage({
   return (
     <main className={styles.page}>
       {/* Hero — DESIGN §10: type-led wordmark, no photo overlay */}
-      <section className={styles.hero}>
-        <h1 className={styles.wordmark}>{wordmark}</h1>
-        <p className={styles.heroMeta}>{t('heroMeta')}</p>
-        <p className={styles.statement}>{t('statement')}</p>
-        {/* Compressed staging-geography echo — DA-2.C */}
-        <p className={styles.geographyEcho} aria-hidden="true">
-          {STAGING_CITIES.join(' · ')}
-        </p>
-      </section>
+      <Suspense fallback={null}>
+        <SlateStrike>
+          <section className={styles.hero}>
+            <h1 className={styles.wordmark}>{wordmark}</h1>
+            <p className={styles.heroMeta}>{t('heroMeta')}</p>
+            <p className={styles.statement}>{t('statement')}</p>
+            {/* Compressed staging-geography echo — DA-2.C */}
+            <p className={styles.geographyEcho} aria-hidden="true">
+              {STAGING_CITIES.join(' · ')}
+            </p>
+          </section>
+        </SlateStrike>
+      </Suspense>
 
       {/* Featured strip — 4–6 hand-curated cards (brief D5) */}
       {featured.length > 0 && (

@@ -410,6 +410,7 @@
   --duration-normal:  200ms;       /* page transition fade */
   --duration-slow:    400ms;       /* signature gesture ceiling */
   --duration-slower:  600ms;
+  --duration-slate:   320ms;       /* slate-strike one-shot animation (DA-3.A) */
 
   --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
   --easing-in:      cubic-bezier(0.4, 0, 1, 1);
