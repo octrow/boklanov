@@ -33,30 +33,54 @@ Date: 2026-04-30
 
 ---
 
+## Progress log
+
+| Phase | Status | Commit | Notes |
+|-------|--------|--------|-------|
+| F1 — App Router shell | ✅ done | `234e22d` | `/`, `/en`, `/de` serve smoke; legacy `pages/[pageId].tsx` parked at `pages/p/[pageId].tsx` until F8 |
+| F2 — Self-hosted fonts | ✅ done | `06af4f7` | Lora 400/500/600 + 400 italic, Inter 500 (woff2), JetBrains Mono 400/500. Inter 400/600 keep existing TTFs. unicode-range splits keep Cyrillic off `/en`+`/de` |
+| F3 — Locale routing | ✅ done | `a0c89a4` | next-intl v4, RU canonical at `/`, EN/DE prefixed. `/ru` → 307 → `/`. `<html lang>` per route |
+| F4 — sync-from-notion | ✅ done | `65f0d22` | 29 paired productions, 22 with posters. RU+EN merge by `-en` slug suffix. Generated outputs gitignored — re-run `npm run sync` |
+| F5 — metadata.yml overlay | ⏳ next | — | — |
+| F6 — content loader | ⏳ pending | — | — |
+| F7 — base styles + reset | ⏳ pending | — | — |
+| F8 — cut legacy renderer | ⏳ pending | — | only after F1–F7 land |
+
+**Foundation = 4 / 8 done.** Phase 4 (Core UI vertical slices) is gated on
+F6 + F7. F8 is gated on Phase 4 having at least one App Router page
+rendering real content.
+
+**Tech-debt parked during F1–F4** (must clean up by/with F8):
+- `next.config.js`: `typescript.ignoreBuildErrors` and `eslint.ignoreDuringBuilds` set true while legacy renderer exists
+- `components/NotionPage.tsx`: `@ts-nocheck` + `mapPageUrl(site!, recordMap!, …)` non-null assertions
+- `pages/p/[pageId].tsx`: legacy route under `/p/` to dodge slug collision with `app/[locale]/`
+
+---
+
 ## Foundation (Phase 3 prep + content pipeline)
 
-- [ ] **F1 — Install deps and scaffold App Router shell**: Add `next-intl`,
+- [x] **F1 — Install deps and scaffold App Router shell**: Add `next-intl`,
   `next-mdx-remote`, `gray-matter`, `sharp` to `package.json`. Create empty
   `app/[locale]/layout.tsx` returning `{children}` plus `<html lang>`, and
   `app/[locale]/page.tsx` rendering "hello". Move `tokens.css` →
   `app/globals.css` and import it from the layout. Keep `pages/` running in
   parallel until F8 cuts it. _New files; deletes nothing yet._
 
-- [ ] **F2 — Self-host Lora + JetBrains Mono + Inter Medium**: Drop OFL
+- [x] **F2 — Self-host Lora + JetBrains Mono + Inter Medium**: Drop OFL
   `.woff2` files into `public/fonts/` (Lora 400/500/600, JetBrains Mono
   400/500, Inter Medium 500 to complete the existing 400/600 set). Wire
   `@font-face` declarations in `app/globals.css` with `font-display: swap`
   and matching `unicode-range` for Cyrillic + Latin. _Reuses existing
   Inter 400/600 files._
 
-- [ ] **F3 — Locale routing + RU default**: Configure `next-intl` with
+- [x] **F3 — Locale routing + RU default**: Configure `next-intl` with
   locales `[ru, en, de]`, default `ru`, no prefix on default per IA §URL
   Strategy. Wire `app/[locale]/layout.tsx` to read locale from route, set
   `<html lang>`, expose `useTranslations`. Stub `messages/{ru,en,de}.json`
   with three keys (nav.productions, nav.about, nav.contact) for smoke
   test. _New; foundational for every page below._
 
-- [ ] **F4 — `scripts/sync-from-notion.ts` (brief D3)**: Parses the
+- [x] **F4 — `scripts/sync-from-notion.ts` (brief D3)**: Parses the
   **local Notion export** at `notion-data/Роман Бокланов/site map database/`
   (no live API call). For each `<Production Name> <notion-id>.md` file:
   read the markdown, parse the title row, extract images from the sibling
