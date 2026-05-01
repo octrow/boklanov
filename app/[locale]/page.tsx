@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
+import { getAllProductions } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 
 export default async function Page({
@@ -12,6 +13,8 @@ export default async function Page({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('nav')
+  const productions = getAllProductions(locale)
+  const featured = productions.filter((p) => p.featured)
 
   return (
     <main
@@ -66,6 +69,16 @@ export default async function Page({
         <span>{t('about')}</span>
         <span>{t('contact')}</span>
       </nav>
+      <p
+        style={{
+          marginTop: 'var(--space-7)',
+          fontFamily: 'var(--font-family-mono)',
+          fontSize: 'var(--font-size-meta)',
+          color: 'var(--color-text-tertiary)'
+        }}
+      >
+        F6 LOADER · {productions.length} productions · {featured.length} featured
+      </p>
     </main>
   )
 }

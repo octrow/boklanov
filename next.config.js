@@ -15,6 +15,8 @@ export default withNextIntl(withBundleAnalyzer({
   // Until then, skip type-check + lint at build to keep the App Router shell green.
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+  // gray-matter is CommonJS; let Node load it as-is on the server.
+  serverExternalPackages: ['gray-matter'],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'www.notion.so' },
