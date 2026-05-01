@@ -13,7 +13,17 @@
   },
   "productions": {
     "title": "постановки",
-    "empty": "Нет постановок, подходящих под фильтры"
+    "empty": "Нет постановок, подходящих под фильтры",
+    "filterRole": "роль",
+    "filterForm": "форма",
+    "filterAge": "возраст",
+    "filterCountry": "страна",
+    "clearAll": "сбросить",
+    "roleDirector": "режиссёр",
+    "roleCoDirector": "сорежиссёр",
+    "rolePerformer": "актёр",
+    "roleReader": "читчик",
+    "roleAll": "все"
   },
   "productionDetail": {
     "watchListen": "Смотреть / слушать",

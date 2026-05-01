@@ -13,7 +13,17 @@
   },
   "productions": {
     "title": "productions",
-    "empty": "No productions match these filters"
+    "empty": "No productions match these filters",
+    "filterRole": "role",
+    "filterForm": "form",
+    "filterAge": "age",
+    "filterCountry": "country",
+    "clearAll": "clear",
+    "roleDirector": "director",
+    "roleCoDirector": "co-director",
+    "rolePerformer": "performer",
+    "roleReader": "reader",
+    "roleAll": "all"
   },
   "productionDetail": {
     "watchListen": "Watch / listen",

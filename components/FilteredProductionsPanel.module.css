@@ -1,0 +1,131 @@
+/* DESIGN §7.4 chip grammar applied to filter controls.
+   Mono labels, sharp corners (2px), no coloured chips.
+   Oxblood reserved only for the clear-all button (DESIGN §5.2). */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Filter bar ────────────────────────────────────────────────────────── */
+
+.filterBar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2);
+  /* Horizontal scroll on narrow viewports without revealing the scrollbar. */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Slight negative margin + padding trick to keep chips flush with the
+     page gutter while allowing the strip to scroll edge-to-edge. */
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.filterBar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Filter group: a set of related chips (role / form / age / country). */
+.group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+/* Visual separator between groups. */
+.sep {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  color: var(--ink-faint);
+  flex-shrink: 0;
+  user-select: none;
+  padding: 0 var(--space-1);
+}
+
+/* ── Filter chip ───────────────────────────────────────────────────────── */
+
+.chip {
+  /* Mono, uppercase, letter-spacing — same grammar as production chips */
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Consistent 1px border slot so active/inactive don't shift layout */
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-1) var(--space-2);
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+  /* Touch target — combined with line-height the chip is ≥24px; on
+     mobile the filterBar has enough height but we add min-height here. */
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.chip:hover {
+  background: var(--paper-sunken);
+  color: var(--ink);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Active state: raised surface + hairline border + full ink.
+   NO oxblood here — that's reserved for clear-all only (DESIGN §5.2). */
+.chipActive {
+  background: var(--paper-raised);
+  border-color: var(--rule-strong);
+  color: var(--ink);
+  font-weight: var(--font-weight-medium);
+}
+
+.chipActive:hover {
+  background: var(--paper-raised);
+  border-color: var(--rule-strong);
+}
+
+/* ── Clear-all — DESIGN §5.2: oxblood, only when non-default filters active */
+
+.clearAll {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  padding: var(--space-1) var(--space-2);
+  color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: opacity var(--duration-fast) var(--easing-default);
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.clearAll:hover {
+  opacity: 0.75;
+}
+
+.clearAll:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--border-radius-sm);
+}

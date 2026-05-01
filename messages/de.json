@@ -13,7 +13,17 @@
   },
   "productions": {
     "title": "Inszenierungen",
-    "empty": "Keine Inszenierungen passen zu diesen Filtern"
+    "empty": "Keine Inszenierungen passen zu diesen Filtern",
+    "filterRole": "Rolle",
+    "filterForm": "Form",
+    "filterAge": "Alter",
+    "filterCountry": "Land",
+    "clearAll": "zurücksetzen",
+    "roleDirector": "Regisseur",
+    "roleCoDirector": "Co-Regisseur",
+    "rolePerformer": "Darsteller",
+    "roleReader": "Leser",
+    "roleAll": "alle"
   },
   "productionDetail": {
     "watchListen": "Ansehen / hören",
