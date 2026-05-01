@@ -34,43 +34,53 @@ export default async function ContactPage({
     <main className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
 
-      {/* Primary: mailto button */}
-      <section className={styles.primarySection}>
-        <a
-          href={mailtoHref}
-          className={styles.mailtoButton}
-          data-ph-event="booking_cta_click"
-          data-ph-locale={locale}
-          data-ph-source="contact"
-        >
-          {t('emailCta')}
-        </a>
-      </section>
-
-      {/* Email address + copy */}
-      <section className={styles.emailSection}>
-        <span className={styles.emailAddress}>{EMAIL}</span>
-        <CopyEmailButton email={EMAIL} />
-      </section>
-
-      {/* Secondary: Telegram + Instagram */}
-      <section className={styles.secondarySection}>
+      {/* Primary: Telegram + Instagram (DESIGN_BRIEF D8 — reordered
+          2026-05-01; Roman responds fastest on these channels). */}
+      <section className={styles.primaryRow}>
         <a
           href={TELEGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className={styles.secondaryLink}
+          className={styles.primaryButton}
+          data-ph-event="booking_cta_click"
+          data-ph-locale={locale}
+          data-ph-source="contact"
+          data-ph-channel="telegram"
         >
-          Telegram
+          {t('telegramCta')}
         </a>
         <a
           href={INSTAGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className={styles.secondaryLink}
+          className={styles.primaryButton}
+          data-ph-event="booking_cta_click"
+          data-ph-locale={locale}
+          data-ph-source="contact"
+          data-ph-channel="instagram"
         >
-          Instagram
+          {t('instagramCta')}
         </a>
+      </section>
+
+      {/* Secondary: email — mono caps subhead, hairline-bordered mailto
+          button, copy-pasteable address. */}
+      <section className={styles.secondarySection}>
+        <p className={styles.secondaryLabel}>{t('emailLabel')}</p>
+        <a
+          href={mailtoHref}
+          className={styles.mailtoLink}
+          data-ph-event="booking_cta_click"
+          data-ph-locale={locale}
+          data-ph-source="contact"
+          data-ph-channel="email"
+        >
+          {t('emailCta')}
+        </a>
+        <div className={styles.emailSection}>
+          <span className={styles.emailAddress}>{EMAIL}</span>
+          <CopyEmailButton email={EMAIL} />
+        </div>
       </section>
     </main>
   )

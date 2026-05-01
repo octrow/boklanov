@@ -1,5 +1,8 @@
-/* C8 — Contact page. Oxblood primary mailto; mono email + copy button;
-   Telegram + Instagram secondary. No form, no backend. */
+/* C8 — Contact page. DESIGN_BRIEF D8 (reordered 2026-05-01):
+   Telegram + Instagram primary (oxblood pair); email mailto + copy
+   demoted to secondary. No form, no backend. The production-detail
+   sticky CTA stays mailto — that route is unchanged because the
+   prefilled subject + body is the booking magnet (brief D1). */
 
 .page {
   max-width: var(--max-width-content);
@@ -29,13 +32,24 @@
   border-bottom: 1px solid var(--rule);
 }
 
-/* ── Primary mailto button ───────────────────────────────────────────── */
+/* ── Primary: Telegram + Instagram pair ──────────────────────────────── */
 
-.primarySection {
-  margin-bottom: var(--space-7);
+.primaryRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
 }
 
-.mailtoButton {
+@media (min-width: 768px) {
+  .primaryRow {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+}
+
+.primaryButton {
+  flex: 1;
   display: block;
   padding: var(--space-4) var(--space-6);
   background: var(--accent);
@@ -49,29 +63,67 @@
   transition: background var(--duration-fast) var(--easing-default);
 }
 
-@media (min-width: 768px) {
-  .mailtoButton {
-    display: inline-block;
-    text-align: left;
-  }
-}
-
-.mailtoButton:hover {
+.primaryButton:hover {
   background: var(--accent-hover);
 }
 
-.mailtoButton:focus-visible {
+.primaryButton:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
 }
 
-/* ── Email address + copy ────────────────────────────────────────────── */
+/* ── Secondary: email mailto + copy ──────────────────────────────────── */
+
+.secondarySection {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+
+.secondaryLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-4);
+}
+
+.mailtoLink {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  text-decoration: none;
+  margin-bottom: var(--space-5);
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default);
+}
+
+.mailtoLink:hover {
+  background: var(--paper-raised);
+  border-color: var(--ink-mute);
+}
+
+.mailtoLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@media (max-width: 767px) {
+  .mailtoLink {
+    display: block;
+    text-align: center;
+  }
+}
 
 .emailSection {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  margin-bottom: var(--space-7);
   padding: var(--space-5);
   background: var(--paper-raised);
   border: 1px solid var(--rule);
@@ -116,39 +168,3 @@
   box-shadow: var(--shadow-focus);
 }
 
-/* ── Secondary links ─────────────────────────────────────────────────── */
-
-.secondarySection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--rule);
-}
-
-@media (min-width: 768px) {
-  .secondarySection {
-    flex-direction: row;
-    gap: var(--space-6);
-  }
-}
-
-.secondaryLink {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-mute);
-  text-decoration: none;
-}
-
-.secondaryLink:hover {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--accent);
-}
-
-.secondaryLink:focus-visible {
-  outline: none;
-  box-shadow: var(--shadow-focus);
-}

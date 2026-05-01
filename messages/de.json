@@ -39,7 +39,10 @@
   },
   "contact": {
     "title": "Kontakt",
-    "emailCta": "Roman schreiben",
+    "telegramCta": "Auf Telegram schreiben",
+    "instagramCta": "Auf Instagram schreiben",
+    "emailLabel": "oder per E-Mail",
+    "emailCta": "Roman per E-Mail",
     "mailtoSubject": "Zusammenarbeit / Tournee"
   },
   "press": {

@@ -39,6 +39,9 @@
   },
   "contact": {
     "title": "contact",
+    "telegramCta": "Message on Telegram",
+    "instagramCta": "Message on Instagram",
+    "emailLabel": "or by email",
     "emailCta": "Email Roman",
     "mailtoSubject": "Collaboration / touring"
   },

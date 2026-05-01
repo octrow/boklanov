@@ -39,6 +39,9 @@
   },
   "contact": {
     "title": "контакты",
+    "telegramCta": "Написать в Telegram",
+    "instagramCta": "Написать в Instagram",
+    "emailLabel": "или по электронной почте",
     "emailCta": "Написать Роману",
     "mailtoSubject": "Сотрудничество / гастроли"
   },

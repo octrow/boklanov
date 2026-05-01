@@ -549,24 +549,24 @@ production build before D1.
   `aria-hidden` because the visible `<h3>` below the cover already
   names the show, so screen readers don't double-read.
 
-- [ ] **Q7 — Contact-page primary action is now Telegram + Instagram,
-  not mailto.** Per user directive 2026-05-01: Roman prefers initial
-  contact via IG/Telegram; email is fallback. Update
-  `app/[locale]/contact/page.tsx`: promote the Telegram + Instagram
-  block to primary visual weight (oxblood treatment matching the
-  current mailto button, side-by-side or stacked at full width on
-  mobile); demote mailto + copy-email row to secondary (mono, hairline
-  border). Documentation propagated:
-  `DESIGN_BRIEF.md` D8, `INFORMATION_ARCHITECTURE.md` §Contact
-  updated in this commit. **Open question for user before
-  implementation:** does this re-ordering apply to the **sticky
-  booking CTA on `/productions/[slug]`** as well? That CTA opens a
-  prefilled mailto where the subject auto-fills with the show name —
-  Telegram cannot prefill structured booking messages cleanly.
-  Recommendation: keep production-detail sticky CTA as mailto
-  (it works as a *booking magnet* per brief D1, with full subject
-  + body context); only re-order the standalone `/contact` page.
-  Confirm with user before fix lands.
+- [x] **Q7 — Contact-page primary action is now Telegram + Instagram,
+  not mailto.** ✅ done (conservative scope per the recommendation
+  in this row's earlier draft). Standalone `/contact` only — the
+  production-detail sticky CTA stays mailto so the prefilled
+  subject auto-fills with the show name (booking magnet, brief D1).
+  Implementation: two oxblood `.primaryButton`s side-by-side on
+  ≥768px (stacked on mobile), `flex: 1` so they share the row; the
+  former `.mailtoButton` is replaced by a hairline-bordered
+  `.mailtoLink` under a mono-caps `emailLabel` subhead ("или по
+  электронной почте" / "or by email" / "oder per E-Mail"). New
+  translation keys added in all three locales: `telegramCta`,
+  `instagramCta`, `emailLabel`. PostHog `booking_cta_click` fires
+  on all three channels with `data-ph-channel="telegram"`,
+  `"instagram"`, `"email"` so analytics can split conversion by
+  contact channel. _If the user later wants the production-detail
+  sticky CTA to also flip to TG+IG, that's a separate change in
+  `app/[locale]/productions/[slug]/page.tsx` — flag it in a new
+  task; the current commit deliberately leaves it untouched._
 
 ---
 
