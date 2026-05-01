@@ -47,7 +47,15 @@ Date: 2026-04-30
 > also landed: filter group labels (РОЛЬ/ФОРМА/ВОЗРАСТ/СТРАНА) above chip
 > groups on ≥768px. Polish commit: ThemeToggle sun/moon SVG, search ×
 > suppression, LQIP gating on `poster.src`. 110 pages, build clean.
-> **Next: R2 real-device QA (iPhone SE 90s scenario), then D1 Vercel preview.**
+>
+> **2026-05-01 — Final polish complete** (`09d5005`). All remaining
+> `DESIGN_REVIEW.md` items exhausted: Should-Fix #1: mono spec sheet in right
+> rail (year / duration / age / country, one token per line, `.rail` wrapper
+> is `position:sticky` on desktop — whole right column sticks as a unit).
+> Could-Improve #2: gallery masonry via CSS `columns: 2` on tablet+ — original
+> aspect ratios preserved. Could-Improve #5: SiteHeader wordmark
+> `letter-spacing` raw value → `var(--letter-spacing-tight)` token. Build
+> clean at 110 pages. **DESIGN_REVIEW.md fully resolved. Only R2 + D1 remain.**
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
@@ -93,7 +101,8 @@ Date: 2026-04-30
 |------|--------|--------|-------|
 | R1 — Design review against brief | ✅ done | `.design/boklanov-rewrite/DESIGN_REVIEW.md` | Zero §11 anti-patterns shipped. Token discipline excellent. Two **Must-Fix** items: (1) desktop sticky CTA on `/productions/[slug]` only enters viewport after deep scroll — needs real right-rail (`page.module.css:348-365`); (2) cover→title-block separator missing when `poster.credit` is null. Seven **Should-Fix**: empty desktop right column, filter chip groups need labels, native search `×` button leaks into Cmd-K, dev-mode LQIP race on first card, hydration-warning verification, ThemeToggle glyph ambiguity, ProductionCard LQIP gating. **I5 cut.** |
 | R1.fix — Land Must-Fix items | ✅ done | `73620e6` `871f287` | Must-Fix #1: CSS-grid right rail for sticky CTA. Must-Fix #2: `.titleBlock` top rule. Optional: filter group labels. Polish: ThemeToggle SVG, search × suppression, LQIP gating. |
-| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). Unblocked; D1 Vercel preview can begin. |
+| R1.polish — Remaining DESIGN_REVIEW items | ✅ done | `09d5005` | Should-Fix #1: spec sheet in right rail. Could-Improve #2: gallery masonry (CSS columns). Could-Improve #5: wordmark letter-spacing token. All DESIGN_REVIEW.md items resolved. |
+| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). D1 Vercel preview can begin in parallel. |
 
 ### Core UI
 
@@ -399,10 +408,14 @@ when the legacy renderer was deleted. The build is clean under
   13" laptop / 27" desktop. Daniil + Roman. Check the 90-second
   curator scenario end-to-end on iPhone SE: open Instagram-DM-shaped
   link → home → see featured shows → tap one → reach booking CTA. Time
-  it. **Also re-check R1 Should-Fix #4 (LQIP/preload race on first
-  featured card)** on a `next build && next start` production build —
-  R1 saw the LQIP blur persist in dev mode; verify it resolves in
-  production. _Depends on R1.fix._
+  it. Also verify:
+  - Spec sheet (year / duration / age / country) visible in right rail
+    above CTA on desktop (≥1024px).
+  - Gallery images retain original aspect ratios (masonry, not uniform grid).
+  - **R1 Should-Fix #4 (LQIP/preload race on first featured card)** on a
+    `next build && next start` production build — R1 saw the LQIP blur
+    persist in dev mode; verify it resolves in production.
+  _Depends on R1.fix + R1.polish._
 
 ---
 
@@ -410,7 +423,8 @@ when the legacy renderer was deleted. The build is clean under
 
 - [ ] **D1 — Vercel preview from `rewrite/v2`**: Push branch, configure
   Vercel preview env, share URL with Roman. Verify Cyrillic fonts
-  render on real Vercel edge (not just localhost). _Depends on R2._
+  render on real Vercel edge (not just localhost). _Can begin before R2
+  completes; D2/D3/D4 depend on D1._
 
 - [ ] **D2 — Hosting decision (brief Q6)**: Confirm Vercel vs Cloudflare
   Pages vs Yandex Cloud given CN/RU access. Fix `next.config.js`
