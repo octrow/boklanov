@@ -214,7 +214,10 @@ function merge(
       ...(fm.videos ?? []),
       ...((overlay.videos as Production['videos']) ?? [])
     ],
-    awards: fm.awards ?? [],
+    awards: pick(
+      overlay.awards as Production['awards'] | undefined,
+      fm.awards ?? []
+    ),
     press: fm.press ?? [],
     externalLinks: fm.externalLinks ?? [],
     techRider: pick(overlay.techRider as string | null, fm.techRider ?? null),

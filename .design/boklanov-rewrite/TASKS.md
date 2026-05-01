@@ -485,18 +485,39 @@ production build before D1.
   `production.body`, but the detail page never renders it — dead
   data path. Not blocking; flag for v2 cleanup.
 
-- [ ] **Q4 — Awards page mixes RU and EN strings.** `/awards` shows
-  some festival names in Cyrillic, some in Latin, some with mojibake
-  (`\udd40 "The Sugar Child"…`). `lib/content.ts:65` types
-  `award.{name,category,city}` as flat `string`, not `{ ru, en }`.
-  Sync extracts whichever language the source MD line happened to be
-  in. _Fix options:_ (a) widen the type to `{ ru, en }`, re-extract
-  per-locale from RU and EN MD siblings, render `award[locale].name`
-  on /awards — correct but heavy; (b) normalise to RU canonical form
-  on every locale (most festival names are RU-language; international
-  festivals like "Bravo - 2022" stay Latin in both locales) — faster
-  and aligns with `DESIGN.md` §3 "press clippings stay in original
-  language". Recommend (b) for v1.
+- [x] **Q4 — Awards page mixes RU and EN strings.** ✅ done. Took
+  option (b) — normalise to RU canonical form (DESIGN §3 "original
+  language" rule). Sync now extracts awards from `prod.body.ru` first
+  (was `primaryBody`, which often pointed at the EN sibling and
+  pulled in mixed-language transliterated festival annotations). The
+  `extractAwards` heuristic was rewritten:
+  - `/u` flag on emoji char classes (without it, `🏅` shared its
+    surrogate `\uD83C` with `🏆` and press-citation lines slipped
+    through — that was the source of `«Собака.ru»` showing up as an
+    award);
+  - year clamped to `19[9]\d|20[0-3]\d` (kills the `year: 1281`
+    parsed from `sobaka.ru/.../128165`);
+  - festival picked from the LAST `[text](url)` link, with
+    `isPersonLink()` filter (URL contains `/pers/` OR text matches
+    Cyrillic "First Last" pattern) — drops `Maxim Morozov`,
+    `Константин Кожев`, `Лидия Клирикова`, `Александра Черных` from
+    the awards list;
+  - falls back to FIRST quoted phrase when no link (subsequent
+    quotes are nomination categories or play titles);
+  - `**bold**` and trailing punctuation stripped from final name.
+  Verified across 24 productions: zero language mixing, zero person
+  names, zero out-of-range years, zero press-citation bleed.
+  Two festival-in-plain-prose patterns remain unextractable by
+  heuristic (`Лучший спектакль о добре` for cinderella and
+  `За важное художественное высказывание` for sugar-kid — both are
+  nomination categories the heuristic picked because the festival
+  name is in unmarked Cyrillic prose).
+  _Overlay path added:_ `lib/content.ts:217` now `pick`s
+  `overlay.awards` over `fm.awards`. The metadata stub generator
+  emits a commented-out `awards:` block listing the auto-extracted
+  values so Roman/Daniil can uncomment + edit to override per
+  production. Hand-fixing those 2 edge cases is a content-level
+  follow-up, not a sync bug.
 
 - [ ] **Q5 — About-page chronology dates wrong.** Daniil flagged
   `content/about/ru.mdx` milestones include `2003 — Поступил в РГИСИ

@@ -234,17 +234,79 @@ function extractPress(body: string): Production['press'] {
 }
 
 function extractAwards(body: string): Production['awards'] {
-  // Lines starting with 🏆 inside "Nominations" section.
+  // Lines starting with 🏆 / 🥇 / 🥈 / 🥉 are awards. 🏅 is reserved for
+  // press-citation paragraphs Notion sometimes mixes into the section, so
+  // it is intentionally NOT in the trigger set.
+  //
+  // Per-line format from Notion: `🏆 <date> – <category description>,
+  // [**Festival Name**](url) (city)`. The festival name reliably sits at
+  // the END of the line — earlier `[...]` brackets often point at actors
+  // or jurors. We pick the LAST bracketed-link or the last «…» / "…"
+  // quoted phrase. Year is clamped to 1990–2030 to reject URL fragments
+  // like `…/128165/…` getting parsed as `1281`.
   const out: Production['awards'] = []
   const lines = body.split('\n')
-  for (const line of lines) {
-    if (!/[🏆🥇🥈🥉]/.test(line)) continue
-    const yearMatch = line.match(/(\d{4})/)
-    const nameMatch = line.match(/\[([^\]]+?)\]/) || line.match(/[«"']([^»"']+?)[»"']/)
-    out.push({
-      name: nameMatch ? nameMatch[1] : line.slice(0, 80).replace(/[🏆🥇🥈🥉]/g, '').trim(),
-      year: yearMatch ? Number(yearMatch[1]) : undefined
-    })
+  const yearRe = /\b(19[9]\d|20[0-3]\d)\b/g
+  const linkAllRe = /\[([^\]]+?)\]\(([^)]+)\)/g
+  const quotedRe = /[«"“]([^»"”]+?)[»"”]/g
+  // "First Last" in Cyrillic — the laureate-name pattern that otherwise
+  // wins the "last link" prize over the actual festival.
+  const personNameRe = /^[А-ЯЁ][а-яё-]+\s[А-ЯЁ][а-яё-]+$/
+
+  function isPersonLink(text: string, url: string): boolean {
+    if (/\/pers\//.test(url)) return true
+    if (personNameRe.test(text.replace(/\*\*/g, '').trim())) return true
+    return false
+  }
+
+  function firstQuoted(s: string): string | null {
+    // FIRST, not last: when a 🏆 line has no festival link, the festival
+    // is the first quoted phrase. Subsequent quotes are typically the
+    // nomination category ("Лучшая женская роль") or the play title
+    // referenced at the end of an actor-laureate sentence ("Гипс").
+    quotedRe.lastIndex = 0
+    const m = quotedRe.exec(s)
+    return m ? m[1] : null
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    // `u` flag is mandatory: without it, surrogate-pair emoji share
+    // their high surrogate (`\uD83C`) inside the character class, so
+    // `🏅` (press-citation) leaks past `[🏆🥇🥈🥉]`.
+    if (!/^[🏆🥇🥈🥉]/u.test(line)) continue
+
+    const yearMatches = [...line.matchAll(yearRe)]
+    const year = yearMatches.length
+      ? Number(yearMatches[yearMatches.length - 1][1])
+      : undefined
+
+    // Walk all [text](url) links, skipping person/laureate ones, and
+    // take the LAST festival link. Falls through to last «…»/"…" quote
+    // when the line has no festival link (Structure C/D).
+    const links = [...line.matchAll(linkAllRe)]
+    let name: string | null = null
+    for (let i = links.length - 1; i >= 0; i--) {
+      const [, text, url] = links[i]
+      if (isPersonLink(text, url)) continue
+      name = text
+      break
+    }
+    if (!name) name = firstQuoted(line)
+    if (!name) {
+      // No link / quote — fall back to the line minus the emoji and date.
+      name = line
+        .replace(/^[🏆🥇🥈🥉]\s*/u, '')
+        .replace(yearRe, '')
+        .slice(0, 80)
+    }
+    name = name
+      .replace(/\*\*/g, '')
+      .replace(/^[\s.,:;–—-]+|[\s.,:;–—-]+$/g, '')
+      .trim()
+    if (!name) continue
+
+    out.push(year ? { name, year } : { name })
     if (out.length >= 10) break
   }
   return out
@@ -407,6 +469,29 @@ synopsis:
 # videos:
 #   - { provider: vimeo, id: "123456789" }
 videos: []
+
+# Awards override. The sync extracts awards heuristically from 🏆 lines
+# in the Notion MD body — robust for festival-link patterns, less
+# reliable when the festival sits in plain prose. If the auto-extracted
+# list looks wrong on /awards, drop the corrected list here and it will
+# replace the auto-extracted one entirely.
+#
+# Auto-extracted (${prod.awards.length} entries): leave commented to keep,
+# or uncomment + edit to override.
+# awards:
+${
+  prod.awards.length === 0
+    ? '#   - { name: "Festival Name", year: 2024, city: "Москва", category: "Лауреат" }'
+    : prod.awards
+        .map(
+          (a) =>
+            `#   - name: ${JSON.stringify(a.name)}` +
+            (a.year ? `\n#     year: ${a.year}` : '') +
+            (a.city ? `\n#     city: ${JSON.stringify(a.city)}` : '') +
+            (a.category ? `\n#     category: ${JSON.stringify(a.category)}` : '')
+        )
+        .join('\n')
+}
 `
 }
 
@@ -606,7 +691,14 @@ async function main() {
       Object.values(prod.body).filter((s): s is string => typeof s === 'string').join('\n')
     )
     prod.press = extractPress(primaryBody)
-    prod.awards = extractAwards(primaryBody)
+
+    // Q4 — extract awards from the RU body when present, falling back to
+    // EN. Festival names are predominantly Russian; using RU as canonical
+    // matches the press-page rule (DESIGN §3 "stay in original language")
+    // and stops the EN body's mixed RU/Latin annotations from leaking
+    // into the awards list.
+    const awardsBody = prod.body.ru || prod.body.en || primaryBody
+    prod.awards = extractAwards(awardsBody)
 
     // 6. Copy images.
     if (primaryMd.folder) {
