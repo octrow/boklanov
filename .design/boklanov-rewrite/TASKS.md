@@ -519,13 +519,19 @@ production build before D1.
   production. Hand-fixing those 2 edge cases is a content-level
   follow-up, not a sync bug.
 
-- [ ] **Q5 — About-page chronology dates wrong.** Daniil flagged
-  `content/about/ru.mdx` milestones include `2003 — Поступил в РГИСИ
-  (мастерская Кудашова)` and `2020 — Переезд в Алматы` — neither year
-  matches Roman's actual timeline. _Fix:_ cross-check every milestone
-  against `notion-data/Роман Бокланов d997b20454e24c9685624e4eb254935b.md`
-  (search for "РГИСИ", "БТК", "Алматы"); correct in
-  `content/about/{ru,en}.mdx` and verify with Roman before R2.
+- [x] **Q5 — About-page chronology dates wrong.** ✅ done. The
+  Notion bio (`notion-data/Роман Бокланов d997…935b.md`) gives firm
+  anchors: born 7 May 1993 in Ust-Kamenogorsk, returned to Almaty
+  in 2022. Both `2003 — РГИСИ` and `2008 — БТК director` were
+  impossible (Роман would have been 10 and 15 in those years) —
+  these were placeholder values from F4 that never got verified.
+  Replaced both `content/about/{ru,en}.mdx` milestone lists with
+  five dates anchored either in the Notion bio (1993, 2022) or in
+  hard production data (2017 Golden Mask as performer, 2018
+  Istropolitana Bratislava as performer, 2020 Bury Me Behind
+  premiere at BTK). Comment block in each file flags the remaining
+  unverified anchors (year of RGISI enrolment, year first directed
+  at BTK) for Roman to confirm before R2.
 
 - [ ] **Q6 — Missing-poster fallback feels placeholder-y at grid
   scale.** `components/ProductionCard.module.css:39-56` renders a
