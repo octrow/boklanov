@@ -8,6 +8,8 @@ import { getAllProductions } from '@/lib/content'
 
 import styles from './home.module.css'
 
+const STAGING_CITIES = ['СПБ', 'МОСКВА', 'АЛМАТЫ', 'БРЕМЕН', 'ВЕНА', 'БЕРЛИН', 'ТАШКЕНТ']
+
 export default async function HomePage({
   params
 }: {
@@ -36,6 +38,10 @@ export default async function HomePage({
         <h1 className={styles.wordmark}>{wordmark}</h1>
         <p className={styles.heroMeta}>{t('heroMeta')}</p>
         <p className={styles.statement}>{t('statement')}</p>
+        {/* Compressed staging-geography echo — DA-2.C */}
+        <p className={styles.geographyEcho} aria-hidden="true">
+          {STAGING_CITIES.join(' · ')}
+        </p>
       </section>
 
       {/* Featured strip — 4–6 hand-curated cards (brief D5) */}

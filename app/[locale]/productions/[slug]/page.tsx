@@ -146,6 +146,12 @@ export default async function ProductionDetailPage({
 
   const t = await getTranslations('productionDetail')
 
+  const allProductions = getAllProductions(locale)
+  const productionIndex = allProductions.findIndex((p) => p.slug === slug)
+  const productionLabel = productionIndex !== -1
+    ? `${String(productionIndex + 1).padStart(2, '0')} / ${String(allProductions.length).padStart(2, '0')}`
+    : null
+
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
   const titleDe = production.titles.de
@@ -285,32 +291,31 @@ export default async function ProductionDetailPage({
           <p className={styles.synopsis}>{production.synopsis}</p>
         )}
 
-        {/* 5. Credits — DESIGN §7.3: JetBrains Mono, two-column on tablet+,
-              role on left, name on right. */}
+        {/* 5. Credits — DA-2.A: leader-dot <dl> table with CREDITS cue. */}
         {production.credits.length > 0 && (
           <section className={styles.creditsBlock}>
-            <ul className={styles.creditsList}>
+            <Cue mark={t('credits')} first>
+              <h2 className={styles.sectionLabel}>{t('credits')}</h2>
+            </Cue>
+            <dl className={styles.creditsDl}>
               {production.credits.map((c, i) => (
-                <li
-                  key={`${c.role}-${c.name}-${i}`}
-                  className={styles.creditsItem}
-                >
-                  <span className={styles.creditsRole}>{c.role}</span>
-                  {c.url ? (
-                    <a
-                      className={styles.creditsName}
-                      href={c.url}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      {c.name}
-                    </a>
-                  ) : (
-                    <span className={styles.creditsName}>{c.name}</span>
-                  )}
-                </li>
+                <div key={`${c.role}-${i}`} className={styles.creditsRow}>
+                  <dt className={styles.creditsRole}>{c.role}</dt>
+                  <dd className={styles.creditsName}>
+                    {c.url ? (
+                      <a
+                        href={c.url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className={styles.creditsLink}
+                      >
+                        {c.name}
+                      </a>
+                    ) : c.name}
+                  </dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </section>
         )}
 
@@ -361,6 +366,16 @@ export default async function ProductionDetailPage({
               </a>
             )}
           </div>
+        )}
+
+        {/* 6b. Plinth tour band — DA-2.D (§3.G.2) */}
+        {production.tour && production.tour.length > 0 && (
+          <section className={styles.tourBand}>
+            <p className={styles.tourLabel}>{t('onTour')}</p>
+            <p className={styles.tourCities}>
+              {production.tour.join(' · ')}
+            </p>
+          </section>
         )}
 
         {/* 7. Photos */}
@@ -472,15 +487,47 @@ export default async function ProductionDetailPage({
 
       {/* Rail: spec sheet (desktop only) + sticky CTA */}
       <div className={styles.rail}>
-        {/* Spec sheet — mono metadata, one token per line. aria-hidden:
-            chips in the prose column carry the same data for screen readers. */}
+        {/* Theatre slate — DA-2.B. aria-hidden: chips row carries same data. */}
         {(production.year || production.durationMin || production.ageRating || country) && (
-          <ul className={styles.specSheet} aria-hidden="true">
-            {production.year && <li className={styles.specItem}>{production.year}</li>}
-            {production.durationMin && <li className={styles.specItem}>{production.durationMin}&thinsp;min</li>}
-            {production.ageRating && <li className={styles.specItem}>{production.ageRating}</li>}
-            {country && <li className={styles.specItem}>{country}</li>}
-          </ul>
+          <div className={styles.slate} aria-hidden="true">
+            {productionLabel && (
+              <div className={styles.slateHeader}>
+                <span className={styles.slateIndex}>{productionLabel}</span>
+              </div>
+            )}
+            <ul className={styles.slateBody}>
+              {production.year && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>YEAR</span>
+                  <span className={styles.slateVal}>{production.year}</span>
+                </li>
+              )}
+              {production.durationMin && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>RUN</span>
+                  <span className={styles.slateVal}>{production.durationMin}&thinsp;MIN</span>
+                </li>
+              )}
+              {production.ageRating && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>AGE</span>
+                  <span className={styles.slateVal}>{production.ageRating}</span>
+                </li>
+              )}
+              {country && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>COUNTRY</span>
+                  <span className={styles.slateVal}>{country}</span>
+                </li>
+              )}
+              {production.tour && production.tour.length > 0 && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>TOURING</span>
+                  <span className={styles.slateVal}>SOLO</span>
+                </li>
+              )}
+            </ul>
+          </div>
         )}
         {/* 11. Sticky CTA — fixed bottom on mobile, static in sticky rail on desktop */}
         <a

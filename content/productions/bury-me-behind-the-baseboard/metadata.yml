@@ -111,3 +111,15 @@ synopsis:
 # videos:
 #   - { provider: vimeo, id: "123456789" }
 videos: []
+
+# Tour cities — Roman extends this list in Phase 8.
+tour:
+  - London
+  - Edinburgh
+  - Bern
+  - Wien
+  - Almaty
+  - Lisboa
+  - Porto
+  - Luxembourg
+  - Alicante

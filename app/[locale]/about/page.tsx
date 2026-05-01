@@ -113,6 +113,8 @@ function personSchema(locale: Locale, description: string) {
 
 // ── Page ────────────────────────────────────────────────────────────────
 
+const STAGING_CITIES = ['СПБ', 'МОСКВА', 'АЛМАТЫ', 'БРЕМЕН', 'ВЕНА', 'БЕРЛИН', 'ТАШКЕНТ']
+
 export default async function AboutPage({
   params
 }: {
@@ -121,21 +123,13 @@ export default async function AboutPage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('nav')
+  const tAbout = await getTranslations('about')
 
   const { frontmatter, paragraphs } = loadAbout(locale)
   const { milestones, lineage } = frontmatter
 
   // First paragraph is the lead (displayed in Lora); the rest are body.
   const [leadParagraph, ...bodyParagraphs] = paragraphs
-
-  const lineageLabel =
-    locale === 'ru' ? 'традиция' : locale === 'de' ? 'Tradition' : 'lineage'
-  const milestonesLabel =
-    locale === 'ru'
-      ? 'хронология'
-      : locale === 'de'
-        ? 'Chronologie'
-        : 'chronology'
 
   const schema = personSchema(locale, leadParagraph ?? '')
 
@@ -159,11 +153,19 @@ export default async function AboutPage({
         ))}
       </section>
 
+      {/* Staging geography — DA-2.C (§3.G.1) */}
+      <section className={styles.geographySection}>
+        <p className={styles.geographyLabel}>{tAbout('stagedIn')}</p>
+        <p className={styles.geographyCities}>
+          {STAGING_CITIES.join(' · ')}
+        </p>
+      </section>
+
       {/* Milestones timeline */}
       {milestones.length > 0 && (
         <section className={styles.milestonesSection}>
           <Cue mark="CUE I" first>
-            <h2 className={styles.lineageHeading}>{milestonesLabel}</h2>
+            <h2 className={styles.lineageHeading}>{tAbout('chronology')}</h2>
           </Cue>
           <div className={styles.milestones}>
             {milestones.map((m) => (
@@ -180,7 +182,7 @@ export default async function AboutPage({
       {lineage.length > 0 && (
         <section className={styles.lineageSection}>
           <Cue mark="CUE II" first>
-            <h2 className={styles.lineageHeading}>{lineageLabel}</h2>
+            <h2 className={styles.lineageHeading}>{tAbout('lineage')}</h2>
           </Cue>
           <div className={styles.lineageGrid}>
             {lineage.map((item) => (

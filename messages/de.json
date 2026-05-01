@@ -62,7 +62,14 @@
     "press": "Presse",
     "awards": "Auszeichnungen",
     "links": "Links",
-    "bookingCta": "Roman zu einer Tournee schreiben"
+    "bookingCta": "Roman zu einer Tournee schreiben",
+    "credits": "Credits",
+    "onTour": "AUF TOURNEE"
+  },
+  "about": {
+    "stagedIn": "INSZENIERTE IN",
+    "chronology": "Chronologie",
+    "lineage": "Tradition"
   },
   "notFound": {
     "heading": "seite nicht gefunden",

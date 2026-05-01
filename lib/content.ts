@@ -78,6 +78,7 @@ export interface Production {
   pressKit: string | null
   featured: boolean
   tags: string[]
+  tour: string[]
 }
 
 /** Locale-projected view returned by getAllProductions / getProduction. */
@@ -251,7 +252,8 @@ function merge(
     pressKit: pick(overlay.pressKit as string | null, fm.pressKit ?? null),
     featured:
       typeof overlay.featured === 'boolean' ? overlay.featured : !!fm.featured,
-    tags: fm.tags ?? []
+    tags: fm.tags ?? [],
+    tour: pick(overlay.tour as string[] | undefined, (fm.tour as string[] | undefined) ?? [])
   }
 
   return merged

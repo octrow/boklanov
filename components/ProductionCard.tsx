@@ -48,7 +48,8 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
 
   const theatre = production.theatre.shortName ?? production.theatre.name
   const country = countryCode(production.theatre.country)
-  const meta = [theatre, production.year, production.ageRating, country]
+  const premMark = production.year ? `PREM ${production.year}` : null
+  const meta = [theatre, premMark, production.ageRating, country]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
 

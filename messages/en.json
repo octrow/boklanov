@@ -62,7 +62,14 @@
     "press": "Press",
     "awards": "Awards",
     "links": "Links",
-    "bookingCta": "Email Roman about touring this show"
+    "bookingCta": "Email Roman about touring this show",
+    "credits": "Credits",
+    "onTour": "ON TOUR"
+  },
+  "about": {
+    "stagedIn": "STAGED IN",
+    "chronology": "chronology",
+    "lineage": "lineage"
   },
   "notFound": {
     "heading": "page not found",

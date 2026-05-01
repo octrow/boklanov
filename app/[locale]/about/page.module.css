@@ -56,6 +56,33 @@
   margin-bottom: 0;
 }
 
+/* ── Staging geography ───────────────────────────────────────────────── */
+
+.geographySection {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.geographyLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 var(--space-2);
+}
+
+.geographyCities {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: 0;
+}
+
 /* ── Milestones ──────────────────────────────────────────────────────── */
 
 .milestonesSection {
