@@ -1,14 +1,14 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-
 import bundleAnalyzer from '@next/bundle-analyzer'
+import createNextIntlPlugin from 'next-intl/plugin'
 
 const withBundleAnalyzer = bundleAnalyzer({
   // eslint-disable-next-line no-process-env
   enabled: process.env.ANALYZE === 'true'
 })
 
-export default withBundleAnalyzer({
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
+
+export default withNextIntl(withBundleAnalyzer({
   staticPageGenerationTimeout: 300,
   // Legacy Notion renderer (components/, pages/) is type-incompatible with
   // strictNullChecks (auto-set by Next 15). It will be deleted in F8.
@@ -35,4 +35,4 @@ export default withBundleAnalyzer({
 
   // See https://react-tweet.vercel.app/next#troubleshooting
   transpilePackages: ['react-tweet']
-})
+}))

@@ -1,6 +1,8 @@
+import { setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
-type Locale = 'ru' | 'en' | 'de'
+import type { Locale } from '@/i18n/routing'
 
 export default async function Page({
   params
@@ -8,6 +10,8 @@ export default async function Page({
   params: Promise<{ locale: Locale }>
 }) {
   const { locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations('nav')
 
   return (
     <main
@@ -33,7 +37,7 @@ export default async function Page({
           marginBottom: 'var(--space-3)'
         }}
       >
-        F1 — APP ROUTER SHELL · LOCALE {locale.toUpperCase()}
+        F3 — LOCALE ROUTING · {locale.toUpperCase()}
       </p>
       <h1
         style={{
@@ -46,6 +50,22 @@ export default async function Page({
       >
         {locale === 'ru' ? 'роман бокланов' : 'roman boklanov'}
       </h1>
+      <nav
+        style={{
+          marginTop: 'var(--space-6)',
+          display: 'flex',
+          gap: 'var(--space-5)',
+          fontFamily: 'var(--font-family-mono)',
+          fontSize: 'var(--font-size-meta)',
+          letterSpacing: 'var(--letter-spacing-wide)',
+          textTransform: 'uppercase',
+          color: 'var(--color-text-secondary)'
+        }}
+      >
+        <span>{t('productions')}</span>
+        <span>{t('about')}</span>
+        <span>{t('contact')}</span>
+      </nav>
     </main>
   )
 }

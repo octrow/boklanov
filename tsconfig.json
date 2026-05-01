@@ -37,6 +37,12 @@
       ],
       "@/styles/*": [
         "styles/*"
+      ],
+      "@/i18n/*": [
+        "i18n/*"
+      ],
+      "@/messages/*": [
+        "messages/*"
       ]
     },
     "strictNullChecks": true
