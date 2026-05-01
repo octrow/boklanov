@@ -55,7 +55,7 @@ Date: 2026-04-30
 | C1 — Production card + grid | ✅ done | `11fc081` | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. |
 | C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. |
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
-| C4 — Filter panel + URL state | ⏳ next | — | — |
+| C4 — Filter panel + URL state | ✅ done | `05600f1` | `<FilteredProductionsPanel>` Client Component with useSearchParams. Role radio (director default), form/age-bucket/country multi-select. Chips: JetBrains Mono uppercase, 2px radius, active = paper-raised + rule-strong border. Clear-all = oxblood only. Suspense boundary keeps build fully SSG. |
 | C5 — About + lineage | ⏳ pending | — | — |
 | C6 — Awards | ⏳ pending | — | — |
 | C7 — Press | ⏳ pending | — | — |
@@ -174,7 +174,7 @@ when the legacy renderer was deleted. The build is clean under
   photo overlay. Featured cards reuse `<ProductionCard>` from C1; only
   pull from the top-coverage band (brief §6 table). _Depends on C1._
 
-- [ ] **C4 — Filter panel + URL-state**: `<ProductionFilters>` driving
+- [x] **C4 — Filter panel + URL-state**: `<ProductionFilters>` driving
   the grid in C1 / C3. Filters: role (default `director`, toggleable),
   ageBucket (3+/6+/12+/18+), country (RU/KZ/DE/ES/AT/BY), form (puppet/
   object/solo/ensemble), year range. **Filters serialize to query
