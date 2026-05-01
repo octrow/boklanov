@@ -25,6 +25,11 @@
     "roleReader": "читчик",
     "roleAll": "все"
   },
+  "contact": {
+    "title": "контакты",
+    "emailCta": "Написать Роману",
+    "mailtoSubject": "Сотрудничество / гастроли"
+  },
   "press": {
     "title": "пресса",
     "empty": "Нет материалов прессы"

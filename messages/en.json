@@ -25,6 +25,11 @@
     "roleReader": "reader",
     "roleAll": "all"
   },
+  "contact": {
+    "title": "contact",
+    "emailCta": "Email Roman",
+    "mailtoSubject": "Collaboration / touring"
+  },
   "press": {
     "title": "press",
     "empty": "No press materials"

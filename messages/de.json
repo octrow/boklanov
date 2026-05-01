@@ -25,6 +25,11 @@
     "roleReader": "Leser",
     "roleAll": "alle"
   },
+  "contact": {
+    "title": "Kontakt",
+    "emailCta": "Roman schreiben",
+    "mailtoSubject": "Zusammenarbeit / Tournee"
+  },
   "press": {
     "title": "Presse",
     "empty": "Keine Pressematerialien"

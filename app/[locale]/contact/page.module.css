@@ -1,0 +1,138 @@
+/* C8 — Contact page. Oxblood primary mailto; mono email + copy button;
+   Telegram + Instagram secondary. No form, no backend. */
+
+.page {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-8) var(--gutter-mobile) var(--space-9);
+}
+
+@media (min-width: 768px) {
+  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+}
+
+@media (min-width: 1024px) {
+  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+}
+
+/* ── Page heading ────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  text-transform: lowercase;
+  margin: 0 0 var(--space-8);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── Primary mailto button ───────────────────────────────────────────── */
+
+.primarySection {
+  margin-bottom: var(--space-7);
+}
+
+.mailtoButton {
+  display: inline-block;
+  padding: var(--space-4) var(--space-6);
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.mailtoButton:hover {
+  opacity: 0.88;
+}
+
+.mailtoButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── Email address + copy ────────────────────────────────────────────── */
+
+.emailSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+  padding: var(--space-5);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+}
+
+.emailAddress {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink);
+  user-select: all;
+}
+
+.copyButton {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 2px var(--space-3);
+  cursor: pointer;
+  min-width: 5ch;
+  text-align: center;
+  transition: color 100ms, border-color 100ms;
+}
+
+.copyButton:hover {
+  color: var(--ink);
+  border-color: var(--ink-mute);
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Secondary links ─────────────────────────────────────────────────── */
+
+.secondarySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+
+@media (min-width: 768px) {
+  .secondarySection {
+    flex-direction: row;
+    gap: var(--space-6);
+  }
+}
+
+.secondaryLink {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration: none;
+}
+
+.secondaryLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.secondaryLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
