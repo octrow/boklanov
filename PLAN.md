@@ -1,5 +1,30 @@
 # Rewrite plan — boklanov.com
 
+> **Status (2026-05-01).** Live execution on branch `rewrite/v2`. The
+> operational checklist is `.design/boklanov-rewrite/TASKS.md`; this
+> document is the *vision* it was generated from.
+>
+> | Phase | Status | Where |
+> |-------|--------|-------|
+> | 0 — Skills + branch snapshot | ✅ done | `rewrite/v2` cut from `main` |
+> | 1 — Discovery & brief | ✅ done | `.design/boklanov-rewrite/{DESIGN_BRIEF, INFORMATION_ARCHITECTURE, TASKS}.md` |
+> | 2 — Visual identity & DESIGN.md | ✅ done | `DESIGN.md`, `app/globals.css`, `.design/boklanov-rewrite/tokens.{md,css}` |
+> | 3 — Content migration (F1–F8) | ✅ done | `scripts/sync-from-notion.ts`, `content/productions/<slug>/`, `lib/content.ts`. Notion deps fully removed in F8. |
+> | 4 — Frontend rebuild | 🟡 in progress (2 / 11) | C1 production card + grid (`11fc081`), C2 production detail (`c7d58ae`). Next: C3 home. |
+> | 5 — i18n + SEO + OG | ⏳ pending | next-intl wired; sitemap/RSS/JSON-LD/OG-port pending in S1–S5 |
+> | 6 — Design review | ⏳ pending | R1 against the brief after C-tasks land |
+> | 7 — Deploy + cutover | ⏳ pending | D1–D4 |
+>
+> Decisions D1–D6 from §7 are all **confirmed migrate / editorial /
+> next-intl / repo MDX / no Anthropic Design / .ru status quo**. Aesthetic
+> family was sharpened during Phase 1 from "editorial minimalism" to
+> *warm editorial + brutalist metadata* (DESIGN_BRIEF D10) — DESIGN.md
+> §2 is the locked statement, not §4 below.
+>
+> Where this file disagrees with TASKS.md or DESIGN.md, **TASKS.md and
+> DESIGN.md win**. They are kept current; this file is preserved as the
+> origin record.
+
 ## 0. What we have today
 
 - **Stack:** Next.js 15 + React 19 + TypeScript, `react-notion-x` rendering a live Notion page (root id

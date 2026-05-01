@@ -53,14 +53,23 @@ Date: 2026-04-30
 | Task | Status | Commit | Notes |
 |------|--------|--------|-------|
 | C1 — Production card + grid | ✅ done | `11fc081` | `<ProductionCard>` + `<ProductionGrid>` per DESIGN §7.2; rendered at `/[locale]/productions`. 4:5 cover, Lora RU title with oxblood underline reveal on hover (150ms), Inter EN subtitle in `--ink-mute`, mono `theatre · year · ageRating · countryCode` row, hairline rule between cards. Typographic fallback for productions without a poster. Whole card is the link. Grid: 1-col / 2-col / 3-col responsive. |
-| C2 — Production detail | ✅ done | _pending_ | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. | Phase 4 (Core UI vertical slices) is gated on
-F6 + F7. F8 is gated on Phase 4 having at least one App Router page
-rendering real content.
+| C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman@boklanov.ru` (subject + body include show title, year, role; tour-window/venue/notes prompts). 84 detail pages × 3 locales pre-rendered. |
+| C3 — Home | ⏳ next | — | Aesthetic checkpoint: review C1/C2 against DESIGN §3 + §11 before starting C3. |
+| C4 — Filter panel + URL state | ⏳ pending | — | — |
+| C5 — About + lineage | ⏳ pending | — | — |
+| C6 — Awards | ⏳ pending | — | — |
+| C7 — Press | ⏳ pending | — | — |
+| C8 — Contact | ⏳ pending | — | — |
+| C9 — Archive | ⏳ pending | — | — |
+| C10 — Layout shell | ⏳ pending | — | Built last so nav links target real pages. |
+| C11 — Cmd-K palette | ⏳ pending | — | — |
 
-**Tech-debt parked during F1–F4** (must clean up by/with F8):
-- `next.config.js`: `typescript.ignoreBuildErrors` and `eslint.ignoreDuringBuilds` set true while legacy renderer exists
-- `components/NotionPage.tsx`: `@ts-nocheck` + `mapPageUrl(site!, recordMap!, …)` non-null assertions
-- `pages/p/[pageId].tsx`: legacy route under `/p/` to dodge slug collision with `app/[locale]/`
+**Core UI = 2 / 11 done.**
+
+**Tech-debt cleared by F8:** all three items below (`ignoreBuildErrors`,
+`@ts-nocheck` on legacy components, `pages/p/[pageId].tsx`) were retired
+when the legacy renderer was deleted. The build is clean under
+`strictNullChecks` + ESLint without any escape hatches.
 
 ---
 
@@ -100,7 +109,7 @@ rendering real content.
   + originals + lqip placeholders. _New; re-runnable when Roman re-exports
   from Notion; the workhorse of Phase 3._
 
-- [ ] **F5 — `metadata.yml` overlay + manual-pass workflow**: After F4
+- [x] **F5 — `metadata.yml` overlay + manual-pass workflow**: After F4
   produces `content/productions/*.mdx`, generate one
   `content/productions/<slug>/metadata.yml` per production with the
   fields the heuristic missed (brief D6) — `lineage[]`, `form[]`,
@@ -109,14 +118,14 @@ rendering real content.
   wins. Document the workflow in `content/README.md` so Roman can hand
   back the credit list once. _New; closes brief Q1, Q2, Q8._
 
-- [ ] **F6 — Content loader API**: `lib/content.ts` with three functions —
+- [x] **F6 — Content loader API**: `lib/content.ts` with three functions —
   `getAllProductions(locale)`, `getProduction(slug, locale)`,
   `getRelatedProductions(production, n)` (the recommends algorithm from
   brief D9: same age bucket + same form + same lineage, 3 cards). Pure
   functions over the merged content tree, no I/O outside build. _New;
   every page route calls this._
 
-- [ ] **F7 — `app/globals.css` reset + base styles**: Minimal CSS reset,
+- [x] **F7 — `app/globals.css` reset + base styles**: Minimal CSS reset,
   `body { background: var(--paper); color: var(--ink); font-family: var(--font-family-body); }`,
   selection colours, scrollbar styles in editorial paper tones (replace
   the legacy `styles/global.css` `::-webkit-scrollbar` block which uses
