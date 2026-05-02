@@ -1,0 +1,16 @@
+/* v3 §2.8 — per-section 2px accent stripe. First child of each route's <main>.
+   Accent resolved from pathname via sectionAccent(); ink handled separately
+   because --ink is not an --accent-* token. */
+
+.stripe {
+  height: var(--stripe-thickness);
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.stripe[data-accent="vermillion"] { background: var(--accent-vermillion); }
+.stripe[data-accent="cobalt"]     { background: var(--accent-cobalt); }
+.stripe[data-accent="mustard"]    { background: var(--accent-mustard); }
+.stripe[data-accent="ink"]        { background: var(--ink); }
+
+@media print { .stripe { display: none; } }

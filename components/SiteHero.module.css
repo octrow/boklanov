@@ -1,0 +1,56 @@
+/* v3 §7.2 — SiteHero: home-page-only hero. Gradient Unbounded wordmark
+   (aria-hidden) + SR h1 companion + Lora italic statement + mono scroll hint.
+   Replaces SlateStrike + Lora wordmark from v2. Phase 9v3.5. */
+
+.hero {
+  padding: var(--space-9) 0 var(--space-8);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: var(--space-10);
+  }
+}
+
+/* Visually hidden but accessible to screen readers. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.heroWordmark {
+  margin: 0;
+  /* Contain overflow on narrow viewports when wordmark word-wraps. */
+  overflow: visible;
+  /* Prevent clip on descenders/ascenders of background-clip:text gradient. */
+  padding-block: 0.06em;
+  /* Allow long words ('Бокланов') to break on narrow viewports without overflowing. */
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.statement {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  max-width: var(--measure-prose);
+  margin: var(--space-6) 0 0;
+}
+
+.scrollHint {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--ink-faint);
+  margin: var(--space-5) 0 0;
+}

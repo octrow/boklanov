@@ -1,9 +1,10 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
-import { Suspense } from 'react'
 
+import { FeaturedStrip } from '@/components/FeaturedStrip'
 import { ProductionGrid } from '@/components/ProductionGrid'
-import { SlateStrike } from '@/components/SlateStrike'
+import { SiteHero } from '@/components/SiteHero'
+import { TourTicker } from '@/components/TourTicker'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
@@ -20,6 +21,7 @@ export default async function HomePage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('home')
+  const tAbout = await getTranslations('about')
   const tProductions = await getTranslations('productions')
 
   const productions = getAllProductions(locale)
@@ -35,31 +37,20 @@ export default async function HomePage({
     (p) => p.role.includes('director') && !featuredSlugs.has(p.slug)
   )
 
-  const wordmark = locale === 'ru' ? 'роман бокланов' : 'roman boklanov'
-
   return (
     <main className={styles.page}>
-      {/* Hero — DESIGN §10: type-led wordmark, no photo overlay */}
-      <Suspense fallback={null}>
-        <SlateStrike>
-          <section className={styles.hero}>
-            <h1 className={styles.wordmark}>{wordmark}</h1>
-            <p className={styles.heroMeta}>{t('heroMeta')}</p>
-            <p className={styles.statement}>{t('statement')}</p>
-            {/* Compressed staging-geography echo — DA-2.C */}
-            <p className={styles.geographyEcho} aria-hidden="true">
-              {STAGING_CITIES.join(' · ')}
-            </p>
-          </section>
-        </SlateStrike>
-      </Suspense>
+      {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
+      <SiteHero locale={locale} statement={t('statement')} />
 
-      {/* Featured strip — 4–6 hand-curated cards (brief D5) */}
+      {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
+      <TourTicker cities={STAGING_CITIES} accent="mustard" label={tAbout('stagedIn')} />
+
+      {/* Featured strip — v3 §2.4: broken-grid, 1 large + 2 medium + 3 small */}
       {featured.length > 0 && (
         <>
           <section className={styles.section} aria-label={t('featuredLabel')}>
             <p className={styles.sectionLabel}>{t('featuredLabel')}</p>
-            <ProductionGrid productions={featured} emptyLabel='' priorityFirst />
+            <FeaturedStrip productions={featured} priorityFirst />
           </section>
           <hr />
         </>
@@ -76,6 +67,7 @@ export default async function HomePage({
         <ProductionGrid
           productions={directorProductions}
           emptyLabel={tProductions('empty')}
+          duotoneAll
         />
       </section>
     </main>

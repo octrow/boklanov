@@ -1,0 +1,52 @@
+/* v3 §2.9 — CSS marquee tour band. Accent-coloured full-width strip.
+   Pauses on hover. prefers-reduced-motion zeroes animation entirely.
+   Scoped to productions with tour[] data — only bury-me-behind-the-baseboard
+   has non-empty tour data as of Phase 9v3.3. */
+
+.section {
+  overflow: hidden;
+  padding: var(--space-2) 0;
+}
+
+.section[data-accent="vermillion"] { background: var(--accent-vermillion); }
+.section[data-accent="cobalt"]     { background: var(--accent-cobalt); }
+.section[data-accent="mustard"]    { background: var(--accent-mustard); }
+
+/* Track: doubled city band for seamless loop. Translate -50% moves from
+   the first copy to the start of the second copy = one clean loop. */
+.ticker {
+  display: flex;
+  width: 100%;
+}
+
+.track {
+  display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  animation: ticker var(--ticker-speed) linear infinite;
+  font-family: var(--font-family-plakat);
+  font-size: var(--font-size-sticker);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: 1;
+  padding: 2px var(--space-3);
+  font-synthesis: none;
+}
+
+.section[data-accent="vermillion"] .track,
+.section[data-accent="cobalt"]     .track { color: var(--ink-on-accent); }
+.section[data-accent="mustard"]    .track { color: var(--ink-on-mustard); }
+
+.track:hover { animation-play-state: paused; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+}
+
+@media print { .section { display: none; } }

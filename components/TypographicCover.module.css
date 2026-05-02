@@ -43,12 +43,14 @@
 .centre .synopsis { grid-row: 3; }
 .centre .meta     { grid-row: 4; }
 
+/* v3 §7.7: Unbounded 600 ALL CAPS replaces Lora 600. Phase 9v3.6. */
 .title {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-plakat);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: var(--ink);
   margin: 0;
 }

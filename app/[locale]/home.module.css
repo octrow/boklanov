@@ -1,6 +1,5 @@
-/* DESIGN.md §15.3 — Home page (C3).
-   Hero: type-led Lora wordmark + mono genre meta + prose statement.
-   Featured strip: 4–6 curated cards reusing <ProductionCard>.
+/* v3 §7.2 — Home page (C3).
+   Hero: <SiteHero> (gradient Unbounded) + <TourTicker> + <FeaturedStrip> broken-grid.
    Below fold: full director productions grid (C4 adds filter UI). */
 
 .page {
@@ -21,58 +20,6 @@
     padding-left: var(--gutter-desktop);
     padding-right: var(--gutter-desktop);
   }
-}
-
-/* ── Hero ──────────────────────────────────────────────────────────────── */
-
-.hero {
-  padding: var(--space-8) 0 var(--space-7);
-  border-bottom: 1px solid var(--rule);
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    padding: var(--space-9) 0 var(--space-8);
-  }
-}
-
-/* DESIGN §10: lowercase Lora wordmark, --font-size-4xl on home hero only. */
-.wordmark {
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
-  line-height: var(--line-height-tight);
-  color: var(--ink);
-  text-transform: lowercase;
-  margin: 0;
-}
-
-.heroMeta {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-mute);
-  margin: var(--space-3) 0 0;
-}
-
-/* Artistic statement: Inter body, prose width, relaxed leading. */
-.statement {
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-relaxed);
-  color: var(--ink);
-  max-width: var(--max-width-prose);
-  margin: var(--space-6) 0 0;
-}
-
-.geographyEcho {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-chip);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: var(--space-4) 0 0;
 }
 
 /* ── Sections ──────────────────────────────────────────────────────────── */

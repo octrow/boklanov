@@ -1,0 +1,51 @@
+/* v3 §4.4 (revised 2026-05-03):
+   Hero variant keeps Unbounded VF gradient — the one decisive plakat gesture.
+   Header + footer use Lora lowercase (v1/v2 register restored after visual
+   review). Color is inherited from the caller for header/footer; hero owns
+   its own gradient fill via background-clip:text. */
+
+.wordmark {
+  font-synthesis: none;
+}
+
+/* Header + footer: Lora lowercase, v1/v2 register. */
+.header,
+.footer {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-medium);
+  text-transform: lowercase;
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.header {
+  font-size: var(--font-size-lg);
+}
+
+.footer {
+  font-size: var(--font-size-meta);
+}
+
+/* Hero: Unbounded ALL CAPS, gradient fill. §2.5: static — never animated. */
+.hero {
+  font-family: var(--font-family-plakat);
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 0.95;
+  /* Allow wrap on narrow viewports; hyphenation off so RU stays whole word. */
+  white-space: normal;
+  word-spacing: 0.04em;
+  hyphens: none;
+  background: linear-gradient(
+    135deg,
+    var(--accent-vermillion) 0%,
+    var(--accent-cobalt) 55%,
+    var(--accent-mustard) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

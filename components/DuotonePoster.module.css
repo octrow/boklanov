@@ -1,0 +1,30 @@
+/* v3 §2.4 — DuotonePoster wrapper. display:contents so the ProductionCard
+   link stays the direct grid item. SVG duotone filter applied directly per
+   accent (no @supports gate — every browser the site supports already handles
+   `filter: url()`). Sprite injected once in app/[locale]/layout.tsx via
+   <DuotonePosterSprite />.
+
+   Selector covers both <img> (next/image fill render) and any element marked
+   `[data-cover-style]` (TypographicCover) so posterless featured cards also
+   tint. URLs unquoted to avoid CSS Modules / postcss quote-parsing edge cases. */
+
+.wrapper {
+  display: contents;
+}
+
+.wrapper[data-accent="vermillion"] :is(img, [data-cover-style]) {
+  filter: url(#duotone-v);
+}
+
+.wrapper[data-accent="cobalt"] :is(img, [data-cover-style]) {
+  filter: url(#duotone-c);
+}
+
+/* prefers-reduced-transparency: use a simpler grayscale-+-contrast pass
+   instead of the SVG duotone (avoids the saturated tint on accessibility
+   profiles that explicitly request reduced visual effect). */
+@media (prefers-reduced-transparency: reduce) {
+  .wrapper :is(img, [data-cover-style]) {
+    filter: grayscale(0.7) contrast(1.08) !important;
+  }
+}

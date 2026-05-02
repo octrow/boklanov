@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 
 import { Analytics } from '@/components/Analytics'
 import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
+import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
@@ -49,12 +50,20 @@ export default async function LocaleLayout({
             (Latin+Cyrillic combined) regardless of locale; Inter still subset-split. */}
         <link rel='preload' as='font' type='font/woff2' href='/fonts/Lora-VF.woff2' crossOrigin='anonymous' />
         {locale === 'ru' ? (
-          <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-cyrillic-400.woff2' crossOrigin='anonymous' />
+          <>
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-cyrillic-400.woff2' crossOrigin='anonymous' />
+            {/* v3 9v3.1: Unbounded VF Cyrillic for ALL CAPS wordmark in header + footer */}
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/unbounded-cyrillic-vf.woff2' crossOrigin='anonymous' />
+          </>
         ) : (
-          <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-latin-400.woff2' crossOrigin='anonymous' />
+          <>
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-latin-400.woff2' crossOrigin='anonymous' />
+            <link rel='preload' as='font' type='font/woff2' href='/fonts/unbounded-latin-vf.woff2' crossOrigin='anonymous' />
+          </>
         )}
       </head>
       <body>
+        <DuotonePosterSprite />
         <NextIntlClientProvider>
           <CommandPaletteProvider items={searchItems} locale={locale}>
             <SiteHeader productions={productions.map((p) => ({ slug: p.slug }))} />

@@ -76,15 +76,8 @@
 /* ── Wordmark ─────────────────────────────────────────────────────────── */
 
 .wordmark {
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
-  line-height: 1;
-  text-transform: lowercase;
   color: var(--ink);
   text-decoration: none;
-  white-space: nowrap;
   flex-shrink: 0;
 }
 

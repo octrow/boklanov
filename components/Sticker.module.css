@@ -1,0 +1,51 @@
+/* v3 §2.5 — Plakat sticker badge. Unbounded ALL CAPS, no radius.
+   Positioned absolutely inside ProductionCard .cover (position:relative,
+   overflow:hidden). Rotation passed via inline transform. Max 1 per card. */
+
+.sticker {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: inline-block;
+  padding: 3px var(--space-2);
+  font-family: var(--font-family-plakat);
+  font-size: var(--font-size-sticker);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: 1.2;
+  border-radius: var(--border-radius-none);
+  white-space: nowrap;
+  font-synthesis: none;
+  transform-origin: center center;
+  /* Smooth transform in non-reduced-motion contexts; rotation itself is static. */
+  will-change: transform;
+}
+
+/* Inline mode — production-detail row above title (no absolute escape). */
+.sticker.inline {
+  position: static;
+  top: auto;
+  right: auto;
+}
+
+.shadow {
+  box-shadow: var(--shadow-plakat);
+}
+
+/* Accent fills — background + text colour. */
+.sticker[data-accent="vermillion"] {
+  background: var(--accent-vermillion);
+  color: var(--ink-on-accent);
+}
+.sticker[data-accent="cobalt"] {
+  background: var(--accent-cobalt);
+  color: var(--ink-on-accent);
+}
+.sticker[data-accent="mustard"] {
+  background: var(--accent-mustard);
+  color: var(--ink-on-mustard);
+}
+
+@media print { .sticker { display: none; } }

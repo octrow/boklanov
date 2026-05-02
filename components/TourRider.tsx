@@ -97,13 +97,14 @@ export function TourRider({
 
   if (rows.length === 0 && !productionLabel) return null
 
+  /* v3 9v3.6: <details> so ≥1280px collapses to free margin for Marginalia float.
+     At 1024-1279px CSS forces body visible. aria-hidden keeps AT unaffected. */
   return (
-    <div className={styles.rider} aria-hidden='true'>
-      {productionLabel && (
-        <div className={styles.header}>
-          <span className={styles.index}>{productionLabel}</span>
-        </div>
-      )}
+    <details className={styles.rider} aria-hidden='true'>
+      {/* tabIndex={-1} prevents keyboard focus since aria-hidden covers AT */}
+      <summary className={styles.header} tabIndex={-1}>
+        <span className={styles.index}>{productionLabel ?? 'SPEC SHEET'}</span>
+      </summary>
       <dl className={styles.body}>
         {rows.map((r) => (
           <div className={styles.row} key={r.label}>
@@ -112,6 +113,6 @@ export function TourRider({
           </div>
         ))}
       </dl>
-    </div>
+    </details>
   )
 }

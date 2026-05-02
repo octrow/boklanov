@@ -452,6 +452,20 @@ dd.creditsName {
   color: var(--ink-mute);
 }
 
+/* v3 §2.2 — sticker badge row above title.
+   Decorative; aria-hidden. Wraps to two lines on narrow viewports. */
+.stickerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) 0 var(--space-4);
+}
+
+@media print {
+  .stickerRow { display: none; }
+}
+
 /* DA-7.6.C — Director's note block */
 .directorsNote {
   margin: 0 0 var(--space-7);

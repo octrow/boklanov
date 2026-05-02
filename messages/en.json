@@ -66,12 +66,16 @@
     "bookingCta": "Email Roman about touring this show",
     "credits": "Credits",
     "onTour": "ON TOUR",
-    "directorsNoteAttr": "— ROMAN BOKLANOV"
+    "directorsNoteAttr": "— ROMAN BOKLANOV",
+    "deForthcoming": "Deutsche Übersetzung folgt",
+    "stickerAward": "FESTIVAL AWARD",
+    "stickerTour": "TOURING"
   },
   "about": {
     "stagedIn": "STAGED IN",
     "chronology": "chronology",
-    "lineage": "lineage"
+    "lineage": "lineage",
+    "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "notFound": {
     "heading": "page not found",

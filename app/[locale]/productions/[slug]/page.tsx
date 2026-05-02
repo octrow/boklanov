@@ -6,7 +6,10 @@ import { compileMDX } from 'next-mdx-remote/rsc'
 import * as React from 'react'
 
 import { GalleryLightbox } from '@/components/GalleryLightbox'
+import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
+import { Sticker } from '@/components/Sticker'
+import { TourTicker } from '@/components/TourTicker'
 import { countryCode } from '@/components/ProductionCard'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
@@ -307,6 +310,29 @@ export default async function ProductionDetailPage({
           )
         })()}
 
+      {/* v3 §2.2 — plakat sticker badges above title.
+          Award sticker fires when production has any award; tour sticker fires
+          when production has a `tour[]` (the Plinth). At most 2 stickers per
+          page (cap from proposal §2.2 max-3-per-page; we leave room for a
+          third elsewhere). Hidden from screen readers — TourRider + awards
+          list are the canonical sources. */}
+      {(production.awards.length > 0 || production.tour.length > 0) && (
+        <div className={styles.stickerRow} aria-hidden="true">
+          {production.awards.length > 0 && (
+            <Sticker variant="award" accent="vermillion" rotate={-3} shadow layout="inline">
+              {production.awards.length === 1
+                ? t('stickerAward')
+                : `${t('stickerAward')} · ${production.awards.length}`}
+            </Sticker>
+          )}
+          {production.tour.length > 0 && (
+            <Sticker variant="tour" accent="cobalt" rotate={3} layout="inline">
+              {t('stickerTour')}
+            </Sticker>
+          )}
+        </div>
+      )}
+
       {/* .layout: on desktop becomes a CSS grid [720px content | 1fr rail].
           .stickyCta lives in the rail column so it's visible from landing. */}
       <div className={styles.layout}>
@@ -358,9 +384,15 @@ export default async function ProductionDetailPage({
             </ul>
           )}
 
-          {/* 4. One-line synopsis */}
+          {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
           {production.synopsis && (
-            <p className={styles.synopsis}>{production.synopsis}</p>
+            locale === 'de' ? (
+              <Marginalia note={t('deForthcoming')}>
+                <p className={styles.synopsis}>{production.synopsis}</p>
+              </Marginalia>
+            ) : (
+              <p className={styles.synopsis}>{production.synopsis}</p>
+            )
           )}
 
           {/* 4b. Tagline — subgenre / format label */}
@@ -462,12 +494,9 @@ export default async function ProductionDetailPage({
             </div>
           )}
 
-          {/* 6b. Plinth tour band — DA-2.D (§3.G.2) */}
+          {/* 6b. Plinth tour band — DA-2.D (§3.G.2) · v3: TourTicker CSS marquee */}
           {production.tour && production.tour.length > 0 && (
-            <section className={styles.tourBand}>
-              <p className={styles.tourLabel}>{t('onTour')}</p>
-              <p className={styles.tourCities}>{production.tour.join(' · ')}</p>
-            </section>
+            <TourTicker cities={production.tour} accent="cobalt" label={t('onTour')} />
           )}
 
           {/* 7. Press */}

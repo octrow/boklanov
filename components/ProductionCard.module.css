@@ -12,6 +12,17 @@
   /* Hairline rule between rows of the grid. Last-row strays read as a
      newspaper rule, not a bug. */
   border-bottom: 1px solid var(--rule);
+  /* Override hooks for layout-context-specific call-sites (FeaturedStrip
+     hero cell). Defaults preserve existing behaviour exactly; overriding
+     --card-height / --cover-aspect / --cover-flex on an ancestor cascades
+     here through DuotonePoster's display:contents wrapper. See
+     .design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md §3 Option B. */
+  height: var(--card-height, auto);
+  /* Container context — descendants can query the card's inline width.
+     Used by the @container rule below to upscale title + meta when the
+     card sits in a hero-sized cell (FeaturedStrip cols 1–7). */
+  container-type: inline-size;
+  container-name: card;
 }
 
 .card:focus-visible {
@@ -24,7 +35,8 @@
 .cover {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--cover-aspect, 4 / 5);
+  flex: var(--cover-flex, 0 1 auto);
   background: var(--paper-sunken);
   overflow: hidden;
 }
@@ -91,4 +103,18 @@
 
 .metaWrap {
   padding: 0 var(--space-1);
+}
+
+/* FEATURED_STRIP_GRID_RESEARCH.md §8 — typographic scaling when the card
+   sits in a wide cell (FeaturedStrip hero ≈ 686px desktop, mediums ≈ 481px,
+   smalls ≈ 286px, ProductionGrid ≈ 378px). 600px threshold fires only on
+   the desktop hero cell; mediums and smalls keep default register. */
+@container card (min-width: 600px) {
+  .titleRu {
+    font-size: var(--font-size-2xl);
+  }
+
+  .meta {
+    font-size: var(--font-size-sm);
+  }
 }

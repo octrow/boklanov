@@ -73,8 +73,8 @@ export interface Production {
   featured: boolean
   tags: string[]
   tour: string[]
-  tagline: { ru?: string; en?: string | null } | null
-  directorsNote: { ru?: string; en?: string } | null
+  tagline: { ru?: string; en?: string | null; de?: string | null } | null
+  directorsNote: { ru?: string; en?: string; de?: string | null } | null
   runs: Array<{
     venue?: string
     city?: string
@@ -248,14 +248,13 @@ function project(p: Production, locale: Locale): ProductionView {
     p.premiereDate?.en ??
     null
   const directorsNote =
-    (locale !== 'de' && p.directorsNote?.[locale as 'ru' | 'en']) ||
-    p.directorsNote?.ru ||
-    p.directorsNote?.en ||
-    null
+    locale === 'de'
+      ? (p.directorsNote?.de ?? null)
+      : (p.directorsNote?.[locale as 'ru' | 'en'] ?? p.directorsNote?.ru ?? p.directorsNote?.en ?? null)
   const tagline =
-    (locale !== 'de' && p.tagline?.[locale as 'ru' | 'en']) ||
-    p.tagline?.ru ||
-    null
+    locale === 'de'
+      ? (p.tagline?.de ?? null)
+      : (p.tagline?.[locale as 'ru' | 'en'] ?? p.tagline?.ru ?? null)
 
   const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, tagline: _tg, directorsNote: _dn, ...rest } = p
   return {
