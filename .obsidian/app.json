@@ -1,0 +1,13 @@
+{
+  "useMarkdownLinks": true,
+  "newLinkFormat": "relative",
+  "promptDelete": false,
+  "trashOption": "local",
+  "defaultViewMode": "source",
+  "spellcheck": true,
+  "spellcheckLanguages": ["ru", "en-US"],
+  "showFrontmatter": false,
+  "foldHeading": false,
+  "foldIndent": false,
+  "attachmentFolderPath": "./"
+}
