@@ -2,8 +2,20 @@
 
 > Companion to `DESIGN_BRIEF.md` D3 ("Content source"), `PLAN.md`
 > Phase 8, and `content/README.md`.
-> **Status: ✅ locked 2026-05-02.**
+> **Status: ✅ locked 2026-05-02. Phase 8 ✅ complete 2026-05-02.**
 > Date: 2026-05-02.
+
+## Phase 8 implementation status (2026-05-02)
+
+| Sub-phase | Status | Notes |
+|-----------|--------|-------|
+| **8.1** Vault layout (Obsidian config) | ✅ done (`11bef4d`) | `.obsidian/{app,types,community-plugins}.json` committed. `useMarkdownLinks: true` (no `![[wikilink]]`). Property types defined for `year`/`featured`/`ageRating`/`durationMin`/`ticketsUrl`/`form`/`lineage`/`tour`/`tags`. `scripts/lint-mdx.ts` + `npm run lint-mdx` CI guard fails on Obsidian-flavoured wikilinks in `content/`. Roman manually installs `obsidian-git` + `mdx-as-md` plugins on first vault open. `.gitignore` now excludes `workspace.json`, `cache`, `plugins/`. |
+| **8.2** R2 image migration | 🟡 code done, CDN activation **blocked** | `lib/cdn.ts` (`cdnUrl(path)` helper, no-op in dev), `scripts/upload-images.ts` (S3-compatible upload, `--slug` + `--dry-run` flags, skip-unchanged by size). `<Image>` `src` wrapped in `cdnUrl()` on `ProductionCard` + production detail. `next.config.js` `images.remotePatterns` allows `cdn.boklanov.com`. `npm run upload-images`. **Blocker:** `cdn.boklanov.com` cannot connect to R2 until `boklanov.com` DNS moves to Cloudflare; currently on Spaceship. Defer R2 activation until/unless DNS migrates. `NEXT_PUBLIC_CDN_BASE` unset in prod → images still serve from `public/` via Vercel. No regression. |
+| **8.3** Fold overlay + retire Notion sync | ✅ done (`c1c4436`) | `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` overlays folded into `index.mdx` frontmatter (overlay-wins), overlay files deleted. `lib/content.ts` simplified: `merge()`/`pick()` removed, replaced by lean `fromFm()` reading frontmatter directly, `yaml` import dropped. `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header. `npm run sync` → echo stub. `content/README.md` rewritten. |
+| **8.4** `content/AUTHORING.ru.md` | ✅ done (`c1c4436`) | Russian-language onboarding written: one-time install (desktop + mobile), Properties editing, prose editing, commit-and-push, draft branch, add new productions, swap photos, troubleshooting (5 cases). Replaces Notion-centric `content/README.md`. |
+| **8.5** Cyrillic-only-Name orphan audit | ✅ done (`c1c4436`) | `.design/boklanov-rewrite/orphan-audit-2026-05.md` created. Lists `sugar-kid` + `kasztanka` as MANUAL_SIBLING_PAIRS orphans for Roman to confirm titles in Obsidian after onboarding. One-shot. |
+
+**Phase 8 complete.** All sub-phases shipped in commits `11bef4d` (8.1), `8339141` (8.2 code), `c1c4436` (8.3–8.5). R2 CDN activation remains blocked on DNS cutover to Cloudflare (deferred). Decap (Phase 9) remains deferred — activate only if Roman requests web editing.
 
 ## Decision summary
 

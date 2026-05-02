@@ -1,31 +1,27 @@
-# DESIGN BRIEF — boklanov.com / boklanov.ru rewrite
+# DESIGN BRIEF — boklanov.com rewrite
 
 > Output of the `/grill-me` interview, locked 2026-04-30. This brief is the
 > source of truth for every Phase 2+ decision. If a downstream phase wants to
 > contradict something here, that is a brief change and needs explicit
 > sign-off, not a unilateral pivot.
+>
+> **Status 2026-05-02: rewrite complete.** Phases 1–8 shipped. Site live at
+> https://boklanov.vercel.app/. D4 DNS cutover (boklanov.com) pending — deadline
+> 6 May 2026. This brief is now the historical source-of-truth record for
+> the implemented site.
 
 ---
 
 ## 1. Project context
 
-Roman Boklanov is a theatre director working between Almaty, Saint Petersburg,
-and Western Europe. His repertoire is **puppet theatre, theatre of objects, and
-contemporary theatre for kids / teens / family** — ages 3+ to 18+, 30+ staged
-productions, 20+ awards, active touring across KZ, RU, DE, ES, AT, BY.
+Roman Boklanov is a theatre director working between Almaty and Western Europe.
+His repertoire is **puppet theatre, theatre of objects, and contemporary theatre
+for kids / teens / family** — ages 3+ to 18+, 30+ staged productions, 20+ awards,
+active touring across KZ, DE, ES, AT, BY.
 
-Today's site is a `react-notion-x` renderer over a public Notion page. It has
-two structural problems and one tonal one:
-
-- **Structural:** content is unstructured Notion blocks, so the site cannot
-  filter by age, country, role, or theatre form; bilingual handling is just a
-  link to a parallel Notion page; SEO/OG is weak; first paint depends on
-  Notion's API uptime.
-- **Tonal:** the site looks like a Notion theme. There is no theatre-specific
-  atmosphere, no editorial voice, no curatorial signal. A festival curator
-  opening it on mobile sees "another Notion site," not Roman's body of work.
-
-The rewrite addresses both.
+The site was previously a `react-notion-x` renderer over a public Notion page.
+The rewrite replaced it with a statically generated Next.js 15 site on a
+content-owned MDX stack (Obsidian as editor, Vercel as host).
 
 ---
 
@@ -45,8 +41,21 @@ The rewrite addresses both.
 >    Productions he directed in Russia before 2022 stay on the site
 >    as part of the body of work; copy must not claim present-tense
 >    work in Russia. Consequence applied in `DESIGN_AMBITION.md`
->    §3.G.1 (tense-neutral section labels) and §3.H (year-only
->    colophon, no city pairing).
+>    §3.G.1 (past-tense `ГДЕ СТАВИЛ` / `STAGED IN` /
+>    `INSZENIERTE IN`) and §3.H (year-only colophon, no city pairing).
+>
+> **Launch context (2026-05-02).** The site goes live to
+> `boklanov.com` as a 33rd-birthday surprise for Roman (born
+> 7 May 1993; D4 deadline before 6 May). **Phase 7.5 Round 1–3
+> design elevation already shipped** against `boklanov.vercel.app`
+> (folio + cue numbers + edition stamp; production credits +
+> theatre slate + two-geographies + premiere mark; slate-strike
+> gesture paired with static edition-frame fallback). Phase 7.6
+> editorial-polish backlog scheduled post-D4. Phase 8 authoring
+> handoff (Obsidian + R2 codepaths shipped, 8.3–8.5 pending) lets
+> Roman take the site over after the surprise reveal. None of these
+> post-lock annotations modify D1–D15 — they record which lock-text
+> triggered which downstream decision.
 
 **#1 user:** a **theatre director or curator** (probably Russian-speaking) in a
 European city — **Berlin, Bremen, Vienna, London, Alicante, Bern, Hamburg,
@@ -82,29 +91,29 @@ site.
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | D1  | **Site goal:** booking magnet first, EPK second, archive third.                                                                                       |
 | D2  | **Primary user:** theatre director / curator, RU-speaking, EU cities, mobile, 90s.                                                                    |
-| D3  | **Content source:** Notion stays editor-of-record. `scripts/sync-from-notion.ts` regenerates `content/productions/*.mdx` at build. MDX is generated, never hand-edited. _**Superseded 2026-05-02** by `CONTENT_WORKFLOW.md` lock: in Phase 8 the source of truth becomes **Obsidian + obsidian-git, vault = repo**; MDX becomes hand-edited; the sync script is retired to `scripts/_legacy/`._ |
+| D3  | **Content source:** ~~Notion stays editor-of-record.~~ _Superseded 2026-05-02:_ source of truth is **Obsidian + obsidian-git (vault = repo)**. MDX frontmatter is hand-edited via Obsidian Properties panel. `scripts/sync-from-notion.ts` retired to `scripts/_legacy/`. |
 | D4  | **Bilingual:** RU + EN parity for everything programmers care about. **DE = UI-chrome only for v1**; promote to full DE bios for the 5–6 most-toured productions in v2. Press clippings stay in original language with no translation. |
 | D5  | **IA:** single Productions index, default-filtered to `role=director`. Acting/co-direction/readings tucked behind a toggle. Curator-default landing opens with a short artistic statement and 4–6 hand-curated featured shows above the filterable grid. |
-| D6  | **Content metadata:** heuristic extraction (age rating, year, country flags) from MD on first sync into `metadata.yml`; hand-fix the 20% the heuristic misses. Roman never edits the metadata file. _**Superseded 2026-05-02** by `CONTENT_WORKFLOW.md` lock: in Phase 8.3 `metadata.yml` is folded one-shot into MDX frontmatter (single source of truth per field); the overlay file is deleted; Roman edits frontmatter directly via Obsidian Properties panel._ |
-| D7  | **Production page layout:** cover · title (RU + smaller EN/DE) · age/year/duration/country chips · 1-line synopsis · credits · "Watch / listen" CTA + "Tech rider (PDF)" + "Press kit (ZIP)" when present · photos with credit on hover · critic quotes · awards · external theatre links · sticky "Email Roman about touring this show" CTA. |
-| D8  | **Contact / booking:** **revised 2026-05-01.** On the standalone `/contact` page, **Telegram + Instagram are primary** (Roman responds there fastest); prefilled mailto + plain-text copy-pasteable email demoted to secondary. No form, no backend. The **sticky booking CTA on `/productions/[slug]` stays mailto** — that CTA is a booking magnet (brief D1) and benefits from a prefilled subject + body that Telegram cannot replicate cleanly. _Original phrasing: "prefilled mailto primary + Telegram + Instagram secondary." Reordered after R1 manual QA._ |
+| D6  | **Content metadata:** ~~heuristic extraction into `metadata.yml`; hand-fix the 20% the heuristic misses.~~ _Superseded 2026-05-02:_ Phase 8.3 folded all `metadata.yml` overlays one-shot into MDX frontmatter (single source of truth per field). Overlay files deleted. Roman edits frontmatter directly via Obsidian Properties. |
+| D7  | **Production page layout:** cover · title (RU + smaller EN/DE) · age/year/duration/country chips · 1-line synopsis · credits · "Watch / listen" CTA + "Tech rider (PDF)" + "Press kit (ZIP)" when present · photos with credit · critic quotes · awards · external theatre links · sticky "Email Roman about touring this show" CTA. |
+| D8  | **Contact / booking:** on `/contact`, **Telegram + Instagram are primary** (Roman responds there fastest); prefilled mailto + plain-text copy-pasteable email are secondary. No form, no backend. The **sticky booking CTA on `/productions/[slug]` stays mailto** — benefits from prefilled subject + body. |
 | D9  | **Search & recommends:** Cmd-K palette across productions, awards, press, theatres, cities, with transliterated index. Recommends 3 cards by `same age bucket + same theatre form + same lineage (Кудашов / БТК)`. |
 | D10 | **Aesthetic family:** **(α) warm editorial** as base + **(δ) brutalist accents** for metadata (mono dates, roles, durations). Dark mode = soft `#0E0D0C`, never pure black. |
 | D11 | **Colour system:** **(c) photo-led** — chrome stays neutral, colour comes from production photos. **One reserved accent:** deep oxblood for booking CTAs and hover underlines only. |
-| D12 | **Photography:** local export already complete (419 images, see §6). Subtle brutalist credit caption under each image is mandatory. |
-| D13 | **Typography:** display = **Lora** (transitional, calligraphic warmth, full Cyrillic — recommended by type.today for editorial Cyrillic work); body = **Inter** (already in `public/fonts/`, full Cyrillic); caption / metadata = **JetBrains Mono** (full Cyrillic, brutalist-leaning, sets up the metadata layer). All three are open-source / SIL OFL. PT Serif and Spectral kept as A/B alternates. |
-| D14 | **Tone:** quiet curatorial. The site is a frame; the work speaks. **One signature gesture only** — a single subtle string-line / paper-cut transition, not a recurring motif. No kinetic type, no hero video, no scroll-locked parallax. |
+| D12 | **Photography:** local export complete (419 images). Subtle brutalist credit caption under each image is mandatory. |
+| D13 | **Typography:** display = **Lora** (transitional, calligraphic warmth, full Cyrillic); body = **Inter** (already in `public/fonts/`, full Cyrillic); caption / metadata = **JetBrains Mono** (full Cyrillic, brutalist-leaning). All three are open-source / SIL OFL. |
+| D14 | **Tone:** quiet curatorial. The site is a frame; the work speaks. One signature gesture only — the slate-strike (DA-3.A, shipped 2026-05-02). No kinetic type, no hero video, no scroll-locked parallax. |
 | D15 | **Wordmark:** no logo. Site title is the name set in Lora, all-lowercase, language-aware (`роман бокланов` / `roman boklanov`). |
 
 ---
 
-## 4. Information architecture (high-level — Phase 2 will detail)
+## 4. Information architecture
 
 ```
 /                       Home — artistic statement + 4–6 featured shows + filterable grid below fold
 /productions            Filterable grid (query strings drive filters; deep-linkable)
 /productions/[slug]     Canonical detail page, layout per D7
-/about                  Long-form bio + lineage (Кудашов / БТК / РГИСИ) + portrait
+/about                  Long-form bio + lineage (Кудашов / БТК / РГИСИ) + portrait + staging geography
 /awards                 Award timeline grouped by production
 /press                  Press clippings in card grid; original-language only
 /archive                Readings, sketches, workshops, festival appearances (the long-tail CV)
@@ -114,40 +123,37 @@ site.
 
 ---
 
-## 5. Visual system (Phase 2 deliverable; preview here)
+## 5. Visual system (implemented)
 
-Tokens go into `.design/boklanov-rewrite/tokens.md` and `app/globals.css`.
+Tokens in `app/globals.css`. Source reference in `.design/boklanov-rewrite/tokens.md`.
 
 ### 5.1 Colour (light)
 
-| Token        | Value     | Use                                                       |
-| ------------ | --------- | --------------------------------------------------------- |
-| `--paper`    | `#F4F2EC` | Page background. Off-white, warm.                         |
-| `--ink`      | `#161514` | Primary text.                                             |
-| `--ink-mute` | `#605C56` | Secondary text, dates, captions.                          |
-| `--rule`     | `#1615141A` | Hairline rules between sections (10% ink).              |
-| `--accent`   | `#6B0F0F` | **Reserved**: booking CTAs, hover underlines. Nowhere else. |
+| Token        | Value       | Use                                                       |
+| ------------ | ----------- | --------------------------------------------------------- |
+| `--paper`    | `#F4F2EC`   | Page background. Off-white, warm.                         |
+| `--ink`      | `#161514`   | Primary text.                                             |
+| `--ink-mute` | `#605C56`   | Secondary text, dates, captions.                          |
+| `--rule`     | `#1615141A` | Hairline rules between sections (10% ink).                |
+| `--accent`   | `#6B0F0F`   | **Reserved**: booking CTAs, hover underlines. Nowhere else. |
 
 ### 5.2 Colour (dark)
 
-| Token        | Value     | Use                                          |
-| ------------ | --------- | -------------------------------------------- |
-| `--paper`    | `#0E0D0C` | Page background. Soft black, not OLED-pure.  |
-| `--ink`      | `#E8E5DD` | Primary text.                                |
-| `--ink-mute` | `#9E9A92` | Secondary text.                              |
-| `--rule`     | `#E8E5DD1A` | Hairline rules.                            |
-| `--accent`   | `#A82626` | Booking CTAs, hover underlines.              |
+| Token        | Value       | Use                                          |
+| ------------ | ----------- | -------------------------------------------- |
+| `--paper`    | `#0E0D0C`   | Page background. Soft black, not OLED-pure.  |
+| `--ink`      | `#E8E5DD`   | Primary text.                                |
+| `--ink-mute` | `#9E9A92`   | Secondary text.                              |
+| `--rule`     | `#E8E5DD1A` | Hairline rules.                              |
+| `--accent`   | `#A82626`   | Booking CTAs, hover underlines.              |
 
 ### 5.3 Typography
 
-| Role                          | Font                | Weights used      | Cyrillic | License   |
-| ----------------------------- | ------------------- | ----------------- | -------- | --------- |
-| Display (hero, page titles)   | **Lora**            | 400, 500, 600     | ✓        | OFL       |
-| Body (long-form prose)        | **Inter**           | 400, 500, 600     | ✓        | OFL       |
-| Caption / metadata / numerics | **JetBrains Mono**  | 400, 500          | ✓        | OFL       |
-
-A/B alternates if a future refresh wants more weight: PT Serif (display)
-and Spectral (body). Both have first-class Cyrillic.
+| Role                          | Font                | Weights used | Cyrillic | License |
+| ----------------------------- | ------------------- | ------------ | -------- | ------- |
+| Display (hero, page titles)   | **Lora**            | 400, 500, 600 | ✓       | OFL     |
+| Body (long-form prose)        | **Inter**           | 400, 500, 600 | ✓       | OFL     |
+| Caption / metadata / numerics | **JetBrains Mono**  | 400, 500      | ✓       | OFL     |
 
 ### 5.4 Type scale (mobile-first, fluid)
 
@@ -172,71 +178,54 @@ and Spectral (body). Both have first-class Cyrillic.
 
 - Page transitions: 200ms fade, no slide.
 - Hover: 150ms underline reveal on links and CTAs.
-- The **one signature gesture** (TBD in Phase 4): a paper-cut or string-line
-  transition between sections on the home page, ≤ 400ms total, runs once on
-  page load, never on scroll. `prefers-reduced-motion` disables it entirely.
+- **Signature gesture:** slate-strike (DA-3.A) — 320ms one-shot on home first paint; `prefers-reduced-motion` disables entirely; static edition-frame fallback (DA-3.C) as end-state.
 - No parallax. No scroll-driven entrances. No animated gradients.
 
 ---
 
-## 6. Photo coverage (real, audited)
+## 6. Photo coverage
 
 From `.design/boklanov-rewrite/photo-audit.md` (run on the local Notion export):
 
-- **56 production records** total in the export.
-- **32 records with at least one local image** (57%). 24 records have zero
-  images — most of these are **EN-mirror duplicates** (e.g. _Похороните меня за плинтусом_ with 0 images is the same show as _Bury Me Behind the Baseboard_ with 12 images). The sync script must merge RU+EN siblings into a single production record.
-- **419 total images, 250 MB**.
-- **Only 4 records (7%) have an explicitly-named poster** (Крошечка-Хаврошечка,
-  Джаггер-Джаггер, Медведь в своём репертуаре, Bury Me Behind the Baseboard).
-  All other productions need a poster either commissioned, extracted from
-  rehearsal photos, or rendered from the production title alone — the design
-  system must not assume a poster exists.
-- **Photo credits are NOT structured anywhere in the export** — heuristic
-  search of all MD files returned only one candidate. **A manual pass is
-  required**: `metadata.yml` must include a `credits[]` array per production,
-  and the gallery component must display the credit visibly (not hidden behind
-  hover) for every image. Roman owes us this list, and we should ask in plain
-  language: "for each image you want on the site, who took it."
+- **24 productions** (after merging RU+EN sibling pairs and filtering non-productions).
+- **419 total images, 250 MB** — all in `public/productions/<slug>/`.
+- **Photo credits are not structured** — `gallery[].credit` is null across most productions. Roman needs to fill these via Obsidian (open task).
 
-### Top-coverage productions (use these for hero / featured / examples)
+### Top-coverage productions (used for hero / featured)
 
 | Images | Production                        | Notes                                |
 | -----: | --------------------------------- | ------------------------------------ |
-|     33 | Nikita looking for the sea        | EN; merge with _Никита ищет море_     |
-|     28 | Комедия Дель-Арте                  | RU only                              |
+|     33 | Nikita looking for the sea        | merged with _Никита ищет море_       |
+|     28 | Комедия Дель-Арте                 | RU only                              |
 |     27 | Лина-Марлина                      | KZ production                        |
 |     25 | Гипс                              | RU                                   |
-|     25 | Осторожно, злая собака!!!          | KZ                                   |
-|     25 | The Ape Star                      | EN; merge with _Меня удочерила Горилла_|
+|     25 | Осторожно, злая собака!!!         | KZ                                   |
+|     25 | The Ape Star                      | merged with _Меня удочерила Горилла_ |
 |     24 | Крошечка-Хаврошечка               | poster present                       |
 |     22 | Идём вдвоём                       | RU                                   |
-|     21 | Aiaccio                           | EN; merge with _Айяччо_              |
-
-The **artistic-statement landing should pull featured cards from this top
-band** — not from low-coverage shows that would force placeholder treatment.
+|     21 | Aiaccio                           | merged with _Айяччо_                 |
 
 ---
 
-## 7. Content model — production frontmatter (target)
+## 7. Content model — production frontmatter
 
-This is what `scripts/sync-from-notion.ts` should produce per production. It
-combines auto-extracted fields, metadata-overlay fields, and credit fields
-that need a manual pass.
+Single source of truth is `content/productions/<slug>/index.mdx`. All fields
+are edited via Obsidian Properties panel; no overlay file.
 
 ```yaml
 ---
 slug: bury-me-behind-the-baseboard
-notionIds:
-  ru: ee2d7bea11484e16bcb03effc276a719
-  en: c6f2c93cbb534a19ba38b81226aa795b
+notionIds:           # kept for historical traceability; Notion sync retired
+  ru: ee2d7bea...
+  en: c6f2c93c...
 title:
   ru: "Похороните меня за плинтусом"
   en: "Bury Me Behind the Baseboard"
-  de: null  # filled only for v2 priority shows
+  de: null           # filled only for v2 priority shows
 synopsis:
   ru: "..."
   en: "..."
+  de: null
 theatre:
   name: "Большой театр кукол"
   shortName: "БТК"
@@ -244,41 +233,59 @@ theatre:
   country: "RU"
   url: "https://puppets.ru/spec/115"
 year: 2020
+premiereDate:        # human-readable string per locale
+  ru: "24 марта 2021 г."
+  en: "24 March 2021"
+ticketsUrl: "https://puppets.ru/spec/115#performance=..."
 ageRating: "18+"
 durationMin: 90
-role: director           # director | co-director | performer | reader | sketch
-form:                    # for filtering and recommends
+role: director       # director | co-director | performer | reader | sketch
+form:
   - puppet
   - solo
-lineage:                 # for recommends
+lineage:
   - btk
   - kudashov
+credits:             # per-locale arrays; role labels in source language
+  ru:
+    - role: Режиссёр
+      name: Роман Бокланов
+      url: "https://..."   # optional
+  en:
+    - role: Director
+      name: Roman Boklanov
 poster:
   src: /productions/bury-me-behind-the-baseboard/poster.jpg
-  credit: null
+  credit: null       # photographer name — Roman to fill
 gallery:
   - src: /productions/bury-me-behind-the-baseboard/01.jpg
-    credit: "Стас Левшин"           # MANUAL PASS
-    caption: { ru: "...", en: "..." }
+    credit: null     # photographer name — Roman to fill
+    caption:
+      ru: null
+      en: null
 videos:
   - provider: youtube
-    id: "dQw4w9WgXcQ"
+    id: "..."
 awards:
   - name: "Он.Она.Они."
     category: "Лауреат 1 степени"
     year: 2021
     city: "Екатеринбург"
 press:
-  - title: "Если спектакль рожден в любви, то и зритель его полюбит"
+  - title: "..."
     outlet: "СПб ведомости"
-    url: "https://spbvedomosti.ru/..."
+    url: "https://..."
     language: "ru"
-techRider: null          # path to PDF if available
-pressKit: null           # path to ZIP if available
+tour:                # Plinth only — list of tour stops; empty → band hidden
+  - city: London
+  - city: Edinburgh
 externalLinks:
   - label: "БТК"
     url: "https://puppets.ru/spec/115"
-featured: true           # editor's choice for landing carousel
+techRider: null      # path to PDF if available
+pressKit: null       # path to ZIP if available
+featured: true       # editor's choice for landing strip
+tags: []
 ---
 ```
 
@@ -286,44 +293,34 @@ featured: true           # editor's choice for landing carousel
 
 ## 8. Anti-patterns (do NOT ship)
 
-These are the AI-default looks the design must actively reject. Cribbed from
-`~/refs/awesome-claude-design`'s anti-slop kit, filtered for relevance.
-
 - AI-purple / pink gradients
 - Glassmorphism, neumorphism, claymorphism
 - "AI-Native UI" chips, animated gradient text, kinetic gradient meshes
 - Hero video backgrounds
 - Bento grids on the home page
-- Generic Tailwind defaults (rounded-2xl shadow-xl)
-- Stock photography of "diverse smiling team" types (we have real production photos; use them)
+- Generic Tailwind defaults (`rounded-2xl shadow-xl`)
+- Stock photography (we have real production photos; use them)
 - Comic-Sans-as-irony or any "puppet show" pastiche typography
 - Loading-spinner skeletons that animate forever
 - Cookie banner that takes the bottom 20% of the screen
 
 ---
 
-## 9. Open questions and risks
+## 9. Open questions
 
-| #   | Question / risk                                                                                                                  | Owner    | When needed |
-| --- | -------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
-| Q1  | Does Roman have **photographer credits per image**? Without these, the gallery treatment looks unprofessional.                   | Roman    | Phase 3     |
-| Q2  | Does Roman have **technical riders / press kits** as PDFs we can host? If yes, which productions?                                | Roman    | Phase 3     |
-| Q3  | The "**one signature gesture**" — paper-cut transition vs string-line vs neither. Decide in Phase 4 with prototypes.              | Designer | Phase 4     |
-| Q4  | German UI-chrome translations: who does them? (Translation effort is small; ~80 strings.)                                          | Daniil   | Phase 5     |
-| Q5  | **Domain question:** keep `boklanov.ru` only, or also `boklanov.com`? `.ru` is geopolitically sensitive for some EU bookers.       | Roman    | Phase 7     |
-| Q6  | **Hosting:** stay on Vercel? CN/RU access has been intermittent. Cloudflare Pages or Yandex Cloud as alternates.                  | Daniil   | Phase 7     |
-| Q7  | **Analytics:** PostHog and Fathom are in deps but unused. Pick one (or none) and wire it up — booking-CTA conversion is the only real metric. | Daniil   | Phase 5     |
-| Q8  | What's the **legal language** for press / production photos? Can we host them, or do we link out only?                           | Roman    | Phase 3     |
-
----
-
-## 10. Phase plan reference
-
-This brief feeds Phase 2 (`/information-architecture` + `/design-tokens`) and
-Phase 3 (Notion → MDX sync). The full 8-phase plan is in
-`/PLAN.md` at the repo root. Any divergence from this brief in a later phase
-is a brief change and must be reflected here first.
+| #   | Question / risk                                                                                              | Owner  | Status         |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------ | -------------- |
+| Q1  | Does Roman have **photographer credits per image**? Without these, `gallery[].credit` stays null.            | Roman  | **Open** — fill via Obsidian after onboarding |
+| Q2  | Does Roman have **technical riders / press kits** as PDFs? Which productions?                                | Roman  | **Open** — fill `techRider` / `pressKit` fields in Obsidian |
+| Q3  | The "one signature gesture" — which option?                                                                   | —      | **Resolved 2026-05-02** — DA-3.A slate-strike (320ms one-shot) + DA-3.C static edition-frame fallback. Shipped in `7c26402`. |
+| Q4  | German UI-chrome translations: who does them?                                                                 | —      | **Resolved 2026-05-02** — S5 done. All 44 keys in `messages/de.json`. |
+| Q5  | **Domain:** keep `boklanov.ru` only, or also `boklanov.com`?                                                  | —      | **Resolved 2026-05-02** — `boklanov.com` canonical (D3). `.ru` deferred. D4 cutover pending. |
+| Q6  | **Hosting:** stay on Vercel? CN/RU access intermittent. Cloudflare Pages or Yandex Cloud as alternates.      | —      | **Resolved 2026-05-02** — Vercel stays (D2). No migration. |
+| Q7  | **Analytics:** PostHog or Fathom or none?                                                                     | —      | **Resolved 2026-05-02** — PostHog (S4). `booking_cta_click` only; autocapture/pageview/recording disabled. |
+| Q8  | What's the **legal language** for press / production photos? Can we host them, or link out only?              | Roman  | **Open** — assumed host-ok based on Roman providing files; confirm explicitly. |
 
 ---
 
 _Brief locked: 2026-04-30. Author: Daniil Petrov + Claude Opus 4.7._
+_Annotations 2026-05-02: troupe clarification, Russia context, D3/D6/D8 supersessions,_
+_Q3–Q7 resolved, content model updated to reflect Phase 8.3 single-source frontmatter._

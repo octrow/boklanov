@@ -1,7 +1,24 @@
 # Information Architecture — boklanov.com / boklanov.ru
 
 > Produced from DESIGN_BRIEF.md (locked 2026-04-30). Any divergence from the
-> brief must be reflected here first. Last updated: 2026-04-30.
+> brief must be reflected here first. Last updated: **2026-05-02 (Phase 7.5
+> shipped, Phase 7.6 backlog added)**.
+>
+> **Phase 7.5 (`DESIGN_AMBITION.md`) ✅ all rounds shipped.** Routes are
+> unchanged; the per-route content blocks gained editorial fingerprints —
+> folio band + cue marks (Round 1), per-production credits as `<dl>` +
+> theatre slate + two-geographies (`/about` staging row + Plinth `ON TOUR`
+> band) + `PREM YYYY` cards (Round 2), slate-strike gesture on home first
+> paint with static edition-frame fallback (Round 3).
+>
+> **Phase 7.6 backlog (`TASKS.md` Phase 7.6).** Adds optional content
+> blocks at the route level — director's note (DA-7.6.C) + run-of-show
+> indicator (DA-7.6.D) on `/productions/[slug]`; marginalia gutter on
+> `/about` and synopses ≥1280px (DA-7.6.A); CUE-count tag on `/awards`
+> (DA-7.6.E); editorial empty states across `/productions`, Cmd-K, and
+> `/archive` (DA-7.6.J); print stylesheet for press-kit printability
+> (DA-7.6.B). All scheduled post-D4. **No new routes**, no IA changes —
+> only per-route content additions and CSS polish.
 
 > **v2 architectural shift:** the current repo (`main`) uses Next.js Pages Router
 > under `pages/`. v2 (`rewrite/v2`) migrates to the App Router. All file-system
@@ -154,13 +171,21 @@ or a bento grid. The work speaks; the statement frames it.
 
 ### Production detail `/productions/[slug]`
 
-> **Phase 7.5 addition (DESIGN_AMBITION.md §3.G.2).** On the
-> `/productions/bury-me-behind-the-baseboard` route only, an `ON TOUR`
-> band renders above the photo gallery, listing the Plinth solo-show
-> tour stops. Driven by a `tour[]` array on the production's MDX
-> frontmatter; if empty, the band hides. No new URL, no new route —
-> just a per-production data block. Roman tours this show alone, no
-> troupe, so the band carries no cast information.
+> **Phase 7.5 addition (DESIGN_AMBITION.md §3.G.2, shipped `0bebf3c`).**
+> On the `/productions/bury-me-behind-the-baseboard` route only, an
+> `ON TOUR` band renders above the photo gallery, listing the Plinth
+> solo-show tour stops. Driven by a `tour[]` array on the production's
+> MDX frontmatter (with overlay support); if empty, the band hides. No
+> new URL, no new route — just a per-production data block. Roman tours
+> this show alone, no troupe, so the band carries no cast information.
+>
+> **Phase 7.6 backlog additions (`TASKS.md` Phase 7.6, post-D4).**
+> Two optional per-production blocks: **DA-7.6.C director's note** —
+> italic Lora blockquote with hairline left rule + mono attribution
+> `— РОМАН БОКЛАНОВ`, gated by an optional `directorsNote.{ru,en}`
+> field; **DA-7.6.D run-of-show row** — mono caps `RUN · BTK · СПБ ·
+> 2020–2024 · ~80 PERFORMANCES`, gated by an optional `runs[]` array.
+> Both hide when the field is empty. No route changes.
 
 Follows the D7 layout exactly:
 
@@ -189,14 +214,22 @@ Follows the D7 layout exactly:
 1. **Portrait** — full-width or 50% column on desktop. Real production/press photo, not a headshot.
 2. **Bio lead** — 1-paragraph curatorial intro, Lora.
 3. **Long-form bio** — prose, Inter body. Covers artistic lineage: Кудашов → БТК → РГИСИ.
-4. **Staging geography (Phase 7.5, DESIGN_AMBITION §3.G.1)** — single mono row of cities where
-   Roman has directed productions, in chronological order of first commission:
-   `СПБ · МОСКВА · АЛМАТЫ · БРЕМЕН · ВЕНА · БЕРЛИН · ТАШКЕНТ`. Section label **locked past-tense
-   2026-05-02**: RU `ГДЕ СТАВИЛ` · EN `STAGED IN` · DE `INSZENIERTE IN`. Past-tense is the only
-   form that's literally truthful for both the Russian cities (Roman cannot work there since
-   the 2022 mobilisation, but the productions exist) and the active commissions (already-staged
-   productions still play). Each city hover-links to `/productions?city=<slug>` — reuses the
-   existing C4 filter URL state.
+4. **Staging geography (Phase 7.5, DESIGN_AMBITION §3.G.1, shipped `0bebf3c`)** — single mono
+   row of cities where Roman has directed productions, in chronological order of first
+   commission: `СПБ · МОСКВА · АЛМАТЫ · БРЕМЕН · ВЕНА · БЕРЛИН · ТАШКЕНТ`. Section label
+   **locked past-tense 2026-05-02**: RU `ГДЕ СТАВИЛ` · EN `STAGED IN` · DE `INSZENIERTE IN`.
+   Past-tense is the only form that's literally truthful for both the Russian cities
+   (Roman cannot work there since the 2022 mobilisation, but the productions exist) and
+   the active commissions (already-staged productions still play). Each city hover-links
+   to `/productions?city=<slug>` — reuses the existing C4 filter URL state.
+
+   **Phase 7.6 backlog (`DA-7.6.A` post-D4).** Above 1280px, the long-form bio prose to the
+   left of this row gets a marginalia slot in the right gutter — photographer credits,
+   lineage cross-references, dates in mono. Collapses inline below 1280px.
+
+   **Phase 7.6 backlog (`DA-7.6.H` post-D4).** Audit `INSZENIERTE IN` (13 chars) wrap on
+   1024–1100px desktop in DE locale; if it wraps, apply `text-wrap: balance` or shorten the
+   label to `BÜHNEN IN`.
 5. **Education / key dates** — timeline component, JetBrains Mono dates. Not a CV dump; 6–8 key milestones.
 6. **Theatres worked with** — logo/name grid or plain list with links.
 
