@@ -144,14 +144,14 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 | §6.1 | Grain SVG + photographic processing recipe (contrast/saturate/brightness) | done | `5d49f4e` |
 | §6.2 | TypographicCover synopsis collision-buster (1-line italic Lora above meta) | done | `046aae9` |
 | §6.3 | CreditLine primitive | done | `e73379a` — primitive available for future call-sites |
-| §7 #1 | Stylelint scope rule for `--specimen-rule` | done (npm script) | this commit — `npm run lint-tokens` |
+| §7 #1 | Stylelint scope rule for `--specimen-rule` | done (npm script) | `b617817` — `npm run lint-tokens` |
 | §7 #1b | Playwright visual regression for non-photo card box-shadow | not implemented | no Playwright setup; lint-tokens covers static guard |
-| CONTENT.md | TourRider null-field contract documented | done | this commit |
+| CONTENT.md | TourRider null-field contract documented | done | `b617817` |
 
 ## Recent commits
 
 ```
-(this commit) chore: lint-tokens scope guard + CONTENT.md TourRider contract + STATUS update
+b617817 chore: lint-tokens scope guard + CONTENT.md TourRider contract + STATUS update
 36546d9 feat(9.4): Marginalia kind=note/pull/run API extension
 046aae9 feat(9.x-poly): TypographicCover synopsis collision-buster (proposal §6.2)
 e73379a feat(9.x-poly): CreditLine primitive (proposal §6.3)
