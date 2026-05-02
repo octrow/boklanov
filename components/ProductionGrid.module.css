@@ -24,16 +24,7 @@
   }
 }
 
-.empty {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-mute);
-  padding: var(--space-7) 0;
-  text-align: left;
-}
-
-/* Inline "· clear" button in the empty state. Oxblood only per DESIGN §5.2. */
+/* Clear-filters ghost button inside EmptyState. Oxblood only per DESIGN §5.2. */
 .emptyReset {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -42,11 +33,10 @@
   background: none;
   border: none;
   cursor: pointer;
-  /* ≥44px vertical touch target on mobile; inline-flex keeps it in flow. */
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0 var(--space-1);
+  padding: 0;
   transition: opacity var(--duration-fast) var(--easing-default);
 }
 

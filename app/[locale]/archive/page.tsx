@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
+import { EmptyState } from '@/components/EmptyState'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -35,7 +36,7 @@ export default async function ArchivePage({
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {entries.length === 0 ? (
-        <p className={styles.empty}>{t('empty')}</p>
+        <EmptyState body={t('empty')} />
       ) : (
         <table className={styles.table}>
           <thead className={styles.thead}>

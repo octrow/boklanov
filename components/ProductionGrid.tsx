@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import type { ProductionView } from '@/lib/content'
 
+import { EmptyState } from './EmptyState'
 import { ProductionCard } from './ProductionCard'
 import styles from './ProductionGrid.module.css'
 
@@ -24,17 +25,14 @@ export function ProductionGrid({
 }: ProductionGridProps) {
   if (productions.length === 0) {
     return (
-      <p className={styles.empty}>
-        {emptyLabel}
-        {clearAllLabel && onClearAll && (
-          <>
-            {' · '}
-            <button className={styles.emptyReset} onClick={onClearAll}>
-              {clearAllLabel}
-            </button>
-          </>
-        )}
-      </p>
+      <EmptyState
+        body={emptyLabel}
+        action={clearAllLabel && onClearAll ? (
+          <button className={styles.emptyReset} onClick={onClearAll}>
+            <span aria-hidden="true">→ </span>{clearAllLabel}
+          </button>
+        ) : undefined}
+      />
     )
   }
   return (

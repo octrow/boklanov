@@ -1,0 +1,28 @@
+/* DA-7.6.J — editorial empty state. Hairline rule + ERRATA label + italic body.
+   Used across filter, archive, awards, press empty states. */
+
+.root {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.body {
+  font-family: var(--font-family-serif);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  color: var(--ink-mute);
+  margin: 0;
+  max-width: 55ch;
+}

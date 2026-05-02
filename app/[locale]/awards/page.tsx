@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { Cue } from '@/components/Cue'
+import { EmptyState } from '@/components/EmptyState'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -36,7 +37,7 @@ export default async function AwardsPage({
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {groups.length === 0 ? (
-        <p className={styles.empty}>{t('empty')}</p>
+        <EmptyState body={t('empty')} />
       ) : (
         <div className={styles.groups}>
           {groups.map((group, i) => (

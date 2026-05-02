@@ -80,5 +80,8 @@
   },
   "footer": {
     "colophon": "2026 EDITION"
+  },
+  "search": {
+    "noResults": "no results in this edition"
   }
 }

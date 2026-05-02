@@ -80,5 +80,8 @@
   },
   "footer": {
     "colophon": "AUSGABE 2026"
+  },
+  "search": {
+    "noResults": "nichts gefunden"
   }
 }

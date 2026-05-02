@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import type { SearchItem } from '@/lib/search'
@@ -122,6 +123,7 @@ interface CommandPaletteProps {
 }
 
 export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) {
+  const t = useTranslations('search')
   const [query, setQuery] = React.useState('')
   const [activeIdx, setActiveIdx] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -217,7 +219,10 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
         {query.trim() && (
           <div className={styles.results} role="listbox" aria-label="Search results">
             {grouped.length === 0 ? (
-              <p className={styles.noResults}>No results</p>
+              <div className={styles.noResults}>
+                <span aria-hidden="true" className={styles.noResultsLabel}>ERRATA</span>
+                <p className={styles.noResultsBody}>{t('noResults')}</p>
+              </div>
             ) : (
               grouped.map(({ group, items: gItems }) => (
                 <div key={group} className={styles.group}>
