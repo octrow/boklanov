@@ -186,7 +186,6 @@ export default async function ProductionDetailPage({
 
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
-  const titleDe = production.titles.de
 
   const country = countryCode(production.theatre.country)
   const chips: string[] = []
