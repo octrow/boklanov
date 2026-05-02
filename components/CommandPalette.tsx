@@ -38,13 +38,6 @@ function searchKey(s: string): string {
 
 type GroupKey = 'production' | 'award' | 'press' | 'theatre' | 'city'
 
-const GROUP_LABELS: Record<GroupKey, string> = {
-  production: 'PRODUCTIONS',
-  award:      'AWARDS',
-  press:      'PRESS',
-  theatre:    'THEATRES',
-  city:       'CITIES'
-}
 
 const GROUP_ORDER: GroupKey[] = ['production', 'award', 'press', 'theatre', 'city']
 const MAX_PER_GROUP = 5
@@ -124,6 +117,13 @@ interface CommandPaletteProps {
 
 export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) {
   const t = useTranslations('search')
+  const GROUP_LABELS: Record<GroupKey, string> = {
+    production: t('groupProductions'),
+    award:      t('groupAwards'),
+    press:      t('groupPress'),
+    theatre:    t('groupTheatres'),
+    city:       t('groupCities'),
+  }
   const [query, setQuery] = React.useState('')
   const [activeIdx, setActiveIdx] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -209,7 +209,7 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={styles.input}
-            placeholder="Search…"
+            placeholder={t('placeholder')}
             aria-label="Search"
             autoComplete="off"
             spellCheck={false}

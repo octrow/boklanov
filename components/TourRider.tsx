@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
 import styles from './TourRider.module.css'
@@ -36,7 +37,7 @@ interface TourRiderProps {
  * Desktop-only (≥1024px); on mobile, the production-detail chips row
  * carries year/age/duration data.
  */
-export function TourRider({
+export async function TourRider({
   productionLabel,
   year,
   durationMin,
@@ -49,29 +50,30 @@ export function TourRider({
   techRider,
   pressKit,
 }: TourRiderProps) {
+  const t = await getTranslations('productionDetail')
   const rows: TourRiderRowProps[] = []
-  if (year) rows.push({ label: 'YEAR', value: year })
-  if (durationMin) rows.push({ label: 'RUN', value: <>{durationMin}&thinsp;MIN</> })
-  if (ageRating) rows.push({ label: 'AGE', value: ageRating })
-  if (country) rows.push({ label: 'COUNTRY', value: country })
-  if (language) rows.push({ label: 'LANGUAGE', value: language.toUpperCase() })
+  if (year) rows.push({ label: t('riderYear'), value: year })
+  if (durationMin) rows.push({ label: t('riderRun'), value: <>{durationMin}&thinsp;{t('riderMin')}</> })
+  if (ageRating) rows.push({ label: t('riderAge'), value: ageRating })
+  if (country) rows.push({ label: t('riderCountry'), value: country })
+  if (language) rows.push({ label: t('riderLanguage'), value: language.toUpperCase() })
   if (form && form.length > 0) {
-    rows.push({ label: 'FORM', value: form.map((f) => f.toUpperCase()).join(' · ') })
+    rows.push({ label: t('riderForm'), value: form.map((f) => f.toUpperCase()).join(' · ') })
   }
   if (lineage && lineage.length > 0) {
-    rows.push({ label: 'LINEAGE', value: lineage.map((l) => l.toUpperCase()).join(' · ') })
+    rows.push({ label: t('riderLineage'), value: lineage.map((l) => l.toUpperCase()).join(' · ') })
   }
-  if (tourSolo) rows.push({ label: 'TOURING', value: 'SOLO' })
+  if (tourSolo) rows.push({ label: t('riderTouring'), value: t('riderSolo') })
   if (techRider) {
     rows.push({
-      label: 'TECH RIDER',
+      label: t('riderTechRider'),
       value: (
         <a
           className={styles.docLink}
           href={techRider}
           target='_blank'
           rel='noreferrer noopener'
-          aria-label='Technical rider, PDF'
+          aria-label={t('riderTechRiderAria')}
         >
           PDF
         </a>
@@ -80,14 +82,14 @@ export function TourRider({
   }
   if (pressKit) {
     rows.push({
-      label: 'PRESS KIT',
+      label: t('riderPressKit'),
       value: (
         <a
           className={styles.docLink}
           href={pressKit}
           target='_blank'
           rel='noreferrer noopener'
-          aria-label='Press kit, ZIP'
+          aria-label={t('riderPressKitAria')}
         >
           ZIP
         </a>
@@ -103,7 +105,7 @@ export function TourRider({
     <details className={styles.rider} aria-hidden='true'>
       {/* tabIndex={-1} prevents keyboard focus since aria-hidden covers AT */}
       <summary className={styles.header} tabIndex={-1}>
-        <span className={styles.index}>{productionLabel ?? 'SPEC SHEET'}</span>
+        <span className={styles.index}>{productionLabel ?? t('riderSpecSheet')}</span>
       </summary>
       <dl className={styles.body}>
         {rows.map((r) => (

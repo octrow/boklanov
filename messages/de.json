@@ -6,10 +6,12 @@
     "press": "Presse",
     "contact": "Kontakt",
     "archive": "Archiv",
-    "search": "Suche"
+    "search": "Suche",
+    "wordmark": "roman boklanov"
   },
   "home": {
     "heroMeta": "Regisseur · Figurentheater · Objekttheater",
+    "heroWordmark": "Roman Boklanov",
     "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
     "featuredLabel": "ausgewählte Werke",
     "allLabel": "Inszenierungen",
@@ -59,7 +61,11 @@
     "instagramCta": "Auf Instagram schreiben",
     "emailLabel": "oder per E-Mail",
     "emailCta": "Roman per E-Mail",
-    "mailtoSubject": "Zusammenarbeit / Tournee"
+    "mailtoSubject": "Zusammenarbeit / Tournee",
+    "copyButton": "kopieren",
+    "copiedButton": "✓",
+    "copyAria": "E-Mail-Adresse kopieren",
+    "copiedAria": "Kopiert"
   },
   "press": {
     "title": "Presse",
@@ -84,7 +90,23 @@
     "directorsNoteAttr": "— ROMAN BOKLANOV",
     "deForthcoming": "Deutsche Übersetzung folgt",
     "stickerAward": "FESTIVALPREIS",
-    "stickerTour": "TOURNEE"
+    "stickerTour": "TOURNEE",
+    "riderYear": "JAHR",
+    "riderRun": "LAUFZEIT",
+    "riderMin": "MIN",
+    "riderAge": "ALTER",
+    "riderCountry": "LAND",
+    "riderLanguage": "SPRACHE",
+    "riderForm": "FORM",
+    "riderLineage": "TRADITION",
+    "riderTouring": "TOURNEE",
+    "riderSolo": "SOLO",
+    "riderTechRider": "TECH RIDER",
+    "riderPressKit": "PRESSEMAPPE",
+    "riderSpecSheet": "TECHBLATT",
+    "riderTechRiderAria": "Technischer Rider, PDF",
+    "riderPressKitAria": "Pressekit, ZIP",
+    "premPrefix": "PREM"
   },
   "about": {
     "stagedIn": "INSZENIERTE IN",
@@ -102,6 +124,12 @@
     "colophon": "AUSGABE 2026"
   },
   "search": {
-    "noResults": "nichts gefunden"
+    "noResults": "nichts gefunden",
+    "groupProductions": "INSZENIERUNGEN",
+    "groupAwards": "AUSZEICHNUNGEN",
+    "groupPress": "PRESSE",
+    "groupTheatres": "THEATER",
+    "groupCities": "STÄDTE",
+    "placeholder": "Suche…"
   }
 }

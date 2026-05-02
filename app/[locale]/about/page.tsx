@@ -127,8 +127,6 @@ function personSchema(locale: Locale, description: string) {
 
 // ── Page ────────────────────────────────────────────────────────────────
 
-const STAGING_CITIES = ['СПБ', 'МОСКВА', 'АЛМАТЫ', 'БРЕМЕН', 'ВЕНА', 'БЕРЛИН', 'ТАШКЕНТ']
-
 export default async function AboutPage({
   params
 }: {
@@ -138,6 +136,7 @@ export default async function AboutPage({
   setRequestLocale(locale)
   const t = await getTranslations('nav')
   const tAbout = await getTranslations('about')
+  const tHome = await getTranslations('home')
 
   const { frontmatter, paragraphs, deForthcoming } = loadAbout(locale)
   const { milestones, lineage, marginalia, photos } = frontmatter
@@ -174,7 +173,7 @@ export default async function AboutPage({
       <section className={styles.geographySection}>
         <p className={styles.geographyLabel}>{tAbout('stagedIn')}</p>
         <p className={styles.geographyCities}>
-          {STAGING_CITIES.join(' · ')}
+          {(tHome.raw('stagingCities') as string[]).filter(Boolean).join(' · ')}
         </p>
       </section>
 

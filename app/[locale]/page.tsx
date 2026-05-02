@@ -38,7 +38,7 @@ export default async function HomePage({
   return (
     <main className={styles.page}>
       {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
-      <SiteHero locale={locale} statement={t('statement')} />
+      <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')} />
 
       {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
       <TourTicker cities={t.raw('stagingCities') as string[]} accent="mustard" label={tAbout('stagedIn')} />

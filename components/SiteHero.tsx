@@ -1,28 +1,20 @@
 import * as React from 'react'
 
-import type { Locale } from '@/i18n/routing'
-
 import { SiteWordmark } from './SiteWordmark'
 import styles from './SiteHero.module.css'
 
-const SR_NAME: Record<Locale, string> = {
-  ru: 'Роман Бокланов',
-  en: 'Roman Boklanov',
-  de: 'Roman Boklanov'
-}
-
 interface SiteHeroProps {
-  locale: Locale
+  heroWordmark: string
   statement: string
 }
 
-export function SiteHero({ locale, statement }: SiteHeroProps) {
+export function SiteHero({ heroWordmark, statement }: SiteHeroProps) {
   return (
     <section className={styles.hero}>
       {/* SR reads plain text; visible wordmark is aria-hidden gradient */}
-      <h1 className={styles.srOnly}>{SR_NAME[locale]}</h1>
+      <h1 className={styles.srOnly}>{heroWordmark}</h1>
       <p className={styles.heroWordmark} aria-hidden="true">
-        <SiteWordmark variant="hero" locale={locale} />
+        <SiteWordmark variant="hero" text={heroWordmark} />
       </p>
       <p className={styles.statement}>{statement}</p>
       <p className={styles.scrollHint} aria-hidden="true">↓</p>
