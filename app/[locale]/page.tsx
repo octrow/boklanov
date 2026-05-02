@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Suspense } from 'react'
 
 import { ProductionGrid } from '@/components/ProductionGrid'
+import { SectionStripe } from '@/components/SectionStripe'
 import { SlateStrike } from '@/components/SlateStrike'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -39,6 +40,7 @@ export default async function HomePage({
 
   return (
     <main className={styles.page}>
+      <SectionStripe />
       {/* Hero — DESIGN §10: type-led wordmark, no photo overlay */}
       <Suspense fallback={null}>
         <SlateStrike>

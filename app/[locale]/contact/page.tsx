@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
+import { SectionStripe } from '@/components/SectionStripe'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 
@@ -32,6 +33,7 @@ export default async function ContactPage({
 
   return (
     <main className={styles.page}>
+      <SectionStripe />
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {/* Primary: Telegram + Instagram (DESIGN_BRIEF D8 — reordered

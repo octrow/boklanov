@@ -7,6 +7,7 @@ import * as React from 'react'
 
 import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { PosterLightbox } from '@/components/PosterLightbox'
+import { SectionStripe } from '@/components/SectionStripe'
 import { countryCode } from '@/components/ProductionCard'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
@@ -245,6 +246,7 @@ export default async function ProductionDetailPage({
 
   return (
     <main className={styles.page}>
+      <SectionStripe />
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
