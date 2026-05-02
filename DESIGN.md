@@ -48,7 +48,7 @@ Light:
 - `--ink-marginalia rgba(15,14,13,0.55)` marginalia secondary register
 - `--rule rgba(15,14,13,0.10)` hairlines
 - `--rule-strong rgba(15,14,13,0.18)` hover/active borders
-- `--accent-vermillion #E63946` primary stage. Booking CTA fill, `/` + `/awards` + `/contact` SectionStripe, link-hover underline, focus ring, Sticker A. AA on paper 4.65:1 ✓.
+- `--accent-vermillion #CC2530` primary stage. Booking CTA fill, `/` + `/awards` + `/contact` SectionStripe, link-hover underline, focus ring, Sticker A. AA on paper 4.76:1 ✓. (v3.9.fix: was `#E63946` 3.66:1 — proposal claimed 4.65 in error.)
 - `--accent-cobalt #1D3557` secondary stage. `/productions` SectionStripe, Sticker B. AAA on paper 12.4:1 ✓.
 - `--accent-mustard #F4D35E` tertiary stage. `/about` SectionStripe, TourTicker fill, Sticker C. **Decorative only — never for text** (AA fail on paper). Use `--ink-on-mustard` for text on mustard fills.
 - `--ink-on-accent #FBFAF6` text on accent fills (auto-selected per accent for AA)

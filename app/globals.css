@@ -246,7 +246,7 @@
   --rule-strong:  rgba(15, 14, 13, 0.18);   /* hover/active borders */
 
   /* v3 Bauhaus stage trio — replaces v1/v2 oxblood. See DESIGN_v3_PROPOSAL §3. */
-  --accent-vermillion: #E63946;     /* primary stage — booking CTA, /home + /awards + /contact stripes, error */
+  --accent-vermillion: #CC2530;     /* primary stage — booking CTA, /home + /awards + /contact stripes, error. 4.76:1 on --paper AA ✓ */
   --accent-cobalt:     #1D3557;     /* secondary stage — /productions + /press stripes, link-hover underline */
   --accent-mustard:    #F4D35E;     /* tertiary stage — DECORATIVE ONLY (sticker/marquee fill); never text colour */
   --ink-on-accent:     #FBFAF6;     /* default text-on-accent for vermillion/cobalt fills (AA) */
