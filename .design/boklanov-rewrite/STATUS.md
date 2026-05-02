@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-02 (session 4).
+Current state + open work. Updated: 2026-05-02 (session 6).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -24,7 +24,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | Phase                           | Status       | Notes                                                                                                                                                        |
 |---------------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 0 Skills + branch               | done         | `rewrite/v2` cut from `main`                                                                                                                                 |
-| 1 Discovery + brief             | done         | D1-D15 locked (history: `archive/DESIGN_BRIEF.md`)                                                                                                           |
+| 1 Discovery + brief             | done         | D1-D15 locked (history: `archive/DESIGN_BRIEF_compress.md`, full: `archive/DESIGN_BRIEF.md`)                                                                 |
 | 2 Visual identity               | done         | `DESIGN.md` + `app/globals.css`                                                                                                                              |
 | 3 Content migration             | done         | Notion deps removed in F8                                                                                                                                    |
 | 4 Frontend rebuild              | done (11/11) | Last: `ab2ce8b`                                                                                                                                              |
@@ -36,7 +36,8 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
-| 9 Decap CMS layer               | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
+| 9 v2 visual refresh (Vitrine)   | in progress  | See `DESIGN_v2_PROPOSAL.md`. 9.0a `12d1b5a` 9.0b `1d054f2` 9.0c `930fd0a` (§11 unfreezes). 9.1 `5558e16` token deltas. 9.3 TheatreSlate component. 9.2/9.4-9.8 pending. |
+| 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
 
@@ -94,30 +95,66 @@ Tier 3 (~1.5 days):
 - DA-7.6.I ✓ OG image: mono slug + hairlines + Lora title centred + meta/colophon row. Webp skipped → oxblood fallback. `0288258`
 - DA-7.6.J ✓ editorial empty states — `EmptyState`: hairline + ERRATA label + italic Lora body + action slot. Filter, search, archive, awards, press. `e1920af`
 
-Rationale ledger (history, read-only): `archive/DESIGN_AMBITION.md` §15.
+Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §15 (full: `archive/DESIGN_AMBITION.md`).
+
+## Post-7.6 UX fixes (session 5, uncommitted)
+
+- **Hydration**: `suppressHydrationWarning` on `<html>` in `layout.tsx`. Silences `data-theme` / extension attribute mismatch.
+- **Folio on home + full format**: `folioFor` now returns `isHome:true` for `/`; folio band shows on every page. Format updated to `РОМАН БОКЛАНОВ ⟶ SECTION ⟶ 01/24` (director name prefix added).
+- **Cover / afisha**: `max-height: 65vh`, `object-fit: contain`, centered — no cropping. `PosterLightbox` client component wraps cover; click opens full-image overlay (dark backdrop, Escape/click-outside to close).
+- **About photos**: `photos[]` array added to `AboutFrontmatter` + 2-col masonry grid rendered below geography section. Placeholder `photos: []` in `ru.mdx` + `en.mdx`. Roman adds entries when photos are ready.
+- **Archive compress docs**: all `*_compress.md` files registered in MAP.md §2; all active-doc archive links updated to compress-first.
+
+## Accessibility fixes (session 5 audit, uncommitted)
+
+- **PosterLightbox**: focus moves to close button on open; returns to trigger on close (via `requestAnimationFrame`). Body scroll locked while overlay is open. Close button 32px → 44px touch target. `border-radius: 50%` → `var(--border-radius-sm)` (was §5 violation).
+- **About lineage heading**: `<h2>` → `<h3>` for lineage item names — was broken heading hierarchy (section CUE II h2 + inner h2 at same level).
+- **SiteHeader searchBtn**: added `cursor: pointer` to `.searchBtn`.
 
 ## Build state
 
-`main` branch: clean. Last: `0288258`.
+`main` branch: clean. Last: Phase 9.3 TheatreSlate component (commit hash filled on commit).
+
+## Phase 9 v2 visual refresh (in progress)
+
+Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on `main`, no feature branch.
+
+| Phase | Subject | Status | Commit |
+|---|---|---|---|
+| 9.0a | Unfreeze drop-shadow → specimen rule | done | `12d1b5a` |
+| 9.0b | Unfreeze coloured chip pills → mono labels | done | `1d054f2` |
+| 9.0c | Unfreeze rounded-2xl/shadow-xl → form-chrome 2px | done | `930fd0a` |
+| 9.1 | Token deltas — warmer paper + 5 new tokens | done | `5558e16` |
+| 9.2 | Lora variable swap | pending | font file pending download |
+| 9.3 | TheatreSlate component (extract title block + role line) | done | (this commit) |
+| 9.4 | Marginalia refresh (louder, pull variant) | pending | — |
+| 9.5 | EmptyState / ERRATA refresh | pending | — |
+| 9.6 | SpecimenPlate component | pending | blocks-on `--specimen-rule` (9.1 ✓) |
+| 9.7 | TourRider component (subsumes existing right-rail `.slate`) | pending | — |
+| 9.8 | TypographicCover + CreditLine + grain SVG + build-time `coverStyle` | pending | last phase |
+
+Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must read as paper, not cream. If perceived as cream, `git revert 5558e16`.
 
 ## Recent commits
 
 ```
+(9.3 hash) feat(9.3): TheatreSlate component — extract + role line
+5558e16 feat(9.1): v2 token deltas — warmer paper + 5 new tokens
+930fd0a docs(unfreeze 9.0c): rounded-2xl/shadow-xl → form-chrome 2px
+1d054f2 docs(unfreeze 9.0b): coloured chip pills → specimen mono labels
+12d1b5a docs(unfreeze 9.0a): drop-shadow → specimen rule (inset only)
+b00503d docs(v2): archive 2026 research, select Vitrine direction
 0288258 feat(7.6-tier3-i): OG image programme-grammar chrome
 e1920af feat(7.6-tier3-j): editorial empty states — ERRATA register
 00c2501 feat(7.6-tier1): marginalia, print stylesheet, director's note, run-of-show
 3106d26 feat(7.6-tier2): award count, slate LANGUAGE row, no-poster year anchor
-8d3c4fd docs: merge docs/update-planning-docs branch
-c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
-2cee460 docs: update planning — R2 closed, 8.1/8.2 done
-11bef4d feat(phase-8.1): Obsidian vault config + lint-mdx
-8339141 feat(phase-8.2): R2 image CDN — upload script + cdnUrl
-70eb044 content: 2021 RGISI milestone + fix awards
-4ad3743 docs: D1 live + all rounds done
 ```
 
 ## Next actions (in order)
 
-1. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
-2. Roman closes orphan-title audit + photographer credits.
-3. D3/D4 cutover when reactivated.
+1. Daniil pushes commits `b00503d..HEAD` to `boklanov.vercel.app`; visual A/B on `--paper #F2F0EA`.
+2. Lora-VF font download (`Lora[wght].woff2`, `Lora-Italic[wght].woff2` already present) → enables Phase 9.2.
+3. Phase 9.4 (Marginalia louder) or 9.6 (SpecimenPlate) next — both unblocked by 9.1 token deltas.
+4. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
+5. Roman closes orphan-title audit + photographer credits.
+6. D3/D4 cutover when reactivated.

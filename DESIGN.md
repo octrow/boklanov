@@ -163,7 +163,7 @@ Production detail (D7 layout, top -> bottom):
 
 1. Cover: `max-height: 65vh`, `object-fit: contain`, centered. Natural aspect ratio, no cropping. `PosterLightbox` wraps for click-to-expand.
 2. Run-of-show row (Phase 7.6): optional `runs[]` frontmatter. Mono chip row above title: `RUN · venue · city · yearFrom–yearTo · count`. Hidden when `runs[]` empty.
-3. Title block: RU display Lora + smaller EN + DE if present. Top rule on `.titleBlock`.
+3. Title block: `<TheatreSlate>` component (Phase 9.3, `components/TheatreSlate.tsx`) — RU display Lora + smaller EN + DE if present, theatre line (mono meta with optional URL link), role line (mono uppercase, `--ink-marginalia`, `--letter-spacing-wide`), premiereDate (mono meta). Top + bottom rules. Heading element via `as` prop (`h1` on detail, `h2` on index when adopted).
 4. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
 5. Synopsis Lora italic.
 5b. Director's note (Phase 7.6): optional `directorsNote.{ru,en}` frontmatter. Italic Lora `<blockquote>` with 2px hairline left rule + mono attribution `— РОМАН БОКЛАНОВ`. Hidden when field absent.

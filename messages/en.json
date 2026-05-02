@@ -27,6 +27,7 @@
     "roleCoDirector": "co-director",
     "rolePerformer": "performer",
     "roleReader": "reader",
+    "roleSketch": "sketch",
     "roleAll": "all"
   },
   "archive": {

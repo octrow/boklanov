@@ -5,7 +5,9 @@ import { notFound } from 'next/navigation'
 import * as React from 'react'
 
 import { Cue } from '@/components/Cue'
+import { PosterLightbox } from '@/components/PosterLightbox'
 import { countryCode } from '@/components/ProductionCard'
+import { TheatreSlate } from '@/components/TheatreSlate'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
@@ -146,6 +148,7 @@ export default async function ProductionDetailPage({
   if (!production) notFound()
 
   const t = await getTranslations('productionDetail')
+  const tProductions = await getTranslations('productions')
 
   const allProductions = getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
@@ -156,8 +159,6 @@ export default async function ProductionDetailPage({
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
   const titleDe = production.titles.de
-  const showEn = !!titleEn && titleEn !== titleRu
-  const showDe = !!titleDe && titleDe !== titleRu && titleDe !== titleEn
 
   const country = countryCode(production.theatre.country)
   const chips: string[] = []
@@ -166,13 +167,14 @@ export default async function ProductionDetailPage({
   if (production.durationMin) chips.push(`${production.durationMin} MIN`)
   if (country) chips.push(country)
 
-  const theatreLine = [
-    production.theatre.name ?? production.theatre.shortName,
-    production.theatre.city
-  ]
-    .filter(Boolean)
-    .join(' · ')
-  const theatreUrl = production.theatre.url
+  const roleLabelMap: Record<string, string> = {
+    director: tProductions('roleDirector'),
+    'co-director': tProductions('roleCoDirector'),
+    performer: tProductions('rolePerformer'),
+    reader: tProductions('roleReader'),
+    sketch: tProductions('roleSketch'),
+  }
+  const roleLabel = production.role ? roleLabelMap[production.role] ?? null : null
 
   // Sticky CTA mailto: pre-filled per brief D7. Subject names the show; body
   // hints what we want from a touring inquiry. EN body — most curators write
@@ -205,46 +207,47 @@ export default async function ProductionDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      {/* 1. Cover — full-bleed, original aspect ratio respected */}
-      {production.poster.src && (
-        <figure className={styles.cover}>
-          {production.poster.width && production.poster.height ? (
-            <Image
-              src={cdnUrl(production.poster.src)!}
-              alt={[
-                production.role,
-                titleRu ?? titleEn ?? slug,
-                production.theatre.name ?? production.theatre.shortName,
-                production.year
-              ].filter(Boolean).join(', ')
-                + (production.poster.credit ? ` (${production.poster.credit})` : '')}
-              width={production.poster.width}
-              height={production.poster.height}
-              priority
-              sizes='(min-width: 1024px) 60vw, 100vw'
-              style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
-          ) : (
-            <img
-              src={cdnUrl(production.poster.src)!}
-              alt={[
-                production.role,
-                titleRu ?? titleEn ?? slug,
-                production.theatre.name ?? production.theatre.shortName,
-                production.year
-              ].filter(Boolean).join(', ')
-                + (production.poster.credit ? ` (${production.poster.credit})` : '')}
-              loading='eager'
-              decoding='async'
-            />
-          )}
-          {production.poster.credit && (
-            <figcaption className={styles.coverCredit}>
-              {production.poster.credit}
-            </figcaption>
-          )}
-        </figure>
-      )}
+      {/* 1. Cover — natural aspect, capped at 65vh. Click to view full poster. */}
+      {production.poster.src && (() => {
+        const posterAlt = [
+          production.role,
+          titleRu ?? titleEn ?? slug,
+          production.theatre.name ?? production.theatre.shortName,
+          production.year
+        ].filter(Boolean).join(', ')
+          + (production.poster.credit ? ` (${production.poster.credit})` : '')
+        const posterSrc = cdnUrl(production.poster.src)!
+        return (
+          <PosterLightbox src={posterSrc} alt={posterAlt}>
+            <figure className={styles.cover}>
+              {production.poster.width && production.poster.height ? (
+                <Image
+                  src={posterSrc}
+                  alt={posterAlt}
+                  width={production.poster.width}
+                  height={production.poster.height}
+                  priority
+                  sizes='(min-width: 1024px) 60vw, 100vw'
+                  style={{ maxWidth: '100%', maxHeight: '65vh', width: 'auto', height: 'auto', display: 'block' }}
+                />
+              ) : (
+                <img
+                  src={posterSrc}
+                  alt={posterAlt}
+                  loading='eager'
+                  decoding='async'
+                  style={{ maxWidth: '100%', maxHeight: '65vh', width: 'auto', height: 'auto', display: 'block' }}
+                />
+              )}
+              {production.poster.credit && (
+                <figcaption className={styles.coverCredit}>
+                  {production.poster.credit}
+                </figcaption>
+              )}
+            </figure>
+          </PosterLightbox>
+        )
+      })()}
 
       {/* .layout: on desktop becomes a CSS grid [720px content | 1fr rail].
           .stickyCta lives in the rail column so it's visible from landing. */}
@@ -273,31 +276,16 @@ export default async function ProductionDetailPage({
           </ul>
         )}
 
-        {/* 2. Title block */}
-        <header className={styles.titleBlock}>
-          {titleRu && <h1 className={styles.titleRu}>{titleRu}</h1>}
-          {showEn && <p className={styles.titleEn}>{titleEn}</p>}
-          {showDe && <p className={styles.titleDe}>{titleDe}</p>}
-          {theatreLine && (
-            <p className={styles.theatre}>
-              {theatreUrl ? (
-                <a
-                  className={styles.theatreLink}
-                  href={theatreUrl}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  {theatreLine}
-                </a>
-              ) : (
-                theatreLine
-              )}
-            </p>
-          )}
-          {production.premiereDate && (
-            <p className={styles.premiereDate}>{production.premiereDate}</p>
-          )}
-        </header>
+        {/* 2. Title block — TheatreSlate component (Phase 9.3, DESIGN_v2_PROPOSAL.md §4.1) */}
+        <TheatreSlate
+          as="h1"
+          titleRu={titleRu}
+          titleEn={titleEn}
+          titleDe={titleDe}
+          theatre={production.theatre}
+          roleLabel={roleLabel}
+          premiereDate={production.premiereDate}
+        />
 
         {/* 3. Chips row */}
         {chips.length > 0 && (
@@ -417,26 +405,31 @@ export default async function ProductionDetailPage({
               <h2 className={styles.sectionLabel}>{t('photos')}</h2>
             </Cue>
             <div className={styles.gallery}>
-              {production.gallery.map((g, i) => (
-                <figure key={`${g.src}-${i}`} className={styles.galleryItem}>
-                  <img
-                    src={cdnUrl(g.src)!}
-                    alt={
-                      g.caption?.[locale] ??
-                      g.caption?.ru ??
-                      g.caption?.en ??
-                      ''
-                    }
-                    loading='lazy'
-                    decoding='async'
-                  />
-                  {g.credit && (
-                    <figcaption className={styles.galleryCredit}>
-                      {g.credit}
-                    </figcaption>
-                  )}
-                </figure>
-              ))}
+              {production.gallery.map((g, i) => {
+                const imgSrc = cdnUrl(g.src)!
+                const imgAlt =
+                  g.caption?.[locale] ??
+                  g.caption?.ru ??
+                  g.caption?.en ??
+                  ''
+                return (
+                  <PosterLightbox key={`${g.src}-${i}`} src={imgSrc} alt={imgAlt}>
+                    <figure className={styles.galleryItem}>
+                      <img
+                        src={imgSrc}
+                        alt={imgAlt}
+                        loading='lazy'
+                        decoding='async'
+                      />
+                      {g.credit && (
+                        <figcaption className={styles.galleryCredit}>
+                          {g.credit}
+                        </figcaption>
+                      )}
+                    </figure>
+                  </PosterLightbox>
+                )
+              })}
             </div>
           </section>
         )}
