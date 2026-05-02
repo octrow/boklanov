@@ -1,13 +1,13 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-02.
+Current state + open work. Updated: 2026-05-02 (session 2).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
 
 ## Constraints
 
-- Birthday surprise: no reveal to Roman until D4 live. Deadline 2026-05-06.
+- Birthday surprise: no reveal to Roman until the site goes live on its production domain. Original 2026-05-06 deadline lapsed; D3/D4 deferred (see below).
 - Roman has no troupe. Not in Russia since 2022 mobilisation. Past-tense `ГДЕ СТАВИЛ` / `STAGED IN` / `INSZENIERTE IN`.
   Year-only colophon. No present-tense Russia work.
 - `git push origin main` blocked by safety hook. Always ask user to push.
@@ -32,26 +32,23 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 6 Polish                        | done (5/5)   | I1, I4, P1, P2, P3. I5 cut. Last: `09d5005`                                                                                                                  |
 | 6.5 R1 review + R1.fix + polish | done         | Zero §11 violations. `73620e6` `871f287` `09d5005`                                                                                                           |
 | 6.6 Q1-Q8                       | done         | `10f951f` `b3bded7` `fdbae94` `99299de` `8dae0b2` `c7647bf`. 24 productions clean.                                                                           |
-| 7 Deploy + cutover              | in progress  | R2 closed; D1 live `boklanov.vercel.app`; D2 Vercel stays; D3/D4 pending                                                                                     |
+| 7 Deploy + cutover              | partial      | R2 closed; D1 live `boklanov.vercel.app`; D2 Vercel stays; D3/D4 deferred                                                                                    |
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
-| 7.6 Editorial polish            | pending      | 10 tasks, 3 tiers. Post-D4. None blocks launch.                                                                                                              |
+| 7.6 Editorial polish            | in progress  | Tier 2 done `3106d26`. 6 tasks remain (Tier 1 + Tier 3).                                                                                                     |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
 | 9 Decap CMS layer               | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
-## D3/D4 cutover (active blocker, deadline 2026-05-06)
+## D3/D4 cutover (deferred)
 
-Domain: `boklanov.com` canonical + `www.boklanov.com` 301. Old Notion site at boklanov.com — OK to overwrite.
+Not a current blocker. Site stays at `boklanov.vercel.app` until activated.
 
-DNS at Spaceship.com:
+When ready:
 
-- A `@` -> `76.76.21.21`
-- CNAME `www` -> `cname.vercel-dns.com`
-- TTL 300
+- Domain: `boklanov.com` canonical + `www.boklanov.com` 301. Old Notion site at boklanov.com — OK to overwrite.
+- DNS at Spaceship.com: A `@` -> `76.76.21.21`, CNAME `www` -> `cname.vercel-dns.com`, TTL 300.
+- Vercel: Settings -> Domains -> add `boklanov.com` + `www.boklanov.com`.
 
-Vercel: Settings -> Domains -> add `boklanov.com` + `www.boklanov.com`.
-
-R2 CDN note: `cdn.boklanov.com` cannot connect to R2 until boklanov.com moves to Cloudflare DNS. Defer R2 activation
-until/unless DNS migrates. `NEXT_PUBLIC_CDN_BASE` unset -> images serve from `public/` via Vercel.
+R2 CDN note: `cdn.boklanov.com` cannot connect to R2 until boklanov.com moves to Cloudflare DNS. R2 activation deferred with the cutover. `NEXT_PUBLIC_CDN_BASE` unset -> images serve from `public/` via Vercel.
 
 ## Open content tasks (Roman, via Obsidian)
 
@@ -76,7 +73,7 @@ Context: `slugify("Сахарный ребёнок")` returned empty (regex `\w`
 during sibling grouping. Pair table manually re-attached the RU row to its EN sibling. Sync now retired; titles only
 change by direct edit.
 
-## Phase 7.6 backlog (post-D4)
+## Phase 7.6 backlog
 
 Tier 1 (programme-grammar, ~3 days):
 
@@ -85,12 +82,12 @@ Tier 1 (programme-grammar, ~3 days):
 - DA-7.6.C director's note block (italic Lora + mono attribution), gated by `directorsNote.{ru,en}` field
 - DA-7.6.D run-of-show row `RUN · BTK · СПБ · 2020-2024 · ~80 PERFORMANCES`, gated by `runs[]`
 
-Tier 2 (~2 hours):
+Tier 2 — done `3106d26`:
 
-- DA-7.6.E CUE-count tag on `/awards`
-- DA-7.6.F theatre slate `LANGUAGE` row
-- DA-7.6.G no-poster card year-anchor `margin-top: auto`
-- DA-7.6.H DE chrome length audit (`INSZENIERTE IN` 13 chars at 1024-1100px)
+- DA-7.6.E ✓ CUE-count tag on `/awards`
+- DA-7.6.F ✓ theatre slate `LANGUAGE` row
+- DA-7.6.G ✓ no-poster card year-anchor `margin-top: auto`
+- DA-7.6.H ✓ DE chrome audited at 1024-1100px — no overflow found
 
 Tier 3 (~1.5 days):
 
@@ -101,12 +98,13 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION.md` §15.
 
 ## Build state
 
-`main` branch: clean. `npm run build` passes, 98/98 SSG pages.
-Branch `docs/update-planning-docs`: 4 commits ahead of `main`.
+`main` branch: clean. Last: `3106d26`.
 
 ## Recent commits
 
 ```
+3106d26 feat(7.6-tier2): award count, slate LANGUAGE row, no-poster year anchor
+8d3c4fd docs: merge docs/update-planning-docs branch
 c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
 2cee460 docs: update planning — R2 closed, 8.1/8.2 done
 11bef4d feat(phase-8.1): Obsidian vault config + lint-mdx
@@ -118,7 +116,7 @@ c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
 ## Next actions (in order)
 
 1. User pushes `docs/update-planning-docs` -> merge PR.
-2. D3/D4: add Spaceship DNS + Vercel domains. Wait propagation.
-3. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
-4. Roman closes orphan audit + photographer credits.
-5. Phase 7.6 Tier 1+2 (post-D4, no blocker).
+2. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
+3. Roman closes orphan-title audit + photographer credits.
+4. Phase 7.6 Tier 1+2 (no longer gated on D4).
+5. D3/D4 cutover when reactivated.
