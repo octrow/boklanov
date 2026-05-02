@@ -269,7 +269,7 @@ Naming (RU/EN):
 - Cookie banner taking bottom 20%
 - Newsletter modal on first visit
 - "Built with Next.js" in footer
-- Coloured chip pills (status -> font weight, not hue)
+- Coloured chip pills (status -> font weight, not hue) — _narrowed 2026-05-02_: chips become specimen mono labels — `text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-mono); font-size: var(--font-size-chip); padding: 0; border-bottom: 1px solid var(--rule); background: none; border-radius: 0`. NEVER background-fill. NEVER coloured beyond `--ink-mute`. Multiple labels separated by em-dash. See `DESIGN_v2_PROPOSAL.md` §2.2.
 - Drop-shadow glow on cards, neon focus — _narrowed 2026-05-02_: `--specimen-rule: inset 0 0 0 1px rgb(22 21 20 / 0.08)` allowed on photographic plates only (`coverStyle === 'photo'` AND ≥768px), scoped to `SpecimenPlate.module.css`. NEVER `blur > 0`, NEVER outset, NEVER coloured, NEVER on hover. Outer drop-shadow remains banned. See `DESIGN_v2_PROPOSAL.md` §2.1.
 - Coloured headers with white text
 

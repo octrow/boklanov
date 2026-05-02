@@ -309,6 +309,7 @@ tags: []
 These rows exist in `DESIGN.md` §11 as additions made after this brief was locked. Recorded here so the historical archive remains self-contained when MAP.md §5 unfreeze events fire.
 
 - _Superseded 2026-05-02 (DESIGN.md §11-only addition): "Drop-shadow glow on cards, neon focus" narrowed by `DESIGN_v2_PROPOSAL.md` §2.1 — `--specimen-rule: inset 0 0 0 1px rgb(22 21 20 / 0.08)` allowed on photographic plates only (`coverStyle === 'photo'` AND ≥768px), scoped to `SpecimenPlate.module.css`. NEVER blur >0, NEVER outset, NEVER coloured, NEVER on hover. Outer drop-shadow remains banned._
+- _Superseded 2026-05-02 (DESIGN.md §11-only addition): "Coloured chip pills (status -> font weight, not hue)" narrowed by `DESIGN_v2_PROPOSAL.md` §2.2 — chips become specimen mono labels: `text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-mono); font-size: var(--font-size-chip); padding: 0; border-bottom: 1px solid var(--rule); background: none; border-radius: 0`. NEVER background-fill. NEVER coloured beyond `--ink-mute`. Multiple labels separated by em-dash, not comma._
 
 ---
 
