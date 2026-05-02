@@ -1,4 +1,4 @@
-# Handoff prompt — boklanov.ru rewrite, D1 live / R2 QA next
+# Handoff prompt — boklanov.com rewrite, Phase 8 in progress
 
 Paste the block below into a fresh Claude Code conversation in the
 `boklanov` repo (branch `main`) to continue.
@@ -7,8 +7,7 @@ Paste the block below into a fresh Claude Code conversation in the
 
 ## Prompt
 
-I'm continuing the boklanov.com / boklanov.ru rewrite on branch
-`main` (formerly `rewrite/v2`, merged 2026-05-02). This is a
+I'm continuing the boklanov.com rewrite on branch `main`. This is a
 Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
@@ -18,92 +17,101 @@ Roman Boklanov (puppet / object / family theatre, 30+ productions).
    Ташкент …) and tours one solo show, *Похороните меня за плинтусом*
    ("the Plinth"), alone — no company travels with him.
 2. Roman has **not been in Russia since the 2022 mobilisation**.
-   Productions he directed in Russia before 2022 (e.g. the Plinth at
-   БТК) remain part of the body of work, but no copy on the site may
-   claim present-tense work in Russia. Colophon is city-free;
-   staging-geography labels use past-tense.
+   Productions he directed in Russia before 2022 remain part of the body
+   of work, but no copy may claim present-tense work in Russia. Colophon
+   is city-free; staging-geography labels use past-tense.
 
-**Current state — Phase 7.5 Rounds 1 + 2 + 3 shipped. D1 live at https://boklanov.vercel.app/. R2 QA is next.**
-
-Round 1 (`c7a1b50`, 2026-05-02):
-- `lib/folio.ts` — `folioFor(pathname, productions)` → `{ sectionKey, index? }`
-- `components/Cue.tsx` + `Cue.module.css` — section cue marks
-- `SiteHeader`: folio band above wordmark row; accepts `productions` prop
-- `SiteFooter`: `<small class="colophon">` edition stamp; `footer.colophon` i18n key
-- `/about`, `/awards`, `/productions/[slug]`: section heads wrapped in `<Cue>`
-- `messages/{ru,en,de}.json`: new `footer` namespace with `colophon` key
-
-Round 2 (`0bebf3c`, 2026-05-02):
-- DA-2.A — credits `<dl>` leader grid + CREDITS Cue header
-- DA-2.B — theatre slate in right rail (bordered box, PRODUCTION 01/24 index,
-  TOURING · SOLO row for Plinth)
-- DA-2.C — `ГДЕ СТАВИЛ / STAGED IN` section on `/about`; home echo below statement;
-  new `about` i18n namespace; about-page label strings moved to `tAbout()`
-- DA-2.D — `tour[]` in `merge()` with overlay support; 9 seed cities in
-  `bury-me-behind-the-baseboard/metadata.yml`; ON TOUR band above gallery
-- DA-2.E — `PREM 2021` on production cards (was bare `2021`)
-
-Round 3 (`7c26402`, 2026-05-02):
-- DA-3.A — `components/SlateStrike.tsx` + `SlateStrike.module.css`:
-  320ms one-shot slate-top drop on first paint; gated by
-  `sessionStorage.firstPaintDone`, `?gesture=off`, `prefers-reduced-motion`
-- Edition-frame (`::after` hairline rule) present in all static states
-- `<Suspense fallback={null}>` boundary wraps `<SlateStrike>` in home page
-- `--duration-slate: 320ms` token added to `globals.css`
-
-**Build state:** clean. `main` is live on Vercel at https://boklanov.vercel.app/
-Vercel project: https://vercel.com/octrows-projects/boklanov
-
-**Next milestones, in order:**
-1. ~~**Phase 7.5 Round 1**~~ ✅ **done** (`c7a1b50`)
-2. ~~**Phase 7.5 Round 2**~~ ✅ **done** (`0bebf3c`)
-3. ~~**Phase 7.5 Round 3**~~ ✅ **done** (`7c26402`)
-4. ~~**D1 Vercel preview**~~ ✅ **live** — https://boklanov.vercel.app/ (`476af22`)
-5. **R2 real-device QA** — manual pass by Daniil + Roman on real
-   hardware. Claude cannot run this. See R2 checklist below.
-   Note: `?gesture=off` gate on slate-strike is still active — lift after R2 sign-off.
-6. **D2/D3/D4** — hosting decision, custom domain, cutover.
-7. **Phase 8** — Authoring handoff (Obsidian + R2). After D4 cutover.
+**IMPORTANT — birthday surprise:** The site is a birthday present for
+Roman (born 7 May 1993). Do **not** reveal the domain, design, or any
+details to Roman until D4 is live. Deadline: before 6 May 2026.
 
 ---
 
-### R2 scope (real-device QA — requires Daniil + Roman)
+**Current state — Phase 8 authoring handoff in progress. D4 cutover pending.**
 
-Manual pass on real hardware. Checklist:
+### What shipped since D1 (branch `docs/update-planning-docs`, ready to merge)
 
-**Round 3 chrome (new in `7c26402`):**
-- Home page first visit (fresh session): slate-top hairline drops 1.5em
-  onto wordmark, then hairline rule fades in. Animation is ~320ms, one-shot.
-- Home page second visit (sessionStorage set): end-state only — wordmark
-  sits on hairline rule, no motion.
-- Home with `?gesture=off`: no animation at all; end-state static.
-- Reduced-motion OS setting: no animation; identical end-state.
+Commits `70eb044`, `8339141`, `11bef4d` (2026-05-02):
 
-**Round 2 chrome (new in `0bebf3c`):**
-- Credits block on production detail: leader-dot `<dl>` table with CREDITS
-  cue header. No troupe claim.
-- Theatre slate in right rail: bordered box, `PRODUCTION 01/24` header, key/value
-  rows. `TOURING · SOLO` appears on the Plinth's page.
-- `/about` staging-geography row (`ГДЕ СТАВИЛ` / `STAGED IN`): 7 city
-  names in mono between bio and chronology sections.
-- Home: compressed city echo below statement, above featured strip.
-- Production cards: year now reads `PREM 2021`, not bare `2021`.
-- Plinth detail: `ON TOUR / В ГАСТРОЛЯХ` band above gallery with 9 cities.
+- **Content fixes:**
+  - `content/about/{ru,en}.mdx`: added 2021 RGISI graduation milestone
+    (confirmed from Notion bio: "2021 — закончил РГИСИ, режиссёр театра
+    кукол, мастерская Р.Р. Кудашова, курс при БТК")
+  - `cinderella/metadata.yml`: awards override — heuristic had extracted
+    category "Лучший спектакль о добре" instead of festival "XXX Международный
+    фестиваль КУКАРТ"
+  - `sugar-kid/metadata.yml`: awards override — both entries corrected
+    ("Браво — 2022" + "V Всероссийский молодёжный фестиваль им. В.С. Золотухина")
 
-**Round 1 chrome:**
-- Folio band visible above header wordmark on section pages (PRODUCTIONS,
-  О РЕЖИССЁРЕ, etc.); hidden on home. `01 / 24` index on production detail.
-- Cue marks (`CUE I`, `CUE II`, …) above sections on `/about`, `/awards`,
-  `/productions/[slug]`.
-- `2026 EDITION` / `2026 ИЗДАНИЕ` stamp at bottom of every page footer.
+- **Phase 8.2 — R2 CDN infrastructure (code done, CDN activation pending):**
+  - `lib/cdn.ts`: `cdnUrl(path)` helper — prepends `NEXT_PUBLIC_CDN_BASE`
+    in prod, no-op in local dev
+  - `scripts/upload-images.ts`: S3-compatible upload to Cloudflare R2;
+    skips unchanged files by size check; `--slug` and `--dry-run` flags
+  - `components/ProductionCard.tsx`, `app/[locale]/productions/[slug]/page.tsx`:
+    poster + gallery `src` wrapped in `cdnUrl()`
+  - `next.config.js`: `images.remotePatterns` → `cdn.boklanov.com`
+  - `package.json`: `npm run upload-images` script; `@aws-sdk/client-s3`
+    + `dotenv` added as devDeps
+  - `.env.example`: `NEXT_PUBLIC_CDN_BASE`, `R2_*` credentials documented
+  - **CDN not yet active:** boklanov.com is NOT on Cloudflare, so
+    `cdn.boklanov.com` custom domain cannot be connected to R2 yet.
+    `NEXT_PUBLIC_CDN_BASE` is unset — images still served from `public/`
+    via Vercel. Skip R2 activation until domain moves to Cloudflare.
 
-**Existing checks (carry over from R1 QA list):**
-- Sticky CTA right-rail visible on desktop from landing.
-- Gallery masonry (original aspect ratios, not cropped).
-- No-poster cards read as title-cards, not placeholders.
-- `/contact`: TG + IG oxblood primaries; mailto secondary.
-- Synopsis prose (no raw Markdown links).
-- Awards page: zero language mixing.
+- **Phase 8.1 — Obsidian vault config (done):**
+  - `.obsidian/app.json`: `useMarkdownLinks:true`, spellcheck ru+en,
+    source view default — prevents `![[wikilink]]` from being created
+  - `.obsidian/types.json`: property types for `year`/`featured`/
+    `ageRating`/`durationMin`/`ticketsUrl`/`form`/`lineage`/`tour`/`tags`
+  - `.obsidian/community-plugins.json`: `["obsidian-git", "mdx-as-md"]`
+    (Roman installs these manually in Obsidian)
+  - `.gitignore`: ignores `workspace.json`, `cache`, `plugins/`
+  - `scripts/lint-mdx.ts`: CI guard — fails on `![[wikilink]]` in `content/`
+  - `package.json`: `npm run lint-mdx` script added
+
+**Build state:** clean (`npm run build` passes, 98/98 pages SSG).
+
+**Branch state:** `docs/update-planning-docs` is ahead of `main` by 3 commits.
+User must run `! git push origin main` or merge via PR to deploy.
+(Direct `git push origin main` is blocked by a safety hook — always ask
+the user to push themselves.)
+
+---
+
+**Next milestones, in order:**
+
+1. ~~Phase 7.5 Round 1~~ ✅ `c7a1b50`
+2. ~~Phase 7.5 Round 2~~ ✅ `0bebf3c`
+3. ~~Phase 7.5 Round 3~~ ✅ `7c26402`
+4. ~~D1 Vercel preview~~ ✅ live — https://boklanov.vercel.app/
+5. ~~R2 real-device QA~~ ✅ closed 2026-05-02 — Daniil checked desktop +
+   mobile, site looks ok. `?gesture=off` gate lifted (animation live).
+6. ~~D2 Hosting decision~~ ✅ Vercel stays — no migration needed.
+7. **D3/D4 — boklanov.com cutover** 🟡 **in progress, deadline 6 May**
+   - Domain: `boklanov.com` (canonical) + `www.boklanov.com` (alias → 301)
+   - DNS currently at **Spaceship.com** (https://www.spaceship.com/domains/)
+   - Old Notion-based site still live at boklanov.com — OK to cut over
+   - **DNS records to add at Spaceship:**
+     - A `@` → `76.76.21.21`
+     - CNAME `www` → `cname.vercel-dns.com`
+   - **Vercel steps:** Settings → Domains → Add `boklanov.com` + `www.boklanov.com`
+   - TTL 300 → propagation ~5 min to few hours
+8. **Phase 8.1** ✅ done (`11bef4d`)
+9. **Phase 8.2** 🟡 code done, CDN activation blocked (needs boklanov.com on Cloudflare)
+10. **Phase 8.3** — fold overlay + retire Notion sync ⬜
+11. **Phase 8.4** — `content/AUTHORING.ru.md` for Roman ⬜
+12. **Phase 8.5** — Cyrillic-only-Name orphan audit ⬜
+
+---
+
+### R2 QA — ✅ closed (2026-05-02)
+
+Daniil checked desktop + mobile on https://boklanov.vercel.app/.
+Site looks correct. All R2 checklist items considered passed.
+`?gesture=off` gate on slate-strike is **lifted** — animation ships to
+all users on first visit. `?gesture=off` remains as a permanent debug
+escape hatch.
 
 ---
 
@@ -113,32 +121,57 @@ Manual pass on real hardware. Checklist:
 - Vercel project: https://vercel.com/octrows-projects/boklanov
 - `main` branch auto-deploys on every push.
 - `NEXT_PUBLIC_BASE_URL` not yet set (defaults to `https://boklanov.com`
-  — fine until D3 domain cutover).
-- `?gesture=off` slate-strike gate still active — lift after R2 sign-off.
-- Next: D2 hosting decision, D3 custom domain, D4 cutover.
+  — fine until D4 cutover).
 
 ---
 
-### Phase 8 scope (authoring handoff — queued behind Phase 7 cutover)
+### D2 — ✅ decided (2026-05-02)
 
-Locked 2026-05-02 in `CONTENT_WORKFLOW.md`. Tasks in `TASKS.md` § Phase 8.
-~2.5 days: vault layout + Obsidian config (8.1), R2 image migration (8.2),
-fold metadata.yml overlay into MDX frontmatter (8.3), `AUTHORING.ru.md`
-guide (8.4), Cyrillic-only-Name orphan audit (8.5).
-
-Phase 9 (Decap CMS) is deferred — activate only when Roman asks.
+Vercel stays. No migration to Cloudflare Pages or Yandex Cloud.
+Reason: no CN/RU blocking issues reported, zero migration cost.
 
 ---
 
-### Open content tasks (Roman to confirm before R2 sign-off)
+### D3/D4 — 🟡 in progress (deadline 6 May 2026)
 
-- Year of RGISI enrolment + year first directed at BTK — flag in
-  `content/about/{ru,en}.mdx` comment block.
-- Two festival-in-plain-prose awards: hand-overlay via `awards:` block
-  in `content/productions/cinderella/metadata.yml` (КУКАРТ) and
-  `content/productions/sugar-kid/metadata.yml` (V Всероссийский…).
-- Photographer credits per gallery image (brief Q1).
-- Canonical Plinth tour city list (Roman extends `tour[]` in Phase 8).
+**boklanov.com** is the canonical domain (`.ru` deferred).
+Old site at boklanov.com is Notion-based — cutting over is fine.
+DNS at Spaceship.com. Steps documented above in milestone list.
+
+R2 CDN note: `cdn.boklanov.com` cannot be connected to R2 until
+boklanov.com moves to Cloudflare DNS. Skipped for now — revisit if/when
+user migrates DNS to Cloudflare. In the meantime, images serve from
+`public/` via Vercel with no NEXT_PUBLIC_CDN_BASE set.
+
+---
+
+### Phase 8 scope (authoring handoff)
+
+Locked 2026-05-02 in `CONTENT_WORKFLOW.md`.
+Source of truth: Obsidian + obsidian-git (vault = repo).
+Image hosting: Cloudflare R2 (code ready; activation pending domain move).
+Editorial workflow: trust-on-publish + `draft` branch for WIP.
+Decap CMS deferred — activate only if Roman requests web editing.
+
+**Status:**
+- 8.1 Vault config: ✅ done
+- 8.2 R2 code: ✅ done (CDN activation pending)
+- 8.3 Fold overlay + retire sync: ⬜ not started
+- 8.4 AUTHORING.ru.md: ⬜ not started
+- 8.5 Orphan audit: ⬜ not started
+
+**Obsidian plugins Roman must install manually (one-time):**
+1. `obsidian-git` — commit/push from sidebar button
+2. `mdx-as-md` — opens `.mdx` files as editable markdown
+
+---
+
+### Open content tasks (Roman fills these via Obsidian after Phase 8)
+
+- Photographer credits per gallery image → `metadata.yml` `gallery[].credit`
+- Canonical Plinth tour city list → extend `tour[]` in
+  `content/productions/bury-me-behind-the-baseboard/metadata.yml`
+- Any new productions → add folder + `index.mdx` following existing pattern
 
 ---
 
@@ -155,22 +188,22 @@ Phase 9 (Decap CMS) is deferred — activate only when Roman asks.
 - The production-detail sticky booking CTA stays mailto.
 - Staging geography labels are **past-tense** (`ГДЕ СТАВИЛ` /
   `STAGED IN`). Never present-tense ("stages in" / "ставит в").
-- No city links in the staging-geography row — C4 has no `city=`
-  filter parameter.
-- DA-3.A (slate-strike) **must ship paired with the static edition-frame**
-  as the `prefers-reduced-motion` fallback — both must render an
-  identical end-state visually. ✅ Done.
+- No city links in the staging-geography row.
+- DA-3.A (slate-strike) ships with static edition-frame fallback. ✅ Done.
+- Direct `git push origin main` is **blocked by safety hook** — always
+  ask the user to push themselves (`! git push origin main`).
 
 ---
 
-### Recent commits on `rewrite/v2` for context
+### Recent commits
 
 ```
-7c26402  feat: Phase 7.5 Round 3 — slate-strike + edition-frame fallback (DA-3.A)
-0bebf3c  feat: Phase 7.5 Round 2 — credits dl, theatre slate, staging geography, tour band, premiere mark
-c7a1b50  feat: Phase 7.5 Round 1 — folio + cue numbers + edition stamp
-8eaacf1  docs: research — content authoring workflow options
-33d9c75  production-detail: surface theatre + credits + premiere + tickets (Q8)
+11bef4d  feat(phase-8.1): Obsidian vault config + MDX wikilink linter
+8339141  feat(phase-8.2): R2 image CDN — upload script + cdnUrl helper
+70eb044  content: add 2021 RGISI milestone + fix festival names in awards
+4ad3743  docs: update planning docs to reflect D1 live + all rounds done
+b1210b7  docs: mark D1 live; refresh HANDOFF for R2 QA
+476af22  Merge pull request #3 from octrow/fix/nextjs-version
 ```
 
-**Build state:** clean. No uncommitted edits.
+**Build state:** clean. Branch `docs/update-planning-docs` ready to push.

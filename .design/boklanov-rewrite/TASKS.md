@@ -152,7 +152,7 @@ Date: 2026-04-30
 | R1 — Design review against brief | ✅ done | `.design/boklanov-rewrite/DESIGN_REVIEW.md` | Zero §11 anti-patterns shipped. Token discipline excellent. Two **Must-Fix** items: (1) desktop sticky CTA on `/productions/[slug]` only enters viewport after deep scroll — needs real right-rail (`page.module.css:348-365`); (2) cover→title-block separator missing when `poster.credit` is null. Seven **Should-Fix**: empty desktop right column, filter chip groups need labels, native search `×` button leaks into Cmd-K, dev-mode LQIP race on first card, hydration-warning verification, ThemeToggle glyph ambiguity, ProductionCard LQIP gating. **I5 cut.** |
 | R1.fix — Land Must-Fix items | ✅ done | `73620e6` `871f287` | Must-Fix #1: CSS-grid right rail for sticky CTA. Must-Fix #2: `.titleBlock` top rule. Optional: filter group labels. Polish: ThemeToggle SVG, search × suppression, LQIP gating. |
 | R1.polish — Remaining DESIGN_REVIEW items | ✅ done | `09d5005` | Should-Fix #1: spec sheet in right rail. Could-Improve #2: gallery masonry (CSS columns). Could-Improve #5: wordmark letter-spacing token. All DESIGN_REVIEW.md items resolved. |
-| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). Use https://boklanov.vercel.app/ for the pass. |
+| R2 — Real-device manual QA | ✅ done | 2026-05-02 | Daniil checked desktop + mobile on https://boklanov.vercel.app/. Site looks correct. `?gesture=off` gate lifted — slate-strike animation live for all users. |
 
 ### Core UI
 
@@ -685,17 +685,18 @@ production build before D1.
   `main` auto-deploys on push. Cyrillic fonts pending real-device
   verification (R2 QA item).
 
-- [ ] **D2 — Hosting decision (brief Q6)**: Confirm Vercel vs Cloudflare
-  Pages vs Yandex Cloud given CN/RU access. Fix `next.config.js`
-  output mode if switching off Vercel. _Depends on D1._
+- [x] **D2 — Hosting decision**: ✅ Vercel stays. No migration. Decided 2026-05-02.
 
-- [ ] **D3 — Domain decision (brief Q5)**: `.ru` only or also `.com`.
-  Configure both as aliases or pick one canonical with 301. _Depends
-  on D2._
+- [x] **D3 — Domain decision**: ✅ `boklanov.com` canonical (`.ru` deferred).
+  www.boklanov.com → 301 redirect via Vercel alias. Decided 2026-05-02.
 
-- [ ] **D4 — Cutover + DNS swap**: Point domain at Vercel, archive old
-  Notion renderer tag (`legacy-2026-04-30`). Document rollback in
-  `contributing.md`. _Depends on D3._
+- [ ] **D4 — Cutover + DNS swap** 🟡 **IN PROGRESS — deadline 6 May 2026**:
+  DNS currently at Spaceship.com. Old Notion site still live — OK to cut.
+  Steps: (1) Vercel → Settings → Domains → add `boklanov.com` + `www.boklanov.com`;
+  (2) Spaceship DNS: A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`;
+  (3) Wait for propagation (~5 min – few hours at TTL 300).
+  Note: cdn.boklanov.com R2 connection skipped — boklanov.com not yet on
+  Cloudflare. Revisit if/when DNS moves to Cloudflare. _Depends on D3._
 
 ---
 
@@ -795,7 +796,7 @@ production build before D1.
   wraps `<SlateStrike>` in home page (required by `useSearchParams`).
   `--duration-slate: 320ms` token in `globals.css`. Static edition-frame
   end-state (hairline rule, no motion) present in all three fallback paths.
-  `?gesture=off` gate still active — lift after R2 sign-off.
+  `?gesture=off` gate **lifted** — R2 QA signed off 2026-05-02. Animation live.
 
 ### Cuts (do not build)
 
@@ -829,23 +830,27 @@ production build before D1.
 > **Decap (C) deferred** as a later second admin surface — see Phase 9.
 > Total ~2.5 days. Runs after Phase 7 deploy.
 
-- [ ] **8.1 — Vault layout + Properties schema (½ day)**: Register
-  `.mdx` as markdown in Obsidian (community plugin or `app.json`).
-  Configure Obsidian Properties to render canonical frontmatter keys
-  (`title`, `titleEn`, `year`, `theatre`, `premiereDate`, `featured`,
-  `public`, `tags`, `synopsis`, …) as typed form fields with Cyrillic
-  labels. Commit `.obsidian/community-plugins.json` so any clone
-  inherits config. Add `scripts/lint-mdx.ts` failing the build on
-  Obsidian-flavoured `![[wikilink]]`.
+- [x] **8.1 — Vault layout + Properties schema** ✅ done `11bef4d` (2026-05-02):
+  `.obsidian/app.json` (`useMarkdownLinks:true`, spellcheck ru+en, source view).
+  `.obsidian/types.json` (year/featured/ageRating/durationMin/ticketsUrl/form/
+  lineage/tour/tags typed). `.obsidian/community-plugins.json`
+  (`["obsidian-git","mdx-as-md"]` — Roman installs manually).
+  `.gitignore` updated (ignore workspace.json, cache, plugins/).
+  `scripts/lint-mdx.ts` CI guard against `![[wikilink]]`.
+  `npm run lint-mdx` script added.
 
-- [ ] **8.2 — R2 image migration (½ day)**: Provision R2 bucket
-  `boklanov-content`, public-read access, custom domain
-  `cdn.boklanov.com`, auto-SSL. One-shot
-  `rclone sync public/productions/ r2://boklanov-content/productions/`.
-  Introduce `CDN_BASE` env var; rewrite `<Image>` `src` paths to
-  `${CDN_BASE}/productions/<slug>/...`. Keep LQIPs / blurhashes inline
-  in MDX. Author `npm run upload-images` — a thin `wrangler r2 object
-  put` wrapper Roman calls before commit.
+- [x] **8.2 — R2 image migration** ✅ code done `8339141` (2026-05-02),
+  **CDN activation pending** (boklanov.com not on Cloudflare):
+  R2 bucket `boklanov-content` created (account `534e18f3…`, EEUR).
+  `lib/cdn.ts`: `cdnUrl()` helper (prepends `NEXT_PUBLIC_CDN_BASE` or no-op).
+  `scripts/upload-images.ts`: S3-compatible upload via `@aws-sdk/client-s3`;
+  size-based skip, `--slug`/`--dry-run` flags; `npm run upload-images`.
+  `ProductionCard` + production detail: all `poster.src` + gallery `src`
+  wrapped in `cdnUrl()`. `next.config.js`: `remotePatterns` → cdn.boklanov.com.
+  `.env.example`: `NEXT_PUBLIC_CDN_BASE` + `R2_*` documented.
+  **cdn.boklanov.com custom domain SKIPPED** — boklanov.com DNS at Spaceship,
+  not Cloudflare; R2 zone-link fails. Revisit after D4 + DNS migration.
+  Images currently served from `public/` via Vercel (zero cost, sufficient).
 
 - [ ] **8.3 — Fold overlay + retire Notion sync (½ day)**: Write
   `scripts/fold-overlay.ts` — one-shot merge of every non-null
