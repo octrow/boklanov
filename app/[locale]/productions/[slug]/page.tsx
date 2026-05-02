@@ -14,7 +14,6 @@ import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
-import { cleanBodyMarkdown } from '@/lib/clean-body'
 import {
   getAllProductions,
   getProduction,
@@ -233,11 +232,9 @@ export default async function ProductionDetailPage({
 
   const schema = creativeWorkSchema(production, slug, locale)
 
-  // Compile MDX body (cleaned of Notion-export noise)
-  const cleanedBody = production.body ? cleanBodyMarkdown(production.body) : ''
-  const compiledBody = cleanedBody
+  const compiledBody = production.body
     ? await compileMDX({
-        source: cleanedBody,
+        source: production.body,
         options: { mdxOptions: {} },
         components: {
           // suppress any lingering broken images

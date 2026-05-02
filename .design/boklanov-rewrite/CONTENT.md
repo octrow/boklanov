@@ -49,6 +49,13 @@ slug: bury-me-behind-the-baseboard
 notionIds: { ru: ..., en: ... }    # historical traceability only
 title: { ru: "...", en: "...", de: null }
 synopsis: { ru: "...", en: "...", de: null }
+body:                              # optional; long-form narrative, renders as prose below synopsis
+  ru: |-
+    Paragraph one.
+
+    Paragraph two with **bold** and *italic* and [links](url).
+  en: |-
+    English paragraph.
 theatre: { name: "...", shortName: "...", city: "...", country: "RU", url: "..." }
 year: 2020
 premiereDate: { ru: "...", en: "..." }
@@ -86,7 +93,7 @@ tags: [ ]
 - Edit `index.mdx` Properties panel. `Cmd+S`. Source Control -> Commit-and-push.
 - Add new production: copy existing `content/productions/<slug>/` folder. Latin slug, dashes-not-spaces. Fill
   Properties. Commit.
-- New photos: drop into `public/productions/<slug>/`. After R2 activates: `npm run upload-images`. Else: just commit.
+- New photos: drop into `public/productions/<slug>/`, run `npm run upload-images -- --slug <slug>`, commit.
 - Featured strip: set `featured: true`. Cards without poster filtered out (`p.featured && p.poster.src`).
 - About bio + milestones + lineage + marginalia notes: edit `content/about/{ru,en,de}.mdx` directly. `marginalia[]`
   is an optional array (one entry per body paragraph, `null` for no note) that drives the ≥1280px gutter note.

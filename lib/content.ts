@@ -161,13 +161,16 @@ function loadAll(): Production[] {
 }
 
 /** Build a Production directly from frontmatter (overlay already folded in). */
-function fromFm(fm: Partial<Production>, rawMdx: string): Production {
+function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
   return {
     slug: fm.slug as string,
     notionIds: fm.notionIds ?? {},
     title: fm.title ?? {},
     synopsis: fm.synopsis ?? {},
-    body: extractBodies(rawMdx),
+    body: {
+      ru: (fm.body as any)?.ru?.trim() ?? '',
+      en: (fm.body as any)?.en?.trim() ?? '',
+    },
     theatre: fm.theatre ?? {},
     year: fm.year,
     premiereDate: fm.premiereDate,
@@ -209,15 +212,6 @@ function fromFm(fm: Partial<Production>, rawMdx: string): Production {
   }
 }
 
-/** Pulls RU and EN bodies out of the <Locale value="…"> wrappers in the MDX. */
-function extractBodies(rawMdx: string): { ru: string; en: string } {
-  const stripFrontmatter = rawMdx.replace(/^---[\s\S]*?---\s*/, '')
-  const grab = (locale: 'ru' | 'en') => {
-    const re = new RegExp(`<Locale value="${locale}">([\\s\\S]*?)</Locale>`, 'i')
-    return stripFrontmatter.match(re)?.[1].trim() ?? ''
-  }
-  return { ru: grab('ru'), en: grab('en') }
-}
 
 // ---------------------------------------------------------------------------
 // Locale projection

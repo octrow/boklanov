@@ -35,7 +35,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7 Deploy + cutover              | partial      | R2 closed; D1 live `boklanov.vercel.app`; D2 Vercel stays; D3/D4 deferred                                                                                    |
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
-| 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
+| 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2: 291 files uploaded 2026-05-02. Dev URL active. `cdn.boklanov.com` blocked on Cloudflare DNS. |
 | 9 v2 visual refresh (Vitrine)   | in progress  | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 7 of 8 code phases done (9.0a/b/c, 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8). 9.4 Marginalia louder deferred — needs detail-page layout restructure. |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
@@ -49,7 +49,7 @@ When ready:
 - DNS at Spaceship.com: A `@` -> `76.76.21.21`, CNAME `www` -> `cname.vercel-dns.com`, TTL 300.
 - Vercel: Settings -> Domains -> add `boklanov.com` + `www.boklanov.com`.
 
-R2 CDN note: `cdn.boklanov.com` cannot connect to R2 until boklanov.com moves to Cloudflare DNS. R2 activation deferred with the cutover. `NEXT_PUBLIC_CDN_BASE` unset -> images serve from `public/` via Vercel.
+R2 CDN note: 291 images uploaded to `boklanov-content` bucket 2026-05-02. Dev URL `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev` active (rate-limited, no Cloudflare cache). `cdn.boklanov.com` custom domain blocked until boklanov.com DNS moves to Cloudflare. To activate: set `NEXT_PUBLIC_CDN_BASE` in Vercel.
 
 ## Open content tasks (Roman, via Obsidian)
 
