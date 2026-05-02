@@ -57,7 +57,7 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
 
   // Alt format from DESIGN §12: {role} {title}, {theatre}, {year} ({photographer})
   const altBase = [
-    production.role,
+    production.role.join(' / '),
     titleRu ?? titleEn ?? production.slug,
     theatre,
     production.year

@@ -40,7 +40,7 @@ export async function GET(
   const meta = FEED_META[locale]
 
   const items = productions
-    .filter((p) => p.role === 'director')
+    .filter((p) => p.role.includes('director'))
     .map((p) => {
       const url = `${base}/productions/${p.slug}`
       const pubDate = p.year ? new Date(p.year, 0, 1).toUTCString() : ''

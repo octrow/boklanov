@@ -201,8 +201,8 @@ export default async function ProductionDetailPage({
     reader: tProductions('roleReader'),
     sketch: tProductions('roleSketch')
   }
-  const roleLabel = production.role
-    ? (roleLabelMap[production.role] ?? null)
+  const roleLabel = production.role.length
+    ? production.role.map((r) => roleLabelMap[r] ?? r).join(' / ')
     : null
 
   // Sticky CTA mailto: pre-filled per brief D7. Subject names the show; body
@@ -212,7 +212,7 @@ export default async function ProductionDetailPage({
   const body =
     `Hi Roman,\n\n` +
     `I'm interested in touring ${titleRu ?? titleEn ?? slug} ` +
-    `(${production.year ?? ''}${production.role ? `, ${production.role}` : ''}).\n\n` +
+    `(${production.year ?? ''}${production.role.length ? `, ${production.role.join(' / ')}` : ''}).\n\n` +
     `Tour window:\n` +
     `Venue / festival:\n` +
     `Notes:\n`
@@ -254,7 +254,7 @@ export default async function ProductionDetailPage({
         (() => {
           const posterAlt =
             [
-              production.role,
+              production.role.join(' / '),
               titleRu ?? titleEn ?? slug,
               production.theatre.name ?? production.theatre.shortName,
               production.year

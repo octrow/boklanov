@@ -104,7 +104,7 @@ export function FilteredProductionsPanel({
 
   const filtered = React.useMemo(() => {
     return productions.filter((p) => {
-      if (activeRole !== 'all' && p.role !== activeRole) return false
+      if (activeRole !== 'all' && !p.role.includes(activeRole)) return false
       if (activeForms.length > 0 && !activeForms.some((f) => p.form.includes(f)))
         return false
       if (activeAges.length > 0) {

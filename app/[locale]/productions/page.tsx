@@ -21,7 +21,7 @@ export default async function ProductionsIndexPage({
 
   // Default view for the Suspense fallback (shown in static HTML pre-hydration).
   // Matches the filter default: role=director per brief D5.
-  const directorProductions = productions.filter((p) => p.role === 'director')
+  const directorProductions = productions.filter((p) => p.role.includes('director'))
 
   const labels = {
     roleDirector: t('roleDirector'),

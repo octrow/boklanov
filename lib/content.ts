@@ -58,7 +58,7 @@ export interface Production {
   ticketsUrl?: string | null
   ageRating?: string | null
   durationMin?: number | null
-  role: string
+  role: string[]
   form: string[]
   lineage: string[]
   credits: { ru: CreditEntry[]; en: CreditEntry[]; de?: CreditEntry[] }
@@ -177,7 +177,7 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     ticketsUrl: fm.ticketsUrl ?? null,
     ageRating: fm.ageRating ?? null,
     durationMin: fm.durationMin ?? null,
-    role: fm.role ?? 'director',
+    role: Array.isArray(fm.role) ? fm.role : [fm.role ?? 'director'],
     form: fm.form ?? [],
     lineage: fm.lineage ?? [],
     credits: fm.credits ?? { ru: [], en: [] },
@@ -323,8 +323,8 @@ export function getRelatedProductions(
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score
     // tie-break: prefer same role, then newer year
-    const aRoleEq = a.prod.role === production.role ? 1 : 0
-    const bRoleEq = b.prod.role === production.role ? 1 : 0
+    const aRoleEq = a.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
+    const bRoleEq = b.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
     if (aRoleEq !== bRoleEq) return bRoleEq - aRoleEq
     return (b.prod.year ?? 0) - (a.prod.year ?? 0)
   })
