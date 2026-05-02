@@ -80,6 +80,15 @@
   box-shadow: var(--shadow-focus);
 }
 
+.awardCount {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+  font-weight: var(--font-weight-normal);
+  margin-left: var(--space-3);
+}
+
 /* ── Award rows ──────────────────────────────────────────────────────── */
 
 .awardsList {

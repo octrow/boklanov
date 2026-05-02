@@ -521,6 +521,12 @@ export default async function ProductionDetailPage({
                   <span className={styles.slateVal}>{country}</span>
                 </li>
               )}
+              {country && (
+                <li className={styles.slateRow}>
+                  <span className={styles.slateKey}>LANGUAGE</span>
+                  <span className={styles.slateVal}>{productionLanguage(production.theatre.country).toUpperCase()}</span>
+                </li>
+              )}
               {production.tour && production.tour.length > 0 && (
                 <li className={styles.slateRow}>
                   <span className={styles.slateKey}>TOURING</span>

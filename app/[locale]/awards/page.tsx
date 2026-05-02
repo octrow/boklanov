@@ -49,6 +49,9 @@ export default async function AwardsPage({
                   >
                     {group.title}
                   </Link>
+                  <span className={styles.awardCount} aria-label={`${group.awards.length} awards`}>
+                    ×{group.awards.length}
+                  </span>
                 </h2>
               </Cue>
               <ul className={styles.awardsList}>

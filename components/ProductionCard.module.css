@@ -69,6 +69,7 @@
   letter-spacing: var(--letter-spacing-meta);
   text-transform: uppercase;
   color: var(--ink-mute);
+  margin-top: auto;
 }
 
 .titleRu {
