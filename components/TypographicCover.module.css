@@ -1,0 +1,56 @@
+/* TypographicCover — canonical cover for productions without poster.
+ * Per DESIGN_v2_PROPOSAL.md §4.5. The frame IS the cover, not a fallback.
+ * 4:5 aspect, Lora display title, JetBrains Mono meta line.
+ *
+ * Slug-hash mod 3 picks one of three layout variants (top/centre/bottom-set)
+ * so collisions on theatre+year don't render identical plates. */
+
+.cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  padding: var(--space-5);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  gap: var(--space-3);
+}
+
+/* Three layout variants — chosen by slug-hash mod 3 in TypographicCover.tsx. */
+.bottom {
+  grid-template-rows: 1fr auto auto;
+  align-items: end;
+}
+.bottom .title { grid-row: 2; align-self: end; }
+.bottom .meta  { grid-row: 3; }
+
+.top {
+  grid-template-rows: auto auto 1fr;
+}
+.top .title { grid-row: 1; }
+.top .meta  { grid-row: 2; }
+
+.centre {
+  grid-template-rows: 1fr auto auto 1fr;
+  align-items: center;
+}
+.centre .title { grid-row: 2; }
+.centre .meta  { grid-row: 3; }
+
+.title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--ink);
+  margin: 0;
+}
+
+.meta {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-marginalia);
+  margin: 0;
+}

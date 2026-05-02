@@ -6,6 +6,7 @@ import { cdnUrl } from '@/lib/cdn'
 import type { ProductionView } from '@/lib/content'
 
 import styles from './ProductionCard.module.css'
+import { TypographicCover } from './TypographicCover'
 
 // Country full-name → ISO-2 (uppercase). Brief D5/D7 fixes the chip set
 // to RU/KZ/DE/ES/AT/BY; anything outside falls back to no chip.
@@ -85,16 +86,13 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
             priority={priority}
           />
         ) : (
-          <div className={styles.coverFallback} aria-hidden='true'>
-            <h4 className={styles.coverFallbackTitle}>
-              {titleRu ?? titleEn ?? production.slug}
-            </h4>
-            {production.year && (
-              <span className={styles.coverFallbackYear}>
-                {production.year}
-              </span>
-            )}
-          </div>
+          <TypographicCover
+            slug={production.slug}
+            title={titleRu ?? titleEn ?? production.slug}
+            theatre={theatre ?? null}
+            countryCode={country}
+            year={production.year ?? null}
+          />
         )}
       </div>
 

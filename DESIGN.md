@@ -1,6 +1,6 @@
 # DESIGN
 
-Visual identity + IA + token essentials. Updated: 2026-05-02 (session 3).
+Visual identity + IA + token essentials. Updated: 2026-05-02 (session 6).
 
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
@@ -30,6 +30,10 @@ References borrowed for grammar, never fingerprints: linear.com, claude.ai (warm
 | Hairline rules, sharp corners                       | Drop-shadows, soft 16px radii, glassmorphism |
 | Production photos credited                          | Stock "diverse smiling team"                 |
 | Spacious, Japanese Ma                               | Bento grids, marketing density               |
+| Catalogue raisonné register (numbered plates, archival caption) | Catalogue marketing register (collection, "shop the look") |
+| Variable-weight Lora as breath, not animation       | Kinetic interpolation between weights        |
+| Mono labels with hairline underline (no fill, no radius) | Coloured pill chips, status hue         |
+| 1px low-contrast inset rule on photographic plates  | Outset shadow, blur radius >0, hover lift    |
 
 ## 3. Colour
 
@@ -145,7 +149,7 @@ Production card:
 - Lora RU title, Inter EN title `--ink-mute`.
 - Mono meta row: `theatre · PREM YYYY · ageRating · countryCode`. `font-variant-numeric: tabular-nums`.
 - Whole card is the link. Hover: oxblood underline reveal under RU title, no card lift.
-- No-poster fallback = deliberate typographic treatment. `coverStyle` only when `poster.src && poster.lqip`.
+- No-poster fallback = deliberate typographic treatment via `<TypographicCover>` (Phase 9.8, `components/TypographicCover.tsx`). Slug-hash mod 3 picks one of three layout variants (top / centre / bottom-set title placement) so productions sharing theatre+year don't render visually identical plates. Triggered when `poster.src && poster.lqip` is false.
 
 Marginalia (Phase 7.6, `00c2501`): `<Marginalia note="...">` wraps prose on `/about`. ≥1280px:
 `grid-template-columns: minmax(0,65ch) minmax(0,20ch)`, note in right column with `border-left: 1px solid var(--rule)`,

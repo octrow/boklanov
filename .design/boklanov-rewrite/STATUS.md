@@ -129,15 +129,19 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.3 | TheatreSlate component (extract title block + role line) | done | `49eb04c` |
 | 9.4 | Marginalia refresh (louder, pull variant) | deferred | requires production-detail layout restructure (right-rail conflict); split into separate session |
 | 9.5 | EmptyState / ERRATA refresh | done | `806d1a0` — ERRATA chip dropped; complete-sentence Lora italic; aria-live polite |
-| 9.6 | SpecimenPlate component | pending | blocks-on `--specimen-rule` (9.1 ✓) |
-| 9.7 | TourRider component (subsumes existing right-rail `.slate`) | pending | — |
-| 9.8 | TypographicCover + CreditLine + grain SVG + build-time `coverStyle` | pending | last phase |
+| 9.6 | SpecimenPlate component | done | `c866152` — gallery + /about photos. /archive deferred. |
+| 9.7 | TourRider component (subsumes existing right-rail `.slate`) | done | `4210970` — extracted + expanded with FORM/LINEAGE/TECH RIDER/PRESS KIT rows |
+| 9.8 | TypographicCover + slug-hash mod 3 variant | done | (this commit) — CreditLine + grain SVG deferred to a future polish phase |
 
 Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must read as paper, not cream. If perceived as cream, `git revert 5558e16`.
 
 ## Recent commits
 
 ```
+(9.8 hash) feat(9.8): TypographicCover — slug-hash variant, replaces inline coverFallback
+4210970 feat(9.7): TourRider component — replaces inline right-rail .slate
+c866152 feat(9.6): SpecimenPlate component — gallery + /about photos
+79a45f9 docs: STATUS.md hash backfill for 806d1a0
 806d1a0 feat(9.5): EmptyState refresh — drop ERRATA chip, full-sentence Lora italic
 0ff38ed docs: STATUS.md hash backfill for f1613b1
 f1613b1 feat(9.2): Lora variable font swap — 11 subsetted → 2 VF
@@ -156,8 +160,9 @@ e1920af feat(7.6-tier3-j): editorial empty states — ERRATA register
 
 ## Next actions (in order)
 
-1. Daniil pushes commits `b00503d..HEAD` to `boklanov.vercel.app`; visual A/B on `--paper #F2F0EA`.
-2. Phase 9.4 (Marginalia louder) or 9.6 (SpecimenPlate) next — both unblocked by 9.1 token deltas.
+1. Daniil pushes remaining commits to `boklanov.vercel.app`; visual A/B on `--paper #F2F0EA` (9.1), TheatreSlate role line (9.3), EmptyState register (9.5), SpecimenPlate captions (9.6), TourRider expanded rows (9.7), TypographicCover variants (9.8).
+2. Phase 9.4 (Marginalia louder, pull/run variants) — deferred. Requires production-detail layout restructure (right-rail conflict with TourRider). Separate session.
+3. Phase 9.8 follow-ups (deferred to a polish session): grain SVG noise overlay (proposal §6.1), CreditLine component (proposal §6.3 — current SpecimenPlate caption already meets the "never apologetic" spec).
 4. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
 5. Roman closes orphan-title audit + photographer credits.
 6. D3/D4 cutover when reactivated.
