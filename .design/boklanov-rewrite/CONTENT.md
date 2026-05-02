@@ -1,11 +1,12 @@
 # CONTENT
 
-How content gets into boklanov.com. Updated: 2026-05-02 (session 3).
+How content gets into boklanov.com. Updated: 2026-05-02 (session 6).
 
 Owns: live workflow + frontmatter shape.
 Roman-facing day-to-day RU: `content/AUTHORING.ru.md`.
-History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW.md` — 9-option matrix, Q&A, deferred Decap
-plan.
+History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW_compress.md` — 9-option matrix, Q&A, deferred Decap plan (full: `archive/CONTENT_WORKFLOW.md`).
+
+`content/about/{ru,en}.mdx` frontmatter: `photos[]` array — `- src: /path.jpg\n  credit: "…"`. Rendered as 2-col masonry below the geography block. Empty array = section hidden.
 
 ## Source of truth
 
@@ -86,9 +87,34 @@ tags: [ ]
 - Featured strip: set `featured: true`. Cards without poster filtered out (`p.featured && p.poster.src`).
 - About bio + milestones + lineage + marginalia notes: edit `content/about/{ru,en,de}.mdx` directly. `marginalia[]`
   is an optional array (one entry per body paragraph, `null` for no note) that drives the ≥1280px gutter note.
+  `photos[]` — `- src: /path.jpg\n  credit: "Name"` — add once photos are ready; empty array = section hidden.
 - UI chrome strings: `messages/{ru,en,de}.json`. RU+EN required. DE chrome only.
 - Production-card text never translates to DE (IA D4).
 - DE bios: only top 5-6 priority shows for v1.
+
+## TourRider null-field contract
+
+The right-rail TourRider on `/productions/[slug]` (Phase 9.7) reads
+frontmatter directly and short-circuits null fields. Omitting a field
+omits the row — the component never renders a placeholder, never an
+empty `<a>`. Conversely, populating a field surfaces a new row without
+touching component code:
+
+| Field             | Surfaces row             | Notes                                              |
+|-------------------|--------------------------|----------------------------------------------------|
+| `year`            | `YEAR`                   | Mono, tabular-nums.                                |
+| `durationMin`     | `RUN  nn MIN`            | Thin-space before `MIN`.                           |
+| `ageRating`       | `AGE  3+ / 6+ / 12+ / 18+` | Plain string.                                      |
+| `theatre.country` | `COUNTRY`                | ISO-2 via `countryCode` mapper.                    |
+| `theatre.country` | `LANGUAGE`               | Derived (DE/AT/CH→`DE`, KZ→`RU`, default `RU`).    |
+| `form[]`          | `FORM`                   | Joined ` · ` uppercase.                            |
+| `lineage[]`       | `LINEAGE`                | Joined ` · ` uppercase.                            |
+| `tour[]` not empty | `TOURING SOLO`          | Plinth-tier indicator.                             |
+| `techRider`       | `TECH RIDER  PDF`        | Anchor `aria-label="Technical rider, PDF"`.        |
+| `pressKit`        | `PRESS KIT  ZIP`         | Anchor `aria-label="Press kit, ZIP"`.              |
+
+Empty `tour[]`, missing `techRider`, missing `pressKit` are the most
+common omissions; render is silent until populated.
 
 ## Retired
 
@@ -100,4 +126,4 @@ tags: [ ]
 
 Decap CMS web-admin layer (variant C). Activation triggers: Roman travels + Obsidian Mobile insufficient; second
 contributor; browser-edit friction. Locks pre-set: `editorial_workflow: false`, `backend.branch: draft`, no
-`_diagnostics.md`. ~2 days when activated. Full plan in `archive/CONTENT_WORKFLOW.md` §6B (history, read-only).
+`_diagnostics.md`. ~2 days when activated. Full plan in `archive/CONTENT_WORKFLOW_compress.md` §6B (history, read-only; full: `archive/CONTENT_WORKFLOW.md`).

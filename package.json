@@ -14,6 +14,7 @@
     "sync": "echo 'sync retired — edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
     "lint-mdx": "tsx scripts/lint-mdx.ts",
+    "lint-tokens": "tsx scripts/lint-tokens.ts",
     "start": "next start",
     "deploy": "vercel deploy",
     "analyze": "cross-env ANALYZE=true next build",

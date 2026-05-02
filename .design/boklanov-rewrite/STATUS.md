@@ -115,7 +115,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 `main` branch: clean. Last: `2bdd855` — STATUS hash backfill for Phase 9.8.
 
-## Phase 9 v2 visual refresh (7 of 8 code phases done; 9.4 deferred)
+## Phase 9 v2 visual refresh (8 of 8 code phases done; polish items shipped)
 
 Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on `main`, no feature branch.
 
@@ -127,7 +127,7 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.1 | Token deltas — warmer paper + 5 new tokens | done | `5558e16` |
 | 9.2 | Lora variable swap | done | `f1613b1` — VF files renamed `[wght]` → `-VF`; 11 subsetted woff2 deleted |
 | 9.3 | TheatreSlate component (extract title block + role line) | done | `49eb04c` |
-| 9.4 | Marginalia refresh (louder, pull variant) | deferred | requires production-detail layout restructure (right-rail conflict); split into separate session |
+| 9.4 | Marginalia refresh (louder, pull variant) | API done | `36546d9` — kind=note/pull/run prop. Existing directorsNote / runs[] already implement the louder register inline; greenfield call-sites use Marginalia.pull / .run. Float-into-margin layout still deferred (right-rail conflict). |
 | 9.5 | EmptyState / ERRATA refresh | done | `806d1a0` — ERRATA chip dropped; complete-sentence Lora italic; aria-live polite |
 | 9.6 | SpecimenPlate component | done | `c866152` — gallery + /about photos. /archive deferred. |
 | 9.7 | TourRider component (subsumes existing right-rail `.slate`) | done | `4210970` — extracted + expanded with FORM/LINEAGE/TECH RIDER/PRESS KIT rows |
@@ -135,9 +135,28 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 
 Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must read as paper, not cream. If perceived as cream, `git revert 5558e16`.
 
+### Phase 9.x polish (proposal §5/§6/§7 follow-ups, all shipped)
+
+| Item | Subject | Status | Commit |
+|---|---|---|---|
+| §5.2 | SpecimenPlate caption focus settle (2px translateY, --duration-fast) | done | `5d49f4e` |
+| §5.3 | Marginalia pull-text intersect settle | n/a | inline render makes effect imperceptible; documented in 9.4 commit |
+| §6.1 | Grain SVG + photographic processing recipe (contrast/saturate/brightness) | done | `5d49f4e` |
+| §6.2 | TypographicCover synopsis collision-buster (1-line italic Lora above meta) | done | `046aae9` |
+| §6.3 | CreditLine primitive | done | `e73379a` — primitive available for future call-sites |
+| §7 #1 | Stylelint scope rule for `--specimen-rule` | done (npm script) | this commit — `npm run lint-tokens` |
+| §7 #1b | Playwright visual regression for non-photo card box-shadow | not implemented | no Playwright setup; lint-tokens covers static guard |
+| CONTENT.md | TourRider null-field contract documented | done | this commit |
+
 ## Recent commits
 
 ```
+(this commit) chore: lint-tokens scope guard + CONTENT.md TourRider contract + STATUS update
+36546d9 feat(9.4): Marginalia kind=note/pull/run API extension
+046aae9 feat(9.x-poly): TypographicCover synopsis collision-buster (proposal §6.2)
+e73379a feat(9.x-poly): CreditLine primitive (proposal §6.3)
+5d49f4e feat(9.x-poly): grain SVG + photographic filter + focus settle motion
+5b3c80b docs: post-Phase-9 update — STATUS, DESIGN §7, proposal reflow
 2bdd855 docs: STATUS.md hash backfill for 778677c
 778677c feat(9.8): TypographicCover — slug-hash variant, replaces inline coverFallback
 4210970 feat(9.7): TourRider component — replaces inline right-rail .slate
@@ -161,9 +180,8 @@ e1920af feat(7.6-tier3-j): editorial empty states — ERRATA register
 
 ## Next actions (in order)
 
-1. Daniil pushes remaining commits to `boklanov.vercel.app`; visual A/B on `--paper #F2F0EA` (9.1), TheatreSlate role line (9.3), EmptyState register (9.5), SpecimenPlate captions (9.6), TourRider expanded rows (9.7), TypographicCover variants (9.8).
-2. Phase 9.4 (Marginalia louder, pull/run variants) — deferred. Requires production-detail layout restructure (right-rail conflict with TourRider). Separate session.
-3. Phase 9.8 follow-ups (deferred to a polish session): grain SVG noise overlay (proposal §6.1), CreditLine component (proposal §6.3 — current SpecimenPlate caption already meets the "never apologetic" spec).
-4. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
-5. Roman closes orphan-title audit + photographer credits.
-6. D3/D4 cutover when reactivated.
+1. Daniil pushes remaining commits to `boklanov.vercel.app`; visual review of v2 across home / production grid / production detail / about. Acceptance gate is paper colour: `--paper #F2F0EA` must read as paper, not cream — if cream, `git revert 5558e16`.
+2. Marginalia float-into-margin layout (proposal §4.3 ≥1024px float) — only outstanding v2 item. Needs production-detail restructure to coexist with TourRider right-rail. Separate session when prioritised.
+3. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
+4. Roman closes orphan-title audit + photographer credits.
+5. D3/D4 cutover when reactivated.
