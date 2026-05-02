@@ -71,19 +71,20 @@ Components reference semantic aliases, not raw paper/ink.
 
 Self-hosted from `public/fonts/`. SIL OFL. Full Cyrillic. No Google Fonts CDN.
 
-v3 addition: Unbounded VF for ALL CAPS wordmark + plakat moments.
+v3 addition: Unbounded VF — scoped to hero wordmark + Sticker badges only.
 
 | Role     | Family         | Weights      | Use                                                             |
 |----------|----------------|--------------|-----------------------------------------------------------------|
-| Plakat   | **Unbounded**  | 200–900 VF   | ALL CAPS wordmark, hero plakat moments, Sticker badges (v3)     |
-| Display  | Lora-VF        | 400–700 VF   | Page H1, section H2, editorial prose, italic press attribution  |
+| Plakat   | **Unbounded**  | 200–900 VF   | Hero wordmark on `/` only, Sticker badges (v3)                  |
+| Display  | Lora-VF        | 400–700 VF   | Header + footer wordmark (lowercase), page H1, section H2, editorial prose, italic press attribution |
 | Body/UI  | Inter          | 400, 500, 600| Long-form prose, UI, CTAs                                       |
 | Mono     | JetBrains Mono | 400, 500     | Dates, durations, chips, credits, country codes                 |
 
 Voice rules:
 
-- Wordmark **ALL CAPS** Unbounded 700, `letter-spacing: 0.03em` — `РОМАН БОКЛАНОВ` / `ROMAN BOKLANOV`. Never lowercase, never italic.
-- All-caps reserved for: wordmark (Unbounded), chips (mono), section labels (mono), Sticker badges (Unbounded). No all-caps Lora.
+- Hero wordmark on `/`: Unbounded 700 ALL CAPS, gradient fill, `letter-spacing: 0.03em` — `РОМАН БОКЛАНОВ` / `ROMAN BOKLANOV`. Never italic. Static gradient — never animated.
+- Header + footer wordmark: Lora medium **lowercase** — `роман бокланов` / `roman boklanov`. v3 fix-pass `2388511`: ALL CAPS Unbounded reverted at chrome scale (read as too tech, broke editorial register). Hero is the only Unbounded surface in chrome.
+- All-caps reserved for: hero wordmark (Unbounded), chips (mono), section labels (mono), Sticker badges (Unbounded). No all-caps Lora.
 - Italics only in Lora. Never in Inter or Unbounded.
 - Mono for any number that's not a price.
 
@@ -97,7 +98,7 @@ Scale (fluid `clamp(min@375, mid, max@1280)`):
 | `--font-size-lg`      | 20  | 24  | h3, card titles                             |
 | `--font-size-2xl`     | 28  | 40  | h2, section titles                          |
 | `--font-size-4xl`     | 44  | 88  | Display, page H1                            |
-| `--font-size-hero`    | 72  | 168 | **v3** Unbounded hero wordmark on `/` only  |
+| `--font-size-hero`    | 48  | 96  | **v3** Unbounded hero wordmark on `/` only — narrowed `2388511` after visual review (was 72–168; cropped on mobile, oversized at desktop) |
 | `--font-size-sticker` | 11  | 13  | **v3** Unbounded Sticker badge text         |
 
 Tracking: `--letter-spacing-tight -0.015em` (Lora display), `--letter-spacing-wide 0.06em` (mono caps),
@@ -148,7 +149,7 @@ ms.
 Page chrome is a frame. Hairline rules separate sections. Header sticky on production detail only. Footer minimal: three
 columns of mono links + colophon. No newsletter signup, no "Built with Next.js".
 
-**v3 components (2026-05-03, branch `design_v3`):** SiteWordmark (`b20d501`) — Unbounded 700 ALL CAPS, variant=hero/header/footer. SiteHero (`c8fffc7`) — `/` only: SR h1 + aria-hidden gradient wordmark + Lora italic statement + mono hint. SectionStripe (`6f7fc30`) — 2px per-route accent band above `<Cue>`. Sticker (`c892efd`) — Unbounded 600 ALL CAPS badge, fill one accent, no radius, `--shadow-plakat`, max 1/card. DuotonePoster (`e73ab4f`) — SVG feColorMatrix two-tone on featured cards, slugHash%2 picks accent, @supports-gated, grayscale fallback. TourTicker (`c892efd`) — CSS marquee mono caps band, pauses on hover + reduced-motion. FeaturedStrip (`c8fffc7`) — broken-grid on `/` only (1 large + 2 medium + 3 small ≥1024px).
+**v3 components (2026-05-03, branch `design_v3`):** SiteWordmark (`b20d501`; fix-pass `2388511`) — variant=hero (Unbounded 700 ALL CAPS gradient) | header + footer (Lora medium lowercase, v1/v2 register restored). SiteHero (`c8fffc7`) — `/` only: SR h1 + aria-hidden gradient wordmark + Lora italic statement + mono hint. SectionStripe (`6f7fc30`; fix-pass `2388511`) — 2px per-route accent band, rendered once inside `<SiteHeader>` below the header rule (was per-page inside `<main>` — constrained by max-width-content; now spans 100vw). Sticker (`c892efd`; fix-pass `2388511` adds production-detail call-site) — Unbounded 600 ALL CAPS badge, fill one accent, no radius, `--shadow-plakat`, max 1/card on grid + max 2/page on detail. DuotonePoster (`e73ab4f`; fix-pass `2388511`) — SVG feColorMatrix two-tone on featured cards, slugHash%2 picks accent, @supports-gated, grayscale fallback; selector widened to `:is(img, [data-cover-style])` so typographic covers also tint. TourTicker (`c892efd`) — CSS marquee mono caps band, pauses on hover + reduced-motion. FeaturedStrip (`c8fffc7`; fix-pass `2388511`) — broken-grid on `/` only: row 1 = 1 large (cols 1–7) + 1 medium (cols 8–12); row 2 = 3 small evenly; row 3 = 1 wide trailing centred. Restructured from v2-style 2-row-tall large cell which left dead space below the wide-and-short card.
 
 Folio (Phase 7.5, `c7a1b50`; updated session 5): mono caps running line above nav in `<header>`, `aria-hidden="true"`. Format: `РОМАН БОКЛАНОВ ⟶ SECTION ⟶ 01 / 24`. Home page shows just `РОМАН БОКЛАНОВ` (no section arrow). `folioFor()` in `lib/folio.ts`. Footer mirrors with `2026 EDITION` / `2026 ИЗДАНИЕ` / `AUSGABE 2026`. Year only. No cities.
 
@@ -187,6 +188,7 @@ Production detail (D7 layout, top -> bottom):
 
 1. Cover: `max-height: 65vh`, `object-fit: contain`, centered. Natural aspect ratio, no cropping. `PosterLightbox` wraps for click-to-expand.
 2. Run-of-show row (Phase 7.6): optional `runs[]` frontmatter. Mono chip row above title: `RUN · venue · city · yearFrom–yearTo · count`. Hidden when `runs[]` empty.
+2b. Sticker row (v3 fix-pass `2388511`): optional plakat badges above title. `aria-hidden="true"`. Vermillion `FESTIVAL AWARD · N` when `awards.length > 0`; cobalt `TOURING` when `tour.length > 0`. Max 2 stickers; canonical sources are TourRider + awards list. Translation keys: `productions.stickerAward` + `productions.stickerTour` (RU/EN/DE).
 3. Title block: `<TheatreSlate>` component (Phase 9.3, `components/TheatreSlate.tsx`) — RU display Lora + smaller EN + DE if present, theatre line (mono meta with optional URL link), role line (mono uppercase, `--ink-marginalia`, `--letter-spacing-wide`), premiereDate (mono meta). Top + bottom rules. Heading element via `as` prop (`h1` on detail, `h2` on index when adopted).
 4. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
 5. Synopsis Lora italic.
@@ -314,11 +316,12 @@ Non-negotiable.
 
 ## 13. Wordmark
 
-No logo. `<SiteWordmark>` component. Unbounded 700 ALL CAPS, `letter-spacing: 0.03em`.
-- Hero (`/`): `--font-size-hero`, static gradient fill (vermillion→cobalt→mustard, 135deg)
-- Header: `--font-size-lg`, solid `--ink`
-- Footer: `--font-size-meta`, solid `--ink-mute`
-RU: `РОМАН БОКЛАНОВ`. EN/DE: `ROMAN BOKLANOV`. Never italic. Gradient only on hero variant.
+No logo. `<SiteWordmark>` component. Two registers (v3 fix-pass `2388511`):
+
+- **Hero** (`/` only): Unbounded 700 ALL CAPS, `letter-spacing: 0.03em`, `--font-size-hero` clamp(48px, 28+4.5vw, 96px). Static gradient fill (vermillion→cobalt→mustard, 135deg). RU: `РОМАН БОКЛАНОВ`. EN/DE: `ROMAN BOKLANOV`. `aria-hidden`; SR h1 companion carries the plain text.
+- **Header + footer**: Lora medium **lowercase**, `letter-spacing: --letter-spacing-tight`, solid colour (header `--ink`, footer `--ink-mute`). RU: `роман бокланов`. EN/DE: `roman boklanov`. Never italic. Never gradient.
+
+The lowercase Lora register at chrome scale is the v1/v2 anchor; ALL CAPS Unbounded was tried on every variant in 9v3.1 but reverted to hero-only after visual review (read as too tech, broke editorial register).
 
 ## 14. Source-of-truth chain
 

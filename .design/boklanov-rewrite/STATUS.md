@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 11 — 9v3.9 sweep in progress, Gate 3 fixed).
+Current state + open work. Updated: 2026-05-03 (session 12 — fix-pass `2388511` after first visual review).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -37,7 +37,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2: 291 files uploaded 2026-05-02. Dev URL active. `cdn.boklanov.com` blocked on Cloudflare DNS. |
 | 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates). |
-| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 5/10 phases shipped (9v3.0–9v3.4). 9v3.5 next.   |
+| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 9 of 10 phases shipped (9v3.0–9v3.8) + fix-pass `2388511`. 9v3.9 acceptance sweep in progress. |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
@@ -158,11 +158,11 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | Phase | Subject | Status | Commit |
 |---|---|---|---|
 | 9v3.0 | Token deltas — Bauhaus trio replaces oxblood, deeper ink, new --shadow-plakat / --stripe-thickness / --ticker-speed / --font-size-hero / --font-size-sticker / --measure-poster | done | `2827654` |
-| 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer | done | `b20d501` |
-| 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts) | done | `6f7fc30` |
-| 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion) | done | `c892efd` |
-| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | done | `e73ab4f` |
-| 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). | done | `c8fffc7` |
+| 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer (header/footer reverted to Lora lowercase in fix-pass `2388511`) | done | `b20d501` + fix-pass `2388511` |
+| 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts). Fix-pass `2388511`: moved into `<SiteHeader>` (was per-page inside `<main>` — constrained by max-width-content; now spans 100vw under header rule). | done | `6f7fc30` + fix-pass `2388511` |
+| 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion). Fix-pass `2388511`: `<Sticker>` row added on production-detail above title (FESTIVAL AWARD vermillion + TOURING cobalt; aria-hidden; new i18n keys `productions.stickerAward` / `stickerTour`). | done | `c892efd` + fix-pass `2388511` |
+| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt). Fix-pass `2388511`: selector widened to `:is(img, [data-cover-style])` so typographic covers also tint; `@supports` specificity lifted via doubled `[data-accent]`. | done | `e73ab4f` + fix-pass `2388511` |
+| 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). Fix-pass `2388511`: `--font-size-hero` clamp narrowed 72→48 / 168→96 (cropped on mobile, oversized on desktop); `<SiteHero>.heroWordmark` overflow:visible + padding-block + overflow-wrap:anywhere; `<FeaturedStrip>` grid restructured (was 1-large-spans-2-rows beside two stacked mediums → row1: 1 large + 1 medium; row2: 3 small; row3: 1 wide trailing — eliminates dead space below wide-and-short cell). | done | `c8fffc7` + fix-pass `2388511` |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2). TourRider → `<details>` at ≥1280px frees gutter. | done | `8ed4c56` |
 | 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | done | `badafb0` |
 | 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | done | `9782071` (archive §8.2) + `6958737` (DESIGN.md §7/8/11/13 complete) |
@@ -211,6 +211,9 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ## Recent commits
 
 ```
+2388511  fix(9v3): visual review pass — wordmark, stripe, hero, grid, duotone, stickers
+c78f997  fix/update
+334b2d3  docs(design_v3): STATUS update — 9v3.9 sweep in progress
 14777b7  fix(9v3.9): accent-vermillion contrast — #E63946→#CC2530
 6958737  docs(9v3.8): complete DESIGN.md mirror — §7 tail + §8 + §11 + §13
 9782071  docs(9v3.8-partial): mirror v3 unfreezes — archive §8.2 + DESIGN.md §1/3/4/5/6/7 partial
@@ -265,7 +268,11 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 6. ~~**9v3.6**~~ — done `8ed4c56`
 7. ~~**9v3.7**~~ — done `badafb0`
 8. ~~**9v3.8**~~ — done `9782071` + `6958737`
-9. **9v3.9 — acceptance-gate sweep** (in progress): Gate 3 fixed `14777b7`. Pending: push to Vercel, run axe-core/Lighthouse (gates 1/2), visual A/B (gate 4), reduced-motion test (gate 5), curator 90s sim (gate 6), font-delta judgment (gate 8). After all gates green, open PR `design_v3 → main`.
+9. **9v3.9 — acceptance-gate sweep** (in progress):
+   - Gate 3 fixed `14777b7` (vermillion contrast).
+   - Fix-pass `2388511` shipped after first dev-server visual review — six bugs caught (wordmark register, stripe width, hero size, featured grid, duotone gating, production-detail v3-touches). Updated `DESIGN.md` §4/§7/§13 to match.
+   - Pending: push to Vercel, run axe-core/Lighthouse (gates 1/2), visual A/B (gate 4), reduced-motion test (gate 5), curator 90s sim (gate 6), font-delta judgment (gate 8).
+   - After all gates green, open PR `design_v3 → main`.
 ### Carryover (v2 / authoring / cutover)
 
 - `main` has uncommitted `GalleryLightbox` work — finish on `main` separately or fold into `design_v3` after v3 merge. Decide: keep on `main` and rebase `design_v3` once before merge.
