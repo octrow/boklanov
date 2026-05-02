@@ -113,7 +113,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 ## Build state
 
-`main` branch: clean. Last: Phase 9.3 TheatreSlate component (commit hash filled on commit).
+`main` branch: clean. Last: `49eb04c` — Phase 9.3 TheatreSlate component.
 
 ## Phase 9 v2 visual refresh (in progress)
 
@@ -126,7 +126,7 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.0c | Unfreeze rounded-2xl/shadow-xl → form-chrome 2px | done | `930fd0a` |
 | 9.1 | Token deltas — warmer paper + 5 new tokens | done | `5558e16` |
 | 9.2 | Lora variable swap | pending | font file pending download |
-| 9.3 | TheatreSlate component (extract title block + role line) | done | (this commit) |
+| 9.3 | TheatreSlate component (extract title block + role line) | done | `49eb04c` |
 | 9.4 | Marginalia refresh (louder, pull variant) | pending | — |
 | 9.5 | EmptyState / ERRATA refresh | pending | — |
 | 9.6 | SpecimenPlate component | pending | blocks-on `--specimen-rule` (9.1 ✓) |
@@ -138,7 +138,7 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 ## Recent commits
 
 ```
-(9.3 hash) feat(9.3): TheatreSlate component — extract + role line
+49eb04c feat(9.3): TheatreSlate component — extract + role line
 5558e16 feat(9.1): v2 token deltas — warmer paper + 5 new tokens
 930fd0a docs(unfreeze 9.0c): rounded-2xl/shadow-xl → form-chrome 2px
 1d054f2 docs(unfreeze 9.0b): coloured chip pills → specimen mono labels
