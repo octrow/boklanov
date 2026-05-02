@@ -336,46 +336,8 @@ dd.creditsName { margin: 0; color: var(--ink); }
   }
 }
 
-/* Theatre slate — DA-2.B: bordered box, desktop only. */
-.slate {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .slate {
-    display: block;
-    border: 1px solid var(--rule-strong);
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-meta);
-    letter-spacing: var(--letter-spacing-meta);
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.slateHeader {
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--rule-strong);
-  display: flex;
-  justify-content: space-between;
-}
-
-.slateIndex { color: var(--ink-faint); text-transform: uppercase; }
-
-.slateBody { list-style: none; padding: 0; margin: 0; }
-
-.slateRow {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--rule);
-}
-
-.slateRow:last-child { border-bottom: none; }
-
-.slateKey { color: var(--ink-faint); text-transform: uppercase; flex-shrink: 0; }
-
-.slateVal { color: var(--ink); text-transform: uppercase; text-align: right; }
+/* .slate / .slateHeader / .slateIndex / .slateBody / .slateRow / .slateKey /
+   .slateVal — migrated to components/TourRider.module.css (Phase 9.7). */
 
 /* Tour band — DA-2.D: Plinth city list above gallery. */
 .tourBand {

@@ -9,6 +9,7 @@ import { PosterLightbox } from '@/components/PosterLightbox'
 import { countryCode } from '@/components/ProductionCard'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
 import { TheatreSlate } from '@/components/TheatreSlate'
+import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
@@ -505,56 +506,21 @@ export default async function ProductionDetailPage({
         )}
       </div>
 
-      {/* Rail: spec sheet (desktop only) + sticky CTA */}
+      {/* Rail: TourRider (desktop only) + sticky CTA */}
       <div className={styles.rail}>
-        {/* Theatre slate — DA-2.B. aria-hidden: chips row carries same data. */}
-        {(production.year || production.durationMin || production.ageRating || country) && (
-          <div className={styles.slate} aria-hidden="true">
-            {productionLabel && (
-              <div className={styles.slateHeader}>
-                <span className={styles.slateIndex}>{productionLabel}</span>
-              </div>
-            )}
-            <ul className={styles.slateBody}>
-              {production.year && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>YEAR</span>
-                  <span className={styles.slateVal}>{production.year}</span>
-                </li>
-              )}
-              {production.durationMin && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>RUN</span>
-                  <span className={styles.slateVal}>{production.durationMin}&thinsp;MIN</span>
-                </li>
-              )}
-              {production.ageRating && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>AGE</span>
-                  <span className={styles.slateVal}>{production.ageRating}</span>
-                </li>
-              )}
-              {country && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>COUNTRY</span>
-                  <span className={styles.slateVal}>{country}</span>
-                </li>
-              )}
-              {country && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>LANGUAGE</span>
-                  <span className={styles.slateVal}>{productionLanguage(production.theatre.country).toUpperCase()}</span>
-                </li>
-              )}
-              {production.tour && production.tour.length > 0 && (
-                <li className={styles.slateRow}>
-                  <span className={styles.slateKey}>TOURING</span>
-                  <span className={styles.slateVal}>SOLO</span>
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
+        <TourRider
+          productionLabel={productionLabel}
+          year={production.year}
+          durationMin={production.durationMin}
+          ageRating={production.ageRating}
+          country={country}
+          language={country ? productionLanguage(production.theatre.country) : null}
+          form={production.form}
+          lineage={production.lineage}
+          tourSolo={Boolean(production.tour && production.tour.length > 0)}
+          techRider={production.techRider}
+          pressKit={production.pressKit}
+        />
         {/* 11. Sticky CTA — fixed bottom on mobile, static in sticky rail on desktop */}
         <a
           className={styles.stickyCta}

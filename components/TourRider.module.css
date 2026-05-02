@@ -1,0 +1,76 @@
+/* TourRider — production tech-rider sheet per DESIGN_v2_PROPOSAL.md §4.4.
+ * Replaces inline .slate from production detail page.module.css (DA-2.B).
+ * Desktop-only (≥1024px) — mobile chips row carries the same data. */
+
+.rider {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .rider {
+    display: block;
+    border: 1px solid var(--rule-strong);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    letter-spacing: var(--letter-spacing-meta);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.header {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--rule-strong);
+  display: flex;
+  justify-content: space-between;
+}
+
+.index {
+  color: var(--ink-marginalia);
+  text-transform: uppercase;
+}
+
+.body {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.key {
+  color: var(--ink-marginalia);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.val {
+  color: var(--ink);
+  text-transform: uppercase;
+  text-align: right;
+  margin: 0;
+}
+
+.docLink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.docLink:hover {
+  color: var(--accent);
+}
+
+.docLink:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
