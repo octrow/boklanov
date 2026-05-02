@@ -300,3 +300,6 @@
   border: none;
   border-top: 1px solid var(--rule);
 }
+
+/* DA-7.6.B — Hide navigation chrome on print */
+@media print { .header { display: none; } }

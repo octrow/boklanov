@@ -7,6 +7,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { Cue } from '@/components/Cue'
+import { Marginalia } from '@/components/Marginalia'
 import type { Locale } from '@/i18n/routing'
 
 import styles from './page.module.css'
@@ -30,6 +31,7 @@ interface AboutFrontmatter {
   portrait: { src: string | null; credit: string | null }
   milestones: Milestone[]
   lineage: LineageItem[]
+  marginalia?: Array<string | null>
 }
 
 // ── Loader ───────────────────────────────────────────────────────────────
@@ -126,7 +128,7 @@ export default async function AboutPage({
   const tAbout = await getTranslations('about')
 
   const { frontmatter, paragraphs } = loadAbout(locale)
-  const { milestones, lineage } = frontmatter
+  const { milestones, lineage, marginalia } = frontmatter
 
   // First paragraph is the lead (displayed in Lora); the rest are body.
   const [leadParagraph, ...bodyParagraphs] = paragraphs
@@ -141,15 +143,17 @@ export default async function AboutPage({
       />
       <h1 className={styles.heading}>{t('about')}</h1>
 
-      {/* Bio prose */}
+      {/* Bio prose — DA-7.6.A: Marginalia grid at ≥1280px */}
       <section className={styles.bio}>
         {leadParagraph && (
-          <p className={styles.bioLead}>{leadParagraph}</p>
+          <Marginalia note={marginalia?.[0] ?? undefined}>
+            <p className={styles.bioLead}>{leadParagraph}</p>
+          </Marginalia>
         )}
         {bodyParagraphs.map((para, i) => (
-          <p key={i} className={styles.bioParagraph}>
-            {para}
-          </p>
+          <Marginalia key={i} note={marginalia?.[i + 1] ?? undefined}>
+            <p className={styles.bioParagraph}>{para}</p>
+          </Marginalia>
         ))}
       </section>
 

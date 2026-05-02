@@ -1,0 +1,45 @@
+/* DA-7.6.A — Marginalia component.
+   Mobile/tablet: note collapses inline as italic subordinate text.
+   ≥1280px: two-column grid — prose left, note right. */
+
+/* No-note wrapper: constrain prose to reading measure */
+.rowSingle {
+  max-width: var(--max-width-prose);
+}
+
+/* Note-present wrapper: block on mobile */
+.row { /* block */ }
+
+/* Prose column: transparent on mobile */
+.prose { /* transparent */ }
+
+/* Note: italic subordinate below prose on mobile */
+.note {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--ink-faint);
+  margin-top: var(--space-2);
+}
+
+/* ≥1280px: grid layout */
+@media (min-width: 1280px) {
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 65ch) minmax(0, 20ch);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .note {
+    font-family: var(--font-family-mono);
+    font-style: normal;
+    font-size: var(--font-size-meta);
+    letter-spacing: var(--letter-spacing-meta);
+    color: var(--ink-faint);
+    margin-top: 0.35em;
+    border-left: 1px solid var(--rule);
+    padding-left: var(--space-4);
+  }
+}

@@ -31,9 +31,10 @@
 
 /* ── Bio block ───────────────────────────────────────────────────────── */
 
-.bio {
-  max-width: var(--max-width-prose);
-}
+/* No max-width here — Marginalia component handles the 65ch prose column.
+   rowSingle (no note) constrains to --max-width-prose; row (with note)
+   uses a two-column grid at ≥1280px. */
+.bio {}
 
 .bioLead {
   font-family: var(--font-family-display);

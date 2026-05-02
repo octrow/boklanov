@@ -654,3 +654,51 @@ input[type="search"]::-webkit-search-cancel-button {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-secondary) var(--color-bg-tertiary);
 }
+
+/* ============================================================
+ * DA-7.6.B — @media print — theatre programme output
+ * Paper white + ink black, 18mm margins, widows/orphans 3.
+ * Component-level hiding (nav, CTA, rail) is in each module.
+ * ========================================================== */
+@media print {
+  @page { margin: 18mm; }
+
+  /* Pure print palette — override tokens */
+  :root {
+    --paper: #ffffff;
+    --paper-raised: #ffffff;
+    --paper-sunken: #f0f0f0;
+    --ink: #000000;
+    --ink-mute: #444444;
+    --ink-faint: #888888;
+    --rule: rgba(0,0,0,0.15);
+    --rule-strong: rgba(0,0,0,0.28);
+  }
+
+  /* Strip backgrounds, shadows, transitions */
+  * {
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  body { font-size: 11pt; line-height: 1.5; color: #000; background: #fff; }
+
+  /* Pagination hygiene */
+  p, h1, h2, h3, blockquote { widows: 3; orphans: 3; }
+  h1, h2, h3                 { page-break-after: avoid; }
+  figure, dl, ul, ol         { page-break-inside: avoid; }
+
+  /* Hairlines at 0.5pt */
+  hr { border-top-width: 0.5pt; }
+
+  /* Print external links */
+  a[href^="http"]::after,
+  a[href^="https"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #888;
+  }
+}

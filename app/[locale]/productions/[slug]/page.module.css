@@ -529,3 +529,55 @@ dd.creditsName { margin: 0; color: var(--ink); }
     box-shadow: none;
   }
 }
+
+/* DA-7.6.D — Run-of-show row */
+.runsRow {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-3);
+}
+
+.runLine {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-normal);
+}
+
+.runMark { color: var(--ink-mute); }
+
+/* DA-7.6.C — Director's note block */
+.directorsNote {
+  margin: 0 0 var(--space-7);
+  padding: 0 0 0 var(--space-5);
+  border-left: 2px solid var(--rule-strong);
+}
+
+.directorsNoteText {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+  color: var(--ink);
+  margin: 0 0 var(--space-3);
+  max-width: 60ch;
+}
+
+.directorsNoteAttr {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+}
+
+/* DA-7.6.B — Print overrides */
+@media print {
+  .stickyCta { display: none; }
+  .rail       { display: none; }
+  .actionBar  { display: none; }
+  .layout     { display: block; }
+  .column     { padding: 0; max-width: none; }
+}

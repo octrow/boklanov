@@ -88,3 +88,6 @@
   font-variant-numeric: tabular-nums;
   font-style: normal;
 }
+
+/* DA-7.6.B — Hide nav columns on print; keep colophon */
+@media print { .inner { display: none; } }

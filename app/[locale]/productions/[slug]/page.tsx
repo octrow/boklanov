@@ -250,6 +250,29 @@ export default async function ProductionDetailPage({
           .stickyCta lives in the rail column so it's visible from landing. */}
       <div className={styles.layout}>
       <div className={styles.column}>
+        {/* DA-7.6.D — Run-of-show row, mono line above the title */}
+        {production.runs.length > 0 && (
+          <ul className={styles.runsRow}>
+            {production.runs.map((run, i) => {
+              const parts: string[] = []
+              if (run.venue) parts.push(run.venue)
+              if (run.city) parts.push(run.city)
+              if (run.yearFrom) {
+                parts.push(run.yearTo && run.yearTo !== run.yearFrom
+                  ? `${run.yearFrom}–${run.yearTo}`
+                  : String(run.yearFrom))
+              }
+              if (run.count) parts.push(run.count)
+              return (
+                <li key={i} className={styles.runLine}>
+                  <span className={styles.runMark}>RUN</span>
+                  {parts.length > 0 && <>&thinsp;·&thinsp;{parts.join(' · ')}</>}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+
         {/* 2. Title block */}
         <header className={styles.titleBlock}>
           {titleRu && <h1 className={styles.titleRu}>{titleRu}</h1>}
@@ -290,6 +313,14 @@ export default async function ProductionDetailPage({
         {/* 4. One-line synopsis */}
         {production.synopsis && (
           <p className={styles.synopsis}>{production.synopsis}</p>
+        )}
+
+        {/* DA-7.6.C — Director's note, gated by directorsNote field */}
+        {production.directorsNote && (
+          <blockquote className={styles.directorsNote}>
+            <p className={styles.directorsNoteText}>{production.directorsNote}</p>
+            <footer className={styles.directorsNoteAttr}>{t('directorsNoteAttr')}</footer>
+          </blockquote>
         )}
 
         {/* 5. Credits — DA-2.A: leader-dot <dl> table with CREDITS cue. */}
