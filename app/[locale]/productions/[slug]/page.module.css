@@ -237,29 +237,7 @@ dd.creditsName { margin: 0; color: var(--ink); }
     column-gap: var(--space-5);
   }
 }
-.galleryItem {
-  margin: 0;
-}
-@media (min-width: 768px) {
-  .galleryItem {
-    break-inside: avoid;
-    margin-bottom: var(--space-5);
-  }
-}
-.galleryItem img {
-  width: 100%;
-  height: auto;
-  display: block;
-  background: var(--paper-sunken);
-  cursor: zoom-in;
-}
-.galleryCredit {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-mute);
-  padding-top: var(--space-2);
-}
+/* .galleryItem / .galleryCredit migrated to components/SpecimenPlate.module.css (Phase 9.6). */
 
 /* 8/9/10 — flat lists in mono, hairline rules between rows. */
 .pressList,

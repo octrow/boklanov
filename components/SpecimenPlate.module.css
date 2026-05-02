@@ -1,0 +1,48 @@
+/* SpecimenPlate — photographic plate per DESIGN_v2_PROPOSAL.md §4.2.
+ * Used on /productions/[slug] gallery, /about photos[].
+ * Specimen rule (inset 1px) only at ≥768px per §11 unfreeze 9.0a. */
+
+.plate {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-5);   /* margin-bottom for CSS columns flow (gap doesn't apply inside `columns`) */
+  break-inside: avoid;
+}
+
+.frame {
+  background: var(--paper);
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;       /* PosterLightbox click target */
+}
+
+@media (min-width: 768px) {
+  .frame {
+    box-shadow: var(--specimen-rule);
+  }
+}
+
+.caption {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-marginalia);
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.index {
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.credit {
+  max-width: var(--measure-caption);
+}

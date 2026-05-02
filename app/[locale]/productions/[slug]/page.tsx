@@ -7,6 +7,7 @@ import * as React from 'react'
 import { Cue } from '@/components/Cue'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { countryCode } from '@/components/ProductionCard'
+import { SpecimenPlate } from '@/components/SpecimenPlate'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -414,19 +415,13 @@ export default async function ProductionDetailPage({
                   ''
                 return (
                   <PosterLightbox key={`${g.src}-${i}`} src={imgSrc} alt={imgAlt}>
-                    <figure className={styles.galleryItem}>
-                      <img
-                        src={imgSrc}
-                        alt={imgAlt}
-                        loading='lazy'
-                        decoding='async'
-                      />
-                      {g.credit && (
-                        <figcaption className={styles.galleryCredit}>
-                          {g.credit}
-                        </figcaption>
-                      )}
-                    </figure>
+                    <SpecimenPlate
+                      src={imgSrc}
+                      alt={imgAlt}
+                      credit={g.credit}
+                      plateNumber={i + 1}
+                      total={production.gallery.length}
+                    />
                   </PosterLightbox>
                 )
               })}

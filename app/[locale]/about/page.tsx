@@ -8,7 +8,9 @@ import * as React from 'react'
 
 import { Cue } from '@/components/Cue'
 import { Marginalia } from '@/components/Marginalia'
+import { SpecimenPlate } from '@/components/SpecimenPlate'
 import type { Locale } from '@/i18n/routing'
+import { cdnUrl } from '@/lib/cdn'
 
 import styles from './page.module.css'
 
@@ -27,8 +29,14 @@ interface LineageItem {
   note?: string
 }
 
+interface AboutPhoto {
+  src: string
+  credit?: string | null
+}
+
 interface AboutFrontmatter {
   portrait: { src: string | null; credit: string | null }
+  photos?: AboutPhoto[]
   milestones: Milestone[]
   lineage: LineageItem[]
   marginalia?: Array<string | null>
@@ -128,7 +136,7 @@ export default async function AboutPage({
   const tAbout = await getTranslations('about')
 
   const { frontmatter, paragraphs } = loadAbout(locale)
-  const { milestones, lineage, marginalia } = frontmatter
+  const { milestones, lineage, marginalia, photos } = frontmatter
 
   // First paragraph is the lead (displayed in Lora); the rest are body.
   const [leadParagraph, ...bodyParagraphs] = paragraphs
@@ -165,6 +173,24 @@ export default async function AboutPage({
         </p>
       </section>
 
+      {/* Photos of Roman */}
+      {photos && photos.length > 0 && (
+        <section className={styles.photosSection}>
+          <div className={styles.photosGrid}>
+            {photos.map((photo, i) => (
+              <SpecimenPlate
+                key={i}
+                src={cdnUrl(photo.src)!}
+                alt={photo.credit ?? 'Roman Boklanov'}
+                credit={photo.credit}
+                plateNumber={i + 1}
+                total={photos.length}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Milestones timeline */}
       {milestones.length > 0 && (
         <section className={styles.milestonesSection}>
@@ -191,7 +217,7 @@ export default async function AboutPage({
           <div className={styles.lineageGrid}>
             {lineage.map((item) => (
               <div key={item.key} className={styles.lineageCard}>
-                <h2 className={styles.lineageName}>{item.name}</h2>
+                <h3 className={styles.lineageName}>{item.name}</h3>
                 <span className={styles.lineageRole}>{item.role}</span>
                 <span className={styles.lineageInstitution}>
                   {item.institution}
