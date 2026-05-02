@@ -36,7 +36,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
-| 9 v2 visual refresh (Vitrine)   | in progress  | See `DESIGN_v2_PROPOSAL.md`. 9.0a `12d1b5a` 9.0b `1d054f2` 9.0c `930fd0a` (§11 unfreezes). 9.1 `5558e16` token deltas. 9.3 TheatreSlate component. 9.2/9.4-9.8 pending. |
+| 9 v2 visual refresh (Vitrine)   | in progress  | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 7 of 8 code phases done (9.0a/b/c, 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8). 9.4 Marginalia louder deferred — needs detail-page layout restructure. |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
@@ -113,9 +113,9 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 ## Build state
 
-`main` branch: clean. Last: `49eb04c` — Phase 9.3 TheatreSlate component.
+`main` branch: clean. Last: `2bdd855` — STATUS hash backfill for Phase 9.8.
 
-## Phase 9 v2 visual refresh (in progress)
+## Phase 9 v2 visual refresh (7 of 8 code phases done; 9.4 deferred)
 
 Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on `main`, no feature branch.
 
@@ -138,6 +138,7 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 ## Recent commits
 
 ```
+2bdd855 docs: STATUS.md hash backfill for 778677c
 778677c feat(9.8): TypographicCover — slug-hash variant, replaces inline coverFallback
 4210970 feat(9.7): TourRider component — replaces inline right-rail .slate
 c866152 feat(9.6): SpecimenPlate component — gallery + /about photos

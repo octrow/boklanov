@@ -156,10 +156,15 @@ Marginalia (Phase 7.6, `00c2501`): `<Marginalia note="...">` wraps prose on `/ab
 mono `--font-size-meta`. Below 1280px: note renders as italic Lora subordinate text inline. `aria-hidden="true"` on
 `<aside>`. `rowSingle` (no note) constrains to `--max-width-prose`.
 
-EmptyState (Phase 7.6, `e1920af`): editorial empty-state register. Top hairline rule → `ERRATA` mono caps chip
-(`aria-hidden="true"`) → italic Lora body (55ch max-width) → optional `action` slot (ReactNode). Used on
-`ProductionGrid` (filter empty + clear-filters ghost button), archive, awards, and press pages. `CommandPalette`
-no-results uses equivalent inline markup for layout containment reasons.
+EmptyState (Phase 7.6 + 9.5 refresh, `806d1a0`): editorial empty-state register. Top + bottom hairline rules → italic Lora body at `--font-size-base` (55ch max-width) → optional `action` slot. `role="status"` + `aria-live="polite"` for filter call-sites. Used on `ProductionGrid` (filter empty + clear-filters ghost button), archive, awards, press. ERRATA mono chip dropped in 9.5 — body reads as prose, not UI state. `CommandPalette` no-results uses equivalent inline markup for layout containment reasons.
+
+SpecimenPlate (Phase 9.6, `c866152`): photographic plate with archival caption. `<figure>` + `<img>` wrapped in `.frame` carrying `--specimen-rule` (inset 1px ≥768px, scoped here per §11 unfreeze 9.0a). `<figcaption>` is never empty: zero-padded mono index `07 / 24` plus optional credit (`--ink-marginalia`). `break-inside: avoid` + `margin-bottom` keep CSS columns masonry intact. Used on `/productions/[slug]` gallery (composes inside `PosterLightbox`) and `/about` photos[] grid.
+
+TourRider (Phase 9.7, `4210970`): production tech-rider sheet — replaces inline right-rail `.slate` (DA-2.B). Mono key/value rows in a bordered `<dl>`, desktop-only (≥1024px). Rows short-circuit on null fields: `PRODUCTION nn / nn` header → YEAR / RUN / AGE / COUNTRY / LANGUAGE / FORM / LINEAGE / TOURING SOLO / TECH RIDER (PDF link, `aria-label`) / PRESS KIT (ZIP link, `aria-label`). Keys use `--ink-marginalia`. `font-variant-numeric: tabular-nums`. Mobile chips row carries year/age/duration; TourRider stays hidden.
+
+TheatreSlate (Phase 9.3, `49eb04c`): four-line typographic record on production detail — heading via `as` prop (`h1` on detail, `h2` on index when adopted), titleEn (Inter `--ink-mute`), titleDe (Inter `--ink-faint`), theatre line (mono meta with optional URL link), role line (mono uppercase, `--ink-marginalia`, `--letter-spacing-wide`, NEW), premiereDate (mono meta). Top + bottom hairlines. Role labels via i18n `productions.role*` (`roleSketch` added in 9.3).
+
+TypographicCover (Phase 9.8, `778677c`): canonical cover for productions without a photographic poster — not a fallback. 4:5 aspect, Lora display title `--font-size-2xl`, mono meta line `theatre · countryCode · year`. Slug-hash mod 3 selects one of three layout variants (top / centre / bottom-set title placement) so productions sharing theatre+year don't render identical plates. Triggered by `ProductionCard` when `poster.src && poster.lqip` is false. `aria-hidden="true"` (visible `<h3>` carries title for SR).
 
 PosterLightbox (session 5): `<PosterLightbox src alt>` client component wrapping the production cover. Click opens a full-image overlay (`--z-overlay 500`, dark backdrop). Close via `✕` button (44px touch target, 2px radius), click on backdrop, or Escape. `cursor: zoom-in` on trigger. On open: focus moves to close button, body scroll locked. On close: focus returns to trigger.
 
@@ -176,7 +181,7 @@ Production detail (D7 layout, top -> bottom):
 6. Action bar: Watch/listen (oxblood primary), Tech rider (PDF), Press kit (ZIP). Hide when asset absent.
 7. ON TOUR band (Plinth only): mono caps row of cities, hairline above + below. Driven by `tour[]`; empty -> hidden. No
    links.
-8. Gallery: `columns: 2` masonry tablet+, original aspect. Credit visible (mono caption under), not hover.
+8. Gallery: `columns: 2` masonry tablet+, original aspect. Each item is a `<SpecimenPlate>` (Phase 9.6) — `--specimen-rule` inset 1px ≥768px, archival caption `07 / 24 — credit` in mono. Composes inside `<PosterLightbox>` for click-to-expand.
 9. Critic quotes: Lora italic `<blockquote>` with hairline left rule, mono attribution.
 10. Awards: list, mono year + name + city.
 11. External theatre links: single mono row.
@@ -184,11 +189,10 @@ Production detail (D7 layout, top -> bottom):
 13. Sticky CTA `Email Roman about touring this show`. Mailto with prefilled subject + show name. `IntersectionObserver`
     on cover. Right-rail grid on desktop, fixed bottom on mobile. `--z-sticky 100`.
 
-Theatre slate (right rail desktop): bordered mono spec sheet. `PRODUCTION 14 / 24` index, title block,
-`YEAR/RUNTIME/AGE/COUNTRY/THEATRE/PREMIERE` rows, optional `TOURING SOLO`. `font-variant-numeric: tabular-nums`.
+Theatre slate / right rail (desktop): see TourRider (Phase 9.7) above. Replaces the inline `.slate` div from `app/[locale]/productions/[slug]/page.tsx`.
 
 Chips: JetBrains Mono uppercase, `letter-spacing: 0.06em`, `--paper-sunken` bg, `--border-radius-sm`. No coloured chips.
-No status hue.
+No status hue. Per §11 unfreeze 9.0b, mono labels with `border-bottom 1px var(--rule)` + no fill + no radius are the new specimen-label register for non-chip metadata; existing chip styling stays for the production-detail age/year/duration/country row.
 
 Buttons:
 
