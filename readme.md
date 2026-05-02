@@ -1,19 +1,5 @@
 # boklanov.ru / boklanov.com
 
-Site for Roman Boklanov — theatre director (puppet, object, kids/teens). Bilingual RU/EN, DE chrome. Static, MDX-owned, editorial.
-
-Live: https://boklanov.vercel.app/. D3/D4 cutover to `boklanov.com` deferred (see STATUS.md).
-
-## Stack
-
-- Next.js 15 App Router + React 19 + TypeScript 5.9 strict
-- `next-intl` v4 — RU canonical `/`, EN `/en`, DE `/de`
-- MDX per production, frontmatter = single source of truth (Phase 8.3)
-- CSS Modules + design tokens via `app/globals.css` custom properties. No Tailwind.
-- Self-hosted Lora + Inter + JetBrains Mono OFL under `public/fonts/`
-- `next/image` AVIF/WebP. `sharp` LQIPs inline in frontmatter.
-- Cmd-K via `lib/search.ts` Cyrillic<->Latin transliteration
-- PostHog: only `booking_cta_click` event. No autocapture, no recording. Silent without API key.
 
 98/98 SSG pages. Lighthouse mobile ≥95. Zero §11 anti-patterns.
 
@@ -47,6 +33,7 @@ messages/{ru,en,de}.json  ~80 keys per locale
 scripts/
   upload-images.ts        S3-compatible R2 upload (`npm run upload-images`)
   lint-mdx.ts             CI guard against ![[wikilink]] (`npm run lint-mdx`)
+  lint-tokens.ts          CI guard against scoped-token leak (`npm run lint-tokens`)
   fold-overlay.ts         retired one-shot
   _legacy/sync-from-notion.ts  FROZEN
 
@@ -65,6 +52,7 @@ npm run dev                # http://localhost:3000
 npm run build && npm start
 npm test                   # runs lint + typecheck + lint-mdx
 npm run lint-mdx           # block ![[wikilink]] in content/
+npm run lint-tokens        # block scoped CSS tokens leaking outside owning module
 npm run upload-images      # S3 upload to R2 (post-DNS-cutover)
 ```
 
@@ -96,7 +84,7 @@ R2 CDN deferred until `boklanov.com` moves to Cloudflare DNS.
 | `DESIGN.md` | Visual identity + IA + tokens + anti-patterns |
 | `content/AUTHORING.ru.md` | Roman's RU day-to-day |
 
-Frozen history: `.design/boklanov-rewrite/archive/` (D1-D15 brief, R1+R2 review, Phase 7.5 ambition, 9-option content matrix, full IA, token rationale, photo audit, origin PLAN, HANDOFF + TASKS commit ledgers).
+Frozen history: `.design/boklanov-rewrite/archive/` (D1-D15 brief, R1+R2 review, Phase 7.5 ambition, 9-option content matrix, full IA, token rationale, photo audit, origin PLAN, HANDOFF + TASKS commit ledgers). Each doc has a `*_compress.md` — read that first.
 
 ## License
 
