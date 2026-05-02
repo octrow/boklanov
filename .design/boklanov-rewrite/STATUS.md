@@ -125,7 +125,7 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.0b | Unfreeze coloured chip pills → mono labels | done | `1d054f2` |
 | 9.0c | Unfreeze rounded-2xl/shadow-xl → form-chrome 2px | done | `930fd0a` |
 | 9.1 | Token deltas — warmer paper + 5 new tokens | done | `5558e16` |
-| 9.2 | Lora variable swap | done | (this commit) — VF files renamed `[wght]` → `-VF`; 11 subsetted woff2 deleted |
+| 9.2 | Lora variable swap | done | `f1613b1` — VF files renamed `[wght]` → `-VF`; 11 subsetted woff2 deleted |
 | 9.3 | TheatreSlate component (extract title block + role line) | done | `49eb04c` |
 | 9.4 | Marginalia refresh (louder, pull variant) | pending | — |
 | 9.5 | EmptyState / ERRATA refresh | pending | — |
@@ -138,7 +138,7 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 ## Recent commits
 
 ```
-(9.2 hash) feat(9.2): Lora variable font swap — 11 subsetted → 2 VF
+f1613b1 feat(9.2): Lora variable font swap — 11 subsetted → 2 VF
 7d7cf5f docs: STATUS.md hash backfill for 49eb04c
 49eb04c feat(9.3): TheatreSlate component — extract + role line
 5558e16 feat(9.1): v2 token deltas — warmer paper + 5 new tokens
