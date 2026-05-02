@@ -1,6 +1,6 @@
 # DESIGN
 
-Visual identity + IA + token essentials. Updated: 2026-05-03 (session 11 — v3 Plakat mirrored).
+Visual identity + IA + token essentials. Updated: 2026-05-03 (9v3.8 — v3 Plakat mirror complete: §1/3/4/5/6/7/8/11/13).
 
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
@@ -173,11 +173,11 @@ SpecimenPlate (Phase 9.6, `c866152`; polish `5d49f4e`): photographic plate with 
 
 GalleryLightbox (post-9.x polish): `<GalleryLightbox items={[{src, alt, credit}]}>` client component. Renders masonry grid (`columns: 2` ≥768px) of `<SpecimenPlate>` thumbnails. Single shared overlay state — clicking any thumbnail opens the lightbox at that index. Overlay: `--z-overlay 500`, `rgba(0,0,0,0.92)` backdrop, click-outside to close. Navigation: ← / → arrow buttons (44×44 touch targets, `--border-radius-sm`, hidden when `total === 1`); keyboard `ArrowLeft` / `ArrowRight` / `Escape`. Focus: on open moves to close button; on close returns to the clicked thumbnail. Meta bar below image: mono counter `01 / 07` + optional credit in muted rgba. Replaced per-image `PosterLightbox` wrappers in the gallery section.
 
-TourRider (Phase 9.7, `4210970`): production tech-rider sheet — replaces inline right-rail `.slate` (DA-2.B). Mono key/value rows in a bordered `<dl>`, desktop-only (≥1024px). Rows short-circuit on null fields: `PRODUCTION nn / nn` header → YEAR / RUN / AGE / COUNTRY / LANGUAGE / FORM / LINEAGE / TOURING SOLO / TECH RIDER (PDF link, `aria-label`) / PRESS KIT (ZIP link, `aria-label`). Keys use `--ink-marginalia`. `font-variant-numeric: tabular-nums`. Mobile chips row carries year/age/duration; TourRider stays hidden.
+TourRider (Phase 9.7, `4210970`; v3 `8ed4c56`): production tech-rider sheet — replaces inline right-rail `.slate` (DA-2.B). Mono key/value rows in a bordered `<dl>`, desktop-only (≥1024px). **v3:** `<details>` accordion at ≥1280px (was always-visible right-rail) — collapses to free gutter for Marginalia float. Rows short-circuit on null fields: `PRODUCTION nn / nn` header → YEAR / RUN / AGE / COUNTRY / LANGUAGE / FORM / LINEAGE / TOURING SOLO / TECH RIDER (PDF link, `aria-label`) / PRESS KIT (ZIP link, `aria-label`). Keys use `--ink-marginalia`. `font-variant-numeric: tabular-nums`. Mobile chips row carries year/age/duration; TourRider stays hidden.
 
 TheatreSlate (Phase 9.3, `49eb04c`): four-line typographic record on production detail — heading via `as` prop (`h1` on detail, `h2` on index when adopted), titleEn (Inter `--ink-mute`), titleDe (Inter `--ink-faint`), theatre line (mono meta with optional URL link), role line (mono uppercase, `--ink-marginalia`, `--letter-spacing-wide`, NEW), premiereDate (mono meta). Top + bottom hairlines. Role labels via i18n `productions.role*` (`roleSketch` added in 9.3).
 
-TypographicCover (Phase 9.8, `778677c`; polish `046aae9`): canonical cover for productions without a photographic poster — not a fallback. 4:5 aspect, Lora display title `--font-size-2xl`, mono meta line `theatre · countryCode · year`. Slug-hash mod 3 selects one of three layout variants (top / centre / bottom-set title placement) so productions sharing theatre+year don't render identical plates. Optional 1-line italic Lora `synopsis` line above meta when `production.synopsis` present (truncated 60 chars, single-line ellipsis) — proposal §6.2 collision-buster on top of mod-3 variants. Triggered by `ProductionCard` when `poster.src && poster.lqip` is false. `aria-hidden="true"` (visible `<h3>` carries title for SR).
+TypographicCover (Phase 9.8, `778677c`; polish `046aae9`; v3 `8ed4c56`): canonical cover for productions without a photographic poster — not a fallback. 4:5 aspect, **Unbounded 600 ALL CAPS** title `--font-size-2xl` (v3: was Lora 600), mono meta line `theatre · countryCode · year`. Slug-hash mod 3 selects one of three layout variants (top / centre / bottom-set title placement) so productions sharing theatre+year don't render identical plates. Optional 1-line italic Lora `synopsis` line above meta when `production.synopsis` present (truncated 60 chars, single-line ellipsis) — proposal §6.2 collision-buster on top of mod-3 variants. Triggered by `ProductionCard` when `poster.src && poster.lqip` is false. `aria-hidden="true"` (visible `<h3>` carries title for SR).
 
 PosterLightbox (session 5): `<PosterLightbox src alt>` client component wrapping the production cover. Click opens a full-image overlay (`--z-overlay 500`, dark backdrop). Close via `✕` button (44px touch target, 2px radius), click on backdrop, or Escape. `cursor: zoom-in` on trigger. On open: focus moves to close button, body scroll locked. On close: focus returns to trigger.
 
@@ -194,8 +194,7 @@ Production detail (D7 layout, top -> bottom):
 6. Credits as `<dl>` with leader-dot rows. `Director ........ Roman Boklanov`. Cast sub-block under hairline. No "in
    order of appearance". No puppet-as-cast.
 6. Action bar: Watch/listen (oxblood primary), Tech rider (PDF), Press kit (ZIP). Hide when asset absent.
-7. ON TOUR band (Plinth only): mono caps row of cities, hairline above + below. Driven by `tour[]`; empty -> hidden. No
-   links.
+7. ON TOUR band: `<TourTicker>` CSS marquee (v3, replaces static `.slate` Plinth band). Driven by `tour[]`; empty -> hidden. No links. Pauses on hover + reduced-motion.
 8. Press: Lora italic link + mono outlet, hairline rules between items. Hidden when `press[]` empty.
 9. Gallery: `columns: 2` masonry tablet+, original aspect. Each item is a `<SpecimenPlate>` inside `<GalleryLightbox>` — single shared navigable overlay, ← / → arrows + keyboard. Hidden when `gallery[]` empty.
 10. Awards: list, mono year + name + city.
@@ -211,7 +210,7 @@ No status hue. Per §11 unfreeze 9.0b, mono labels with `border-bottom 1px var(-
 
 Buttons:
 
-- Primary: oxblood fill, `--paper` text, sm radius. Hover -> `--accent-hover`. No shadow.
+- Primary: `--accent-vermillion` fill (v3: was oxblood), `--paper` text, sm radius. Hover `#C2202E`. `--shadow-plakat` outset (§11 unfreeze §2.6).
 - Secondary: hairline border `--rule-strong`, transparent. Hover fills `--paper-raised`.
 - Ghost: no border, underline reveal on hover.
 - Touch ≥ 44px mobile. Focus ring mandatory (`--shadow-focus`).
@@ -235,10 +234,10 @@ Cmd-K: keyboard-only end-to-end. Groups: Productions, Awards, Press, Theatres. C
 /contact                TG + IG primary, mailto secondary, plain-text email
 
 /en/*                   Full parity
-/de/*                   Chrome only. /de/productions/[slug] grid only; card text stays RU/EN. /de/about full DE for top 5-6 shows v2.
+/de/*                   Full content parity code paths (v3, `badafb0`). `lib/content.ts` — explicit-null contract: `title.de`, `synopsis.de`, `directorsNote.de`, `tagline.de`. Render paths fall through to `<Marginalia note="Deutsche Übersetzung folgt">` when DE absent. `hreflang` stays RU↔EN only until ≥5 productions have real DE copy.
 
 /api/og/[slug]          Per-production OG (1200x630, satori `ImageResponse`)
-/sitemap.xml            hreflang RU<->EN only; DE excluded
+/sitemap.xml            hreflang RU↔EN only; DE URLs present but without alternates until content parity reached.
 /feed                   RSS RU + EN; DE excluded
 /robots.txt
 ```
@@ -283,19 +282,20 @@ Naming (RU/EN):
 
 - AI-purple/pink gradients
 - Glassmorphism, neumorphism, claymorphism
-- "AI-Native UI" chips, animated gradient text, kinetic gradient meshes
-- Hero video
-- Bento grids on home
-- Tailwind defaults `rounded-2xl shadow-xl` — _narrowed 2026-05-02_: `--border-radius-form: 2px` allowed on `<input>`, `<textarea>`, `<select>`, `<dialog>`, `kbd` only. NEVER on cards, images, buttons. Outset `shadow-xl` remains banned (specimen-rule inset is the only exception per §11 drop-shadow narrowing). See `DESIGN_v2_PROPOSAL.md` §2.3.
+- "AI-Native UI" chips, animated gradient text, kinetic gradient meshes — _v3 narrowed 2026-05-03: DuotonePoster SVG duotone (§2.1) + static hero gradient (§2.5) allowed. See DESIGN_v3_PROPOSAL.md §2.1 + §2.5._
+- Hero video — _v3 narrowed 2026-05-03: approved but skipped — no clip available. See DESIGN_v3_PROPOSAL.md §2.3._
+- Bento grids on home — _v3 narrowed 2026-05-03: `<FeaturedStrip>` asymmetric broken-grid on `/` only. See DESIGN_v3_PROPOSAL.md §2.4._
+- Tailwind defaults `rounded-2xl shadow-xl` — _narrowed 2026-05-02_: `--border-radius-form: 2px` allowed on `<input>`, `<textarea>`, `<select>`, `<dialog>`, `kbd` only. NEVER on cards, images, buttons. Outset `shadow-xl` remains banned (specimen-rule inset is the only exception per §11 drop-shadow narrowing). See `DESIGN_v2_PROPOSAL.md` §2.3. _v3 narrowed 2026-05-03: `--shadow-plakat` outset allowed on `DuotonePoster` only. See DESIGN_v3_PROPOSAL.md §2.6._
 - Stock photography
 - Comic-Sans-as-irony, "puppet show" pastiche, hand-drawn underlines
 - Loading-spinner skeletons that animate forever
 - Cookie banner taking bottom 20%
 - Newsletter modal on first visit
 - "Built with Next.js" in footer
-- Coloured chip pills (status -> font weight, not hue) — _narrowed 2026-05-02_: chips become specimen mono labels — `text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-mono); font-size: var(--font-size-chip); padding: 0; border-bottom: 1px solid var(--rule); background: none; border-radius: 0`. NEVER background-fill. NEVER coloured beyond `--ink-mute`. Multiple labels separated by em-dash. See `DESIGN_v2_PROPOSAL.md` §2.2.
-- Drop-shadow glow on cards, neon focus — _narrowed 2026-05-02_: `--specimen-rule: inset 0 0 0 1px rgb(22 21 20 / 0.08)` allowed on photographic plates only (`coverStyle === 'photo'` AND ≥768px), scoped to `SpecimenPlate.module.css`. NEVER `blur > 0`, NEVER outset, NEVER coloured, NEVER on hover. Outer drop-shadow remains banned. See `DESIGN_v2_PROPOSAL.md` §2.1.
-- Coloured headers with white text
+- Coloured chip pills (status -> font weight, not hue) — _narrowed 2026-05-02_: chips become specimen mono labels — `text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-mono); font-size: var(--font-size-chip); padding: 0; border-bottom: 1px solid var(--rule); background: none; border-radius: 0`. NEVER background-fill. NEVER coloured beyond `--ink-mute`. Multiple labels separated by em-dash. See `DESIGN_v2_PROPOSAL.md` §2.2. _v3 narrowed 2026-05-03: `<Sticker>` Unbounded ALL CAPS badges allowed (one accent fill, no radius). See DESIGN_v3_PROPOSAL.md §2.2._
+- Drop-shadow glow on cards, neon focus — _narrowed 2026-05-02_: `--specimen-rule: inset 0 0 0 1px rgb(22 21 20 / 0.08)` allowed on photographic plates only (`coverStyle === 'photo'` AND ≥768px), scoped to `SpecimenPlate.module.css`. NEVER `blur > 0`, NEVER outset, NEVER coloured, NEVER on hover. Outer drop-shadow remains banned. See `DESIGN_v2_PROPOSAL.md` §2.1. _v3 narrowed 2026-05-03: `--shadow-plakat` extends to `<Sticker>` + `<DuotonePoster>`. See DESIGN_v3_PROPOSAL.md §2.7._
+- Coloured headers with white text — _v3 narrowed 2026-05-03: `<SectionStripe>` 2px per-route accent band above `<Cue>` allowed (not a header fill). See DESIGN_v3_PROPOSAL.md §2.8._
+- Marquee / ticker tape — _v3 narrowed 2026-05-03: `<TourTicker>` CSS marquee on `/` and production-detail `tour[]` only. Pauses on hover + reduced-motion. See DESIGN_v3_PROPOSAL.md §2.9._
 
 History only: Phase 7.5 fingerprint audit table at `archive/DESIGN_AMBITION_compress.md` §13.1 (read-only; full: `archive/DESIGN_AMBITION.md`).
 
@@ -314,8 +314,11 @@ Non-negotiable.
 
 ## 13. Wordmark
 
-No logo. Lora, all-lowercase, language-aware. RU `роман бокланов`, EN `roman boklanov`, DE `roman boklanov` (not
-transliterated). Header `--font-size-lg`, hero `--font-size-4xl`. Never caps, italic, or coloured.
+No logo. `<SiteWordmark>` component. Unbounded 700 ALL CAPS, `letter-spacing: 0.03em`.
+- Hero (`/`): `--font-size-hero`, static gradient fill (vermillion→cobalt→mustard, 135deg)
+- Header: `--font-size-lg`, solid `--ink`
+- Footer: `--font-size-meta`, solid `--ink-mute`
+RU: `РОМАН БОКЛАНОВ`. EN/DE: `ROMAN BOKLANOV`. Never italic. Gradient only on hero variant.
 
 ## 14. Source-of-truth chain
 
