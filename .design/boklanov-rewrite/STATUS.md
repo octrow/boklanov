@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 10 — 9v3.5–9v3.6 shipped).
+Current state + open work. Updated: 2026-05-03 (session 11 — 9v3.7 shipped).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -164,7 +164,7 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | done | `e73ab4f` |
 | 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). | done | `c8fffc7` |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2). TourRider → `<details>` at ≥1280px frees gutter. | done | `8ed4c56` |
-| 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | pending | — |
+| 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | done | `badafb0` |
 | 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | pending | — |
 | 9v3.9 | Acceptance-gate sweep (Lighthouse, axe-core, A/B, reduced-motion test, 90s curator-sim, bundle delta) | pending | — |
 
@@ -187,14 +187,15 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ### Open questions / deferred decisions
 
 1. ~~**DA-3.A slate-strike**~~ — resolved 9v3.5: retired on `/`, kept on production-detail covers.
-2. **DE translation source** — Daniil translates top-5 productions himself, hires a native speaker, or machine + native review? Decide before 9v3.7.
+2. ~~**DE translation source**~~ — resolved 9v3.7: AI translation (machine + Daniil review). Frontmatter filled incrementally.
 3. ~~**Hero plakat clip** (proposal §2.3)~~ — resolved 9v3.5: skipped (no clip available).
 4. **`--accent-mustard` text exclusion** — confirmed decorative-only per proposal §3.1. If a use case appears (TourTicker text-on-mustard), recompute contrast against `#0F0E0D` ink and use `--ink-on-mustard`.
-5. **`hreflang` policy** — if DE expands to full content parity, current `hreflang RU<->EN only` rule must extend to include DE. Decide before 9v3.7 lands `<de>` URLs in `sitemap.xml`.
+5. ~~**`hreflang` policy**~~ — resolved 9v3.7: Option B — code paths only. DE URLs in sitemap without `hreflang` alternates until DE content is substantively filled. Revisit after ≥5 productions have real DE copy.
 
 ## Recent commits
 
 ```
+badafb0  feat(9v3.7): DE full-content scaffolding — explicit-null contract + Marginalia forthcoming
 8ed4c56  feat(9v3.6): TypographicCover Unbounded + Marginalia float + TourRider details
 c8fffc7  feat(9v3.5): SiteHero broken-grid hero + FeaturedStrip
 e73ab4f  feat(9v3.4): DuotonePoster + SVG filter sprite (vermillion / cobalt)
@@ -243,9 +244,8 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 4. ~~**9v3.4**~~ — done `e73ab4f`
 5. ~~**9v3.5**~~ — done `c8fffc7`
 6. ~~**9v3.6**~~ — done `8ed4c56`
-7. **9v3.7 — DE full-content scaffolding** (next): swap TypographicCover title to `--font-family-plakat` ALL CAPS 600. Ship Marginalia float-into-margin from ≥1024px (was deferred from v2 9.4) — resolves right-rail conflict by collapsing `<TourRider>` to `<details>` accordion below ≥1280.
-7. **9v3.7 — DE full-content scaffolding**: extend `AboutFrontmatter` + production frontmatter for DE fields with explicit-null contract. Render paths fall through to `<Marginalia note="…DE forthcoming…">` when `*.de` is null. `messages/de.json` extended for Marginalia placeholder strings. `sitemap.ts` + `hreflang` policy update gated on Open Question #5.
-8. **9v3.8 — mirror unfreezes to docs**: edit `archive/DESIGN_BRIEF.md` §8 with `_Superseded 2026-05-03: v3 acceptance — see DESIGN_v3_PROPOSAL.md §2.N_` annotations on each of the 9 lifted anti-patterns; mirror narrative into `DESIGN.md` §11; refresh `DESIGN.md` §3 (palette) + §4 (type) + §6 (motion) + §7 (component grammar) to v3 reality. Update `MAP.md` §4 cascade if any new file:line touchpoints emerge. This is the only legitimate edit to `archive/*` per `MAP.md` §5.
+7. ~~**9v3.7**~~ — done `badafb0`
+8. **9v3.8 — mirror unfreezes to docs** (next): edit `archive/DESIGN_BRIEF.md` §8 with `_Superseded 2026-05-03: v3 acceptance — see DESIGN_v3_PROPOSAL.md §2.N_` annotations on each of the 9 lifted anti-patterns; mirror narrative into `DESIGN.md` §11; refresh `DESIGN.md` §3 (palette) + §4 (type) + §6 (motion) + §7 (component grammar) to v3 reality. Update `MAP.md` §4 cascade if any new file:line touchpoints emerge. This is the only legitimate edit to `archive/*` per `MAP.md` §5.
 9. **9v3.9 — acceptance-gate sweep**: run all 11 gates from this STATUS §"Acceptance gates" / proposal §11. If any gate fails, file remediation as a 9v3.x.fix commit; never silently skip. After all gates green, open PR `design_v3 → main`.
 
 ### Carryover (v2 / authoring / cutover)
