@@ -20,10 +20,20 @@
   font-size: var(--font-size-meta);
 }
 
-/* hero is wired in 9v3.5 (SiteHero gradient treatment); define the base now. */
+/* §2.5: static gradient fill, aria-hidden — never animated. Wired in 9v3.5. */
 .hero {
   font-size: var(--font-size-hero);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
+  white-space: normal; /* allow word-wrap on narrow viewports */
+  background: linear-gradient(
+    135deg,
+    var(--accent-vermillion) 0%,
+    var(--accent-cobalt) 55%,
+    var(--accent-mustard) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
