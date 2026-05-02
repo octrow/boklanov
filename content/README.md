@@ -28,12 +28,18 @@ shape is:
 ```
 content/
 ├── README.md                          ← you are here
-├── productions-index.json             ← (gitignored, regenerated)
+├── productions-index.json             ← committed (required for Vercel build)
 └── productions/
     └── <slug>/
-        ├── index.mdx                  ← (gitignored, regenerated)
-        └── metadata.yml               ← (committed, hand-edited)
+        ├── index.mdx                  ← committed (required for Vercel build)
+        └── metadata.yml               ← committed, hand-edited
 ```
+
+> **Note (2026-05-02):** `index.mdx`, `productions-index.json`, and
+> `public/productions/` are now committed to the repo so that Vercel
+> can build without `notion-data/` being present. When you re-run
+> `npm run sync` locally, commit the diff in these generated files
+> alongside the `metadata.yml` changes.
 
 ## How content gets here
 
