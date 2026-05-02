@@ -34,7 +34,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 6.6 Q1-Q8                       | done         | `10f951f` `b3bded7` `fdbae94` `99299de` `8dae0b2` `c7647bf`. 24 productions clean.                                                                           |
 | 7 Deploy + cutover              | partial      | R2 closed; D1 live `boklanov.vercel.app`; D2 Vercel stays; D3/D4 deferred                                                                                    |
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
-| 7.6 Editorial polish            | in progress  | Tier 1 done `00c2501`. DA-7.6.J done `e1920af`. DA-7.6.I OG remains.                                                                                       |
+| 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
 | 9 Decap CMS layer               | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
@@ -91,18 +91,19 @@ Tier 2 — done `3106d26`:
 
 Tier 3 (~1.5 days):
 
-- DA-7.6.I OG image chrome upgrade (programme-grammar via satori `ImageResponse`)
-- DA-7.6.J ✓ editorial empty states — `EmptyState` component: hairline + ERRATA label + italic Lora body + action slot. Filter, search, archive, awards, press. `e1920af`
+- DA-7.6.I ✓ OG image: mono slug + hairlines + Lora title centred + meta/colophon row. Webp skipped → oxblood fallback. `0288258`
+- DA-7.6.J ✓ editorial empty states — `EmptyState`: hairline + ERRATA label + italic Lora body + action slot. Filter, search, archive, awards, press. `e1920af`
 
 Rationale ledger (history, read-only): `archive/DESIGN_AMBITION.md` §15.
 
 ## Build state
 
-`main` branch: clean. Last: `e1920af`.
+`main` branch: clean. Last: `0288258`.
 
 ## Recent commits
 
 ```
+0288258 feat(7.6-tier3-i): OG image programme-grammar chrome
 e1920af feat(7.6-tier3-j): editorial empty states — ERRATA register
 00c2501 feat(7.6-tier1): marginalia, print stylesheet, director's note, run-of-show
 3106d26 feat(7.6-tier2): award count, slate LANGUAGE row, no-poster year anchor
@@ -119,5 +120,4 @@ c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
 
 1. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
 2. Roman closes orphan-title audit + photographer credits.
-3. Phase 7.6 Tier 3: DA-7.6.I OG image chrome (satori `ImageResponse` upgrade).
-4. D3/D4 cutover when reactivated.
+3. D3/D4 cutover when reactivated.
