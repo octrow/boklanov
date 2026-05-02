@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 9 — 9v3.1 shipped).
+Current state + open work. Updated: 2026-05-03 (session 9 — 9v3.1–9v3.4 shipped).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -37,7 +37,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2: 291 files uploaded 2026-05-02. Dev URL active. `cdn.boklanov.com` blocked on Cloudflare DNS. |
 | 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates). |
-| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 2/10 phases shipped (9v3.0, 9v3.1). 9v3.2 next.   |
+| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 5/10 phases shipped (9v3.0–9v3.4). 9v3.5 next.   |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
@@ -159,9 +159,9 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 |---|---|---|---|
 | 9v3.0 | Token deltas — Bauhaus trio replaces oxblood, deeper ink, new --shadow-plakat / --stripe-thickness / --ticker-speed / --font-size-hero / --font-size-sticker / --measure-poster | done | `2827654` |
 | 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer | done | `b20d501` |
-| 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts) | pending | — |
-| 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion) | pending | — |
-| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | pending | — |
+| 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts) | done | `6f7fc30` |
+| 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion) | done | `c892efd` |
+| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | done | `e73ab4f` |
 | 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark | pending | — |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2) | pending | — |
 | 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | pending | — |
@@ -195,6 +195,9 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ## Recent commits
 
 ```
+e73ab4f  feat(9v3.4): DuotonePoster + SVG filter sprite (vermillion / cobalt)
+c892efd  feat(9v3.3): Sticker + TourTicker — Plakat badges + CSS marquee
+6f7fc30  feat(9v3.2): SectionStripe + per-route accent (lib/section-accent.ts)
 b20d501  feat(9v3.1): Unbounded VF + SiteWordmark — ALL CAPS wordmark swap
 2827654  feat(9v3.0): token deltas — Bauhaus trio replaces oxblood
 b7a0620  docs(design_v3): v3 plakat proposal — Bauhaus trio + Unbounded + 9 unfreezes
@@ -233,9 +236,10 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 ### v3 implementation queue
 
 1. ~~**9v3.1**~~ — done `b20d501`
-2. **9v3.2 — SectionStripe** (next): `lib/section-accent.ts` resolves route → accent (`/` + `/awards` + `/contact` = vermillion · `/productions` + `/press` = cobalt · `/about` = mustard · `/archive` = ink). `<SectionStripe>` renders 2px coloured band. Wire above `<Cue>` on each route.
-3. **9v3.3 — Sticker + TourTicker**: build `<Sticker variant="award|tour|form" accent="vermillion|cobalt|mustard">` (Unbounded ALL CAPS, no radius, optional `--shadow-plakat`, slug-hash rotation -3°/+3°, max 1 per card). Build `<TourTicker cities accent>` (CSS marquee `--ticker-speed`, pauses on hover + `prefers-reduced-motion`). Wire one occurrence each: featured-card sticker on `/` strip + Plinth-tour ticker on `bury-me-behind-the-baseboard`.
-4. **9v3.4 — DuotonePoster**: SVG `<defs>` filter sprite (vermillion + cobalt) at root layout. `<DuotonePoster>` wraps ProductionCard cover when `featured: true`. Filter accent picked deterministically by `slugHash % 2`. `@supports`-gated; reduced-transparency falls back to `grayscale(0.7) contrast(1.08)`.
+2. ~~**9v3.2**~~ — done `6f7fc30`
+3. ~~**9v3.3**~~ — done `c892efd`
+4. ~~**9v3.4**~~ — done `e73ab4f`
+5. **9v3.5 — SiteHero** (next): SVG `<defs>` filter sprite (vermillion + cobalt) at root layout. `<DuotonePoster>` wraps ProductionCard cover when `featured: true`. Filter accent picked deterministically by `slugHash % 2`. `@supports`-gated; reduced-transparency falls back to `grayscale(0.7) contrast(1.08)`.
 5. **9v3.5 — SiteHero**: replaces home hero. Folio band → ALL CAPS gradient Unbounded hero wordmark (`--font-size-hero`, `aria-hidden`; SR reads plain `<h1>` companion) → Lora italic statement → mono scroll hint. Below: broken-grid Featured strip (1 large + 2 medium + 3 small at ≥1024, collapsed at ≤1023). Decide DA-3.A slate-strike fate — provisional: retire on `/`, keep on production-detail.
 6. **9v3.6 — TypographicCover + Marginalia float**: swap TypographicCover title to `--font-family-plakat` ALL CAPS 600. Ship Marginalia float-into-margin from ≥1024px (was deferred from v2 9.4) — resolves right-rail conflict by collapsing `<TourRider>` to `<details>` accordion below ≥1280.
 7. **9v3.7 — DE full-content scaffolding**: extend `AboutFrontmatter` + production frontmatter for DE fields with explicit-null contract. Render paths fall through to `<Marginalia note="…DE forthcoming…">` when `*.de` is null. `messages/de.json` extended for Marginalia placeholder strings. `sitemap.ts` + `hreflang` policy update gated on Open Question #5.
