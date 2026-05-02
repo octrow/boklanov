@@ -99,6 +99,13 @@ Date: 2026-04-30
 > their MD source has no `[Name](url)` theatre link — Roman can
 > add a `theatre:` block in the per-production `metadata.yml` to
 > fill this in.
+>
+> **2026-05-02 — Phase 7.5 Round 3 + D1 shipped.** DA-3.A slate-strike
+> landed (`7c26402`). `rewrite/v2` merged → `main` (PR #2); Next.js
+> patched 15.5.6 → 15.5.15 (PR #3). Site live at
+> https://boklanov.vercel.app/. `main` auto-deploys. R2 real-device QA
+> is next; `?gesture=off` gate on slate-strike stays active until R2
+> sign-off.
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
@@ -145,7 +152,7 @@ Date: 2026-04-30
 | R1 — Design review against brief | ✅ done | `.design/boklanov-rewrite/DESIGN_REVIEW.md` | Zero §11 anti-patterns shipped. Token discipline excellent. Two **Must-Fix** items: (1) desktop sticky CTA on `/productions/[slug]` only enters viewport after deep scroll — needs real right-rail (`page.module.css:348-365`); (2) cover→title-block separator missing when `poster.credit` is null. Seven **Should-Fix**: empty desktop right column, filter chip groups need labels, native search `×` button leaks into Cmd-K, dev-mode LQIP race on first card, hydration-warning verification, ThemeToggle glyph ambiguity, ProductionCard LQIP gating. **I5 cut.** |
 | R1.fix — Land Must-Fix items | ✅ done | `73620e6` `871f287` | Must-Fix #1: CSS-grid right rail for sticky CTA. Must-Fix #2: `.titleBlock` top rule. Optional: filter group labels. Polish: ThemeToggle SVG, search × suppression, LQIP gating. |
 | R1.polish — Remaining DESIGN_REVIEW items | ✅ done | `09d5005` | Should-Fix #1: spec sheet in right rail. Could-Improve #2: gallery masonry (CSS columns). Could-Improve #5: wordmark letter-spacing token. All DESIGN_REVIEW.md items resolved. |
-| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). D1 Vercel preview can begin in parallel. |
+| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). Use https://boklanov.vercel.app/ for the pass. |
 
 ### Core UI
 
@@ -671,10 +678,12 @@ production build before D1.
 
 ## Phase 7 — Deploy + cutover
 
-- [ ] **D1 — Vercel preview from `rewrite/v2`**: Push branch, configure
-  Vercel preview env, share URL with Roman. Verify Cyrillic fonts
-  render on real Vercel edge (not just localhost). _Can begin before R2
-  completes; D2/D3/D4 depend on D1._
+- [x] **D1 — Vercel deploy from `main`**: ✅ done (2026-05-02).
+  `rewrite/v2` merged → `main` via PR #2; Next.js patched 15.5.6 → 15.5.15
+  via PR #3 to clear Vercel security check. Live at
+  https://boklanov.vercel.app/ (Vercel project: `octrows-projects/boklanov`).
+  `main` auto-deploys on push. Cyrillic fonts pending real-device
+  verification (R2 QA item).
 
 - [ ] **D2 — Hosting decision (brief Q6)**: Confirm Vercel vs Cloudflare
   Pages vs Yandex Cloud given CN/RU access. Fix `next.config.js`
@@ -684,9 +693,8 @@ production build before D1.
   Configure both as aliases or pick one canonical with 301. _Depends
   on D2._
 
-- [ ] **D4 — Cutover + archive legacy**: Merge `rewrite/v2` → `main`,
-  swap DNS, archive `legacy/notion-renderer` branch as a fallback tag
-  (`legacy-2026-04-30`). Document rollback procedure in
+- [ ] **D4 — Cutover + DNS swap**: Point domain at Vercel, archive old
+  Notion renderer tag (`legacy-2026-04-30`). Document rollback in
   `contributing.md`. _Depends on D3._
 
 ---
@@ -699,7 +707,7 @@ production build before D1.
 > anti-patterns. Brief is unchanged. Total ~3.5 days, sequenced
 > alongside R2 / D1 — does not block deploy.
 >
-> **Sequence:** Round 1 → R2 → Round 2 → D1 → Round 3.
+> **Sequence:** Round 1 → R2 → Round 2 → D1 → Round 3. **All three rounds + D1 done.**
 
 ### Round 1 — Publication chrome (~1 day, ships **before R2**)
 
@@ -778,15 +786,16 @@ production build before D1.
 
 ### Round 3 — The opening cue (~1 day, after D1, optional)
 
-- [ ] **DA-3.A — Slate-strike (§4.1.A) + edition-frame fallback
-  (§4.1.C)**: 320ms one-shot CSS animation on home first paint,
-  gated by `sessionStorage.firstPaintDone` so it doesn't recur on
-  navigation. Wordmark "slate top" pseudo-element drops 1.5em onto
-  baseline + hairline rule fades in. **Must ship paired with the
-  static edition-frame** as the `prefers-reduced-motion: reduce`
-  fallback — both render identical end-state visually. Behind a
-  `?gesture=off` query flag for first 48h post-deploy so we can
-  capture a comparison screenshot for design review.
+- [x] **DA-3.A — Slate-strike (§4.1.A) + edition-frame fallback
+  (§4.1.C)**: ✅ done `7c26402` (2026-05-02). `components/SlateStrike.tsx`
+  + `SlateStrike.module.css`. 320ms one-shot CSS animation: `::before`
+  slate-top drops 1.5em, `::after` hairline rule fades in. Gated by
+  `sessionStorage.firstPaintDone`, `?gesture=off`, and
+  `prefers-reduced-motion: reduce`. `<Suspense fallback={null}>` boundary
+  wraps `<SlateStrike>` in home page (required by `useSearchParams`).
+  `--duration-slate: 320ms` token in `globals.css`. Static edition-frame
+  end-state (hairline rule, no motion) present in all three fallback paths.
+  `?gesture=off` gate still active — lift after R2 sign-off.
 
 ### Cuts (do not build)
 
