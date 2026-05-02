@@ -1,44 +1,28 @@
 /* v3 §2.4 — DuotonePoster wrapper. display:contents so the ProductionCard
-   link remains a direct grid item. @supports gates the SVG filter; falls
-   back to grayscale+contrast. prefers-reduced-transparency reverts to fallback.
+   link stays the direct grid item. SVG duotone filter applied directly per
+   accent (no @supports gate — every browser the site supports already handles
+   `filter: url()`). Sprite injected once in app/[locale]/layout.tsx via
+   <DuotonePosterSprite />.
 
-   Revised 2026-05-03 after visual review of inconsistent duotone across the
-   featured strip. Two robustness changes:
-
-   1. Filter selector widened from `.wrapper img` to `.wrapper :is(img, picture,
-      [class*="cover"])` so it catches both <Image>'s rendered <img> AND any
-      typographic-cover background (so missing-poster cards still tint instead
-      of reading as "duotone broken"). The typographic cover renders no <img>
-      and previously stayed neutral.
-
-   2. The fallback (grayscale) and the filter are written so that the @supports
-      override remains higher-specificity. Some browsers were stuck on the base
-      rule even with @supports matching because both selectors had identical
-      specificity. Adding an extra attribute lifts the override. */
+   Selector covers both <img> (next/image fill render) and any element marked
+   `[data-cover-style]` (TypographicCover) so posterless featured cards also
+   tint. URLs unquoted to avoid CSS Modules / postcss quote-parsing edge cases. */
 
 .wrapper {
   display: contents;
 }
 
-/* Fallback for unsupported browsers / before SVG sprite loads.
-   `:is()` keeps specificity at attr-selector level so the @supports rule below
-   wins in modern browsers. */
-.wrapper :is(img, [data-cover-style]) {
-  filter: grayscale(0.7) contrast(1.08);
-  transition: filter var(--duration-normal) var(--easing-default);
+.wrapper[data-accent="vermillion"] :is(img, [data-cover-style]) {
+  filter: url(#duotone-v);
 }
 
-/* @supports upgrade: SVG duotone when filter:url() is available. */
-@supports (filter: url(#x)) {
-  .wrapper[data-accent="vermillion"][data-accent] :is(img, [data-cover-style]) {
-    filter: url('#duotone-v');
-  }
-  .wrapper[data-accent="cobalt"][data-accent] :is(img, [data-cover-style]) {
-    filter: url('#duotone-c');
-  }
+.wrapper[data-accent="cobalt"] :is(img, [data-cover-style]) {
+  filter: url(#duotone-c);
 }
 
-/* prefers-reduced-transparency: always use the simpler fallback. */
+/* prefers-reduced-transparency: use a simpler grayscale-+-contrast pass
+   instead of the SVG duotone (avoids the saturated tint on accessibility
+   profiles that explicitly request reduced visual effect). */
 @media (prefers-reduced-transparency: reduce) {
   .wrapper :is(img, [data-cover-style]) {
     filter: grayscale(0.7) contrast(1.08) !important;
