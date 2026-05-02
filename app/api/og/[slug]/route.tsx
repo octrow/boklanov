@@ -12,10 +12,17 @@ export const runtime = 'nodejs'
 
 const W = 1200
 const H = 630
+const POSTER_W = 380
+
 const PAPER = '#F4F2EC'
 const INK = '#161514'
 const INK_MUTE = '#605C56'
+const INK_FAINT = 'rgba(22, 21, 20, 0.45)'
 const ACCENT = '#6B0F0F'
+const RULE = 'rgba(22, 21, 20, 0.15)'
+
+const PAD_X = 56 // horizontal padding in text rail
+const PAD_Y = 36 // vertical padding top/bottom in text rail
 
 // satori supports .woff (not .woff2). Use @fontsource packages — already installed.
 function fontBuf(pkgPath: string): Buffer {
@@ -58,22 +65,168 @@ export async function GET(
   const titleEn = production.titles.en ?? null
   const showTitleEn = !!titleEn && titleEn !== titleRu
 
-  const theatreName = production.theatre.name ?? production.theatre.shortName ?? null
+  // Font size: shorter titles get a larger size.
+  const titleLen = titleRu?.length ?? 0
+  const titleFontSize = titleLen > 36 ? 40 : titleLen > 24 ? 48 : 56
 
-  const chips = [
-    production.ageRating ?? null,
+  // Bottom-left meta line: theatre · city · year · age
+  const metaLine = [
+    production.theatre.shortName ?? production.theatre.name,
+    production.theatre.city,
     production.year ? String(production.year) : null,
-    production.theatre.country ?? null,
+    production.ageRating ?? null,
   ]
     .filter(Boolean)
     .join(' · ')
 
   // Absolute poster URL — constructed from request origin so preview deploys work.
+  // satori only handles JPEG/PNG; webp silently renders blank, so skip those.
   const { origin } = new URL(request.url)
-  const posterUrl = production.poster.src ? `${origin}${production.poster.src}` : null
+  const posterSrc = production.poster.src
+  const posterUrl =
+    posterSrc && !posterSrc.endsWith('.webp') ? `${origin}${posterSrc}` : null
 
-  // Font size: shorter titles get a larger size.
-  const titleFontSize = (titleRu?.length ?? 0) > 30 ? 44 : 54
+  // ── Text rail (right side) ──────────────────────────────────────────────
+  const textRail = (
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        background: PAPER,
+      }}
+    >
+      {/* Section slug — programme folio */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: `${PAD_Y}px ${PAD_X}px 18px`,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'JetBrains Mono',
+            fontSize: 11,
+            color: INK_FAINT,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          ROMAN BOKLANOV · PRODUCTIONS
+        </span>
+      </div>
+
+      {/* Hairline rule */}
+      <div style={{ height: 1, background: RULE, marginLeft: PAD_X, marginRight: PAD_X }} />
+
+      {/* Title block — vertically centred */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: `28px ${PAD_X}px`,
+        }}
+      >
+        {/* RU title */}
+        <div
+          style={{
+            fontFamily: 'Lora',
+            fontSize: titleFontSize,
+            fontWeight: 400,
+            color: INK,
+            lineHeight: 1.2,
+            marginBottom: showTitleEn ? 12 : 0,
+          }}
+        >
+          {titleRu}
+        </div>
+
+        {/* EN subtitle — italic Lora */}
+        {showTitleEn && (
+          <div
+            style={{
+              fontFamily: 'Lora',
+              fontSize: Math.round(titleFontSize * 0.52),
+              fontStyle: 'italic',
+              color: INK_MUTE,
+              lineHeight: 1.35,
+            }}
+          >
+            {titleEn}
+          </div>
+        )}
+      </div>
+
+      {/* Hairline rule */}
+      <div style={{ height: 1, background: RULE, marginLeft: PAD_X, marginRight: PAD_X }} />
+
+      {/* Bottom: meta left · colophon right */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: `18px ${PAD_X}px ${PAD_Y}px`,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'JetBrains Mono',
+            fontSize: 12,
+            color: INK_MUTE,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}
+        >
+          {metaLine}
+        </span>
+        <span
+          style={{
+            fontFamily: 'JetBrains Mono',
+            fontSize: 11,
+            color: ACCENT,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}
+        >
+          2026 EDITION
+        </span>
+      </div>
+    </div>
+  )
+
+  // ── No-poster fallback: oxblood block with vertical wordmark ────────────
+  const noPosterBlock = (
+    <div
+      style={{
+        width: POSTER_W,
+        height: H,
+        background: ACCENT,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}
+    >
+      <div
+        style={{
+          fontFamily: 'Lora',
+          fontSize: 20,
+          color: PAPER,
+          opacity: 0.5,
+          letterSpacing: '0.08em',
+          textTransform: 'lowercase',
+          transform: 'rotate(-90deg)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        роман бокланов
+      </div>
+    </div>
+  )
 
   return new ImageResponse(
     (
@@ -82,143 +235,24 @@ export async function GET(
           width: W,
           height: H,
           display: 'flex',
-          flexDirection: 'column',
-          fontFamily: 'Lora',
+          flexDirection: 'row',
         }}
       >
-        {/* Main content row */}
-        <div style={{ flex: 1, display: 'flex', background: PAPER }}>
-          {/* Left: poster or oxblood typographic block */}
-          {posterUrl ? (
-            <img
-              src={posterUrl}
-              alt=""
-              width={400}
-              height={H - 8}
-              style={{ objectFit: 'cover', flexShrink: 0, display: 'block' }}
-            />
-          ) : (
-            <div
-              style={{
-                width: 400,
-                background: ACCENT,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'Lora',
-                  fontSize: 22,
-                  color: PAPER,
-                  opacity: 0.55,
-                  letterSpacing: '0.08em',
-                  textTransform: 'lowercase',
-                  transform: 'rotate(-90deg)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                роман бокланов
-              </div>
-            </div>
-          )}
+        {/* Left: poster or oxblood fallback */}
+        {posterUrl ? (
+          <img
+            src={posterUrl}
+            alt=""
+            width={POSTER_W}
+            height={H}
+            style={{ objectFit: 'cover', flexShrink: 0, display: 'block' }}
+          />
+        ) : (
+          noPosterBlock
+        )}
 
-          {/* Right: text block */}
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '52px 60px 40px 60px',
-            }}
-          >
-            {/* Spacer: push title to vertical center–bottom */}
-            <div style={{ flex: 1 }} />
-
-            {/* RU title */}
-            <div
-              style={{
-                fontFamily: 'Lora',
-                fontSize: titleFontSize,
-                fontWeight: 400,
-                color: INK,
-                lineHeight: 1.15,
-                marginBottom: 14,
-              }}
-            >
-              {titleRu}
-            </div>
-
-            {/* EN subtitle */}
-            {showTitleEn && (
-              <div
-                style={{
-                  fontFamily: 'Lora',
-                  fontSize: 26,
-                  fontStyle: 'italic',
-                  color: INK_MUTE,
-                  lineHeight: 1.3,
-                  marginBottom: 20,
-                }}
-              >
-                {titleEn}
-              </div>
-            )}
-
-            {/* Theatre */}
-            {theatreName && (
-              <div
-                style={{
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: 15,
-                  color: INK_MUTE,
-                  letterSpacing: '0.02em',
-                  marginBottom: 8,
-                }}
-              >
-                {theatreName}
-              </div>
-            )}
-
-            {/* Chips: age · year · country */}
-            {chips && (
-              <div
-                style={{
-                  fontFamily: 'JetBrains Mono',
-                  fontSize: 14,
-                  color: INK_MUTE,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
-                  marginBottom: 4,
-                }}
-              >
-                {chips}
-              </div>
-            )}
-
-            {/* Spacer bottom */}
-            <div style={{ flex: 1 }} />
-
-            {/* Signature — low-key */}
-            <div
-              style={{
-                fontFamily: 'Lora',
-                fontSize: 14,
-                color: INK_MUTE,
-                opacity: 0.6,
-                letterSpacing: '0.04em',
-                textTransform: 'lowercase',
-              }}
-            >
-              boklanov.com
-            </div>
-          </div>
-        </div>
-
-        {/* Oxblood accent bar — bottom */}
-        <div style={{ height: 8, background: ACCENT, flexShrink: 0 }} />
+        {/* Right: programme-grammar text rail */}
+        {textRail}
       </div>
     ),
     {
