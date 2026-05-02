@@ -1,28 +1,24 @@
-/* DA-7.6.J — editorial empty state. Hairline rule + ERRATA label + italic body.
-   Used across filter, archive, awards, press empty states. */
+/* DA-7.6.J / Phase 9.5 — editorial empty state.
+   v1 (DA-7.6.J): hairline + ERRATA mono chip + italic body.
+   v2 (Phase 9.5): hairline top + bottom rules; ERRATA chip dropped; body
+   upsized to base + Lora italic + --ink-marginalia. Reads as prose, not
+   UI state. Used across filter, archive, awards, press empty states. */
 
 .root {
   border-top: 1px solid var(--rule);
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--rule);
+  padding-block: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-.label {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-chip);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 .body {
-  font-family: var(--font-family-serif);
+  font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-sm);
-  color: var(--ink-mute);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  color: var(--ink-marginalia);
   margin: 0;
   max-width: 55ch;
 }
