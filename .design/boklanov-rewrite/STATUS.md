@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-02 (session 2).
+Current state + open work. Updated: 2026-05-02 (session 3).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -34,7 +34,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 6.6 Q1-Q8                       | done         | `10f951f` `b3bded7` `fdbae94` `99299de` `8dae0b2` `c7647bf`. 24 productions clean.                                                                           |
 | 7 Deploy + cutover              | partial      | R2 closed; D1 live `boklanov.vercel.app`; D2 Vercel stays; D3/D4 deferred                                                                                    |
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
-| 7.6 Editorial polish            | in progress  | Tier 2 done `3106d26`. 6 tasks remain (Tier 1 + Tier 3).                                                                                                     |
+| 7.6 Editorial polish            | in progress  | Tier 1 done `00c2501`. Tier 3 (DA-7.6.I OG + DA-7.6.J empty states) remains.                                                                               |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2 CDN blocked on Cloudflare DNS. |
 | 9 Decap CMS layer               | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
@@ -75,12 +75,12 @@ change by direct edit.
 
 ## Phase 7.6 backlog
 
-Tier 1 (programme-grammar, ~3 days):
+Tier 1 — done `00c2501`:
 
-- DA-7.6.A marginalia ≥1280px on `/about` + synopses
-- DA-7.6.B `@media print` stylesheet
-- DA-7.6.C director's note block (italic Lora + mono attribution), gated by `directorsNote.{ru,en}` field
-- DA-7.6.D run-of-show row `RUN · BTK · СПБ · 2020-2024 · ~80 PERFORMANCES`, gated by `runs[]`
+- DA-7.6.A ✓ Marginalia component — 65ch+20ch grid ≥1280px on `/about` bio; inline italic below
+- DA-7.6.B ✓ `@media print` — 18mm margins, palette override, header/CTA/rail hidden
+- DA-7.6.C ✓ Director's note block (italic Lora + left rule + mono attribution), gated by `directorsNote.{ru,en}`
+- DA-7.6.D ✓ Run-of-show row above title, gated by `runs[]`
 
 Tier 2 — done `3106d26`:
 
@@ -103,6 +103,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION.md` §15.
 ## Recent commits
 
 ```
+00c2501 feat(7.6-tier1): marginalia, print stylesheet, director's note, run-of-show
 3106d26 feat(7.6-tier2): award count, slate LANGUAGE row, no-poster year anchor
 8d3c4fd docs: merge docs/update-planning-docs branch
 c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
@@ -115,8 +116,7 @@ c1c4436 feat(phase-8): fold overlay + authoring handoff (8.3-8.5)
 
 ## Next actions (in order)
 
-1. User pushes `docs/update-planning-docs` -> merge PR.
-2. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
-3. Roman closes orphan-title audit + photographer credits.
-4. Phase 7.6 Tier 1+2 (no longer gated on D4).
-5. D3/D4 cutover when reactivated.
+1. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
+2. Roman closes orphan-title audit + photographer credits.
+3. Phase 7.6 Tier 3: DA-7.6.I OG image chrome + DA-7.6.J editorial empty states.
+4. D3/D4 cutover when reactivated.
