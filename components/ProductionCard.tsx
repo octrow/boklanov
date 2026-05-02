@@ -6,38 +6,11 @@ import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
 import { cdnUrl } from '@/lib/cdn'
+import { countryCode } from '@/lib/countryCode'
 import type { ProductionView } from '@/lib/content'
 
 import styles from './ProductionCard.module.css'
 import { TypographicCover } from './TypographicCover'
-
-// Country full-name → ISO-2 (uppercase). Brief D5/D7 fixes the chip set
-// to RU/KZ/DE/ES/AT/BY; anything outside falls back to no chip.
-const COUNTRY_TO_CODE: Record<string, string> = {
-  Россия: 'RU',
-  Russia: 'RU',
-  Казахстан: 'KZ',
-  Kazakhstan: 'KZ',
-  Германия: 'DE',
-  Germany: 'DE',
-  Deutschland: 'DE',
-  Испания: 'ES',
-  Spain: 'ES',
-  España: 'ES',
-  Австрия: 'AT',
-  Austria: 'AT',
-  Österreich: 'AT',
-  Беларусь: 'BY',
-  Belarus: 'BY'
-}
-
-function countryCode(name?: string): string | null {
-  if (!name) return null
-  const trimmed = name.trim()
-  // Accept ISO-2 codes already in the data (some metadata.yml uses RU/DE/...).
-  if (/^[A-Z]{2}$/.test(trimmed)) return trimmed
-  return COUNTRY_TO_CODE[trimmed] ?? null
-}
 
 export { countryCode }
 
