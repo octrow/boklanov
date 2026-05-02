@@ -1,6 +1,6 @@
 # DESIGN
 
-Visual identity + IA + token essentials. Updated: 2026-05-02.
+Visual identity + IA + token essentials. Updated: 2026-05-02 (session 3).
 
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
@@ -148,13 +148,20 @@ Production card:
 - Whole card is the link. Hover: oxblood underline reveal under RU title, no card lift.
 - No-poster fallback = deliberate typographic treatment. `coverStyle` only when `poster.src && poster.lqip`.
 
+Marginalia (Phase 7.6, `00c2501`): `<Marginalia note="...">` wraps prose on `/about`. ≥1280px:
+`grid-template-columns: minmax(0,65ch) minmax(0,20ch)`, note in right column with `border-left: 1px solid var(--rule)`,
+mono `--font-size-meta`. Below 1280px: note renders as italic Lora subordinate text inline. `aria-hidden="true"` on
+`<aside>`. `rowSingle` (no note) constrains to `--max-width-prose`.
+
 Production detail (D7 layout, top -> bottom):
 
 1. Cover full-bleed, original aspect, no parallax.
-2. Title block: RU display Lora + smaller EN + DE if present. Top rule on `.titleBlock`.
-3. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
-4. Synopsis Lora italic.
-5. Credits as `<dl>` with leader-dot rows. `Director ........ Roman Boklanov`. Cast sub-block under hairline. No "in
+2. Run-of-show row (Phase 7.6): optional `runs[]` frontmatter. Mono chip row above title: `RUN · venue · city · yearFrom–yearTo · count`. Hidden when `runs[]` empty.
+3. Title block: RU display Lora + smaller EN + DE if present. Top rule on `.titleBlock`.
+4. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
+5. Synopsis Lora italic.
+5b. Director's note (Phase 7.6): optional `directorsNote.{ru,en}` frontmatter. Italic Lora `<blockquote>` with 2px hairline left rule + mono attribution `— РОМАН БОКЛАНОВ`. Hidden when field absent.
+6. Credits as `<dl>` with leader-dot rows. `Director ........ Roman Boklanov`. Cast sub-block under hairline. No "in
    order of appearance". No puppet-as-cast.
 6. Action bar: Watch/listen (oxblood primary), Tech rider (PDF), Press kit (ZIP). Hide when asset absent.
 7. ON TOUR band (Plinth only): mono caps row of cities, hairline above + below. Driven by `tour[]`; empty -> hidden. No

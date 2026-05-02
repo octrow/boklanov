@@ -1,6 +1,6 @@
 # CONTENT
 
-How content gets into boklanov.com. Updated: 2026-05-02.
+How content gets into boklanov.com. Updated: 2026-05-02 (session 3).
 
 Owns: live workflow + frontmatter shape.
 Roman-facing day-to-day RU: `content/AUTHORING.ru.md`.
@@ -61,6 +61,13 @@ videos: [ { provider: youtube, id } ]
 awards: [ { name, category, year, city } ]
 press: [ { title, outlet, url, language } ]
 tour: [ { city } ]                   # Plinth only; empty -> ON TOUR band hidden
+directorsNote: { ru: "...", en: "..." }  # optional; italic Lora blockquote below synopsis
+runs:                                # optional; mono row above title (run-of-show)
+  - venue: "БТК"
+    city: "СПБ"
+    yearFrom: 2020
+    yearTo: 2024
+    count: "~80 спектаклей"
 externalLinks: [ { label, url } ]
 techRider: null                    # PDF path
 pressKit: null                     # ZIP path
@@ -77,7 +84,8 @@ tags: [ ]
   Properties. Commit.
 - New photos: drop into `public/productions/<slug>/`. After R2 activates: `npm run upload-images`. Else: just commit.
 - Featured strip: set `featured: true`. Cards without poster filtered out (`p.featured && p.poster.src`).
-- About bio + milestones + lineage: edit `content/about/{ru,en,de}.mdx` directly. Not generated.
+- About bio + milestones + lineage + marginalia notes: edit `content/about/{ru,en,de}.mdx` directly. `marginalia[]`
+  is an optional array (one entry per body paragraph, `null` for no note) that drives the ≥1280px gutter note.
 - UI chrome strings: `messages/{ru,en,de}.json`. RU+EN required. DE chrome only.
 - Production-card text never translates to DE (IA D4).
 - DE bios: only top 5-6 priority shows for v1.
