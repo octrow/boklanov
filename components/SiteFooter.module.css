@@ -69,7 +69,6 @@
   font-size: var(--font-size-meta);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-faint);
-  text-transform: lowercase;
 }
 
 /* ── Edition stamp — DA-1.C (§3.H) ───────────────────────────────────── */

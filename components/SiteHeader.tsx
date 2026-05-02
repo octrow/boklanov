@@ -8,6 +8,7 @@ import type { Locale } from '@/i18n/routing'
 import { folioFor } from '@/lib/folio'
 
 import { CommandPaletteContext } from './CommandPaletteProvider'
+import { SiteWordmark } from './SiteWordmark'
 import { ThemeToggle } from './ThemeToggle'
 import styles from './SiteHeader.module.css'
 
@@ -67,7 +68,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       <div className={styles.inner}>
         {/* Wordmark */}
         <Link href="/" className={styles.wordmark}>
-          {WORDMARKS[locale]}
+          <SiteWordmark variant="header" locale={locale} />
         </Link>
 
         {/* Desktop nav */}

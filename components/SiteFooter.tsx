@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 
+import { SiteWordmark } from './SiteWordmark'
 import styles from './SiteFooter.module.css'
 
 const TELEGRAM_URL = 'https://t.me/romanboklanov'
@@ -56,9 +57,8 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         {/* Col 3: Copyright */}
         <div className={styles.col}>
           <span className={styles.copyright}>
-            {locale === 'ru'
-              ? `роман бокланов · ${year}`
-              : `roman boklanov · ${year}`}
+            <SiteWordmark variant="footer" locale={locale} />
+            {` · ${year}`}
           </span>
         </div>
       </div>

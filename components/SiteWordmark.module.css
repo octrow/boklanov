@@ -1,0 +1,29 @@
+/* v3 §4.1 — Unbounded VF display wordmark. Three variants: header / footer / hero.
+   Color is inherited from the caller; do not set it here so each context (header
+   ink, footer ink-faint) picks up the right value without overrides. */
+
+.wordmark {
+  font-family: var(--font-family-plakat);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: 1;
+  white-space: nowrap;
+  font-synthesis: none;
+}
+
+.header {
+  font-size: var(--font-size-lg);
+}
+
+.footer {
+  font-size: var(--font-size-meta);
+}
+
+/* hero is wired in 9v3.5 (SiteHero gradient treatment); define the base now. */
+.hero {
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
