@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 8 — v3 Plakat kickoff).
+Current state + open work. Updated: 2026-05-03 (session 9 — 9v3.1 shipped).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -37,7 +37,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2: 291 files uploaded 2026-05-02. Dev URL active. `cdn.boklanov.com` blocked on Cloudflare DNS. |
 | 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates). |
-| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 1/10 phases shipped (9v3.0). 9v3.1 in progress.   |
+| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 2/10 phases shipped (9v3.0, 9v3.1). 9v3.2 next.   |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
@@ -116,7 +116,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 `main` branch: uncommitted changes. `GalleryLightbox` component + gallery-after-press reorder pending commit.
 
-`design_v3` branch: 2 commits ahead of `main` (proposal doc + 9v3.0 token deltas). Working tree has uncommitted 9v3.1 work-in-progress (Unbounded font files in `public/fonts/`, `@font-face` declarations + `--font-family-plakat` token in `app/globals.css`, Unbounded preload in `app/[locale]/layout.tsx`). SiteWordmark component + header/footer wordmark swap pending — completes 9v3.1 commit.
+`design_v3` branch: 4 commits ahead of `main` (proposal doc + 9v3.0 + 9v3.1 + STATUS doc). Working tree clean.
 
 ## Phase 9 v2 visual refresh (8 of 8 code phases done; polish items shipped)
 
@@ -158,7 +158,7 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | Phase | Subject | Status | Commit |
 |---|---|---|---|
 | 9v3.0 | Token deltas — Bauhaus trio replaces oxblood, deeper ink, new --shadow-plakat / --stripe-thickness / --ticker-speed / --font-size-hero / --font-size-sticker / --measure-poster | done | `2827654` |
-| 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer | in progress | partial WIP — see Build state |
+| 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer | done | `b20d501` |
 | 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts) | pending | — |
 | 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion) | pending | — |
 | 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | pending | — |
@@ -195,7 +195,7 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ## Recent commits
 
 ```
-(WIP)    feat(9v3.1): Unbounded VF + SiteWordmark — partial, font files + @font-face shipped, component pending
+b20d501  feat(9v3.1): Unbounded VF + SiteWordmark — ALL CAPS wordmark swap
 2827654  feat(9v3.0): token deltas — Bauhaus trio replaces oxblood
 b7a0620  docs(design_v3): v3 plakat proposal — Bauhaus trio + Unbounded + 9 unfreezes
 (pending) feat: GalleryLightbox — navigable gallery lightbox + gallery moved after press   [main only]
@@ -232,8 +232,8 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 
 ### v3 implementation queue
 
-1. **9v3.1 — finish in-flight**: build `<SiteWordmark variant="hero|header|footer">` + CSS module; swap `SiteHeader`/`SiteFooter` lowercase Lora → ALL CAPS Unbounded (header `--font-size-lg`, footer `--font-size-meta`); commit.
-2. **9v3.2 — SectionStripe**: `lib/section-accent.ts` resolves route → accent (`/` + `/awards` + `/contact` = vermillion · `/productions` + `/press` = cobalt · `/about` = mustard · `/archive` = ink). `<SectionStripe>` renders 2px coloured band. Wire above `<Cue>` on each route.
+1. ~~**9v3.1**~~ — done `b20d501`
+2. **9v3.2 — SectionStripe** (next): `lib/section-accent.ts` resolves route → accent (`/` + `/awards` + `/contact` = vermillion · `/productions` + `/press` = cobalt · `/about` = mustard · `/archive` = ink). `<SectionStripe>` renders 2px coloured band. Wire above `<Cue>` on each route.
 3. **9v3.3 — Sticker + TourTicker**: build `<Sticker variant="award|tour|form" accent="vermillion|cobalt|mustard">` (Unbounded ALL CAPS, no radius, optional `--shadow-plakat`, slug-hash rotation -3°/+3°, max 1 per card). Build `<TourTicker cities accent>` (CSS marquee `--ticker-speed`, pauses on hover + `prefers-reduced-motion`). Wire one occurrence each: featured-card sticker on `/` strip + Plinth-tour ticker on `bury-me-behind-the-baseboard`.
 4. **9v3.4 — DuotonePoster**: SVG `<defs>` filter sprite (vermillion + cobalt) at root layout. `<DuotonePoster>` wraps ProductionCard cover when `featured: true`. Filter accent picked deterministically by `slugHash % 2`. `@supports`-gated; reduced-transparency falls back to `grayscale(0.7) contrast(1.08)`.
 5. **9v3.5 — SiteHero**: replaces home hero. Folio band → ALL CAPS gradient Unbounded hero wordmark (`--font-size-hero`, `aria-hidden`; SR reads plain `<h1>` companion) → Lora italic statement → mono scroll hint. Below: broken-grid Featured strip (1 large + 2 medium + 3 small at ≥1024, collapsed at ≤1023). Decide DA-3.A slate-strike fate — provisional: retire on `/`, keep on production-detail.
