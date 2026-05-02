@@ -128,7 +128,7 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.2 | Lora variable swap | done | `f1613b1` — VF files renamed `[wght]` → `-VF`; 11 subsetted woff2 deleted |
 | 9.3 | TheatreSlate component (extract title block + role line) | done | `49eb04c` |
 | 9.4 | Marginalia refresh (louder, pull variant) | deferred | requires production-detail layout restructure (right-rail conflict); split into separate session |
-| 9.5 | EmptyState / ERRATA refresh | done | (this commit) — ERRATA chip dropped; complete-sentence Lora italic; aria-live polite |
+| 9.5 | EmptyState / ERRATA refresh | done | `806d1a0` — ERRATA chip dropped; complete-sentence Lora italic; aria-live polite |
 | 9.6 | SpecimenPlate component | pending | blocks-on `--specimen-rule` (9.1 ✓) |
 | 9.7 | TourRider component (subsumes existing right-rail `.slate`) | pending | — |
 | 9.8 | TypographicCover + CreditLine + grain SVG + build-time `coverStyle` | pending | last phase |
@@ -138,7 +138,7 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 ## Recent commits
 
 ```
-(9.5 hash) feat(9.5): EmptyState refresh — drop ERRATA chip, full-sentence Lora italic
+806d1a0 feat(9.5): EmptyState refresh — drop ERRATA chip, full-sentence Lora italic
 0ff38ed docs: STATUS.md hash backfill for f1613b1
 f1613b1 feat(9.2): Lora variable font swap — 11 subsetted → 2 VF
 7d7cf5f docs: STATUS.md hash backfill for 49eb04c
