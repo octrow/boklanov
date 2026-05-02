@@ -4,14 +4,15 @@ Index of every doc. Updated: 2026-05-02. Update on add/rename/archive.
 
 Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 
-## 1. Active (4)
+## 1. Active (5)
 
-| # | Path                                  | Role                                                | Lines |
-|---|---------------------------------------|-----------------------------------------------------|------:|
-| 1 | `.design/boklanov-rewrite/STATUS.md`  | Phase status, open tasks, next actions, constraints |   ~80 |
-| 2 | `.design/boklanov-rewrite/CONTENT.md` | Authoring workflow + frontmatter shape              |   ~80 |
-| 3 | `DESIGN.md`                           | Visual identity + IA + tokens + anti-patterns       |  ~220 |
-| 4 | `readme.md`                           | Stack, dev, deploy, doc map                         |   ~75 |
+| # | Path                                            | Role                                                                                        | Lines |
+|---|-------------------------------------------------|---------------------------------------------------------------------------------------------|------:|
+| 1 | `.design/boklanov-rewrite/STATUS.md`            | Phase status, open tasks, next actions, constraints                                         |   ~80 |
+| 2 | `.design/boklanov-rewrite/CONTENT.md`           | Authoring workflow + frontmatter shape                                                      |   ~80 |
+| 3 | `DESIGN.md`                                     | Visual identity + IA + tokens + anti-patterns                                               |  ~220 |
+| 4 | `readme.md`                                     | Stack, dev, deploy, doc map                                                                 |   ~75 |
+| 5 | `.design/boklanov-rewrite/DESIGN_v2_PROPOSAL.md` | Vitrine direction — 3 §11 unfreeze commits + 8 code phases, 6 components, decisions taken |  ~290 |
 
 Plus `.design/boklanov-rewrite/MAP.md` (this file) and `content/AUTHORING.ru.md` (Roman's RU day-to-day, owned by
 Roman).
@@ -22,18 +23,33 @@ Roman).
 
 Verbatim historical record. Cite by section, never edit. Source for non-derivable user answers.
 
-| Path                                  | Preserves                                                                                                                                                                                                                                                    |
-|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `archive/DESIGN_BRIEF.md`             | D1-D15 locked decisions; 2026-05-02 annotations (troupe, Russia, D3/D6/D8 supersessions, Q3-Q7 resolutions); §8 anti-patterns; frontmatter shape source.                                                                                                     |
-| `archive/DESIGN_AMBITION.md`          | Roman A1-A14.1 answers; Round 1/2/3 lock; past-tense `ГДЕ СТАВИЛ`/`STAGED IN`/`INSZENIERTE IN`; year-only colophon; 10-city tour cap; cuts §3.D §3.J; §13 ui-ux-pro-max review; §14 follow-ups; §15 Phase 7.6 rationale ledger.                              |
-| `archive/DESIGN_REVIEW.md`            | R1 Must/Should/Could items with file:line; §11 compliance table; I5 cut + reason; curator-90s goal-backward check; R2 closed.                                                                                                                                |
-| `archive/CONTENT_WORKFLOW.md`         | 9-option matrix (A=Notion, B=GitHub, C=Decap, D=Tina, E=Sanity, F=Obsidian chosen, G=Logseq, H=Anytype/AppFlowy/SiYuan, I=GDocs+R2); §6 migration plan 8.1-8.5; §6.5 AUTHORING.ru.md skeleton; §6B Decap deferred plan; §8/§9/§11 Roman+Daniil verbatim Q&A. |
-| `archive/INFORMATION_ARCHITECTURE.md` | Full per-route content blocks + gating; URL strategy (slugs, query params, hreflang policy excluding DE); RU/EN naming table; user flows; growth plan; Phase 7.5/7.6 per-route annotations.                                                                  |
-| `archive/tokens.md`                   | Per-token rationale; §1.1 paper/ink locked palette; §10 nonexistent tokens; §11 deviations + justifications.                                                                                                                                                 |
-| `archive/PLAN.md`                     | Origin record. §0 pre-rewrite snapshot; §6 reusable prompts; §7 D1-D6 trade-off table.                                                                                                                                                                       |
-| `archive/HANDOFF.md`                  | Pre-reorg next-conversation prompt + chronological context for the rewrite.                                                                                                                                                                                  |
-| `archive/TASKS.md`                    | Per-phase task ledger with commit hashes; Q1-Q8 resolutions.                                                                                                                                                                                                 |
-| `archive/photo-audit.md`              | 419 imgs / 56 records snapshot 2026-04-30. Counts: Nikita 33, Дель-Арте 28, Лина-Марлина 27, Гипс 25, Злая собака 25, Ape Star 25, Хаврошечка 24. 24 records MD-only. 4 productions have poster.                                                             |
+**Reading order:** always read `*_compress.md` first — it covers 90 %+ of lookup needs at a fraction of tokens. Open the full original only when the compressed version lacks the specific detail needed.
+
+| Path                                           | Preserves                                                                                                                                                                                                                                                    |
+|------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `archive/DESIGN_BRIEF_compress.md`             | Compressed. D1-D15 locked decisions; anti-patterns; frontmatter shape source.                                                                                                                                                                                |
+| `archive/DESIGN_BRIEF.md`                      | Full. D1-D15 locked decisions; 2026-05-02 annotations (troupe, Russia, D3/D6/D8 supersessions, Q3-Q7 resolutions); §8 anti-patterns; frontmatter shape source.                                                                                              |
+| `archive/DESIGN_AMBITION_compress.md`          | Compressed. Roman A1-A14.1 answers; Round 1/2/3 lock; key constraints; Phase 7.6 rationale ledger.                                                                                                                                                          |
+| `archive/DESIGN_AMBITION.md`                   | Full. Roman A1-A14.1 answers; Round 1/2/3 lock; past-tense `ГДЕ СТАВИЛ`/`STAGED IN`/`INSZENIERTE IN`; year-only colophon; 10-city tour cap; cuts §3.D §3.J; §13 ui-ux-pro-max review; §14 follow-ups; §15 Phase 7.6 rationale ledger.                       |
+| `archive/DESIGN_REVIEW_compress.md`            | Compressed. R1 Must/Should/Could items; compliance table; I5 cut; R2 closed.                                                                                                                                                                                 |
+| `archive/DESIGN_REVIEW.md`                     | Full. R1 Must/Should/Could items with file:line; §11 compliance table; I5 cut + reason; curator-90s goal-backward check; R2 closed.                                                                                                                          |
+| `archive/CONTENT_WORKFLOW_compress.md`         | Compressed. 9-option matrix decision (Obsidian chosen); migration plan; authoring flow.                                                                                                                                                                      |
+| `archive/CONTENT_WORKFLOW.md`                  | Full. 9-option matrix (A=Notion, B=GitHub, C=Decap, D=Tina, E=Sanity, F=Obsidian chosen, G=Logseq, H=Anytype/AppFlowy/SiYuan, I=GDocs+R2); §6 migration plan 8.1-8.5; §6.5 AUTHORING.ru.md skeleton; §6B Decap deferred plan; §8/§9/§11 Roman+Daniil verbatim Q&A. |
+| `archive/INFORMATION_ARCHITECTURE_compress.md` | Compressed. Per-route content blocks; URL strategy; RU/EN naming; user flows; Phase 7.5/7.6 annotations.                                                                                                                                                    |
+| `archive/INFORMATION_ARCHITECTURE.md`          | Full. Full per-route content blocks + gating; URL strategy (slugs, query params, hreflang policy excluding DE); RU/EN naming table; user flows; growth plan; Phase 7.5/7.6 per-route annotations.                                                           |
+| `archive/PLAN_compress.md`                     | Compressed. Origin record; D1-D6 trade-off table.                                                                                                                                                                                                           |
+| `archive/PLAN.md`                              | Full. Origin record. §0 pre-rewrite snapshot; §6 reusable prompts; §7 D1-D6 trade-off table.                                                                                                                                                                |
+| `archive/HANDOFF_compress.md`                  | Compressed. Pre-reorg next-conversation prompt + key chronological context.                                                                                                                                                                                  |
+| `archive/HANDOFF.md`                           | Full. Pre-reorg next-conversation prompt + chronological context for the rewrite.                                                                                                                                                                            |
+| `archive/TASKS_compress.md`                    | Compressed. Per-phase task ledger; Q1-Q8 resolutions.                                                                                                                                                                                                       |
+| `archive/TASKS.md`                             | Full. Per-phase task ledger with commit hashes; Q1-Q8 resolutions.                                                                                                                                                                                          |
+| `archive/tokens_compress.md`                   | Compressed. Per-token rationale; locked palette; deviations.                                                                                                                                                                                                |
+| `archive/tokens.md`                            | Full. Per-token rationale; §1.1 paper/ink locked palette; §10 nonexistent tokens; §11 deviations + justifications.                                                                                                                                          |
+| `archive/photo-audit_compress.md`              | Compressed. 419 imgs / 56 records snapshot 2026-04-30; key counts.                                                                                                                                                                                          |
+| `archive/photo-audit.md`                       | Full. 419 imgs / 56 records snapshot 2026-04-30. Counts: Nikita 33, Дель-Арте 28, Лина-Марлина 27, Гипс 25, Злая собака 25, Ape Star 25, Хаврошечка 24. 24 records MD-only. 4 productions have poster.                                                      |
+| `archive/RESEARCH_2026.md`                     | Frozen 2026-05-02. Research prompt for Visual v2 (Capital-V refresh). Methodology record; canonical proposal lives in `DESIGN_v2_PROPOSAL.md`.                                                                                                              |
+| `archive/RESEARCH_OPUS.md`                     | Frozen 2026-05-02. Claude Opus 4.7 output — selected basis for `DESIGN_v2_PROPOSAL.md`. Four corrections applied (see proposal §0.1).                                                                                                                       |
+| `archive/RESEARCH_GEMINI.md`                   | Frozen 2026-05-02. Gemini Pro 3.1 output — convergence evidence. Same trend/component skeleton as Opus; weaker source discipline. Not the basis.                                                                                                            |
 
 ## 3. Deleted (git history preserves)
 
@@ -129,7 +145,7 @@ Continuing the boklanov.com rewrite. Context order:
 3. Read .design/boklanov-rewrite/CONTENT.md only if the task touches authoring, frontmatter, Obsidian, R2, or images.
 4. Read DESIGN.md only if the task touches visual identity, tokens, IA, routes, motion, components, or anti-patterns.
 5. Skim readme.md for dev commands if you need to run anything.
-6. Open archive/<file>.md ONLY if you need a non-derivable answer (D-decision, R-review item, A-answer from Roman, 9-option matrix, per-route detail). archive/* is read-only history.
+6. Open archive/<file>.md ONLY if you need a non-derivable answer (D-decision, R-review item, A-answer from Roman, 9-option matrix, per-route detail). archive/* is read-only history. Always read `*_compress.md` first; open the full original only if the compressed version lacks the specific detail.
 
 Hard rules (from STATUS.md Constraints, do not violate):
 - Birthday surprise: no reveal to Roman until the site is live on its production domain. D3/D4 cutover currently deferred.
