@@ -1,10 +1,12 @@
 # DESIGN v3 PROPOSAL — "Plakat"
 
-Status: PROPOSAL. Branch: `design_v3` (cut from `main` 2026-05-02). Updated: 2026-05-02.
+Status: PROPOSAL — implementation in progress. Branch: `design_v3` (cut from `main` 2026-05-02). Updated: 2026-05-03 (session 8 — 9v3.0 shipped, 9v3.1 in progress).
 
 Owner: Daniil. Roman has not seen v3 — birthday surprise constraint still in force.
 
 Supersedes (subject to acceptance): `DESIGN_v2_PROPOSAL.md` (Vitrine direction). Vitrine code stays on `main` until v3 acceptance gates pass; rollback = `git checkout main`.
+
+Implementation ledger (commits, gates, queue): see `STATUS.md` § "Phase 9 v3 visual refresh — Plakat". This file is the durable design contract; STATUS.md is the live-progress mirror.
 
 ## 0. North-star
 

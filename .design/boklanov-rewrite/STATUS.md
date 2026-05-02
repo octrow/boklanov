@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-02 (session 7).
+Current state + open work. Updated: 2026-05-03 (session 8 — v3 Plakat kickoff).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -12,12 +12,12 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
   Year-only colophon. No present-tense Russia work.
 - `git push origin main` blocked by safety hook. Always ask user to push.
 - I5 signature gesture cut formally. DA-3.A slate-strike + DA-3.C edition-frame fallback shipped instead.
-- Production-card text stays RU/EN regardless of locale. DE chrome only.
-- `hreflang` RU<->EN only. DE excluded.
+- Production-card text stays RU/EN regardless of locale. **v3 update 2026-05-03:** DE expanding to full content parity for top 5–6 productions + /about (was chrome-only). `hreflang` policy still TBD for DE.
 - Awards/press original-language only.
 - Sticky booking CTA stays mailto.
 - Analytics: only `booking_cta_click`. Never expand autocapture.
-- §11 anti-patterns: see `DESIGN.md` §11.
+- §11 anti-patterns: see `DESIGN.md` §11. **v3 update 2026-05-03:** 9 anti-patterns lifted on `design_v3` per `DESIGN_v3_PROPOSAL.md` §2 with rollback triggers; mirrored to `archive/DESIGN_BRIEF.md` + `DESIGN.md` §11 in Phase 9v3.8 only.
+- **v3 branch active**: `design_v3` cut from `main` 2026-05-02. Active code work happens on `design_v3` until acceptance gates §11 pass; `main` remains v2 Vitrine. Rollback = `git checkout main`. Daniil owns the call; Roman not consulted (birthday surprise still in force).
 
 ## Phases
 
@@ -36,7 +36,8 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 7.5 Editorial fingerprints      | done         | R1 `c7a1b50` folio+cue+stamp. R2 `0bebf3c` credits+slate+geos+PREM+tour[]. R3 `7c26402` slate-strike+frame fallback.                                         |
 | 7.6 Editorial polish            | done         | Tier 1 `00c2501`. Tier 2 `3106d26`. DA-7.6.J `e1920af`. DA-7.6.I `0288258`.                                                                                |
 | 8 Authoring handoff             | in progress  | 8.1 `11bef4d` Obsidian config. 8.2 `8339141` R2 code. 8.3-8.5 `c1c4436` overlay folded + `AUTHORING.ru.md` + orphan audit. R2: 291 files uploaded 2026-05-02. Dev URL active. `cdn.boklanov.com` blocked on Cloudflare DNS. |
-| 9 v2 visual refresh (Vitrine)   | in progress  | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 7 of 8 code phases done (9.0a/b/c, 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8). 9.4 Marginalia louder deferred — needs detail-page layout restructure. |
+| 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates). |
+| 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 1/10 phases shipped (9v3.0). 9v3.1 in progress.   |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                               |
 
 ## D3/D4 cutover (deferred)
@@ -115,6 +116,8 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 `main` branch: uncommitted changes. `GalleryLightbox` component + gallery-after-press reorder pending commit.
 
+`design_v3` branch: 2 commits ahead of `main` (proposal doc + 9v3.0 token deltas). Working tree has uncommitted 9v3.1 work-in-progress (Unbounded font files in `public/fonts/`, `@font-face` declarations + `--font-family-plakat` token in `app/globals.css`, Unbounded preload in `app/[locale]/layout.tsx`). SiteWordmark component + header/footer wordmark swap pending — completes 9v3.1 commit.
+
 ## Phase 9 v2 visual refresh (8 of 8 code phases done; polish items shipped)
 
 Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on `main`, no feature branch.
@@ -148,10 +151,54 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 | §7 #1b | Playwright visual regression for non-photo card box-shadow | not implemented | no Playwright setup; lint-tokens covers static guard |
 | CONTENT.md | TourRider null-field contract documented | done | `b617817` |
 
+## Phase 9 v3 visual refresh — Plakat (in progress, branch `design_v3`)
+
+Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio (vermillion / cobalt / mustard) replaces oxblood. Unbounded VF added for ALL CAPS wordmark + sticker badges. 9 §11 anti-pattern unfreezes with rollback triggers (mirrored to `archive/DESIGN_BRIEF.md` + `DESIGN.md` §11 in 9v3.8 only). DE expanding to full content parity. 10 phases, each = 1 commit.
+
+| Phase | Subject | Status | Commit |
+|---|---|---|---|
+| 9v3.0 | Token deltas — Bauhaus trio replaces oxblood, deeper ink, new --shadow-plakat / --stripe-thickness / --ticker-speed / --font-size-hero / --font-size-sticker / --measure-poster | done | `2827654` |
+| 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer | in progress | partial WIP — see Build state |
+| 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts) | pending | — |
+| 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion) | pending | — |
+| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt) | pending | — |
+| 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark | pending | — |
+| 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2) | pending | — |
+| 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | pending | — |
+| 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | pending | — |
+| 9v3.9 | Acceptance-gate sweep (Lighthouse, axe-core, A/B, reduced-motion test, 90s curator-sim, bundle delta) | pending | — |
+
+### Acceptance gates (must pass before PR `design_v3` → `main`)
+
+Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at gate time.
+
+1. Vercel preview deploy of `design_v3` clean across 7 routes (no console errors, CLS ≤ 0.1 on slow-3G)
+2. axe-core + Lighthouse Accessibility ≥ 95 on every route
+3. AA contrast verified for every accent + ink combo (manual + automated)
+4. Daniil v2-vs-v3 visual A/B on monitor for `/`, `/productions`, two production-detail pages (with + without poster). Verdict must read as "same director's portfolio in his actual voice", not "different director" or "v2 with stickers slapped on"
+5. `prefers-reduced-motion` manual test (macOS Reduce Motion + Firefox `ui.prefersReducedMotion=1`): TourTicker static, sticker stamp instant, gradient hero static, no animation visible
+6. Russian curator 90s session test (RU locale, mobile sim): identifies (a) what kind of theatre Roman makes, (b) 2–3 specific productions, (c) how to email Roman, in <90s
+7. Roman not consulted (birthday surprise constraint). Daniil makes the call alone. If unsure, do NOT merge — keep `design_v3` open
+8. Bundle size delta on `/` + `/productions/[slug]` measured against `main`: target < +30kb gzipped (Unbounded VF is the main delta)
+9. DE locale code paths render without layout breakage even when DE content frontmatter is `null` (graceful Marginalia "DE forthcoming")
+10. `git revert` of any 9v3.0–9v3.7 commit leaves the branch in a coherent visual state (no half-shipped accent, no dangling sticker)
+11. v3 unfreezes mirrored to `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (Phase 9v3.8) before merge — non-doc commits + doc commits ship together
+
+### Open questions / deferred decisions
+
+1. **DA-3.A slate-strike** survival — does it still make sense alongside Unbounded gradient hero? Decide in 9v3.5; provisional answer: retire on `/` (gradient hero is the new first-paint moment), keep on production-detail covers.
+2. **DE translation source** — Daniil translates top-5 productions himself, hires a native speaker, or machine + native review? Decide before 9v3.7.
+3. **Hero plakat clip** (proposal §2.3) — does Roman have a 3s clip from any production worth using, or skip §2.3 lift entirely? Daniil checks Notion archive; default = skip if uncertain.
+4. **`--accent-mustard` text exclusion** — confirmed decorative-only per proposal §3.1. If a use case appears (TourTicker text-on-mustard), recompute contrast against `#0F0E0D` ink and use `--ink-on-mustard`.
+5. **`hreflang` policy** — if DE expands to full content parity, current `hreflang RU<->EN only` rule must extend to include DE. Decide before 9v3.7 lands `<de>` URLs in `sitemap.xml`.
+
 ## Recent commits
 
 ```
-(pending) feat: GalleryLightbox — navigable gallery lightbox + gallery moved after press
+(WIP)    feat(9v3.1): Unbounded VF + SiteWordmark — partial, font files + @font-face shipped, component pending
+2827654  feat(9v3.0): token deltas — Bauhaus trio replaces oxblood
+b7a0620  docs(design_v3): v3 plakat proposal — Bauhaus trio + Unbounded + 9 unfreezes
+(pending) feat: GalleryLightbox — navigable gallery lightbox + gallery moved after press   [main only]
 b617817 chore: lint-tokens scope guard + CONTENT.md TourRider contract + STATUS update
 36546d9 feat(9.4): Marginalia kind=note/pull/run API extension
 046aae9 feat(9.x-poly): TypographicCover synopsis collision-buster (proposal §6.2)
@@ -181,8 +228,24 @@ e1920af feat(7.6-tier3-j): editorial empty states — ERRATA register
 
 ## Next actions (in order)
 
-1. Daniil pushes remaining commits to `boklanov.vercel.app`; visual review of v2 across home / production grid / production detail / about. Acceptance gate is paper colour: `--paper #F2F0EA` must read as paper, not cream — if cream, `git revert 5558e16`.
-2. Marginalia float-into-margin layout (proposal §4.3 ≥1024px float) — only outstanding v2 item. Needs production-detail restructure to coexist with TourRider right-rail. Separate session when prioritised.
-3. Roman onboarding: install Obsidian + obsidian-git + mdx-as-md plugins. Walk through `content/AUTHORING.ru.md`.
-4. Roman closes orphan-title audit + photographer credits.
-5. D3/D4 cutover when reactivated.
+Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover deferred until v3 acceptance gates pass and `design_v3` merges to `main`.
+
+### v3 implementation queue
+
+1. **9v3.1 — finish in-flight**: build `<SiteWordmark variant="hero|header|footer">` + CSS module; swap `SiteHeader`/`SiteFooter` lowercase Lora → ALL CAPS Unbounded (header `--font-size-lg`, footer `--font-size-meta`); commit.
+2. **9v3.2 — SectionStripe**: `lib/section-accent.ts` resolves route → accent (`/` + `/awards` + `/contact` = vermillion · `/productions` + `/press` = cobalt · `/about` = mustard · `/archive` = ink). `<SectionStripe>` renders 2px coloured band. Wire above `<Cue>` on each route.
+3. **9v3.3 — Sticker + TourTicker**: build `<Sticker variant="award|tour|form" accent="vermillion|cobalt|mustard">` (Unbounded ALL CAPS, no radius, optional `--shadow-plakat`, slug-hash rotation -3°/+3°, max 1 per card). Build `<TourTicker cities accent>` (CSS marquee `--ticker-speed`, pauses on hover + `prefers-reduced-motion`). Wire one occurrence each: featured-card sticker on `/` strip + Plinth-tour ticker on `bury-me-behind-the-baseboard`.
+4. **9v3.4 — DuotonePoster**: SVG `<defs>` filter sprite (vermillion + cobalt) at root layout. `<DuotonePoster>` wraps ProductionCard cover when `featured: true`. Filter accent picked deterministically by `slugHash % 2`. `@supports`-gated; reduced-transparency falls back to `grayscale(0.7) contrast(1.08)`.
+5. **9v3.5 — SiteHero**: replaces home hero. Folio band → ALL CAPS gradient Unbounded hero wordmark (`--font-size-hero`, `aria-hidden`; SR reads plain `<h1>` companion) → Lora italic statement → mono scroll hint. Below: broken-grid Featured strip (1 large + 2 medium + 3 small at ≥1024, collapsed at ≤1023). Decide DA-3.A slate-strike fate — provisional: retire on `/`, keep on production-detail.
+6. **9v3.6 — TypographicCover + Marginalia float**: swap TypographicCover title to `--font-family-plakat` ALL CAPS 600. Ship Marginalia float-into-margin from ≥1024px (was deferred from v2 9.4) — resolves right-rail conflict by collapsing `<TourRider>` to `<details>` accordion below ≥1280.
+7. **9v3.7 — DE full-content scaffolding**: extend `AboutFrontmatter` + production frontmatter for DE fields with explicit-null contract. Render paths fall through to `<Marginalia note="…DE forthcoming…">` when `*.de` is null. `messages/de.json` extended for Marginalia placeholder strings. `sitemap.ts` + `hreflang` policy update gated on Open Question #5.
+8. **9v3.8 — mirror unfreezes to docs**: edit `archive/DESIGN_BRIEF.md` §8 with `_Superseded 2026-05-03: v3 acceptance — see DESIGN_v3_PROPOSAL.md §2.N_` annotations on each of the 9 lifted anti-patterns; mirror narrative into `DESIGN.md` §11; refresh `DESIGN.md` §3 (palette) + §4 (type) + §6 (motion) + §7 (component grammar) to v3 reality. Update `MAP.md` §4 cascade if any new file:line touchpoints emerge. This is the only legitimate edit to `archive/*` per `MAP.md` §5.
+9. **9v3.9 — acceptance-gate sweep**: run all 11 gates from this STATUS §"Acceptance gates" / proposal §11. If any gate fails, file remediation as a 9v3.x.fix commit; never silently skip. After all gates green, open PR `design_v3 → main`.
+
+### Carryover (v2 / authoring / cutover)
+
+- `main` has uncommitted `GalleryLightbox` work — finish on `main` separately or fold into `design_v3` after v3 merge. Decide: keep on `main` and rebase `design_v3` once before merge.
+- Marginalia float-into-margin (v2 outstanding item) gets resolved as part of 9v3.6, no longer a separate v2 ticket.
+- Roman onboarding (Obsidian + obsidian-git + mdx-as-md walkthrough) — unchanged, post-cutover.
+- Roman closes orphan-title audit + photographer credits — unchanged.
+- D3/D4 cutover — only after v3 ships AND birthday-surprise reveal gate is opened by Daniil.
