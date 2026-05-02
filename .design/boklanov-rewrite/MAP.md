@@ -4,7 +4,7 @@ Index of every doc. Updated: 2026-05-02. Update on add/rename/archive.
 
 Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 
-## 1. Active (5)
+## 1. Active (6)
 
 | # | Path                                            | Role                                                                                        | Lines |
 |---|-------------------------------------------------|---------------------------------------------------------------------------------------------|------:|
@@ -13,6 +13,7 @@ Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 | 3 | `DESIGN.md`                                     | Visual identity + IA + tokens + anti-patterns                                               |  ~220 |
 | 4 | `readme.md`                                     | Stack, dev, deploy, doc map                                                                 |   ~75 |
 | 5 | `.design/boklanov-rewrite/DESIGN_v2_PROPOSAL.md` | Vitrine direction — 3 §11 unfreeze commits + 8 code phases, 6 components, decisions taken |  ~290 |
+| 6 | `.design/boklanov-rewrite/DESIGN_v3_PROPOSAL.md` | Plakat direction (branch `design_v3`) — 9 §11 unfreezes, 10 phases, Bauhaus trio palette, Unbounded display, ALL CAPS wordmark, full DE | ~340 |
 
 Plus `.design/boklanov-rewrite/MAP.md` (this file) and `content/AUTHORING.ru.md` (Roman's RU day-to-day, owned by
 Roman).
