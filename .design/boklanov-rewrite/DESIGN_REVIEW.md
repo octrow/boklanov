@@ -11,12 +11,21 @@ Build under review: branch `rewrite/v2`, head `6ddb466` (P3)
 > document is **reference only** — kept as the historical record of
 > what R1 found and how it was closed.
 >
+> **R2 — ✅ closed 2026-05-02.** Daniil signed off desktop + mobile
+> against `boklanov.vercel.app`. `?gesture=off` gate on slate-strike
+> lifted; animation lives for all visitors on first paint.
+>
 > A retrospective evaluation against this baseline ("the chrome reads
 > as a generic editorial template") is captured in
 > `.design/boklanov-rewrite/DESIGN_AMBITION.md`, locked 2026-05-02 as
-> Phase 7.5. R1's verdict ("zero §11 anti-patterns shipped") still
-> stands; Phase 7.5 adds editorial fingerprints **on top** of the R1
-> baseline, it does not relitigate it.
+> Phase 7.5. **Phase 7.5 Round 1–3 ✅ all shipped 2026-05-02**
+> (`c7a1b50` · `0bebf3c` · `7c26402`). R1's verdict ("zero §11
+> anti-patterns shipped") still stands; Phase 7.5 added editorial
+> fingerprints **on top** of the R1 baseline without violating §11.
+>
+> Phase 7.6 (10 polish tasks, 3 tiers) added to backlog 2026-05-02 —
+> see `TASKS.md` Phase 7.6 + `DESIGN_AMBITION.md` §15. Schedule:
+> post-D4 cutover.
 
 ---
 

@@ -41,8 +41,21 @@ content-owned MDX stack (Obsidian as editor, Vercel as host).
 >    Productions he directed in Russia before 2022 stay on the site
 >    as part of the body of work; copy must not claim present-tense
 >    work in Russia. Consequence applied in `DESIGN_AMBITION.md`
->    §3.G.1 (past-tense section labels) and §3.H (year-only
->    colophon, no city pairing).
+>    §3.G.1 (past-tense `ГДЕ СТАВИЛ` / `STAGED IN` /
+>    `INSZENIERTE IN`) and §3.H (year-only colophon, no city pairing).
+>
+> **Launch context (2026-05-02).** The site goes live to
+> `boklanov.com` as a 33rd-birthday surprise for Roman (born
+> 7 May 1993; D4 deadline before 6 May). **Phase 7.5 Round 1–3
+> design elevation already shipped** against `boklanov.vercel.app`
+> (folio + cue numbers + edition stamp; production credits +
+> theatre slate + two-geographies + premiere mark; slate-strike
+> gesture paired with static edition-frame fallback). Phase 7.6
+> editorial-polish backlog scheduled post-D4. Phase 8 authoring
+> handoff (Obsidian + R2 codepaths shipped, 8.3–8.5 pending) lets
+> Roman take the site over after the surprise reveal. None of these
+> post-lock annotations modify D1–D15 — they record which lock-text
+> triggered which downstream decision.
 
 **#1 user:** a **theatre director or curator** (probably Russian-speaking) in a
 European city — **Berlin, Bremen, Vienna, London, Alicante, Bern, Hamburg,
