@@ -5,10 +5,9 @@ import { notFound } from 'next/navigation'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import * as React from 'react'
 
-import { Cue } from '@/components/Cue'
+import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { countryCode } from '@/components/ProductionCard'
-import { SpecimenPlate } from '@/components/SpecimenPlate'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
@@ -343,9 +342,7 @@ export default async function ProductionDetailPage({
           {/* 2. Title block — TheatreSlate component (Phase 9.3, DESIGN_v2_PROPOSAL.md §4.1) */}
           <TheatreSlate
             as='h1'
-            titleRu={titleRu}
-            titleEn={titleEn}
-            titleDe={titleDe}
+            titleRu={production.title}
             theatre={production.theatre}
             roleLabel={roleLabel}
             premiereDate={production.premiereDate}
@@ -389,12 +386,10 @@ export default async function ProductionDetailPage({
             <div className={styles.bodyProse}>{compiledBody}</div>
           )}
 
-          {/* 5. Credits — DA-2.A: leader-dot <dl> table with CREDITS cue. */}
+          {/* 5. Credits — DA-2.A: leader-dot <dl> table. */}
           {production.credits.length > 0 && (
             <section className={styles.creditsBlock}>
-              <Cue mark={t('credits')} first>
-                <h2 className={styles.sectionLabel}>{t('credits')}</h2>
-              </Cue>
+              <h2 className={styles.sectionLabel}>{t('credits')}</h2>
               <dl className={styles.creditsDl}>
                 {production.credits.map((c, i) => (
                   <div key={`${c.role}-${i}`} className={styles.creditsRow}>
@@ -476,44 +471,10 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
-          {/* 7. Photos */}
-          {production.gallery.length > 0 && (
-            <section className={styles.section}>
-              <Cue mark='CUE I' first>
-                <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-              </Cue>
-              <div className={styles.gallery}>
-                {production.gallery.map((g, i) => {
-                  const imgSrc = cdnUrl(g.src)!
-                  const imgAlt =
-                    g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? ''
-                  return (
-                    <PosterLightbox
-                      key={`${g.src}-${i}`}
-                      src={imgSrc}
-                      alt={imgAlt}
-                    >
-                      <SpecimenPlate
-                        src={imgSrc}
-                        alt={imgAlt}
-                        credit={g.credit}
-                        plateNumber={i + 1}
-                        total={production.gallery.length}
-                      />
-                    </PosterLightbox>
-                  )
-                })}
-              </div>
-            </section>
-          )}
-
-          {/* 8. Critic quotes — when press has a `quote` we'd render it; the
-            current data only has links, so render press as a list. */}
+          {/* 7. Press */}
           {production.press.length > 0 && (
             <section className={styles.section}>
-              <Cue mark='CUE II' first>
-                <h2 className={styles.sectionLabel}>{t('press')}</h2>
-              </Cue>
+              <h2 className={styles.sectionLabel}>{t('press')}</h2>
               <ul className={styles.pressList}>
                 {production.press.map((p) => (
                   <li key={p.url} className={styles.pressItem}>
@@ -534,12 +495,24 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
+          {/* 8. Photos — navigable lightbox with left/right arrows */}
+          {production.gallery.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+              <GalleryLightbox
+                items={production.gallery.map((g) => ({
+                  src: cdnUrl(g.src)!,
+                  alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                  credit: g.credit
+                }))}
+              />
+            </section>
+          )}
+
           {/* 9. Awards */}
           {production.awards.length > 0 && (
             <section className={styles.section}>
-              <Cue mark='CUE III' first>
-                <h2 className={styles.sectionLabel}>{t('awards')}</h2>
-              </Cue>
+              <h2 className={styles.sectionLabel}>{t('awards')}</h2>
               <ul className={styles.awardList}>
                 {production.awards.map((a, i) => (
                   <li key={`${a.name}-${i}`} className={styles.awardItem}>
@@ -559,9 +532,7 @@ export default async function ProductionDetailPage({
           {/* 10. External theatre links */}
           {(production.theatre.url || production.externalLinks.length > 0) && (
             <section className={styles.section}>
-              <Cue mark='CUE IV' first>
-                <h2 className={styles.sectionLabel}>{t('links')}</h2>
-              </Cue>
+              <h2 className={styles.sectionLabel}>{t('links')}</h2>
               <ul className={styles.linksList}>
                 {production.theatre.url && (
                   <li className={styles.linksItem}>

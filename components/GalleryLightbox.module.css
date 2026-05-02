@@ -1,0 +1,147 @@
+/* Masonry grid — mirrors page.module.css .gallery layout */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    display: block;
+    columns: 2;
+    column-gap: var(--space-5);
+  }
+}
+
+/* Trigger wrapper — display:contents so SpecimenPlate is the column flow unit */
+.trigger {
+  display: contents;
+}
+
+/* Lightbox overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  cursor: zoom-out;
+}
+
+/* Frame — flex column so meta bar sits below image naturally */
+.frame {
+  position: relative;
+  max-width: min(90vw, 1000px);
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image container — arrows are positioned relative to this */
+.imgWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  display: block;
+  max-width: 100%;
+  max-height: 78vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Navigation arrows — overlaid on left/right image edges */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--paper);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--duration-fast) var(--easing-default);
+  z-index: 1;
+}
+
+.navBtn:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.navBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.navPrev {
+  left: var(--space-3);
+}
+
+.navNext {
+  right: var(--space-3);
+}
+
+/* Close button — outside the frame top-right */
+.close {
+  position: absolute;
+  top: calc(-1 * var(--space-6));
+  right: calc(-1 * var(--space-6));
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--paper);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--duration-fast) var(--easing-default);
+}
+
+.close:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Meta bar: counter + optional credit below the image */
+.meta {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding-top: var(--space-3);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.credit {
+  color: rgba(255, 255, 255, 0.3);
+}

@@ -247,23 +247,6 @@ dd.creditsName {
   margin: 0 0 var(--space-5);
 }
 
-/* 7. Photos — masonry: original aspect ratios, CSS columns on tablet+. */
-.gallery {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-}
-
-@media (min-width: 768px) {
-  .gallery {
-    display: block;
-    columns: 2;
-    column-gap: var(--space-5);
-  }
-}
-
-/* .galleryItem / .galleryCredit migrated to components/SpecimenPlate.module.css (Phase 9.6). */
-
 /* 8/9/10 — flat lists in mono, hairline rules between rows. */
 .pressList,
 .awardList,

@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-02 (session 6).
+Current state + open work. Updated: 2026-05-02 (session 7).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -113,7 +113,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 ## Build state
 
-`main` branch: clean. Last: `2bdd855` — STATUS hash backfill for Phase 9.8.
+`main` branch: uncommitted changes. `GalleryLightbox` component + gallery-after-press reorder pending commit.
 
 ## Phase 9 v2 visual refresh (8 of 8 code phases done; polish items shipped)
 
@@ -151,6 +151,7 @@ Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must re
 ## Recent commits
 
 ```
+(pending) feat: GalleryLightbox — navigable gallery lightbox + gallery moved after press
 b617817 chore: lint-tokens scope guard + CONTENT.md TourRider contract + STATUS update
 36546d9 feat(9.4): Marginalia kind=note/pull/run API extension
 046aae9 feat(9.x-poly): TypographicCover synopsis collision-buster (proposal §6.2)
