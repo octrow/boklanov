@@ -99,6 +99,13 @@ Date: 2026-04-30
 > their MD source has no `[Name](url)` theatre link — Roman can
 > add a `theatre:` block in the per-production `metadata.yml` to
 > fill this in.
+>
+> **2026-05-02 — Phase 7.5 Round 3 + D1 shipped.** DA-3.A slate-strike
+> landed (`7c26402`). `rewrite/v2` merged → `main` (PR #2); Next.js
+> patched 15.5.6 → 15.5.15 (PR #3). Site live at
+> https://boklanov.vercel.app/. `main` auto-deploys. R2 real-device QA
+> is next; `?gesture=off` gate on slate-strike stays active until R2
+> sign-off.
 
 | Phase | Status | Commit | Notes |
 |-------|--------|--------|-------|
@@ -145,7 +152,7 @@ Date: 2026-04-30
 | R1 — Design review against brief | ✅ done | `.design/boklanov-rewrite/DESIGN_REVIEW.md` | Zero §11 anti-patterns shipped. Token discipline excellent. Two **Must-Fix** items: (1) desktop sticky CTA on `/productions/[slug]` only enters viewport after deep scroll — needs real right-rail (`page.module.css:348-365`); (2) cover→title-block separator missing when `poster.credit` is null. Seven **Should-Fix**: empty desktop right column, filter chip groups need labels, native search `×` button leaks into Cmd-K, dev-mode LQIP race on first card, hydration-warning verification, ThemeToggle glyph ambiguity, ProductionCard LQIP gating. **I5 cut.** |
 | R1.fix — Land Must-Fix items | ✅ done | `73620e6` `871f287` | Must-Fix #1: CSS-grid right rail for sticky CTA. Must-Fix #2: `.titleBlock` top rule. Optional: filter group labels. Polish: ThemeToggle SVG, search × suppression, LQIP gating. |
 | R1.polish — Remaining DESIGN_REVIEW items | ✅ done | `09d5005` | Should-Fix #1: spec sheet in right rail. Could-Improve #2: gallery masonry (CSS columns). Could-Improve #5: wordmark letter-spacing token. All DESIGN_REVIEW.md items resolved. |
-| R2 — Real-device manual QA | 🟡 open | — | iPhone SE 90s scenario (Daniil + Roman on real devices). D1 Vercel preview can begin in parallel. |
+| R2 — Real-device manual QA | ✅ done | 2026-05-02 | Daniil checked desktop + mobile on https://boklanov.vercel.app/. Site looks correct. `?gesture=off` gate lifted — slate-strike animation live for all users. |
 
 ### Core UI
 
@@ -671,23 +678,25 @@ production build before D1.
 
 ## Phase 7 — Deploy + cutover
 
-- [ ] **D1 — Vercel preview from `rewrite/v2`**: Push branch, configure
-  Vercel preview env, share URL with Roman. Verify Cyrillic fonts
-  render on real Vercel edge (not just localhost). _Can begin before R2
-  completes; D2/D3/D4 depend on D1._
+- [x] **D1 — Vercel deploy from `main`**: ✅ done (2026-05-02).
+  `rewrite/v2` merged → `main` via PR #2; Next.js patched 15.5.6 → 15.5.15
+  via PR #3 to clear Vercel security check. Live at
+  https://boklanov.vercel.app/ (Vercel project: `octrows-projects/boklanov`).
+  `main` auto-deploys on push. Cyrillic fonts pending real-device
+  verification (R2 QA item).
 
-- [ ] **D2 — Hosting decision (brief Q6)**: Confirm Vercel vs Cloudflare
-  Pages vs Yandex Cloud given CN/RU access. Fix `next.config.js`
-  output mode if switching off Vercel. _Depends on D1._
+- [x] **D2 — Hosting decision**: ✅ Vercel stays. No migration. Decided 2026-05-02.
 
-- [ ] **D3 — Domain decision (brief Q5)**: `.ru` only or also `.com`.
-  Configure both as aliases or pick one canonical with 301. _Depends
-  on D2._
+- [x] **D3 — Domain decision**: ✅ `boklanov.com` canonical (`.ru` deferred).
+  www.boklanov.com → 301 redirect via Vercel alias. Decided 2026-05-02.
 
-- [ ] **D4 — Cutover + archive legacy**: Merge `rewrite/v2` → `main`,
-  swap DNS, archive `legacy/notion-renderer` branch as a fallback tag
-  (`legacy-2026-04-30`). Document rollback procedure in
-  `contributing.md`. _Depends on D3._
+- [ ] **D4 — Cutover + DNS swap** 🟡 **IN PROGRESS — deadline 6 May 2026**:
+  DNS currently at Spaceship.com. Old Notion site still live — OK to cut.
+  Steps: (1) Vercel → Settings → Domains → add `boklanov.com` + `www.boklanov.com`;
+  (2) Spaceship DNS: A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`;
+  (3) Wait for propagation (~5 min – few hours at TTL 300).
+  Note: cdn.boklanov.com R2 connection skipped — boklanov.com not yet on
+  Cloudflare. Revisit if/when DNS moves to Cloudflare. _Depends on D3._
 
 ---
 
@@ -699,7 +708,7 @@ production build before D1.
 > anti-patterns. Brief is unchanged. Total ~3.5 days, sequenced
 > alongside R2 / D1 — does not block deploy.
 >
-> **Sequence:** Round 1 → R2 → Round 2 → D1 → Round 3.
+> **Sequence:** Round 1 → R2 → Round 2 → D1 → Round 3. **All three rounds + D1 done.**
 
 ### Round 1 — Publication chrome (~1 day, ships **before R2**)
 
@@ -778,15 +787,16 @@ production build before D1.
 
 ### Round 3 — The opening cue (~1 day, after D1, optional)
 
-- [ ] **DA-3.A — Slate-strike (§4.1.A) + edition-frame fallback
-  (§4.1.C)**: 320ms one-shot CSS animation on home first paint,
-  gated by `sessionStorage.firstPaintDone` so it doesn't recur on
-  navigation. Wordmark "slate top" pseudo-element drops 1.5em onto
-  baseline + hairline rule fades in. **Must ship paired with the
-  static edition-frame** as the `prefers-reduced-motion: reduce`
-  fallback — both render identical end-state visually. Behind a
-  `?gesture=off` query flag for first 48h post-deploy so we can
-  capture a comparison screenshot for design review.
+- [x] **DA-3.A — Slate-strike (§4.1.A) + edition-frame fallback
+  (§4.1.C)**: ✅ done `7c26402` (2026-05-02). `components/SlateStrike.tsx`
+  + `SlateStrike.module.css`. 320ms one-shot CSS animation: `::before`
+  slate-top drops 1.5em, `::after` hairline rule fades in. Gated by
+  `sessionStorage.firstPaintDone`, `?gesture=off`, and
+  `prefers-reduced-motion: reduce`. `<Suspense fallback={null}>` boundary
+  wraps `<SlateStrike>` in home page (required by `useSearchParams`).
+  `--duration-slate: 320ms` token in `globals.css`. Static edition-frame
+  end-state (hairline rule, no motion) present in all three fallback paths.
+  `?gesture=off` gate **lifted** — R2 QA signed off 2026-05-02. Animation live.
 
 ### Cuts (do not build)
 
@@ -820,53 +830,52 @@ production build before D1.
 > **Decap (C) deferred** as a later second admin surface — see Phase 9.
 > Total ~2.5 days. Runs after Phase 7 deploy.
 
-- [ ] **8.1 — Vault layout + Properties schema (½ day)**: Register
-  `.mdx` as markdown in Obsidian (community plugin or `app.json`).
-  Configure Obsidian Properties to render canonical frontmatter keys
-  (`title`, `titleEn`, `year`, `theatre`, `premiereDate`, `featured`,
-  `public`, `tags`, `synopsis`, …) as typed form fields with Cyrillic
-  labels. Commit `.obsidian/community-plugins.json` so any clone
-  inherits config. Add `scripts/lint-mdx.ts` failing the build on
-  Obsidian-flavoured `![[wikilink]]`.
+- [x] **8.1 — Vault layout + Properties schema** ✅ done `11bef4d` (2026-05-02):
+  `.obsidian/app.json` (`useMarkdownLinks:true`, spellcheck ru+en, source view).
+  `.obsidian/types.json` (year/featured/ageRating/durationMin/ticketsUrl/form/
+  lineage/tour/tags typed). `.obsidian/community-plugins.json`
+  (`["obsidian-git","mdx-as-md"]` — Roman installs manually).
+  `.gitignore` updated (ignore workspace.json, cache, plugins/).
+  `scripts/lint-mdx.ts` CI guard against `![[wikilink]]`.
+  `npm run lint-mdx` script added.
 
-- [ ] **8.2 — R2 image migration (½ day)**: Provision R2 bucket
-  `boklanov-content`, public-read access, custom domain
-  `cdn.boklanov.com`, auto-SSL. One-shot
-  `rclone sync public/productions/ r2://boklanov-content/productions/`.
-  Introduce `CDN_BASE` env var; rewrite `<Image>` `src` paths to
-  `${CDN_BASE}/productions/<slug>/...`. Keep LQIPs / blurhashes inline
-  in MDX. Author `npm run upload-images` — a thin `wrangler r2 object
-  put` wrapper Roman calls before commit.
+- [x] **8.2 — R2 image migration** ✅ code done `8339141` (2026-05-02),
+  **CDN activation pending** (boklanov.com not on Cloudflare):
+  R2 bucket `boklanov-content` created (account `534e18f3…`, EEUR).
+  `lib/cdn.ts`: `cdnUrl()` helper (prepends `NEXT_PUBLIC_CDN_BASE` or no-op).
+  `scripts/upload-images.ts`: S3-compatible upload via `@aws-sdk/client-s3`;
+  size-based skip, `--slug`/`--dry-run` flags; `npm run upload-images`.
+  `ProductionCard` + production detail: all `poster.src` + gallery `src`
+  wrapped in `cdnUrl()`. `next.config.js`: `remotePatterns` → cdn.boklanov.com.
+  `.env.example`: `NEXT_PUBLIC_CDN_BASE` + `R2_*` documented.
+  **cdn.boklanov.com custom domain SKIPPED** — boklanov.com DNS at Spaceship,
+  not Cloudflare; R2 zone-link fails. Revisit after D4 + DNS migration.
+  Images currently served from `public/` via Vercel (zero cost, sufficient).
 
-- [ ] **8.3 — Fold overlay + retire Notion sync (½ day)**: Write
-  `scripts/fold-overlay.ts` — one-shot merge of every non-null
-  `metadata.yml` field into `index.mdx` frontmatter (overlay-wins),
-  then `git rm` each `metadata.yml`. Simplify `lib/content.ts` —
-  drop `pick(overlay, fm)` and all `overlay.*` references; reads
-  reduce to plain frontmatter. Move
-  `scripts/sync-from-notion.ts` → `scripts/_legacy/` with header
-  `// frozen 2026-05-02; do not re-run`. Move `notion-data/` to
-  `archive/notion-export-2026-05` branch (frees ~250 MB on `main`).
-  Replace `npm run sync` with
-  `echo "sync retired; edit in Obsidian"`. Rewrite
-  `content/README.md` to point at `AUTHORING.ru.md`.
+- [x] **8.3 — Fold overlay + retire Notion sync** ✅ done (2026-05-02):
+  `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` files folded
+  into `index.mdx` frontmatter (overlay-wins logic); files deleted.
+  `lib/content.ts` simplified: `merge()` + `pick()` removed, replaced
+  with lean `fromFm()` that reads frontmatter directly (no overlay step).
+  `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header.
+  `npm run sync` → `echo "sync retired — edit in Obsidian"`.
+  `content/README.md` rewritten to point at `AUTHORING.ru.md`.
+  Build clean (98/98 pages). Awards override verified correct for
+  `cinderella` + `sugar-kid`. `notion-data/` already gitignored —
+  no archive branch needed.
 
-- [ ] **8.4 — `content/AUTHORING.ru.md` mini-guide (½ day)**: Write
-  the Russian-language onboarding for Roman from the skeleton in
-  CONTENT_WORKFLOW.md §6.5. Cover: install (desktop + mobile), open
-  vault, edit Properties, edit prose, commit + push, draft branch,
-  add new productions, swap photos via `npm run upload-images`,
-  troubleshooting. Daniil walks through it once async (Telegram or
-  recorded video). Replaces the Notion-centric flow in
-  `content/README.md`.
+- [x] **8.4 — `content/AUTHORING.ru.md`** ✅ done (2026-05-02):
+  Russian-language onboarding written covering: one-time install
+  (desktop + mobile), open vault, edit Properties/prose, commit +
+  push, draft branch workflow, add new productions, swap photos,
+  troubleshooting (5 common failure modes), contact.
 
-- [ ] **8.5 — Cyrillic-only-Name orphan audit (½ day)**: Open every
-  production whose RU title was synthesized via
-  `MANUAL_SIBLING_PAIRS` (`Сахарный ребёнок`, `Каштанка`, …) in
-  Obsidian. Roman confirms or corrects via Properties panel; one
-  commit per production. Capture the audit log in
-  `.design/boklanov-rewrite/orphan-audit-2026-05.md`. One-shot,
-  never repeated.
+- [x] **8.5 — Cyrillic-only-Name orphan audit** ✅ audit log created
+  (2026-05-02): `.design/boklanov-rewrite/orphan-audit-2026-05.md`
+  lists the two orphan slugs (`sugar-kid`, `kasztanka`), the workflow
+  for Roman to confirm titles in Obsidian, and the log table to fill
+  on confirmation. Actual confirmation happens when Roman gets Obsidian
+  access — the audit is one-shot, never repeated.
 
 ---
 

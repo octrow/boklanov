@@ -1,0 +1,17 @@
+{
+  "types": {
+    "year":        "number",
+    "durationMin": "number",
+    "featured":    "checkbox",
+    "ageRating":   "text",
+    "ticketsUrl":  "url",
+    "techRider":   "url",
+    "pressKit":    "url",
+    "role":        "text",
+    "form":        "multitext",
+    "lineage":     "multitext",
+    "tags":        "multitext",
+    "videos":      "multitext",
+    "tour":        "multitext"
+  }
+}

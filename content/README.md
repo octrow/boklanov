@@ -1,132 +1,83 @@
 # `content/` — production data
 
-> **Status note (2026-05-02).** The workflow described below is the
-> **current** state (Notion → sync → MDX + `metadata.yml` overlay).
-> A future state was locked in
-> `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` on 2026-05-02:
->
-> - **Phase 8** (after Phase 7 cutover, ~2.5 days) replaces Notion
->   with **Obsidian + obsidian-git, vault = repo**. Roman edits MDX
->   directly; no sync script.
-> - `metadata.yml` is **folded into MDX frontmatter** in Phase 8.3 —
->   single source of truth per field. `lib/content.ts` overlay merge
->   collapses to a plain frontmatter read.
-> - Images move to **Cloudflare R2** (`cdn.boklanov.com`) in
->   Phase 8.2; `public/productions/` shrinks to LQIPs only.
-> - Roman onboarding lives in `content/AUTHORING.ru.md` (Phase 8.4),
->   replacing this README's Notion-centric workflow.
-> - **Decap CMS is deferred** as a future second admin surface on
->   the same vault.
->
-> Until Phase 8 ships, edit via the Notion + sync flow below. After
-> Phase 8 ships, this README will be rewritten and `metadata.yml`
-> sections will be deleted.
+**Phase 8.3 (2026-05-02):** `metadata.yml` overlay retired and folded into
+frontmatter. Notion sync retired. Obsidian + obsidian-git is now the
+editorial workflow. Roman's onboarding guide: `content/AUTHORING.ru.md`.
 
-This directory holds the merged content that page routes render. The
-shape is:
+---
+
+## Structure
 
 ```
 content/
-├── README.md                          ← you are here
-├── productions-index.json             ← (gitignored, regenerated)
+├── README.md                ← you are here
+├── AUTHORING.ru.md          ← Roman's editing guide (Russian)
+├── productions-index.json   ← flat index for the content loader
 └── productions/
     └── <slug>/
-        ├── index.mdx                  ← (gitignored, regenerated)
-        └── metadata.yml               ← (committed, hand-edited)
+        └── index.mdx        ← frontmatter + RU/EN body
 ```
 
-## How content gets here
+No `metadata.yml` files — overlays were folded into `index.mdx`
+frontmatter by `scripts/fold-overlay.ts` on 2026-05-02.
 
-1. **Source of truth:** `notion-data/Роман Бокланов/` (the local Notion
-   export, committed to the repo). Roman re-exports from Notion when he
-   adds or edits a production and drops the new export into that folder.
+---
 
-2. **Sync command:**
+## Editing
 
-   ```bash
-   npm run sync
-   ```
+Edit `index.mdx` files directly in Obsidian. The Properties panel
+(top of each file) shows all structured fields. Body text is below
+the Properties block.
 
-   Runs `scripts/sync-from-notion.ts`. For every public production, the
-   script:
+Commit and push from Obsidian's Source Control panel — Vercel
+redeploys automatically in 1–2 minutes.
 
-   - parses the markdown body and `_all.csv` index
-   - **filters non-production sub-pages** via `NON_PRODUCTION_SLUGS`
-     (contact page, bio mirror, role overviews, festival listings —
-     edit the set in the script when a new orphan slips through)
-   - merges RU + EN siblings into one record by stripping the
-     `-en` / `-eng` slug suffix; orphan Cyrillic-only rows whose
-     CSV `Slug` is empty get attached to their EN sibling via
-     `MANUAL_SIBLING_PAIRS` (see the script for the table)
-   - resolves locale from the CSV slug suffix (`-en` / `-eng` → EN,
-     otherwise Cyrillic-name detection); body content is **not**
-     used to detect locale because EN pages often quote Russian
-     cast lists and would mis-classify
-   - heuristic-extracts `year`, `durationMin`, `ageRating`, `theatre`,
-     `role`, `form`, `lineage`, `awards` (RU body preferred for
-     canonical festival names per DESIGN §3), `press`, `videos`
-   - cleans synopsis text — strips `[X](Y)` and Notion's nested
-     `[[X]](Y)` link forms, skips URL-only / promo / cast-list
-     paragraphs, strips `<aside>` HTML
-   - copies images to `public/productions/<slug>/`
-   - generates an LQIP (low-quality blurred placeholder) for the poster
-   - writes `content/productions/<slug>/index.mdx` (frontmatter + body)
-   - writes `content/productions/<slug>/metadata.yml` **only if absent**
-   - writes `content/productions-index.json` (a flat, locale-aware list
-     for the loader)
+---
 
-3. **Render:** `lib/content.ts` (F6) loads `index.mdx` and `metadata.yml`,
-   merges them with metadata winning, and exposes the result to page
-   routes.
+## `index.mdx` frontmatter fields
 
-## What goes in `metadata.yml`?
+| Field | Type | Notes |
+|-------|------|-------|
+| `slug` | string | Latin + hyphens. Matches folder name. |
+| `notionIds.ru` / `.en` | string | Legacy Notion IDs. Keep for audit. |
+| `title.ru` / `.en` / `.de` | string | DE only for priority shows. |
+| `synopsis.ru` / `.en` / `.de` | string | Short description. |
+| `theatre.name` | string | Producing theatre. |
+| `theatre.url` | string | Theatre website. |
+| `year` | number | Premiere year. |
+| `premiereDate.ru` / `.en` | string | Full date string per locale. |
+| `ageRating` | string | `0+` / `3+` / `6+` / `12+` / `16+` / `18+` |
+| `durationMin` | number | Integer minutes. |
+| `role` | string | `director` / `performer` / `co-director` / `reader` |
+| `form` | string[] | `puppet` / `object` / `solo` / `ensemble` / `family` |
+| `lineage` | string[] | `btk` / `rgisi` / `kudashov` / `dotheatre` |
+| `featured` | boolean | Show in home featured row (4–6 max site-wide). |
+| `tour` | string[] | Tour cities. Used on Plinth detail page. |
+| `credits.ru` / `.en` | CreditEntry[] | `{ role, name, url? }` |
+| `gallery` | GalleryItem[] | `{ src, credit, caption: { ru, en } }` |
+| `awards` | Award[] | `{ name, year?, category?, city? }` |
+| `press` | Press[] | `{ title, url, outlet?, language? }` |
+| `videos` | Video[] | `{ provider: "youtube", id }` |
+| `ticketsUrl` | string\|null | Active tickets page. |
+| `techRider` | string\|null | Path to PDF. |
+| `pressKit` | string\|null | Path to ZIP. |
+| `tags` | string[] | Free tags. |
 
-The fields the auto-sync **can't** infer reliably. Currently:
+---
 
-| Field | What it is | Why manual |
-|---|---|---|
-| `gallery[].credit` | Photographer name per image | Notion captions don't carry these (brief Q1) |
-| `gallery[].caption.{ru,en}` | Optional caption per image | Same — needed for editorial gallery views |
-| `poster.credit` | Photographer / designer of the poster | Same |
-| `featured` | Editor's choice for the home-page featured row | A curatorial call, not data |
-| `form` | `puppet \| object \| solo \| ensemble \| family \| reading \| sketch` | Tags don't always cover this |
-| `lineage` | `btk \| rgisi \| kudashov \| dotheatre \| ...` | For the recommends algorithm (brief D9) |
-| `role` | `director \| co-director \| performer \| reader \| sketch` | Auto-detect is naive |
-| `ageRating` | `0+ \| 3+ \| 6+ \| 12+ \| 16+ \| 18+` | Auto-extract sometimes misses |
-| `durationMin` | Integer minutes | Auto-extract sometimes misses |
-| `techRider` | Path to PDF, or `null` (brief Q2) | Roman uploads or links |
-| `pressKit` | Path to ZIP, or `null` | Same |
-| `title.de` | German title | Only filled for v2 priority shows |
-| `synopsis.de` | German synopsis | Same |
-| `videos[]` | Extra video URLs (Vimeo, etc.) | Auto-extract only catches YouTube |
-| `awards[]` | Override the auto-extracted award list | Heuristic can't extract festivals that sit in unmarked plain prose (no link, no quote). The metadata stub emits the auto-extracted list as commented-out lines — uncomment + edit to override (see Q4 follow-ups in `.design/boklanov-rewrite/TASKS.md`). Setting this replaces the entire list, overlay-wins. |
-| `theatre` | Theatre attribution `{ name, shortName?, city?, country?, url? }` | Sync only auto-extracts theatres that have a `[Name](url)` link in the MD body before the press / awards section. 18 of 24 productions need this filled in by hand. |
-| `credits` | `{ ru: [...], en: [...] }` arrays of `{ role, name, url? }` | Sync extracts these heuristically from `**Role:** Value` lines and the cast section. If a credit comes out wrong (or you want to reorder them), drop the corrected list here, overlay-wins. |
-| `premiereDate` | Per-locale date string `{ ru?, en? }` | Sync reads `**Премьера:**` / `**Premiere:**` lines. Override here if the source MD lacks this line or has a typo. |
-| `ticketsUrl` | Single URL string | Sync reads `**Билеты:** [...](url)`. Override if you want a different ticketing destination. |
+## Adding a new production
 
-Each `metadata.yml` has every field as a stub — fill what you have,
-leave the rest as `null` or `[]`. The loader treats `null` / `[]` as
-"no overlay, fall through to frontmatter".
+1. Copy an existing `content/productions/<slug>/` as a template.
+2. Rename the folder to the new slug (Latin, hyphens).
+3. Edit `index.mdx` — fill in Properties, write RU/EN body.
+4. Add photos to `public/productions/<slug>/`.
+5. Commit and push from Obsidian.
 
-## Workflow when Roman edits a production
+---
 
-1. Edit in Notion as usual.
-2. Re-export the database from Notion → drop the new ZIP into
-   `notion-data/Роман Бокланов/` (replacing the old export).
-3. Run `npm run sync`. The new MDX is written; existing `metadata.yml`
-   files are untouched.
-4. If the production is **new**, a fresh `metadata.yml` stub appears
-   in `content/productions/<new-slug>/`. Fill in the manual-pass
-   fields, then commit just that yml file.
-5. If a production was **renamed** (slug changed): the old folder
-   becomes orphaned. Delete it manually after copying any
-   hand-edited `metadata.yml` content into the new slug's folder.
+## Archive
 
-## What is NOT in `metadata.yml`
+Legacy Notion sync script: `scripts/_legacy/sync-from-notion.ts`
+(frozen 2026-05-02, do not re-run).
 
-- **The body text.** Body comes from the MDX. Edit the source markdown
-  in Notion, then resync.
-- **Frontmatter the script CAN infer.** The overlay should not duplicate
-  the entire frontmatter — only fields the script gets wrong or can't
-  see. Less duplication, fewer drift points.
+`notion-data/` lives on disk locally but is gitignored.

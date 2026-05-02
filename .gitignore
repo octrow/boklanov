@@ -38,6 +38,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# obsidian — commit config, ignore runtime state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/
+
 # claude code local settings (project skills are committed; local settings are not)
 .claude/settings.local.json
 

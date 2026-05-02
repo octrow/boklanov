@@ -12,7 +12,7 @@
 | **Source of truth** | **F — Obsidian + obsidian-git, vault = repo** | Lowest infra (no proxy, no Action), real editor for prose, single source of truth fixes P2–P4 at root. |
 | **Image hosting** | **R2 with custom CDN domain** | 10 GB free, free egress, slim repo, S3-compatible. Migrated alongside Q1 cutover (one rclone + path rewrite). |
 | **Edit cadence assumption** | Several / month, daily early on | Comfortably above the threshold where migration pays back. |
-| **Editorial workflow** | Trust-on-publish + `draft` branch for WIP | Vercel preview URLs per branch; merge to `main` = publish. |
+| **Editorial workflow** | Trust-on-publish + `draft` branch for WIP | Vercel auto-deploys `main` → https://boklanov.vercel.app/. Preview URLs per branch. |
 | **`metadata.yml` overlay** | **Folded into MDX frontmatter** (overlay deprecated) | B4 answer 2026-05-02: single source of truth per field. Migration script merges every `overlay.*` field into `index.mdx` frontmatter once; `metadata.yml` is deleted. `lib/content.ts` `pick(overlay, fm)` collapses to `fm`. |
 | **Cyrillic-only-Name orphans** | Manual audit included in migration (Phase 8.5) | One-time correction before they freeze in the new source. |
 | **Roman onboarding** | Mini-guide (`AUTHORING.ru.md`) instead of screen-share | Async, repeatable, doubles as future onboarding for collaborators. |
