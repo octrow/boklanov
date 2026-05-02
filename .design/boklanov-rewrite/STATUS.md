@@ -131,14 +131,14 @@ Direction B "Vitrine" selected — see `DESIGN_v2_PROPOSAL.md`. 8 code phases on
 | 9.5 | EmptyState / ERRATA refresh | done | `806d1a0` — ERRATA chip dropped; complete-sentence Lora italic; aria-live polite |
 | 9.6 | SpecimenPlate component | done | `c866152` — gallery + /about photos. /archive deferred. |
 | 9.7 | TourRider component (subsumes existing right-rail `.slate`) | done | `4210970` — extracted + expanded with FORM/LINEAGE/TECH RIDER/PRESS KIT rows |
-| 9.8 | TypographicCover + slug-hash mod 3 variant | done | (this commit) — CreditLine + grain SVG deferred to a future polish phase |
+| 9.8 | TypographicCover + slug-hash mod 3 variant | done | `778677c` — CreditLine + grain SVG deferred to a future polish phase |
 
 Acceptance for 9.1: visual A/B on Daniil's monitor — `--paper #F2F0EA` must read as paper, not cream. If perceived as cream, `git revert 5558e16`.
 
 ## Recent commits
 
 ```
-(9.8 hash) feat(9.8): TypographicCover — slug-hash variant, replaces inline coverFallback
+778677c feat(9.8): TypographicCover — slug-hash variant, replaces inline coverFallback
 4210970 feat(9.7): TourRider component — replaces inline right-rail .slate
 c866152 feat(9.6): SpecimenPlate component — gallery + /about photos
 79a45f9 docs: STATUS.md hash backfill for 806d1a0
