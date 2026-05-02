@@ -1,7 +1,11 @@
 # DESIGN_AMBITION.md — making the frame distinctive
 
-> Companion to `DESIGN.md` and `DESIGN_BRIEF.md`. **Status: research /
-> proposal, not locked.** Open for discussion before any Phase 7 work.
+> Companion to `DESIGN.md` and `DESIGN_BRIEF.md`.
+> **Status: ✅ Phase 7.5 Round 1–3 shipped 2026-05-02**
+> (`c7a1b50` · `0bebf3c` · `7c26402`). R2 QA closed; `?gesture=off`
+> gate lifted; slate-strike live for all visitors on first paint.
+> Phase 7.6 backlog (10 polish tasks) added in §15 — schedule
+> post-D4 cutover.
 > Date: 2026-05-02. Author: Claude Opus 4.7 (1M).
 >
 > This doc exists because, after R1 + Q1–Q7 + R1.fix, the rewrite is
@@ -59,17 +63,26 @@ the 2022 mobilisation.** This affects copy, not just design:
 - The colophon (§3.A folio bottom + §3.H edition stamp) is now
   **city-free** per A14.1 answer γ — see locks below.
 
-**Round-1 / Round-2 / Round-3 schedule (locked):**
+**Round-1 / Round-2 / Round-3 schedule (✅ all shipped 2026-05-02):**
 
-- **Round 1** ships **before R2** (folio §3.A + cue numbers §3.C +
-  edition stamp §3.H). ~1 day.
-- **Round 2** ships **after R2, before D1** (production credits
-  §3.B + theatre slate §3.F + two-geographies §3.G + premiere mark
-  on cards §13.4 N1). ~1.5–2 days.
-- **Round 3** ships **after D1** (slate-strike §4.1.A *paired with*
-  the static edition frame §4.1.C as `prefers-reduced-motion`
-  fallback). ~1 day. Behind a `?gesture=off` query-flag for first
-  48h.
+- **Round 1 ✅** — folio §3.A + cue numbers §3.C + edition stamp §3.H.
+  Shipped in `c7a1b50`. Folio mark + cue system live; `2026 ИЗДАНИЕ` /
+  `2026 EDITION` / `AUSGABE 2026` in the footer.
+- **Round 2 ✅** — production credits §3.B + theatre slate §3.F +
+  two-geographies §3.G + premiere mark on cards §13.4 N1. Shipped in
+  `0bebf3c`. `<dl>` credits with leader-dots; theatre slate w/
+  `PRODUCTION 14 / 24` index + `TOURING · SOLO` row; `ГДЕ СТАВИЛ`
+  staging row on `/about` + home echo; `ON TOUR` band on Plinth detail
+  with seed 9 cities in `metadata.yml`; `PREM YYYY` on cards;
+  `tour[]` wired in `lib/content.ts merge()` with overlay support.
+- **Round 3 ✅** — slate-strike §4.1.A paired with static
+  edition-frame §4.1.C as `prefers-reduced-motion` fallback. Shipped
+  in `7c26402`. 320ms `::before`/`::after` CSS animation gated by
+  `sessionStorage.firstPaintDone`, `?gesture=off`, and reduced-motion.
+  R2 QA signed off; `?gesture=off` gate lifted, animation live for all.
+
+**Phase 7.6 — design polish backlog** (10 tasks, 3 tiers, post-D4):
+see §15 below + `TASKS.md` Phase 7.6.
 
 **Catalogue changes:**
 
@@ -1233,3 +1246,87 @@ ship with the seed list, then extend on Roman's pass):
 _§14 closed 2026-05-02. 14.1 and 14.2 fully resolved. 14.3 ships
 with the partial list as the floor; Roman extends the `tour[]`
 array via the new content workflow when ready._
+
+---
+
+## 15. Phase 7.6 — design polish backlog (post-D4)
+
+> Added 2026-05-02 after Phase 7.5 Round 1–3 shipped. Detailed task
+> entries with files / effort / rationale live in
+> `TASKS.md` Phase 7.6. This section is the design-rationale ledger
+> for those tasks.
+
+Phase 7.5 closed three rounds of structural design changes (chrome,
+production credits, geographies, gesture). The site is now visually
+distinctive without violating the brief. **Phase 7.6 is the post-launch
+polish backlog** — ten brief-compatible moves grouped in three tiers,
+none of which blocks the birthday-surprise launch on 6 May:
+
+### Tier 1 — programme-grammar continuations
+
+These extend the theatre-programme metaphor into corners Phase 7.5
+didn't reach.
+
+- **DA-7.6.A — Marginalia (§3.E activation).** Was deferred at
+  lock-time pending a real desktop test cohort. The cohort exists now
+  (R2 closed, `boklanov.vercel.app` live). Above 1280px on `/about`
+  long-form prose and production synopses, the right margin holds
+  photographer credits, lineage cross-refs, date stamps in mono.
+  Below 1280px collapses inline. CSS-grid template on the prose
+  container; new `<Aside>` component.
+- **DA-7.6.B — Print stylesheet.** A theatre-programme metaphor that
+  doesn't print is a half-truth. `@media print` block: paper white,
+  ink black, hairlines 0.5pt, mono caps stay mono caps, page margins
+  18mm, `widows`/`orphans` 3.
+- **DA-7.6.C — Director's note block.** Optional
+  `directorsNote.{ru,en}` field; renders below synopsis as italic
+  Lora blockquote with hairline left rule (mirrors the critic-quote
+  treatment) — but mono attribution `— РОМАН БОКЛАНОВ` instead of
+  outlet. Distinguishes editorial third-person from the director's
+  voice. Gated by Roman content via Obsidian.
+- **DA-7.6.D — Run-of-show indicator (N2 reactivated).** Tiny mono
+  row above the title: `RUN · BTK · СПБ · 2020–2024 · ~80
+  PERFORMANCES`. Bookers' metadata, single line, hides when empty.
+
+### Tier 2 — micro-typography polish
+
+- **DA-7.6.E — CUE-count tag on awards.** `CUE 2021 · 4 НАГРАДЫ`.
+  Pulls the cue from "decoration" into informative metadata.
+- **DA-7.6.F — Theatre slate `LANGUAGE` row.** Optional, useful for
+  silent puppet shows + bilingual productions.
+- **DA-7.6.G — Year-anchor on no-poster fallback cards.**
+  `margin-top: auto` on the year mark so it sticks to bottom regardless
+  of title length. Pure CSS.
+- **DA-7.6.H — DE chrome length audit.** `INSZENIERTE IN` is 13 chars
+  vs `STAGED IN` 9 — verify the §3.G.1 row doesn't wrap awkwardly at
+  1024–1100px.
+
+### Tier 3 — first-impression polish
+
+- **DA-7.6.I — OG image chrome upgrade.** First impression on
+  Telegram/Slack share. Push the satori `ImageResponse` from baseline
+  to programme-grammar: hairline rules, mono section slug top-left,
+  Lora-display title centred, mono meta line bottom-left, oxblood
+  colophon bottom-right.
+- **DA-7.6.J — Editorial empty states.** Filter / search / archive
+  empty states currently render plain "No matches" lines. Push into
+  editorial register with hairline rule, italic Lora line, mono ghost
+  link.
+
+### Why these and not other polish moves
+
+The earlier specimen-hero (§3.D) and errata-404 (§3.J) cuts stand —
+the chrome has settled and they would still read as "too clever" and
+"vanishing audience" respectively. The string-line gesture (§4.1.B)
+stays cut. Phase 7.6 is about **finishing the programme metaphor**,
+not about reopening rejected proposals.
+
+### When to ship Phase 7.6
+
+After D4 cutover (post-6 May). None of these blocks the launch and
+some (DA-7.6.C, DA-7.6.D) are gated by Roman content that arrives via
+Phase 8.4 onboarding. Total Tier-1 effort ~3 days, Tier-2 ~2 hours,
+Tier-3 ~1.5 days.
+
+_§15 added 2026-05-02. Detailed task entries in
+`TASKS.md` Phase 7.6. None of these is a brief change._
