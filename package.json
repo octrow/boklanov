@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "sync": "tsx scripts/sync-from-notion.ts",
+    "sync": "echo 'sync retired — edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
     "lint-mdx": "tsx scripts/lint-mdx.ts",
     "start": "next start",

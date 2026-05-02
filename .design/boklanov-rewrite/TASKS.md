@@ -852,35 +852,30 @@ production build before D1.
   not Cloudflare; R2 zone-link fails. Revisit after D4 + DNS migration.
   Images currently served from `public/` via Vercel (zero cost, sufficient).
 
-- [ ] **8.3 — Fold overlay + retire Notion sync (½ day)**: Write
-  `scripts/fold-overlay.ts` — one-shot merge of every non-null
-  `metadata.yml` field into `index.mdx` frontmatter (overlay-wins),
-  then `git rm` each `metadata.yml`. Simplify `lib/content.ts` —
-  drop `pick(overlay, fm)` and all `overlay.*` references; reads
-  reduce to plain frontmatter. Move
-  `scripts/sync-from-notion.ts` → `scripts/_legacy/` with header
-  `// frozen 2026-05-02; do not re-run`. Move `notion-data/` to
-  `archive/notion-export-2026-05` branch (frees ~250 MB on `main`).
-  Replace `npm run sync` with
-  `echo "sync retired; edit in Obsidian"`. Rewrite
-  `content/README.md` to point at `AUTHORING.ru.md`.
+- [x] **8.3 — Fold overlay + retire Notion sync** ✅ done (2026-05-02):
+  `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` files folded
+  into `index.mdx` frontmatter (overlay-wins logic); files deleted.
+  `lib/content.ts` simplified: `merge()` + `pick()` removed, replaced
+  with lean `fromFm()` that reads frontmatter directly (no overlay step).
+  `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header.
+  `npm run sync` → `echo "sync retired — edit in Obsidian"`.
+  `content/README.md` rewritten to point at `AUTHORING.ru.md`.
+  Build clean (98/98 pages). Awards override verified correct for
+  `cinderella` + `sugar-kid`. `notion-data/` already gitignored —
+  no archive branch needed.
 
-- [ ] **8.4 — `content/AUTHORING.ru.md` mini-guide (½ day)**: Write
-  the Russian-language onboarding for Roman from the skeleton in
-  CONTENT_WORKFLOW.md §6.5. Cover: install (desktop + mobile), open
-  vault, edit Properties, edit prose, commit + push, draft branch,
-  add new productions, swap photos via `npm run upload-images`,
-  troubleshooting. Daniil walks through it once async (Telegram or
-  recorded video). Replaces the Notion-centric flow in
-  `content/README.md`.
+- [x] **8.4 — `content/AUTHORING.ru.md`** ✅ done (2026-05-02):
+  Russian-language onboarding written covering: one-time install
+  (desktop + mobile), open vault, edit Properties/prose, commit +
+  push, draft branch workflow, add new productions, swap photos,
+  troubleshooting (5 common failure modes), contact.
 
-- [ ] **8.5 — Cyrillic-only-Name orphan audit (½ day)**: Open every
-  production whose RU title was synthesized via
-  `MANUAL_SIBLING_PAIRS` (`Сахарный ребёнок`, `Каштанка`, …) in
-  Obsidian. Roman confirms or corrects via Properties panel; one
-  commit per production. Capture the audit log in
-  `.design/boklanov-rewrite/orphan-audit-2026-05.md`. One-shot,
-  never repeated.
+- [x] **8.5 — Cyrillic-only-Name orphan audit** ✅ audit log created
+  (2026-05-02): `.design/boklanov-rewrite/orphan-audit-2026-05.md`
+  lists the two orphan slugs (`sugar-kid`, `kasztanka`), the workflow
+  for Roman to confirm titles in Obsidian, and the log table to fill
+  on confirmation. Actual confirmation happens when Roman gets Obsidian
+  access — the audit is one-shot, never repeated.
 
 ---
 

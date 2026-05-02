@@ -1,16 +1,11 @@
 /**
  * lib/content.ts — content loader API (F6)
  *
- * Pure functions over the merged content tree. No I/O outside build-time
- * file reads. The content tree itself is produced by F4/F5
- * (scripts/sync-from-notion.ts).
+ * Pure functions over the content tree. No I/O outside build-time file reads.
+ * Source of truth: content/productions/<slug>/index.mdx frontmatter + body.
+ * (Phase 8.3: metadata.yml overlay folded into frontmatter — no overlay step.)
  *
- * Source-of-truth shape comes from:
- *   - frontmatter in content/productions/<slug>/index.mdx (from CSV + body heuristics)
- *   - content/productions/<slug>/metadata.yml             (manual overlay; wins)
- *   - content/productions-index.json                       (flat index from sync)
- *
- * The merged result satisfies brief §7. Page routes call:
+ * Page routes call:
  *   - getAllProductions(locale)
  *   - getProduction(slug, locale)
  *   - getRelatedProductions(production, n=3)   → brief D9 algorithm
@@ -19,7 +14,6 @@
 import * as fs from 'node:fs'
 import matter from 'gray-matter'
 import * as path from 'node:path'
-import * as yaml from 'yaml'
 
 import type { Locale } from '@/i18n/routing'
 
@@ -121,12 +115,7 @@ function loadAll(): Production[] {
     const raw = fs.readFileSync(mdxPath, 'utf8')
     const { data: frontmatter } = matter(raw)
 
-    const metaPath = path.join(dir, 'metadata.yml')
-    const overlay = fs.existsSync(metaPath)
-      ? (yaml.parse(fs.readFileSync(metaPath, 'utf8')) ?? {})
-      : {}
-
-    const prod = merge(frontmatter as Partial<Production>, overlay, raw)
+    const prod = fromFm(frontmatter as Partial<Production>, raw)
 
     const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
     if (fs.existsSync(lqipPath)) {
@@ -160,103 +149,50 @@ function loadAll(): Production[] {
   return out
 }
 
-/** Overlay-wins merge. `null` / empty arrays in overlay are treated as "no override". */
-function merge(
-  fm: Partial<Production>,
-  overlay: Record<string, unknown>,
-  rawMdx: string
-): Production {
-  const pick = <T,>(overlayVal: T | null | undefined, fmVal: T): T => {
-    if (overlayVal === null || overlayVal === undefined) return fmVal
-    if (Array.isArray(overlayVal) && overlayVal.length === 0) return fmVal
-    return overlayVal
-  }
-
-  const galleryFm = (fm.gallery ?? []) as GalleryItem[]
-  const galleryOverlay = (overlay.gallery as GalleryItem[] | undefined) ?? []
-  // Match overlay items to fm items by `src` so the order/length comes from
-  // the sync (truth) and credits come from the overlay (manual).
-  const galleryMerged = galleryFm.map((g) => {
-    const o = galleryOverlay.find((x) => x?.src === g.src)
-    if (!o) return g
-    return {
-      src: g.src,
-      credit: pick(o.credit, g.credit),
-      caption: {
-        ru: pick(o.caption?.ru, g.caption?.ru ?? null),
-        en: pick(o.caption?.en, g.caption?.en ?? null),
-        de: pick((o.caption as any)?.de, (g.caption as any)?.de ?? null)
-      }
-    }
-  })
-
-  const overlayPoster = (overlay.poster ?? {}) as { credit?: string | null }
-  const overlayTitle = (overlay.title ?? {}) as Record<string, string | null>
-  const overlaySynopsis = (overlay.synopsis ?? {}) as Record<string, string | null>
-
-  const merged: Production = {
+/** Build a Production directly from frontmatter (overlay already folded in). */
+function fromFm(fm: Partial<Production>, rawMdx: string): Production {
+  return {
     slug: fm.slug as string,
     notionIds: fm.notionIds ?? {},
-    title: {
-      ru: fm.title?.ru,
-      en: fm.title?.en,
-      de: pick(overlayTitle.de, fm.title?.de ?? null)
-    },
-    synopsis: {
-      ru: fm.synopsis?.ru,
-      en: fm.synopsis?.en,
-      de: pick(overlaySynopsis.de, (fm.synopsis as any)?.de ?? null)
-    },
+    title: fm.title ?? {},
+    synopsis: fm.synopsis ?? {},
     body: extractBodies(rawMdx),
-    theatre: pick(
-      overlay.theatre as Production['theatre'] | undefined,
-      fm.theatre ?? {}
-    ),
+    theatre: fm.theatre ?? {},
     year: fm.year,
-    premiereDate: pick(
-      overlay.premiereDate as Production['premiereDate'] | undefined,
-      fm.premiereDate ?? undefined
-    ),
-    ticketsUrl: pick(
-      overlay.ticketsUrl as string | null | undefined,
-      fm.ticketsUrl ?? null
-    ),
-    ageRating: pick(overlay.ageRating as string | null, fm.ageRating ?? null),
-    durationMin: pick(overlay.durationMin as number | null, fm.durationMin ?? null),
-    role: pick(overlay.role as string, fm.role ?? 'director'),
-    form: pick(overlay.form as string[], fm.form ?? []),
-    lineage: pick(overlay.lineage as string[], fm.lineage ?? []),
-    credits: pick(
-      overlay.credits as Production['credits'] | undefined,
-      fm.credits ?? { ru: [], en: [] }
-    ),
+    premiereDate: fm.premiereDate,
+    ticketsUrl: fm.ticketsUrl ?? null,
+    ageRating: fm.ageRating ?? null,
+    durationMin: fm.durationMin ?? null,
+    role: fm.role ?? 'director',
+    form: fm.form ?? [],
+    lineage: fm.lineage ?? [],
+    credits: fm.credits ?? { ru: [], en: [] },
     poster: {
       src: fm.poster?.src ?? null,
-      credit: pick(overlayPoster.credit, fm.poster?.credit ?? null),
-      lqip: null,    // filled by loadAll() after merge
-      width: null,   // filled by loadAll() from lqip.json posterWidth
-      height: null   // filled by loadAll() from lqip.json posterHeight
+      credit: fm.poster?.credit ?? null,
+      lqip: null,   // filled by loadAll() from lqip.json
+      width: null,
+      height: null,
     },
-    gallery: galleryMerged,
-    videos: [
-      ...(fm.videos ?? []),
-      ...((overlay.videos as Production['videos']) ?? [])
-    ],
-    awards: pick(
-      overlay.awards as Production['awards'] | undefined,
-      fm.awards ?? []
-    ),
+    gallery: (fm.gallery ?? []).map((g) => ({
+      src: g.src,
+      credit: g.credit ?? null,
+      caption: {
+        ru: (g.caption as any)?.ru ?? null,
+        en: (g.caption as any)?.en ?? null,
+        de: (g.caption as any)?.de ?? null,
+      },
+    })),
+    videos: fm.videos ?? [],
+    awards: fm.awards ?? [],
     press: fm.press ?? [],
     externalLinks: fm.externalLinks ?? [],
-    techRider: pick(overlay.techRider as string | null, fm.techRider ?? null),
-    pressKit: pick(overlay.pressKit as string | null, fm.pressKit ?? null),
-    featured:
-      typeof overlay.featured === 'boolean' ? overlay.featured : !!fm.featured,
+    techRider: fm.techRider ?? null,
+    pressKit: fm.pressKit ?? null,
+    featured: !!fm.featured,
     tags: fm.tags ?? [],
-    tour: pick(overlay.tour as string[] | undefined, (fm.tour as string[] | undefined) ?? [])
+    tour: (fm.tour as string[] | undefined) ?? [],
   }
-
-  return merged
 }
 
 /** Pulls RU and EN bodies out of the <Locale value="…"> wrappers in the MDX. */

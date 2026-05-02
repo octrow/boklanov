@@ -1,5 +1,9 @@
 /**
- * scripts/sync-from-notion.ts
+ * FROZEN 2026-05-02 — do not re-run. Phase 8.3 folded metadata.yml into
+ * frontmatter; Obsidian + obsidian-git is now the editorial workflow.
+ * Kept for historical reference. See content/AUTHORING.ru.md.
+ *
+ * scripts/sync-from-notion.ts (archived)
  *
  * Parses the local Notion export at `notion-data/Роман Бокланов/...` and
  * emits per-production MDX files into `content/productions/<slug>.mdx`,
