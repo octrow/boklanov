@@ -153,6 +153,11 @@ Marginalia (Phase 7.6, `00c2501`): `<Marginalia note="...">` wraps prose on `/ab
 mono `--font-size-meta`. Below 1280px: note renders as italic Lora subordinate text inline. `aria-hidden="true"` on
 `<aside>`. `rowSingle` (no note) constrains to `--max-width-prose`.
 
+EmptyState (Phase 7.6, `e1920af`): editorial empty-state register. Top hairline rule → `ERRATA` mono caps chip
+(`aria-hidden="true"`) → italic Lora body (55ch max-width) → optional `action` slot (ReactNode). Used on
+`ProductionGrid` (filter empty + clear-filters ghost button), archive, awards, and press pages. `CommandPalette`
+no-results uses equivalent inline markup for layout containment reasons.
+
 Production detail (D7 layout, top -> bottom):
 
 1. Cover full-bleed, original aspect, no parallax.
