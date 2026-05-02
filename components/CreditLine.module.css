@@ -1,0 +1,15 @@
+/* CreditLine — photo credit primitive per DESIGN_v2_PROPOSAL.md §6.3.
+ * Mono caption; em-dash separator; nothing when fields null. */
+
+.credit {
+  display: inline-block;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-marginalia);
+}
+
+.sep {
+  display: inline-block;
+  padding-inline: 0.4em;
+}
