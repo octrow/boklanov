@@ -1,0 +1,61 @@
+.trigger {
+  display: contents;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  cursor: zoom-out;
+}
+
+.frame {
+  position: relative;
+  max-width: min(90vw, 1000px);
+  max-height: 92vh;
+  cursor: default;
+}
+
+.img {
+  display: block;
+  max-width: 100%;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.close {
+  position: absolute;
+  top: calc(-1 * var(--space-6));
+  right: calc(-1 * var(--space-6));
+  /* 44×44 touch target (DESIGN §12) */
+  width: 44px;
+  height: 44px;
+  /* Sharp corner per token set (DESIGN §5) */
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--paper);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--duration-fast) var(--easing-default);
+}
+
+.close:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}

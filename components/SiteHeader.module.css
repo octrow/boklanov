@@ -25,6 +25,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+.folioName {
+  color: var(--ink-mute);
+}
+
 .folioSep {
   opacity: 0.5;
 }
@@ -188,6 +192,7 @@
   min-height: 44px;
   padding: 4px;
   color: var(--ink-mute);
+  cursor: pointer;
   transition: color var(--duration-fast) var(--easing-default);
 }
 

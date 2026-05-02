@@ -8,11 +8,12 @@ Branch: rewrite/v2. Source of truth: TASKS.md, DESIGN.md.
 
 * P0-P6.6: DONE. Notion decoupled, MDX sync complete, C1-C11 shipped, SEO/i18n/RSS shipped, I1-I4 shipped, Q1-Q8 QA
   closed.
-* P7: IN PROGRESS. D1/D2 live on Vercel. D3/D4 DNS cutover pending (deadline 2026-05-06).
+* P7: PARTIAL. D1/D2 live at `boklanov.vercel.app`. D3/D4 DNS cutover deferred (birthday deadline lapsed; no blocker).
 * P7.5: DONE. Editorial fingerprints (R1-R3).
-* P7.6: PENDING. 10 editorial polish tasks.
-* P8: IN PROGRESS. Obsidian handoff. 8.1 done. 8.2 blocked on Cloudflare R2 DNS. 8.3-8.5 pending.
-* P9: DEFERRED. Decap CMS workflow.
+* P7.6: DONE. All 10 tasks shipped — Tier 1 `00c2501`, Tier 2 `3106d26`, DA-7.6.I `0288258`, DA-7.6.J `e1920af`.
+* P8: IN PROGRESS. 8.1–8.5 shipped (`11bef4d` `8339141` `c1c4436`). R2 CDN blocked on Cloudflare DNS (deferred with
+  D3/D4). Next: Roman onboarding (Obsidian + obsidian-git + mdx-as-md), orphan-title audit, photographer credits.
+* P9: DEFERRED. Decap CMS — activates on Roman demand. ~2 days.
 
 ## ARCHITECTURE
 

@@ -8,14 +8,17 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
-export default withNextIntl(withBundleAnalyzer({
-  staticPageGenerationTimeout: 300,
-  // gray-matter is CommonJS; let Node load it as-is on the server.
-  serverExternalPackages: ['gray-matter'],
-  images: {
-    formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      { protocol: 'https', hostname: 'cdn.boklanov.com' }
-    ]
-  }
-}))
+export default withNextIntl(
+  withBundleAnalyzer({
+    staticPageGenerationTimeout: 300,
+    // gray-matter is CommonJS; let Node load it as-is on the server.
+    serverExternalPackages: ['gray-matter'],
+    images: {
+      formats: ['image/avif', 'image/webp'],
+      remotePatterns: [
+        { protocol: 'https', hostname: 'cdn.boklanov.com' },
+        { protocol: 'https', hostname: '*.r2.dev' }
+      ]
+    }
+  })
+)

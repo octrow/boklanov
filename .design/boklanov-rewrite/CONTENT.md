@@ -4,9 +4,11 @@ How content gets into boklanov.com. Updated: 2026-05-02 (session 6).
 
 Owns: live workflow + frontmatter shape.
 Roman-facing day-to-day RU: `content/AUTHORING.ru.md`.
-History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW_compress.md` — 9-option matrix, Q&A, deferred Decap plan (full: `archive/CONTENT_WORKFLOW.md`).
+History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW_compress.md` — 9-option matrix, Q&A,
+deferred Decap plan (full: `archive/CONTENT_WORKFLOW.md`).
 
-`content/about/{ru,en}.mdx` frontmatter: `photos[]` array — `- src: /path.jpg\n  credit: "…"`. Rendered as 2-col masonry below the geography block. Empty array = section hidden.
+`content/about/{ru,en}.mdx` frontmatter: `photos[]` array — `- src: /path.jpg\n  credit: "…"`. Rendered as 2-col masonry
+below the geography block. Empty array = section hidden.
 
 ## Source of truth
 
@@ -33,10 +35,11 @@ History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW_comp
 - `scripts/upload-images.ts`: S3-compatible upload, `--slug`, `--dry-run`, skip-unchanged-by-size.
   `npm run upload-images`.
 - R2 bucket `boklanov-content`, custom domain `cdn.boklanov.com`, public-read.
-- Activation blocked: `cdn.boklanov.com` cannot connect to R2 until `boklanov.com` DNS moves to Cloudflare. Currently on
-  Spaceship. Deferred.
-- Until activation: `NEXT_PUBLIC_CDN_BASE` unset -> images serve from `public/` via Vercel. Authoring drops new files
-  into `public/productions/<slug>/`.
+- 291 files uploaded 2026-05-02. Bucket public-read enabled.
+- Dev URL (rate-limited, no Cloudflare cache): `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev`
+- Production URL `cdn.boklanov.com` blocked until `boklanov.com` DNS moves to Cloudflare (currently Spaceship).
+- Set `NEXT_PUBLIC_CDN_BASE` in Vercel to activate CDN serving. Unset = images serve from `public/` via Vercel.
+- New photos: drop into `public/productions/<slug>/`, then `npm run upload-images -- --slug <slug>`.
 
 ## Frontmatter shape
 
@@ -63,7 +66,7 @@ awards: [ { name, category, year, city } ]
 press: [ { title, outlet, url, language } ]
 tour: [ { city } ]                   # Plinth only; empty -> ON TOUR band hidden
 directorsNote: { ru: "...", en: "..." }  # optional; italic Lora blockquote below synopsis
-runs:                                # optional; mono row above title (run-of-show)
+runs: # optional; mono row above title (run-of-show)
   - venue: "БТК"
     city: "СПБ"
     yearFrom: 2020
@@ -100,18 +103,18 @@ omits the row — the component never renders a placeholder, never an
 empty `<a>`. Conversely, populating a field surfaces a new row without
 touching component code:
 
-| Field             | Surfaces row             | Notes                                              |
-|-------------------|--------------------------|----------------------------------------------------|
-| `year`            | `YEAR`                   | Mono, tabular-nums.                                |
-| `durationMin`     | `RUN  nn MIN`            | Thin-space before `MIN`.                           |
-| `ageRating`       | `AGE  3+ / 6+ / 12+ / 18+` | Plain string.                                      |
-| `theatre.country` | `COUNTRY`                | ISO-2 via `countryCode` mapper.                    |
-| `theatre.country` | `LANGUAGE`               | Derived (DE/AT/CH→`DE`, KZ→`RU`, default `RU`).    |
-| `form[]`          | `FORM`                   | Joined ` · ` uppercase.                            |
-| `lineage[]`       | `LINEAGE`                | Joined ` · ` uppercase.                            |
-| `tour[]` not empty | `TOURING SOLO`          | Plinth-tier indicator.                             |
-| `techRider`       | `TECH RIDER  PDF`        | Anchor `aria-label="Technical rider, PDF"`.        |
-| `pressKit`        | `PRESS KIT  ZIP`         | Anchor `aria-label="Press kit, ZIP"`.              |
+| Field              | Surfaces row               | Notes                                           |
+|--------------------|----------------------------|-------------------------------------------------|
+| `year`             | `YEAR`                     | Mono, tabular-nums.                             |
+| `durationMin`      | `RUN  nn MIN`              | Thin-space before `MIN`.                        |
+| `ageRating`        | `AGE  3+ / 6+ / 12+ / 18+` | Plain string.                                   |
+| `theatre.country`  | `COUNTRY`                  | ISO-2 via `countryCode` mapper.                 |
+| `theatre.country`  | `LANGUAGE`                 | Derived (DE/AT/CH→`DE`, KZ→`RU`, default `RU`). |
+| `form[]`           | `FORM`                     | Joined ` · ` uppercase.                         |
+| `lineage[]`        | `LINEAGE`                  | Joined ` · ` uppercase.                         |
+| `tour[]` not empty | `TOURING SOLO`             | Plinth-tier indicator.                          |
+| `techRider`        | `TECH RIDER  PDF`          | Anchor `aria-label="Technical rider, PDF"`.     |
+| `pressKit`         | `PRESS KIT  ZIP`           | Anchor `aria-label="Press kit, ZIP"`.           |
 
 Empty `tour[]`, missing `techRider`, missing `pressKit` are the most
 common omissions; render is silent until populated.
@@ -126,4 +129,5 @@ common omissions; render is silent until populated.
 
 Decap CMS web-admin layer (variant C). Activation triggers: Roman travels + Obsidian Mobile insufficient; second
 contributor; browser-edit friction. Locks pre-set: `editorial_workflow: false`, `backend.branch: draft`, no
-`_diagnostics.md`. ~2 days when activated. Full plan in `archive/CONTENT_WORKFLOW_compress.md` §6B (history, read-only; full: `archive/CONTENT_WORKFLOW.md`).
+`_diagnostics.md`. ~2 days when activated. Full plan in `archive/CONTENT_WORKFLOW_compress.md` §6B (history, read-only;
+full: `archive/CONTENT_WORKFLOW.md`).

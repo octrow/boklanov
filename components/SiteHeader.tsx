@@ -43,11 +43,19 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
   return (
     <header className={styles.header}>
-      {folio.sectionKey && (
+      {(folio.sectionKey || folio.isHome) && (
         <div className={styles.folio} aria-hidden="true">
-          <span className={styles.folioSection}>
-            {t(folio.sectionKey as Parameters<typeof t>[0]).toUpperCase()}
+          <span className={styles.folioName}>
+            {WORDMARKS[locale].toUpperCase()}
           </span>
+          {folio.sectionKey && (
+            <>
+              <span className={styles.folioSep}>⟶</span>
+              <span className={styles.folioSection}>
+                {t(folio.sectionKey as Parameters<typeof t>[0]).toUpperCase()}
+              </span>
+            </>
+          )}
           {folio.index && (
             <>
               <span className={styles.folioSep}>⟶</span>

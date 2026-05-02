@@ -73,6 +73,7 @@ export interface Production {
   featured: boolean
   tags: string[]
   tour: string[]
+  tagline: { ru?: string; en?: string | null } | null
   directorsNote: { ru?: string; en?: string } | null
   runs: Array<{
     venue?: string
@@ -85,12 +86,13 @@ export interface Production {
 
 /** Locale-projected view returned by getAllProductions / getProduction. */
 export interface ProductionView
-  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate' | 'directorsNote'> {
+  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate' | 'tagline' | 'directorsNote'> {
   title: string
   synopsis: string
   body: string
   credits: CreditEntry[]
   premiereDate: string | null
+  tagline: string | null
   directorsNote: string | null
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
@@ -201,6 +203,7 @@ function fromFm(fm: Partial<Production>, rawMdx: string): Production {
     featured: !!fm.featured,
     tags: fm.tags ?? [],
     tour: (fm.tour as string[] | undefined) ?? [],
+    tagline: fm.tagline ?? null,
     directorsNote: fm.directorsNote ?? null,
     runs: fm.runs ?? [],
   }
@@ -255,8 +258,12 @@ function project(p: Production, locale: Locale): ProductionView {
     p.directorsNote?.ru ||
     p.directorsNote?.en ||
     null
+  const tagline =
+    (locale !== 'de' && p.tagline?.[locale as 'ru' | 'en']) ||
+    p.tagline?.ru ||
+    null
 
-  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, directorsNote: _dn, ...rest } = p
+  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, tagline: _tg, directorsNote: _dn, ...rest } = p
   return {
     ...rest,
     title: t!,
@@ -264,6 +271,7 @@ function project(p: Production, locale: Locale): ProductionView {
     body: b,
     credits,
     premiereDate,
+    tagline: tagline || null,
     directorsNote,
     titles: p.title
   }

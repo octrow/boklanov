@@ -2,7 +2,9 @@
 
 _Frozen 2026-05-02. Read-only. Selected basis for `DESIGN_v2_PROPOSAL.md`. Do not edit._
 
-Run against the prompt in `archive/RESEARCH_2026.md` on 2026-05-02. Direction B ("Vitrine") selected as canonical, with four corrections recorded in `DESIGN_v2_PROPOSAL.md` §0:
+Run against the prompt in `archive/RESEARCH_2026.md` on 2026-05-02. Direction B ("Vitrine") selected as canonical, with
+four corrections recorded in `DESIGN_v2_PROPOSAL.md` §0:
+
 1. DottedProgress dropped (no in-flight states justify spinner-ban lift on a static-first site).
 2. `--rule-hairline 0.5px` replaced with reuse of existing `--rule` / `--rule-strong` (cross-DPR rendering risk).
 3. Frontmatter migration phase folded into Phase 8 via build-time computed `coverStyle` default.
