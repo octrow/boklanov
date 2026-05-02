@@ -67,6 +67,7 @@ export default async function HomePage({
         <ProductionGrid
           productions={directorProductions}
           emptyLabel={tProductions('empty')}
+          duotoneAll
         />
       </section>
     </main>
