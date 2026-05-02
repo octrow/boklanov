@@ -1,6 +1,15 @@
 /* DA-7.6.A — Marginalia component.
    Mobile/tablet: note collapses inline as italic subordinate text.
-   ≥1280px: two-column grid — prose left, note right. */
+   ≥1280px: two-column grid — prose left, note right.
+
+   Phase 9.4 (DESIGN_v2_PROPOSAL.md §4.3) adds two new kinds:
+   - .pull — italic Lora at body size, --ink. Inline render (no float)
+     because production-detail right-rail conflict with TourRider blocks
+     the float-into-margin layout. Float can ship in a follow-up phase.
+   - .run  — mono caps register for run rows.
+
+   Motion §5.3 (intersect settle) deferred — requires IntersectionObserver
+   client wrapper. Inline render makes the effect less compelling. */
 
 /* No-note wrapper: constrain prose to reading measure */
 .rowSingle {
@@ -42,4 +51,28 @@
     border-left: 1px solid var(--rule);
     padding-left: var(--space-4);
   }
+}
+
+/* kind='pull' — louder editorial pull-quote.
+   Italic Lora at body size, --ink (vs --ink-mute on note). 2px hairline
+   left rule echoes the existing directorsNote treatment but uses tokens. */
+.pull {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  color: var(--ink);
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--rule-strong);
+  max-width: 55ch;
+}
+
+/* kind='run' — mono caps register for run rows. */
+.run {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-marginalia);
 }
