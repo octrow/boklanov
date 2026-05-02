@@ -92,6 +92,7 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
             theatre={theatre ?? null}
             countryCode={country}
             year={production.year ?? null}
+            synopsis={production.synopsis}
           />
         )}
       </div>

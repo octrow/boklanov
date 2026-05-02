@@ -11,6 +11,9 @@ interface TypographicCoverProps {
   /** Optional country/city marker (mid of meta line). */
   countryCode?: string | null
   year?: number | null
+  /** Optional synopsis line — proposal §6.2 collision-buster. Rendered as
+   * italic Lora above meta when present, truncated to 60 chars. */
+  synopsis?: string | null
 }
 
 type Variant = 'top' | 'centre' | 'bottom'
@@ -33,19 +36,27 @@ function variantForSlug(slug: string): Variant {
  * aria-hidden because the visible <h3> title below the cover (in
  * ProductionCard) already carries the name for SR.
  */
+function truncate(text: string, max: number): string {
+  if (text.length <= max) return text
+  return text.slice(0, max - 1).trimEnd() + '…'
+}
+
 export function TypographicCover({
   slug,
   title,
   theatre,
   countryCode,
   year,
+  synopsis,
 }: TypographicCoverProps) {
   const variant = variantForSlug(slug)
   const metaParts = [theatre, countryCode, year].filter(Boolean)
+  const synopsisLine = synopsis ? truncate(synopsis, 60) : null
 
   return (
     <div className={`${styles.cover} ${styles[variant]}`} aria-hidden='true'>
       <h4 className={styles.title}>{title}</h4>
+      {synopsisLine && <p className={styles.synopsis}>{synopsisLine}</p>}
       {metaParts.length > 0 && (
         <p className={styles.meta}>{metaParts.join(' · ')}</p>
       )}

@@ -15,26 +15,33 @@
   gap: var(--space-3);
 }
 
-/* Three layout variants — chosen by slug-hash mod 3 in TypographicCover.tsx. */
+/* Three layout variants — chosen by slug-hash mod 3 in TypographicCover.tsx.
+ * Each variant uses 4-row grid: spacer, title, synopsis (optional), meta.
+ * .synopsis uses display:none when not rendered, so its grid-row reserve is
+ * collapsed via subgrid-equivalent auto-fit. */
+
 .bottom {
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto auto auto;
   align-items: end;
 }
-.bottom .title { grid-row: 2; align-self: end; }
-.bottom .meta  { grid-row: 3; }
+.bottom .title    { grid-row: 2; align-self: end; }
+.bottom .synopsis { grid-row: 3; }
+.bottom .meta     { grid-row: 4; }
 
 .top {
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
 }
-.top .title { grid-row: 1; }
-.top .meta  { grid-row: 2; }
+.top .title    { grid-row: 1; }
+.top .synopsis { grid-row: 2; }
+.top .meta     { grid-row: 3; }
 
 .centre {
-  grid-template-rows: 1fr auto auto 1fr;
+  grid-template-rows: 1fr auto auto auto 1fr;
   align-items: center;
 }
-.centre .title { grid-row: 2; }
-.centre .meta  { grid-row: 3; }
+.centre .title    { grid-row: 2; }
+.centre .synopsis { grid-row: 3; }
+.centre .meta     { grid-row: 4; }
 
 .title {
   font-family: var(--font-family-display);
@@ -44,6 +51,19 @@
   letter-spacing: var(--letter-spacing-tight);
   color: var(--ink);
   margin: 0;
+}
+
+.synopsis {
+  font-family: var(--font-family-display);
+  font-style: italic;
+  font-size: var(--font-size-meta);
+  line-height: var(--line-height-snug);
+  color: var(--ink-marginalia);
+  margin: 0;
+  /* Single line, ellipsis if even truncated synopsis still wraps. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .meta {
