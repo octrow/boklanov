@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 11 — 9v3.7 shipped).
+Current state + open work. Updated: 2026-05-03 (session 11 — 9v3.8 complete).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -165,7 +165,7 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). | done | `c8fffc7` |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2). TourRider → `<details>` at ≥1280px frees gutter. | done | `8ed4c56` |
 | 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | done | `badafb0` |
-| 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | pending | — |
+| 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | done | `9782071` (archive §8.2) + `6958737` (DESIGN.md §7/8/11/13 complete) |
 | 9v3.9 | Acceptance-gate sweep (Lighthouse, axe-core, A/B, reduced-motion test, 90s curator-sim, bundle delta) | pending | — |
 
 ### Acceptance gates (must pass before PR `design_v3` → `main`)
@@ -195,6 +195,8 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ## Recent commits
 
 ```
+6958737  docs(9v3.8): complete DESIGN.md mirror — §7 tail + §8 + §11 + §13
+9782071  docs(9v3.8-partial): mirror v3 unfreezes — archive §8.2 + DESIGN.md §1/3/4/5/6/7 partial
 badafb0  feat(9v3.7): DE full-content scaffolding — explicit-null contract + Marginalia forthcoming
 8ed4c56  feat(9v3.6): TypographicCover Unbounded + Marginalia float + TourRider details
 c8fffc7  feat(9v3.5): SiteHero broken-grid hero + FeaturedStrip
@@ -245,9 +247,8 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 5. ~~**9v3.5**~~ — done `c8fffc7`
 6. ~~**9v3.6**~~ — done `8ed4c56`
 7. ~~**9v3.7**~~ — done `badafb0`
-8. **9v3.8 — mirror unfreezes to docs** (next): edit `archive/DESIGN_BRIEF.md` §8 with `_Superseded 2026-05-03: v3 acceptance — see DESIGN_v3_PROPOSAL.md §2.N_` annotations on each of the 9 lifted anti-patterns; mirror narrative into `DESIGN.md` §11; refresh `DESIGN.md` §3 (palette) + §4 (type) + §6 (motion) + §7 (component grammar) to v3 reality. Update `MAP.md` §4 cascade if any new file:line touchpoints emerge. This is the only legitimate edit to `archive/*` per `MAP.md` §5.
-9. **9v3.9 — acceptance-gate sweep**: run all 11 gates from this STATUS §"Acceptance gates" / proposal §11. If any gate fails, file remediation as a 9v3.x.fix commit; never silently skip. After all gates green, open PR `design_v3 → main`.
-
+8. ~~**9v3.8**~~ — done `9782071` + `6958737`
+9. **9v3.9 — acceptance-gate sweep** (next): run all 11 gates from this STATUS §"Acceptance gates" / proposal §11. If any gate fails, file remediation as a 9v3.x.fix commit; never silently skip. After all gates green, open PR `design_v3 → main`.
 ### Carryover (v2 / authoring / cutover)
 
 - `main` has uncommitted `GalleryLightbox` work — finish on `main` separately or fold into `design_v3` after v3 merge. Decide: keep on `main` and rebase `design_v3` once before merge.
