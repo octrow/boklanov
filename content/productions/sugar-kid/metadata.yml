@@ -12,6 +12,16 @@
 # Editor's choice for the home-page featured row (4–6 max site-wide).
 featured: true
 
+# Awards override — corrects heuristic: category names were extracted instead of festival names.
+awards:
+  - name: "Браво — 2022"
+    year: 2022
+    category: "За художественное воплощение исторической памяти в спектакле для детей"
+    city: "Екатеринбург"
+  - name: "V Всероссийский молодёжный фестиваль им. В.С. Золотухина"
+    year: 2022
+    category: "За важное художественное высказывание"
+
 # Photo credits — one entry per gallery image. `src` matches the path the
 # sync emitted; copy/paste from index.mdx if needed.
 gallery:

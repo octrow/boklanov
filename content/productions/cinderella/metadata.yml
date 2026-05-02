@@ -12,6 +12,17 @@
 # Editor's choice for the home-page featured row (4–6 max site-wide).
 featured: true
 
+# Awards override — corrects heuristic: category name was extracted instead of festival name.
+awards:
+  - name: "«Золотой софит»"
+    year: 2021
+    category: "Лучшая работа актёра в театре кукол (К. Кожев)"
+    city: "Санкт-Петербург"
+  - name: "XXX Международный фестиваль КУКАРТ"
+    year: 2021
+    category: "Лучший спектакль о добре"
+    city: "Санкт-Петербург"
+
 # Photo credits — one entry per gallery image. `src` matches the path the
 # sync emitted; copy/paste from index.mdx if needed.
 gallery:
