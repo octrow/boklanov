@@ -2,6 +2,7 @@ import Image from 'next/image'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
+import { cdnUrl } from '@/lib/cdn'
 import type { ProductionView } from '@/lib/content'
 
 import styles from './ProductionCard.module.css'
@@ -76,7 +77,7 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
         {production.poster.src ? (
           <Image
             className={styles.coverImg}
-            src={production.poster.src}
+            src={cdnUrl(production.poster.src)!}
             alt={alt}
             fill
             sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'

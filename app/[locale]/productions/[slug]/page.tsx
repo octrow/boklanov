@@ -8,6 +8,7 @@ import { Cue } from '@/components/Cue'
 import { countryCode } from '@/components/ProductionCard'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { cdnUrl } from '@/lib/cdn'
 import { getAllProductions, getProduction, type ProductionView } from '@/lib/content'
 
 import styles from './page.module.css'
@@ -209,7 +210,7 @@ export default async function ProductionDetailPage({
         <figure className={styles.cover}>
           {production.poster.width && production.poster.height ? (
             <Image
-              src={production.poster.src}
+              src={cdnUrl(production.poster.src)!}
               alt={[
                 production.role,
                 titleRu ?? titleEn ?? slug,
@@ -225,7 +226,7 @@ export default async function ProductionDetailPage({
             />
           ) : (
             <img
-              src={production.poster.src}
+              src={cdnUrl(production.poster.src)!}
               alt={[
                 production.role,
                 titleRu ?? titleEn ?? slug,
@@ -388,7 +389,7 @@ export default async function ProductionDetailPage({
               {production.gallery.map((g, i) => (
                 <figure key={`${g.src}-${i}`} className={styles.galleryItem}>
                   <img
-                    src={g.src}
+                    src={cdnUrl(g.src)!}
                     alt={
                       g.caption?.[locale] ??
                       g.caption?.ru ??
