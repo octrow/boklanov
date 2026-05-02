@@ -475,8 +475,8 @@ export default async function ProductionDetailPage({
             <section className={styles.section}>
               <h2 className={styles.sectionLabel}>{t('press')}</h2>
               <ul className={styles.pressList}>
-                {production.press.map((p) => (
-                  <li key={p.url} className={styles.pressItem}>
+                {production.press.map((p, i) => (
+                  <li key={`${p.url}-${i}`} className={styles.pressItem}>
                     <a
                       className={styles.pressLink}
                       href={p.url}

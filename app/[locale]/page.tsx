@@ -29,7 +29,11 @@ export default async function HomePage({
   const featured = productions.filter((p) => p.featured && p.poster.src).slice(0, 6)
 
   // Below-fold grid: director role only (brief D5 — curator default).
-  const directorProductions = productions.filter((p) => p.role.includes('director'))
+  // Exclude titles already shown in the featured strip above.
+  const featuredSlugs = new Set(featured.map((p) => p.slug))
+  const directorProductions = productions.filter(
+    (p) => p.role.includes('director') && !featuredSlugs.has(p.slug)
+  )
 
   const wordmark = locale === 'ru' ? 'роман бокланов' : 'roman boklanov'
 
