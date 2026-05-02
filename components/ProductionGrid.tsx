@@ -17,11 +17,11 @@ export interface ProductionGridProps {
   priorityFirst?: boolean
   /** v3: sticker badge rendered on the first card only. */
   firstCardSticker?: React.ReactNode
-  /** v3 §2.4: when true, wrap every card in <DuotonePoster> regardless of
-   *  `featured`. Used on the home below-fold grid so the whole `/` reads as a
-   *  Bauhaus plakat surface. Default false — `/productions`, filter panel,
-   *  and other routes keep photos as-shot. Cards with `featured: true` are
-   *  always wrapped, regardless of this flag. */
+  /** v3 §2.4: when true, wrap every card in <DuotonePoster> so the whole
+   *  surface reads as a Bauhaus plakat. Default false — `/productions`,
+   *  filter panel, and other routes keep photos as-shot. Featured cards are
+   *  no longer auto-wrapped (was implicit before 2026-05-03; produced unwanted
+   *  tint on the /productions filterable grid). */
   duotoneAll?: boolean
 }
 
@@ -56,8 +56,7 @@ export function ProductionGrid({
             sticker={i === 0 ? firstCardSticker : undefined}
           />
         )
-        const wrapInDuotone = duotoneAll || p.featured
-        return wrapInDuotone ? (
+        return duotoneAll ? (
           <DuotonePoster key={p.slug} slug={p.slug}>{card}</DuotonePoster>
         ) : (
           <React.Fragment key={p.slug}>{card}</React.Fragment>
