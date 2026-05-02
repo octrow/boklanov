@@ -33,6 +33,9 @@ Motion: 200ms page fade. 150ms underline hover. 320ms slate-strike one-shot (fal
 ANTI-PATTERNS (DO NOT IMPLEMENT):
 AI gradients, glassmorphism, kinetic typography, hero videos, bento grids, generic Tailwind shadows, infinite spinners, parallax, scroll-driven entrances.
 
+ANTI-PATTERN SUPERSESSIONS:
+2026-05-02: "Drop-shadow glow on cards" (DESIGN.md §11 addition post-brief) narrowed → `--specimen-rule` inset 1px on photographic plates only (≥768px, scoped to SpecimenPlate.module.css). See full archive §8.1 + DESIGN_v2_PROPOSAL.md §2.1.
+
 MDX FRONTMATTER (`content/productions/[slug]/index.mdx`):
 Required structure for Obsidian properties editing:
 ```yaml

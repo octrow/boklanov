@@ -5,10 +5,10 @@ Visual identity + IA + token essentials. Updated: 2026-05-02 (session 3).
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
 
-History (read-only, consult for "why"; do not edit in routine work):
-`.design/boklanov-rewrite/archive/DESIGN_BRIEF.md` (D1-D15), `archive/tokens.md` (per-token rationale),
-`archive/INFORMATION_ARCHITECTURE.md` (full per-route detail, flows, naming, growth plan),
-`archive/DESIGN_AMBITION.md` (Phase 7.5 fingerprints + 7.6 backlog rationale + §13.1 audit).
+History (read-only, consult for "why"; do not edit in routine work). Read `*_compress.md` first; open full original only if detail is missing:
+`.design/boklanov-rewrite/archive/DESIGN_BRIEF_compress.md` (D1-D15), `archive/tokens_compress.md` (per-token rationale),
+`archive/INFORMATION_ARCHITECTURE_compress.md` (per-route detail, flows, naming, growth plan),
+`archive/DESIGN_AMBITION_compress.md` (Phase 7.5 fingerprints + 7.6 backlog rationale + §13.1 audit).
 
 ## 1. Identity
 
@@ -131,9 +131,7 @@ ms.
 Page chrome is a frame. Hairline rules separate sections. Header sticky on production detail only. Footer minimal: three
 columns of mono links + colophon. No newsletter signup, no "Built with Next.js".
 
-Folio (Phase 7.5, `c7a1b50`): mono caps running line above wordmark in `<header>`, `aria-hidden="true"`. Format:
-`SITE -> SECTION -> 01 / 24`. Footer mirrors with `2026 EDITION` / `2026 ИЗДАНИЕ` / `AUSGABE 2026`. Year only. No
-cities (Roman not in Russia since 2022; year-only honest + durable).
+Folio (Phase 7.5, `c7a1b50`; updated session 5): mono caps running line above nav in `<header>`, `aria-hidden="true"`. Format: `РОМАН БОКЛАНОВ ⟶ SECTION ⟶ 01 / 24`. Home page shows just `РОМАН БОКЛАНОВ` (no section arrow). `folioFor()` in `lib/folio.ts`. Footer mirrors with `2026 EDITION` / `2026 ИЗДАНИЕ` / `AUSGABE 2026`. Year only. No cities.
 
 Edition stamp (footer): `<small class="colophon">` mono caps, hairline above.
 
@@ -158,9 +156,11 @@ EmptyState (Phase 7.6, `e1920af`): editorial empty-state register. Top hairline 
 `ProductionGrid` (filter empty + clear-filters ghost button), archive, awards, and press pages. `CommandPalette`
 no-results uses equivalent inline markup for layout containment reasons.
 
+PosterLightbox (session 5): `<PosterLightbox src alt>` client component wrapping the production cover. Click opens a full-image overlay (`--z-overlay 500`, dark backdrop). Close via `✕` button (44px touch target, 2px radius), click on backdrop, or Escape. `cursor: zoom-in` on trigger. On open: focus moves to close button, body scroll locked. On close: focus returns to trigger.
+
 Production detail (D7 layout, top -> bottom):
 
-1. Cover full-bleed, original aspect, no parallax.
+1. Cover: `max-height: 65vh`, `object-fit: contain`, centered. Natural aspect ratio, no cropping. `PosterLightbox` wraps for click-to-expand.
 2. Run-of-show row (Phase 7.6): optional `runs[]` frontmatter. Mono chip row above title: `RUN · venue · city · yearFrom–yearTo · count`. Hidden when `runs[]` empty.
 3. Title block: RU display Lora + smaller EN + DE if present. Top rule on `.titleBlock`.
 4. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
@@ -204,7 +204,7 @@ Cmd-K: keyboard-only end-to-end. Groups: Productions, Awards, Press, Theatres. C
 /                       Home: hero + featured strip + grid below fold
 /productions            Filterable grid (?role,form,age,country,year)
 /productions/[slug]     Detail (D7 layout)
-/about                  Bio + lineage + ГДЕ СТАВИЛ row
+/about                  Bio + photos[] grid + lineage + ГДЕ СТАВИЛ row
 /awards                 Award timeline (by-production default, by-year toggle)
 /press                  Card grid, language filter, original-language only
 /archive                Long-tail CV: readings, sketches, workshops
@@ -270,10 +270,10 @@ Naming (RU/EN):
 - Newsletter modal on first visit
 - "Built with Next.js" in footer
 - Coloured chip pills (status -> font weight, not hue)
-- Drop-shadow glow on cards, neon focus
+- Drop-shadow glow on cards, neon focus — _narrowed 2026-05-02_: `--specimen-rule: inset 0 0 0 1px rgb(22 21 20 / 0.08)` allowed on photographic plates only (`coverStyle === 'photo'` AND ≥768px), scoped to `SpecimenPlate.module.css`. NEVER `blur > 0`, NEVER outset, NEVER coloured, NEVER on hover. Outer drop-shadow remains banned. See `DESIGN_v2_PROPOSAL.md` §2.1.
 - Coloured headers with white text
 
-History only: Phase 7.5 fingerprint audit table at `archive/DESIGN_AMBITION.md` §13.1 (read-only).
+History only: Phase 7.5 fingerprint audit table at `archive/DESIGN_AMBITION_compress.md` §13.1 (read-only; full: `archive/DESIGN_AMBITION.md`).
 
 ## 12. Accessibility floor
 
@@ -295,8 +295,7 @@ transliterated). Header `--font-size-lg`, hero `--font-size-4xl`. Never caps, it
 
 ## 14. Source-of-truth chain
 
-This doc is the live source. `app/globals.css` mirrors §3-6 tokens. Components must obey §7 + §11. The `archive/` folder
-is read-only history; consult for the *why* behind a value, never edit during routine work.
+This doc is the live source. `app/globals.css` mirrors §3-6 tokens. Components must obey §7 + §11. The `archive/` folder is read-only history; read `*_compress.md` first, open the full original only if detail is missing, never edit during routine work.
 
 If a component contradicts this doc, fix the component. If reality contradicts this doc (a locked decision is genuinely
 changing), that is a `MAP.md` §5 unfreeze event — surface it, don't silent-edit the brief.
