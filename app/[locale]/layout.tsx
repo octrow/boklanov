@@ -42,21 +42,16 @@ export default async function LocaleLayout({
   const searchItems = buildSearchIndex(productions)
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        {/* Preload the display font (wordmark + headings) and body font used
-            above the fold. Subset choice: Cyrillic for RU, Latin otherwise. */}
+        {/* Preload above-the-fold fonts. Phase 9.2: Lora is one VF file
+            (Latin+Cyrillic combined) regardless of locale; Inter still subset-split. */}
+        <link rel='preload' as='font' type='font/woff2' href='/fonts/Lora-VF.woff2' crossOrigin='anonymous' />
         {locale === 'ru' ? (
-          <>
-            <link rel='preload' as='font' type='font/woff2' href='/fonts/lora-cyrillic-400.woff2' crossOrigin='anonymous' />
-            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-cyrillic-400.woff2' crossOrigin='anonymous' />
-          </>
+          <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-cyrillic-400.woff2' crossOrigin='anonymous' />
         ) : (
-          <>
-            <link rel='preload' as='font' type='font/woff2' href='/fonts/lora-latin-400.woff2' crossOrigin='anonymous' />
-            <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-latin-400.woff2' crossOrigin='anonymous' />
-          </>
+          <link rel='preload' as='font' type='font/woff2' href='/fonts/inter-latin-400.woff2' crossOrigin='anonymous' />
         )}
       </head>
       <body>
