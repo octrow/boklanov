@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 
 import { ProductionGrid } from '@/components/ProductionGrid'
 import { SectionStripe } from '@/components/SectionStripe'
+import { Sticker } from '@/components/Sticker'
 import { SlateStrike } from '@/components/SlateStrike'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -61,7 +62,14 @@ export default async function HomePage({
         <>
           <section className={styles.section} aria-label={t('featuredLabel')}>
             <p className={styles.sectionLabel}>{t('featuredLabel')}</p>
-            <ProductionGrid productions={featured} emptyLabel='' priorityFirst />
+            <ProductionGrid
+              productions={featured}
+              emptyLabel=''
+              priorityFirst
+              firstCardSticker={
+                <Sticker accent="vermillion" rotate={3} shadow>PICK</Sticker>
+              }
+            />
           </section>
           <hr />
         </>

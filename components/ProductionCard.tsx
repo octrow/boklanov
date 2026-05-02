@@ -41,9 +41,10 @@ export { countryCode }
 export interface ProductionCardProps {
   production: ProductionView
   priority?: boolean
+  sticker?: React.ReactNode
 }
 
-export function ProductionCard({ production, priority = false }: ProductionCardProps) {
+export function ProductionCard({ production, priority = false, sticker }: ProductionCardProps) {
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
   const showEn = !!titleEn && titleEn !== titleRu
@@ -75,6 +76,7 @@ export function ProductionCard({ production, priority = false }: ProductionCardP
   return (
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
+        {sticker}
         {production.poster.src ? (
           <Image
             className={styles.coverImg}

@@ -14,6 +14,8 @@ export interface ProductionGridProps {
   clearAllLabel?: string
   onClearAll?: () => void
   priorityFirst?: boolean
+  /** v3: sticker badge rendered on the first card only. */
+  firstCardSticker?: React.ReactNode
 }
 
 export function ProductionGrid({
@@ -21,7 +23,8 @@ export function ProductionGrid({
   emptyLabel,
   clearAllLabel,
   onClearAll,
-  priorityFirst = false
+  priorityFirst = false,
+  firstCardSticker
 }: ProductionGridProps) {
   if (productions.length === 0) {
     return (
@@ -38,7 +41,12 @@ export function ProductionGrid({
   return (
     <div className={styles.grid}>
       {productions.map((p, i) => (
-        <ProductionCard key={p.slug} production={p} priority={priorityFirst && i === 0} />
+        <ProductionCard
+          key={p.slug}
+          production={p}
+          priority={priorityFirst && i === 0}
+          sticker={i === 0 ? firstCardSticker : undefined}
+        />
       ))}
     </div>
   )

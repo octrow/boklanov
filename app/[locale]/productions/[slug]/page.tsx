@@ -8,6 +8,7 @@ import * as React from 'react'
 import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { SectionStripe } from '@/components/SectionStripe'
+import { TourTicker } from '@/components/TourTicker'
 import { countryCode } from '@/components/ProductionCard'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
@@ -464,12 +465,9 @@ export default async function ProductionDetailPage({
             </div>
           )}
 
-          {/* 6b. Plinth tour band — DA-2.D (§3.G.2) */}
+          {/* 6b. Plinth tour band — DA-2.D (§3.G.2) · v3: TourTicker CSS marquee */}
           {production.tour && production.tour.length > 0 && (
-            <section className={styles.tourBand}>
-              <p className={styles.tourLabel}>{t('onTour')}</p>
-              <p className={styles.tourCities}>{production.tour.join(' · ')}</p>
-            </section>
+            <TourTicker cities={production.tour} accent="cobalt" label={t('onTour')} />
           )}
 
           {/* 7. Press */}
