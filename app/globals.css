@@ -200,22 +200,32 @@
 }
 
 :root {
-  /* ---------- Colour: light (paper) [BRIEF §5.1] ---------- */
+  /* ---------- Colour: light (paper) [BRIEF §5.1; v3 §3] ---------- */
   --paper:        #F2F0EA;          /* warm off-white page bg — v2: one notch warmer for Lora's calligraphic axis (was #F4F2EC) */
   --paper-raised: #FBFAF6;          /* cards, modals, raised surfaces */
   --paper-sunken: #ECE9E1;          /* inputs, code wells, sunken zones */
-  --ink:          #161514;          /* primary text */
+  --ink:          #0F0E0D;          /* primary text — v3: one notch deeper than v2 #161514 for accent contrast */
   --ink-mute:     #605C56;          /* secondary text, dates, captions */
   --ink-faint:    #8F8B83;          /* placeholder, disabled */
-  --ink-marginalia: rgba(22, 21, 20, 0.55);   /* v2: marginalia secondary register, AA on --paper */
-  --rule:         rgba(22, 21, 20, 0.10);   /* hairline section rules */
-  --rule-strong:  rgba(22, 21, 20, 0.18);   /* hover/active borders */
-  --accent:       #6B0F0F;          /* deep oxblood — booking CTA only */
-  --accent-hover: #571212;
-  --accent-active:#420E0E;
-  --overlay:      rgba(22, 21, 20, 0.45);   /* modal/dropdown backdrop */
-  --selection-bg: #6B0F0F;
-  --selection-fg: #F2F0EA;
+  --ink-marginalia: rgba(15, 14, 13, 0.55);   /* v3: marginalia secondary register, AA on --paper */
+  --rule:         rgba(15, 14, 13, 0.10);   /* hairline section rules */
+  --rule-strong:  rgba(15, 14, 13, 0.18);   /* hover/active borders */
+
+  /* v3 Bauhaus stage trio — replaces v1/v2 oxblood. See DESIGN_v3_PROPOSAL §3. */
+  --accent-vermillion: #E63946;     /* primary stage — booking CTA, /home + /awards + /contact stripes, error */
+  --accent-cobalt:     #1D3557;     /* secondary stage — /productions + /press stripes, link-hover underline */
+  --accent-mustard:    #F4D35E;     /* tertiary stage — DECORATIVE ONLY (sticker/marquee fill); never text colour */
+  --ink-on-accent:     #FBFAF6;     /* default text-on-accent for vermillion/cobalt fills (AA) */
+  --ink-on-mustard:    #0F0E0D;     /* text-on-mustard fills only (mustard is too light for paper-on-fill) */
+
+  /* --accent aliases the primary stage so existing v1/v2 component code (booking CTA,
+   * focus ring, hover underline) swaps from oxblood to vermillion atomically. */
+  --accent:        var(--accent-vermillion);
+  --accent-hover:  #C2202E;          /* darker vermillion */
+  --accent-active: #9C1825;
+  --overlay:       rgba(15, 14, 13, 0.45);   /* modal/dropdown backdrop */
+  --selection-bg:  var(--accent-vermillion);
+  --selection-fg:  #F2F0EA;
 
   /* ---------- Colour: semantic mapping ---------- */
   --color-bg-primary:     var(--paper);
@@ -239,10 +249,10 @@
 
   /* Status colours kept muted to fit warm-editorial palette.
    * The site has no dashboards; these are only used for form
-   * validation and toast hints. */
+   * validation and toast hints. v3 aliases error to vermillion. */
   --color-status-success: #3F6B3A;
   --color-status-warning: #8A5A18;
-  --color-status-error:   #6B0F0F;
+  --color-status-error:   var(--accent-vermillion);
   --color-status-info:    var(--ink-mute);
 
   --color-surface-overlay: var(--overlay);
@@ -280,6 +290,8 @@
   --font-size-2xl:     clamp(28px, 23.6px + 1.32vw, 40px);          /* h2 */
   --font-size-3xl:     clamp(36px, 28.5px + 2.18vw, 60px);
   --font-size-4xl:     clamp(44px, 26.5px + 4.84vw, 88px);          /* display */
+  --font-size-hero:    clamp(72px, 64px + 5vw, 168px);              /* v3: Unbounded hero wordmark on / only */
+  --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px);          /* v3: Unbounded sticker badge text */
 
   --font-weight-normal:   400;
   --font-weight-medium:   500;
@@ -302,6 +314,7 @@
   --max-width-wide:    1280px;     /* hero rows, full-bleed photo bands */
   --max-width-page:    1440px;     /* hard ceiling */
   --measure-caption:   36ch;       /* v2: SpecimenPlate caption block */
+  --measure-poster:    56ch;       /* v3: TypographicCover wider register */
 
   --gutter-mobile:      20px;
   --gutter-tablet:      24px;
@@ -318,11 +331,16 @@
 
   /* Hairline-first: rules > shadows. Shadows are subtle, never glow. */
   --shadow-none: none;
-  --shadow-sm:   0 1px 2px rgba(22, 21, 20, 0.05);
-  --shadow-md:   0 2px 8px rgba(22, 21, 20, 0.08);
-  --shadow-lg:   0 8px 32px rgba(22, 21, 20, 0.12);
+  --shadow-sm:   0 1px 2px rgba(15, 14, 13, 0.05);
+  --shadow-md:   0 2px 8px rgba(15, 14, 13, 0.08);
+  --shadow-lg:   0 8px 32px rgba(15, 14, 13, 0.12);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
-  --specimen-rule: inset 0 0 0 1px rgba(22, 21, 20, 0.08);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
+  --specimen-rule: inset 0 0 0 1px rgba(15, 14, 13, 0.08);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
+  --shadow-plakat: 0 4px 0 0 var(--ink);                     /* v3 §2.7: flat-stack offset for posters/stickers; mimics screen-print misregister, scoped to DuotonePoster + Sticker — DESIGN.md §11 unfreeze 2026-05-03 */
+
+  /* ---------- v3 plakat tokens ---------- */
+  --stripe-thickness:  2px;        /* v3 §2.8: per-section accent stripe above Cue */
+  --ticker-speed:      38s;        /* v3 §2.9: TourTicker linear marquee duration */
 
   /* ---------- Motion [BRIEF §5.6] ---------- */
   --duration-instant: 50ms;
@@ -369,22 +387,31 @@
   --ink-marginalia: rgba(232, 229, 221, 0.55);   /* v2: marginalia secondary register, AA on dark --paper */
   --rule:         rgba(232, 229, 221, 0.10);
   --rule-strong:  rgba(232, 229, 221, 0.18);
-  --accent:       #A82626;
-  --accent-hover: #BC3030;
-  --accent-active:#8E1F1F;
-  --overlay:      rgba(0, 0, 0, 0.6);
-  --selection-bg: #A82626;
-  --selection-fg: #E8E5DD;
+
+  /* v3 Bauhaus stage trio — lifted variants for AA on dark paper */
+  --accent-vermillion: #FF5A66;
+  --accent-cobalt:     #5B82C2;
+  --accent-mustard:    #C9A22F;
+  --ink-on-accent:     #0E0D0C;
+  --ink-on-mustard:    #0E0D0C;
+
+  --accent:        var(--accent-vermillion);
+  --accent-hover:  #FF7B85;
+  --accent-active: #E0414C;
+  --overlay:       rgba(0, 0, 0, 0.6);
+  --selection-bg:  var(--accent-vermillion);
+  --selection-fg:  #0E0D0C;
 
   --color-status-success: #6FA365;
   --color-status-warning: #C28F3A;
-  --color-status-error:   #C95151;
+  --color-status-error:   var(--accent-vermillion);
 
   --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
   --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
   --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);   /* v2: photographic plates, lifted contrast for dark paper */
+  --shadow-plakat: 0 4px 0 0 var(--ink);                        /* v3 §2.7: flat-stack offset on dark */
 }
 
 /* System preference, unless the user explicitly chose light. */
@@ -399,22 +426,30 @@
     --ink-marginalia: rgba(232, 229, 221, 0.55);
     --rule:         rgba(232, 229, 221, 0.10);
     --rule-strong:  rgba(232, 229, 221, 0.18);
-    --accent:       #A82626;
-    --accent-hover: #BC3030;
-    --accent-active:#8E1F1F;
-    --overlay:      rgba(0, 0, 0, 0.6);
-    --selection-bg: #A82626;
-    --selection-fg: #E8E5DD;
+
+    --accent-vermillion: #FF5A66;
+    --accent-cobalt:     #5B82C2;
+    --accent-mustard:    #C9A22F;
+    --ink-on-accent:     #0E0D0C;
+    --ink-on-mustard:    #0E0D0C;
+
+    --accent:        var(--accent-vermillion);
+    --accent-hover:  #FF7B85;
+    --accent-active: #E0414C;
+    --overlay:       rgba(0, 0, 0, 0.6);
+    --selection-bg:  var(--accent-vermillion);
+    --selection-fg:  #0E0D0C;
 
     --color-status-success: #6FA365;
     --color-status-warning: #C28F3A;
-    --color-status-error:   #C95151;
+    --color-status-error:   var(--accent-vermillion);
 
     --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
     --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
     --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
     --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);
+    --shadow-plakat: 0 4px 0 0 var(--ink);
   }
 }
 
