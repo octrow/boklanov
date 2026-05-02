@@ -1,17 +1,27 @@
-/* v3 §2.4 rollback shipped 2026-05-03 — see FeaturedStrip.tsx header for rationale.
-   Clean 3-column equal-cell grid:
+/* v3 §2.4 broken-grid asymmetric featured strip on `/`.
 
-     Mobile  (<768)   1 column linear
-     Tablet  (≥768)   2 columns
-     Desktop (≥1024)  3 columns
+   Re-attempts the unfreeze that fix-pass-2 (`2b1e3c9`) rolled back. Geometry
+   problem and ranked options analysed in
+   .design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md.
 
-   No align-self overrides. No special cell{n} placements. No trailing orphan
-   row. All cards same width → same poster height (4:5 aspect) → titles +
-   meta + hairlines align horizontally across every row.
+   Geometry (desktop, 12-col, gap 32):
+     - Cells 1–7 hero, 8–12 medium ×2, then 1–4 / 5–8 / 9–12 small.
+     - Medium cells (cols 8–12, aspect-ratio 4:5) define row height for rows 1+2.
+     - Hero spans rows 1–2 with aspect-ratio dropped + flex:1 cover so the
+       card fills 2*medium-height + row-gap. Cover stretches; coverImg uses
+       object-fit:cover. Title/meta sit at the bottom of the card.
 
-   Visual variety lives in DuotonePoster (slugHash%2 vermillion / cobalt
-   filter) + Sticker on the first card. Plakat energy is colour + badge,
-   not geometry. */
+   Override mechanism: CSS custom properties published on .cell with defaults
+   in ProductionCard.module.css. The :global() pierce in research §3 Option A
+   was rejected during implementation because CSS Modules hashes .card / .cover
+   class names, so :global(.card) matches nothing in the rendered DOM. Custom
+   properties cascade through DuotonePoster's display:contents wrapper
+   regardless of class hashing — so they reach .card and .cover cleanly.
+
+   Rollback trigger (proposal §2.4): bento on /productions or /about; equal-size
+   cells; cards lift on hover. Visual check at /: hero bottom hairline aligns
+   with medium-2 bottom hairline → rows 1+2 height == 2*medium-height + row-gap.
+   If it drifts, single-file revert this file. */
 
 .grid {
   list-style: none;
@@ -23,39 +33,93 @@
   row-gap: var(--space-7);
 }
 
-/* Block-level grid item — width comes from the grid track. NOT a flex container.
-   DuotonePoster wraps children with `display: contents` (layout-transparent),
-   so the actual block child of <li> is ProductionCard's <a>.card. As a block-
-   level flex element (display:flex via .card), it fills the cell's full inline
-   size automatically.
-
-   Earlier `.cell { display: flex }` made <a>.card a flex item without explicit
-   flex sizing — browsers fell back to content-width, which shrank the first
-   card (carrying the Sticker) and produced a smaller poster than its
-   neighbours. Removing the flex restores correct sizing. */
 .cell {
   min-width: 0;
 }
 
-/* Anchor descendant of cell — guarantee 100% width regardless of how the
-   intermediate DuotonePoster wrapper renders. Descendant selector is robust
-   to CSS-Modules class scoping (which would have broken `.cell > .wrapper`). */
+/* DuotonePoster wraps with display:contents, so the actual layout child of
+   <li>.cell is ProductionCard's <a>.card. Anchor selector guarantees full
+   width regardless of class hashing. */
 .cell a {
   width: 100%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "h  m1"
+      "h  m2"
+      "s1 s2"
+      "s3 .";
     column-gap: var(--gutter-tablet);
-    row-gap: var(--space-8);
+    row-gap: var(--space-7);
+  }
+
+  .cell:nth-child(1) { grid-area: h; }
+  .cell:nth-child(2) { grid-area: m1; }
+  .cell:nth-child(3) { grid-area: m2; }
+  .cell:nth-child(4) { grid-area: s1; }
+  .cell:nth-child(5) { grid-area: s2; }
+  .cell:nth-child(6) { grid-area: s3; }
+
+  /* Hero cell: drop intrinsic 4:5 cover aspect, let the card fill the
+     2-row stack determined by medium cards' natural height. Cover absorbs
+     the slack via flex:1; titleStack + metaWrap sit at the bottom. */
+  .cell:nth-child(1) {
+    --card-height: 100%;
+    --cover-aspect: auto;
+    --cover-flex: 1 1 0;
+  }
+
+  /* Proposal §5 stagger directive — kept as authored intent. With aspect-
+     ratio-driven row sizing, the slack required for align-self to translate
+     into pixels is currently zero (rows are content-sized). Visible only if a
+     future polish pass introduces grid-auto-rows: minmax(...) per research §6. */
+  .cell:nth-child(2),
+  .cell:nth-child(3) {
+    align-self: start;
+  }
+
+  .cell:nth-child(4),
+  .cell:nth-child(5),
+  .cell:nth-child(6) {
+    align-self: end;
   }
 }
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-areas:
+      "h  h  h  h  h  h  h  m1 m1 m1 m1 m1"
+      "h  h  h  h  h  h  h  m2 m2 m2 m2 m2"
+      "s1 s1 s1 s1 s2 s2 s2 s2 s3 s3 s3 s3";
     column-gap: var(--gutter-desktop);
     row-gap: var(--space-8);
+  }
+
+  .cell:nth-child(1) { grid-area: h; }
+  .cell:nth-child(2) { grid-area: m1; }
+  .cell:nth-child(3) { grid-area: m2; }
+  .cell:nth-child(4) { grid-area: s1; }
+  .cell:nth-child(5) { grid-area: s2; }
+  .cell:nth-child(6) { grid-area: s3; }
+
+  .cell:nth-child(1) {
+    --card-height: 100%;
+    --cover-aspect: auto;
+    --cover-flex: 1 1 0;
+  }
+
+  .cell:nth-child(2),
+  .cell:nth-child(3) {
+    align-self: start;
+  }
+
+  .cell:nth-child(4),
+  .cell:nth-child(5),
+  .cell:nth-child(6) {
+    align-self: end;
   }
 }

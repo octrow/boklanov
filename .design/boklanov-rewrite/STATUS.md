@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 14 — duotone tuning + scope cleanup).
+Current state + open work. Updated: 2026-05-03 (session 15 — §2.4 broken-grid re-attempt: Option B + container queries).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -16,7 +16,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 - Awards/press original-language only.
 - Sticky booking CTA stays mailto.
 - Analytics: only `booking_cta_click`. Never expand autocapture.
-- §11 anti-patterns: see `DESIGN.md` §11. **v3 update 2026-05-03:** 9 anti-patterns lifted on `design_v3` per `DESIGN_v3_PROPOSAL.md` §2 with rollback triggers; mirrored to `archive/DESIGN_BRIEF.md` + `DESIGN.md` §11 in Phase 9v3.8. **Fix-pass-2 (session 13):** §2.4 (bento / broken-grid) unfreeze ROLLED BACK after rollback trigger fired ("equal-size cells" forced by 4:5 aspect-ratio incompatibility). Net 8 active unfreezes.
+- §11 anti-patterns: see `DESIGN.md` §11. **v3 update 2026-05-03:** 9 anti-patterns lifted on `design_v3` per `DESIGN_v3_PROPOSAL.md` §2 with rollback triggers; mirrored to `archive/DESIGN_BRIEF.md` + `DESIGN.md` §11 in Phase 9v3.8. **Fix-pass-2 (session 13):** §2.4 (bento / broken-grid) unfreeze ROLLED BACK after rollback trigger fired ("equal-size cells" forced by 4:5 aspect-ratio incompatibility). **Fix-pass-3 (session 15):** §2.4 RE-ATTEMPTED via custom-property override per `FEATURED_STRIP_GRID_RESEARCH.md` §3 Option B + §8 container queries. Pending §11.4 visual gate. Net 9 active unfreezes if accepted, 8 if reverted.
 - **v3 branch active**: `design_v3` cut from `main` 2026-05-02. Active code work happens on `design_v3` until acceptance gates §11 pass; `main` remains v2 Vitrine. Rollback = `git checkout main`. Daniil owns the call; Roman not consulted (birthday surprise still in force).
 
 ## Phases
@@ -116,7 +116,7 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 
 `main` branch: uncommitted changes. `GalleryLightbox` component + gallery-after-press reorder pending commit.
 
-`design_v3` branch: 4 commits ahead of `main` (proposal doc + 9v3.0 + 9v3.1 + STATUS doc). Working tree clean.
+`design_v3` branch: many commits ahead of `main`. Working tree dirty: `FEATURED_STRIP_GRID_RESEARCH.md` (research extension §6–§13), `FeaturedStrip.module.css` (Option B rewrite), `FeaturedStrip.tsx` (header comment swap), `ProductionCard.module.css` (custom-prop hooks + container query), `MAP.md` (line count), `STATUS.md` (this row). `tsc --noEmit` passes; `npm run lint-tokens` passes.
 
 ## Phase 9 v2 visual refresh (8 of 8 code phases done; polish items shipped)
 
@@ -162,7 +162,7 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts). Fix-pass `2388511`: moved into `<SiteHeader>` (was per-page inside `<main>` — constrained by max-width-content; now spans 100vw under header rule). | done | `6f7fc30` + fix-pass `2388511` |
 | 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion). Fix-pass `2388511`: `<Sticker>` row added on production-detail above title (FESTIVAL AWARD vermillion + TOURING cobalt; aria-hidden; new i18n keys `productions.stickerAward` / `stickerTour`). | done | `c892efd` + fix-pass `2388511` |
 | 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt). Fix-pass `2388511`: selector widened to `:is(img, [data-cover-style])` so typographic covers also tint. Fix-pass `e9d78c4`: dropped fragile `@supports` gate (some browsers fell to grayscale-only); unquoted url(). Fix-pass `8c78b02`+`8fa36c3`: scope = home only (FeaturedStrip + below-fold via `duotoneAll`); `/productions` no longer auto-wraps featured cards. Fix-pass `8fa36c3`: removed S-curve, restored linear luminance → softer screen-print register. | done | `e73ab4f` + 4 fix-passes |
-| 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). Fix-pass `2388511`: `--font-size-hero` clamp narrowed 72→48 / 168→96; hero overflow tweaks. **Fix-pass-2:** §2.4 broken-grid unfreeze ROLLED BACK after second attempt still produced misaligned baselines + floating hairlines (variable cell widths × 4:5 aspect ratio = variable heights, geometrically incompatible). `<FeaturedStrip>` now clean 3-col equal-cell grid; visual variety via DuotonePoster + Sticker, not geometry. `<Sticker>` gains `layout="inline"` prop for non-absolute production-detail row use. | done | `c8fffc7` + fix-pass `2388511` + fix-pass-2 |
+| 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). Fix-pass `2388511`: `--font-size-hero` clamp narrowed 72→48 / 168→96; hero overflow tweaks. **Fix-pass-2:** §2.4 broken-grid unfreeze ROLLED BACK after second attempt still produced misaligned baselines + floating hairlines (variable cell widths × 4:5 aspect ratio = variable heights, geometrically incompatible). `<FeaturedStrip>` now clean 3-col equal-cell grid; visual variety via DuotonePoster + Sticker, not geometry. `<Sticker>` gains `layout="inline"` prop for non-absolute production-detail row use. **Fix-pass-3 (uncommitted):** §2.4 RE-ATTEMPTED. Root-cause documented in `FEATURED_STRIP_GRID_RESEARCH.md` §1 (4:5 aspect-ratio on hero cover incompatible with broken-grid widths). Implementation: Option B custom-property override (`--card-height` / `--cover-aspect` / `--cover-flex` published on `.cell`, defaults in `ProductionCard.module.css` preserve all other call-sites) + Layer 3 container query (`@container card (min-width: 600px)` upscales hero title to `--font-size-2xl`, meta to `--font-size-sm`). Layer 2 subgrid deferred (gap-uniformity issue, see research §13.3). | done | `c8fffc7` + fix-pass `2388511` + fix-pass-2 + fix-pass-3 (uncommitted) |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2). TourRider → `<details>` at ≥1280px frees gutter. | done | `8ed4c56` |
 | 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | done | `badafb0` |
 | 9v3.8 | Mirror 9 anti-pattern unfreezes into `archive/DESIGN_BRIEF.md` §8 + `DESIGN.md` §11 (the only legitimate edit to `archive/*` per `MAP.md` §5) | done | `9782071` (archive §8.2) + `6958737` (DESIGN.md §7/8/11/13 complete) |

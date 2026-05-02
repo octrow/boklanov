@@ -1,7 +1,7 @@
 # FEATURED STRIP — BROKEN GRID RESEARCH
 
 Status: ACTIVE — research doc for `FeaturedStrip` broken-grid re-implementation. Branch: `design_v3`. Updated:
-2026-05-03.
+2026-05-03 (§13 implementation log added).
 
 Context: `<FeaturedStrip>` broken grid (§2.4 of `DESIGN_v3_PROPOSAL.md`) was rolled back twice. This doc records
 root-cause analysis and ranked implementation options for the next attempt.
@@ -497,3 +497,77 @@ test lands a verdict on §9a (the proposal default).
 
 Rollback for all three layers is still single-file: `git restore components/FeaturedStrip.module.css
 components/ProductionCard.module.css`.
+
+---
+
+## 13. Implementation log (2026-05-03)
+
+What actually shipped, what changed during implementation, what got deferred.
+
+### 13.1 Option A pivoted to Option B during implementation
+
+§3 Option A specified `:global(.card)` and `:global(.cover)` selectors inside `FeaturedStrip.module.css`. This was
+verified during implementation to **not work** with the project's CSS Modules setup: Next.js auto-hashes class names
+(e.g., `.card` → `ProductionCard_card__abc123`), so the rendered DOM has no element with literal class `card`. A
+selector `:global(.card)` matches nothing.
+
+The fix was to ship the **Option B mechanism** (custom-property override) under Option A's *layout structure*. Custom
+properties cascade through `display: contents` (DuotonePoster's wrapper) and through any class-hashing, so the chain
+`.cell → .card → .cover` works regardless of CSS-Modules opacity.
+
+Concrete contract added to `ProductionCard.module.css`:
+
+```css
+.card  { height:        var(--card-height,  auto); }
+.cover { aspect-ratio:  var(--cover-aspect, 4 / 5);
+         flex:          var(--cover-flex,   0 1 auto); }
+```
+
+Hero override in `FeaturedStrip.module.css`:
+
+```css
+.cell:nth-child(1) {
+  --card-height:  100%;
+  --cover-aspect: auto;
+  --cover-flex:   1 1 0;
+}
+```
+
+Defaults preserve every existing call-site exactly (ProductionGrid, FilteredProductionsPanel, etc.).
+
+### 13.2 Layer 3 (container queries) shipped
+
+`@container card (min-width: 600px)` in `ProductionCard.module.css` upscales `.titleRu` to `--font-size-2xl` and `.meta`
+to `--font-size-sm` only inside hero-sized cells. Validated against width math: desktop hero ~686px ✓, desktop medium
+~481px (no fire), desktop small ~286px (no fire), ProductionGrid 3-col ~378px (no fire). Tablet hero ~500px does not
+fire — acceptable; tablet hero typography stays at default register.
+
+### 13.3 Layer 2 (subgrid) deferred
+
+Implementation analysis surfaced a CSS Grid limitation that the research §7 sketch glossed over: subgrid rows inherit
+the parent's `gap` uniformly. The card's *internal* gap (cover-to-title 12px) and the strip's *external* gap
+(card-to-card 32–64px) cannot both be expressed when card and strip share a row track-list under subgrid. Workarounds
+(wrapping rows with empty gap-tracks, using padding-block instead of gap) make the implementation cost outweigh the
+"newspaper-grade rhythm" payoff for this milestone.
+
+§12 layer 2 recommendation stands as a **future polish item** when one of the following changes:
+- ProductionCard standardises on grid layout (would unlock subgrid composition)
+- A polish pass introduces oversized rows per §6 (would already produce the visual rhythm without subgrid)
+- The card's internal gap matches the strip's row-gap (collapses both into a single uniform track)
+
+Until then: cards align cell-to-cell by virtue of equal column widths in row 3 and matching aspect-ratios in rows 1/2.
+Cross-row alignment of internal title/meta baselines remains content-dependent.
+
+### 13.4 Files changed
+
+- `components/FeaturedStrip.module.css` — full rewrite (Option B + §6 stagger directive, no-op until row-sizing
+  amendment per research §6).
+- `components/ProductionCard.module.css` — added 3 custom-prop hooks + container query block. No default behaviour
+  changed.
+- `components/FeaturedStrip.tsx` — replaced rollback header with one-line pointer to the css/research docs.
+
+### 13.5 §11.4 acceptance test reminder
+
+The §2.4 unfreeze rolled back twice already. This third attempt must clear `DESIGN_v3_PROPOSAL.md §11.4`: composition
+reads as "Schaubühne season-page aside, not Notion-feature." Reviewer test: would this fit a printed festival
+programme? If no, fall back to symmetric 3×2 (the layout fix-pass-2 shipped). Single-file revert path still applies.

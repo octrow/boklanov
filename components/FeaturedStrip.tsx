@@ -12,17 +12,9 @@ interface FeaturedStripProps {
   priorityFirst?: boolean
 }
 
-/* v3 §2.4 rollback (fix-pass 2): the asymmetric "broken-grid" (1 large cell
-   spanning 2 rows beside two stacked mediums + 3 small + trailing centred wide)
-   was geometrically incompatible with the 4:5 ProductionCard aspect-ratio: the
-   wide left cell rendered shorter than the two-row right column, leaving dead
-   space below the big card and floating hairline rules.
-
-   Reverted to a clean 3-column equal-cell grid (matches §2.4 rollback trigger:
-   "equal-size cells"). Visual variety still arrives via DuotonePoster slugHash%2
-   (vermillion / cobalt) and a Sticker on the first card. Card baselines align;
-   bottom hairlines align across rows. Plakat energy is in the colour and
-   stickers, not in card geometry. */
+/* v3 §2.4 broken-grid (re-attempt). Geometry + override mechanism in
+   FeaturedStrip.module.css header; root-cause + ranked options in
+   .design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md. */
 
 export function FeaturedStrip({ productions, priorityFirst = false }: FeaturedStripProps) {
   const cards = productions.slice(0, 6)
