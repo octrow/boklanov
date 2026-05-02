@@ -298,7 +298,7 @@ tags: []
 - "AI-Native UI" chips, animated gradient text, kinetic gradient meshes
 - Hero video backgrounds
 - Bento grids on the home page
-- Generic Tailwind defaults (`rounded-2xl shadow-xl`)
+- Generic Tailwind defaults (`rounded-2xl shadow-xl`) — _Superseded 2026-05-02_: `--border-radius-form: 2px` allowed on `<input>`, `<textarea>`, `<select>`, `<dialog>`, `kbd` only. NEVER on cards, images, buttons. `shadow-xl` outset remains banned (specimen-rule inset case is handled by §8.1 drop-shadow narrowing). See `DESIGN_v2_PROPOSAL.md` §2.3.
 - Stock photography (we have real production photos; use them)
 - Comic-Sans-as-irony or any "puppet show" pastiche typography
 - Loading-spinner skeletons that animate forever

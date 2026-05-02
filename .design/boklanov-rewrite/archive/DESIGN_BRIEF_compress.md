@@ -36,6 +36,7 @@ AI gradients, glassmorphism, kinetic typography, hero videos, bento grids, gener
 ANTI-PATTERN SUPERSESSIONS:
 2026-05-02: "Drop-shadow glow on cards" (DESIGN.md §11 addition post-brief) narrowed → `--specimen-rule` inset 1px on photographic plates only (≥768px, scoped to SpecimenPlate.module.css). See full archive §8.1 + DESIGN_v2_PROPOSAL.md §2.1.
 2026-05-02: "Coloured chip pills" (DESIGN.md §11 addition post-brief) narrowed → specimen mono labels (uppercase, mono, hairline underline, no fill, no radius, em-dash separator). See full archive §8.1 + DESIGN_v2_PROPOSAL.md §2.2.
+2026-05-02: "Generic Tailwind defaults (`rounded-2xl shadow-xl`)" narrowed → `--border-radius-form: 2px` on form chrome only (input, textarea, select, dialog, kbd). NEVER on cards, images, buttons. Outset shadow-xl still banned. See full archive §8 + DESIGN_v2_PROPOSAL.md §2.3.
 
 MDX FRONTMATTER (`content/productions/[slug]/index.mdx`):
 Required structure for Obsidian properties editing:

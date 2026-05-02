@@ -262,7 +262,7 @@ Naming (RU/EN):
 - "AI-Native UI" chips, animated gradient text, kinetic gradient meshes
 - Hero video
 - Bento grids on home
-- Tailwind defaults `rounded-2xl shadow-xl`
+- Tailwind defaults `rounded-2xl shadow-xl` — _narrowed 2026-05-02_: `--border-radius-form: 2px` allowed on `<input>`, `<textarea>`, `<select>`, `<dialog>`, `kbd` only. NEVER on cards, images, buttons. Outset `shadow-xl` remains banned (specimen-rule inset is the only exception per §11 drop-shadow narrowing). See `DESIGN_v2_PROPOSAL.md` §2.3.
 - Stock photography
 - Comic-Sans-as-irony, "puppet show" pastiche, hand-drawn underlines
 - Loading-spinner skeletons that animate forever
