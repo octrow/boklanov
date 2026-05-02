@@ -77,7 +77,7 @@ User must run `! git push origin docs/update-planning-docs` then merge via PR.
 4. ~~D1 Vercel preview~~ ✅ https://boklanov.vercel.app/
 5. ~~R2 real-device QA~~ ✅ closed 2026-05-02
 6. ~~D2 Hosting decision~~ ✅ Vercel stays
-7. **D3/D4 — boklanov.com cutover** 🟡 **deadline 6 May 2026**
+7. **D3/D4 — boklanov.com cutover** 🟡 **deadline 6 May 2026** skip for now
    - Domain: `boklanov.com` (canonical) + `www.boklanov.com` (→ 301)
    - DNS currently at **Spaceship.com**
    - Old Notion-based site still live at boklanov.com — OK to cut over
@@ -179,3 +179,26 @@ c1c4436  feat(phase-8): fold overlay + authoring handoff (8.3–8.5)
 ```
 
 **Build state:** clean. Branch `docs/update-planning-docs` ready to push.
+
+---
+we have many docs related to rewrite/rebuild current site:
+1) @.design/boklanov-rewrite/CONTENT_WORKFLOW.md - about how we can update/change data on site
+2) @.design/boklanov-rewrite/DESIGN_AMBITION.md - about how we can improve design of site
+3) @.design/boklanov-rewrite/DESIGN_BRIEF.md - some questions and
+4) @.design/boklanov-rewrite/DESIGN_REVIEW.md
+5) @.design/boklanov-rewrite/HANDOFF.md - we use it like a promt for next conversation
+6) @.design/boklanov-rewrite/INFORMATION_ARCHITECTURE.md
+7) @.design/boklanov-rewrite/orphan-audit-2026-05.md
+8) @.design/boklanov-rewrite/photo-audit.md
+9) @.design/boklanov-rewrite/TASKS.md
+10) @.design/boklanov-rewrite/tokens.css
+11) @.design/boklanov-rewrite/tokens.md
+12) @contributing.md
+13) @DESIGN.md
+14) @PLAN.md - main plan for work rebuild site
+15) @readme.md
+
+i need:
+- merge some of them into one, we have too many docs
+- make clear and easy workflow if we update one of them how we need to change others, etc
+- sync all of them between
