@@ -23,14 +23,25 @@
   row-gap: var(--space-7);
 }
 
+/* Block-level grid item — width comes from the grid track. NOT a flex container.
+   DuotonePoster wraps children with `display: contents` (layout-transparent),
+   so the actual block child of <li> is ProductionCard's <a>.card. As a block-
+   level flex element (display:flex via .card), it fills the cell's full inline
+   size automatically.
+
+   Earlier `.cell { display: flex }` made <a>.card a flex item without explicit
+   flex sizing — browsers fell back to content-width, which shrank the first
+   card (carrying the Sticker) and produced a smaller poster than its
+   neighbours. Removing the flex restores correct sizing. */
 .cell {
-  display: flex;
   min-width: 0;
 }
 
-.cell > * {
-  flex: 1 1 auto;
-  min-width: 0;
+/* Anchor descendant of cell — guarantee 100% width regardless of how the
+   intermediate DuotonePoster wrapper renders. Descendant selector is robust
+   to CSS-Modules class scoping (which would have broken `.cell > .wrapper`). */
+.cell a {
+  width: 100%;
 }
 
 @media (min-width: 768px) {
