@@ -286,12 +286,13 @@
 
 :root {
   /* ---------- Colour: light (paper) [BRIEF §5.1] ---------- */
-  --paper:        #F4F2EC;          /* warm off-white page bg */
+  --paper:        #F2F0EA;          /* warm off-white page bg — v2: one notch warmer for Lora's calligraphic axis (was #F4F2EC) */
   --paper-raised: #FBFAF6;          /* cards, modals, raised surfaces */
   --paper-sunken: #ECE9E1;          /* inputs, code wells, sunken zones */
   --ink:          #161514;          /* primary text */
   --ink-mute:     #605C56;          /* secondary text, dates, captions */
   --ink-faint:    #8F8B83;          /* placeholder, disabled */
+  --ink-marginalia: rgba(22, 21, 20, 0.55);   /* v2: marginalia secondary register, AA on --paper */
   --rule:         rgba(22, 21, 20, 0.10);   /* hairline section rules */
   --rule-strong:  rgba(22, 21, 20, 0.18);   /* hover/active borders */
   --accent:       #6B0F0F;          /* deep oxblood — booking CTA only */
@@ -299,7 +300,7 @@
   --accent-active:#420E0E;
   --overlay:      rgba(22, 21, 20, 0.45);   /* modal/dropdown backdrop */
   --selection-bg: #6B0F0F;
-  --selection-fg: #F4F2EC;
+  --selection-fg: #F2F0EA;
 
   /* ---------- Colour: semantic mapping ---------- */
   --color-bg-primary:     var(--paper);
@@ -385,10 +386,12 @@
   --max-width-content: 1080px;     /* productions index, default page */
   --max-width-wide:    1280px;     /* hero rows, full-bleed photo bands */
   --max-width-page:    1440px;     /* hard ceiling */
+  --measure-caption:   36ch;       /* v2: SpecimenPlate caption block */
 
-  --gutter-mobile:  20px;
-  --gutter-tablet:  24px;
-  --gutter-desktop: 32px;
+  --gutter-mobile:      20px;
+  --gutter-tablet:      24px;
+  --gutter-desktop:     32px;
+  --gutter-margin-pull: -1.25rem;  /* v2: Marginalia float-into-margin from ≥1024px */
 
   /* Editorial + brutalist => minimal radii. Sharp wins. */
   --border-radius-none: 0;
@@ -396,6 +399,7 @@
   --border-radius-md:   4px;
   --border-radius-lg:   8px;       /* reserved for photo cards if needed */
   --border-radius-full: 999px;     /* pills (chips use sm instead) */
+  --border-radius-form: 2px;       /* v2: form chrome only (input, textarea, select, dialog, kbd) — DESIGN.md §11 unfreeze 2026-05-02 */
 
   /* Hairline-first: rules > shadows. Shadows are subtle, never glow. */
   --shadow-none: none;
@@ -403,6 +407,7 @@
   --shadow-md:   0 2px 8px rgba(22, 21, 20, 0.08);
   --shadow-lg:   0 8px 32px rgba(22, 21, 20, 0.12);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
+  --specimen-rule: inset 0 0 0 1px rgba(22, 21, 20, 0.08);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
 
   /* ---------- Motion [BRIEF §5.6] ---------- */
   --duration-instant: 50ms;
@@ -446,6 +451,7 @@
   --ink:          #E8E5DD;
   --ink-mute:     #9E9A92;
   --ink-faint:    #6B6862;
+  --ink-marginalia: rgba(232, 229, 221, 0.55);   /* v2: marginalia secondary register, AA on dark --paper */
   --rule:         rgba(232, 229, 221, 0.10);
   --rule-strong:  rgba(232, 229, 221, 0.18);
   --accent:       #A82626;
@@ -463,6 +469,7 @@
   --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
   --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
+  --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);   /* v2: photographic plates, lifted contrast for dark paper */
 }
 
 /* System preference, unless the user explicitly chose light. */
@@ -474,6 +481,7 @@
     --ink:          #E8E5DD;
     --ink-mute:     #9E9A92;
     --ink-faint:    #6B6862;
+    --ink-marginalia: rgba(232, 229, 221, 0.55);
     --rule:         rgba(232, 229, 221, 0.10);
     --rule-strong:  rgba(232, 229, 221, 0.18);
     --accent:       #A82626;
@@ -491,6 +499,7 @@
     --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
     --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
     --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
+    --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);
   }
 }
 

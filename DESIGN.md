@@ -35,12 +35,13 @@ References borrowed for grammar, never fingerprints: linear.com, claude.ai (warm
 
 Light (`--paper`/`--ink`/`--accent`):
 
-- `--paper #F4F2EC` warm off-white
+- `--paper #F2F0EA` warm off-white (v2 2026-05-02; was `#F4F2EC`)
 - `--paper-raised #FBFAF6` cards/modals
 - `--paper-sunken #ECE9E1` inputs/wells
 - `--ink #161514` primary text
 - `--ink-mute #605C56` secondary, dates, captions
 - `--ink-faint #8F8B83` placeholder, disabled, decorative metadata
+- `--ink-marginalia rgba(22,21,20,0.55)` v2: marginalia secondary register
 - `--rule rgba(22,21,20,0.10)` hairlines
 - `--rule-strong rgba(22,21,20,0.18)` hover/active borders
 - `--accent #6B0F0F` oxblood. Reserved for: (1) booking CTA fills, (2) hover underline reveal on primary links, (3)
@@ -97,15 +98,15 @@ Base 4px. Scale: `0,4,8,12,16,24,32,48,64,96,128` -> `--space-0..10`.
 
 Gutters: mobile 20px, tablet 24px, desktop 32px.
 
-Reading measure: `--max-width-prose 65ch`. Content: 1080px. Wide hero: 1280px. Hard ceiling: 1440px.
+Reading measure: `--max-width-prose 65ch`. Content: 1080px. Wide hero: 1280px. Hard ceiling: 1440px. v2 additions: `--measure-caption 36ch` (SpecimenPlate captions), `--gutter-margin-pull -1.25rem` (Marginalia float-into-margin ≥1024px).
 
 Grid: 1-col mobile, 8-col tablet (≥768), 12-col desktop (≥1024).
 
 Radii (sharp wins): `--border-radius-sm 2px` default (chips, buttons), `4px` modals, `8px` reserved (photo cards). No
-`rounded-2xl`.
+`rounded-2xl`. v2 addition (per §11 unfreeze 9.0c): `--border-radius-form 2px` allowed on `<input>`, `<textarea>`, `<select>`, `<dialog>`, `kbd` only — never on cards, images, buttons.
 
 Shadows hairline-first: `--shadow-sm` low lift, `--shadow-md` Cmd-K + dropdowns, `--shadow-lg` modals only,
-`--shadow-focus 0 0 0 2px var(--paper), 0 0 0 4px var(--accent)`.
+`--shadow-focus 0 0 0 2px var(--paper), 0 0 0 4px var(--accent)`. v2 addition (per §11 unfreeze 9.0a): `--specimen-rule inset 0 0 0 1px rgba(22,21,20,0.08)` allowed on photographic plates only — scoped to `SpecimenPlate.module.css`, ≥768px, never blur >0, never outset.
 
 Z: `--z-base 0`, `--z-raised 10`, `--z-sticky 100`, `--z-overlay 500`, `--z-modal 1000`, `--z-toast 2000`.
 
