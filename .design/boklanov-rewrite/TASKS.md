@@ -819,6 +819,145 @@ production build before D1.
 
 ---
 
+## Phase 7.6 — Editorial polish (post-D4)
+
+> Added 2026-05-02 after Phase 7.5 Round 1–3 shipped. Each task is
+> brief-compatible (audited against `DESIGN.md` §11) and continues the
+> theatre-programme metaphor. **Schedule: post-D4 cutover (after
+> 6 May).** None of these are blockers for the birthday-surprise
+> launch — they are post-launch compounding moves. Daniil may promote
+> any single task to pre-D4 if bandwidth allows, but the default is
+> "ship the launch first, polish after."
+>
+> Effort tags: XS = ≤ 1h · S = ≤ ½ day · M = ≤ 1 day · L = > 1 day.
+
+### Tier 1 — programme-grammar continuations (highest signal)
+
+- [ ] **DA-7.6.A — Marginalia (§3.E activation)** — M.
+  Was deferred at lock-time pending a real desktop test cohort. Round
+  1+2 chrome has settled and curators have eyes on `boklanov.vercel.app`,
+  so the cohort exists. Activate gutter notes above 1280px on `/about`
+  long-form prose and on each `productions/[slug]` synopsis section.
+  Right-margin slot holds: photographer-credit line, lineage cross-refs
+  (`see also: Идём вдвоём ↗`), date stamps in mono. Below 1280px the
+  same content collapses inline as italic Lora subordinate notes.
+  Implementation: new `<Aside>` component + CSS-grid template on the
+  prose container (`minmax(0, 65ch) minmax(0, 20ch)`). No new tokens.
+  Files: `components/Aside.tsx` (new), `app/[locale]/about/about.module.css`,
+  `app/[locale]/productions/[slug]/page.module.css`.
+
+- [ ] **DA-7.6.B — Print stylesheet** — S.
+  A theatre-programme metaphor that doesn't print is a half-truth.
+  Curators do print press kits and bio sheets. Add `@media print`
+  block in `app/globals.css`: hide nav + footer + folio + Cmd-K
+  trigger, keep wordmark + main + colophon, force `--paper` to white
+  and `--ink` to black, hairline rules to 0.5pt black, mono caps stay
+  mono caps, page margins 18mm, `widows: 3; orphans: 3` on long
+  prose. Test against `/about`, `/productions/bury-me-behind-the-
+  baseboard`, `/awards` in browser print preview. Niche but very
+  on-brand.
+
+- [ ] **DA-7.6.C — Director's note block** — S (data-driven by Roman).
+  Optional `directorsNote.{ru,en}` field in production frontmatter.
+  When present, render below the synopsis on production detail as
+  italic Lora blockquote with a hairline left rule (mirrors the
+  critic-quote treatment from D7 step 8) — but attribution is mono
+  `— РОМАН БОКЛАНОВ` instead of an outlet. Distinguishes editorial
+  third-person synopsis from the director's own voice. Requires a
+  one-shot Roman pass via Obsidian after Phase 8.4.
+  Files: `lib/content.ts` (add field), `app/[locale]/productions/
+  [slug]/page.tsx`, new section in `Cue` system (`CUE — ОТ
+  РЕЖИССЁРА` / `FROM THE DIRECTOR`).
+
+- [ ] **DA-7.6.D — Run-of-show indicator (N2 reactivation)** — S.
+  Reactivate the deferred §13.4 N2 proposal. Tiny mono row above the
+  title on production detail: `RUN · BTK · СПБ · 2020–2024 ·
+  ~80 PERFORMANCES`. Data-driven by a new `runs[]` array in
+  frontmatter (start year, end year, performance count, theatre
+  shortName). Hides when array is empty. Reads as bookers'
+  metadata, not as boasting. Single row, mono caps, `--ink-faint`,
+  hairline rule under.
+  Files: `lib/content.ts`, `app/[locale]/productions/[slug]/page.tsx`,
+  i18n `productionDetail.runOfShow` strings.
+
+### Tier 2 — micro-typography polish
+
+- [ ] **DA-7.6.E — Awards CUE-count tag** — XS.
+  Each `CUE 2017` / `CUE 2020` heading on `/awards` gets a count
+  suffix in mono: `CUE 2021 · 4 НАГРАДЫ` / `CUE 2021 · 4 AWARDS` /
+  `CUE 2021 · 4 PREISE`. Pulls the cue system from "decoration" into
+  "informative metadata" with one extra string per group. Tabular-nums
+  required so single-digit counts don't shift the surrounding line.
+  Files: `app/[locale]/awards/page.tsx`, i18n `awards.cueCount` plural
+  rules per locale.
+
+- [ ] **DA-7.6.F — Theatre slate LANGUAGE row** — XS (data-driven).
+  Add an optional `language` field on production frontmatter (e.g.
+  `silent`, `ru+en`, `de+ru bilingual`). When present, the right-rail
+  theatre slate gets a `LANGUAGE` row between `COUNTRY` and
+  `THEATRE`. Useful for international touring decisions; silent
+  puppet shows are a meaningful subset. No row when field is null.
+  Files: `lib/content.ts`, `components/TheatreSlate.tsx` (or wherever
+  the slate lives), i18n strings.
+
+- [ ] **DA-7.6.G — Typographic-fallback card year-anchor** — XS.
+  No-poster cards (Q6 brutalist fallback) currently have title flush
+  top-left and year flush below. When titles run long, the year
+  drifts down inconsistently across the grid row. Pin the year-mark
+  to the bottom of the card with `margin-top: auto` inside a flex
+  column — title sticks top-left, year sticks bottom-left, regardless
+  of title length. Pure CSS, no markup change.
+  Files: `components/ProductionCard.module.css` only.
+
+- [ ] **DA-7.6.H — DE chrome length audit** — XS.
+  `INSZENIERTE IN` is 13 characters vs `STAGED IN` 9 vs `ГДЕ СТАВИЛ`
+  10. At narrow desktop widths (1024–1100px) the §3.G.1 row label can
+  push the city list onto a second wrap. Audit at 1024 / 1280 / 1440
+  on `/de/about`; if it wraps, add a `text-wrap: balance` rule on the
+  staging-row container or shorten the German label to `BÜHNEN IN`.
+  Same audit for the folio top line in DE. Pure CSS or i18n string
+  edit, ~30 minutes.
+
+### Tier 3 — first-impression polish
+
+- [ ] **DA-7.6.I — OG image chrome upgrade** — M.
+  Curators share productions on Telegram and Slack; the OG card is
+  often the first impression. Push `app/api/og/[slug]/route.ts` from
+  baseline to programme-grammar: hairline rule top + bottom, mono
+  caps section slug top-left (`PRODUCTION · 14 / 24` or just
+  `PRODUCTION`), Lora-display title centred, mono meta line bottom-
+  left (`2021 · 60 MIN · 6+ · KZ`), oxblood `cdn.boklanov.com` colophon
+  bottom-right at `--ink-faint` opacity. Same paper-cream background
+  as the site. Verify Cyrillic renders correctly via the satori font-
+  loading path.
+  Files: `app/api/og/[slug]/route.ts`.
+
+- [ ] **DA-7.6.J — Editorial empty states** — S.
+  Filter empty (`/productions` with no matches), search empty (Cmd-K
+  no results), archive year with no entries — currently render a
+  plain "Нет результатов / No matches" line. Push into editorial
+  register: hairline rule top, Lora italic body line, mono ghost
+  link below (`⟶ убрать один фильтр / clear one filter` for
+  `/productions`; `⟶ показать недавние / show recent` for Cmd-K).
+  Reuses tokens, no new components — just elevates a tone we already
+  almost have.
+  Files: `components/FilteredProductionsPanel.module.css`,
+  `components/CommandPalette.tsx`, i18n strings.
+
+### Sequencing notes for Phase 7.6
+
+- All tasks are independent of each other and of Phase 8 — pick any
+  order, ship in any combination. None blocks anything.
+- Tier 1 has the highest editorial signal; Tier 2 is one-hour micro-
+  polish; Tier 3 is shareable-first-impression work.
+- DA-7.6.C and DA-7.6.D are **gated by Roman content**: notes per
+  show + run counts. They ship when Roman fills the data via Obsidian
+  (Phase 8.4 onboarding).
+- Total Tier-1 effort: ~3 days. Tier-2: ~2 hours. Tier-3: ~1.5 days.
+  All ten together fit a single quiet week post-launch.
+
+---
+
 ## Phase 8 — Authoring handoff (Obsidian + R2)
 
 > Locked 2026-05-02 in `.design/boklanov-rewrite/CONTENT_WORKFLOW.md`.
