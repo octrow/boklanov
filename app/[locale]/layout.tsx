@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 
 import { Analytics } from '@/components/Analytics'
 import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
+import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
@@ -62,6 +63,7 @@ export default async function LocaleLayout({
         )}
       </head>
       <body>
+        <DuotonePosterSprite />
         <NextIntlClientProvider>
           <CommandPaletteProvider items={searchItems} locale={locale}>
             <SiteHeader productions={productions.map((p) => ({ slug: p.slug }))} />

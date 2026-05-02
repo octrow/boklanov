@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import type { ProductionView } from '@/lib/content'
 
+import { DuotonePoster } from './DuotonePoster'
 import { EmptyState } from './EmptyState'
 import { ProductionCard } from './ProductionCard'
 import styles from './ProductionGrid.module.css'
@@ -40,14 +41,20 @@ export function ProductionGrid({
   }
   return (
     <div className={styles.grid}>
-      {productions.map((p, i) => (
-        <ProductionCard
-          key={p.slug}
-          production={p}
-          priority={priorityFirst && i === 0}
-          sticker={i === 0 ? firstCardSticker : undefined}
-        />
-      ))}
+      {productions.map((p, i) => {
+        const card = (
+          <ProductionCard
+            production={p}
+            priority={priorityFirst && i === 0}
+            sticker={i === 0 ? firstCardSticker : undefined}
+          />
+        )
+        return p.featured ? (
+          <DuotonePoster key={p.slug} slug={p.slug}>{card}</DuotonePoster>
+        ) : (
+          <React.Fragment key={p.slug}>{card}</React.Fragment>
+        )
+      })}
     </div>
   )
 }

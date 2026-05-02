@@ -1,0 +1,23 @@
+/* v3 §2.4 — DuotonePoster wrapper. display:contents so the ProductionCard
+   link remains a direct grid item. @supports gates the SVG filter; falls
+   back to grayscale+contrast. prefers-reduced-transparency reverts to fallback. */
+
+.wrapper {
+  display: contents;
+}
+
+/* Grayscale fallback for unsupported browsers / before SVG sprite loads. */
+.wrapper img {
+  filter: grayscale(0.7) contrast(1.08);
+}
+
+/* @supports upgrade: SVG duotone when filter:url() is available. */
+@supports (filter: url(#x)) {
+  .wrapper[data-accent="vermillion"] img { filter: url('#duotone-v'); }
+  .wrapper[data-accent="cobalt"]     img { filter: url('#duotone-c'); }
+}
+
+/* prefers-reduced-transparency: always use the simpler fallback. */
+@media (prefers-reduced-transparency: reduce) {
+  .wrapper img { filter: grayscale(0.7) contrast(1.08) !important; }
+}
