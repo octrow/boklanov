@@ -13,6 +13,7 @@
     "build": "next build",
     "sync": "tsx scripts/sync-from-notion.ts",
     "upload-images": "tsx scripts/upload-images.ts",
+    "lint-mdx": "tsx scripts/lint-mdx.ts",
     "start": "next start",
     "deploy": "vercel deploy",
     "analyze": "cross-env ANALYZE=true next build",
