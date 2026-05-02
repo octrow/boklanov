@@ -319,14 +319,14 @@ export default async function ProductionDetailPage({
       {(production.awards.length > 0 || production.tour.length > 0) && (
         <div className={styles.stickerRow} aria-hidden="true">
           {production.awards.length > 0 && (
-            <Sticker variant="award" accent="vermillion" rotate={-3} shadow>
+            <Sticker variant="award" accent="vermillion" rotate={-3} shadow layout="inline">
               {production.awards.length === 1
                 ? t('stickerAward')
                 : `${t('stickerAward')} · ${production.awards.length}`}
             </Sticker>
           )}
           {production.tour.length > 0 && (
-            <Sticker variant="tour" accent="cobalt" rotate={3}>
+            <Sticker variant="tour" accent="cobalt" rotate={3} layout="inline">
               {t('stickerTour')}
             </Sticker>
           )}

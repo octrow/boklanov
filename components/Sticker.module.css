@@ -23,6 +23,13 @@
   will-change: transform;
 }
 
+/* Inline mode — production-detail row above title (no absolute escape). */
+.sticker.inline {
+  position: static;
+  top: auto;
+  right: auto;
+}
+
 .shadow {
   box-shadow: var(--shadow-plakat);
 }
