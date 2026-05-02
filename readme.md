@@ -2,7 +2,7 @@
 
 Site for Roman Boklanov — theatre director (puppet, object, kids/teens). Bilingual RU/EN, DE chrome. Static, MDX-owned, editorial.
 
-Live: https://boklanov.vercel.app/. D4 cutover to `boklanov.com` deadline 2026-05-06.
+Live: https://boklanov.vercel.app/. D3/D4 cutover to `boklanov.com` deferred (see STATUS.md).
 
 ## Stack
 

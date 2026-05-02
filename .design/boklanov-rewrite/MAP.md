@@ -132,7 +132,7 @@ Continuing the boklanov.com rewrite. Context order:
 6. Open archive/<file>.md ONLY if you need a non-derivable answer (D-decision, R-review item, A-answer from Roman, 9-option matrix, per-route detail). archive/* is read-only history.
 
 Hard rules (from STATUS.md Constraints, do not violate):
-- Birthday surprise: no reveal to Roman until D4 live (deadline 2026-05-06).
+- Birthday surprise: no reveal to Roman until the site is live on its production domain. D3/D4 cutover currently deferred.
 - Past-tense `ГДЕ СТАВИЛ` / `STAGED IN` / `INSZENIERTE IN`. No present-tense Russia work. Year-only colophon.
 - `git push origin main` blocked by safety hook — always ask user to push.
 - I5 cut. DA-3.A slate-strike + DA-3.C edition-frame fallback shipped, do not revisit.
