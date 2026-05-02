@@ -66,12 +66,14 @@
     "bookingCta": "Написать Роману о гастролях этого спектакля",
     "credits": "кредиты",
     "onTour": "В ГАСТРОЛЯХ",
-    "directorsNoteAttr": "— РОМАН БОКЛАНОВ"
+    "directorsNoteAttr": "— РОМАН БОКЛАНОВ",
+    "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "about": {
     "stagedIn": "ГДЕ СТАВИЛ",
     "chronology": "хронология",
-    "lineage": "традиция"
+    "lineage": "традиция",
+    "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "notFound": {
     "heading": "страница не найдена",

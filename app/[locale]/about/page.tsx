@@ -48,8 +48,10 @@ interface AboutFrontmatter {
 function loadAbout(locale: Locale): {
   frontmatter: AboutFrontmatter
   paragraphs: string[]
+  deForthcoming: boolean
 } {
   const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
+  const deForthcoming = locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
   const candidates = [locale, 'en', 'ru'] // DE falls back to EN then RU
   for (const lang of candidates) {
     const p = path.join(ABOUT_DIR, `${lang}.mdx`)
@@ -61,7 +63,8 @@ function loadAbout(locale: Locale): {
         .filter(Boolean)
       return {
         frontmatter: data as AboutFrontmatter,
-        paragraphs
+        paragraphs,
+        deForthcoming
       }
     }
   }
@@ -71,7 +74,8 @@ function loadAbout(locale: Locale): {
       milestones: [],
       lineage: []
     },
-    paragraphs: []
+    paragraphs: [],
+    deForthcoming
   }
 }
 
@@ -136,7 +140,7 @@ export default async function AboutPage({
   const t = await getTranslations('nav')
   const tAbout = await getTranslations('about')
 
-  const { frontmatter, paragraphs } = loadAbout(locale)
+  const { frontmatter, paragraphs, deForthcoming } = loadAbout(locale)
   const { milestones, lineage, marginalia, photos } = frontmatter
 
   // First paragraph is the lead (displayed in Lora); the rest are body.
@@ -153,15 +157,16 @@ export default async function AboutPage({
       />
       <h1 className={styles.heading}>{t('about')}</h1>
 
-      {/* Bio prose — DA-7.6.A: Marginalia grid at ≥1280px */}
+      {/* Bio prose — DA-7.6.A: Marginalia grid at ≥1024px.
+          DE forthcoming: annotate lead paragraph; suppress RU margin notes. */}
       <section className={styles.bio}>
         {leadParagraph && (
-          <Marginalia note={marginalia?.[0] ?? undefined}>
+          <Marginalia note={deForthcoming ? tAbout('deForthcoming') : (marginalia?.[0] ?? undefined)}>
             <p className={styles.bioLead}>{leadParagraph}</p>
           </Marginalia>
         )}
         {bodyParagraphs.map((para, i) => (
-          <Marginalia key={i} note={marginalia?.[i + 1] ?? undefined}>
+          <Marginalia key={i} note={deForthcoming ? undefined : (marginalia?.[i + 1] ?? undefined)}>
             <p className={styles.bioParagraph}>{para}</p>
           </Marginalia>
         ))}

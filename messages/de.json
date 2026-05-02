@@ -66,12 +66,14 @@
     "bookingCta": "Roman zu einer Tournee schreiben",
     "credits": "Credits",
     "onTour": "AUF TOURNEE",
-    "directorsNoteAttr": "— ROMAN BOKLANOV"
+    "directorsNoteAttr": "— ROMAN BOKLANOV",
+    "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "about": {
     "stagedIn": "INSZENIERTE IN",
     "chronology": "Chronologie",
-    "lineage": "Tradition"
+    "lineage": "Tradition",
+    "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "notFound": {
     "heading": "seite nicht gefunden",

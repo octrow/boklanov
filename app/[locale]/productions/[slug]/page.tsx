@@ -6,6 +6,7 @@ import { compileMDX } from 'next-mdx-remote/rsc'
 import * as React from 'react'
 
 import { GalleryLightbox } from '@/components/GalleryLightbox'
+import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { SectionStripe } from '@/components/SectionStripe'
 import { TourTicker } from '@/components/TourTicker'
@@ -361,9 +362,15 @@ export default async function ProductionDetailPage({
             </ul>
           )}
 
-          {/* 4. One-line synopsis */}
+          {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
           {production.synopsis && (
-            <p className={styles.synopsis}>{production.synopsis}</p>
+            locale === 'de' ? (
+              <Marginalia note={t('deForthcoming')}>
+                <p className={styles.synopsis}>{production.synopsis}</p>
+              </Marginalia>
+            ) : (
+              <p className={styles.synopsis}>{production.synopsis}</p>
+            )
           )}
 
           {/* 4b. Tagline — subgenre / format label */}
