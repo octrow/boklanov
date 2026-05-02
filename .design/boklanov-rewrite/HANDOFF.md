@@ -1,14 +1,15 @@
-# Handoff prompt — boklanov.ru rewrite, post-Round 3 / D1 next
+# Handoff prompt — boklanov.ru rewrite, D1 live / R2 QA next
 
 Paste the block below into a fresh Claude Code conversation in the
-`boklanov` repo (branch `rewrite/v2`) to continue.
+`boklanov` repo (branch `main`) to continue.
 
 ---
 
 ## Prompt
 
 I'm continuing the boklanov.com / boklanov.ru rewrite on branch
-`rewrite/v2`. This is a Russian/English/German site for theatre director
+`main` (formerly `rewrite/v2`, merged 2026-05-02). This is a
+Russian/English/German site for theatre director
 Roman Boklanov (puppet / object / family theatre, 30+ productions).
 
 **Two structural facts that affect copy and proposals:**
@@ -22,7 +23,7 @@ Roman Boklanov (puppet / object / family theatre, 30+ productions).
    claim present-tense work in Russia. Colophon is city-free;
    staging-geography labels use past-tense.
 
-**Current state — Phase 7.5 Rounds 1 + 2 + 3 shipped. D1 Vercel preview is next.**
+**Current state — Phase 7.5 Rounds 1 + 2 + 3 shipped. D1 live at https://boklanov.vercel.app/. R2 QA is next.**
 
 Round 1 (`c7a1b50`, 2026-05-02):
 - `lib/folio.ts` — `folioFor(pathname, productions)` → `{ sectionKey, index? }`
@@ -50,17 +51,19 @@ Round 3 (`7c26402`, 2026-05-02):
 - `<Suspense fallback={null}>` boundary wraps `<SlateStrike>` in home page
 - `--duration-slate: 320ms` token added to `globals.css`
 
-**Build state:** clean. No uncommitted edits. `npm run build` passes.
+**Build state:** clean. `main` is live on Vercel at https://boklanov.vercel.app/
+Vercel project: https://vercel.com/octrows-projects/boklanov
 
 **Next milestones, in order:**
 1. ~~**Phase 7.5 Round 1**~~ ✅ **done** (`c7a1b50`)
 2. ~~**Phase 7.5 Round 2**~~ ✅ **done** (`0bebf3c`)
 3. ~~**Phase 7.5 Round 3**~~ ✅ **done** (`7c26402`)
-4. **R2 real-device QA** — manual pass by Daniil + Roman on real
+4. ~~**D1 Vercel preview**~~ ✅ **live** — https://boklanov.vercel.app/ (`476af22`)
+5. **R2 real-device QA** — manual pass by Daniil + Roman on real
    hardware. Claude cannot run this. See R2 checklist below.
-5. **D1 Vercel preview** — push `rewrite/v2` to GitHub, connect Vercel,
-   set `NEXT_PUBLIC_BASE_URL`. Can begin before R2 sign-off.
-6. **Phase 8** — Authoring handoff (Obsidian + R2). After D4 cutover.
+   Note: `?gesture=off` gate on slate-strike is still active — lift after R2 sign-off.
+6. **D2/D3/D4** — hosting decision, custom domain, cutover.
+7. **Phase 8** — Authoring handoff (Obsidian + R2). After D4 cutover.
 
 ---
 
@@ -104,15 +107,15 @@ Manual pass on real hardware. Checklist:
 
 ---
 
-### D1 scope (Vercel preview — can begin before R2 sign-off)
+### D1 — ✅ done (2026-05-02)
 
-- Push branch → connect Vercel project.
-- Set `NEXT_PUBLIC_BASE_URL` env var.
-- Set `NEXT_PUBLIC_POSTHOG_KEY` if PostHog enabled.
-- Verify Cyrillic fonts render on Vercel edge (not just localhost).
-- Share preview URL with Roman.
-- After D1: lift `?gesture=off` gate (or keep for 48h design review),
-  then D2 hosting decision, D3 domain, D4 cutover.
+- Live at https://boklanov.vercel.app/
+- Vercel project: https://vercel.com/octrows-projects/boklanov
+- `main` branch auto-deploys on every push.
+- `NEXT_PUBLIC_BASE_URL` not yet set (defaults to `https://boklanov.com`
+  — fine until D3 domain cutover).
+- `?gesture=off` slate-strike gate still active — lift after R2 sign-off.
+- Next: D2 hosting decision, D3 custom domain, D4 cutover.
 
 ---
 
