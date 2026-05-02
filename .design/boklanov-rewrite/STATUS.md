@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 13 — fix-pass-2: §2.4 broken-grid unfreeze rolled back).
+Current state + open work. Updated: 2026-05-03 (session 14 — duotone tuning + scope cleanup).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -161,7 +161,7 @@ Direction "Plakat" selected — see `DESIGN_v3_PROPOSAL.md`. Bauhaus stage trio 
 | 9v3.1 | Unbounded VF (Cyrl + Latin + Latin-ext) self-hosted + `<SiteWordmark>` + ALL CAPS swap on header/footer (header/footer reverted to Lora lowercase in fix-pass `2388511`) | done | `b20d501` + fix-pass `2388511` |
 | 9v3.2 | `<SectionStripe>` + per-route accent (lib/section-accent.ts). Fix-pass `2388511`: moved into `<SiteHeader>` (was per-page inside `<main>` — constrained by max-width-content; now spans 100vw under header rule). | done | `6f7fc30` + fix-pass `2388511` |
 | 9v3.3 | `<Sticker>` + `<TourTicker>` (CSS marquee, pauses on hover + reduced-motion). Fix-pass `2388511`: `<Sticker>` row added on production-detail above title (FESTIVAL AWARD vermillion + TOURING cobalt; aria-hidden; new i18n keys `productions.stickerAward` / `stickerTour`). | done | `c892efd` + fix-pass `2388511` |
-| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt). Fix-pass `2388511`: selector widened to `:is(img, [data-cover-style])` so typographic covers also tint; `@supports` specificity lifted via doubled `[data-accent]`. | done | `e73ab4f` + fix-pass `2388511` |
+| 9v3.4 | `<DuotonePoster>` + SVG `<feColorMatrix>` filters (vermillion / cobalt). Fix-pass `2388511`: selector widened to `:is(img, [data-cover-style])` so typographic covers also tint. Fix-pass `e9d78c4`: dropped fragile `@supports` gate (some browsers fell to grayscale-only); unquoted url(). Fix-pass `8c78b02`+`8fa36c3`: scope = home only (FeaturedStrip + below-fold via `duotoneAll`); `/productions` no longer auto-wraps featured cards. Fix-pass `8fa36c3`: removed S-curve, restored linear luminance → softer screen-print register. | done | `e73ab4f` + 4 fix-passes |
 | 9v3.5 | `<SiteHero>` broken-grid hero on `/` + gradient ALL CAPS hero wordmark + `<TourTicker>` on `/` (mustard) + `<FeaturedStrip>` broken-grid. DA-3.A resolved: slate-strike retired on `/`, kept on production-detail. §2.3 skipped (no clip). Fix-pass `2388511`: `--font-size-hero` clamp narrowed 72→48 / 168→96; hero overflow tweaks. **Fix-pass-2:** §2.4 broken-grid unfreeze ROLLED BACK after second attempt still produced misaligned baselines + floating hairlines (variable cell widths × 4:5 aspect ratio = variable heights, geometrically incompatible). `<FeaturedStrip>` now clean 3-col equal-cell grid; visual variety via DuotonePoster + Sticker, not geometry. `<Sticker>` gains `layout="inline"` prop for non-absolute production-detail row use. | done | `c8fffc7` + fix-pass `2388511` + fix-pass-2 |
 | 9v3.6 | TypographicCover ALL CAPS Unbounded swap + Marginalia float-into-margin ≥1024px (was deferred from v2). TourRider → `<details>` at ≥1280px frees gutter. | done | `8ed4c56` |
 | 9v3.7 | DE full-content scaffolding — title.de / synopsis.de / directorsNote.de paths + Marginalia "DE forthcoming" graceful-empty | done | `badafb0` |
@@ -211,6 +211,13 @@ Per `DESIGN_v3_PROPOSAL.md` §11. Track each on the v3 acceptance worksheet at g
 ## Recent commits
 
 ```
+8fa36c3  fix(9v3): soften duotone + drop featured auto-wrap on /productions
+8c78b02  fix(9v3): duotone on home below-fold grid (richters-fairytale et al.)
+e9d78c4  fix(9v3): duotone filter visibility — drop @supports gate + S-curve contrast
+43deafc  fix(9v3): FeaturedStrip first-cell width — remove flex on .cell
+e896dea  docs(design_v3): MAP §7 update — STATUS + DESIGN for fix-pass-2 (§2.4 rollback)
+2b1e3c9  fix(9v3 fix-pass-2): roll back §2.4 broken-grid → clean 3-col FeaturedStrip
+d5bd5e7  docs(design_v3): MAP §7 update — STATUS + DESIGN for fix-pass 2388511
 2388511  fix(9v3): visual review pass — wordmark, stripe, hero, grid, duotone, stickers
 c78f997  fix/update
 334b2d3  docs(design_v3): STATUS update — 9v3.9 sweep in progress
@@ -270,7 +277,12 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 8. ~~**9v3.8**~~ — done `9782071` + `6958737`
 9. **9v3.9 — acceptance-gate sweep** (in progress):
    - Gate 3 fixed `14777b7` (vermillion contrast).
-   - Fix-pass `2388511` shipped after first dev-server visual review — six bugs caught (wordmark register, stripe width, hero size, featured grid, duotone gating, production-detail v3-touches). Updated `DESIGN.md` §4/§7/§13 to match.
+   - Fix-pass `2388511` (six bugs): wordmark register reverted to Lora lowercase chrome, SectionStripe in header, hero size narrowed, FeaturedStrip restructured, duotone gating, production-detail Sticker.
+   - Fix-pass-2 `2b1e3c9` (§2.4 broken-grid rolled back): clean 3-col FeaturedStrip; Sticker `layout="inline"` prop.
+   - Fix-pass `43deafc`: FeaturedStrip first-cell width (removed `display:flex` on `.cell`).
+   - Fix-pass `e9d78c4`: duotone reliability — dropped `@supports` gate, unquoted url(), added S-curve.
+   - Fix-pass `8c78b02`: duotone applied to home below-fold via new `duotoneAll` prop on ProductionGrid.
+   - Fix-pass `8fa36c3`: duotone scope locked to home only (no auto-wrap of featured on `/productions`); softened — S-curve removed, linear luminance restored.
    - Pending: push to Vercel, run axe-core/Lighthouse (gates 1/2), visual A/B (gate 4), reduced-motion test (gate 5), curator 90s sim (gate 6), font-delta judgment (gate 8).
    - After all gates green, open PR `design_v3 → main`.
 ### Carryover (v2 / authoring / cutover)
