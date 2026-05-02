@@ -1,15 +1,14 @@
 /* DA-7.6.A — Marginalia component.
    Mobile/tablet: note collapses inline as italic subordinate text.
-   ≥1280px: two-column grid — prose left, note right.
+   ≥1024px: two-column grid — prose left (65ch), note right (20ch).
 
    Phase 9.4 (DESIGN_v2_PROPOSAL.md §4.3) adds two new kinds:
-   - .pull — italic Lora at body size, --ink. Inline render (no float)
-     because production-detail right-rail conflict with TourRider blocks
-     the float-into-margin layout. Float can ship in a follow-up phase.
+   - .pull — italic Lora at body size, --ink.
    - .run  — mono caps register for run rows.
 
-   Motion §5.3 (intersect settle) deferred — requires IntersectionObserver
-   client wrapper. Inline render makes the effect less compelling. */
+   Phase 9v3.6: float-into-margin breakpoint lowered to ≥1024px (was ≥1280px).
+   TourRider collapses to <details> at ≥1280px, freeing gutter for production-
+   detail Marginalia notes (9v3.7 DE scaffolding). */
 
 /* No-note wrapper: constrain prose to reading measure */
 .rowSingle {
@@ -32,8 +31,8 @@
   margin-top: var(--space-2);
 }
 
-/* ≥1280px: grid layout */
-@media (min-width: 1280px) {
+/* ≥1024px: float note into margin (was ≥1280px, lowered in 9v3.6). */
+@media (min-width: 1024px) {
   .row {
     display: grid;
     grid-template-columns: minmax(0, 65ch) minmax(0, 20ch);

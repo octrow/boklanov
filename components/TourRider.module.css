@@ -2,6 +2,10 @@
  * Replaces inline .slate from production detail page.module.css (DA-2.B).
  * Desktop-only (≥1024px) — mobile chips row carries the same data. */
 
+/* v3 9v3.6: TourRider is now a <details> accordion. At 1024-1279px the body
+   is force-visible via CSS (author stylesheet overrides UA details hide rule).
+   At ≥1280px native collapse/expand applies — frees gutter for Marginalia float. */
+
 .rider {
   display: none;
 }
@@ -15,13 +19,45 @@
     letter-spacing: var(--letter-spacing-meta);
     font-variant-numeric: tabular-nums;
   }
+
+  /* Force body visible at 1024-1279px regardless of [open] attribute. */
+  .body {
+    display: block;
+  }
 }
 
+@media (min-width: 1280px) {
+  /* Revert to UA: body hidden when <details> lacks [open]. User can expand. */
+  .body {
+    display: revert;
+  }
+}
+
+/* <summary> styled as the former header div. */
 .header {
   padding: var(--space-2) var(--space-3);
   border-bottom: 1px solid var(--rule-strong);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  cursor: default;
+}
+
+.header::-webkit-details-marker {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .header {
+    cursor: pointer;
+  }
+
+  .header::after {
+    content: '+';
+    color: var(--ink-faint);
+    font-size: var(--font-size-chip);
+  }
 }
 
 .index {
