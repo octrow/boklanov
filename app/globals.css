@@ -325,7 +325,7 @@
   --font-size-2xl:     clamp(28px, 23.6px + 1.32vw, 40px);          /* h2 */
   --font-size-3xl:     clamp(36px, 28.5px + 2.18vw, 60px);
   --font-size-4xl:     clamp(44px, 26.5px + 4.84vw, 88px);          /* display */
-  --font-size-hero:    clamp(72px, 64px + 5vw, 168px);              /* v3: Unbounded hero wordmark on / only */
+  --font-size-hero:    clamp(48px, 28px + 4.5vw, 96px);             /* v3: Unbounded hero wordmark on / only — narrowed 2026-05-03 after visual review (was clamp(72,…,168)) so EN+RU stay single line at ≥1024 and don't crop on mobile */
   --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px);          /* v3: Unbounded sticker badge text */
 
   --font-weight-normal:   400;

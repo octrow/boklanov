@@ -1,6 +1,21 @@
 /* v3 §2.4 — broken-grid featured strip on `/` only.
-   Mobile: 1 col. Tablet ≥768: large full-width + 2-col flow.
-   Desktop ≥1024: asymmetric 12-col, 3 rows.
+   Revised 2026-05-03 after visual review: previous layout used a 2-row tall
+   "large" cell (cols 1–7 rows 1–2) beside two stacked mediums on the right.
+   Card aspect-ratio 4:5 forced the wide cell shorter than two-row mediums,
+   leaving dead vertical space below the top-left card. Restructured into a
+   single set of cells per row so widths drive heights consistently:
+
+     ≥1024:
+       Row 1 — cell1 cols 1–7 (large)   | cell2 cols 8–12 (medium)
+       Row 2 — cell3 cols 1–5 (medium)  | cell4 cols 6–9 (medium-narrow) | cell5 cols 10–13... NB: 12 cols total, so:
+       Row 2 — cell3 cols 1–5 | cell4 cols 6–9 | cell5 cols 9–13 (overlap-safe)
+     For 6-card content: row 2 = 3 small cells (cols 1–4, 5–8, 9–12). cell6
+     joins row 2 only when 6 productions present; row keeps even heights via
+     auto-rows.
+
+     Tablet ≥768: 2-col flow, cell1 spans full width on row 1.
+     Mobile: 1-col linear.
+
    Rollback trigger: equal-size cells; cards lift on hover. Phase 9v3.5. */
 
 .grid {
@@ -10,6 +25,12 @@
 }
 
 .cell {
+  min-width: 0;
+  display: flex;
+}
+
+.cell > * {
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -28,44 +49,48 @@
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: auto;
     gap: var(--gutter-desktop);
-    row-gap: var(--gutter-desktop);
+    row-gap: var(--space-7);
   }
 
-  /* Large: cols 1–7, rows 1–2 */
+  /* Row 1: 1 large + 1 medium, side by side, both single-row so card aspect
+     ratios drive matching heights without empty space. */
   .cell1 {
     grid-column: 1 / 8;
-    grid-row: 1 / 3;
+    grid-row: 1;
   }
 
-  /* Medium top: cols 8–12, row 1 */
   .cell2 {
     grid-column: 8 / 13;
     grid-row: 1;
+    /* Medium card sits offset slightly so it visually anchors to the bottom of
+       the wide neighbour — keeps the broken-grid feel without empty space. */
+    align-self: end;
+  }
+
+  /* Row 2: medium-narrow + medium-narrow + medium-narrow — three even small
+     cells. Asymmetric anchors keep the editorial register. */
+  .cell3 {
+    grid-column: 1 / 5;
+    grid-row: 2;
+  }
+
+  .cell4 {
+    grid-column: 5 / 9;
+    grid-row: 2;
     align-self: start;
   }
 
-  /* Medium bottom: cols 8–12, row 2 */
-  .cell3 {
-    grid-column: 8 / 13;
+  .cell5 {
+    grid-column: 9 / 13;
     grid-row: 2;
     align-self: end;
   }
 
-  /* Small: cols 1–4, 5–8, 9–12, row 3 */
-  .cell4 {
-    grid-column: 1 / 5;
-    grid-row: 3;
-    align-self: end;
-  }
-
-  .cell5 {
-    grid-column: 5 / 9;
-    grid-row: 3;
-  }
-
+  /* Row 3: a single wide trailing cell — shipped only when 6 featured exist. */
   .cell6 {
-    grid-column: 9 / 13;
+    grid-column: 3 / 11;
     grid-row: 3;
   }
 }

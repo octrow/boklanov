@@ -2,7 +2,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { EmptyState } from '@/components/EmptyState'
-import { SectionStripe } from '@/components/SectionStripe'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -57,7 +56,6 @@ export default async function PressPage({
 
   return (
     <main className={styles.page}>
-      <SectionStripe />
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {items.length === 0 ? (

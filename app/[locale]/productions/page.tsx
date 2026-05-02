@@ -4,7 +4,6 @@ import { Suspense } from 'react'
 
 import { FilteredProductionsPanel } from '@/components/FilteredProductionsPanel'
 import { ProductionGrid } from '@/components/ProductionGrid'
-import { SectionStripe } from '@/components/SectionStripe'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
 
@@ -41,7 +40,6 @@ export default async function ProductionsIndexPage({
 
   return (
     <main className={styles.page}>
-      <SectionStripe />
       <header className={styles.header}>
         <h1 className={styles.title}>{t('title')}</h1>
       </header>

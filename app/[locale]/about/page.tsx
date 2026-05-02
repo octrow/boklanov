@@ -7,7 +7,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { Cue } from '@/components/Cue'
-import { SectionStripe } from '@/components/SectionStripe'
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
 import type { Locale } from '@/i18n/routing'
@@ -150,7 +149,6 @@ export default async function AboutPage({
 
   return (
     <main className={styles.page}>
-      <SectionStripe />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

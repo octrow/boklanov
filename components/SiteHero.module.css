@@ -29,7 +29,12 @@
 .heroWordmark {
   margin: 0;
   /* Contain overflow on narrow viewports when wordmark word-wraps. */
-  overflow: hidden;
+  overflow: visible;
+  /* Prevent clip on descenders/ascenders of background-clip:text gradient. */
+  padding-block: 0.06em;
+  /* Allow long words ('Бокланов') to break on narrow viewports without overflowing. */
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 
 .statement {

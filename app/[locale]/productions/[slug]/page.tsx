@@ -8,7 +8,7 @@ import * as React from 'react'
 import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
-import { SectionStripe } from '@/components/SectionStripe'
+import { Sticker } from '@/components/Sticker'
 import { TourTicker } from '@/components/TourTicker'
 import { countryCode } from '@/components/ProductionCard'
 import { TheatreSlate } from '@/components/TheatreSlate'
@@ -248,7 +248,6 @@ export default async function ProductionDetailPage({
 
   return (
     <main className={styles.page}>
-      <SectionStripe />
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
@@ -310,6 +309,29 @@ export default async function ProductionDetailPage({
             </PosterLightbox>
           )
         })()}
+
+      {/* v3 §2.2 — plakat sticker badges above title.
+          Award sticker fires when production has any award; tour sticker fires
+          when production has a `tour[]` (the Plinth). At most 2 stickers per
+          page (cap from proposal §2.2 max-3-per-page; we leave room for a
+          third elsewhere). Hidden from screen readers — TourRider + awards
+          list are the canonical sources. */}
+      {(production.awards.length > 0 || production.tour.length > 0) && (
+        <div className={styles.stickerRow} aria-hidden="true">
+          {production.awards.length > 0 && (
+            <Sticker variant="award" accent="vermillion" rotate={-3} shadow>
+              {production.awards.length === 1
+                ? t('stickerAward')
+                : `${t('stickerAward')} · ${production.awards.length}`}
+            </Sticker>
+          )}
+          {production.tour.length > 0 && (
+            <Sticker variant="tour" accent="cobalt" rotate={3}>
+              {t('stickerTour')}
+            </Sticker>
+          )}
+        </div>
+      )}
 
       {/* .layout: on desktop becomes a CSS grid [720px content | 1fr rail].
           .stickyCta lives in the rail column so it's visible from landing. */}

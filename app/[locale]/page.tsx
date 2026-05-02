@@ -3,7 +3,6 @@ import * as React from 'react'
 
 import { FeaturedStrip } from '@/components/FeaturedStrip'
 import { ProductionGrid } from '@/components/ProductionGrid'
-import { SectionStripe } from '@/components/SectionStripe'
 import { SiteHero } from '@/components/SiteHero'
 import { TourTicker } from '@/components/TourTicker'
 import { Link } from '@/i18n/navigation'
@@ -40,7 +39,6 @@ export default async function HomePage({
 
   return (
     <main className={styles.page}>
-      <SectionStripe />
       {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
       <SiteHero locale={locale} statement={t('statement')} />
 
