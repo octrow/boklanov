@@ -13,7 +13,22 @@
     "statement": "Shows about people and things — for children, teenagers, and the adults. Roman Boklanov works between Bremen, Viena and Almaty.",
     "featuredLabel": "selected works",
     "allLabel": "productions",
-    "viewAll": "all productions →"
+    "viewAll": "all productions →",
+    "stagingCities": [
+      "ST.PETERSBURG",
+      "MOSCOW",
+      "ALMATY",
+      "BREMEN",
+      "VIENNA",
+      "BERLIN",
+      "TASHKENT",
+      "ALICANTE",
+      "LONDON",
+      "EDINBURGH",
+      "LISBON",
+      "PORTO",
+      "LUXEMBOURG"
+    ]
   },
   "productions": {
     "title": "productions",

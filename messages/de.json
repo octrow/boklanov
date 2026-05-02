@@ -13,7 +13,22 @@
     "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
     "featuredLabel": "ausgewählte Werke",
     "allLabel": "Inszenierungen",
-    "viewAll": "alle Inszenierungen →"
+    "viewAll": "alle Inszenierungen →",
+    "stagingCities": [
+      "ST. PETERSBURG",
+      "MOSKAU",
+      "ALMATY",
+      "BREMEN",
+      "WIEN",
+      "BERLIN",
+      "TASCHKENT",
+      "ALICANTE",
+      "LONDON",
+      "EDINBURGH",
+      "LISSABON",
+      "PORTO",
+      "LUXEMBURG"
+    ]
   },
   "productions": {
     "title": "Inszenierungen",
