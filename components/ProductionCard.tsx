@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
@@ -44,14 +47,19 @@ export interface ProductionCardProps {
   sticker?: React.ReactNode
 }
 
-export function ProductionCard({ production, priority = false, sticker }: ProductionCardProps) {
+export function ProductionCard({
+  production,
+  priority = false,
+  sticker
+}: ProductionCardProps) {
+  const t = useTranslations('productionDetail')
   const titleRu = production.titles.ru
   const titleEn = production.titles.en
   const showEn = !!titleEn && titleEn !== titleRu
 
   const theatre = production.theatre.shortName ?? production.theatre.name
   const country = countryCode(production.theatre.country)
-  const premMark = production.year ? `PREM ${production.year}` : null
+  const premMark = production.year ? `${t('premPrefix')} ${production.year}` : null
   const meta = [theatre, premMark, production.ageRating, country]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
@@ -69,9 +77,14 @@ export function ProductionCard({ production, priority = false, sticker }: Produc
     ? `${altBase} (${production.poster.credit})`
     : altBase
 
-  const coverStyle = production.poster.src && production.poster.lqip
-    ? { backgroundImage: `url(${production.poster.lqip})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' }
-    : undefined
+  const coverStyle =
+    production.poster.src && production.poster.lqip
+      ? {
+          backgroundImage: `url(${production.poster.lqip})`,
+          backgroundSize: 'cover' as const,
+          backgroundPosition: 'center'
+        }
+      : undefined
 
   return (
     <Link href={`/productions/${production.slug}`} className={styles.card}>

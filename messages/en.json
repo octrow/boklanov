@@ -6,14 +6,31 @@
     "press": "press",
     "contact": "contact",
     "archive": "archive",
-    "search": "search"
+    "search": "search",
+    "wordmark": "roman boklanov"
   },
   "home": {
     "heroMeta": "director · puppet theatre · theatre of objects",
+    "heroWordmark": "Roman Boklanov",
     "statement": "Shows about people and things — for children, teenagers, and the adults. Roman Boklanov works between Bremen, Viena and Almaty.",
     "featuredLabel": "selected works",
     "allLabel": "productions",
-    "viewAll": "all productions →"
+    "viewAll": "all productions →",
+    "stagingCities": [
+      "ST.PETERSBURG",
+      "MOSCOW",
+      "ALMATY",
+      "BREMEN",
+      "VIENNA",
+      "BERLIN",
+      "TASHKENT",
+      "ALICANTE",
+      "LONDON",
+      "EDINBURGH",
+      "LISBON",
+      "PORTO",
+      "LUXEMBOURG"
+    ]
   },
   "productions": {
     "title": "productions",
@@ -44,7 +61,11 @@
     "instagramCta": "Message on Instagram",
     "emailLabel": "or by email",
     "emailCta": "Email Roman",
-    "mailtoSubject": "Collaboration / touring"
+    "mailtoSubject": "Collaboration / touring",
+    "copyButton": "copy",
+    "copiedButton": "✓",
+    "copyAria": "Copy email address",
+    "copiedAria": "Copied"
   },
   "press": {
     "title": "press",
@@ -69,7 +90,23 @@
     "directorsNoteAttr": "— ROMAN BOKLANOV",
     "deForthcoming": "Deutsche Übersetzung folgt",
     "stickerAward": "FESTIVAL AWARD",
-    "stickerTour": "TOURING"
+    "stickerTour": "TOURING",
+    "riderYear": "YEAR",
+    "riderRun": "RUN",
+    "riderMin": "MIN",
+    "riderAge": "AGE",
+    "riderCountry": "COUNTRY",
+    "riderLanguage": "LANGUAGE",
+    "riderForm": "FORM",
+    "riderLineage": "LINEAGE",
+    "riderTouring": "TOURING",
+    "riderSolo": "SOLO",
+    "riderTechRider": "TECH RIDER",
+    "riderPressKit": "PRESS KIT",
+    "riderSpecSheet": "SPEC SHEET",
+    "riderTechRiderAria": "Technical rider, PDF",
+    "riderPressKitAria": "Press kit, ZIP",
+    "premPrefix": "PREM"
   },
   "about": {
     "stagedIn": "STAGED IN",
@@ -87,6 +124,12 @@
     "colophon": "2026 EDITION"
   },
   "search": {
-    "noResults": "no results in this edition"
+    "noResults": "no results in this edition",
+    "groupProductions": "PRODUCTIONS",
+    "groupAwards": "AWARDS",
+    "groupPress": "PRESS",
+    "groupTheatres": "THEATRES",
+    "groupCities": "CITIES",
+    "placeholder": "Search…"
   }
 }

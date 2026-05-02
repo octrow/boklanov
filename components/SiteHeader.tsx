@@ -15,11 +15,6 @@ import styles from './SiteHeader.module.css'
 
 const LOCALES: Locale[] = ['ru', 'en', 'de']
 
-const WORDMARKS: Record<Locale, string> = {
-  ru: 'роман бокланов',
-  en: 'roman boklanov',
-  de: 'roman boklanov'
-}
 
 interface SiteHeaderProps {
   productions: { slug: string }[]
@@ -48,7 +43,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       {(folio.sectionKey || folio.isHome) && (
         <div className={styles.folio} aria-hidden="true">
           <span className={styles.folioName}>
-            {WORDMARKS[locale].toUpperCase()}
+            {t('wordmark').toUpperCase()}
           </span>
           {folio.sectionKey && (
             <>
@@ -69,7 +64,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       <div className={styles.inner}>
         {/* Wordmark */}
         <Link href="/" className={styles.wordmark}>
-          <SiteWordmark variant="header" locale={locale} />
+          <SiteWordmark variant="header" text={t('wordmark')} />
         </Link>
 
         {/* Desktop nav */}

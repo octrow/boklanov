@@ -6,14 +6,17 @@
     "press": "пресса",
     "contact": "контакты",
     "archive": "архив",
-    "search": "поиск"
+    "search": "поиск",
+    "wordmark": "роман бокланов"
   },
   "home": {
     "heroMeta": "режиссёр · театр кукол · театр объекта",
+    "heroWordmark": "Роман Бокланов",
     "statement": "Спектакли о людях и вещах — для детей, подростков и семьи. Роман Бокланов работает между Бременом, Веной и Алматы.",
     "featuredLabel": "избранное",
     "allLabel": "постановки",
-    "viewAll": "все постановки →"
+    "viewAll": "все постановки →",
+    "stagingCities": ["ПЕТЕРБУРГ", "МОСКВА", "АЛМАТЫ", "БРЕМЕН", "ВЕНА", "БЕРЛИН", "ТАШКЕНТ", "АЛИКАНТЕ", "ЛОНДОН", "ЭДИНБУРГ", "ЛИССАБОН", "ПОРТО", "ЛЮКСЕМБУРГ"]
   },
   "productions": {
     "title": "постановки",
@@ -44,7 +47,11 @@
     "instagramCta": "Написать в Instagram",
     "emailLabel": "или по электронной почте",
     "emailCta": "Написать Роману",
-    "mailtoSubject": "Сотрудничество / гастроли"
+    "mailtoSubject": "Сотрудничество / гастроли",
+    "copyButton": "копировать",
+    "copiedButton": "✓",
+    "copyAria": "Скопировать адрес эл. почты",
+    "copiedAria": "Скопировано"
   },
   "press": {
     "title": "пресса",
@@ -69,7 +76,23 @@
     "directorsNoteAttr": "— РОМАН БОКЛАНОВ",
     "deForthcoming": "Deutsche Übersetzung folgt",
     "stickerAward": "ПРИЗ ФЕСТИВАЛЯ",
-    "stickerTour": "ГАСТРОЛИ"
+    "stickerTour": "ГАСТРОЛИ",
+    "riderYear": "ГОД",
+    "riderRun": "ПРОД",
+    "riderMin": "МИН",
+    "riderAge": "ВОЗР",
+    "riderCountry": "СТРАНА",
+    "riderLanguage": "ЯЗЫК",
+    "riderForm": "ФОРМА",
+    "riderLineage": "ТРАДИЦИЯ",
+    "riderTouring": "ГАСТРОЛИ",
+    "riderSolo": "СОЛО",
+    "riderTechRider": "ТЕХ. РАЙДЕР",
+    "riderPressKit": "ПРЕСС-КИТ",
+    "riderSpecSheet": "ТЕХПАСПОРТ",
+    "riderTechRiderAria": "Технический райдер, PDF",
+    "riderPressKitAria": "Пресс-кит, ZIP",
+    "premPrefix": "ПРЕМ"
   },
   "about": {
     "stagedIn": "ГДЕ СТАВИЛ",
@@ -87,6 +110,12 @@
     "colophon": "2026 ИЗДАНИЕ"
   },
   "search": {
-    "noResults": "ничего не найдено"
+    "noResults": "ничего не найдено",
+    "groupProductions": "ПОСТАНОВКИ",
+    "groupAwards": "НАГРАДЫ",
+    "groupPress": "ПРЕССА",
+    "groupTheatres": "ТЕАТРЫ",
+    "groupCities": "ГОРОДА",
+    "placeholder": "Поиск…"
   }
 }

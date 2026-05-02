@@ -11,8 +11,6 @@ import { getAllProductions } from '@/lib/content'
 
 import styles from './home.module.css'
 
-const STAGING_CITIES = ['СПБ', 'МОСКВА', 'АЛМАТЫ', 'БРЕМЕН', 'ВЕНА', 'БЕРЛИН', 'ТАШКЕНТ']
-
 export default async function HomePage({
   params
 }: {
@@ -40,10 +38,10 @@ export default async function HomePage({
   return (
     <main className={styles.page}>
       {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
-      <SiteHero locale={locale} statement={t('statement')} />
+      <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')} />
 
       {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
-      <TourTicker cities={STAGING_CITIES} accent="mustard" label={tAbout('stagedIn')} />
+      <TourTicker cities={t.raw('stagingCities') as string[]} accent="mustard" label={tAbout('stagedIn')} />
 
       {/* Featured strip — v3 §2.4: broken-grid, 1 large + 2 medium + 3 small */}
       {featured.length > 0 && (

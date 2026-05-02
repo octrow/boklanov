@@ -57,7 +57,7 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
         {/* Col 3: Copyright */}
         <div className={styles.col}>
           <span className={styles.copyright}>
-            <SiteWordmark variant="footer" locale={locale} />
+            <SiteWordmark variant="footer" text={t('wordmark')} />
             {` · ${year}`}
           </span>
         </div>
