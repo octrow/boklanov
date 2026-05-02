@@ -1,6 +1,6 @@
 # DESIGN
 
-Visual identity + IA + token essentials. Updated: 2026-05-02 (session 6).
+Visual identity + IA + token essentials. Updated: 2026-05-03 (session 11 — v3 Plakat mirrored).
 
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
@@ -12,11 +12,9 @@ History (read-only, consult for "why"; do not edit in routine work). Read `*_com
 
 ## 1. Identity
 
-Frame around the work. Warm editorial body + brutalist mono accents. One reserved colour: oxblood. Photo carries colour;
-chrome stays still. Curator on mobile, 90s: must walk away with what kind of theatre + 2-3 productions + non-Instagram
-contact.
+Frame around the work. Warm editorial body + Bauhaus plakat accents. Three stage colours: vermillion / cobalt / mustard (v3 2026-05-03, replace v2 oxblood). Photo carries colour; chrome stays still. One decisive plakat gesture per page. Curator on mobile, 90s: must walk away with what kind of theatre + 2-3 productions + non-Instagram contact.
 
-References borrowed for grammar, never fingerprints: linear.com, claude.ai (warm), granola.ai, the-newyorker.com.
+References (energy): gorki.de, hau-berlin.de, volksbuehne-berlin.de. Grammar (not fingerprints): linear.com, claude.ai (warm), granola.ai.
 
 ## 2. Mood axis
 
@@ -37,63 +35,73 @@ References borrowed for grammar, never fingerprints: linear.com, claude.ai (warm
 
 ## 3. Colour
 
-Light (`--paper`/`--ink`/`--accent`):
+v3 Plakat (2026-05-03): Bauhaus trio replaces v2 oxblood. `--ink` deepened for accent contrast.
 
-- `--paper #F2F0EA` warm off-white (v2 2026-05-02; was `#F4F2EC`)
+Light:
+
+- `--paper #F2F0EA` warm off-white
 - `--paper-raised #FBFAF6` cards/modals
 - `--paper-sunken #ECE9E1` inputs/wells
-- `--ink #161514` primary text
+- `--ink #0F0E0D` primary text (v3: was `#161514`, deepened for accent contrast)
 - `--ink-mute #605C56` secondary, dates, captions
 - `--ink-faint #8F8B83` placeholder, disabled, decorative metadata
-- `--ink-marginalia rgba(22,21,20,0.55)` v2: marginalia secondary register
-- `--rule rgba(22,21,20,0.10)` hairlines
-- `--rule-strong rgba(22,21,20,0.18)` hover/active borders
-- `--accent #6B0F0F` oxblood. Reserved for: (1) booking CTA fills, (2) hover underline reveal on primary links, (3)
-  focus ring. Nowhere else.
+- `--ink-marginalia rgba(15,14,13,0.55)` marginalia secondary register
+- `--rule rgba(15,14,13,0.10)` hairlines
+- `--rule-strong rgba(15,14,13,0.18)` hover/active borders
+- `--accent-vermillion #E63946` primary stage. Booking CTA fill, `/` + `/awards` + `/contact` SectionStripe, link-hover underline, focus ring, Sticker A. AA on paper 4.65:1 ✓.
+- `--accent-cobalt #1D3557` secondary stage. `/productions` SectionStripe, Sticker B. AAA on paper 12.4:1 ✓.
+- `--accent-mustard #F4D35E` tertiary stage. `/about` SectionStripe, TourTicker fill, Sticker C. **Decorative only — never for text** (AA fail on paper). Use `--ink-on-mustard` for text on mustard fills.
+- `--ink-on-accent #FBFAF6` text on accent fills (auto-selected per accent for AA)
 
-Dark (auto via `prefers-color-scheme`, manual via `[data-theme="dark"]`):
+Dark:
 
-- `--paper #0E0D0C` soft black, never `#000`
+- `--paper #0E0D0C` soft black
 - `--ink #E8E5DD`
 - `--ink-mute #9E9A92`
 - `--rule rgba(232,229,221,0.10)`
-- `--accent #A82626` lifted oxblood, AA on `#0E0D0C`
+- `--accent-vermillion #FF5A66`
+- `--accent-cobalt #5B82C2`
+- `--accent-mustard #C9A22F`
 
-Status (muted, form-validation only): success `#3F6B3A`/`#6FA365`, warning `#8A5A18`/`#C28F3A`, error `#6B0F0F`/
-`#C95151`.
+Status (muted, form-validation only): success `#3F6B3A`/`#6FA365`, warning `#8A5A18`/`#C28F3A`, error aliased to `--accent-vermillion`.
 
-Components reference semantic aliases (`--color-bg-primary`, `--color-text-secondary`), not raw paper/ink.
+Components reference semantic aliases, not raw paper/ink.
 
 ## 4. Type
 
 Self-hosted from `public/fonts/`. SIL OFL. Full Cyrillic. No Google Fonts CDN.
 
-| Role    | Family         | Weights       | Use                                             |
-|---------|----------------|---------------|-------------------------------------------------|
-| Display | Lora           | 400, 500, 600 | Hero name, page H1, section H2                  |
-| Body    | Inter          | 400, 500, 600 | Long-form prose, UI, CTAs                       |
-| Mono    | JetBrains Mono | 400, 500      | Dates, durations, chips, credits, country codes |
+v3 addition: Unbounded VF for ALL CAPS wordmark + plakat moments.
+
+| Role     | Family         | Weights      | Use                                                             |
+|----------|----------------|--------------|-----------------------------------------------------------------|
+| Plakat   | **Unbounded**  | 200–900 VF   | ALL CAPS wordmark, hero plakat moments, Sticker badges (v3)     |
+| Display  | Lora-VF        | 400–700 VF   | Page H1, section H2, editorial prose, italic press attribution  |
+| Body/UI  | Inter          | 400, 500, 600| Long-form prose, UI, CTAs                                       |
+| Mono     | JetBrains Mono | 400, 500     | Dates, durations, chips, credits, country codes                 |
 
 Voice rules:
 
-- Wordmark always lowercase: `роман бокланов` / `roman boklanov`.
-- All-caps reserved for chips, mono caps, `letter-spacing: 0.06em`.
-- Italics only in Lora (press attribution, subtitles). Never in Inter body.
+- Wordmark **ALL CAPS** Unbounded 700, `letter-spacing: 0.03em` — `РОМАН БОКЛАНОВ` / `ROMAN BOKLANOV`. Never lowercase, never italic.
+- All-caps reserved for: wordmark (Unbounded), chips (mono), section labels (mono), Sticker badges (Unbounded). No all-caps Lora.
+- Italics only in Lora. Never in Inter or Unbounded.
 - Mono for any number that's not a price.
 
 Scale (fluid `clamp(min@375, mid, max@1280)`):
 
-| Token              | Min | Max | Use                             |
-|--------------------|-----|-----|---------------------------------|
-| `--font-size-chip` | 11  | 11  | Chips, age rating, country code |
-| `--font-size-meta` | 13  | 13  | Mono captions, dates            |
-| `--font-size-base` | 17  | 18  | Body                            |
-| `--font-size-lg`   | 20  | 24  | h3, card titles                 |
-| `--font-size-2xl`  | 28  | 40  | h2, section titles              |
-| `--font-size-4xl`  | 44  | 88  | Display, page H1                |
+| Token                 | Min | Max | Use                                         |
+|-----------------------|-----|-----|---------------------------------------------|
+| `--font-size-chip`    | 11  | 11  | Chips, age rating, country code             |
+| `--font-size-meta`    | 13  | 13  | Mono captions, dates                        |
+| `--font-size-base`    | 17  | 18  | Body                                        |
+| `--font-size-lg`      | 20  | 24  | h3, card titles                             |
+| `--font-size-2xl`     | 28  | 40  | h2, section titles                          |
+| `--font-size-4xl`     | 44  | 88  | Display, page H1                            |
+| `--font-size-hero`    | 72  | 168 | **v3** Unbounded hero wordmark on `/` only  |
+| `--font-size-sticker` | 11  | 13  | **v3** Unbounded Sticker badge text         |
 
 Tracking: `--letter-spacing-tight -0.015em` (Lora display), `--letter-spacing-wide 0.06em` (mono caps),
-`--letter-spacing-meta 0.01em` (mono captions).
+`--letter-spacing-meta 0.01em` (mono captions). Unbounded ALL CAPS: `0.03em`.
 Line-heights: tight 1.15, snug 1.3, normal 1.55, relaxed 1.7 (`/about` prose).
 
 ## 5. Spacing + layout
@@ -102,7 +110,7 @@ Base 4px. Scale: `0,4,8,12,16,24,32,48,64,96,128` -> `--space-0..10`.
 
 Gutters: mobile 20px, tablet 24px, desktop 32px.
 
-Reading measure: `--max-width-prose 65ch`. Content: 1080px. Wide hero: 1280px. Hard ceiling: 1440px. v2 additions: `--measure-caption 36ch` (SpecimenPlate captions), `--gutter-margin-pull -1.25rem` (Marginalia float-into-margin ≥1024px).
+Reading measure: `--max-width-prose 65ch`. Content: 1080px. Wide hero: 1280px. Hard ceiling: 1440px. v2 additions: `--measure-caption 36ch` (SpecimenPlate captions), `--gutter-margin-pull -1.25rem` (Marginalia float-into-margin ≥1024px). v3 additions: `--measure-poster 56ch` (TypographicCover wider register), `--shadow-plakat: 0 4px 0 0 var(--ink)` (flat-stack poster offset, §11 unfreeze §2.6/§2.7), `--stripe-thickness: 2px` (SectionStripe band), `--ticker-speed: 38s` (TourTicker marquee duration).
 
 Grid: 1-col mobile, 8-col tablet (≥768), 12-col desktop (≥1024).
 
@@ -127,7 +135,10 @@ Allowed:
    `sessionStorage.firstPaintDone`, `?gesture=off`, and `prefers-reduced-motion`.
 4. SpecimenPlate caption focus settle (Phase 9.x polish, `5d49f4e`): 2px y-translate on caption when `.plate:focus-within`, `--duration-fast` with `--easing-editorial`. Plate itself does not move; only the caption "shifts in its slot." Scoped to `SpecimenPlate.module.css`.
 
-Banned: parallax, scroll-driven entrances, animated gradients, kinetic type, hero video.
+5. **TourTicker marquee** (v3, `c892efd`): CSS `@keyframes` linear translate-X over `--ticker-speed 38s`. `prefers-reduced-motion` sets `animation-duration: 0s` AND `animation-play-state: paused` — static row of cities. `:hover` also pauses. Never opacity-fade.
+6. **Sticker badge stamp** (v3, `c892efd`): on first-paint only, `rotate(-3deg) scale(0.95)` → `rotate(-2deg) scale(1)` over `--duration-normal`, single-shot via `sessionStorage.stickersStamped`. Reduced-motion: render at final transform, no animation.
+
+Banned: parallax, scroll-driven entrances, animated gradients (static hero gradient is the one exception per §11 §2.5), kinetic type, hero video looping >3s (§2.3).
 
 `prefers-reduced-motion` zeros all `--duration-*` at the token layer. Components must reference tokens, never hardcode
 ms.
@@ -136,6 +147,8 @@ ms.
 
 Page chrome is a frame. Hairline rules separate sections. Header sticky on production detail only. Footer minimal: three
 columns of mono links + colophon. No newsletter signup, no "Built with Next.js".
+
+**v3 components (2026-05-03, branch `design_v3`):** SiteWordmark (`b20d501`) — Unbounded 700 ALL CAPS, variant=hero/header/footer. SiteHero (`c8fffc7`) — `/` only: SR h1 + aria-hidden gradient wordmark + Lora italic statement + mono hint. SectionStripe (`6f7fc30`) — 2px per-route accent band above `<Cue>`. Sticker (`c892efd`) — Unbounded 600 ALL CAPS badge, fill one accent, no radius, `--shadow-plakat`, max 1/card. DuotonePoster (`e73ab4f`) — SVG feColorMatrix two-tone on featured cards, slugHash%2 picks accent, @supports-gated, grayscale fallback. TourTicker (`c892efd`) — CSS marquee mono caps band, pauses on hover + reduced-motion. FeaturedStrip (`c8fffc7`) — broken-grid on `/` only (1 large + 2 medium + 3 small ≥1024px).
 
 Folio (Phase 7.5, `c7a1b50`; updated session 5): mono caps running line above nav in `<header>`, `aria-hidden="true"`. Format: `РОМАН БОКЛАНОВ ⟶ SECTION ⟶ 01 / 24`. Home page shows just `РОМАН БОКЛАНОВ` (no section arrow). `folioFor()` in `lib/folio.ts`. Footer mirrors with `2026 EDITION` / `2026 ИЗДАНИЕ` / `AUSGABE 2026`. Year only. No cities.
 
@@ -149,10 +162,10 @@ Production card:
 - 4:5 cover top, no radius, no border.
 - Lora RU title, Inter EN title `--ink-mute`.
 - Mono meta row: `theatre · PREM YYYY · ageRating · countryCode`. `font-variant-numeric: tabular-nums`.
-- Whole card is the link. Hover: oxblood underline reveal under RU title, no card lift.
+- Whole card is the link. Hover: vermillion underline reveal under RU title (v3: vermillion replaces oxblood), no card lift. Optional `<Sticker>` overlay.
 - No-poster fallback = deliberate typographic treatment via `<TypographicCover>` (Phase 9.8, `components/TypographicCover.tsx`). Slug-hash mod 3 picks one of three layout variants (top / centre / bottom-set title placement) so productions sharing theatre+year don't render visually identical plates. Triggered when `poster.src && poster.lqip` is false.
 
-Marginalia (Phase 7.6, `00c2501`; Phase 9.4 API extension `36546d9`): `<Marginalia kind="note|pull|run">`. Default `kind="note"` is the DA-7.6.A wrapper — `<Marginalia note="...">{prose}</Marginalia>`, ≥1280px two-column grid (`minmax(0,65ch) minmax(0,20ch)`) with note in right column, `border-left: 1px solid var(--rule)`, mono `--font-size-meta`; below 1280px the note renders as italic Lora subordinate text inline; `aria-hidden="true"` on `<aside>`. `rowSingle` (no note) constrains to `--max-width-prose`. New `kind="pull"` renders an italic Lora pull-quote at `--font-size-base`, `--ink`, 2px hairline left rule, 55ch max-width — primitive for greenfield pull-quotes; existing inline `directorsNote` rendering already matches this register so adoption is opt-in. New `kind="run"` is mono caps `--ink-marginalia` register for run rows. Float-into-margin from ≥1024px (proposal §4.3) deferred — needs production-detail right-rail restructure.
+Marginalia (Phase 7.6, `00c2501`; 9.4 API `36546d9`; v3 9v3.6 float shipped `8ed4c56`): `<Marginalia kind="note|pull|run">`. Default `kind="note"` — `<Marginalia note="...">{prose}</Marginalia>`. **v3 (9v3.6):** float-into-margin breakpoint lowered to ≥1024px (was ≥1280px); TourRider collapses to `<details>` at ≥1280px to free gutter. ≥1024px: two-column grid (`minmax(0,65ch) minmax(0,20ch)`), note in right column, `border-left`, mono meta. Below 1024px: note inline as italic Lora. `aria-hidden="true"` on `<aside>`. DE forthcoming: `note={tAbout('deForthcoming')}` on lead paragraph when `de.mdx` absent.
 
 EmptyState (Phase 7.6 + 9.5 refresh, `806d1a0`): editorial empty-state register. Top + bottom hairline rules → italic Lora body at `--font-size-base` (55ch max-width) → optional `action` slot. `role="status"` + `aria-live="polite"` for filter call-sites. Used on `ProductionGrid` (filter empty + clear-filters ghost button), archive, awards, press. ERRATA mono chip dropped in 9.5 — body reads as prose, not UI state. `CommandPalette` no-results uses equivalent inline markup for layout containment reasons.
 
