@@ -21,6 +21,7 @@
 
 # ide
 .idea
+.obsidian
 
 # debug
 npm-debug.log*
