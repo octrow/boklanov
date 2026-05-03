@@ -432,15 +432,25 @@ dd.creditsName {
 }
 
 /* 12. Trailer embed — sits below the booking CTA in the rail.
-   Mobile: full bleed inside the page flow (CTA is fixed, so this lands after
-   TourRider). Desktop ≥1024px: lives inside the sticky rail below the CTA. */
+   Mobile: page-flow card whose horizontal inset mirrors the CTA's fixed
+   positioning (var(--gutter-mobile) each side), so the trailer width matches
+   what the button would occupy — regardless of whether the button is shown.
+   Desktop ≥1024px: fills the rail width (padded by --gutter-desktop), matching
+   the static CTA above it. */
 .trailer {
   position: relative;
-  margin: var(--space-5) 0 0;
+  margin: var(--space-5) var(--gutter-mobile) 0;
   aspect-ratio: 16 / 9;
   background: var(--ink);
   border-radius: var(--border-radius-sm);
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .trailer {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .trailerFrame {
