@@ -431,6 +431,27 @@ dd.creditsName {
   }
 }
 
+/* 12. Trailer embed — sits below the booking CTA in the rail.
+   Mobile: full bleed inside the page flow (CTA is fixed, so this lands after
+   TourRider). Desktop ≥1024px: lives inside the sticky rail below the CTA. */
+.trailer {
+  position: relative;
+  margin: var(--space-5) 0 0;
+  aspect-ratio: 16 / 9;
+  background: var(--ink);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.trailerFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 /* DA-7.6.D — Run-of-show row */
 .runsRow {
   list-style: none;
