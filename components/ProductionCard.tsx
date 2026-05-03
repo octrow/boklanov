@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
@@ -26,10 +26,7 @@ export function ProductionCard({
   sticker
 }: ProductionCardProps) {
   const t = useTranslations('productionDetail')
-  const locale = useLocale()
   const titleMain = production.title
-  const titleAlt = locale === 'ru' ? production.titles.en : production.titles.ru
-  const showAlt = !!titleAlt && titleAlt !== titleMain
 
   const theatre = production.theatre.shortName ?? production.theatre.name
   const country = countryCode(production.theatre.country)
@@ -88,7 +85,6 @@ export function ProductionCard({
 
       <div className={styles.titleStack}>
         {titleMain && <h3 className={styles.titleRu}>{titleMain}</h3>}
-        {showAlt && <p className={styles.titleEn}>{titleAlt}</p>}
       </div>
 
       {meta && (
