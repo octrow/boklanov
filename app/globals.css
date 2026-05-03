@@ -325,7 +325,7 @@
   --font-size-2xl:     clamp(28px, 23.6px + 1.32vw, 40px);          /* h2 */
   --font-size-3xl:     clamp(36px, 28.5px + 2.18vw, 60px);
   --font-size-4xl:     clamp(44px, 26.5px + 4.84vw, 88px);          /* display */
-  --font-size-hero:    clamp(48px, 28px + 4.5vw, 96px);             /* v3: Unbounded hero wordmark on / only — narrowed 2026-05-03 after visual review (was clamp(72,…,168)) so EN+RU stay single line at ≥1024 and don't crop on mobile */
+  --font-size-hero:    clamp(36px, 23px + 4vw, 80px);               /* v3: Unbounded hero wordmark on / only — retuned 2026-05-03: min 36 so 'Бокланов' fits whole-word from 320px (iPhone SE), max 80 so full 'РОМАН БОКЛАНОВ' stays single-line at the 1080px content cap. Was clamp(48,28+4.5vw,96) which both cropped on 320–375px and wrapped at 1440 */
   --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px);          /* v3: Unbounded sticker badge text */
 
   --font-weight-normal:   400;
