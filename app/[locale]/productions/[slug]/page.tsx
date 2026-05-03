@@ -385,6 +385,35 @@ export default async function ProductionDetailPage({
             premiereDate={production.premiereDate}
           />
 
+          {/* Trailer embed — promoted to flow right after the title so poster→name→trailer→photos read in order on both desktop and mobile. */}
+          {trailerEmbedUrl && (
+            <div className={styles.trailer}>
+              <iframe
+                className={styles.trailerFrame}
+                src={trailerEmbedUrl}
+                title={`${production.title} — ${t('trailer')}`}
+                loading='lazy'
+                allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
+                allowFullScreen
+                referrerPolicy='strict-origin-when-cross-origin'
+              />
+            </div>
+          )}
+
+          {/* Photos — promoted to sit right under the trailer per the unified poster→name→trailer→photos order. */}
+          {production.gallery.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+              <GalleryLightbox
+                items={production.gallery.map((g) => ({
+                  src: cdnUrl(g.src)!,
+                  alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                  credit: g.credit
+                }))}
+              />
+            </section>
+          )}
+
           {/* 3. Chips row */}
           {chips.length > 0 && (
             <ul className={styles.chips}>
@@ -535,20 +564,6 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
-          {/* 8. Photos — navigable lightbox with left/right arrows */}
-          {production.gallery.length > 0 && (
-            <section className={styles.section}>
-              <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-              <GalleryLightbox
-                items={production.gallery.map((g) => ({
-                  src: cdnUrl(g.src)!,
-                  alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
-                  credit: g.credit
-                }))}
-              />
-            </section>
-          )}
-
           {/* 9. Awards & Festivals */}
           {(production.awards.length > 0 || (production.festivals && production.festivals.length > 0)) && (
             <section className={styles.section}>
@@ -654,21 +669,6 @@ export default async function ProductionDetailPage({
             >
               {ctaLabel}
             </a>
-          )}
-          {/* 12. Trailer embed — sits below the CTA in the rail (desktop) or
-              after TourRider in flow (mobile, since CTA is position:fixed). */}
-          {trailerEmbedUrl && (
-            <div className={styles.trailer}>
-              <iframe
-                className={styles.trailerFrame}
-                src={trailerEmbedUrl}
-                title={`${production.title} — ${t('trailer')}`}
-                loading='lazy'
-                allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
-                allowFullScreen
-                referrerPolicy='strict-origin-when-cross-origin'
-              />
-            </div>
           )}
         </div>
       </div>
