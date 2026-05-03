@@ -43,7 +43,7 @@
     "roleDirector": "Regisseur",
     "roleCoDirector": "Co-Regisseur",
     "rolePerformer": "Darsteller",
-    "roleReader": "Leser",
+    "roleReader": "andere",
     "roleSketch": "Skizze",
     "roleAll": "alle"
   },

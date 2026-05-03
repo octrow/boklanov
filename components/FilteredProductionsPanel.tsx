@@ -34,7 +34,7 @@ const ROLE_OPTIONS = [
   { labelKey: 'director', value: 'director' },
   { labelKey: 'coDirector', value: 'co-director' },
   { labelKey: 'performer', value: 'performer' },
-  { labelKey: 'reader', value: 'reader' }
+  { labelKey: 'reader', value: 'other' }
 ] as const
 
 // ── Component ───────────────────────────────────────────────────────────
@@ -103,8 +103,11 @@ export function FilteredProductionsPanel({
   // ── Filter productions ───────────────────────────────────────────────
 
   const filtered = React.useMemo(() => {
+    const mainRoles = ['director', 'co-director', 'performer']
     return productions.filter((p) => {
-      if (activeRole !== 'all' && !p.role.includes(activeRole)) return false
+      if (activeRole === 'other') {
+        if (p.role.some((r) => mainRoles.includes(r))) return false
+      } else if (activeRole !== 'all' && !p.role.includes(activeRole)) return false
       if (activeForms.length > 0 && !activeForms.some((f) => p.form.includes(f)))
         return false
       if (activeAges.length > 0) {
@@ -153,7 +156,7 @@ export function FilteredProductionsPanel({
     director: labels.roleDirector,
     'co-director': labels.roleCoDirector,
     performer: labels.rolePerformer,
-    reader: labels.roleReader
+    other: labels.roleReader
   }
 
   return (
