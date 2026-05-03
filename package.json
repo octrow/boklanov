@@ -28,6 +28,7 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/lora": "^5.2.8",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/og": "^0.0.19",
     "classnames": "^2.5.1",
     "fathom-client": "^3.4.1",
