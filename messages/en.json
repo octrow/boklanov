@@ -72,8 +72,8 @@
     "empty": "No press materials"
   },
   "awards": {
-    "title": "awards",
-    "empty": "No awards data",
+    "title": "awards & festivals",
+    "empty": "No awards or festivals data",
     "awardsLabel": "prizes",
     "festivalsLabel": "festivals"
   },
