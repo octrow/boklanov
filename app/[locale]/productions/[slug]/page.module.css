@@ -312,6 +312,15 @@ dd.creditsName {
   border-bottom: none;
 }
 
+.awardsSubLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: var(--space-5) 0 var(--space-3);
+}
+
 .awardYear {
   color: var(--ink-mute);
 }

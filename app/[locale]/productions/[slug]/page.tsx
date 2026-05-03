@@ -549,23 +549,50 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
-          {/* 9. Awards */}
-          {production.awards.length > 0 && (
+          {/* 9. Awards & Festivals */}
+          {(production.awards.length > 0 || (production.festivals && production.festivals.length > 0)) && (
             <section className={styles.section}>
               <h2 className={styles.sectionLabel}>{t('awards')}</h2>
-              <ul className={styles.awardList}>
-                {production.awards.map((a, i) => (
-                  <li key={`${a.name}-${i}`} className={styles.awardItem}>
-                    {a.year && (
-                      <span className={styles.awardYear}>{a.year}</span>
-                    )}
-                    <span className={styles.awardName}>{a.name}</span>
-                    {a.city && (
-                      <span className={styles.awardCity}>{a.city}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {production.awards.length > 0 && (
+                <>
+                  {production.festivals && production.festivals.length > 0 && (
+                    <p className={styles.awardsSubLabel}>{t('awardsLabel')}</p>
+                  )}
+                  <ul className={styles.awardList}>
+                    {production.awards.map((a, i) => (
+                      <li key={`${a.name}-${i}`} className={styles.awardItem}>
+                        {a.year && (
+                          <span className={styles.awardYear}>{a.year}</span>
+                        )}
+                        <span className={styles.awardName}>{a.name}</span>
+                        {a.city && (
+                          <span className={styles.awardCity}>{a.city}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {production.festivals && production.festivals.length > 0 && (
+                <>
+                  {production.awards.length > 0 && (
+                    <p className={styles.awardsSubLabel}>{t('festivalsLabel')}</p>
+                  )}
+                  <ul className={styles.awardList}>
+                    {production.festivals.map((f, i) => (
+                      <li key={`${f.name}-${i}`} className={styles.awardItem}>
+                        {f.year && (
+                          <span className={styles.awardYear}>{f.year}</span>
+                        )}
+                        <span className={styles.awardName}>{f.name}</span>
+                        {f.city && (
+                          <span className={styles.awardCity}>{f.city}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </section>
           )}
 

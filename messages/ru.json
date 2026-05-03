@@ -59,7 +59,9 @@
   },
   "awards": {
     "title": "награды",
-    "empty": "Нет данных о наградах"
+    "empty": "Нет данных о наградах",
+    "awardsLabel": "призы",
+    "festivalsLabel": "фестивали"
   },
   "productionDetail": {
     "watchListen": "Смотреть / слушать",
@@ -68,7 +70,9 @@
     "pressKit": "Пресс-кит (ZIP)",
     "photos": "Фотографии",
     "press": "Пресса",
-    "awards": "Награды",
+    "awards": "Награды и фестивали",
+    "awardsLabel": "призы",
+    "festivalsLabel": "фестивали",
     "links": "Ссылки",
     "bookingCta": "Написать Роману о гастролях этого спектакля",
     "trailer": "трейлер",

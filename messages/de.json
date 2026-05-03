@@ -73,7 +73,9 @@
   },
   "awards": {
     "title": "Auszeichnungen",
-    "empty": "Keine Auszeichnungsdaten"
+    "empty": "Keine Auszeichnungsdaten",
+    "awardsLabel": "Preise",
+    "festivalsLabel": "Festivals"
   },
   "productionDetail": {
     "watchListen": "Ansehen / hören",
@@ -82,7 +84,9 @@
     "pressKit": "Pressekit (ZIP)",
     "photos": "Fotos",
     "press": "Presse",
-    "awards": "Auszeichnungen",
+    "awards": "Auszeichnungen & Festivals",
+    "awardsLabel": "Preise",
+    "festivalsLabel": "Festivals",
     "links": "Links",
     "bookingCta": "Roman zu einer Tournee schreiben",
     "trailer": "Trailer",

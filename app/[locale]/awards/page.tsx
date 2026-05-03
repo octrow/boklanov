@@ -25,8 +25,10 @@ export default async function AwardsPage({
   const productions = getAllProductions(locale)
 
   const groups = productions
-    .filter((p) => p.awards && p.awards.length > 0)
-    .map((p) => ({ slug: p.slug, title: p.title, awards: p.awards }))
+    .filter((p) => (p.awards && p.awards.length > 0) || (p.festivals && p.festivals.length > 0))
+    .map((p) => ({ slug: p.slug, title: p.title, awards: p.awards, festivals: p.festivals ?? [] }))
+
+  const totalCount = groups.reduce((s, g) => s + g.awards.length + g.festivals.length, 0)
 
   return (
     <main className={styles.page}>
@@ -45,27 +47,60 @@ export default async function AwardsPage({
                 >
                   {group.title}
                 </Link>
-                <span className={styles.awardCount} aria-label={`${group.awards.length} awards`}>
-                  ×{group.awards.length}
+                <span className={styles.awardCount} aria-label={`${group.awards.length + group.festivals.length} entries`}>
+                  ×{group.awards.length + group.festivals.length}
                 </span>
               </h2>
-              <ul className={styles.awardsList}>
-                {group.awards.map((award, i) => (
-                  <li key={i} className={styles.awardRow}>
-                    <span className={styles.awardMeta}>
-                      {award.year != null && award.year > 1900
-                        ? String(award.year)
-                        : ''}
-                    </span>
-                    <span className={styles.awardName}>{award.name}</span>
-                    {(award.city || award.category) && (
-                      <span className={styles.awardDetail}>
-                        {[award.city, award.category].filter(Boolean).join(' · ')}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+
+              {group.awards.length > 0 && (
+                <>
+                  {group.festivals.length > 0 && (
+                    <p className={styles.subLabel}>{t('awardsLabel')}</p>
+                  )}
+                  <ul className={styles.awardsList}>
+                    {group.awards.map((award, i) => (
+                      <li key={i} className={styles.awardRow}>
+                        <span className={styles.awardMeta}>
+                          {award.year != null && award.year > 1900
+                            ? String(award.year)
+                            : ''}
+                        </span>
+                        <span className={styles.awardName}>{award.name}</span>
+                        {(award.city || award.category) && (
+                          <span className={styles.awardDetail}>
+                            {[award.city, award.category].filter(Boolean).join(' · ')}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {group.festivals.length > 0 && (
+                <>
+                  {group.awards.length > 0 && (
+                    <p className={styles.subLabel}>{t('festivalsLabel')}</p>
+                  )}
+                  <ul className={styles.awardsList}>
+                    {group.festivals.map((fest, i) => (
+                      <li key={i} className={styles.awardRow}>
+                        <span className={styles.awardMeta}>
+                          {fest.year != null && fest.year > 1900
+                            ? String(fest.year)
+                            : ''}
+                        </span>
+                        <span className={styles.awardName}>{fest.name}</span>
+                        {(fest.city || fest.category) && (
+                          <span className={styles.awardDetail}>
+                            {[fest.city, fest.category].filter(Boolean).join(' · ')}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </section>
           ))}
         </div>

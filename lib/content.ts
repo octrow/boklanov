@@ -66,6 +66,7 @@ export interface Production {
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{ name: string; category?: string; year?: number; city?: string }>
+  festivals: Array<{ name: string; category?: string; year?: number; city?: string }>
   press: Array<{ title: string; url: string; outlet?: string; language?: string }>
   externalLinks: Array<{ label: string; url: string }>
   techRider: string | null
@@ -207,6 +208,7 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     })),
     videos: fm.videos ?? [],
     awards: fm.awards ?? [],
+    festivals: fm.festivals ?? [],
     press: fm.press ?? [],
     externalLinks: fm.externalLinks ?? [],
     techRider: fm.techRider ?? null,

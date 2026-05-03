@@ -73,7 +73,9 @@
   },
   "awards": {
     "title": "awards",
-    "empty": "No awards data"
+    "empty": "No awards data",
+    "awardsLabel": "prizes",
+    "festivalsLabel": "festivals"
   },
   "productionDetail": {
     "watchListen": "Watch / listen",
@@ -82,7 +84,9 @@
     "pressKit": "Press kit (ZIP)",
     "photos": "Photos",
     "press": "Press",
-    "awards": "Awards",
+    "awards": "Awards & Festivals",
+    "awardsLabel": "prizes",
+    "festivalsLabel": "festivals",
     "links": "Links",
     "bookingCta": "Email Roman about touring this show",
     "trailer": "trailer",

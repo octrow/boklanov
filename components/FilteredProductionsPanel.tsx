@@ -70,14 +70,14 @@ export function FilteredProductionsPanel({
   // ── Parse URL params (safe with null — hooks must run before any return) ─
   // `role` default = 'director' (brief D5 curator default)
   const activeRole = searchParams?.get('role') ?? 'director'
-  const activeForms = parseList(searchParams?.get('form') ?? null)
+  const activeForm = searchParams?.get('form') ?? null
   const activeAges = parseList(searchParams?.get('age') ?? null)
   const activeCountries = parseList(searchParams?.get('country') ?? null)
 
   // Non-default filters are "active" (show clear-all)
   const hasActiveFilters =
     activeRole !== 'director' ||
-    activeForms.length > 0 ||
+    activeForm !== null ||
     activeAges.length > 0 ||
     activeCountries.length > 0
 
@@ -108,8 +108,7 @@ export function FilteredProductionsPanel({
       if (activeRole === 'other') {
         if (p.role.some((r) => mainRoles.includes(r))) return false
       } else if (activeRole !== 'all' && !p.role.includes(activeRole)) return false
-      if (activeForms.length > 0 && !activeForms.some((f) => p.form.includes(f)))
-        return false
+      if (activeForm !== null && !p.form.includes(activeForm)) return false
       if (activeAges.length > 0) {
         const bucket = ageBucketValue(p.ageRating)
         if (!bucket || !activeAges.includes(bucket)) return false
@@ -120,7 +119,7 @@ export function FilteredProductionsPanel({
       }
       return true
     })
-  }, [productions, activeRole, activeForms, activeAges, activeCountries])
+  }, [productions, activeRole, activeForm, activeAges, activeCountries])
 
   // Null during SSR in Suspense boundary — page fallback is shown instead.
   if (!searchParams) return null
@@ -192,19 +191,20 @@ export function FilteredProductionsPanel({
           </div>
         </div>
 
-        {/* Form — multi-select (only show options present in data) */}
+        {/* Form — single-select radio group (only show options present in data) */}
         {availableForms.length > 0 && (
           <>
             <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={styles.group} role='group' aria-label={labels.groupLabelForm}>
+            <div className={styles.group} role='radiogroup' aria-label={labels.groupLabelForm}>
               <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelForm}</span>
               <div className={styles.chipRow}>
                 {availableForms.map((form) => (
                   <button
                     key={form}
-                    className={`${styles.chip} ${activeForms.includes(form) ? styles.chipActive : ''}`}
-                    aria-pressed={activeForms.includes(form)}
-                    onClick={() => toggleMulti('form', form, activeForms)}
+                    className={`${styles.chip} ${activeForm === form ? styles.chipActive : ''}`}
+                    role='radio'
+                    aria-checked={activeForm === form}
+                    onClick={() => setParam('form', activeForm === form ? null : form)}
                   >
                     {form}
                   </button>
