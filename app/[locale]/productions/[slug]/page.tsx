@@ -219,7 +219,7 @@ export default async function ProductionDetailPage({
     `Tour window:\n` +
     `Venue / festival:\n` +
     `Notes:\n`
-  const mailto = `mailto:boklanov.roman@mail.ru?subject=${encodeURIComponent(
+  const mailto = `mailto:roman.boklanov@web.de?subject=${encodeURIComponent(
     subject
   )}&body=${encodeURIComponent(body)}`
 

@@ -11,7 +11,7 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-const EMAIL = 'boklanov.roman@mail.ru'
+const EMAIL = 'roman.boklanov@web.de'
 // TODO: replace with real handles when confirmed
 const TELEGRAM_URL = 'https://t.me/roman7593'
 const INSTAGRAM_URL = 'https://instagram.com/boklanovroman'

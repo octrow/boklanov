@@ -30,10 +30,10 @@ export async function SiteFooter() {
         {/* Col 2: Social */}
         <div className={styles.col}>
           <a
-            href={`mailto:boklanov.roman@mail.ru`}
+            href={`mailto:roman.boklanov@web.de`}
             className={styles.footerLink}
           >
-            boklanov.roman@mail.ru
+            roman.boklanov@web.de
           </a>
           <a
             href={TELEGRAM_URL}
