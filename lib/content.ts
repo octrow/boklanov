@@ -72,6 +72,12 @@ export interface Production {
   pressKit: string | null
   featured: boolean
   featuredOrder?: number
+  /** false hides the booking CTA on the production page; default true. */
+  bookingCta: boolean
+  /** Optional locale-keyed label override for the booking CTA. */
+  bookingCtaLabel: { ru?: string; en?: string; de?: string | null } | null
+  /** Optional URL override for the booking CTA (replaces the default mailto). */
+  bookingCtaUrl: string | null
   tags: string[]
   tour: string[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
@@ -87,7 +93,7 @@ export interface Production {
 
 /** Locale-projected view returned by getAllProductions / getProduction. */
 export interface ProductionView
-  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate' | 'tagline' | 'directorsNote'> {
+  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate' | 'tagline' | 'directorsNote' | 'bookingCtaLabel'> {
   title: string
   synopsis: string
   body: string
@@ -95,6 +101,7 @@ export interface ProductionView
   premiereDate: string | null
   tagline: string | null
   directorsNote: string | null
+  bookingCtaLabel: string | null
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
@@ -206,6 +213,12 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     pressKit: fm.pressKit ?? null,
     featured: !!fm.featured,
     featuredOrder: typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
+    bookingCta: fm.bookingCta === false ? false : true,
+    bookingCtaLabel:
+      fm.bookingCtaLabel && typeof fm.bookingCtaLabel === 'object'
+        ? fm.bookingCtaLabel
+        : null,
+    bookingCtaUrl: fm.bookingCtaUrl ?? null,
     tags: fm.tags ?? [],
     tour: (fm.tour as string[] | undefined) ?? [],
     tagline: fm.tagline ?? null,
@@ -257,8 +270,14 @@ function project(p: Production, locale: Locale): ProductionView {
     locale === 'de'
       ? (p.tagline?.de ?? null)
       : (p.tagline?.[locale as 'ru' | 'en'] ?? p.tagline?.ru ?? null)
+  const bookingCtaLabel = p.bookingCtaLabel
+    ? (p.bookingCtaLabel[locale] ??
+       p.bookingCtaLabel.ru ??
+       p.bookingCtaLabel.en ??
+       null)
+    : null
 
-  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, tagline: _tg, directorsNote: _dn, ...rest } = p
+  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, tagline: _tg, directorsNote: _dn, bookingCtaLabel: _bcl, ...rest } = p
   return {
     ...rest,
     title: t!,
@@ -268,6 +287,7 @@ function project(p: Production, locale: Locale): ProductionView {
     premiereDate,
     tagline: tagline || null,
     directorsNote,
+    bookingCtaLabel,
     titles: p.title
   }
 }

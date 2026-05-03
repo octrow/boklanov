@@ -230,6 +230,18 @@ export default async function ProductionDetailPage({
       : primaryVideo?.provider === 'vimeo'
         ? `https://vimeo.com/${primaryVideo.id}`
         : null
+  const trailerEmbedUrl =
+    primaryVideo?.provider === 'youtube'
+      ? `https://www.youtube-nocookie.com/embed/${primaryVideo.id}`
+      : primaryVideo?.provider === 'vimeo'
+        ? `https://player.vimeo.com/video/${primaryVideo.id}`
+        : null
+
+  // Per-mdx CTA overrides (frontmatter): bookingCta=false hides; bookingCtaUrl
+  // replaces the default mailto; bookingCtaLabel replaces the i18n label.
+  const ctaEnabled = production.bookingCta !== false
+  const ctaUrl = production.bookingCtaUrl || mailto
+  const ctaLabel = production.bookingCtaLabel || t('bookingCta')
 
   const schema = creativeWorkSchema(production, slug, locale)
 
@@ -602,16 +614,35 @@ export default async function ProductionDetailPage({
             techRider={production.techRider}
             pressKit={production.pressKit}
           />
-          {/* 11. Sticky CTA — fixed bottom on mobile, static in sticky rail on desktop */}
-          <a
-            className={styles.stickyCta}
-            href={mailto}
-            data-ph-event='booking_cta_click'
-            data-ph-slug={slug}
-            data-ph-locale={locale}
-          >
-            {t('bookingCta')}
-          </a>
+          {/* 11. Sticky CTA — fixed bottom on mobile, static in sticky rail on desktop.
+              Hide via `bookingCta: false` in frontmatter; override label/url via
+              bookingCtaLabel / bookingCtaUrl. */}
+          {ctaEnabled && (
+            <a
+              className={styles.stickyCta}
+              href={ctaUrl}
+              data-ph-event='booking_cta_click'
+              data-ph-slug={slug}
+              data-ph-locale={locale}
+            >
+              {ctaLabel}
+            </a>
+          )}
+          {/* 12. Trailer embed — sits below the CTA in the rail (desktop) or
+              after TourRider in flow (mobile, since CTA is position:fixed). */}
+          {trailerEmbedUrl && (
+            <div className={styles.trailer}>
+              <iframe
+                className={styles.trailerFrame}
+                src={trailerEmbedUrl}
+                title={`${production.title} — ${t('trailer')}`}
+                loading='lazy'
+                allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
+                allowFullScreen
+                referrerPolicy='strict-origin-when-cross-origin'
+              />
+            </div>
+          )}
         </div>
       </div>
       {/* end .layout */}
