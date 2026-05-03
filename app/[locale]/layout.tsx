@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 
 import { Analytics } from '@/components/Analytics'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { CommandPaletteProvider } from '@/components/CommandPaletteProvider'
 import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
@@ -74,6 +75,7 @@ export default async function LocaleLayout({
           <Analytics />
         </NextIntlClientProvider>
         <VercelAnalytics />
+        <SpeedInsights />
       </body>
     </html>
   )
