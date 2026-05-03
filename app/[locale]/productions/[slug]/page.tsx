@@ -385,34 +385,34 @@ export default async function ProductionDetailPage({
             premiereDate={production.premiereDate}
           />
 
-          {/* Trailer embed — promoted to flow right after the title so poster→name→trailer→photos read in order on both desktop and mobile. */}
-          {trailerEmbedUrl && (
-            <div className={styles.trailer}>
-              <iframe
-                className={styles.trailerFrame}
-                src={trailerEmbedUrl}
-                title={`${production.title} — ${t('trailer')}`}
-                loading='lazy'
-                allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
-                allowFullScreen
-                referrerPolicy='strict-origin-when-cross-origin'
-              />
-            </div>
-          )}
-
-          {/* Photos — promoted to sit right under the trailer per the unified poster→name→trailer→photos order. */}
-          {production.gallery.length > 0 && (
-            <section className={styles.section}>
-              <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-              <GalleryLightbox
-                items={production.gallery.map((g) => ({
-                  src: cdnUrl(g.src)!,
-                  alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
-                  credit: g.credit
-                }))}
-              />
-            </section>
-          )}
+          {/* Mobile-only media block — desktop renders the same trailer + photos inside the rail (see below). */}
+          <div className={styles.inlineMedia}>
+            {trailerEmbedUrl && (
+              <div className={styles.trailer}>
+                <iframe
+                  className={styles.trailerFrame}
+                  src={trailerEmbedUrl}
+                  title={`${production.title} — ${t('trailer')}`}
+                  loading='lazy'
+                  allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
+                  allowFullScreen
+                  referrerPolicy='strict-origin-when-cross-origin'
+                />
+              </div>
+            )}
+            {production.gallery.length > 0 && (
+              <section className={styles.section}>
+                <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+                <GalleryLightbox
+                  items={production.gallery.map((g) => ({
+                    src: cdnUrl(g.src)!,
+                    alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                    credit: g.credit
+                  }))}
+                />
+              </section>
+            )}
+          </div>
 
           {/* 3. Chips row */}
           {chips.length > 0 && (
@@ -670,6 +670,35 @@ export default async function ProductionDetailPage({
               {ctaLabel}
             </a>
           )}
+          {/* Desktop-only media block — mobile renders the same trailer + photos
+              inline right after the title (see .inlineMedia above). */}
+          <div className={styles.railMedia}>
+            {trailerEmbedUrl && (
+              <div className={styles.trailer}>
+                <iframe
+                  className={styles.trailerFrame}
+                  src={trailerEmbedUrl}
+                  title={`${production.title} — ${t('trailer')}`}
+                  loading='lazy'
+                  allow='accelerometer; clipboard-write; encrypted-media; picture-in-picture'
+                  allowFullScreen
+                  referrerPolicy='strict-origin-when-cross-origin'
+                />
+              </div>
+            )}
+            {production.gallery.length > 0 && (
+              <section className={styles.section}>
+                <h2 className={styles.sectionLabel}>{t('photos')}</h2>
+                <GalleryLightbox
+                  items={production.gallery.map((g) => ({
+                    src: cdnUrl(g.src)!,
+                    alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                    credit: g.credit
+                  }))}
+                />
+              </section>
+            )}
+          </div>
         </div>
       </div>
       {/* end .layout */}

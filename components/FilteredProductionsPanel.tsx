@@ -84,7 +84,10 @@ export function FilteredProductionsPanel({
   // ── Derive available options from data ───────────────────────────────
 
   const availableForms = React.useMemo(
-    () => [...new Set(productions.flatMap((p) => p.form))].sort(),
+    () =>
+      [...new Set(productions.flatMap((p) => p.form))]
+        .filter((f) => f !== 'ensemble' && f !== 'theater')
+        .sort(),
     [productions]
   )
 

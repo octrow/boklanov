@@ -440,9 +440,10 @@ dd.creditsName {
   }
 }
 
-/* Trailer embed — sits in main column right after the title, ahead of photos.
-   Lives inside .column whose horizontal padding already supplies the gutter,
-   so the trailer takes the full content width on every breakpoint. */
+/* Trailer embed — placed inline right after the title on mobile (.inlineMedia)
+   and inside the sticky rail on desktop (.railMedia). The wrapping containers
+   already supply their own horizontal gutter, so margins here are vertical
+   only. */
 .trailer {
   position: relative;
   margin: var(--space-5) 0 var(--space-7);
@@ -450,6 +451,45 @@ dd.creditsName {
   background: var(--ink);
   border-radius: var(--border-radius-sm);
   overflow: hidden;
+}
+
+/* Mobile-only inline copy: trailer + photos right after the title. Desktop
+   suppresses this so the rail copy can take over. */
+.inlineMedia {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .inlineMedia {
+    display: none;
+  }
+}
+
+/* Desktop-only rail copy: trailer + photos under the sticky CTA. Mobile
+   suppresses this so the inline copy is the only one rendered. */
+.railMedia {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .railMedia {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  /* Inside the rail the trailer should not double the rail's own gap. */
+  .railMedia .trailer {
+    margin: 0;
+  }
+
+  /* Photos in the rail: drop the .section hairline border that was sized for
+     the wide reading column. */
+  .railMedia .section {
+    border-top: none;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
 }
 
 .trailerFrame {
