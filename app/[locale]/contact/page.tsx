@@ -13,8 +13,8 @@ export function generateStaticParams() {
 
 const EMAIL = 'roman@boklanov.ru'
 // TODO: replace with real handles when confirmed
-const TELEGRAM_URL = 'https://t.me/romanboklanov'
-const INSTAGRAM_URL = 'https://instagram.com/roman_boklanov'
+const TELEGRAM_URL = 'https://t.me/roman7593'
+const INSTAGRAM_URL = 'https://instagram.com/boklanovroman'
 
 export default async function ContactPage({
   params

@@ -119,8 +119,8 @@ function personSchema(locale: Locale, description: string) {
     url: locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`,
     email: 'roman@boklanov.ru',
     sameAs: [
-      'https://instagram.com/roman_boklanov',
-      'https://t.me/romanboklanov',
+      'https://instagram.com/boklanovroman',
+      'https://t.me/roman7593',
     ],
   }
 }

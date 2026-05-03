@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
-import { Cue } from '@/components/Cue'
 import { EmptyState } from '@/components/EmptyState'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -9,9 +8,6 @@ import { routing } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
 
 import styles from './page.module.css'
-
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
-  'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX']
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -40,21 +36,19 @@ export default async function AwardsPage({
         <EmptyState body={t('empty')} />
       ) : (
         <div className={styles.groups}>
-          {groups.map((group, i) => (
+          {groups.map((group) => (
             <section key={group.slug} className={styles.group}>
-              <Cue mark={`CUE ${ROMAN[i] ?? String(i + 1)}`} first>
-                <h2 className={styles.productionTitle}>
-                  <Link
-                    href={`/productions/${group.slug}`}
-                    className={styles.productionLink}
-                  >
-                    {group.title}
-                  </Link>
-                  <span className={styles.awardCount} aria-label={`${group.awards.length} awards`}>
-                    ×{group.awards.length}
-                  </span>
-                </h2>
-              </Cue>
+              <h2 className={styles.productionTitle}>
+                <Link
+                  href={`/productions/${group.slug}`}
+                  className={styles.productionLink}
+                >
+                  {group.title}
+                </Link>
+                <span className={styles.awardCount} aria-label={`${group.awards.length} awards`}>
+                  ×{group.awards.length}
+                </span>
+              </h2>
               <ul className={styles.awardsList}>
                 {group.awards.map((award, i) => (
                   <li key={i} className={styles.awardRow}>

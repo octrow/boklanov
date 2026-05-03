@@ -6,8 +6,8 @@ import { Link } from '@/i18n/navigation'
 import { SiteWordmark } from './SiteWordmark'
 import styles from './SiteFooter.module.css'
 
-const TELEGRAM_URL = 'https://t.me/romanboklanov'
-const INSTAGRAM_URL = 'https://instagram.com/roman_boklanov'
+const TELEGRAM_URL = 'https://t.me/roman7593'
+const INSTAGRAM_URL = 'https://instagram.com/boklanovroman'
 
 export async function SiteFooter() {
   const t = await getTranslations('nav')
