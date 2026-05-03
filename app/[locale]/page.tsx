@@ -26,7 +26,19 @@ export default async function HomePage({
 
   // Featured: curated (featured: true), must have a poster so no typographic
   // fallback lands in the above-the-fold strip (DESIGN §9). Cap at 6.
-  const featured = productions.filter((p) => p.featured && p.poster.src).slice(0, 6)
+  // Order: items with explicit `featuredOrder` first (ascending), then the rest
+  // alphabetically by slug. Pin a hero piece with e.g. `featuredOrder: 1`.
+  const featured = productions
+    .filter((p) => p.featured && p.poster.src)
+    .sort((a, b) => {
+      const ao = a.featuredOrder
+      const bo = b.featuredOrder
+      if (ao != null && bo != null) return ao - bo
+      if (ao != null) return -1
+      if (bo != null) return 1
+      return a.slug.localeCompare(b.slug)
+    })
+    .slice(0, 6)
 
   // Below-fold grid: director role only (brief D5 — curator default).
   // Exclude titles already shown in the featured strip above.

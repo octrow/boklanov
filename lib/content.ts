@@ -71,6 +71,7 @@ export interface Production {
   techRider: string | null
   pressKit: string | null
   featured: boolean
+  featuredOrder?: number
   tags: string[]
   tour: string[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
@@ -204,6 +205,7 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     techRider: fm.techRider ?? null,
     pressKit: fm.pressKit ?? null,
     featured: !!fm.featured,
+    featuredOrder: typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
     tags: fm.tags ?? [],
     tour: (fm.tour as string[] | undefined) ?? [],
     tagline: fm.tagline ?? null,
