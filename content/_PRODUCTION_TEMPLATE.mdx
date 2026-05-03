@@ -1,0 +1,173 @@
+# Шаблон нового спектакля
+
+> Как пользоваться: скопировать этот файл в `content/productions/<slug>/index.mdx`.
+> Slug — латиница, дефисы вместо пробелов (например, `solnyshko`, `novaya-postanovka`).
+> Заполнить поля во frontmatter (между двумя `---`). Поля, которые неизвестны,
+> оставить как `null` или пустой список `[]` — они просто не покажутся на сайте.
+> Подробнее: см. `content/AUTHORING.ru.md`.
+
+---
+# === Идентификатор ===
+slug: REPLACE-ME-with-folder-name        # должно совпадать с именем папки
+notionIds:
+  ru: null
+  en: null
+
+# === Заголовки и тексты (мультиязычные) ===
+# Минимум — заполнить ru и en. de можно оставить null.
+title:
+  ru: ""                                  # «Похороните меня за плинтусом»
+  en: ""                                  # "Bury Me Behind the Baseboard"
+  de: null
+
+synopsis:
+  ru: ""                                  # 1–3 предложения, появляется в карточке и шапке
+  en: ""
+  de: null
+
+# Подзаголовок над названием на странице спектакля. Опционально.
+tagline:
+  ru: null                                # "Автобиографичный спектакль-воспоминание"
+  en: null
+  de: null
+
+# Цитата режиссёра под синопсисом. Опционально.
+directorsNote:
+  ru: null
+  en: null
+  de: null
+
+# === Театр ===
+theatre:
+  name: ""                                # «Большой театр кукол»
+  shortName: null                         # «БТК» — для компактных мест
+  city: ""                                # Saint Petersburg
+  country: ""                             # двухбуквенный ISO: RU / KZ / DE / ES …
+  url: null                               # официальная страница спектакля или театра
+
+# === Даты ===
+year: null                                # год премьеры, например 2021
+premiereDate:
+  ru: null                                # «24 марта 2021 г.»
+  en: null                                # "24 March 2021"
+  de: null
+ticketsUrl: null                          # ссылка на покупку билетов, если есть
+
+# === Маркеры ===
+ageRating: null                           # "0+", "6+", "12+", "16+", "18+"
+durationMin: null                         # длительность в минутах, число
+
+# Роль Романа в постановке. Любое из:
+# director, performer, playwright, designer, choreographer, mentor
+role:
+  - director
+
+# Форма спектакля. Любое из:
+# theater, puppet, solo, mono, music, immersive, lab, festival, online …
+form: []
+
+# Линия преемственности / школа. Используется для блока «Похожие спектакли».
+# Примеры значений: btk, kudashov, mejerhold, lab, school
+lineage: []
+
+# === Команда ===
+# Роль + имя. URL опционален. Списки по локалям — заполнить ru и en минимум.
+credits:
+  ru:
+    - role: Режиссёр
+      name: Роман Бокланов
+      url: https://puppets.ru/pers/40
+    # - role: Художник
+    #   name: ""
+    # - role: Исполнители
+    #   name: ""
+  en:
+    - role: Director
+      name: Roman Boklanov
+      url: https://puppets.ru/pers/40
+    # - role: Production designer
+    #   name: ""
+  de: []
+
+# === Медиа ===
+# Постер: обложка спектакля. Положить файл в эту же папку (.webp / .jpg).
+poster:
+  src: null                               # /productions/<slug>/poster.jpg
+  credit: null                            # фотограф, если известен
+
+# Галерея. Файлы кладутся в ту же папку, что и index.mdx.
+# После добавления — написать Daniil, он зальёт фото в R2:
+#   npm run upload-images -- --slug <slug>
+gallery: []
+# Пример заполненной записи:
+# gallery:
+#   - src: /productions/<slug>/01.jpg
+#     credit: null                        # имя фотографа или null
+#     caption:
+#       ru: null
+#       en: null
+#       de: null
+
+# Видео. provider: youtube | vimeo. id: id ролика (не полный URL).
+videos: []
+# - provider: youtube
+#   id: 1GWFJ0jfPq4
+
+# === Признание ===
+awards: []
+# - name: «Один. Два. Три»                 # название премии / фестиваля
+#   year: 2022
+#   category: null                         # номинация, если была
+#   city: null
+
+press: []
+# - title: "Заголовок статьи"
+#   url: https://...
+#   outlet: null                           # название издания (sobaka.ru), если хочется
+#   language: null                         # ru / en / de
+
+externalLinks: []
+# - label: "Канал спектакля"
+#   url: https://...
+
+techRider: null                            # ссылка на PDF, если есть
+pressKit: null                             # ссылка на PDF, если есть
+
+# === Размещение на сайте ===
+featured: false                            # true → попадает на главную
+featuredOrder: null                        # порядок на главной (1, 2, 3 …); null если featured=false
+
+# Теги для фильтрации. Свободная форма.
+tags: []
+# - mono-performance
+# - puppet
+# - roman boklanov
+
+# Города гастролей. Простой список строк.
+tour: []
+# - Almaty
+# - Vienna
+
+# История прокатов (показывается строкой над заголовком).
+runs: []
+# - venue: "БТК"
+#   city: "Saint Petersburg"
+#   yearFrom: 2021
+#   yearTo: 2024
+#   count: "60+"
+
+# === Описание ===
+# Длинный текст под синопсисом. Markdown поддерживается.
+# Для многострочного текста используется `|-` (сохраняет переводы строк, обрезает финальный).
+body:
+  ru: |-
+    Полное описание спектакля на русском.
+
+    Можно несколько абзацев. Можно курсив через _подчёркивания_
+    и жирный через **звёздочки**.
+  en: |-
+    Full description in English.
+
+    Multiple paragraphs are fine.
+  de: ""
+---
