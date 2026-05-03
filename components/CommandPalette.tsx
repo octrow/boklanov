@@ -171,7 +171,7 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
       setActiveIdx((i) => Math.max(i - 1, 0))
     } else if (e.key === 'Enter' && results[activeIdx]) {
       const href = itemHref(results[activeIdx])
-      const localePrefix = locale === 'ru' ? '' : `/${locale}`
+      const localePrefix = locale === 'en' ? '' : `/${locale}`
       router.push(localePrefix + href)
       onClose()
     }
@@ -230,7 +230,7 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
                   {gItems.map((item, localIdx) => {
                     const globalIdx = flat.indexOf(item)
                     const href = itemHref(item)
-                    const localePrefix = locale === 'ru' ? '' : `/${locale}`
+                    const localePrefix = locale === 'en' ? '' : `/${locale}`
                     return (
                       <a
                         key={`${item.type}-${item.slug}-${localIdx}`}

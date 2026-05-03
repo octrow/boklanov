@@ -13,7 +13,7 @@ import { SiteWordmark } from './SiteWordmark'
 import { ThemeToggle } from './ThemeToggle'
 import styles from './SiteHeader.module.css'
 
-const LOCALES: Locale[] = ['ru', 'en', 'de']
+const LOCALES: Locale[] = ['en', 'de', 'ru']
 
 
 interface SiteHeaderProps {

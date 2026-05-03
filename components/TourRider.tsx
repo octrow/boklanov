@@ -102,7 +102,7 @@ export async function TourRider({
   /* v3 9v3.6: <details> so ≥1280px collapses to free margin for Marginalia float.
      At 1024-1279px CSS forces body visible. aria-hidden keeps AT unaffected. */
   return (
-    <details className={styles.rider} aria-hidden='true'>
+    <details className={styles.rider} aria-hidden='true' open>
       {/* tabIndex={-1} prevents keyboard focus since aria-hidden covers AT */}
       <summary className={styles.header} tabIndex={-1}>
         <span className={styles.index}>{productionLabel ?? t('riderSpecSheet')}</span>

@@ -88,7 +88,7 @@ export async function generateMetadata({
   const { paragraphs } = loadAbout(locale)
   const description = paragraphs[0] ?? undefined
 
-  const url = locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`
+  const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
   const name = locale === 'ru' ? 'Роман Бокланов — о режиссёре' : locale === 'de' ? 'Roman Boklanov — über' : 'Roman Boklanov — about'
 
   return {
@@ -96,7 +96,7 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: url,
-      languages: { ru: `${BASE}/about`, en: `${BASE}/en/about` },
+      languages: { en: `${BASE}/about`, ru: `${BASE}/ru/about` },
     },
     openGraph: {
       title: name,
@@ -115,7 +115,7 @@ function personSchema(locale: Locale, description: string) {
     alternateName: 'Роман Бокланов',
     jobTitle: locale === 'ru' ? 'Театральный режиссёр' : locale === 'de' ? 'Theaterregisseur' : 'Theatre Director',
     description,
-    url: locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`,
+    url: locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`,
     email: 'boklanov.roman@mail.ru',
     sameAs: [
       'https://instagram.com/boklanovroman',

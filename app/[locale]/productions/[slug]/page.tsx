@@ -55,7 +55,7 @@ function creativeWorkSchema(
   locale: Locale
 ) {
   const pageUrl =
-    locale === 'ru'
+    locale === 'en'
       ? `${BASE}/productions/${slug}`
       : `${BASE}/${locale}/productions/${slug}`
 
@@ -120,7 +120,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
   ).replace(/\/$/, '')
   const url =
-    locale === 'ru'
+    locale === 'en'
       ? `${base}/productions/${slug}`
       : `${base}/${locale}/productions/${slug}`
   const ogImage = `${base}/api/og/${slug}`
@@ -131,8 +131,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: url,
       languages: {
-        ru: `${base}/productions/${slug}`,
-        en: `${base}/en/productions/${slug}`
+        en: `${base}/productions/${slug}`,
+        ru: `${base}/ru/productions/${slug}`
       }
     },
     openGraph: {

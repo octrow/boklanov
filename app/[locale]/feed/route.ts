@@ -6,7 +6,7 @@ import { getAllProductions } from '@/lib/content'
 const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
 
 function localeBase(locale: Locale): string {
-  return locale === 'ru' ? BASE : `${BASE}/${locale}`
+  return locale === 'en' ? BASE : `${BASE}/${locale}`
 }
 
 const FEED_META: Record<'ru' | 'en', { title: string; desc: string }> = {
