@@ -28,8 +28,6 @@ export default async function AwardsPage({
     .filter((p) => (p.awards && p.awards.length > 0) || (p.festivals && p.festivals.length > 0))
     .map((p) => ({ slug: p.slug, title: p.title, awards: p.awards, festivals: p.festivals ?? [] }))
 
-  const totalCount = groups.reduce((s, g) => s + g.awards.length + g.festivals.length, 0)
-
   return (
     <main className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
