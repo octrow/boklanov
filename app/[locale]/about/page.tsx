@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
-import { Cue } from '@/components/Cue'
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
 import type { Locale } from '@/i18n/routing'
@@ -198,9 +197,7 @@ export default async function AboutPage({
       {/* Milestones timeline */}
       {milestones.length > 0 && (
         <section className={styles.milestonesSection}>
-          <Cue mark="CUE I" first>
-            <h2 className={styles.lineageHeading}>{tAbout('chronology')}</h2>
-          </Cue>
+          <h2 className={styles.lineageHeading}>{tAbout('chronology')}</h2>
           <div className={styles.milestones}>
             {milestones.map((m) => (
               <div key={m.year} className={styles.milestone}>
@@ -215,9 +212,7 @@ export default async function AboutPage({
       {/* Lineage block */}
       {lineage.length > 0 && (
         <section className={styles.lineageSection}>
-          <Cue mark="CUE II" first>
-            <h2 className={styles.lineageHeading}>{tAbout('lineage')}</h2>
-          </Cue>
+          <h2 className={styles.lineageHeading}>{tAbout('lineage')}</h2>
           <div className={styles.lineageGrid}>
             {lineage.map((item) => (
               <div key={item.key} className={styles.lineageCard}>

@@ -64,7 +64,6 @@
   padding-top: var(--space-5);
   padding-bottom: var(--space-5);
   border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
 }
 
 .geographyLabel {
