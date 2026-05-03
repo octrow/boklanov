@@ -540,31 +540,7 @@ export default async function ProductionDetailPage({
             <TourTicker cities={production.tour} accent="cobalt" label={t('onTour')} />
           )}
 
-          {/* 7. Press */}
-          {production.press.length > 0 && (
-            <section className={styles.section}>
-              <h2 className={styles.sectionLabel}>{t('press')}</h2>
-              <ul className={styles.pressList}>
-                {production.press.map((p, i) => (
-                  <li key={`${p.url}-${i}`} className={styles.pressItem}>
-                    <a
-                      className={styles.pressLink}
-                      href={p.url}
-                      target='_blank'
-                      rel='noreferrer noopener'
-                    >
-                      {p.title}
-                    </a>
-                    {p.outlet && (
-                      <span className={styles.pressOutlet}>{p.outlet}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {/* 9. Awards & Festivals */}
+          {/* 7. Awards & Festivals */}
           {(production.awards.length > 0 || (production.festivals && production.festivals.length > 0)) && (
             <section className={styles.section}>
               <h2 className={styles.sectionLabel}>{t('awards')}</h2>
@@ -608,6 +584,30 @@ export default async function ProductionDetailPage({
                   </ul>
                 </>
               )}
+            </section>
+          )}
+
+          {/* 9. Press */}
+          {production.press.length > 0 && (
+            <section className={styles.section}>
+              <h2 className={styles.sectionLabel}>{t('press')}</h2>
+              <ul className={styles.pressList}>
+                {production.press.map((p, i) => (
+                  <li key={`${p.url}-${i}`} className={styles.pressItem}>
+                    <a
+                      className={styles.pressLink}
+                      href={p.url}
+                      target='_blank'
+                      rel='noreferrer noopener'
+                    >
+                      {p.title}
+                    </a>
+                    {p.outlet && (
+                      <span className={styles.pressOutlet}>{p.outlet}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
