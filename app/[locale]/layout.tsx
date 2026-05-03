@@ -68,7 +68,7 @@ export default async function LocaleLayout({
           <CommandPaletteProvider items={searchItems} locale={locale}>
             <SiteHeader productions={productions.map((p) => ({ slug: p.slug }))} />
             {children}
-            <SiteFooter locale={locale} />
+            <SiteFooter />
           </CommandPaletteProvider>
           <Analytics />
         </NextIntlClientProvider>

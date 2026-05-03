@@ -2,7 +2,6 @@ import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
-import type { Locale } from '@/i18n/routing'
 
 import { SiteWordmark } from './SiteWordmark'
 import styles from './SiteFooter.module.css'
@@ -10,7 +9,7 @@ import styles from './SiteFooter.module.css'
 const TELEGRAM_URL = 'https://t.me/romanboklanov'
 const INSTAGRAM_URL = 'https://instagram.com/roman_boklanov'
 
-export async function SiteFooter({ locale }: { locale: Locale }) {
+export async function SiteFooter() {
   const t = await getTranslations('nav')
   const tFooter = await getTranslations('footer')
   const year = new Date().getFullYear()
