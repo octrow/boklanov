@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
@@ -26,9 +26,10 @@ export function ProductionCard({
   sticker
 }: ProductionCardProps) {
   const t = useTranslations('productionDetail')
-  const titleRu = production.titles.ru
-  const titleEn = production.titles.en
-  const showEn = !!titleEn && titleEn !== titleRu
+  const locale = useLocale()
+  const titleMain = production.title
+  const titleAlt = locale === 'ru' ? production.titles.en : production.titles.ru
+  const showAlt = !!titleAlt && titleAlt !== titleMain
 
   const theatre = production.theatre.shortName ?? production.theatre.name
   const country = countryCode(production.theatre.country)
@@ -40,7 +41,7 @@ export function ProductionCard({
   // Alt format from DESIGN §12: {role} {title}, {theatre}, {year} ({photographer})
   const altBase = [
     production.role.join(' / '),
-    titleRu ?? titleEn ?? production.slug,
+    titleMain ?? production.slug,
     theatre,
     production.year
   ]
@@ -76,7 +77,7 @@ export function ProductionCard({
         ) : (
           <TypographicCover
             slug={production.slug}
-            title={titleRu ?? titleEn ?? production.slug}
+            title={titleMain ?? production.slug}
             theatre={theatre ?? null}
             countryCode={country}
             year={production.year ?? null}
@@ -86,8 +87,8 @@ export function ProductionCard({
       </div>
 
       <div className={styles.titleStack}>
-        {titleRu && <h3 className={styles.titleRu}>{titleRu}</h3>}
-        {showEn && <p className={styles.titleEn}>{titleEn}</p>}
+        {titleMain && <h3 className={styles.titleRu}>{titleMain}</h3>}
+        {showAlt && <p className={styles.titleEn}>{titleAlt}</p>}
       </div>
 
       {meta && (

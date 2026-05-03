@@ -13,6 +13,7 @@
   background: var(--paper);
   border: 1px solid var(--rule);
   gap: var(--space-3);
+  overflow: hidden;
 }
 
 /* Three layout variants — chosen by slug-hash mod 3 in TypographicCover.tsx.
@@ -54,6 +55,11 @@
   color: var(--ink);
   margin: 0;
   overflow-wrap: break-word;
+  /* Clamp long titles so they don't push synopsis + meta outside the cover. */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .synopsis {
@@ -76,4 +82,7 @@
   text-transform: uppercase;
   color: var(--ink-marginalia);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
