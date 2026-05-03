@@ -117,7 +117,7 @@ function personSchema(locale: Locale, description: string) {
     jobTitle: locale === 'ru' ? 'Театральный режиссёр' : locale === 'de' ? 'Theaterregisseur' : 'Theatre Director',
     description,
     url: locale === 'ru' ? `${BASE}/about` : `${BASE}/${locale}/about`,
-    email: 'roman@boklanov.ru',
+    email: 'boklanov.roman@mail.ru',
     sameAs: [
       'https://instagram.com/boklanovroman',
       'https://t.me/roman7593',
