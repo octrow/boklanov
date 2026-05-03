@@ -42,10 +42,14 @@ export default async function HomePage({
 
   // Below-fold grid: director role only (brief D5 — curator default).
   // Exclude titles already shown in the featured strip above.
+  // Only productions with explicit `listOrder` appear here (choose + order + limit
+  // via frontmatter). Sort ascending by listOrder.
   const featuredSlugs = new Set(featured.map((p) => p.slug))
-  const directorProductions = productions.filter(
-    (p) => p.role.includes('director') && !featuredSlugs.has(p.slug)
-  )
+  const directorProductions = productions
+    .filter(
+      (p) => p.role.includes('director') && !featuredSlugs.has(p.slug) && p.listOrder != null
+    )
+    .sort((a, b) => (a.listOrder ?? 0) - (b.listOrder ?? 0))
 
   return (
     <main className={styles.page}>

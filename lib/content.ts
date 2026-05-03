@@ -73,6 +73,7 @@ export interface Production {
   pressKit: string | null
   featured: boolean
   featuredOrder?: number
+  listOrder?: number
   /** false hides the booking CTA on the production page; default true. */
   bookingCta: boolean
   /** Optional locale-keyed label override for the booking CTA. */
@@ -215,6 +216,7 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     pressKit: fm.pressKit ?? null,
     featured: !!fm.featured,
     featuredOrder: typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
+    listOrder: typeof fm.listOrder === 'number' ? fm.listOrder : undefined,
     bookingCta: fm.bookingCta === false ? false : true,
     bookingCtaLabel:
       fm.bookingCtaLabel && typeof fm.bookingCtaLabel === 'object'

@@ -19,9 +19,20 @@ export default async function ProductionsIndexPage({
   const t = await getTranslations('productions')
   const productions = getAllProductions(locale)
 
+  // Sort: productions with explicit `listOrder` float to the top (ascending),
+  // the rest follow in the default loadAll() order (year desc, slug).
+  const sortedProductions = [...productions].sort((a, b) => {
+    const ao = a.listOrder
+    const bo = b.listOrder
+    if (ao != null && bo != null) return ao - bo
+    if (ao != null) return -1
+    if (bo != null) return 1
+    return 0
+  })
+
   // Default view for the Suspense fallback (shown in static HTML pre-hydration).
   // Matches the filter default: role=director per brief D5.
-  const directorProductions = productions.filter((p) => p.role.includes('director'))
+  const directorProductions = sortedProductions.filter((p) => p.role.includes('director'))
 
   const labels = {
     roleDirector: t('roleDirector'),
@@ -55,7 +66,7 @@ export default async function ProductionsIndexPage({
           <ProductionGrid productions={directorProductions} emptyLabel='' priorityFirst />
         }
       >
-        <FilteredProductionsPanel productions={productions} labels={labels} />
+        <FilteredProductionsPanel productions={sortedProductions} labels={labels} />
       </Suspense>
     </main>
   )
