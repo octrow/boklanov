@@ -62,7 +62,6 @@
 .geographySection {
   margin-top: var(--space-6);
   padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
   border-top: 1px solid var(--rule);
 }
 
