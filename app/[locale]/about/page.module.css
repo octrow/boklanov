@@ -62,6 +62,7 @@
 .geographySection {
   margin-top: var(--space-6);
   padding-top: var(--space-5);
+  padding-bottom: var(--space-3);
   border-top: 1px solid var(--rule);
 }
 
@@ -85,8 +86,7 @@
 /* ── Photos ──────────────────────────────────────────────────────────── */
 
 .photosSection {
-  margin-top: var(--space-8);
-  padding-top: var(--space-7);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--rule);
 }
 
@@ -109,8 +109,7 @@
 /* ── Milestones ──────────────────────────────────────────────────────── */
 
 .milestonesSection {
-  margin-top: var(--space-8);
-  padding-top: var(--space-7);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--rule);
 }
 
@@ -146,8 +145,7 @@
 /* ── Lineage section ─────────────────────────────────────────────────── */
 
 .lineageSection {
-  margin-top: var(--space-8);
-  padding-top: var(--space-7);
+  padding-top: var(--space-6);
   border-top: 1px solid var(--rule);
 }
 
