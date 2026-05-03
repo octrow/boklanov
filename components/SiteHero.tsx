@@ -17,7 +17,6 @@ export function SiteHero({ heroWordmark, statement }: SiteHeroProps) {
         <SiteWordmark variant="hero" text={heroWordmark} />
       </p>
       <p className={styles.statement}>{statement}</p>
-      <p className={styles.scrollHint} aria-hidden="true">↓</p>
     </section>
   )
 }

@@ -3,13 +3,13 @@
    Replaces SlateStrike + Lora wordmark from v2. Phase 9v3.5. */
 
 .hero {
-  padding: var(--space-9) 0 var(--space-8);
+  padding: var(--space-8) 0 var(--space-7);
   border-bottom: 1px solid var(--rule);
 }
 
 @media (min-width: 1024px) {
   .hero {
-    padding-top: var(--space-10);
+    padding-top: var(--space-9);
   }
 }
 
@@ -45,12 +45,4 @@
   color: var(--ink);
   max-width: var(--measure-prose);
   margin: var(--space-6) 0 0;
-}
-
-.scrollHint {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-wide);
-  color: var(--ink-faint);
-  margin: var(--space-5) 0 0;
 }
