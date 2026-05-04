@@ -11,8 +11,14 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Театральная студия 8+
-  city: Vienna
+  name:
+    ru: Театральная студия 8+
+    en: Theatre Studio 8+
+    de: Theaterstudio 8+
+  city:
+    en: Vienna
+    ru: Вена
+    de: Wien
   country: AT
   url: null
 year: null
@@ -26,7 +32,7 @@ durationMin: null
 role: director
 form:
   - theater
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -40,16 +46,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
   - family show
-tour: []
+tour: [ ]

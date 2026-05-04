@@ -23,8 +23,14 @@ tagline:
   en: Journey towards friendship
   de: Reise auf der Suche nach Freundschaft
 theatre:
-  name: Ханты-Мансийский театр кукол
-  city: Khanty-Mansiysk
+  name:
+    ru: Ханты-Мансийский театр кукол
+    en: Khanty-Mansi Puppet Theatre
+    de: Hanty-Mansijskij Theater für Puppen
+  city:
+    en: Khanty-Mansiysk
+    ru: Ханты-Мансийск
+    de: Hanty-Mansijskij
   country: RU
   url: "https://hmtk.ru/m/afisha/4882/"
 year: 2022
@@ -215,8 +221,14 @@ videos:
   - provider: youtube
     id: oUls9xHOkpE
 awards:
-  - name: IV конкурс «Лучшие актёрские работы в театрах ХМАО-Югры», победительница в
-      номинации «Лучшая женская роль» (Екатерина Цыганец)
+  - name:
+      ru: IV конкурс «Лучшие актёрские работы в театрах ХМАО-Югры», победительница в
+        номинации «Лучшая женская роль» (Екатерина Цыганец)
+      en: IV Best Acting Works in the Theatres of Khanty-Mansiysk Autonomous Okrug -
+        Ugra, Winner in the Category Best Female Role (Ekaterina Tsiganets)
+      de: IV. Theaterpreise der besten Schauspielleistungen in den Theatern der
+        Hanty-Mansijsk-Jugra, Gewinnerin in der Kategorie "Beste weibliche
+        Rolle" (Jekaterina Zsyganec)
     year: 2022
 festivals: []
 press:

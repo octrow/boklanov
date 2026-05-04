@@ -18,9 +18,18 @@ tagline:
   en: Travelling improvisation on the red carpet
   de: Fahrende Improvisation auf dem roten Teppich
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppets.ru/pers/41"
 year: 2018
@@ -293,11 +302,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -305,4 +314,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

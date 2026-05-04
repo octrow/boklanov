@@ -7,12 +7,23 @@ title:
   en: Holiday Recipe
   de: Feierrezept
 synopsis:
-  ru: Новогодняя история о жителях лесной деревни, у которых таинственно исчезают все праздничные пироги. Найдётся ли герой, который вернёт всем праздник?
-  en: "A New Year's story about the inhabitants of a forest village whose holiday pies mysteriously disappear. Will a hero be found to bring the celebration back?"
-  de: Eine Neujahrgeschichte über die Bewohner eines Walddorfes, deren Feiertagskuchen mysteriös verschwinden. Wird sich ein Held finden, der das Fest zurückbringt?
+  ru: Новогодняя история о жителях лесной деревни, у которых таинственно исчезают
+    все праздничные пироги. Найдётся ли герой, который вернёт всем праздник?
+  en: "A New Year's story about the inhabitants of a forest village whose holiday
+    pies mysteriously disappear. Will a hero be found to bring the celebration
+    back?"
+  de: Eine Neujahrgeschichte über die Bewohner eines Walddorfes, deren
+    Feiertagskuchen mysteriös verschwinden. Wird sich ein Held finden, der das
+    Fest zurückbringt?
 theatre:
-  name: Творческое объединение ZHUK
-  city: Alicante
+  name:
+    ru: Творческое объединение ZHUK
+    en: Creative Union ZHUK
+    de: ZHUK
+  city:
+    en: Alicante
+    ru: Аликанте
+    de: Alicante
   country: ES
   url: null
 year: 2023
@@ -27,7 +38,7 @@ role: director
 form:
   - theater
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -41,16 +52,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
   - family show
-tour: []
+tour: [ ]

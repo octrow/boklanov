@@ -11,8 +11,14 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Bremen 11
-  city: Bremen
+  name:
+    en: Bremen 11
+    ru: Бремен 11
+    de: Bremen 11
+  city:
+    en: Bremen
+    ru: Бремен
+    de: Bremen
   country: DE
   url: null
 year: null
@@ -27,7 +33,7 @@ role: director
 form:
   - theater
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -41,16 +47,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
   - family show
-tour: []
+tour: [ ]
