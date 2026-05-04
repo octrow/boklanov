@@ -110,7 +110,7 @@ productionsPhoto:
   src: /productions/bury-me-behind-the-baseboard/poster_eu.webp
   credit: null
 featuredPhoto:
-  src: /productions/bury-me-behind-the-baseboard/poster_eu.webp
+  src: productions/bury-me-behind-the-baseboard/poster_de.webp
   credit: null
 poster:
   src: /productions/bury-me-behind-the-baseboard/poster.jpg
