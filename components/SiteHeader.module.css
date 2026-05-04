@@ -56,7 +56,7 @@
   align-items: center;
   gap: var(--space-4);
   padding: 0 var(--gutter-mobile);
-  height: 56px;
+  height: var(--header-height-mobile);
 }
 
 @media (min-width: 768px) {
@@ -70,6 +70,8 @@
     max-width: var(--max-width-page);
     margin: 0 auto;
     padding: 0 var(--gutter-desktop);
+    height: var(--header-height-desktop);
+    gap: var(--space-5);
   }
 }
 
@@ -106,6 +108,12 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .nav {
+    gap: var(--space-7);
+  }
+}
+
 .navLink {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -113,6 +121,12 @@
   color: var(--ink-mute);
   text-decoration: none;
   transition: color var(--duration-fast) var(--easing-default);
+}
+
+@media (min-width: 1024px) {
+  .navLink {
+    font-size: var(--font-size-nav);
+  }
 }
 
 .navLink:hover {
@@ -149,6 +163,12 @@
   gap: var(--space-2);
 }
 
+@media (min-width: 1024px) {
+  .localeSwitcher {
+    gap: var(--space-3);
+  }
+}
+
 .localeLink {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -158,6 +178,12 @@
   text-decoration: none;
   padding: 2px 0;
   transition: color var(--duration-fast) var(--easing-default);
+}
+
+@media (min-width: 1024px) {
+  .localeLink {
+    font-size: var(--font-size-nav);
+  }
 }
 
 .localeLink:hover {

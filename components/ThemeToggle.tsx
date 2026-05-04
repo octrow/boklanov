@@ -28,51 +28,48 @@ function MoonIcon() {
   )
 }
 
-type Theme = 'light' | 'dark'
+type Theme = 'gorky' | 'paper'
+const STORAGE_KEY = 'boklanov.theme'
 
-function getStoredTheme(): Theme | null {
+function readStoredTheme(): Theme {
   try {
-    const v = localStorage.getItem('theme')
-    if (v === 'light' || v === 'dark') return v
+    const v = localStorage.getItem(STORAGE_KEY)
+    if (v === 'gorky' || v === 'paper') return v
   } catch {
-    // localStorage unavailable (SSR guard)
+    // localStorage unavailable
   }
-  return null
-}
-
-function getSystemTheme(): Theme {
-  if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'gorky'
 }
 
 export function ThemeToggle() {
   const [theme, setTheme] = React.useState<Theme | null>(null)
 
   React.useEffect(() => {
-    const stored = getStoredTheme()
-    const effective = stored ?? getSystemTheme()
-    setTheme(effective)
+    setTheme(readStoredTheme())
   }, [])
 
   function toggle() {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark'
+    const next: Theme = theme === 'gorky' ? 'paper' : 'gorky'
     setTheme(next)
     document.documentElement.dataset.theme = next
     try {
-      localStorage.setItem('theme', next)
+      localStorage.setItem(STORAGE_KEY, next)
     } catch {
       // ignore
     }
   }
+
+  // SSR-safe: render the default-state glyph until hydration completes.
+  const isGorky = theme === null ? true : theme === 'gorky'
 
   return (
     <button
       type="button"
       onClick={toggle}
       className={styles.toggle}
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isGorky ? 'Switch to paper theme' : 'Switch to gorky theme'}
     >
-      {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+      {isGorky ? <SunIcon /> : <MoonIcon />}
     </button>
   )
 }

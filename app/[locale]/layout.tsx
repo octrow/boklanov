@@ -19,11 +19,25 @@ import { buildSearchIndex } from '@/lib/search'
 
 // Runs synchronously before paint: reads localStorage and sets data-theme to
 // prevent a flash of wrong theme on first load.
+// Themes: gorky (default, dark plakat register) | paper (opt-in, light editorial).
+// Legacy migration: theme=dark -> gorky, theme=light -> paper.
 const themeScript = `
 try {
-  var t = localStorage.getItem('theme');
-  if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
-} catch (e) {}
+  var k = 'boklanov.theme';
+  var t = localStorage.getItem(k);
+  if (!t) {
+    var legacy = localStorage.getItem('theme');
+    if (legacy === 'dark') t = 'gorky';
+    else if (legacy === 'light') t = 'paper';
+    else t = 'gorky';
+    localStorage.setItem(k, t);
+    if (legacy) localStorage.removeItem('theme');
+  }
+  if (t !== 'gorky' && t !== 'paper') t = 'gorky';
+  document.documentElement.dataset.theme = t;
+} catch (e) {
+  document.documentElement.dataset.theme = 'gorky';
+}
 `
 
 export function generateStaticParams() {

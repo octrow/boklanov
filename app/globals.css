@@ -234,32 +234,36 @@
 }
 
 :root {
-  /* ---------- Colour: light (paper) [BRIEF §5.1; v3 §3] ---------- */
-  --paper:        #F2F0EA;          /* warm off-white page bg — v2: one notch warmer for Lora's calligraphic axis (was #F4F2EC) */
-  --paper-raised: #FBFAF6;          /* cards, modals, raised surfaces */
-  --paper-sunken: #ECE9E1;          /* inputs, code wells, sunken zones */
-  --ink:          #0F0E0D;          /* primary text — v3: one notch deeper than v2 #161514 for accent contrast */
-  --ink-mute:     #605C56;          /* secondary text, dates, captions */
-  --ink-faint:    #8F8B83;          /* placeholder, disabled */
-  --ink-marginalia: rgba(15, 14, 13, 0.55);   /* v3: marginalia secondary register, AA on --paper */
-  --rule:         rgba(15, 14, 13, 0.10);   /* hairline section rules */
-  --rule-strong:  rgba(15, 14, 13, 0.18);   /* hover/active borders */
+  /* ---------- Colour: gorky (default — dark plakat register) [DESIGN.md §3] ----------
+   * Theatre-Gorky aesthetic: near-black paper, warm off-white ink, lifted vermillion.
+   * D10 floor preserved (--paper #080706 = rgb(8,7,6), not pure black).
+   * D11 superseded 2026-05-03 (9v3.0) and 2026-05-04 (default flip);
+   * see archive/DESIGN_BRIEF.md D11 row.
+   * Paper variant available via [data-theme="paper"] below.
+   */
+  --paper:        #080706;          /* near-black page bg — D10 floor */
+  --paper-raised: #161413;          /* cards, modals, raised surfaces */
+  --paper-sunken: #040303;          /* inputs, code wells, sunken zones */
+  --ink:          #F4F0E8;          /* primary text — warm off-white for editorial register */
+  --ink-mute:     #A8A49C;          /* secondary text, dates, captions */
+  --ink-faint:    #7A7771;          /* placeholder, disabled */
+  --ink-marginalia: rgba(244, 240, 232, 0.55);
+  --rule:         rgba(244, 240, 232, 0.10);   /* hairline section rules */
+  --rule-strong:  rgba(244, 240, 232, 0.18);   /* hover/active borders */
 
-  /* v3 Bauhaus stage trio — replaces v1/v2 oxblood. See DESIGN_v3_PROPOSAL §3. */
-  --accent-vermillion: #CC2530;     /* primary stage — booking CTA, /home + /awards + /contact stripes, error. 4.76:1 on --paper AA ✓ */
-  --accent-cobalt:     #1D3557;     /* secondary stage — /productions + /press stripes, link-hover underline */
-  --accent-mustard:    #F4D35E;     /* tertiary stage — DECORATIVE ONLY (sticker/marquee fill); never text colour */
-  --ink-on-accent:     #FBFAF6;     /* default text-on-accent for vermillion/cobalt fills (AA) */
-  --ink-on-mustard:    #0F0E0D;     /* text-on-mustard fills only (mustard is too light for paper-on-fill) */
+  /* v3 Bauhaus stage trio — lifted variants for AA on near-black paper */
+  --accent-vermillion: #FF5A66;     /* primary stage — AA on #080706 ≈ 6.1:1 ✓ */
+  --accent-cobalt:     #5B82C2;     /* secondary stage */
+  --accent-mustard:    #C9A22F;     /* tertiary — DECORATIVE ONLY (sticker/marquee fill) */
+  --ink-on-accent:     #080706;     /* text on accent fills (matches paper for AA) */
+  --ink-on-mustard:    #080706;
 
-  /* --accent aliases the primary stage so existing v1/v2 component code (booking CTA,
-   * focus ring, hover underline) swaps from oxblood to vermillion atomically. */
   --accent:        var(--accent-vermillion);
-  --accent-hover:  #C2202E;          /* darker vermillion */
-  --accent-active: #9C1825;
-  --overlay:       rgba(15, 14, 13, 0.45);   /* modal/dropdown backdrop */
+  --accent-hover:  #FF7B85;          /* lighter vermillion on dark */
+  --accent-active: #E0414C;
+  --overlay:       rgba(0, 0, 0, 0.6);
   --selection-bg:  var(--accent-vermillion);
-  --selection-fg:  #F2F0EA;
+  --selection-fg:  #080706;
 
   /* ---------- Colour: semantic mapping ---------- */
   --color-bg-primary:     var(--paper);
@@ -283,9 +287,10 @@
 
   /* Status colours kept muted to fit warm-editorial palette.
    * The site has no dashboards; these are only used for form
-   * validation and toast hints. v3 aliases error to vermillion. */
-  --color-status-success: #3F6B3A;
-  --color-status-warning: #8A5A18;
+   * validation and toast hints. v3 aliases error to vermillion.
+   * Defaults below are gorky-tuned (lifted for AA on near-black). */
+  --color-status-success: #6FA365;
+  --color-status-warning: #C28F3A;
   --color-status-error:   var(--accent-vermillion);
   --color-status-info:    var(--ink-mute);
 
@@ -327,6 +332,7 @@
   --font-size-4xl:     clamp(44px, 26.5px + 4.84vw, 88px);          /* display */
   --font-size-hero:    clamp(36px, 23px + 4vw, 80px);               /* v3: Unbounded hero wordmark on / only — retuned 2026-05-03: min 36 so 'Бокланов' fits whole-word from 320px (iPhone SE), max 80 so full 'РОМАН БОКЛАНОВ' stays single-line at the 1080px content cap. Was clamp(48,28+4.5vw,96) which both cropped on 320–375px and wrapped at 1440 */
   --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px);          /* v3: Unbounded sticker badge text */
+  --font-size-nav:     clamp(13px, 11.5px + 0.16vw, 16px);          /* 2026-05-04: header nav links — desktop scale-up, was fixed --font-size-meta 13px */
 
   --font-weight-normal:   400;
   --font-weight-medium:   500;
@@ -356,6 +362,9 @@
   --gutter-desktop:     32px;
   --gutter-margin-pull: -1.25rem;  /* v2: Marginalia float-into-margin from ≥1024px */
 
+  --header-height-mobile:  56px;
+  --header-height-desktop: 72px;   /* 2026-05-04: header inner height ≥1024px — bigger nav buttons */
+
   /* Editorial + brutalist => minimal radii. Sharp wins. */
   --border-radius-none: 0;
   --border-radius-sm:   2px;
@@ -364,13 +373,14 @@
   --border-radius-full: 999px;     /* pills (chips use sm instead) */
   --border-radius-form: 2px;       /* v2: form chrome only (input, textarea, select, dialog, kbd) — DESIGN.md §11 unfreeze 2026-05-02 */
 
-  /* Hairline-first: rules > shadows. Shadows are subtle, never glow. */
+  /* Hairline-first: rules > shadows. Shadows are subtle, never glow.
+   * Defaults below are gorky-tuned (heavier on near-black paper). */
   --shadow-none: none;
-  --shadow-sm:   0 1px 2px rgba(15, 14, 13, 0.05);
-  --shadow-md:   0 2px 8px rgba(15, 14, 13, 0.08);
-  --shadow-lg:   0 8px 32px rgba(15, 14, 13, 0.12);
+  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md:   0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
-  --specimen-rule: inset 0 0 0 1px rgba(15, 14, 13, 0.08);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
+  --specimen-rule: inset 0 0 0 1px rgba(244, 240, 232, 0.10);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
   --shadow-plakat: 0 4px 0 0 var(--ink);                     /* v3 §2.7: flat-stack offset for posters/stickers; mimics screen-print misregister, scoped to DuotonePoster + Sticker — DESIGN.md §11 unfreeze 2026-05-03 */
 
   /* ---------- v3 plakat tokens ---------- */
@@ -407,85 +417,48 @@
 }
 
 /* ============================================================
- * Dark mode [BRIEF §5.2]
- * Soft #0E0D0C, never pure black. Reduced contrast on text.
- * Accent shifts to a slightly lighter oxblood for AA on dark.
+ * Paper theme — opt-in light register [DESIGN.md §3]
+ * v2 Vitrine values. Selected via [data-theme="paper"] on <html>.
+ * Default theme is gorky (root values above); paper requires the
+ * attribute. Legacy [data-theme="light"] migrates to "paper" via
+ * the anti-flash script in app/[locale]/layout.tsx.
  * ========================================================== */
 
-[data-theme="dark"] {
-  --paper:        #0E0D0C;
-  --paper-raised: #161413;
-  --paper-sunken: #080706;
-  --ink:          #E8E5DD;
-  --ink-mute:     #9E9A92;
-  --ink-faint:    #6B6862;
-  --ink-marginalia: rgba(232, 229, 221, 0.55);   /* v2: marginalia secondary register, AA on dark --paper */
-  --rule:         rgba(232, 229, 221, 0.10);
-  --rule-strong:  rgba(232, 229, 221, 0.18);
+[data-theme="paper"] {
+  --paper:        #F2F0EA;
+  --paper-raised: #FBFAF6;
+  --paper-sunken: #ECE9E1;
+  --ink:          #0F0E0D;
+  --ink-mute:     #605C56;
+  --ink-faint:    #8F8B83;
+  --ink-marginalia: rgba(15, 14, 13, 0.55);
+  --rule:         rgba(15, 14, 13, 0.10);
+  --rule-strong:  rgba(15, 14, 13, 0.18);
 
-  /* v3 Bauhaus stage trio — lifted variants for AA on dark paper */
-  --accent-vermillion: #FF5A66;
-  --accent-cobalt:     #5B82C2;
-  --accent-mustard:    #C9A22F;
-  --ink-on-accent:     #0E0D0C;
-  --ink-on-mustard:    #0E0D0C;
+  /* v3 Bauhaus stage trio — paper-tuned for AA on warm off-white */
+  --accent-vermillion: #CC2530;
+  --accent-cobalt:     #1D3557;
+  --accent-mustard:    #F4D35E;
+  --ink-on-accent:     #FBFAF6;
+  --ink-on-mustard:    #0F0E0D;
 
   --accent:        var(--accent-vermillion);
-  --accent-hover:  #FF7B85;
-  --accent-active: #E0414C;
-  --overlay:       rgba(0, 0, 0, 0.6);
+  --accent-hover:  #C2202E;
+  --accent-active: #9C1825;
+  --overlay:       rgba(15, 14, 13, 0.45);
   --selection-bg:  var(--accent-vermillion);
-  --selection-fg:  #0E0D0C;
+  --selection-fg:  #F2F0EA;
 
-  --color-status-success: #6FA365;
-  --color-status-warning: #C28F3A;
+  --color-status-success: #3F6B3A;
+  --color-status-warning: #8A5A18;
   --color-status-error:   var(--accent-vermillion);
 
-  --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-sm:    0 1px 2px rgba(15, 14, 13, 0.05);
+  --shadow-md:    0 2px 8px rgba(15, 14, 13, 0.08);
+  --shadow-lg:    0 8px 32px rgba(15, 14, 13, 0.12);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
-  --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);   /* v2: photographic plates, lifted contrast for dark paper */
-  --shadow-plakat: 0 4px 0 0 var(--ink);                        /* v3 §2.7: flat-stack offset on dark */
-}
-
-/* System preference, unless the user explicitly chose light. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper:        #0E0D0C;
-    --paper-raised: #161413;
-    --paper-sunken: #080706;
-    --ink:          #E8E5DD;
-    --ink-mute:     #9E9A92;
-    --ink-faint:    #6B6862;
-    --ink-marginalia: rgba(232, 229, 221, 0.55);
-    --rule:         rgba(232, 229, 221, 0.10);
-    --rule-strong:  rgba(232, 229, 221, 0.18);
-
-    --accent-vermillion: #FF5A66;
-    --accent-cobalt:     #5B82C2;
-    --accent-mustard:    #C9A22F;
-    --ink-on-accent:     #0E0D0C;
-    --ink-on-mustard:    #0E0D0C;
-
-    --accent:        var(--accent-vermillion);
-    --accent-hover:  #FF7B85;
-    --accent-active: #E0414C;
-    --overlay:       rgba(0, 0, 0, 0.6);
-    --selection-bg:  var(--accent-vermillion);
-    --selection-fg:  #0E0D0C;
-
-    --color-status-success: #6FA365;
-    --color-status-warning: #C28F3A;
-    --color-status-error:   var(--accent-vermillion);
-
-    --shadow-sm:    0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md:    0 2px 8px rgba(0, 0, 0, 0.5);
-    --shadow-lg:    0 8px 32px rgba(0, 0, 0, 0.6);
-    --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
-    --specimen-rule: inset 0 0 0 1px rgba(232, 229, 221, 0.10);
-    --shadow-plakat: 0 4px 0 0 var(--ink);
-  }
+  --specimen-rule: inset 0 0 0 1px rgba(15, 14, 13, 0.08);
+  --shadow-plakat: 0 4px 0 0 var(--ink);
 }
 
 /* ============================================================
