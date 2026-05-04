@@ -107,7 +107,7 @@ export interface Production {
   /** Optional URL override for the booking CTA (replaces the default mailto). */
   bookingCtaUrl: string | null
   tags: string[]
-  tour: string[]
+  tour: L10nString[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
   directorsNote: { ru?: string; en?: string; de?: string | null } | null
   runs: Array<{
@@ -137,6 +137,7 @@ export interface ProductionView
     | 'externalLinks'
     | 'runs'
     | 'theatre'
+    | 'tour'
   > {
   title: string
   synopsis: string
@@ -152,6 +153,7 @@ export interface ProductionView
   externalLinks: Array<{ label: string; url: string }>
   runs: Array<{ venue?: string; city?: string; yearFrom?: number; yearTo?: number; count?: string }>
   theatre: { name?: string; shortName?: string; city?: string; country?: string; url?: string }
+  tour: string[]
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
@@ -290,7 +292,7 @@ function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
         : null,
     bookingCtaUrl: fm.bookingCtaUrl ?? null,
     tags: fm.tags ?? [],
-    tour: (fm.tour as string[] | undefined) ?? [],
+    tour: (fm.tour as L10nString[] | undefined) ?? [],
     tagline: fm.tagline ?? null,
     directorsNote: fm.directorsNote ?? null,
     runs: fm.runs ?? []
@@ -392,6 +394,8 @@ function project(p: Production, locale: Locale): ProductionView {
     city: resolveL10nOpt(p.theatre.city, locale)
   }
 
+  const resolvedTour = p.tour.map((c) => resolveL10n(c, locale)).filter((c) => c !== '')
+
   const {
     title: _t,
     synopsis: _s,
@@ -407,6 +411,7 @@ function project(p: Production, locale: Locale): ProductionView {
     externalLinks: _externalLinks,
     runs: _runs,
     theatre: _theatre,
+    tour: _tour,
     ...rest
   } = p
   return {
@@ -425,6 +430,7 @@ function project(p: Production, locale: Locale): ProductionView {
     externalLinks: resolvedExternalLinks,
     runs: resolvedRuns,
     theatre: resolvedTheatre,
+    tour: resolvedTour,
     titles: p.title
   }
 }

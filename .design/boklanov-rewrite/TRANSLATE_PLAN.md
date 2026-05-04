@@ -37,7 +37,7 @@ everywhere; the script upgrades them to `{ru, en, de}` objects when filling loca
 | `index.yaml` `bookingCtaLabel.{ru,en,de}` | yes | — |
 | `index.yaml` `premiereDate.{ru,en,de}` | yes (locale-formatted date) | — |
 | `index.yaml` `theatre.{name,shortName,city}` | yes (L10nString — upgrade plain string in place) | `country`, `url` |
-| `index.yaml` `tour[]` | yes (city names per locale; upgrade plain string to object) | — |
+| `index.yaml` `tour[]` | yes (each entry is `L10nString`; plain-string entries are upgraded to `{ru,en,de}` objects) | — |
 | `index.yaml` `credits.{ru,en,de}[].role` | yes | `name`, `url` (proper names verbatim) |
 | `index.yaml` `gallery[].caption.{ru,en,de}` | yes (when any source caption exists) | `src`, `credit` |
 | `index.yaml` `awards[].{name,category,city}` | yes (L10nString) | `year` |

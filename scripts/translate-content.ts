@@ -33,11 +33,21 @@ type FieldKind =
   | 'title'
   | 'synopsis'
   | 'directorsNote'
+  | 'tagline'
+  | 'bookingCtaLabel'
   | 'role'
   | 'caption'
   | 'date'
   | 'body'
   | 'about'
+  | 'venue'        // theatre / venue names, cities — short proper-noun-ish labels
+  | 'awardName'    // award + festival names
+  | 'awardCity'    // city of award/festival/run
+  | 'awardCategory'
+  | 'linkLabel'    // externalLinks[].label
+  | 'runVenue'     // runs[].venue
+  | 'runCount'     // runs[].count e.g. "12 shows"
+  | 'tourCity'     // tour[] entries (city names)
 
 interface TranslateJob {
   srcLocale: Locale
@@ -133,7 +143,7 @@ const PROVIDER_CFGS: Record<string, ProviderCfg> = {
 
 const DETECTION_ORDER = ['anthropic', 'cerebras', 'openrouter', 'gemini']
 
-function buildProviderChain(): string[] {
+function buildProviderChain(requireKey: boolean): string[] {
   const preferred = argv.provider as string | undefined
   if (preferred && !PROVIDER_CFGS[preferred]) {
     console.error(`[translate] unknown provider "${preferred}". Choose: ${Object.keys(PROVIDER_CFGS).join(', ')}`)
@@ -141,15 +151,16 @@ function buildProviderChain(): string[] {
   }
   const available = DETECTION_ORDER.filter((n) => process.env[PROVIDER_CFGS[n].envKey])
   if (available.length === 0) {
+    if (!requireKey) return []
     console.error('[translate] no API key found. Set one of: ANTHROPIC_API_KEY, CEREBRAS_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY')
     process.exit(1)
   }
   if (!preferred) return available
-  // Put preferred first, keep rest as fallbacks
   return [preferred, ...available.filter((n) => n !== preferred)]
 }
 
-const PROVIDER_CHAIN = buildProviderChain()
+// --report makes no API calls, so it doesn't need a key.
+const PROVIDER_CHAIN = buildProviderChain(/* requireKey */ !reportOnly)
 
 // ── LLM clients (one per provider, lazy) ──────────────────────────────────────
 
@@ -248,9 +259,15 @@ function cacheSet(job: TranslateJob, text: string) {
 
 const SYSTEM_PROMPT = `You translate theatre production metadata for boklanov.com.
 Hard rules:
-  - Output ONLY the translated string. No quotes, no commentary.
+  - Output ONLY the translated string. No quotes, no commentary, no leading/trailing whitespace.
   - Preserve past-tense framing for tour/staging language ("STAGED IN", "INSZENIERTE IN").
-  - Do not translate proper names of people, theatres, cities.
+  - Do NOT translate proper names of people. Mirror them verbatim.
+  - Theatre, venue, and city names: use the established localized form when one exists
+    ("Большой театр кукол" ↔ "Bolshoi Puppet Theatre" ↔ "Bolschoi-Puppentheater";
+     "Санкт-Петербург" ↔ "Saint Petersburg" ↔ "Sankt Petersburg").
+    If no canonical localized form exists, transliterate; do not invent.
+  - Award and festival names: same rule. Translate descriptive parts ("Золотой софит" → "Golden Spotlight"),
+    transliterate or keep original if it's an established proper noun.
   - Match the existing register: terse, no marketing, no exclamation inflation.
   - For dates: emit native locale form. RU "10 октября 2021 г.", EN "October 10, 2021", DE "10. Oktober 2021".`
 
@@ -315,6 +332,74 @@ function activeTargets(exclude?: Locale): Locale[] {
   return exclude ? candidates.filter((l) => l !== exclude) : candidates
 }
 
+// Heuristic for plain-string L10nString values: pick a source locale from the script.
+function inferLocaleFromText(s: string): Locale {
+  if (/[А-Яа-яЁё]/.test(s)) return 'ru'
+  if (/[äöüÄÖÜß]/.test(s)) return 'de'
+  return 'en'
+}
+
+// L10nString = string | { ru?, en?, de? }. Returns true if any locale was filled / value upgraded.
+async function translateL10nString(
+  doc: ReturnType<typeof parseDocument>,
+  currentVal: unknown,
+  path: (string | number)[],
+  fieldKind: FieldKind,
+  logLabel: string,
+): Promise<boolean> {
+  if (currentVal === null || currentVal === undefined) return false
+  if (typeof currentVal === 'string' && currentVal.trim() === '') return false
+
+  let obj: Record<Locale, string>
+  let srcLoc: Locale
+  let srcText: string
+  const wasString = typeof currentVal === 'string'
+
+  if (wasString) {
+    srcText = currentVal as string
+    srcLoc  = inferLocaleFromText(srcText)
+    obj     = { [srcLoc]: srcText } as Record<Locale, string>
+  } else if (typeof currentVal === 'object') {
+    const src = pickSource(currentVal as Record<Locale, string | null | undefined>)
+    if (!src) return false
+    ;[srcLoc, srcText] = src
+    obj = { ...(currentVal as Record<Locale, string>) }
+  } else {
+    return false
+  }
+
+  let touched = false
+  for (const loc of activeTargets(srcLoc)) {
+    if (!isEmpty(obj[loc]) && !force) continue
+    const t = await translateText({ srcLocale: srcLoc, tgtLocale: loc, fieldKind, sourceText: srcText })
+    console.log(`  ${logLabel}.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`)
+    obj[loc] = t
+    touched  = true
+  }
+
+  if ((touched || wasString) && !dryRun) {
+    doc.setIn(path, doc.createNode(obj))
+  }
+  return touched || wasString
+}
+
+// Counts how many locale fills a given L10nString value would need (for the gap report).
+function l10nStringGaps(val: unknown): Locale[] {
+  if (val === null || val === undefined) return []
+  if (typeof val === 'string') {
+    if (val.trim() === '') return []
+    const src = inferLocaleFromText(val)
+    return LOCALES.filter((l) => l !== src)
+  }
+  if (typeof val === 'object') {
+    const o = val as Record<Locale, string | null | undefined>
+    const hasAny = LOCALES.some((l) => !isEmpty(o[l]))
+    if (!hasAny) return []
+    return LOCALES.filter((l) => isEmpty(o[l]))
+  }
+  return []
+}
+
 // ── Report ────────────────────────────────────────────────────────────────────
 
 interface GapRow {
@@ -329,13 +414,59 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
   const dir  = join(PRODUCTIONS_DIR, slug)
   const rows: GapRow[] = []
 
-  for (const field of ['title', 'synopsis', 'directorsNote'] as const) {
+  for (const field of ['title', 'synopsis', 'directorsNote', 'tagline', 'bookingCtaLabel'] as const) {
+    if (!data[field] || typeof data[field] !== 'object') continue
     const src = pickSourceField(data, field)
     if (!src) continue
     for (const loc of LOCALES) {
       if (isEmpty(data[field]?.[loc]))
         rows.push({ slug, kind: 'field', field, locale: loc })
     }
+  }
+
+  // theatre.{name,shortName,city}
+  if (data.theatre) {
+    for (const key of ['name', 'shortName', 'city'] as const) {
+      for (const loc of l10nStringGaps(data.theatre[key]))
+        rows.push({ slug, kind: 'theatre', field: `theatre.${key}`, locale: loc })
+    }
+  }
+
+  // awards / festivals
+  for (const collection of ['awards', 'festivals'] as const) {
+    if (!Array.isArray(data[collection])) continue
+    data[collection].forEach((item: any, idx: number) => {
+      for (const key of ['name', 'category', 'city'] as const) {
+        for (const loc of l10nStringGaps(item?.[key]))
+          rows.push({ slug, kind: collection, field: `${collection}[${idx}].${key}`, locale: loc })
+      }
+    })
+  }
+
+  // externalLinks[].label
+  if (Array.isArray(data.externalLinks)) {
+    data.externalLinks.forEach((l: any, idx: number) => {
+      for (const loc of l10nStringGaps(l?.label))
+        rows.push({ slug, kind: 'links', field: `externalLinks[${idx}].label`, locale: loc })
+    })
+  }
+
+  // runs[]
+  if (Array.isArray(data.runs)) {
+    data.runs.forEach((r: any, idx: number) => {
+      for (const key of ['venue', 'city', 'count'] as const) {
+        for (const loc of l10nStringGaps(r?.[key]))
+          rows.push({ slug, kind: 'runs', field: `runs[${idx}].${key}`, locale: loc })
+      }
+    })
+  }
+
+  // tour[]
+  if (Array.isArray(data.tour)) {
+    data.tour.forEach((c: any, idx: number) => {
+      for (const loc of l10nStringGaps(c))
+        rows.push({ slug, kind: 'tour', field: `tour[${idx}]`, locale: loc })
+    })
   }
 
   if (data.premiereDate) {
@@ -502,16 +633,19 @@ async function translateProduction(slug: string) {
 
   // scalar locale fields
   if (!onlyScope || onlyScope === 'fields') {
-    for (const field of ['title', 'synopsis', 'directorsNote'] as const) {
+    const SCALAR_LOCALE_FIELDS: Array<[string, FieldKind]> = [
+      ['title',           'title'],
+      ['synopsis',        'synopsis'],
+      ['directorsNote',   'directorsNote'],
+      ['tagline',         'tagline'],
+      ['bookingCtaLabel', 'bookingCtaLabel'],
+    ]
+    for (const [field, kind] of SCALAR_LOCALE_FIELDS) {
       const obj = data[field]
-      if (!obj) continue
+      if (!obj || typeof obj !== 'object') continue
       const src = pickSourceField(data, field)
       if (!src) continue
       const [srcLocale, srcText] = src
-      const kind: FieldKind =
-        field === 'title'          ? 'title'          :
-        field === 'synopsis'       ? 'synopsis'        :
-                                     'directorsNote'
 
       for (const loc of activeTargets(force ? undefined : srcLocale)) {
         if (!isEmpty(data[field]?.[loc]) && !force) continue
@@ -620,6 +754,84 @@ async function translateProduction(slug: string) {
           console.log(`  ${slug} gallery[${i}].caption.${loc} ← ${t.slice(0, 50)}`)
           if (!dryRun) { doc.setIn(['gallery', i, 'caption', loc], t); changed = true }
         }
+      }
+    }
+
+    // theatre.{name,shortName,city} — L10nString
+    if (data.theatre && typeof data.theatre === 'object') {
+      for (const [key, kind] of [
+        ['name',      'venue'],
+        ['shortName', 'venue'],
+        ['city',      'venue'],
+      ] as Array<[string, FieldKind]>) {
+        if (await translateL10nString(doc, data.theatre[key], ['theatre', key], kind, `${slug} theatre.${key}`))
+          changed = true
+      }
+    }
+
+    // awards[] — L10nString on name, category, city
+    if (Array.isArray(data.awards)) {
+      for (let i = 0; i < data.awards.length; i++) {
+        const a = data.awards[i]
+        if (!a) continue
+        for (const [key, kind] of [
+          ['name',     'awardName'],
+          ['category', 'awardCategory'],
+          ['city',     'awardCity'],
+        ] as Array<[string, FieldKind]>) {
+          if (await translateL10nString(doc, a[key], ['awards', i, key], kind, `${slug} awards[${i}].${key}`))
+            changed = true
+        }
+      }
+    }
+
+    // festivals[] — same shape as awards
+    if (Array.isArray(data.festivals)) {
+      for (let i = 0; i < data.festivals.length; i++) {
+        const f = data.festivals[i]
+        if (!f) continue
+        for (const [key, kind] of [
+          ['name',     'awardName'],
+          ['category', 'awardCategory'],
+          ['city',     'awardCity'],
+        ] as Array<[string, FieldKind]>) {
+          if (await translateL10nString(doc, f[key], ['festivals', i, key], kind, `${slug} festivals[${i}].${key}`))
+            changed = true
+        }
+      }
+    }
+
+    // externalLinks[].label — L10nString
+    if (Array.isArray(data.externalLinks)) {
+      for (let i = 0; i < data.externalLinks.length; i++) {
+        const l = data.externalLinks[i]
+        if (!l) continue
+        if (await translateL10nString(doc, l.label, ['externalLinks', i, 'label'], 'linkLabel', `${slug} externalLinks[${i}].label`))
+          changed = true
+      }
+    }
+
+    // runs[].{venue,city,count} — L10nString
+    if (Array.isArray(data.runs)) {
+      for (let i = 0; i < data.runs.length; i++) {
+        const r = data.runs[i]
+        if (!r) continue
+        for (const [key, kind] of [
+          ['venue', 'runVenue'],
+          ['city',  'awardCity'],
+          ['count', 'runCount'],
+        ] as Array<[string, FieldKind]>) {
+          if (await translateL10nString(doc, r[key], ['runs', i, key], kind, `${slug} runs[${i}].${key}`))
+            changed = true
+        }
+      }
+    }
+
+    // tour[] — array of L10nString city entries
+    if (Array.isArray(data.tour)) {
+      for (let i = 0; i < data.tour.length; i++) {
+        if (await translateL10nString(doc, data.tour[i], ['tour', i], 'tourCity', `${slug} tour[${i}]`))
+          changed = true
       }
     }
 

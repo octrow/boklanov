@@ -72,8 +72,11 @@ Full workflow: `.design/boklanov-rewrite/CONTENT.md`. Roman-facing RU walkthroug
 
 Fill missing `en` / `de` (and rarely `ru`) fields across `content/productions/*/index.yaml`,
 `body.{ru,en,de}.md`, and `content/about/*` from whichever locale already exists. Source priority
-`ru → en → de`. Fill-only by default — never overwrites existing prose. Skips `awards`, `festivals`,
-`externalLinks`, proper names, urls, enums.
+`ru → en → de`. Fill-only by default — never overwrites existing prose. **Translates every text
+field**, including `awards`, `festivals`, `externalLinks`, `theatre.name`, `runs[]`, `press[].title`
+— anything typed as `L10nString` in `lib/content.ts`. Verbatim-only: scalars (numbers, booleans),
+URLs, slugs, ISO codes, enums (`form`, `lineage`, `role`, `ageRating`, `tags`), asset paths, and
+`credits[].name` (proper names of people).
 
 ```bash
 set -a && source .env && set +a   # load API key

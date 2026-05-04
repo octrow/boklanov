@@ -95,12 +95,12 @@ credits:
   de: []
 
 # === Медиа ===
-# Постер: обложка спектакля. Положить файл в эту же папку (.webp / .jpg).
+# Постер: обложка спектакля. Положить файл в папку public/productions/<slug> (.webp / .jpg).
 poster:
   src: null                               # /productions/<slug>/poster.jpg
   credit: null                            # фотограф, если известен
 
-# Галерея. Файлы кладутся в ту же папку, что и index.yaml.
+# Галерея. Файлы кладутся в public/productions/<slug>, что и index.yaml.
 # После добавления - написать Daniil, он зальёт фото в R2:
 #   npm run upload-images -- --slug <slug>
 gallery: []
