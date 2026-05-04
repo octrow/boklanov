@@ -14,8 +14,14 @@ synopsis:
   de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte.
     Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
 theatre:
-  name: Актюбинский областной театр кукол «Алакай»
-  city: Aktobe
+  name:
+    ru: Актюбинский областной театр кукол «Алакай»
+    en: Aktubinsk Regional Puppet Theatre "Alakai"
+    de: Aktjubinsker Regionales Puppentheater „Alakai“
+  city:
+    en: Aktobe
+    ru: Актобе
+    de: Aktobe
   country: KZ
   url: null
 year: 2024
@@ -30,7 +36,7 @@ role: director
 form:
   - puppet
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссер
@@ -150,10 +156,10 @@ gallery:
 videos:
   - provider: youtube
     id: br5rNxuUbVo
-awards: []
-festivals: []
-press: []
-externalLinks: []
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -162,4 +168,4 @@ tags:
   - puppet
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

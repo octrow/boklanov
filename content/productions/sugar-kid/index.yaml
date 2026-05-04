@@ -17,8 +17,14 @@ synopsis:
     Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman.
     Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
 theatre:
-  name: Новый Молодежный Нижнетагильский театр
-  city: Nizhny Tagil
+  name:
+    ru: Новый Молодежный Нижнетагильский театр
+    en: New Youth Nizhny Tagil Theatre
+    de: Neuer Jugendlicher Nizhnetagilsky Theater
+  city:
+    en: Nizhny Tagil
+    ru: Нижний Тагил
+    de: Nischny Tagil
   country: RU
   url: "https://teatr-nt.ru/saharnii-rebenok"
 year: 2022
@@ -34,7 +40,7 @@ bookingCta: false
 form:
   - puppet
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссер-постановщик
@@ -87,21 +93,38 @@ credits:
 poster:
   src: /productions/sugar-kid/poster.jpg
   credit: null
-gallery: []
+gallery: [ ]
 videos:
   - provider: youtube
     id: k0XujCi1UpA
 awards:
-  - name: Браво — 2022
+  - name:
+      ru: Браво — 2022
+      en: Bravo — 2022
+      de: Bravo – 2022
     year: 2022
-    category: За художественное воплощение исторической памяти в спектакле для детей
-    city: Екатеринбург
-  - name: V Всероссийский молодёжный фестиваль им. В.С. Золотухина
+    category:
+      ru: За художественное воплощение исторической памяти в спектакле для детей
+      en: For artistic embodiment of historical memory in a children's play
+      de: Für die künstlerische Umsetzung historischer Erinnerungen in einem
+        Kinderstück
+    city:
+      ru: Екатеринбург
+      en: Yekaterinburg
+      de: Jekaterinburg
+  - name:
+      ru: V Всероссийский молодёжный фестиваль им. В.С. Золотухина
+      en: All-Russian Youth Festival named after V.S. Zolotukhin
+      de: Всероссийский молодёжный фестиваль имени В.С. Золотухина → Всероссийский
+        молодёжный фестиваль имени В.С. Золотухина
     year: 2022
-    category: За важное художественное высказывание
-festivals: []
-press: []
-externalLinks: []
+    category:
+      ru: За важное художественное высказывание
+      en: For Important Artistic Statement
+      de: Für ein bedeutendes künstlerisches Statement
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -109,4 +132,4 @@ tags:
   - family show
   - theater
   - puppet
-tour: []
+tour: [ ]

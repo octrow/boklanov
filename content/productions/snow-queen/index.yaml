@@ -11,7 +11,10 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Театр+Музей
+  name:
+    ru: Театр+Музей
+    en: Theatre Museum
+    de: Theater+Museum
   city: null
   country: RU
   url: null
@@ -46,7 +49,7 @@ gallery: []
 videos: []
 awards: []
 festivals: []
-press: []
+press: [ ]
 externalLinks: []
 techRider: null
 pressKit: null

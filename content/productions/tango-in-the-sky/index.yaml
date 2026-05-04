@@ -7,17 +7,44 @@ title:
   en: Tango That Fell Into the Sky
   de: Tango, der in den Himmel fiel
 synopsis:
-  ru: Пластический спектакль о мужчине и женщине, их непохожести и нежности, которая зарождается между ними — метафора полёта человеческой души, опрокинутого в вечность.
-  en: A plastic theatre piece about man and woman, their differences and the tenderness that arises between them — a metaphor for the flight of the human soul overturned into eternity.
-  de: Ein plastisches Theaterstück über Mann und Frau, ihre Unterschiede und die Zärtlichkeit, die zwischen ihnen entsteht — eine Metapher für den Flug der menschlichen Seele, hineingeworfen in die Ewigkeit.
+  ru: Пластический спектакль о мужчине и женщине, их непохожести и нежности,
+    которая зарождается между ними — метафора полёта человеческой души,
+    опрокинутого в вечность.
+  en: A plastic theatre piece about man and woman, their differences and the
+    tenderness that arises between them — a metaphor for the flight of the human
+    soul overturned into eternity.
+  de: Ein plastisches Theaterstück über Mann und Frau, ihre Unterschiede und die
+    Zärtlichkeit, die zwischen ihnen entsteht — eine Metapher für den Flug der
+    menschlichen Seele, hineingeworfen in die Ewigkeit.
 directorsNote:
-  ru: «Танго» — лёгкое, нежное и рассказывает об очень простых вещах. Нам очень интересно снова познавать мир. Через язык пластического театра мы заново открываем для себя тему отношений между мужчиной и женщиной. У Платонова есть выражение — «напряжение нежности». Мы уже давно забыли, что это, а оно, тем временем, существует.
-  en: "\"Tango\" is light, tender, and speaks of very simple things. We are very interested in knowing the world again. Through the language of physical theatre, we rediscover the theme of the relationship between man and woman. Platonov has an expression — \"the tension of tenderness.\" We have long forgotten what that is, while it continues to exist."
-  de: "\"Tango\" ist leicht, zart und erzählt von sehr einfachen Dingen. Wir sind sehr daran interessiert, die Welt neu zu entdecken. Durch die Sprache des Körpertheaters entdecken wir das Thema der Beziehung zwischen Mann und Frau neu. Platonow hat einen Ausdruck — \"die Spannung der Zärtlichkeit.\" Wir haben längst vergessen, was das ist, während es inzwischen existiert."
+  ru: «Танго» — лёгкое, нежное и рассказывает об очень простых вещах. Нам очень
+    интересно снова познавать мир. Через язык пластического театра мы заново
+    открываем для себя тему отношений между мужчиной и женщиной. У Платонова
+    есть выражение — «напряжение нежности». Мы уже давно забыли, что это, а оно,
+    тем временем, существует.
+  en: "\"Tango\" is light, tender, and speaks of very simple things. We are very
+    interested in knowing the world again. Through the language of physical
+    theatre, we rediscover the theme of the relationship between man and woman.
+    Platonov has an expression — \"the tension of tenderness.\" We have long
+    forgotten what that is, while it continues to exist."
+  de: "\"Tango\" ist leicht, zart und erzählt von sehr einfachen Dingen. Wir sind
+    sehr daran interessiert, die Welt neu zu entdecken. Durch die Sprache des
+    Körpertheaters entdecken wir das Thema der Beziehung zwischen Mann und Frau
+    neu. Platonow hat einen Ausdruck — \"die Spannung der Zärtlichkeit.\" Wir
+    haben längst vergessen, was das ist, während es inzwischen existiert."
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppets.ru/tangoupavsheevnebo"
   year: 2020
@@ -32,7 +59,7 @@ role: performer
 bookingCta: false
 form:
   - ensemble
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёры
@@ -107,16 +134,16 @@ credits:
 poster:
   src: /productions/tango-in-the-sky/poster.png
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
