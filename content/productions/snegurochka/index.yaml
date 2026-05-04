@@ -7,14 +7,30 @@ title:
   en: Snegurochka
   de: Snegurotschka
 synopsis:
-  ru: Спектакль по сказочной пьесе А.Н. Островского. Снегурочка — дочь Весны и Деда Мороза — живёт среди людей, но не может любить, ведь от любви она растает. Спектакль-лауреат «Золотой маски» 2017. Роман Бокланов — в роли Брусилы.
-  en: "A performance based on A.N. Ostrovsky's fairy-tale play. The Snow Maiden — daughter of Spring and Father Frost — lives among people but cannot love, for love would melt her. Winner of the Golden Mask 2017. Roman Boklanov in the role of Brusilo."
-  de: Eine Aufführung nach dem Märchenstück von A.N. Ostrowski. Das Schneeweißchen — Tochter von Frühling und Väterchen Frost — lebt unter Menschen, kann aber nicht lieben, denn Liebe würde sie schmelzen lassen. Gewinner der Goldenen Maske 2017. Roman Boklanov in der Rolle des Brusilo.
+  ru: Спектакль по сказочной пьесе А.Н. Островского. Снегурочка — дочь Весны и
+    Деда Мороза — живёт среди людей, но не может любить, ведь от любви она
+    растает. Спектакль-лауреат «Золотой маски» 2017. Роман Бокланов — в роли
+    Брусилы.
+  en: "A performance based on A.N. Ostrovsky's fairy-tale play. The Snow Maiden —
+    daughter of Spring and Father Frost — lives among people but cannot love,
+    for love would melt her. Winner of the Golden Mask 2017. Roman Boklanov in
+    the role of Brusilo."
+  de: Eine Aufführung nach dem Märchenstück von A.N. Ostrowski. Das Schneeweißchen
+    — Tochter von Frühling und Väterchen Frost — lebt unter Menschen, kann aber
+    nicht lieben, denn Liebe würde sie schmelzen lassen. Gewinner der Goldenen
+    Maske 2017. Roman Boklanov in der Rolle des Brusilo.
 theatre:
-  name: Старый дом
-  city: Novosibirsk
+  name:
+    ru: Старый дом
+    en: Old House
+    de: Altes Haus
+  city:
+    en: Novosibirsk
+    ru: Новосибирск
+    de: Nowosibirsk
   country: RU
-  url: "https://web.archive.org/web/20211028163039/https://old-house.ru/en/snegurochka.html"
+  url: "https://web.archive.org/web/20211028163039/https://old-house.ru/en/snegur\
+    ochka.html"
 year: 2016
 premiereDate:
   ru: null
@@ -27,7 +43,7 @@ role: performer
 bookingCta: false
 form:
   - theater
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Артист
@@ -41,18 +57,24 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
+gallery: [ ]
+videos: [ ]
 awards:
-  - name: Российская Национальная театральная премия «Золотая маска 2017» — спектакль-лауреат в номинации «Эксперимент» (роль — Брусило)
+  - name:
+      ru: Российская Национальная театральная премия «Золотая маска 2017» —
+        спектакль-лауреат в номинации «Эксперимент» (роль — Брусило)
+      en: Russian National Theatre Award "Golden Mask 2017" — winner in the
+        "Experiment" category (role — Brusilo)
+      de: Российская Национальная театральная премия «Golden Spotlight 2017» — der
+        Spiel-Preisträger in der Kategorie «Experiment» (Rolle — Brusilo)
     year: 2017
-festivals: []
-press: []
-externalLinks: []
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

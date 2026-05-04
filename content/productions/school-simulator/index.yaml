@@ -11,8 +11,14 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Точка доступа
-  city: Saint Petersburg
+  name:
+    ru: Точка доступа
+    en: The Access Point
+    de: Access Point Festival
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: null
 year: 2019
@@ -27,7 +33,7 @@ role: performer
 bookingCta: false
 form:
   - theater
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Артист
@@ -41,16 +47,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

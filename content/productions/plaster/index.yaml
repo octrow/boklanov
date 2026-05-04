@@ -26,8 +26,14 @@ directorsNote:
     jemand anderen zu sein. Und vielleicht werde ich diesen Tag vermissen, wenn
     ich zweiundvierzig bin.
 theatre:
-  name: Калининградский областной драматический театр
-  city: Kaliningrad
+  name:
+    ru: Калининградский областной драматический театр
+    en: Kaliningrad Regional Drama Theatre
+    de: Regionaltheater für Drama Kaliningrad
+  city:
+    en: Kaliningrad
+    ru: Калининград
+    de: Kaliningrad
   country: RU
   url: "https://dramteatr39.ru/spektakli/gips"
 year: 2021
@@ -41,7 +47,7 @@ durationMin: 105
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссер, автор инсценировки
@@ -310,14 +316,25 @@ videos:
   - provider: youtube
     id: QJsPrvhP1aw
 awards:
-  - name: Лонг-лист Российской Национальной премии в области театрального искусства
-      для детей «Арлекин»
+  - name:
+      ru: Лонг-лист Российской Национальной премии в области театрального искусства
+        для детей «Арлекин»
+      en: Long List of the Russian National Prize in the Field of Children's Theatre
+        Art "Arlekin"
+      de: Long-List der Russischen Nationalen Preis für das Theaterkunst für Kinder
+        "Arlekin"
     year: 2023
-  - name: Лауреат театральной премии «Своё лицо» Калининградского драматического
-      театра в номинации «За раскрытие творческой индивидуальности» (Александра
-      Черных, роль Примулы)
+  - name:
+      ru: Лауреат театральной премии «Своё лицо» Калининградского драматического
+        театра в номинации «За раскрытие творческой индивидуальности»
+        (Александра Черных, роль Примулы)
+      en: Winner of the Kaliningrad Drama Theatre's own face award in the category of
+        revealing creative individuality (Alexandra Chernykh, role of Primula)
+      de: Лауреат der Theaterpreis "Swoje Gesicht" Königsberger Dramatisches Theater
+        in der Nominierung "Für die Entfaltung der kreativen Individualität"
+        (Alexandra Tschernych, Rolle Primula)
     year: 2023
-festivals: []
+festivals: [ ]
 press:
   - title:
       ru: "Режиссер Роман Бокланов: «Моя задача - чтобы было больно, но светло»"
@@ -347,7 +364,7 @@ press:
       de: In Königsberger Theater wurde ein Stück für Jugendliche über die Scheidung
         aufgeführt
     url: "https://m.newkaliningrad.ru/short/2021/11/29/23967262.html"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: true
@@ -356,4 +373,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

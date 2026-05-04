@@ -14,8 +14,14 @@ synopsis:
   de: RICHTERS MÄRCHEN bietet einen Einblick in das Leben von Swjatoslaw Richter
     (1915-1997), einem der größten sowjetischen Pianisten der Musikgeschichte.
 theatre:
-  name: URBAN THEATER
-  city: Berlin
+  name:
+    en: URBAN THEATER
+    ru: URBAN THEATER
+    de: URBAN THEATER
+  city:
+    en: Berlin
+    ru: Берлин
+    de: Berlin
   country: DE
   url: "https://www.facebook.com/theater.urban"
 year: 2024
@@ -30,7 +36,7 @@ role: co-director
 bookingCta: false
 form:
   - puppet
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Театр
@@ -84,11 +90,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -96,4 +102,4 @@ tags:
   - puppet
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
