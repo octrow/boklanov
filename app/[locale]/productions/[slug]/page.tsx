@@ -125,9 +125,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `${base}/${locale}/productions/${slug}`
   const ogImage = `${base}/api/og/${slug}`
 
+  const descriptionParts = [production.title, production.theatre.name, production.year]
+    .filter(Boolean)
+    .join(' · ')
+  const description = production.synopsis?.trim() || descriptionParts
+
   return {
     title: production.title,
-    description: production.synopsis || undefined,
+    description,
     alternates: {
       canonical: url,
       languages: {
@@ -137,7 +142,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     openGraph: {
       title: production.titles.ru ?? production.title,
-      description: production.synopsis || undefined,
+      description,
       url,
       images: [
         {
@@ -152,7 +157,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: production.titles.ru ?? production.title,
-      description: production.synopsis || undefined,
+      description,
       images: [ogImage]
     }
   }
