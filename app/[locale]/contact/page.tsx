@@ -39,25 +39,25 @@ export default async function ContactPage({
       <section className={styles.primaryRow}>
         <a
           href={TELEGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          target='_blank'
+          rel='noopener noreferrer'
           className={styles.primaryButton}
-          data-ph-event="booking_cta_click"
+          data-ph-event='booking_cta_click'
           data-ph-locale={locale}
-          data-ph-source="contact"
-          data-ph-channel="telegram"
+          data-ph-source='contact'
+          data-ph-channel='telegram'
         >
           {t('telegramCta')}
         </a>
         <a
           href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          target='_blank'
+          rel='noopener noreferrer'
           className={styles.primaryButton}
-          data-ph-event="booking_cta_click"
+          data-ph-event='booking_cta_click'
           data-ph-locale={locale}
-          data-ph-source="contact"
-          data-ph-channel="instagram"
+          data-ph-source='contact'
+          data-ph-channel='instagram'
         >
           {t('instagramCta')}
         </a>
@@ -70,10 +70,10 @@ export default async function ContactPage({
         <a
           href={mailtoHref}
           className={styles.mailtoLink}
-          data-ph-event="booking_cta_click"
+          data-ph-event='booking_cta_click'
           data-ph-locale={locale}
-          data-ph-source="contact"
-          data-ph-channel="email"
+          data-ph-source='contact'
+          data-ph-channel='email'
         >
           {t('emailCta')}
         </a>

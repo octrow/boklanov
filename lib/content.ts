@@ -1,9 +1,9 @@
 /**
- * lib/content.ts — content loader API (F6)
+ * lib/content.ts - content loader API (F6)
  *
  * Pure functions over the content tree. No I/O outside build-time file reads.
  * Source of truth: content/productions/<slug>/index.mdx frontmatter + body.
- * (Phase 8.3: metadata.yml overlay folded into frontmatter — no overlay step.)
+ * (Phase 8.3: metadata.yml overlay folded into frontmatter - no overlay step.)
  *
  * Page routes call:
  *   - getAllProductions(locale)
@@ -25,7 +25,7 @@ const CONTENT_DIR = path.resolve(process.cwd(), 'content', 'productions')
 const LQIP_DIR = path.resolve(process.cwd(), 'public', 'productions')
 
 // ---------------------------------------------------------------------------
-// Types — public shape consumed by page routes
+// Types - public shape consumed by page routes
 // ---------------------------------------------------------------------------
 
 export interface GalleryItem {
@@ -62,12 +62,33 @@ export interface Production {
   form: string[]
   lineage: string[]
   credits: { ru: CreditEntry[]; en: CreditEntry[]; de?: CreditEntry[] }
-  poster: { src: string | null; credit: string | null; lqip: string | null; width: number | null; height: number | null }
+  poster: {
+    src: string | null
+    credit: string | null
+    lqip: string | null
+    width: number | null
+    height: number | null
+  }
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
-  awards: Array<{ name: string; category?: string; year?: number; city?: string }>
-  festivals: Array<{ name: string; category?: string; year?: number; city?: string }>
-  press: Array<{ title: string; url: string; outlet?: string; language?: string }>
+  awards: Array<{
+    name: string
+    category?: string
+    year?: number
+    city?: string
+  }>
+  festivals: Array<{
+    name: string
+    category?: string
+    year?: number
+    city?: string
+  }>
+  press: Array<{
+    title: string
+    url: string
+    outlet?: string
+    language?: string
+  }>
   externalLinks: Array<{ label: string; url: string }>
   techRider: string | null
   pressKit: string | null
@@ -95,7 +116,17 @@ export interface Production {
 
 /** Locale-projected view returned by getAllProductions / getProduction. */
 export interface ProductionView
-  extends Omit<Production, 'title' | 'synopsis' | 'body' | 'credits' | 'premiereDate' | 'tagline' | 'directorsNote' | 'bookingCtaLabel'> {
+  extends Omit<
+    Production,
+    | 'title'
+    | 'synopsis'
+    | 'body'
+    | 'credits'
+    | 'premiereDate'
+    | 'tagline'
+    | 'directorsNote'
+    | 'bookingCtaLabel'
+  > {
   title: string
   synopsis: string
   body: string
@@ -150,7 +181,7 @@ function loadAll(): Production[] {
         prod.poster.width = lqipData.posterWidth ?? null
         prod.poster.height = lqipData.posterHeight ?? null
       } catch {
-        // malformed lqip.json — ignore
+        // malformed lqip.json - ignore
       }
     }
 
@@ -179,7 +210,7 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     synopsis: fm.synopsis ?? {},
     body: {
       ru: (fm.body as any)?.ru?.trim() ?? '',
-      en: (fm.body as any)?.en?.trim() ?? '',
+      en: (fm.body as any)?.en?.trim() ?? ''
     },
     theatre: fm.theatre ?? {},
     year: fm.year,
@@ -194,9 +225,9 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     poster: {
       src: fm.poster?.src ?? null,
       credit: fm.poster?.credit ?? null,
-      lqip: null,   // filled by loadAll() from lqip.json
+      lqip: null, // filled by loadAll() from lqip.json
       width: null,
-      height: null,
+      height: null
     },
     gallery: (fm.gallery ?? []).map((g) => ({
       src: g.src,
@@ -204,8 +235,8 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
       caption: {
         ru: (g.caption as any)?.ru ?? null,
         en: (g.caption as any)?.en ?? null,
-        de: (g.caption as any)?.de ?? null,
-      },
+        de: (g.caption as any)?.de ?? null
+      }
     })),
     videos: fm.videos ?? [],
     awards: fm.awards ?? [],
@@ -215,7 +246,8 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     techRider: fm.techRider ?? null,
     pressKit: fm.pressKit ?? null,
     featured: !!fm.featured,
-    featuredOrder: typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
+    featuredOrder:
+      typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
     listOrder: typeof fm.listOrder === 'number' ? fm.listOrder : undefined,
     bookingCta: fm.bookingCta === false ? false : true,
     bookingCtaLabel:
@@ -227,10 +259,9 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     tour: (fm.tour as string[] | undefined) ?? [],
     tagline: fm.tagline ?? null,
     directorsNote: fm.directorsNote ?? null,
-    runs: fm.runs ?? [],
+    runs: fm.runs ?? []
   }
 }
-
 
 // ---------------------------------------------------------------------------
 // Locale projection
@@ -238,16 +269,8 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
 
 function project(p: Production, locale: Locale): ProductionView {
   // Fallback chain: requested → ru → en → '' (never throw).
-  const t =
-    p.title[locale] ??
-    p.title.ru ??
-    p.title.en ??
-    p.slug
-  const s =
-    p.synopsis[locale] ??
-    p.synopsis.ru ??
-    p.synopsis.en ??
-    ''
+  const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
+  const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
   const b =
     (locale === 'ru' && p.body.ru) ||
     (locale === 'en' && p.body.en) ||
@@ -256,11 +279,11 @@ function project(p: Production, locale: Locale): ProductionView {
     ''
   // Credits & premiere date: per-locale with RU→EN fallback, mirroring
   // the press/awards "original language" rule. DE chrome falls through
-  // to RU credits (v1 has no DE bodies — that's a v2 fill).
+  // to RU credits (v1 has no DE bodies - that's a v2 fill).
   const credits =
     (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
     (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??
-    (p.credits.ru?.length ? p.credits.ru : p.credits.en ?? [])
+    (p.credits.ru?.length ? p.credits.ru : (p.credits.en ?? []))
   const premiereDate =
     p.premiereDate?.[locale as 'ru' | 'en'] ??
     p.premiereDate?.ru ??
@@ -269,19 +292,32 @@ function project(p: Production, locale: Locale): ProductionView {
   const directorsNote =
     locale === 'de'
       ? (p.directorsNote?.de ?? null)
-      : (p.directorsNote?.[locale as 'ru' | 'en'] ?? p.directorsNote?.ru ?? p.directorsNote?.en ?? null)
+      : (p.directorsNote?.[locale as 'ru' | 'en'] ??
+        p.directorsNote?.ru ??
+        p.directorsNote?.en ??
+        null)
   const tagline =
     locale === 'de'
       ? (p.tagline?.de ?? null)
       : (p.tagline?.[locale as 'ru' | 'en'] ?? p.tagline?.ru ?? null)
   const bookingCtaLabel = p.bookingCtaLabel
     ? (p.bookingCtaLabel[locale] ??
-       p.bookingCtaLabel.ru ??
-       p.bookingCtaLabel.en ??
-       null)
+      p.bookingCtaLabel.ru ??
+      p.bookingCtaLabel.en ??
+      null)
     : null
 
-  const { title: _t, synopsis: _s, body: _b, credits: _c, premiereDate: _p, tagline: _tg, directorsNote: _dn, bookingCtaLabel: _bcl, ...rest } = p
+  const {
+    title: _t,
+    synopsis: _s,
+    body: _b,
+    credits: _c,
+    premiereDate: _p,
+    tagline: _tg,
+    directorsNote: _dn,
+    bookingCtaLabel: _bcl,
+    ...rest
+  } = p
   return {
     ...rest,
     title: t!,
@@ -336,7 +372,9 @@ export function getRelatedProductions(
     if (ageBucket(cand.ageRating ?? null) === targetAge && targetAge !== null) {
       score += 3
     }
-    const formOverlap = cand.form.filter((f) => production.form.includes(f)).length
+    const formOverlap = cand.form.filter((f) =>
+      production.form.includes(f)
+    ).length
     score += formOverlap * 2
     const lineageOverlap = cand.lineage.filter((l) =>
       production.lineage.includes(l)

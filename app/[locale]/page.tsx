@@ -47,7 +47,10 @@ export default async function HomePage({
   const featuredSlugs = new Set(featured.map((p) => p.slug))
   const directorProductions = productions
     .filter(
-      (p) => p.role.includes('director') && !featuredSlugs.has(p.slug) && p.listOrder != null
+      (p) =>
+        p.role.includes('director') &&
+        !featuredSlugs.has(p.slug) &&
+        p.listOrder != null
     )
     .sort((a, b) => (a.listOrder ?? 0) - (b.listOrder ?? 0))
 
@@ -57,7 +60,11 @@ export default async function HomePage({
       <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')} />
 
       {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
-      <TourTicker cities={t.raw('stagingCities') as string[]} accent="mustard" label={tAbout('stagedIn')} />
+      <TourTicker
+        cities={t.raw('stagingCities') as string[]}
+        accent='mustard'
+        label={tAbout('stagedIn')}
+      />
 
       {/* Featured strip — v3 §2.4: broken-grid, 1 large + 2 medium + 3 small */}
       {featured.length > 0 && (

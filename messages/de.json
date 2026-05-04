@@ -9,10 +9,16 @@
     "search": "Suche",
     "wordmark": "roman boklanov"
   },
+  "meta": {
+    "siteName": "Roman Boklanov",
+    "siteDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Erwachsene. Zwischen Bremen, Wien und Almaty.",
+    "homeTitle": "Roman Boklanov - Theaterregisseur",
+    "homeDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Erwachsene. Zwischen Bremen, Wien und Almaty."
+  },
   "home": {
     "heroMeta": "Regisseur · Figurentheater · Objekttheater",
     "heroWordmark": "Roman Boklanov",
-    "statement": "Stücke über Menschen und Dinge — für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
+    "statement": "Stücke über Menschen und Dinge - für Kinder, Jugendliche und die Erwachsenen. Roman Boklanov arbeitet zwischen Bremen, Viena und Almaty.",
     "featuredLabel": "ausgewählte Werke",
     "allLabel": "Inszenierungen",
     "viewAll": "alle Inszenierungen →",
@@ -92,7 +98,7 @@
     "trailer": "Trailer",
     "credits": "Credits",
     "onTour": "AUF TOURNEE",
-    "directorsNoteAttr": "— ROMAN BOKLANOV",
+    "directorsNoteAttr": "- ROMAN BOKLANOV",
     "deForthcoming": "Deutsche Übersetzung folgt",
     "stickerAward": "FESTIVALPREIS",
     "stickerTour": "TOURNEE",

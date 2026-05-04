@@ -15,7 +15,6 @@ import styles from './SiteHeader.module.css'
 
 const LOCALES: Locale[] = ['en', 'de', 'ru']
 
-
 interface SiteHeaderProps {
   productions: { slug: string }[]
 }
@@ -41,7 +40,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
   return (
     <header className={styles.header}>
       {(folio.sectionKey || folio.isHome) && (
-        <div className={styles.folio} aria-hidden="true">
+        <div className={styles.folio} aria-hidden='true'>
           <span className={styles.folioName}>
             {t('wordmark').toUpperCase()}
           </span>
@@ -63,12 +62,12 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       )}
       <div className={styles.inner}>
         {/* Wordmark */}
-        <Link href="/" className={styles.wordmark}>
-          <SiteWordmark variant="header" text={t('wordmark')} />
+        <Link href='/' className={styles.wordmark}>
+          <SiteWordmark variant='header' text={t('wordmark')} />
         </Link>
 
         {/* Desktop nav */}
-        <nav className={styles.nav} aria-label="Main navigation">
+        <nav className={styles.nav} aria-label='Main navigation'>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -86,7 +85,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
         {/* Controls: locale switcher + theme toggle (desktop) */}
         <div className={styles.controls}>
-          <nav className={styles.localeSwitcher} aria-label="Language">
+          <nav className={styles.localeSwitcher} aria-label='Language'>
             {LOCALES.map((loc) => (
               <Link
                 key={loc}
@@ -105,22 +104,43 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
           <ThemeToggle />
         </div>
 
-        {/* Mobile search button — on-screen Cmd-K trigger (no Cmd key on mobile). */}
+        {/* Mobile search button - on-screen Cmd-K trigger (no Cmd key on mobile). */}
         <button
-          type="button"
+          type='button'
           className={styles.searchBtn}
           aria-label={t('search')}
           onClick={toggleSearch}
         >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
-            <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.25"/>
-            <line x1="11.8" y1="11.8" x2="16" y2="16" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round"/>
+          <svg
+            width='18'
+            height='18'
+            viewBox='0 0 18 18'
+            fill='none'
+            aria-hidden='true'
+            focusable='false'
+          >
+            <circle
+              cx='7.5'
+              cy='7.5'
+              r='5.5'
+              stroke='currentColor'
+              strokeWidth='1.25'
+            />
+            <line
+              x1='11.8'
+              y1='11.8'
+              x2='16'
+              y2='16'
+              stroke='currentColor'
+              strokeWidth='1.25'
+              strokeLinecap='round'
+            />
           </svg>
         </button>
 
         {/* Mobile hamburger */}
         <button
-          type="button"
+          type='button'
           className={styles.hamburger}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
@@ -134,10 +154,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
       {/* Mobile nav drawer */}
       {menuOpen && (
-        <nav
-          className={styles.mobileNav}
-          aria-label="Mobile navigation"
-        >
+        <nav className={styles.mobileNav} aria-label='Mobile navigation'>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -169,7 +186,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       )}
 
       <hr className={styles.rule} />
-      {/* v3 §2.8 — per-section accent stripe, full-viewport-width below header rule.
+      {/* v3 §2.8 - per-section accent stripe, full-viewport-width below header rule.
           Centralised here so it sits above the layout content (not inside <main>'s
           max-width container) and spans 100vw. */}
       <SectionStripe />

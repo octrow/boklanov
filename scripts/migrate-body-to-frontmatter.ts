@@ -8,7 +8,7 @@ import matter from 'gray-matter'
 
 const PRODUCTIONS_DIR = path.resolve(process.cwd(), 'content', 'productions')
 
-// Mirrors lib/clean-body.ts — strips Notion-export noise, keeps narrative text.
+// Mirrors lib/clean-body.ts - strips Notion-export noise, keeps narrative text.
 function cleanBodyMarkdown(raw: string): string {
   const lines = raw.split('\n')
   const out: string[] = []
@@ -21,7 +21,9 @@ function cleanBodyMarkdown(raw: string): string {
     if (/^\*{2,3}[^*].{0,120}\*{2,3}$/.test(t) && !t.includes('\n')) continue
     if (/^!\[.*\]\(%[0-9A-F]{2}/i.test(t)) continue
     if (
-      /^\*\*(Билет|Ticket|Премьера|Premiere|Продолжи|Duration|Категори|Age restrict|Возраст|Partymaker|Graffiti|Lighting designer|Dj:|ENG$|DEU$|Режис|Художн|Освещ|Звук|Composi|Choreograph|Помощн|В спект|Perform|Director|Artist|Cast:|Sound|Light|Figures|Staging|Regie|Besetz)/.test(t)
+      /^\*\*(Билет|Ticket|Премьера|Premiere|Продолжи|Duration|Категори|Age restrict|Возраст|Partymaker|Graffiti|Lighting designer|Dj:|ENG$|DEU$|Режис|Художн|Освещ|Звук|Composi|Choreograph|Помощн|В спект|Perform|Director|Artist|Cast:|Sound|Light|Figures|Staging|Regie|Besetz)/.test(
+        t
+      )
     ) {
       skipUntilBlank = true
       continue
@@ -41,11 +43,17 @@ function cleanBodyMarkdown(raw: string): string {
     out.push(line)
   }
 
-  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+  return out
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 function extractLocale(body: string, locale: 'ru' | 'en'): string {
-  const re = new RegExp(`<Locale\\s+value="${locale}">([\\s\\S]*?)</Locale>`, 'i')
+  const re = new RegExp(
+    `<Locale\\s+value="${locale}">([\\s\\S]*?)</Locale>`,
+    'i'
+  )
   const m = body.match(re)
   if (!m) return ''
   return m[1].trim()
@@ -54,7 +62,7 @@ function extractLocale(body: string, locale: 'ru' | 'en'): string {
 function toYamlLiteralBlock(value: string, contentIndent: number): string {
   if (!value) return '""'
   const prefix = ' '.repeat(contentIndent)
-  const lines = value.split('\n').map(l => (l ? prefix + l : ''))
+  const lines = value.split('\n').map((l) => (l ? prefix + l : ''))
   return `|-\n${lines.join('\n')}`
 }
 
@@ -110,9 +118,7 @@ function migrate(mdxPath: string): 'skipped' | 'done' {
     .trim()
 
   const newFile =
-    newFmLines.join('\n') +
-    '\n---\n' +
-    (cleaned ? '\n' + cleaned + '\n' : '')
+    newFmLines.join('\n') + '\n---\n' + (cleaned ? '\n' + cleaned + '\n' : '')
 
   fs.writeFileSync(mdxPath, newFile, 'utf8')
   return 'done'
@@ -121,8 +127,8 @@ function migrate(mdxPath: string): 'skipped' | 'done' {
 // Run over all production MDX files
 const slugs = fs
   .readdirSync(PRODUCTIONS_DIR, { withFileTypes: true })
-  .filter(e => e.isDirectory())
-  .map(e => e.name)
+  .filter((e) => e.isDirectory())
+  .map((e) => e.name)
 
 let done = 0
 let skipped = 0
@@ -135,7 +141,7 @@ for (const slug of slugs) {
     console.log(`✓  ${slug}`)
     done++
   } else {
-    console.log(`—  ${slug} (skipped)`)
+    console.log(`-  ${slug} (skipped)`)
     skipped++
   }
 }

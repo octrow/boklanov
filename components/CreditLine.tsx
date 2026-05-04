@@ -12,8 +12,8 @@ interface CreditLineProps {
  * Renders only the fields that exist; em-dash separated; never inserts
  * placeholder strings. Survives 80% missing data without apologising.
  *
- *   Photo — A. Surname — 2019    (both present)
- *   Photo — A. Surname           (photographer only)
+ *   Photo - A. Surname - 2019    (both present)
+ *   Photo - A. Surname           (photographer only)
  *   2019                         (year only)
  *   null                         (neither — renders nothing)
  *
@@ -36,7 +36,12 @@ export function CreditLine({ photographer, year }: CreditLineProps) {
     <small className={styles.credit}>
       {parts.map((p, i) => (
         <React.Fragment key={i}>
-          {i > 0 && <span className={styles.sep} aria-hidden='true'> — </span>}
+          {i > 0 && (
+            <span className={styles.sep} aria-hidden='true'>
+              {' '}
+              —{' '}
+            </span>
+          )}
           <span>{p}</span>
         </React.Fragment>
       ))}

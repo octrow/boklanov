@@ -11,10 +11,10 @@ interface StickerProps {
   rotate?: -3 | 0 | 3
   shadow?: boolean
   /** Layout mode.
-   * - `'floating'` (default) — `position: absolute`, top-right of nearest
+   * - `'floating'` (default) - `position: absolute`, top-right of nearest
    *   `position: relative` ancestor (typically ProductionCard `.cover`). Used
    *   for card-overlay badges in FeaturedStrip.
-   * - `'inline'` — `position: static`, no absolute escape. Used for the
+   * - `'inline'` - `position: static`, no absolute escape. Used for the
    *   production-detail `<div>.stickerRow` row above the title.
    */
   layout?: 'floating' | 'inline'
@@ -27,14 +27,14 @@ export function Sticker({
   rotate = 0,
   shadow = false,
   layout = 'floating',
-  children,
+  children
 }: StickerProps) {
   return (
     <span
       className={[
         styles.sticker,
         layout === 'inline' ? styles.inline : '',
-        shadow ? styles.shadow : '',
+        shadow ? styles.shadow : ''
       ]
         .filter(Boolean)
         .join(' ')}

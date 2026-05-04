@@ -47,7 +47,7 @@ export function TypographicCover({
   theatre,
   countryCode,
   year,
-  synopsis,
+  synopsis
 }: TypographicCoverProps) {
   const variant = variantForSlug(slug)
   const metaParts = [theatre, countryCode, year].filter(Boolean)

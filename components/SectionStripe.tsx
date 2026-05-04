@@ -10,5 +10,7 @@ import styles from './SectionStripe.module.css'
 export function SectionStripe() {
   const pathname = usePathname()
   const accent = sectionAccent(pathname)
-  return <div className={styles.stripe} data-accent={accent} aria-hidden="true" />
+  return (
+    <div className={styles.stripe} data-accent={accent} aria-hidden='true' />
+  )
 }

@@ -3,15 +3,22 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "boklanov.com / boklanov.ru — site for theatre director Roman Boklanov.",
+  "description": "boklanov.com / boklanov.ru - site for theatre director Roman Boklanov.",
   "license": "MIT",
   "engines": {
     "node": "22.x"
   },
+  "browserslist": [
+    "chrome >= 110",
+    "edge >= 110",
+    "firefox >= 110",
+    "safari >= 15.6",
+    "ios_saf >= 15.6"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "sync": "echo 'sync retired — edit content in Obsidian (see content/AUTHORING.ru.md)'",
+    "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
     "lint-mdx": "tsx scripts/lint-mdx.ts",
     "lint-tokens": "tsx scripts/lint-tokens.ts",

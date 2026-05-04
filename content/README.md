@@ -1,4 +1,4 @@
-# `content/` — production data
+# `content/` - production data
 
 **Phase 8.3 (2026-05-02):** `metadata.yml` overlay retired and folded into
 frontmatter. Notion sync retired. Obsidian + obsidian-git is now the
@@ -18,7 +18,7 @@ content/
         └── index.mdx        ← frontmatter + RU/EN body
 ```
 
-No `metadata.yml` files — overlays were folded into `index.mdx`
+No `metadata.yml` files - overlays were folded into `index.mdx`
 frontmatter by `scripts/fold-overlay.ts` on 2026-05-02.
 
 ---
@@ -29,7 +29,7 @@ Edit `index.mdx` files directly in Obsidian. The Properties panel
 (top of each file) shows all structured fields. Body text is below
 the Properties block.
 
-Commit and push from Obsidian's Source Control panel — Vercel
+Commit and push from Obsidian's Source Control panel - Vercel
 redeploys automatically in 1–2 minutes.
 
 ---
@@ -69,7 +69,7 @@ redeploys automatically in 1–2 minutes.
 
 1. Copy an existing `content/productions/<slug>/` as a template.
 2. Rename the folder to the new slug (Latin, hyphens).
-3. Edit `index.mdx` — fill in Properties, write RU/EN body.
+3. Edit `index.mdx` - fill in Properties, write RU/EN body.
 4. Add photos to `public/productions/<slug>/`.
 5. Commit and push from Obsidian.
 

@@ -20,9 +20,10 @@ interface CommandPaletteContextValue {
   toggle: () => void
 }
 
-export const CommandPaletteContext = React.createContext<CommandPaletteContextValue>({
-  toggle: () => {}
-})
+export const CommandPaletteContext =
+  React.createContext<CommandPaletteContextValue>({
+    toggle: () => {}
+  })
 
 export function CommandPaletteProvider({ items, locale, children }: Props) {
   const [open, setOpen] = React.useState(false)

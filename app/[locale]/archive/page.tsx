@@ -50,9 +50,7 @@ export default async function ArchivePage({
           <tbody>
             {entries.map((prod) => (
               <tr key={prod.slug} className={styles.row}>
-                <td className={styles.tdYear}>
-                  {prod.year ?? '—'}
-                </td>
+                <td className={styles.tdYear}>{prod.year ?? '—'}</td>
                 <td className={styles.tdTitle}>
                   <Link
                     href={`/productions/${prod.slug}`}

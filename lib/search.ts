@@ -6,15 +6,34 @@
 import type { ProductionView } from './content'
 
 export type SearchItem =
-  | { type: 'production'; slug: string; title: string; theatre: string; city: string; year: string }
-  | { type: 'award';      slug: string; name: string; productionTitle: string; year: string }
-  | { type: 'press';      slug: string; articleTitle: string; outlet: string; productionTitle: string }
-  | { type: 'theatre';    slug: string; name: string; city: string }
-  | { type: 'city';       slug: string; name: string }
+  | {
+      type: 'production'
+      slug: string
+      title: string
+      theatre: string
+      city: string
+      year: string
+    }
+  | {
+      type: 'award'
+      slug: string
+      name: string
+      productionTitle: string
+      year: string
+    }
+  | {
+      type: 'press'
+      slug: string
+      articleTitle: string
+      outlet: string
+      productionTitle: string
+    }
+  | { type: 'theatre'; slug: string; name: string; city: string }
+  | { type: 'city'; slug: string; name: string }
 
 export function buildSearchIndex(productions: ProductionView[]): SearchItem[] {
   const items: SearchItem[] = []
-  const theatresSeen = new Map<string, string>()  // name → slug
+  const theatresSeen = new Map<string, string>() // name → slug
   const citiesSeen = new Set<string>()
 
   for (const prod of productions) {

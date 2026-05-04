@@ -32,7 +32,9 @@ export default async function ProductionsIndexPage({
 
   // Default view for the Suspense fallback (shown in static HTML pre-hydration).
   // Matches the filter default: role=director per brief D5.
-  const directorProductions = sortedProductions.filter((p) => p.role.includes('director'))
+  const directorProductions = sortedProductions.filter((p) =>
+    p.role.includes('director')
+  )
 
   const labels = {
     roleDirector: t('roleDirector'),
@@ -63,10 +65,17 @@ export default async function ProductionsIndexPage({
        */}
       <Suspense
         fallback={
-          <ProductionGrid productions={directorProductions} emptyLabel='' priorityFirst />
+          <ProductionGrid
+            productions={directorProductions}
+            emptyLabel=''
+            priorityFirst
+          />
         }
       >
-        <FilteredProductionsPanel productions={sortedProductions} labels={labels} />
+        <FilteredProductionsPanel
+          productions={sortedProductions}
+          labels={labels}
+        />
       </Suspense>
     </main>
   )

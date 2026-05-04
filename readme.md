@@ -84,7 +84,7 @@ R2 CDN deferred until `boklanov.com` moves to Cloudflare DNS.
 | `DESIGN.md` | Visual identity + IA + tokens + anti-patterns |
 | `content/AUTHORING.ru.md` | Roman's RU day-to-day |
 
-Frozen history: `.design/boklanov-rewrite/archive/` (D1-D15 brief, R1+R2 review, Phase 7.5 ambition, 9-option content matrix, full IA, token rationale, photo audit, origin PLAN, HANDOFF + TASKS commit ledgers). Each doc has a `*_compress.md` — read that first.
+Frozen history: `.design/boklanov-rewrite/archive/` (D1-D15 brief, R1+R2 review, Phase 7.5 ambition, 9-option content matrix, full IA, token rationale, photo audit, origin PLAN, HANDOFF + TASKS commit ledgers). Each doc has a `*_compress.md` - read that first.
 
 ## License
 

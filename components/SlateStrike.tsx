@@ -20,7 +20,11 @@ export function SlateStrike({ children }: { children: React.ReactNode }) {
   }, [gestureOff])
 
   return (
-    <div className={animate ? `${styles.slate} ${styles.slateAnimate}` : styles.slate}>
+    <div
+      className={
+        animate ? `${styles.slate} ${styles.slateAnimate}` : styles.slate
+      }
+    >
       {children}
     </div>
   )

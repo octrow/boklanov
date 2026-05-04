@@ -132,7 +132,8 @@ export function FilteredProductionsPanel({
     return productions.filter((p) => {
       if (activeRole === 'other') {
         if (p.role.some((r) => mainRoles.includes(r))) return false
-      } else if (activeRole !== 'all' && !p.role.includes(activeRole)) return false
+      } else if (activeRole !== 'all' && !p.role.includes(activeRole))
+        return false
       if (activeForm !== null && !p.form.includes(activeForm)) return false
       if (activeAges.length > 0) {
         const bucket = ageBucketValue(p.ageRating)
@@ -189,8 +190,14 @@ export function FilteredProductionsPanel({
           to keep the bar narrow even when many countries appear in the data. */}
       <div className={styles.filterBar} role='toolbar' aria-label='Filters'>
         {/* Role — radio group (single selection) */}
-        <div className={styles.group} role='radiogroup' aria-label={labels.groupLabelRole}>
-          <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelRole}</span>
+        <div
+          className={styles.group}
+          role='radiogroup'
+          aria-label={labels.groupLabelRole}
+        >
+          <span className={styles.groupLabel} aria-hidden='true'>
+            {labels.groupLabelRole}
+          </span>
           <div className={styles.chipRow}>
             {ROLE_OPTIONS.map(({ value }) => (
               <button
@@ -219,9 +226,17 @@ export function FilteredProductionsPanel({
         {/* Form — single-select radio group (only show options present in data) */}
         {availableForms.length > 0 && (
           <>
-            <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={styles.group} role='radiogroup' aria-label={labels.groupLabelForm}>
-              <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelForm}</span>
+            <span className={styles.sep} aria-hidden='true'>
+              ·
+            </span>
+            <div
+              className={styles.group}
+              role='radiogroup'
+              aria-label={labels.groupLabelForm}
+            >
+              <span className={styles.groupLabel} aria-hidden='true'>
+                {labels.groupLabelForm}
+              </span>
               <div className={styles.chipRow}>
                 {availableForms.map((form) => (
                   <button
@@ -229,7 +244,9 @@ export function FilteredProductionsPanel({
                     className={`${styles.chip} ${activeForm === form ? styles.chipActive : ''}`}
                     role='radio'
                     aria-checked={activeForm === form}
-                    onClick={() => setParam('form', activeForm === form ? null : form)}
+                    onClick={() =>
+                      setParam('form', activeForm === form ? null : form)
+                    }
                   >
                     {form}
                   </button>
@@ -240,9 +257,17 @@ export function FilteredProductionsPanel({
         )}
 
         {/* Age buckets — multi-select */}
-        <span className={styles.sep} aria-hidden="true">·</span>
-        <div className={styles.group} role='group' aria-label={labels.groupLabelAge}>
-          <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelAge}</span>
+        <span className={styles.sep} aria-hidden='true'>
+          ·
+        </span>
+        <div
+          className={styles.group}
+          role='group'
+          aria-label={labels.groupLabelAge}
+        >
+          <span className={styles.groupLabel} aria-hidden='true'>
+            {labels.groupLabelAge}
+          </span>
           <div className={styles.chipRow}>
             {AGE_BUCKETS.map(({ label, value }) => (
               <button
@@ -261,8 +286,14 @@ export function FilteredProductionsPanel({
             label, so the mono-caps "СТРАНА" title is omitted here on purpose. */}
         {availableCountries.length > 1 && (
           <>
-            <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={`${styles.group} ${styles.groupCountry}`} role='group' aria-label={labels.groupLabelCountry}>
+            <span className={styles.sep} aria-hidden='true'>
+              ·
+            </span>
+            <div
+              className={`${styles.group} ${styles.groupCountry}`}
+              role='group'
+              aria-label={labels.groupLabelCountry}
+            >
               <div className={styles.countryWrap} ref={countryRef}>
                 <button
                   type='button'
@@ -275,7 +306,9 @@ export function FilteredProductionsPanel({
                   <span className={styles.countryTriggerLabel}>
                     {activeCountry ?? labels.groupLabelCountry}
                   </span>
-                  <span className={styles.caret} aria-hidden='true'>▾</span>
+                  <span className={styles.caret} aria-hidden='true'>
+                    ▾
+                  </span>
                 </button>
                 {countryOpen && (
                   <div
@@ -291,7 +324,10 @@ export function FilteredProductionsPanel({
                         role='radio'
                         aria-checked={activeCountry === code}
                         onClick={() => {
-                          setParam('country', activeCountry === code ? null : code)
+                          setParam(
+                            'country',
+                            activeCountry === code ? null : code
+                          )
                           setCountryOpen(false)
                         }}
                       >

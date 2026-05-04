@@ -153,7 +153,7 @@ const audit = async () => {
   const fmtMB = (b) => `${(b / 1024 / 1024).toFixed(1)} MB`
 
   const lines = []
-  lines.push('# Photo coverage audit — boklanov.ru')
+  lines.push('# Photo coverage audit - boklanov.ru')
   lines.push('')
   lines.push(`Generated: ${new Date().toISOString()}`)
   lines.push(`Source: \`${rootPath.replace(/\/$/, '')}\``)
@@ -161,9 +161,15 @@ const audit = async () => {
   lines.push('## Summary')
   lines.push('')
   lines.push(`- Production / sub-page records: **${total}**`)
-  lines.push(`- Records with at least one local image: **${withImages}** (${pct(withImages, total)})`)
-  lines.push(`- Records with a poster (Афиша / poster / cover): **${withPoster}** (${pct(withPoster, total)})`)
-  lines.push(`- Local images on disk: **${totalImages}** (${fmtMB(totalBytes)})`)
+  lines.push(
+    `- Records with at least one local image: **${withImages}** (${pct(withImages, total)})`
+  )
+  lines.push(
+    `- Records with a poster (Афиша / poster / cover): **${withPoster}** (${pct(withPoster, total)})`
+  )
+  lines.push(
+    `- Local images on disk: **${totalImages}** (${fmtMB(totalBytes)})`
+  )
   lines.push(
     `- Average images per record (incl. zero): **${(totalImages / total).toFixed(1)}**`
   )
@@ -183,7 +189,7 @@ const audit = async () => {
     const poster = p.posters.length ? '●' : '·'
     const md = p.md ? '●' : '·'
     const title = p.title.replace(/\|/g, '\\|')
-    const idShort = (p.id ? p.id.slice(0, 8) : '—')
+    const idShort = p.id ? p.id.slice(0, 8) : '-'
     lines.push(
       `| ${p.imageCount} | ${poster} | ${md} | ${title} | \`${idShort}\` |`
     )
@@ -197,7 +203,9 @@ const audit = async () => {
     lines.push('_None._')
   } else {
     for (const p of empty) {
-      lines.push(`- ${p.title} — \`${(p.id ? p.id.slice(0, 8) : '—')}\` — external refs in MD: ${p.externalImageCount}`)
+      lines.push(
+        `- ${p.title} - \`${p.id ? p.id.slice(0, 8) : '-'}\` — external refs in MD: ${p.externalImageCount}`
+      )
     }
   }
   lines.push('')
@@ -205,7 +213,9 @@ const audit = async () => {
   lines.push('## Photographer-credit candidates found in MD')
   lines.push('')
   if (allCredits.size === 0) {
-    lines.push('_No explicit "Фото:", "Photo:", "©" credits matched in any markdown._')
+    lines.push(
+      '_No explicit "Фото:", "Photo:", "©" credits matched in any markdown._'
+    )
   } else {
     for (const c of [...allCredits].sort()) {
       lines.push(`- ${c}`)
@@ -237,7 +247,9 @@ const audit = async () => {
     lines.push('_None._')
   } else {
     for (const p of noMd) {
-      lines.push(`- ${p.title} — ${p.imageCount} images — \`${(p.id ? p.id.slice(0, 8) : '—')}\``)
+      lines.push(
+        `- ${p.title} — ${p.imageCount} images — \`${p.id ? p.id.slice(0, 8) : '—'}\``
+      )
     }
   }
   lines.push('')
@@ -265,7 +277,8 @@ const audit = async () => {
   }
 }
 
-const pct = (n, total) => (total === 0 ? '0%' : `${Math.round((n / total) * 100)}%`)
+const pct = (n, total) =>
+  total === 0 ? '0%' : `${Math.round((n / total) * 100)}%`
 
 audit()
   .then((s) => process.stdout.write(JSON.stringify(s, null, 2) + '\n'))

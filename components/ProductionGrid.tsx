@@ -38,11 +38,14 @@ export function ProductionGrid({
     return (
       <EmptyState
         body={emptyLabel}
-        action={clearAllLabel && onClearAll ? (
-          <button className={styles.emptyReset} onClick={onClearAll}>
-            <span aria-hidden="true">→ </span>{clearAllLabel}
-          </button>
-        ) : undefined}
+        action={
+          clearAllLabel && onClearAll ? (
+            <button className={styles.emptyReset} onClick={onClearAll}>
+              <span aria-hidden='true'>→ </span>
+              {clearAllLabel}
+            </button>
+          ) : undefined
+        }
       />
     )
   }
@@ -57,7 +60,9 @@ export function ProductionGrid({
           />
         )
         return duotoneAll ? (
-          <DuotonePoster key={p.slug} slug={p.slug}>{card}</DuotonePoster>
+          <DuotonePoster key={p.slug} slug={p.slug}>
+            {card}
+          </DuotonePoster>
         ) : (
           <React.Fragment key={p.slug}>{card}</React.Fragment>
         )

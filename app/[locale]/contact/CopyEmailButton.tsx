@@ -18,7 +18,7 @@ export function CopyEmailButton({ email }: { email: string }) {
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={handleCopy}
       className={styles.copyButton}
       aria-label={copied ? t('copiedAria') : t('copyAria')}

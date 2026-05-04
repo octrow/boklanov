@@ -1,6 +1,6 @@
 # DESIGN
 
-Visual identity + IA + token essentials. Updated: 2026-05-03 (9v3.8 — v3 Plakat mirror complete: §1/3/4/5/6/7/8/11/13).
+Visual identity + IA + token essentials. Updated: 2026-05-03 (9v3.8 - v3 Plakat mirror complete: §1/3/4/5/6/7/8/11/13).
 
 Owns: palette, type, motion, component grammar, anti-patterns, route map, IA rules.
 Runtime tokens: `app/globals.css`.
@@ -37,11 +37,11 @@ References (energy): gorki.de, hau-berlin.de, volksbuehne-berlin.de. Grammar (no
 
 v3 Plakat (2026-05-03): Bauhaus trio replaces v2 oxblood. `--ink` deepened for accent contrast.
 
-**Two themes. `gorky` is default; `paper` is opt-in via ThemeToggle.** `[data-theme]` attr on `<html>` selects; legacy `theme=dark` migrates to gorky, legacy `theme=light` migrates to paper. D11 brief decision was superseded in 9v3.0 (`2827654`); annotation backfilled in `archive/DESIGN_BRIEF.md` D11 2026-05-04. D10 (soft black, never pure black) holds — gorky `--paper #080706` is `rgb(8,7,6)`, not `#000`.
+**Two themes. `gorky` is default; `paper` is opt-in via ThemeToggle.** `[data-theme]` attr on `<html>` selects; legacy `theme=dark` migrates to gorky, legacy `theme=light` migrates to paper. D11 brief decision was superseded in 9v3.0 (`2827654`); annotation backfilled in `archive/DESIGN_BRIEF.md` D11 2026-05-04. D10 (soft black, never pure black) holds - gorky `--paper #080706` is `rgb(8,7,6)`, not `#000`.
 
 Gorky (default, dark plakat register):
 
-- `--paper #080706` near-black (one notch deeper than v3 dark `#0E0D0C` — Theatre-Gorky aesthetic; D10 floor preserved)
+- `--paper #080706` near-black (one notch deeper than v3 dark `#0E0D0C` - Theatre-Gorky aesthetic; D10 floor preserved)
 - `--paper-raised #161413` cards/modals
 - `--paper-sunken #040303` inputs/wells
 - `--ink #F4F0E8` primary text (warmer than v3 `#E8E5DD` for editorial register on near-black)
@@ -55,7 +55,7 @@ Gorky (default, dark plakat register):
 - `--accent-mustard #C9A22F` tertiary, decorative only.
 - `--ink-on-accent #080706` text on accent fills (AA, matches new paper)
 
-Paper (opt-in, light editorial register — current v2 Vitrine, unchanged):
+Paper (opt-in, light editorial register - current v2 Vitrine, unchanged):
 
 - `--paper #F2F0EA` warm off-white
 - `--paper-raised #FBFAF6` cards/modals
@@ -66,9 +66,9 @@ Paper (opt-in, light editorial register — current v2 Vitrine, unchanged):
 - `--ink-marginalia rgba(15,14,13,0.55)` marginalia secondary register
 - `--rule rgba(15,14,13,0.10)` hairlines
 - `--rule-strong rgba(15,14,13,0.18)` hover/active borders
-- `--accent-vermillion #CC2530` primary stage. Booking CTA fill, `/` + `/awards` + `/contact` SectionStripe, link-hover underline, focus ring, Sticker A. AA on paper 4.76:1 ✓. (v3.9.fix: was `#E63946` 3.66:1 — proposal claimed 4.65 in error.)
+- `--accent-vermillion #CC2530` primary stage. Booking CTA fill, `/` + `/awards` + `/contact` SectionStripe, link-hover underline, focus ring, Sticker A. AA on paper 4.76:1 ✓. (v3.9.fix: was `#E63946` 3.66:1 - proposal claimed 4.65 in error.)
 - `--accent-cobalt #1D3557` secondary stage. `/productions` SectionStripe, Sticker B. AAA on paper 12.4:1 ✓.
-- `--accent-mustard #F4D35E` tertiary stage. `/about` SectionStripe, TourTicker fill, Sticker C. **Decorative only — never for text** (AA fail on paper). Use `--ink-on-mustard` for text on mustard fills.
+- `--accent-mustard #F4D35E` tertiary stage. `/about` SectionStripe, TourTicker fill, Sticker C. **Decorative only - never for text** (AA fail on paper). Use `--ink-on-mustard` for text on mustard fills.
 - `--ink-on-accent #FBFAF6` text on accent fills (auto-selected per accent for AA)
 
 Status (muted, form-validation only): success `#3F6B3A`/`#6FA365`, warning `#8A5A18`/`#C28F3A`, error aliased to `--accent-vermillion`.
@@ -79,7 +79,7 @@ Components reference semantic aliases, not raw paper/ink.
 
 Self-hosted from `public/fonts/`. SIL OFL. Full Cyrillic. No Google Fonts CDN.
 
-v3 addition: Unbounded VF — scoped to hero wordmark + Sticker badges only.
+v3 addition: Unbounded VF - scoped to hero wordmark + Sticker badges only.
 
 | Role     | Family         | Weights      | Use                                                             |
 |----------|----------------|--------------|-----------------------------------------------------------------|
@@ -90,8 +90,8 @@ v3 addition: Unbounded VF — scoped to hero wordmark + Sticker badges only.
 
 Voice rules:
 
-- Hero wordmark on `/`: Unbounded 700 ALL CAPS, gradient fill, `letter-spacing: 0.03em` — `РОМАН БОКЛАНОВ` / `ROMAN BOKLANOV`. Never italic. Static gradient — never animated.
-- Header + footer wordmark: Lora medium **lowercase** — `роман бокланов` / `roman boklanov`. v3 fix-pass `2388511`: ALL CAPS Unbounded reverted at chrome scale (read as too tech, broke editorial register). Hero is the only Unbounded surface in chrome.
+- Hero wordmark on `/`: Unbounded 700 ALL CAPS, gradient fill, `letter-spacing: 0.03em` - `РОМАН БОКЛАНОВ` / `ROMAN BOKLANOV`. Never italic. Static gradient - never animated.
+- Header + footer wordmark: Lora medium **lowercase** - `роман бокланов` / `roman boklanov`. v3 fix-pass `2388511`: ALL CAPS Unbounded reverted at chrome scale (read as too tech, broke editorial register). Hero is the only Unbounded surface in chrome.
 - All-caps reserved for: hero wordmark (Unbounded), chips (mono), section labels (mono), Sticker badges (Unbounded). No all-caps Lora.
 - Italics only in Lora. Never in Inter or Unbounded.
 - Mono for any number that's not a price.
@@ -106,7 +106,7 @@ Scale (fluid `clamp(min@375, mid, max@1280)`):
 | `--font-size-lg`      | 20  | 24  | h3, card titles                             |
 | `--font-size-2xl`     | 28  | 40  | h2, section titles                          |
 | `--font-size-4xl`     | 44  | 88  | Display, page H1                            |
-| `--font-size-hero`    | 48  | 96  | **v3** Unbounded hero wordmark on `/` only — narrowed `2388511` after visual review (was 72–168; cropped on mobile, oversized at desktop) |
+| `--font-size-hero`    | 48  | 96  | **v3** Unbounded hero wordmark on `/` only - narrowed `2388511` after visual review (was 72–168; cropped on mobile, oversized at desktop) |
 | `--font-size-sticker` | 11  | 13  | **v3** Unbounded Sticker badge text         |
 
 Tracking: `--letter-spacing-tight -0.015em` (Lora display), `--letter-spacing-wide 0.06em` (mono caps),

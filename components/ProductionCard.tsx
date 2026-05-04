@@ -18,19 +18,26 @@ export interface ProductionCardProps {
   production: ProductionView
   priority?: boolean
   sticker?: React.ReactNode
+  sizes?: string
 }
+
+const DEFAULT_SIZES =
+  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw'
 
 export function ProductionCard({
   production,
   priority = false,
-  sticker
+  sticker,
+  sizes = DEFAULT_SIZES
 }: ProductionCardProps) {
   const t = useTranslations('productionDetail')
   const titleMain = production.title
 
   const theatre = production.theatre.shortName ?? production.theatre.name
   const country = countryCode(production.theatre.country)
-  const premMark = production.year ? `${t('premPrefix')} ${production.year}` : null
+  const premMark = production.year
+    ? `${t('premPrefix')} ${production.year}`
+    : null
   const meta = [theatre, premMark, production.ageRating, country]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
@@ -67,9 +74,10 @@ export function ProductionCard({
             src={cdnUrl(production.poster.src)!}
             alt={alt}
             fill
-            sizes='(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw'
+            sizes={sizes}
             style={{ objectFit: 'cover' }}
             priority={priority}
+            fetchPriority={priority ? 'high' : undefined}
           />
         ) : (
           <TypographicCover
@@ -84,7 +92,7 @@ export function ProductionCard({
       </div>
 
       <div className={styles.titleStack}>
-        {titleMain && <h3 className={styles.titleRu}>{titleMain}</h3>}
+        {titleMain && <h2 className={styles.titleRu}>{titleMain}</h2>}
       </div>
 
       {meta && (

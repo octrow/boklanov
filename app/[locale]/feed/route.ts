@@ -3,7 +3,9 @@ import type { NextRequest } from 'next/server'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
 
-const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+const BASE = (
+  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
+).replace(/\/$/, '')
 
 function localeBase(locale: Locale): string {
   return locale === 'en' ? BASE : `${BASE}/${locale}`
@@ -12,12 +14,12 @@ function localeBase(locale: Locale): string {
 const FEED_META: Record<'ru' | 'en', { title: string; desc: string }> = {
   ru: {
     title: 'Роман Бокланов — постановки',
-    desc: 'Режиссёр театра кукол и театра объекта',
+    desc: 'Режиссёр театра кукол и театра объекта'
   },
   en: {
     title: 'Roman Boklanov — productions',
-    desc: 'Puppet theatre and theatre of objects director',
-  },
+    desc: 'Puppet theatre and theatre of objects director'
+  }
 }
 
 // DE is chrome-only — no RSS per IA.
@@ -51,8 +53,10 @@ export async function GET(
         `      <link>${url}</link>`,
         `      <guid isPermaLink="true">${url}</guid>`,
         pubDate ? `      <pubDate>${pubDate}</pubDate>` : '',
-        synopsis ? `      <description><![CDATA[${synopsis}]]></description>` : '',
-        '    </item>',
+        synopsis
+          ? `      <description><![CDATA[${synopsis}]]></description>`
+          : '',
+        '    </item>'
       ]
         .filter(Boolean)
         .join('\n')
@@ -74,7 +78,7 @@ ${items}
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/rss+xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-    },
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400'
+    }
   })
 }

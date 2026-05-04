@@ -93,8 +93,18 @@ interface Production {
   poster: { src: string | null; credit: null }
   gallery: Array<{ src: string; credit: null; caption: null }>
   videos: Array<{ provider: string; id: string }>
-  awards: Array<{ name: string; category?: string; year?: number; city?: string }>
-  press: Array<{ title: string; url: string; outlet?: string; language?: string }>
+  awards: Array<{
+    name: string
+    category?: string
+    year?: number
+    city?: string
+  }>
+  press: Array<{
+    title: string
+    url: string
+    outlet?: string
+    language?: string
+  }>
   externalLinks: Array<{ label: string; url: string }>
   techRider: null
   pressKit: null
@@ -111,10 +121,10 @@ interface Production {
 // If any of these turn out to BE a production later, drop the slug here and
 // re-run sync.
 const NON_PRODUCTION_SLUGS = new Set<string>([
-  'contacts',              // /contact page mirror
+  'contacts', // /contact page mirror
   'roman-boklanov-english', // EN bio mirror — about page, not a production
-  'puppet-director',        // role overview — references multiple shows
-  'total-fest-dialogs'      // festival listing, not a directorial production
+  'puppet-director', // role overview — references multiple shows
+  'total-fest-dialogs' // festival listing, not a directorial production
 ])
 
 // Q2 — Cyrillic-named rows where the CSV `Slug` column is empty AND
@@ -164,8 +174,12 @@ function extractYear(body: string, fallback: string): number | undefined {
 
 function extractDuration(body: string): number | undefined {
   // "Duration: 1 hour" / "1 hour 30 minutes" / "Продолжительность: 90 минут"
-  const m1 = body.match(/(?:Duration|Продолжительность)[^\n]*?(\d+)\s*(hour|hours|час)/i)
-  const m2 = body.match(/(?:Duration|Продолжительность)[^\n]*?(\d+)\s*(min|мин)/i)
+  const m1 = body.match(
+    /(?:Duration|Продолжительность)[^\n]*?(\d+)\s*(hour|hours|час)/i
+  )
+  const m2 = body.match(
+    /(?:Duration|Продолжительность)[^\n]*?(\d+)\s*(min|мин)/i
+  )
   let mins = 0
   if (m1) mins += Number(m1[1]) * 60
   if (m2) mins += Number(m2[1])
@@ -213,7 +227,10 @@ function isPersonContext(text: string, url: string): boolean {
 function cleanLinkText(s: string): string {
   // Strip leading/trailing single brackets Notion's `[[label]](url)` form
   // leaves behind, plus residual bold/whitespace.
-  return s.replace(/^\[+|\]+$/g, '').replace(/\*\*/g, '').trim()
+  return s
+    .replace(/^\[+|\]+$/g, '')
+    .replace(/\*\*/g, '')
+    .trim()
 }
 
 function looksLikeProperName(s: string): boolean {
@@ -308,7 +325,10 @@ function extractCredits(body: string): CreditEntry[] {
     const linkMatches = [...raw.matchAll(/\[([^\]]+?)\]\(([^)]+)\)/g)]
     if (linkMatches.length > 0) {
       for (const lm of linkMatches) {
-        const name = lm[1].replace(/\*\*/g, '').replace(/[,.;]+$/, '').trim()
+        const name = lm[1]
+          .replace(/\*\*/g, '')
+          .replace(/[,.;]+$/, '')
+          .trim()
         if (!name) continue
         credits.push({ role, name, url: lm[2] })
       }
@@ -335,7 +355,10 @@ function extractCredits(body: string): CreditEntry[] {
     }
     const m = line.match(labelLine)
     if (m) {
-      const role = m[1].trim().replace(/[:.\-–—]+$/, '').trim()
+      const role = m[1]
+        .trim()
+        .replace(/[:.\-–—]+$/, '')
+        .trim()
       const value = m[2].trim()
       if (CAST_TRIGGER.test(role)) {
         castRoleLabel = role
@@ -364,7 +387,8 @@ function extractCredits(body: string): CreditEntry[] {
 
 function extractTicketsUrl(body: string): string | undefined {
   // Match `**Tickets:** [...](url)` / `**Билеты:** [...](url)` / `**Билеты: [...](url)**`.
-  const re = /\*\*\s*(?:tickets?|билет[ыа]?)\s*:?\s*\*?\*?\s*\[?\[?[^\]]*\]?\]?\(([^)]+)\)/i
+  const re =
+    /\*\*\s*(?:tickets?|билет[ыа]?)\s*:?\s*\*?\*?\s*\[?\[?[^\]]*\]?\]?\(([^)]+)\)/i
   const m = body.match(re)
   return m?.[1]
 }
@@ -375,15 +399,17 @@ function extractPremiereDate(body: string): string | undefined {
   // mandatory: without it, the previous non-greedy + optional `:?` form
   // collapsed to capturing just `:` because the engine found a 1-char
   // shortest match before the closing `**`.
-  const lineRe =
-    /^\*\*\s*(?:premiere|премьера)\s*:?\s*\*\*\s*(.+?)\s*$/im
+  const lineRe = /^\*\*\s*(?:premiere|премьера)\s*:?\s*\*\*\s*(.+?)\s*$/im
   const m = body.match(lineRe)
   if (!m) return undefined
   const raw = m[1].trim().replace(/\s+/g, ' ').replace(/[*]/g, '').slice(0, 80)
   return raw || undefined
 }
 
-function extractLineage(theatre: Production['theatre'], body: string): string[] {
+function extractLineage(
+  theatre: Production['theatre'],
+  body: string
+): string[] {
   const out: string[] = []
   if (theatre.shortName === 'БТК') out.push('btk')
   if (/Кудашов|Kudashov/i.test(body)) out.push('kudashov')
@@ -393,8 +419,10 @@ function extractLineage(theatre: Production['theatre'], body: string): string[] 
 
 function extractVideos(body: string): Array<{ provider: string; id: string }> {
   const out: Array<{ provider: string; id: string }> = []
-  const ytRegex = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/g
-  for (const m of body.matchAll(ytRegex)) out.push({ provider: 'youtube', id: m[1] })
+  const ytRegex =
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]{11})/g
+  for (const m of body.matchAll(ytRegex))
+    out.push({ provider: 'youtube', id: m[1] })
   return Array.from(
     new Map(out.map((v) => [`${v.provider}:${v.id}`, v])).values()
   )
@@ -520,7 +548,11 @@ function isUrlOrPromoOnly(plain: string): boolean {
   // surfaces them as bolded labels with values or links. Skip explicitly so
   // they don't masquerade as synopsis text just because the URL pushes them
   // over the 60-char floor.
-  if (/^(tickets?|билеты|website|сайт|premiere|премьера|age|возраст|duration|продолжительность|category|категория)\b[\s:;.\-]/i.test(plain)) {
+  if (
+    /^(tickets?|билеты|website|сайт|premiere|премьера|age|возраст|duration|продолжительность|category|категория)\b[\s:;.\-]/i.test(
+      plain
+    )
+  ) {
     return true
   }
   return false
@@ -531,7 +563,10 @@ function looksLikeCastList(rawParagraph: string): boolean {
   // — `Имя – Роль\nИмя – Роль\n…`. Real prose paragraphs come as one
   // wrapped line. Heuristic: ≥ 3 internal newlines AND a majority of those
   // lines contain a role-name separator (em-dash / en-dash / hyphen).
-  const lines = rawParagraph.split('\n').map((l) => l.trim()).filter(Boolean)
+  const lines = rawParagraph
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
   if (lines.length < 3) return false
   const sep = lines.filter((l) => /\s[–—-]\s/.test(l)).length
   return sep >= Math.ceil(lines.length / 2)
@@ -544,7 +579,11 @@ function extractSynopsis(body: string): string {
   for (const p of paras) {
     const trimmed = p.trim()
     if (!trimmed) continue
-    if (trimmed.startsWith('#') || trimmed.startsWith('>') || trimmed.startsWith('!['))
+    if (
+      trimmed.startsWith('#') ||
+      trimmed.startsWith('>') ||
+      trimmed.startsWith('![')
+    )
       continue
     if (looksLikeCastList(trimmed)) continue
     const plain = stripInlineMd(trimmed)
@@ -569,7 +608,8 @@ async function copyImage(
 ): Promise<string | null> {
   if (!fs.existsSync(src)) return null
   const ext = path.extname(src).toLowerCase() || '.jpg'
-  const filename = index === 0 ? `poster${ext}` : `${String(index).padStart(2, '0')}${ext}`
+  const filename =
+    index === 0 ? `poster${ext}` : `${String(index).padStart(2, '0')}${ext}`
   const dest = path.join(destDir, filename)
   fs.copyFileSync(src, dest)
   return filename
@@ -672,7 +712,9 @@ ${
             `#   - name: ${JSON.stringify(a.name)}` +
             (a.year ? `\n#     year: ${a.year}` : '') +
             (a.city ? `\n#     city: ${JSON.stringify(a.city)}` : '') +
-            (a.category ? `\n#     category: ${JSON.stringify(a.category)}` : '')
+            (a.category
+              ? `\n#     category: ${JSON.stringify(a.category)}`
+              : '')
         )
         .join('\n')
 }
@@ -773,7 +815,9 @@ async function main() {
     return { file: f, stem, key: normalize(stem) }
   })
 
-  function findMdFor(name: string): { md: string; folder: string | null } | null {
+  function findMdFor(
+    name: string
+  ): { md: string; folder: string | null } | null {
     const wanted = normalize(name)
     if (!wanted) return null
     const hit =
@@ -873,7 +917,9 @@ async function main() {
     prod.theatre = extractTheatre(primaryBody)
     prod.lineage = extractLineage(prod.theatre, primaryBody)
     prod.videos = extractVideos(
-      Object.values(prod.body).filter((s): s is string => typeof s === 'string').join('\n')
+      Object.values(prod.body)
+        .filter((s): s is string => typeof s === 'string')
+        .join('\n')
     )
     prod.press = extractPress(primaryBody)
 
@@ -892,8 +938,12 @@ async function main() {
       en: prod.body.en ? extractCredits(prod.body.en) : []
     }
     // Per-locale premiere date — formatted strings differ between RU/EN.
-    const premiereRu = prod.body.ru ? extractPremiereDate(prod.body.ru) : undefined
-    const premiereEn = prod.body.en ? extractPremiereDate(prod.body.en) : undefined
+    const premiereRu = prod.body.ru
+      ? extractPremiereDate(prod.body.ru)
+      : undefined
+    const premiereEn = prod.body.en
+      ? extractPremiereDate(prod.body.en)
+      : undefined
     if (premiereRu || premiereEn) {
       prod.premiereDate = {
         ...(premiereRu ? { ru: premiereRu } : {}),
@@ -916,11 +966,11 @@ async function main() {
       let writtenIndex = 0
       for (const ref of refs) {
         // ref looks like "<FolderName>/<encoded-filename>" — split safely.
-        const [, encodedFile] = ref.split('/').reduce<[string, string]>(
-          (acc, part, i, arr) =>
-            i === arr.length - 1 ? [acc[0], part] : [acc[0] + '/' + part, acc[1]],
-          ['', '']
-        )
+        const [, encodedFile] = ref
+          .split('/')
+          .reduce<
+            [string, string]
+          >((acc, part, i, arr) => (i === arr.length - 1 ? [acc[0], part] : [acc[0] + '/' + part, acc[1]]), ['', ''])
         const decodedFile = decodeURIComponent(encodedFile)
         const candidate = path.join(primaryMd.folder, decodedFile)
         if (seen.has(candidate)) continue

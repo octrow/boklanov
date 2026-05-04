@@ -1,5 +1,5 @@
 /**
- * lint-tokens.ts — guards scoped CSS custom properties from leaking
+ * lint-tokens.ts - guards scoped CSS custom properties from leaking
  * outside their owning module. Phase 9.x governance polish per
  * DESIGN_v2_PROPOSAL.md §7 risk register.
  *
@@ -33,13 +33,18 @@ const SCOPED: ScopedToken[] = [
     token: 'var(--specimen-rule)',
     ownerPath: join(CWD, 'components', 'SpecimenPlate.module.css'),
     reason:
-      '--specimen-rule narrows §11 drop-shadow ban (unfreeze 9.0a) for photographic plates only. Adding a second call-site risks drifting back toward outset shadows. If you need an inset rule elsewhere, propose a new scoped token.',
-  },
+      '--specimen-rule narrows §11 drop-shadow ban (unfreeze 9.0a) for photographic plates only. Adding a second call-site risks drifting back toward outset shadows. If you need an inset rule elsewhere, propose a new scoped token.'
+  }
 ]
 
 function* walk(dir: string): Generator<string> {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
-    if (e.name === 'node_modules' || e.name === '.next' || e.name.startsWith('.')) continue
+    if (
+      e.name === 'node_modules' ||
+      e.name === '.next' ||
+      e.name.startsWith('.')
+    )
+      continue
     const full = join(dir, e.name)
     if (e.isDirectory()) yield* walk(full)
     else if (/\.(css|module\.css|tsx|ts)$/.test(e.name)) yield full
@@ -62,4 +67,6 @@ for (const file of walk(CWD)) {
 }
 
 if (errors > 0) process.exit(1)
-console.log('[lint-tokens] OK — all scoped tokens stay inside their owning modules')
+console.log(
+  '[lint-tokens] OK - all scoped tokens stay inside their owning modules'
+)

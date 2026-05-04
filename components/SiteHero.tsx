@@ -13,8 +13,8 @@ export function SiteHero({ heroWordmark, statement }: SiteHeroProps) {
     <section className={styles.hero}>
       {/* SR reads plain text; visible wordmark is aria-hidden gradient */}
       <h1 className={styles.srOnly}>{heroWordmark}</h1>
-      <p className={styles.heroWordmark} aria-hidden="true">
-        <SiteWordmark variant="hero" text={heroWordmark} />
+      <p className={styles.heroWordmark} aria-hidden='true'>
+        <SiteWordmark variant='hero' text={heroWordmark} />
       </p>
       <p className={styles.statement}>{statement}</p>
     </section>

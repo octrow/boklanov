@@ -25,8 +25,17 @@ export default async function AwardsPage({
   const productions = getAllProductions(locale)
 
   const groups = productions
-    .filter((p) => (p.awards && p.awards.length > 0) || (p.festivals && p.festivals.length > 0))
-    .map((p) => ({ slug: p.slug, title: p.title, awards: p.awards, festivals: p.festivals ?? [] }))
+    .filter(
+      (p) =>
+        (p.awards && p.awards.length > 0) ||
+        (p.festivals && p.festivals.length > 0)
+    )
+    .map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      awards: p.awards,
+      festivals: p.festivals ?? []
+    }))
 
   return (
     <main className={styles.page}>
@@ -45,7 +54,10 @@ export default async function AwardsPage({
                 >
                   {group.title}
                 </Link>
-                <span className={styles.awardCount} aria-label={`${group.awards.length + group.festivals.length} entries`}>
+                <span
+                  className={styles.awardCount}
+                  aria-label={`${group.awards.length + group.festivals.length} entries`}
+                >
                   ×{group.awards.length + group.festivals.length}
                 </span>
               </h2>
@@ -66,7 +78,9 @@ export default async function AwardsPage({
                         <span className={styles.awardName}>{award.name}</span>
                         {(award.city || award.category) && (
                           <span className={styles.awardDetail}>
-                            {[award.city, award.category].filter(Boolean).join(' · ')}
+                            {[award.city, award.category]
+                              .filter(Boolean)
+                              .join(' · ')}
                           </span>
                         )}
                       </li>
@@ -91,7 +105,9 @@ export default async function AwardsPage({
                         <span className={styles.awardName}>{fest.name}</span>
                         {(fest.city || fest.category) && (
                           <span className={styles.awardDetail}>
-                            {[fest.city, fest.category].filter(Boolean).join(' · ')}
+                            {[fest.city, fest.category]
+                              .filter(Boolean)
+                              .join(' · ')}
                           </span>
                         )}
                       </li>

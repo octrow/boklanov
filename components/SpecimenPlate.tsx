@@ -28,7 +28,7 @@ export function SpecimenPlate({
   plateNumber,
   total,
   loading = 'lazy',
-  decoding = 'async',
+  decoding = 'async'
 }: SpecimenPlateProps) {
   const indexLabel = `${String(plateNumber).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 

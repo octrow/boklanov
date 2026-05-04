@@ -26,12 +26,12 @@ interface TourRiderProps {
 }
 
 /**
- * TourRider — production technical/tour metadata as a real tech rider.
+ * TourRider - production technical/tour metadata as a real tech rider.
  * Per DESIGN_v2_PROPOSAL.md §4.4. Replaces the inline right-rail .slate
  * div from app/[locale]/productions/[slug]/page.tsx (DA-2.B).
  *
  * Short-circuits null fields: never renders a placeholder row, never
- * renders an empty link. The "data model is the layout" principle —
+ * renders an empty link. The "data model is the layout" principle -
  * partial provenance is honest, not apologetic.
  *
  * Desktop-only (≥1024px); on mobile, the production-detail chips row
@@ -48,20 +48,35 @@ export async function TourRider({
   lineage,
   tourSolo,
   techRider,
-  pressKit,
+  pressKit
 }: TourRiderProps) {
   const t = await getTranslations('productionDetail')
   const rows: TourRiderRowProps[] = []
   if (year) rows.push({ label: t('riderYear'), value: year })
-  if (durationMin) rows.push({ label: t('riderRun'), value: <>{durationMin}&thinsp;{t('riderMin')}</> })
+  if (durationMin)
+    rows.push({
+      label: t('riderRun'),
+      value: (
+        <>
+          {durationMin}&thinsp;{t('riderMin')}
+        </>
+      )
+    })
   if (ageRating) rows.push({ label: t('riderAge'), value: ageRating })
   if (country) rows.push({ label: t('riderCountry'), value: country })
-  if (language) rows.push({ label: t('riderLanguage'), value: language.toUpperCase() })
+  if (language)
+    rows.push({ label: t('riderLanguage'), value: language.toUpperCase() })
   if (form && form.length > 0) {
-    rows.push({ label: t('riderForm'), value: form.map((f) => f.toUpperCase()).join(' · ') })
+    rows.push({
+      label: t('riderForm'),
+      value: form.map((f) => f.toUpperCase()).join(' · ')
+    })
   }
   if (lineage && lineage.length > 0) {
-    rows.push({ label: t('riderLineage'), value: lineage.map((l) => l.toUpperCase()).join(' · ') })
+    rows.push({
+      label: t('riderLineage'),
+      value: lineage.map((l) => l.toUpperCase()).join(' · ')
+    })
   }
   if (tourSolo) rows.push({ label: t('riderTouring'), value: t('riderSolo') })
   if (techRider) {
@@ -77,7 +92,7 @@ export async function TourRider({
         >
           PDF
         </a>
-      ),
+      )
     })
   }
   if (pressKit) {
@@ -93,7 +108,7 @@ export async function TourRider({
         >
           ZIP
         </a>
-      ),
+      )
     })
   }
 
@@ -105,7 +120,9 @@ export async function TourRider({
     <details className={styles.rider} aria-hidden='true' open>
       {/* tabIndex={-1} prevents keyboard focus since aria-hidden covers AT */}
       <summary className={styles.header} tabIndex={-1}>
-        <span className={styles.index}>{productionLabel ?? t('riderSpecSheet')}</span>
+        <span className={styles.index}>
+          {productionLabel ?? t('riderSpecSheet')}
+        </span>
       </summary>
       <dl className={styles.body}>
         {rows.map((r) => (

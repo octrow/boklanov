@@ -13,10 +13,39 @@ import styles from './CommandPalette.module.css'
 // ---------------------------------------------------------------------------
 
 const CYR_TO_LAT: Record<string, string> = {
-  а:'a', б:'b', в:'v', г:'g', д:'d', е:'e', ё:'yo', ж:'zh', з:'z',
-  и:'i', й:'j', к:'k', л:'l', м:'m', н:'n', о:'o', п:'p', р:'r',
-  с:'s', т:'t', у:'u', ф:'f', х:'kh', ц:'ts', ч:'ch', ш:'sh', щ:'shch',
-  ъ:'', ы:'y', ь:'', э:'e', ю:'yu', я:'ya'
+  а: 'a',
+  б: 'b',
+  в: 'v',
+  г: 'g',
+  д: 'd',
+  е: 'e',
+  ё: 'yo',
+  ж: 'zh',
+  з: 'z',
+  и: 'i',
+  й: 'j',
+  к: 'k',
+  л: 'l',
+  м: 'm',
+  н: 'n',
+  о: 'o',
+  п: 'p',
+  р: 'r',
+  с: 's',
+  т: 't',
+  у: 'u',
+  ф: 'f',
+  х: 'kh',
+  ц: 'ts',
+  ч: 'ch',
+  ш: 'sh',
+  щ: 'shch',
+  ъ: '',
+  ы: 'y',
+  ь: '',
+  э: 'e',
+  ю: 'yu',
+  я: 'ya'
 }
 
 function transliterate(s: string): string {
@@ -38,8 +67,13 @@ function searchKey(s: string): string {
 
 type GroupKey = 'production' | 'award' | 'press' | 'theatre' | 'city'
 
-
-const GROUP_ORDER: GroupKey[] = ['production', 'award', 'press', 'theatre', 'city']
+const GROUP_ORDER: GroupKey[] = [
+  'production',
+  'award',
+  'press',
+  'theatre',
+  'city'
+]
 const MAX_PER_GROUP = 5
 
 function filterItems(items: SearchItem[], query: string): SearchItem[] {
@@ -73,11 +107,16 @@ function filterItems(items: SearchItem[], query: string): SearchItem[] {
 
 function itemText(item: SearchItem): string {
   switch (item.type) {
-    case 'production': return [item.title, item.theatre, item.city, item.year].join(' ')
-    case 'award':      return [item.name, item.productionTitle, item.year].join(' ')
-    case 'press':      return [item.articleTitle, item.outlet, item.productionTitle].join(' ')
-    case 'theatre':    return [item.name, item.city].join(' ')
-    case 'city':       return item.name
+    case 'production':
+      return [item.title, item.theatre, item.city, item.year].join(' ')
+    case 'award':
+      return [item.name, item.productionTitle, item.year].join(' ')
+    case 'press':
+      return [item.articleTitle, item.outlet, item.productionTitle].join(' ')
+    case 'theatre':
+      return [item.name, item.city].join(' ')
+    case 'city':
+      return item.name
   }
 }
 
@@ -87,21 +126,31 @@ function itemHref(item: SearchItem): string {
 
 function itemLabel(item: SearchItem): string {
   switch (item.type) {
-    case 'production': return item.title
-    case 'award':      return item.name
-    case 'press':      return item.articleTitle
-    case 'theatre':    return item.name
-    case 'city':       return item.name
+    case 'production':
+      return item.title
+    case 'award':
+      return item.name
+    case 'press':
+      return item.articleTitle
+    case 'theatre':
+      return item.name
+    case 'city':
+      return item.name
   }
 }
 
 function itemMeta(item: SearchItem): string {
   switch (item.type) {
-    case 'production': return [item.theatre, item.city, item.year].filter(Boolean).join(' · ')
-    case 'award':      return item.productionTitle + (item.year ? ` · ${item.year}` : '')
-    case 'press':      return [item.outlet, item.productionTitle].filter(Boolean).join(' · ')
-    case 'theatre':    return item.city
-    case 'city':       return ''
+    case 'production':
+      return [item.theatre, item.city, item.year].filter(Boolean).join(' · ')
+    case 'award':
+      return item.productionTitle + (item.year ? ` · ${item.year}` : '')
+    case 'press':
+      return [item.outlet, item.productionTitle].filter(Boolean).join(' · ')
+    case 'theatre':
+      return item.city
+    case 'city':
+      return ''
   }
 }
 
@@ -115,14 +164,18 @@ interface CommandPaletteProps {
   locale: string
 }
 
-export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) {
+export function CommandPalette({
+  items,
+  onClose,
+  locale
+}: CommandPaletteProps) {
   const t = useTranslations('search')
   const GROUP_LABELS: Record<GroupKey, string> = {
     production: t('groupProductions'),
-    award:      t('groupAwards'),
-    press:      t('groupPress'),
-    theatre:    t('groupTheatres'),
-    city:       t('groupCities'),
+    award: t('groupAwards'),
+    press: t('groupPress'),
+    theatre: t('groupTheatres'),
+    city: t('groupCities')
   }
   const [query, setQuery] = React.useState('')
   const [activeIdx, setActiveIdx] = React.useState(0)
@@ -193,34 +246,40 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      role="presentation"
+      role='presentation'
     >
       <div
         className={styles.modal}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Search"
+        role='dialog'
+        aria-modal='true'
+        aria-label='Search'
         onKeyDown={handleKeyDown}
       >
         <div className={styles.inputWrapper}>
           <input
             ref={inputRef}
-            type="search"
+            type='search'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={styles.input}
             placeholder={t('placeholder')}
-            aria-label="Search"
-            autoComplete="off"
+            aria-label='Search'
+            autoComplete='off'
             spellCheck={false}
           />
         </div>
 
         {query.trim() && (
-          <div className={styles.results} role="listbox" aria-label="Search results">
+          <div
+            className={styles.results}
+            role='listbox'
+            aria-label='Search results'
+          >
             {grouped.length === 0 ? (
               <div className={styles.noResults}>
-                <span aria-hidden="true" className={styles.noResultsLabel}>ERRATA</span>
+                <span aria-hidden='true' className={styles.noResultsLabel}>
+                  ERRATA
+                </span>
                 <p className={styles.noResultsBody}>{t('noResults')}</p>
               </div>
             ) : (
@@ -240,14 +299,18 @@ export function CommandPalette({ items, onClose, locale }: CommandPaletteProps) 
                             ? `${styles.result} ${styles.resultActive}`
                             : styles.result
                         }
-                        role="option"
+                        role='option'
                         aria-selected={globalIdx === activeIdx}
                         onClick={onClose}
                         onMouseEnter={() => setActiveIdx(globalIdx)}
                       >
-                        <span className={styles.resultLabel}>{itemLabel(item)}</span>
+                        <span className={styles.resultLabel}>
+                          {itemLabel(item)}
+                        </span>
                         {itemMeta(item) && (
-                          <span className={styles.resultMeta}>{itemMeta(item)}</span>
+                          <span className={styles.resultMeta}>
+                            {itemMeta(item)}
+                          </span>
                         )}
                       </a>
                     )

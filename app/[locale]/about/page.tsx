@@ -49,7 +49,8 @@ function loadAbout(locale: Locale): {
   deForthcoming: boolean
 } {
   const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
-  const deForthcoming = locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
+  const deForthcoming =
+    locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
   const candidates = [locale, 'en', 'ru'] // DE falls back to EN then RU
   for (const lang of candidates) {
     const p = path.join(ABOUT_DIR, `${lang}.mdx`)
@@ -77,10 +78,12 @@ function loadAbout(locale: Locale): {
   }
 }
 
-const BASE = (process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com').replace(/\/$/, '')
+const BASE = (
+  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
+).replace(/\/$/, '')
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
@@ -89,21 +92,26 @@ export async function generateMetadata({
   const description = paragraphs[0] ?? undefined
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
-  const name = locale === 'ru' ? 'Роман Бокланов — о режиссёре' : locale === 'de' ? 'Roman Boklanov — über' : 'Roman Boklanov — about'
+  const name =
+    locale === 'ru'
+      ? 'Роман Бокланов — о режиссёре'
+      : locale === 'de'
+        ? 'Roman Boklanov — über'
+        : 'Roman Boklanov — about'
 
   return {
     title: name,
     description,
     alternates: {
       canonical: url,
-      languages: { en: `${BASE}/about`, ru: `${BASE}/ru/about` },
+      languages: { en: `${BASE}/about`, ru: `${BASE}/ru/about` }
     },
     openGraph: {
       title: name,
       description,
       url,
-      type: 'profile',
-    },
+      type: 'profile'
+    }
   }
 }
 
@@ -113,14 +121,16 @@ function personSchema(locale: Locale, description: string) {
     '@type': 'Person',
     name: 'Roman Boklanov',
     alternateName: 'Роман Бокланов',
-    jobTitle: locale === 'ru' ? 'Театральный режиссёр' : locale === 'de' ? 'Theaterregisseur' : 'Theatre Director',
+    jobTitle:
+      locale === 'ru'
+        ? 'Театральный режиссёр'
+        : locale === 'de'
+          ? 'Theaterregisseur'
+          : 'Theatre Director',
     description,
     url: locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`,
     email: 'roman.boklanov@web.de',
-    sameAs: [
-      'https://instagram.com/boklanovroman',
-      'https://t.me/roman7593',
-    ],
+    sameAs: ['https://instagram.com/boklanovroman', 'https://t.me/roman7593']
   }
 }
 
@@ -148,7 +158,7 @@ export default async function AboutPage({
   return (
     <main className={styles.page}>
       <script
-        type="application/ld+json"
+        type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <h1 className={styles.heading}>{t('about')}</h1>
@@ -157,12 +167,23 @@ export default async function AboutPage({
           DE forthcoming: annotate lead paragraph; suppress RU margin notes. */}
       <section className={styles.bio}>
         {leadParagraph && (
-          <Marginalia note={deForthcoming ? tAbout('deForthcoming') : (marginalia?.[0] ?? undefined)}>
+          <Marginalia
+            note={
+              deForthcoming
+                ? tAbout('deForthcoming')
+                : (marginalia?.[0] ?? undefined)
+            }
+          >
             <p className={styles.bioLead}>{leadParagraph}</p>
           </Marginalia>
         )}
         {bodyParagraphs.map((para, i) => (
-          <Marginalia key={i} note={deForthcoming ? undefined : (marginalia?.[i + 1] ?? undefined)}>
+          <Marginalia
+            key={i}
+            note={
+              deForthcoming ? undefined : (marginalia?.[i + 1] ?? undefined)
+            }
+          >
             <p className={styles.bioParagraph}>{para}</p>
           </Marginalia>
         ))}
@@ -221,9 +242,7 @@ export default async function AboutPage({
                 <span className={styles.lineageInstitution}>
                   {item.institution}
                 </span>
-                {item.note && (
-                  <p className={styles.lineageNote}>{item.note}</p>
-                )}
+                {item.note && <p className={styles.lineageNote}>{item.note}</p>}
               </div>
             ))}
           </div>

@@ -67,8 +67,8 @@ export default async function PressPage({
               <blockquote className={styles.quote}>
                 <a
                   href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target='_blank'
+                  rel='noopener noreferrer'
                   className={styles.quoteLink}
                 >
                   {item.title}
@@ -77,8 +77,8 @@ export default async function PressPage({
               <footer className={styles.cardFooter}>
                 <a
                   href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target='_blank'
+                  rel='noopener noreferrer'
                   className={styles.outletLink}
                 >
                   {item.outlet}

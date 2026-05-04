@@ -42,11 +42,19 @@ let _fonts: FontCache | null = null
 async function loadFonts(): Promise<FontCache> {
   if (_fonts) return _fonts
   _fonts = {
-    loraCyrillic: fontBuf('@fontsource/lora/files/lora-cyrillic-400-normal.woff'),
+    loraCyrillic: fontBuf(
+      '@fontsource/lora/files/lora-cyrillic-400-normal.woff'
+    ),
     loraLatin: fontBuf('@fontsource/lora/files/lora-latin-400-normal.woff'),
-    loraLatinExt: fontBuf('@fontsource/lora/files/lora-latin-ext-400-normal.woff'),
-    monoCyrillic: fontBuf('@fontsource/jetbrains-mono/files/jetbrains-mono-cyrillic-400-normal.woff'),
-    monoLatin: fontBuf('@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff'),
+    loraLatinExt: fontBuf(
+      '@fontsource/lora/files/lora-latin-ext-400-normal.woff'
+    ),
+    monoCyrillic: fontBuf(
+      '@fontsource/jetbrains-mono/files/jetbrains-mono-cyrillic-400-normal.woff'
+    ),
+    monoLatin: fontBuf(
+      '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff'
+    )
   }
   return _fonts
 }
@@ -74,7 +82,7 @@ export async function GET(
     production.theatre.shortName ?? production.theatre.name,
     production.theatre.city,
     production.year ? String(production.year) : null,
-    production.ageRating ?? null,
+    production.ageRating ?? null
   ]
     .filter(Boolean)
     .join(' · ')
@@ -93,7 +101,7 @@ export async function GET(
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        background: PAPER,
+        background: PAPER
       }}
     >
       {/* Section slug — programme folio */}
@@ -101,7 +109,7 @@ export async function GET(
         style={{
           display: 'flex',
           alignItems: 'center',
-          padding: `${PAD_Y}px ${PAD_X}px 18px`,
+          padding: `${PAD_Y}px ${PAD_X}px 18px`
         }}
       >
         <span
@@ -110,7 +118,7 @@ export async function GET(
             fontSize: 11,
             color: INK_FAINT,
             letterSpacing: '0.08em',
-            textTransform: 'uppercase',
+            textTransform: 'uppercase'
           }}
         >
           ROMAN BOKLANOV · PRODUCTIONS
@@ -118,7 +126,14 @@ export async function GET(
       </div>
 
       {/* Hairline rule */}
-      <div style={{ height: 1, background: RULE, marginLeft: PAD_X, marginRight: PAD_X }} />
+      <div
+        style={{
+          height: 1,
+          background: RULE,
+          marginLeft: PAD_X,
+          marginRight: PAD_X
+        }}
+      />
 
       {/* Title block — vertically centred */}
       <div
@@ -127,7 +142,7 @@ export async function GET(
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          padding: `28px ${PAD_X}px`,
+          padding: `28px ${PAD_X}px`
         }}
       >
         {/* RU title */}
@@ -138,7 +153,7 @@ export async function GET(
             fontWeight: 400,
             color: INK,
             lineHeight: 1.2,
-            marginBottom: showTitleEn ? 12 : 0,
+            marginBottom: showTitleEn ? 12 : 0
           }}
         >
           {titleRu}
@@ -152,7 +167,7 @@ export async function GET(
               fontSize: Math.round(titleFontSize * 0.52),
               fontStyle: 'italic',
               color: INK_MUTE,
-              lineHeight: 1.35,
+              lineHeight: 1.35
             }}
           >
             {titleEn}
@@ -161,7 +176,14 @@ export async function GET(
       </div>
 
       {/* Hairline rule */}
-      <div style={{ height: 1, background: RULE, marginLeft: PAD_X, marginRight: PAD_X }} />
+      <div
+        style={{
+          height: 1,
+          background: RULE,
+          marginLeft: PAD_X,
+          marginRight: PAD_X
+        }}
+      />
 
       {/* Bottom: meta left · colophon right */}
       <div
@@ -169,7 +191,7 @@ export async function GET(
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: `18px ${PAD_X}px ${PAD_Y}px`,
+          padding: `18px ${PAD_X}px ${PAD_Y}px`
         }}
       >
         <span
@@ -178,7 +200,7 @@ export async function GET(
             fontSize: 12,
             color: INK_MUTE,
             letterSpacing: '0.04em',
-            textTransform: 'uppercase',
+            textTransform: 'uppercase'
           }}
         >
           {metaLine}
@@ -189,7 +211,7 @@ export async function GET(
             fontSize: 11,
             color: ACCENT,
             letterSpacing: '0.1em',
-            textTransform: 'uppercase',
+            textTransform: 'uppercase'
           }}
         >
           2026 EDITION
@@ -208,7 +230,7 @@ export async function GET(
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexShrink: 0,
+        flexShrink: 0
       }}
     >
       <div
@@ -220,7 +242,7 @@ export async function GET(
           letterSpacing: '0.08em',
           textTransform: 'lowercase',
           transform: 'rotate(-90deg)',
-          whiteSpace: 'nowrap',
+          whiteSpace: 'nowrap'
         }}
       >
         роман бокланов
@@ -235,14 +257,14 @@ export async function GET(
           width: W,
           height: H,
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'row'
         }}
       >
         {/* Left: poster or oxblood fallback */}
         {posterUrl ? (
           <img
             src={posterUrl}
-            alt=""
+            alt=''
             width={POSTER_W}
             height={H}
             style={{ objectFit: 'cover', flexShrink: 0, display: 'block' }}
@@ -260,11 +282,31 @@ export async function GET(
       height: H,
       fonts: [
         { name: 'Lora', data: fonts.loraLatin, style: 'normal', weight: 400 },
-        { name: 'Lora', data: fonts.loraLatinExt, style: 'normal', weight: 400 },
-        { name: 'Lora', data: fonts.loraCyrillic, style: 'normal', weight: 400 },
-        { name: 'JetBrains Mono', data: fonts.monoLatin, style: 'normal', weight: 400 },
-        { name: 'JetBrains Mono', data: fonts.monoCyrillic, style: 'normal', weight: 400 },
-      ],
+        {
+          name: 'Lora',
+          data: fonts.loraLatinExt,
+          style: 'normal',
+          weight: 400
+        },
+        {
+          name: 'Lora',
+          data: fonts.loraCyrillic,
+          style: 'normal',
+          weight: 400
+        },
+        {
+          name: 'JetBrains Mono',
+          data: fonts.monoLatin,
+          style: 'normal',
+          weight: 400
+        },
+        {
+          name: 'JetBrains Mono',
+          data: fonts.monoCyrillic,
+          style: 'normal',
+          weight: 400
+        }
+      ]
     }
   )
 }

@@ -16,7 +16,8 @@ function slugHash(slug: string): number {
 }
 
 export function DuotonePoster({ slug, children }: DuotonePosterProps) {
-  const accent: DuotoneAccent = slugHash(slug) % 2 === 0 ? 'vermillion' : 'cobalt'
+  const accent: DuotoneAccent =
+    slugHash(slug) % 2 === 0 ? 'vermillion' : 'cobalt'
   return (
     <div className={styles.wrapper} data-accent={accent}>
       {children}

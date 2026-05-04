@@ -329,16 +329,22 @@ export default async function ProductionDetailPage({
           third elsewhere). Hidden from screen readers — TourRider + awards
           list are the canonical sources. */}
       {(production.awards.length > 0 || production.tour.length > 0) && (
-        <div className={styles.stickerRow} aria-hidden="true">
+        <div className={styles.stickerRow} aria-hidden='true'>
           {production.awards.length > 0 && (
-            <Sticker variant="award" accent="vermillion" rotate={-3} shadow layout="inline">
+            <Sticker
+              variant='award'
+              accent='vermillion'
+              rotate={-3}
+              shadow
+              layout='inline'
+            >
               {production.awards.length === 1
                 ? t('stickerAward')
                 : `${t('stickerAward')} · ${production.awards.length}`}
             </Sticker>
           )}
           {production.tour.length > 0 && (
-            <Sticker variant="tour" accent="cobalt" rotate={3} layout="inline">
+            <Sticker variant='tour' accent='cobalt' rotate={3} layout='inline'>
               {t('stickerTour')}
             </Sticker>
           )}
@@ -406,7 +412,11 @@ export default async function ProductionDetailPage({
                 <GalleryLightbox
                   items={production.gallery.map((g) => ({
                     src: cdnUrl(g.src)!,
-                    alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                    alt:
+                      g.caption?.[locale] ??
+                      g.caption?.ru ??
+                      g.caption?.en ??
+                      '',
                     credit: g.credit
                   }))}
                 />
@@ -426,15 +436,14 @@ export default async function ProductionDetailPage({
           )}
 
           {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
-          {production.synopsis && (
-            locale === 'de' ? (
+          {production.synopsis &&
+            (locale === 'de' ? (
               <Marginalia note={t('deForthcoming')}>
                 <p className={styles.synopsis}>{production.synopsis}</p>
               </Marginalia>
             ) : (
               <p className={styles.synopsis}>{production.synopsis}</p>
-            )
-          )}
+            ))}
 
           {/* 4b. Tagline — subgenre / format label */}
           {production.tagline && (
@@ -537,11 +546,16 @@ export default async function ProductionDetailPage({
 
           {/* 6b. Plinth tour band — DA-2.D (§3.G.2) · v3: TourTicker CSS marquee */}
           {production.tour && production.tour.length > 0 && (
-            <TourTicker cities={production.tour} accent="cobalt" label={t('onTour')} />
+            <TourTicker
+              cities={production.tour}
+              accent='cobalt'
+              label={t('onTour')}
+            />
           )}
 
           {/* 7. Awards & Festivals */}
-          {(production.awards.length > 0 || (production.festivals && production.festivals.length > 0)) && (
+          {(production.awards.length > 0 ||
+            (production.festivals && production.festivals.length > 0)) && (
             <section className={styles.section}>
               <h2 className={styles.sectionLabel}>{t('awards')}</h2>
               {production.awards.length > 0 && (
@@ -567,7 +581,9 @@ export default async function ProductionDetailPage({
               {production.festivals && production.festivals.length > 0 && (
                 <>
                   {production.awards.length > 0 && (
-                    <p className={styles.awardsSubLabel}>{t('festivalsLabel')}</p>
+                    <p className={styles.awardsSubLabel}>
+                      {t('festivalsLabel')}
+                    </p>
                   )}
                   <ul className={styles.awardList}>
                     {production.festivals.map((f, i) => (
@@ -692,7 +708,11 @@ export default async function ProductionDetailPage({
                 <GalleryLightbox
                   items={production.gallery.map((g) => ({
                     src: cdnUrl(g.src)!,
-                    alt: g.caption?.[locale] ?? g.caption?.ru ?? g.caption?.en ?? '',
+                    alt:
+                      g.caption?.[locale] ??
+                      g.caption?.ru ??
+                      g.caption?.en ??
+                      '',
                     credit: g.credit
                   }))}
                 />

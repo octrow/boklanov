@@ -2,9 +2,9 @@
 // Used by SiteHeader to render the running folio band.
 
 export interface FolioMark {
-  /** nav key matching messages/[locale].json nav.* — null on home */
+  /** nav key matching messages/[locale].json nav.* - null on home */
   sectionKey: string | null
-  /** true when on the home page — renders just the director name without a section arrow */
+  /** true when on the home page - renders just the director name without a section arrow */
   isHome?: boolean
   /** '01 / 24' on production detail pages; undefined elsewhere */
   index?: string
@@ -24,11 +24,11 @@ export function folioFor(
   }
 
   if (pathname === '/productions') return { sectionKey: 'productions' }
-  if (pathname === '/about')       return { sectionKey: 'about' }
-  if (pathname === '/awards')      return { sectionKey: 'awards' }
-  if (pathname === '/press')       return { sectionKey: 'press' }
-  if (pathname === '/contact')     return { sectionKey: 'contact' }
-  if (pathname === '/archive')     return { sectionKey: 'archive' }
+  if (pathname === '/about') return { sectionKey: 'about' }
+  if (pathname === '/awards') return { sectionKey: 'awards' }
+  if (pathname === '/press') return { sectionKey: 'press' }
+  if (pathname === '/contact') return { sectionKey: 'contact' }
+  if (pathname === '/archive') return { sectionKey: 'archive' }
 
   if (pathname === '/') return { sectionKey: null, isHome: true }
 

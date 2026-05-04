@@ -1,5 +1,5 @@
 /* ============================================================
- * boklanov.com / boklanov.ru — design tokens
+ * boklanov.com / boklanov.ru - design tokens
  *
  * Derived from DESIGN_BRIEF.md §5 (warm editorial + brutalist accents).
  * Locked values from the brief are marked [BRIEF]. Everything else
@@ -9,26 +9,26 @@
  * THIS FILE is the bundled token layer for the App Router build.
  * Source-of-truth reference doc: .design/boklanov-rewrite/tokens.md
  * Original token CSS: .design/boklanov-rewrite/tokens.css (kept in
- * sync — if you edit one, edit the other).
+ * sync - if you edit one, edit the other).
  *
  * Reset and base body styles land in F7.
  * ========================================================== */
 
 /* ============================================================
- * F2 — Self-hosted fonts (OFL).
+ * F2 - Self-hosted fonts (OFL).
  *   Lora           VF wght 400-700 + italic VF wght 400-700  (display, italic body)
  *   Inter          400 / 500 / 600                            (body, UI)
  *   JetBrains Mono 400 / 500                                  (meta, captions, chips)
  *
  * Subsets: latin, latin-ext (DE diacritics), cyrillic (RU). woff2 only.
  * unicode-range on Inter / JetBrains Mono mirrors Google Fonts canonical
- * splits — keeps the Cyrillic file off the wire on /en and /de routes.
+ * splits - keeps the Cyrillic file off the wire on /en and /de routes.
  *
  * Inter 400/600 reuse the existing TTFs in public/fonts/. Inter 500
  * was added as woff2 in F2 to complete the weight set.
  *
  * Lora VF files (cyrealtype/Lora-Cyrillic) ship Latin+Cyrillic in one
- * file per axis — no subset splitting on the wire. Phase 9.2 swap
+ * file per axis - no subset splitting on the wire. Phase 9.2 swap
  * (DESIGN_v2_PROPOSAL.md §3.1) replaces 11 static @font-face decls with
  * 2 VF decls. Net -64KB and -4 round-trips at the cost of one Cyrillic
  * file always shipping (Cyrillic readers benefit; /en/de pay ~30KB).
@@ -42,6 +42,7 @@
   font-display: swap;
   src: url('/fonts/Lora-VF.woff2') format('woff2');
 }
+
 @font-face {
   font-family: 'Lora';
   font-style: italic;
@@ -62,6 +63,7 @@
   src: url('/fonts/unbounded-cyrillic-vf.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'Unbounded';
   font-style: normal;
@@ -69,10 +71,11 @@
   font-display: swap;
   src: url('/fonts/unbounded-latin-ext-vf.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'Unbounded';
   font-style: normal;
@@ -80,8 +83,8 @@
   font-display: swap;
   src: url('/fonts/unbounded-latin-vf.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* ---------- Inter (body, UI) ---------- */
@@ -93,6 +96,7 @@
   src: url('/fonts/inter-cyrillic-400.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -100,10 +104,11 @@
   font-display: swap;
   src: url('/fonts/inter-latin-ext-400.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -111,9 +116,10 @@
   font-display: swap;
   src: url('/fonts/inter-latin-400.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -122,6 +128,7 @@
   src: url('/fonts/inter-cyrillic-500.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -129,10 +136,11 @@
   font-display: swap;
   src: url('/fonts/inter-latin-ext-500.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -140,9 +148,10 @@
   font-display: swap;
   src: url('/fonts/inter-latin-500.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -151,6 +160,7 @@
   src: url('/fonts/inter-cyrillic-600.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -158,10 +168,11 @@
   font-display: swap;
   src: url('/fonts/inter-latin-ext-600.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -169,8 +180,8 @@
   font-display: swap;
   src: url('/fonts/inter-latin-600.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* ---------- JetBrains Mono (meta, chips, captions) ---------- */
@@ -182,6 +193,7 @@
   src: url('/fonts/jetbrains-mono-cyrillic-400.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
@@ -189,10 +201,11 @@
   font-display: swap;
   src: url('/fonts/jetbrains-mono-latin-ext-400.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
@@ -200,9 +213,10 @@
   font-display: swap;
   src: url('/fonts/jetbrains-mono-latin-400.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
@@ -211,6 +225,7 @@
   src: url('/fonts/jetbrains-mono-cyrillic-500.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
@@ -218,10 +233,11 @@
   font-display: swap;
   src: url('/fonts/jetbrains-mono-latin-ext-500.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
-    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
-    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+  U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+  U+A720-A7FF;
 }
+
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
@@ -229,8 +245,8 @@
   font-display: swap;
   src: url('/fonts/jetbrains-mono-latin-500.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+  U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
@@ -241,48 +257,48 @@
    * see archive/DESIGN_BRIEF.md D11 row.
    * Paper variant available via [data-theme="paper"] below.
    */
-  --paper:        #080706;          /* near-black page bg — D10 floor */
-  --paper-raised: #161413;          /* cards, modals, raised surfaces */
-  --paper-sunken: #040303;          /* inputs, code wells, sunken zones */
-  --ink:          #F4F0E8;          /* primary text — warm off-white for editorial register */
-  --ink-mute:     #A8A49C;          /* secondary text, dates, captions */
-  --ink-faint:    #7A7771;          /* placeholder, disabled */
+  --paper: #080706; /* near-black page bg — D10 floor */
+  --paper-raised: #161413; /* cards, modals, raised surfaces */
+  --paper-sunken: #040303; /* inputs, code wells, sunken zones */
+  --ink: #F4F0E8; /* primary text — warm off-white for editorial register */
+  --ink-mute: #A8A49C; /* secondary text, dates, captions */
+  --ink-faint: #7A7771; /* placeholder, disabled */
   --ink-marginalia: rgba(244, 240, 232, 0.55);
-  --rule:         rgba(244, 240, 232, 0.10);   /* hairline section rules */
-  --rule-strong:  rgba(244, 240, 232, 0.18);   /* hover/active borders */
+  --rule: rgba(244, 240, 232, 0.10); /* hairline section rules */
+  --rule-strong: rgba(244, 240, 232, 0.18); /* hover/active borders */
 
   /* v3 Bauhaus stage trio — lifted variants for AA on near-black paper */
-  --accent-vermillion: #FF5A66;     /* primary stage — AA on #080706 ≈ 6.1:1 ✓ */
-  --accent-cobalt:     #5B82C2;     /* secondary stage */
-  --accent-mustard:    #C9A22F;     /* tertiary — DECORATIVE ONLY (sticker/marquee fill) */
-  --ink-on-accent:     #080706;     /* text on accent fills (matches paper for AA) */
-  --ink-on-mustard:    #080706;
+  --accent-vermillion: #FF5A66; /* primary stage — AA on #080706 ≈ 6.1:1 ✓ */
+  --accent-cobalt: #5B82C2; /* secondary stage */
+  --accent-mustard: #C9A22F; /* tertiary — DECORATIVE ONLY (sticker/marquee fill) */
+  --ink-on-accent: #080706; /* text on accent fills (matches paper for AA) */
+  --ink-on-mustard: #080706;
 
-  --accent:        var(--accent-vermillion);
-  --accent-hover:  #FF7B85;          /* lighter vermillion on dark */
+  --accent: var(--accent-vermillion);
+  --accent-hover: #FF7B85; /* lighter vermillion on dark */
   --accent-active: #E0414C;
-  --overlay:       rgba(0, 0, 0, 0.6);
-  --selection-bg:  var(--accent-vermillion);
-  --selection-fg:  #080706;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --selection-bg: var(--accent-vermillion);
+  --selection-fg: #080706;
 
   /* ---------- Colour: semantic mapping ---------- */
-  --color-bg-primary:     var(--paper);
-  --color-bg-secondary:   var(--paper-raised);
-  --color-bg-tertiary:    var(--paper-sunken);
-  --color-bg-inverse:     var(--ink);
+  --color-bg-primary: var(--paper);
+  --color-bg-secondary: var(--paper-raised);
+  --color-bg-tertiary: var(--paper-sunken);
+  --color-bg-inverse: var(--ink);
 
-  --color-text-primary:   var(--ink);
+  --color-text-primary: var(--ink);
   --color-text-secondary: var(--ink-mute);
-  --color-text-tertiary:  var(--ink-faint);
-  --color-text-inverse:   var(--paper);
-  --color-text-link:      var(--ink);            /* link colour = body; underline does the work */
+  --color-text-tertiary: var(--ink-faint);
+  --color-text-inverse: var(--paper);
+  --color-text-link: var(--ink); /* link colour = body; underline does the work */
 
-  --color-border-primary:   var(--rule);
+  --color-border-primary: var(--rule);
   --color-border-secondary: var(--rule-strong);
-  --color-border-focus:     var(--accent);
+  --color-border-focus: var(--accent);
 
-  --color-accent-primary:        var(--accent);
-  --color-accent-primary-hover:  var(--accent-hover);
+  --color-accent-primary: var(--accent);
+  --color-accent-primary-hover: var(--accent-hover);
   --color-accent-primary-active: var(--accent-active);
 
   /* Status colours kept muted to fit warm-editorial palette.
@@ -291,128 +307,128 @@
    * Defaults below are gorky-tuned (lifted for AA on near-black). */
   --color-status-success: #6FA365;
   --color-status-warning: #C28F3A;
-  --color-status-error:   var(--accent-vermillion);
-  --color-status-info:    var(--ink-mute);
+  --color-status-error: var(--accent-vermillion);
+  --color-status-info: var(--ink-mute);
 
   --color-surface-overlay: var(--overlay);
 
   /* ---------- Spacing — 4px base [BRIEF §5.5] ---------- */
-  --space-0:  0;
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  24px;
-  --space-6:  32px;
-  --space-7:  48px;
-  --space-8:  64px;
-  --space-9:  96px;
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
   --space-10: 128px;
 
   /* ---------- Typography [BRIEF §5.3 / §5.4] ---------- */
   --font-family-display: 'Lora', Georgia, 'Times New Roman', serif;
-  --font-family-body:    'Inter', ui-sans-serif, system-ui, -apple-system,
-                         'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-family-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo,
-                         Consolas, 'Liberation Mono', monospace;
-  --font-family-plakat:  'Unbounded', 'Lora', Georgia, serif;   /* v3: ALL CAPS wordmark, sticker badges, hero only */
+  --font-family-body: 'Inter', ui-sans-serif, system-ui, -apple-system,
+  'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo,
+  Consolas, 'Liberation Mono', monospace;
+  --font-family-plakat: 'Unbounded', 'Lora', Georgia, serif; /* v3: ALL CAPS wordmark, sticker badges, hero only */
 
   /* Fluid type scale: clamp(min @375px, preferred, max @1280px).
    * Steps mirror the brief table (display, h2, h3, body, meta, chip). */
-  --font-size-chip:    11px;                                       /* fixed */
-  --font-size-meta:    13px;                                       /* fixed */
-  --font-size-xs:      12px;
-  --font-size-sm:      14px;
-  --font-size-base:    clamp(17px, 16.5px + 0.13vw, 18px);          /* body */
-  --font-size-md:      clamp(18px, 17px + 0.27vw, 20px);
-  --font-size-lg:      clamp(20px, 18.7px + 0.44vw, 24px);          /* h3 */
-  --font-size-xl:      clamp(24px, 20.5px + 0.93vw, 32px);
-  --font-size-2xl:     clamp(28px, 23.6px + 1.32vw, 40px);          /* h2 */
-  --font-size-3xl:     clamp(36px, 28.5px + 2.18vw, 60px);
-  --font-size-4xl:     clamp(44px, 26.5px + 4.84vw, 88px);          /* display */
-  --font-size-hero:    clamp(36px, 23px + 4vw, 80px);               /* v3: Unbounded hero wordmark on / only — retuned 2026-05-03: min 36 so 'Бокланов' fits whole-word from 320px (iPhone SE), max 80 so full 'РОМАН БОКЛАНОВ' stays single-line at the 1080px content cap. Was clamp(48,28+4.5vw,96) which both cropped on 320–375px and wrapped at 1440 */
-  --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px);          /* v3: Unbounded sticker badge text */
-  --font-size-nav:     clamp(13px, 11.5px + 0.16vw, 16px);          /* 2026-05-04: header nav links — desktop scale-up, was fixed --font-size-meta 13px */
+  --font-size-chip: 11px; /* fixed */
+  --font-size-meta: 13px; /* fixed */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: clamp(17px, 16.5px + 0.13vw, 18px); /* body */
+  --font-size-md: clamp(18px, 17px + 0.27vw, 20px);
+  --font-size-lg: clamp(20px, 18.7px + 0.44vw, 24px); /* h3 */
+  --font-size-xl: clamp(24px, 20.5px + 0.93vw, 32px);
+  --font-size-2xl: clamp(28px, 23.6px + 1.32vw, 40px); /* h2 */
+  --font-size-3xl: clamp(36px, 28.5px + 2.18vw, 60px);
+  --font-size-4xl: clamp(44px, 26.5px + 4.84vw, 88px); /* display */
+  --font-size-hero: clamp(36px, 23px + 4vw, 80px); /* v3: Unbounded hero wordmark on / only — retuned 2026-05-03: min 36 so 'Бокланов' fits whole-word from 320px (iPhone SE), max 80 so full 'РОМАН БОКЛАНОВ' stays single-line at the 1080px content cap. Was clamp(48,28+4.5vw,96) which both cropped on 320–375px and wrapped at 1440 */
+  --font-size-sticker: clamp(11px, 10.5px + 0.13vw, 13px); /* v3: Unbounded sticker badge text */
+  --font-size-nav: clamp(13px, 11.5px + 0.16vw, 16px); /* 2026-05-04: header nav links — desktop scale-up, was fixed --font-size-meta 13px */
 
-  --font-weight-normal:   400;
-  --font-weight-medium:   500;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  --font-weight-bold:     700;
+  --font-weight-bold: 700;
 
-  --line-height-tight:   1.15;     /* display, h1/h2 */
-  --line-height-snug:    1.3;      /* h3, card titles */
-  --line-height-normal:  1.55;     /* body */
-  --line-height-relaxed: 1.7;      /* long-form prose, /about */
+  --line-height-tight: 1.15; /* display, h1/h2 */
+  --line-height-snug: 1.3; /* h3, card titles */
+  --line-height-normal: 1.55; /* body */
+  --line-height-relaxed: 1.7; /* long-form prose, /about */
 
-  --letter-spacing-tight:  -0.015em;   /* Lora display */
+  --letter-spacing-tight: -0.015em; /* Lora display */
   --letter-spacing-normal: 0;
-  --letter-spacing-wide:   0.06em;     /* mono caps, chips */
-  --letter-spacing-meta:   0.01em;     /* JetBrains Mono captions */
+  --letter-spacing-wide: 0.06em; /* mono caps, chips */
+  --letter-spacing-meta: 0.01em; /* JetBrains Mono captions */
 
   /* ---------- Layout ---------- */
-  --max-width-prose:   65ch;       /* /about, press, long-form */
-  --max-width-content: 1080px;     /* productions index, default page */
-  --max-width-wide:    1280px;     /* hero rows, full-bleed photo bands */
-  --max-width-page:    1440px;     /* hard ceiling */
-  --measure-caption:   36ch;       /* v2: SpecimenPlate caption block */
-  --measure-poster:    56ch;       /* v3: TypographicCover wider register */
+  --max-width-prose: 65ch; /* /about, press, long-form */
+  --max-width-content: 1080px; /* productions index, default page */
+  --max-width-wide: 1280px; /* hero rows, full-bleed photo bands */
+  --max-width-page: 1440px; /* hard ceiling */
+  --measure-caption: 36ch; /* v2: SpecimenPlate caption block */
+  --measure-poster: 56ch; /* v3: TypographicCover wider register */
 
-  --gutter-mobile:      20px;
-  --gutter-tablet:      24px;
-  --gutter-desktop:     32px;
-  --gutter-margin-pull: -1.25rem;  /* v2: Marginalia float-into-margin from ≥1024px */
+  --gutter-mobile: 20px;
+  --gutter-tablet: 24px;
+  --gutter-desktop: 32px;
+  --gutter-margin-pull: -1.25rem; /* v2: Marginalia float-into-margin from ≥1024px */
 
-  --header-height-mobile:  56px;
-  --header-height-desktop: 72px;   /* 2026-05-04: header inner height ≥1024px — bigger nav buttons */
+  --header-height-mobile: 56px;
+  --header-height-desktop: 72px; /* 2026-05-04: header inner height ≥1024px — bigger nav buttons */
 
   /* Editorial + brutalist => minimal radii. Sharp wins. */
   --border-radius-none: 0;
-  --border-radius-sm:   2px;
-  --border-radius-md:   4px;
-  --border-radius-lg:   8px;       /* reserved for photo cards if needed */
-  --border-radius-full: 999px;     /* pills (chips use sm instead) */
-  --border-radius-form: 2px;       /* v2: form chrome only (input, textarea, select, dialog, kbd) — DESIGN.md §11 unfreeze 2026-05-02 */
+  --border-radius-sm: 2px;
+  --border-radius-md: 4px;
+  --border-radius-lg: 8px; /* reserved for photo cards if needed */
+  --border-radius-full: 999px; /* pills (chips use sm instead) */
+  --border-radius-form: 2px; /* v2: form chrome only (input, textarea, select, dialog, kbd) — DESIGN.md §11 unfreeze 2026-05-02 */
 
   /* Hairline-first: rules > shadows. Shadows are subtle, never glow.
    * Defaults below are gorky-tuned (heavier on near-black paper). */
   --shadow-none: none;
-  --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md:   0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
-  --specimen-rule: inset 0 0 0 1px rgba(244, 240, 232, 0.10);   /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
-  --shadow-plakat: 0 4px 0 0 var(--ink);                     /* v3 §2.7: flat-stack offset for posters/stickers; mimics screen-print misregister, scoped to DuotonePoster + Sticker — DESIGN.md §11 unfreeze 2026-05-03 */
+  --specimen-rule: inset 0 0 0 1px rgba(244, 240, 232, 0.10); /* v2: photographic plates only, scoped to SpecimenPlate.module.css — DESIGN.md §11 unfreeze 2026-05-02 */
+  --shadow-plakat: 0 4px 0 0 var(--ink); /* v3 §2.7: flat-stack offset for posters/stickers; mimics screen-print misregister, scoped to DuotonePoster + Sticker — DESIGN.md §11 unfreeze 2026-05-03 */
 
   /* ---------- v3 plakat tokens ---------- */
-  --stripe-thickness:  2px;        /* v3 §2.8: per-section accent stripe above Cue */
-  --ticker-speed:      38s;        /* v3 §2.9: TourTicker linear marquee duration */
+  --stripe-thickness: 2px; /* v3 §2.8: per-section accent stripe above Cue */
+  --ticker-speed: 38s; /* v3 §2.9: TourTicker linear marquee duration */
 
   /* ---------- Motion [BRIEF §5.6] ---------- */
   --duration-instant: 50ms;
-  --duration-fast:    150ms;       /* hover underline reveal */
-  --duration-normal:  200ms;       /* page transition fade */
-  --duration-slow:    400ms;       /* signature gesture ceiling */
-  --duration-slower:  600ms;
-  --duration-slate:   320ms;       /* slate-strike one-shot animation (DA-3.A) */
+  --duration-fast: 150ms; /* hover underline reveal */
+  --duration-normal: 200ms; /* page transition fade */
+  --duration-slow: 400ms; /* signature gesture ceiling */
+  --duration-slower: 600ms;
+  --duration-slate: 320ms; /* slate-strike one-shot animation (DA-3.A) */
 
   --easing-default: cubic-bezier(0.4, 0, 0.2, 1);
-  --easing-in:      cubic-bezier(0.4, 0, 1, 1);
-  --easing-out:     cubic-bezier(0, 0, 0.2, 1);
-  --easing-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);   /* paper-cut feel */
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-editorial: cubic-bezier(0.22, 0.61, 0.36, 1); /* paper-cut feel */
 
   /* ---------- Z-index scale ---------- */
-  --z-base:     0;
-  --z-raised:   10;
-  --z-sticky:   100;       /* sticky booking CTA */
-  --z-overlay:  500;
-  --z-modal:    1000;      /* Cmd-K palette */
-  --z-toast:    2000;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100; /* sticky booking CTA */
+  --z-overlay: 500;
+  --z-modal: 1000; /* Cmd-K palette */
+  --z-toast: 2000;
 
   /* ---------- Breakpoints (reference; CSS uses raw values) ---------- */
-  --breakpoint-sm:  375px;
-  --breakpoint-md:  768px;
-  --breakpoint-lg:  1024px;
-  --breakpoint-xl:  1280px;
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 }
 
@@ -425,37 +441,37 @@
  * ========================================================== */
 
 [data-theme="paper"] {
-  --paper:        #F2F0EA;
+  --paper: #F2F0EA;
   --paper-raised: #FBFAF6;
   --paper-sunken: #ECE9E1;
-  --ink:          #0F0E0D;
-  --ink-mute:     #605C56;
-  --ink-faint:    #8F8B83;
+  --ink: #0F0E0D;
+  --ink-mute: #605C56;
+  --ink-faint: #8F8B83;
   --ink-marginalia: rgba(15, 14, 13, 0.55);
-  --rule:         rgba(15, 14, 13, 0.10);
-  --rule-strong:  rgba(15, 14, 13, 0.18);
+  --rule: rgba(15, 14, 13, 0.10);
+  --rule-strong: rgba(15, 14, 13, 0.18);
 
   /* v3 Bauhaus stage trio — paper-tuned for AA on warm off-white */
   --accent-vermillion: #CC2530;
-  --accent-cobalt:     #1D3557;
-  --accent-mustard:    #F4D35E;
-  --ink-on-accent:     #FBFAF6;
-  --ink-on-mustard:    #0F0E0D;
+  --accent-cobalt: #1D3557;
+  --accent-mustard: #F4D35E;
+  --ink-on-accent: #FBFAF6;
+  --ink-on-mustard: #0F0E0D;
 
-  --accent:        var(--accent-vermillion);
-  --accent-hover:  #C2202E;
+  --accent: var(--accent-vermillion);
+  --accent-hover: #C2202E;
   --accent-active: #9C1825;
-  --overlay:       rgba(15, 14, 13, 0.45);
-  --selection-bg:  var(--accent-vermillion);
-  --selection-fg:  #F2F0EA;
+  --overlay: rgba(15, 14, 13, 0.45);
+  --selection-bg: var(--accent-vermillion);
+  --selection-fg: #F2F0EA;
 
   --color-status-success: #3F6B3A;
   --color-status-warning: #8A5A18;
-  --color-status-error:   var(--accent-vermillion);
+  --color-status-error: var(--accent-vermillion);
 
-  --shadow-sm:    0 1px 2px rgba(15, 14, 13, 0.05);
-  --shadow-md:    0 2px 8px rgba(15, 14, 13, 0.08);
-  --shadow-lg:    0 8px 32px rgba(15, 14, 13, 0.12);
+  --shadow-sm: 0 1px 2px rgba(15, 14, 13, 0.05);
+  --shadow-md: 0 2px 8px rgba(15, 14, 13, 0.08);
+  --shadow-lg: 0 8px 32px rgba(15, 14, 13, 0.12);
   --shadow-focus: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent);
   --specimen-rule: inset 0 0 0 1px rgba(15, 14, 13, 0.08);
   --shadow-plakat: 0 4px 0 0 var(--ink);
@@ -468,9 +484,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --duration-fast:   0ms;
+    --duration-fast: 0ms;
     --duration-normal: 0ms;
-    --duration-slow:   0ms;
+    --duration-slow: 0ms;
     --duration-slower: 0ms;
   }
 }
@@ -533,10 +549,10 @@ a {
   text-decoration-thickness: 1px;
   text-decoration-color: var(--color-border-secondary);
   text-underline-offset: 0.18em;
-  transition:
-    text-decoration-color var(--duration-fast) var(--easing-default),
-    color var(--duration-fast) var(--easing-default);
+  transition: text-decoration-color var(--duration-fast) var(--easing-default),
+  color var(--duration-fast) var(--easing-default);
 }
+
 a:hover {
   text-decoration-color: var(--color-accent-primary);
 }
@@ -559,6 +575,7 @@ a.link-bare {
   box-shadow: var(--shadow-focus);
   border-radius: var(--border-radius-sm);
 }
+
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -571,6 +588,7 @@ select {
   font: inherit;
   color: inherit;
 }
+
 button {
   background: none;
   border: none;
@@ -606,17 +624,21 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--color-bg-tertiary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-secondary);
   border: 2px solid var(--color-bg-tertiary);
   border-radius: var(--border-radius-full);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-tertiary);
 }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-secondary) var(--color-bg-tertiary);
@@ -628,7 +650,9 @@ input[type="search"]::-webkit-search-cancel-button {
  * Component-level hiding (nav, CTA, rail) is in each module.
  * ========================================================== */
 @media print {
-  @page { margin: 18mm; }
+  @page {
+    margin: 18mm;
+  }
 
   /* Pure print palette — override tokens */
   :root {
@@ -638,8 +662,8 @@ input[type="search"]::-webkit-search-cancel-button {
     --ink: #000000;
     --ink-mute: #444444;
     --ink-faint: #888888;
-    --rule: rgba(0,0,0,0.15);
-    --rule-strong: rgba(0,0,0,0.28);
+    --rule: rgba(0, 0, 0, 0.15);
+    --rule-strong: rgba(0, 0, 0, 0.28);
   }
 
   /* Strip backgrounds, shadows, transitions */
@@ -651,15 +675,31 @@ input[type="search"]::-webkit-search-cancel-button {
     animation: none !important;
   }
 
-  body { font-size: 11pt; line-height: 1.5; color: #000; background: #fff; }
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
 
   /* Pagination hygiene */
-  p, h1, h2, h3, blockquote { widows: 3; orphans: 3; }
-  h1, h2, h3                 { page-break-after: avoid; }
-  figure, dl, ul, ol         { page-break-inside: avoid; }
+  p, h1, h2, h3, blockquote {
+    widows: 3;
+    orphans: 3;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  figure, dl, ul, ol {
+    page-break-inside: avoid;
+  }
 
   /* Hairlines at 0.5pt */
-  hr { border-top-width: 0.5pt; }
+  hr {
+    border-top-width: 0.5pt;
+  }
 
   /* Print external links */
   a[href^="http"]::after,

@@ -24,7 +24,9 @@ export function PosterLightbox({ src, alt, children }: Props) {
     if (!open) return
     closeRef.current?.focus()
     document.body.style.overflow = 'hidden'
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose()
+    }
     document.addEventListener('keydown', onKey)
     return () => {
       document.removeEventListener('keydown', onKey)
@@ -37,11 +39,13 @@ export function PosterLightbox({ src, alt, children }: Props) {
       <div
         ref={triggerRef}
         className={styles.trigger}
-        role="button"
+        role='button'
         tabIndex={0}
-        aria-label="View full poster"
+        aria-label='View full poster'
         onClick={() => setOpen(true)}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpen(true) }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') setOpen(true)
+        }}
       >
         {children}
       </div>
@@ -49,18 +53,18 @@ export function PosterLightbox({ src, alt, children }: Props) {
       {open && (
         <div
           className={styles.overlay}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Full poster"
+          role='dialog'
+          aria-modal='true'
+          aria-label='Full poster'
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
             <img src={src} alt={alt} className={styles.img} />
             <button
               ref={closeRef}
-              type="button"
+              type='button'
               className={styles.close}
-              aria-label="Close"
+              aria-label='Close'
               onClick={handleClose}
             >
               ✕

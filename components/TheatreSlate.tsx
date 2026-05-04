@@ -2,13 +2,16 @@ import * as React from 'react'
 
 import styles from './TheatreSlate.module.css'
 
-type TheatreInput = {
-  name?: string | null
-  shortName?: string | null
-  city?: string | null
-  country?: string | null
-  url?: string | null
-} | null | undefined
+type TheatreInput =
+  | {
+      name?: string | null
+      shortName?: string | null
+      city?: string | null
+      country?: string | null
+      url?: string | null
+    }
+  | null
+  | undefined
 
 type TheatreSlateProps = {
   titleRu?: string | null
@@ -22,9 +25,11 @@ type TheatreSlateProps = {
 
 function buildTheatreLine(theatre: TheatreInput): string | null {
   if (!theatre) return null
-  return [theatre.name ?? theatre.shortName, theatre.city]
-    .filter(Boolean)
-    .join(' · ') || null
+  return (
+    [theatre.name ?? theatre.shortName, theatre.city]
+      .filter(Boolean)
+      .join(' · ') || null
+  )
 }
 
 export function TheatreSlate({
@@ -34,7 +39,7 @@ export function TheatreSlate({
   theatre,
   roleLabel,
   premiereDate,
-  as = 'h1',
+  as = 'h1'
 }: TheatreSlateProps) {
   const showEn = !!titleEn && titleEn !== titleRu
   const showDe = !!titleDe && titleDe !== titleRu && titleDe !== titleEn
@@ -54,8 +59,8 @@ export function TheatreSlate({
             <a
               className={styles.theatreLink}
               href={theatreUrl}
-              target="_blank"
-              rel="noreferrer noopener"
+              target='_blank'
+              rel='noreferrer noopener'
             >
               {theatreLine}
             </a>
