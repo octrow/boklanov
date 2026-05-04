@@ -7,9 +7,12 @@ title:
   en: "Commedia dell'arte"
   de: "Commedia dell'arte"
 synopsis:
-  ru: "Передвижной спектакль-импровизация на красной ковровой дорожке, мастерски обыгрывающий принципы театра эпохи возрождения!"
-  en: "A travelling red-carpet improvisation, masterfully playing on the principles of Renaissance theatre!"
-  de: "Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die Prinzipien des Renaissancetheatres nutzt!"
+  ru: "Передвижной спектакль-импровизация на красной ковровой дорожке, мастерски
+    обыгрывающий принципы театра эпохи возрождения!"
+  en: "A travelling red-carpet improvisation, masterfully playing on the
+    principles of Renaissance theatre!"
+  de: "Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die
+    Prinzipien des Renaissancetheatres nutzt!"
 tagline:
   ru: Передвижной спектакль-импровизация на красной ковровой дорожке
   en: Travelling improvisation on the red carpet
@@ -91,7 +94,39 @@ credits:
     - role: Space
       name: Okhta Library
       url: "https://vk.com/wall-128420576_1817"
-  de: []
+  de:
+    - role: Regisseur
+      name: Роман Бокланов
+    - role: Mitwirkende
+      name: Алёна Волкова
+      url: https://puppets.ru/pers/41
+    - role: Mitwirkende
+      name: Мария Гельштейн
+      url: https://puppets.ru/pers/44
+    - role: Mitwirkende
+      name: Алексей Егоров
+      url: https://puppets.ru/pers/46
+    - role: Mitwirkende
+      name: Стефания Жученко
+      url: https://puppets.ru/pers/43
+    - role: Mitwirkende
+      name: Дарья Левингер
+      url: https://puppets.ru/pers/50
+    - role: Mitwirkende
+      name: Максим Морозов
+      url: https://puppets.ru/pers/51
+    - role: Mitwirkende
+      name: Дмитрий Скрябин
+      url: https://puppets.ru/pers/56
+    - role: Mitwirkende
+      name: Владислав Тутак
+      url: https://puppets.ru/pers/57
+    - role: Mitwirkende
+      name: Jun-Hyung Choi
+      url: https://puppets.ru/pers/42
+    - role: Spielten in Räumen
+      name: Библиотека Охта
+      url: https://vk.com/wall-128420576_1817
 poster:
   src: /productions/commedia-dell-arte/poster.jpg
   credit: null

@@ -7,9 +7,12 @@ title:
   en: "Richter's Fairytale"
   de: Richters Märchen
 synopsis:
-  ru: Сказка Рихтера предоставляет представление о жизни Святослава Рихтера (1915–1997), одного из величайших советских пианистов в истории музыки.
-  en: "RICHTER'S FAIRYTALE provides an insight into the life of Swjatoslaw Richter (1915-1997), one of the greatest Soviet pianists in the history of music."
-  de: RICHTERS MÄRCHEN bietet einen Einblick in das Leben von Swjatoslaw Richter (1915-1997), einem der größten sowjetischen Pianisten der Musikgeschichte.
+  ru: Сказка Рихтера предоставляет представление о жизни Святослава Рихтера
+    (1915–1997), одного из величайших советских пианистов в истории музыки.
+  en: "RICHTER'S FAIRYTALE provides an insight into the life of Swjatoslaw Richter
+    (1915-1997), one of the greatest Soviet pianists in the history of music."
+  de: RICHTERS MÄRCHEN bietet einen Einblick in das Leben von Swjatoslaw Richter
+    (1915-1997), einem der größten sowjetischen Pianisten der Musikgeschichte.
 theatre:
   name: URBAN THEATER
   city: Berlin
@@ -29,7 +32,20 @@ form:
   - puppet
 lineage: []
 credits:
-  ru: []
+  ru:
+    - role: Театр
+      name: URBAN THEATER
+      url: https://www.facebook.com/theater.urban
+    - role: Актеры
+      name: Mihail Ryabov
+    - role: Актеры
+      name: Ilya Khodyrev
+    - role: Режиссёр
+      name: Kostya Novitskiy
+    - role: Дизайн анимации/визуальных эффектов
+      name: Valeriia Nikolicheva
+    - role: Работа с фигурами и объектами
+      name: Roman Boklanov
   en:
     - role: Theater
       name: URBAN THEATER

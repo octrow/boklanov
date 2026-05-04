@@ -7,9 +7,13 @@ title:
   en: Online
   de: Online
 synopsis:
-  ru: Документальный спектакль для подростков о жизни в интернете. Основан на реальных событиях, интервью и открытых материалах сети.
-  en: "Experience the real-life story of the Internet with ONLINE. Directed by Roman Boklanov and based on interviews and real events. Don't miss out!"
-  de: Ein dokumentarisches Stück für Teenager über das Leben im Internet. Basierend auf echten Ereignissen, Interviews und offenen Netzwerkmaterialien.
+  ru: Документальный спектакль для подростков о жизни в интернете. Основан на
+    реальных событиях, интервью и открытых материалах сети.
+  en: "Experience the real-life story of the Internet with ONLINE. Directed by
+    Roman Boklanov and based on interviews and real events. Don't miss out!"
+  de: Ein dokumentarisches Stück für Teenager über das Leben im Internet.
+    Basierend auf echten Ereignissen, Interviews und offenen
+    Netzwerkmaterialien.
 theatre:
   name: Барнаульский молодёжный театр
   city: Barnaul
@@ -27,7 +31,13 @@ form:
   - family
 lineage: []
 credits:
-  ru: []
+  ru:
+    - role: Режиссёр
+      name: Roman Boklanov
+    - role: Художник
+      name: Vera Petrovskaya
+    - role: Автор пьесы
+      name: Katya Sverdlova
   en:
     - role: Director
       name: Roman Boklanov
@@ -35,7 +45,13 @@ credits:
       name: Vera Petrovskaya
     - role: Playwright
       name: Katya Sverdlova
-  de: []
+  de:
+    - role: Regisseur
+      name: Roman Boklanov
+    - role: Künstler
+      name: Vera Petrovskaya
+    - role: Dramatiker
+      name: Katya Sverdlova
 poster:
   src: /productions/online/poster.jpg
   credit: null

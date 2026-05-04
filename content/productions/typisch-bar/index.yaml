@@ -7,17 +7,23 @@ title:
   en: Typisch bär
   de: Typischer Bär
 synopsis:
-  ru: В самом-самом обыкновенном лесу, среди самых-самых обыкновенных зверей живет не вполне обыкновенный Медведь. Что же с ним не так?
-  en: "In a very ordinary forest, among very ordinary animals, lives a not quite ordinary Bear. What's wrong with him?"
-  de: In einem sehr gewöhnlichen Wald lebt unter sehr gewöhnlichen Tieren ein nicht ganz gewöhnlicher Bär. Was stimmt nicht mit ihm?
+  ru: В самом-самом обыкновенном лесу, среди самых-самых обыкновенных зверей живет
+    не вполне обыкновенный Медведь. Что же с ним не так?
+  en: "In a very ordinary forest, among very ordinary animals, lives a not quite
+    ordinary Bear. What's wrong with him?"
+  de: In einem sehr gewöhnlichen Wald lebt unter sehr gewöhnlichen Tieren ein
+    nicht ganz gewöhnlicher Bär. Was stimmt nicht mit ihm?
 tagline:
   ru: История для «не таких как все»
   en: "A story for those who don't fit in"
   de: Eine Geschichte für diejenigen, die nicht passen
 directorsNote:
-  ru: "Не тот велик, кто никогда не падал, а тот велик — кто падал и вставал! Конфуций между прочим!"
-  en: "Great is not the one who never fell, but great is the one who fell and got up! Confucius by the way!"
-  de: "Großartig ist nicht derjenige, der nie gefallen ist, sondern großartig ist derjenige, der fiel und aufstand! Konfuzius übrigens!"
+  ru: "Не тот велик, кто никогда не падал, а тот велик — кто падал и вставал!
+    Конфуций между прочим!"
+  en: "Great is not the one who never fell, but great is the one who fell and got
+    up! Confucius by the way!"
+  de: "Großartig ist nicht derjenige, der nie gefallen ist, sondern großartig ist
+    derjenige, der fiel und aufstand! Konfuzius übrigens!"
 theatre:
   name: Театр кукол «Бродячая Собачка»
   shortName: Бродячая Собачка
@@ -28,6 +34,7 @@ year: 2022
 premiereDate:
   ru: 29 апреля 2022 г.
   en: April 29, 2022
+  de: 29. April 2022
 ticketsUrl: "https://puppettheatre.spb.ru/index.php?id=183"
 ageRating: 5+
 durationMin: 55
@@ -75,6 +82,36 @@ credits:
       name: Maksim Morozov.
     - role: Lighting Designer
       name: Anastasia Kuznetsova
+  de:
+    - role: Regisseur und Autor der Inszenierung
+      name: Роман Бокланов
+    - role: Bühnenbildner
+      name: Никита Запаскин.
+    - role: Komponist
+      name: Максим Морозов.
+    - role: Lichtdesigner
+      name: Анастасия Кузнецова
+    - role: Mitwirkende
+      name: Константин Кожев
+      url: https://puppettheatre.spb.ru/index.php?id=16
+    - role: Mitwirkende
+      name: Оксана Галустянц
+      url: https://puppettheatre.spb.ru/index.php?id=20
+    - role: Mitwirkende
+      name: Софья Чудакова /
+      url: https://puppettheatre.spb.ru/index.php?id=24
+    - role: Mitwirkende
+      name: Кристина Беканова
+      url: https://puppettheatre.spb.ru/index.php?id=17
+    - role: Mitwirkende
+      name: Елена Сапова /
+      url: https://puppettheatre.spb.ru/index.php?id=178
+    - role: Mitwirkende
+      name: Анастасия Семенова
+      url: https://puppettheatre.spb.ru/index.php?id=184
+    - role: Mitwirkende
+      name: Андрей Бакун
+      url: https://puppettheatre.spb.ru/index.php?id=12
 poster:
   src: /productions/typisch-bar/poster.jpg
   credit: null
@@ -137,7 +174,13 @@ videos: []
 awards: []
 festivals: []
 press:
-  - title: Премьера спектакля «Медведь в своем репертуаре» в театре кукол «Бродячая собачка»
+  - title:
+      ru: Премьера спектакля «Медведь в своем репертуаре» в театре кукол «Бродячая
+        собачка»
+      en: World Premiere of the Play "Bear in His Repertoire" at the Puppet Theatre
+        "Stray Dog"
+      de: Uraufführung des Stücks "Bär im eigenen Repertoire" am Puppentheater "Die
+        treibe Hund"
     url: "https://www.gov.spb.ru/gov/otrasl/c_culture/news/236526/"
 externalLinks: []
 techRider: null

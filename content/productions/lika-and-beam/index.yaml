@@ -7,9 +7,14 @@ title:
   en: Lika and ray
   de: Lika und der Strahl
 synopsis:
-  ru: История об озорной, находчивой, но чересчур самостоятельной девочке Лике, которая хочет понять, что же это - самое важное, главное?
-  en: The performance of Lika and Beam. This story is about a mischievous, resourceful, but over-independent girl, Lika, who wants to understand what is the most important thing?
-  de: Die Aufführung von Lika und dem Strahl. Diese Geschichte handelt von einem frechen, einfallsreichen, aber überunabhängigen Mädchen namens Lika, das verstehen möchte, was das Wichtigste ist.
+  ru: История об озорной, находчивой, но чересчур самостоятельной девочке Лике,
+    которая хочет понять, что же это - самое важное, главное?
+  en: The performance of Lika and Beam. This story is about a mischievous,
+    resourceful, but over-independent girl, Lika, who wants to understand what
+    is the most important thing?
+  de: Die Aufführung von Lika und dem Strahl. Diese Geschichte handelt von einem
+    frechen, einfallsreichen, aber überunabhängigen Mädchen namens Lika, das
+    verstehen möchte, was das Wichtigste ist.
 theatre: {}
 year: 2019
 premiereDate:
@@ -34,7 +39,11 @@ credits:
       name: Roman Boklanov
     - role: Actor
       name: Anastasia Tukaeva (Moscow)
-  de: []
+  de:
+    - role: Regisseur
+      name: Роман Бокланов
+    - role: Spielt
+      name: Анастасия Тукаева (г. Москва)
 poster:
   src: /productions/lika-and-beam/poster.jpg
   credit: null

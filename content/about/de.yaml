@@ -1,0 +1,44 @@
+portrait:
+  src: null
+  credit: null
+photos: [ ]
+milestones:
+  - year: 1993
+    label: Geboren in Ust-Kamenogorsk, Kasachstan
+  - year: 2017
+    label: Darsteller der mit der «Goldenen Maske» ausgezeichneten Aufführung
+      («Altes Haus», Nowosibirsk)
+  - year: 2018
+    label: Grand Prix des internationalen Festivals der Theaterschulen Istropolitana
+      Project, Bratislava
+  - year: 2020
+    label: Premiere von „Begrabt mich hinter der Sockelleiste“, GBT (Sankt Petersburg)
+  - year: 2021
+    label: Absolvent des RGISI – Puppentheaterregisseur, Werkstatt von R.R.
+      Kudaschow (Kurs am GBTK)
+  - year: 2022
+    label: Rückkehr nach Almaty; Inszenierungen in Kasachstan und Europa
+marginalia:
+  - R.R. Kudaschow · RGISI · BTK
+  - null
+  - null
+  - null
+lineage:
+  - key: kudashov
+    name: Андрей Кудашов
+    role: Meister des Kurses
+    institution: РГИСИ, Санкт-Петербург
+    note: Hat eine Generation von Puppentheaterregisseuren in St. Petersburg
+      ausgebildet
+  - key: btk
+    name: Большой театр кукол
+    role: Regie
+    institution: Санкт-Петербург
+    note: Eines der wichtigsten Puppentheater Russlands — hier wurde die Fachsprache
+      geprägt
+  - key: rgisi
+    name: РГИСИ
+    role: Regiefakultät
+    institution: Российский государственный институт сценических искусств
+    note: "Fundament: Europäische Tradition des Puppentheaters, Objekttheater,
+      moderne Regie"

@@ -7,17 +7,24 @@ title:
   en: Wee Little Havroshechka
   de: Kleine Havroshechka
 synopsis:
-  ru: Трудно живется девочке в чужой семье, и только доставшаяся ей в наследство коровушка Рябушка помогает ей своей волшебной силой.
-  en: It is difficult for the girl to live in a foreign family, and only the cow she inherited, Ryabushka, helps her with her magical powers.
-  de: Es ist schwierig für das Mädchen, in einer fremden Familie zu leben, und nur die Kuh, die sie geerbt hat, Ryabushka, hilft ihr mit ihren magischen Kräften.
+  ru: Трудно живется девочке в чужой семье, и только доставшаяся ей в наследство
+    коровушка Рябушка помогает ей своей волшебной силой.
+  en: It is difficult for the girl to live in a foreign family, and only the cow
+    she inherited, Ryabushka, helps her with her magical powers.
+  de: Es ist schwierig für das Mädchen, in einer fremden Familie zu leben, und nur
+    die Kuh, die sie geerbt hat, Ryabushka, hilft ihr mit ihren magischen
+    Kräften.
 tagline:
   ru: Посвящается нашим прародителям
   en: Dedicated to our ancestors
   de: Unseren Vorfahren gewidmet
 directorsNote:
-  ru: Есть на свете люди хорошие, есть и похуже, есть и такие, которые своего брата не стыдятся
-  en: There are good people in this world, there are worse ones, and there are those who are not ashamed of their brother
-  de: Es gibt gute Menschen auf der Welt, es gibt schlechtere, und es gibt solche, die sich ihres Bruders nicht schämen
+  ru: Есть на свете люди хорошие, есть и похуже, есть и такие, которые своего
+    брата не стыдятся
+  en: There are good people in this world, there are worse ones, and there are
+    those who are not ashamed of their brother
+  de: Es gibt gute Menschen auf der Welt, es gibt schlechtere, und es gibt solche,
+    die sich ihres Bruders nicht schämen
 theatre:
   name: Московский театр кукол
   city: Moscow
@@ -27,6 +34,7 @@ year: 2022
 premiereDate:
   ru: 27 марта 2022 г.
   en: 27 March 2022
+  de: 27. März 2022
 ticketsUrl: "https://puppetmo.ru/poster/kroshechka-havroshechka-5/?listim_open_widget=1"
 ageRating: 6+
 durationMin: 40
@@ -77,6 +85,27 @@ credits:
     - role: Participants in the performance
       name: Ruslan Ergashev
       url: "https://puppetmo.ru/people-of-the-theater/actors/ruslan-ergashev/"
+  de:
+    - role: Regisseur, Autor der Inszenierung
+      name: Роман Бокланов
+    - role: Künstler
+      name: Оганес Айрапетян
+    - role: Videoartist
+      name: Галина Шахова
+    - role: Puppenspieler
+      name: Дарья Лазарева
+    - role: Mitwirkende
+      name: Евгения Бушуева
+      url: https://puppetmo.ru/people-of-the-theater/actors/evgenija-gluhih/
+    - role: Mitwirkende
+      name: Заслуженная артистка России Людмила Мартьянова
+      url: https://puppetmo.ru/people-of-the-theater/actors/martjanova-ljudmila/
+    - role: Mitwirkende
+      name: Николай Мигов
+      url: https://puppetmo.ru/people-of-the-theater/actors/migov-nikolaj/
+    - role: Mitwirkende
+      name: Руслан Ергашев
+      url: https://puppetmo.ru/people-of-the-theater/actors/ruslan-ergashev/
 poster:
   src: /productions/wee-little-havroshechka/poster.jpg
   credit: null

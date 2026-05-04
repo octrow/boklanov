@@ -7,9 +7,14 @@ title:
   en: Nikita looking for the sea
   de: Nikita sucht das Meer
 synopsis:
-  ru: "История о семилетнем мальчике Никите, которого родители отправили в деревню к двоюродной бабушке на все лето. Но бабушка совсем не обычная!"
-  en: "The story of a seven-year-old boy, Nikita, who is sent by his parents to the countryside to stay with his great-aunt for the whole summer. But the grandmother is not at all ordinary!"
-  de: "Die Geschichte eines siebenjährigen Jungen namens Nikita, der von seinen Eltern auf das Land geschickt wird, um den ganzen Sommer über bei seiner Großtante zu bleiben. Aber die Großmutter ist überhaupt nicht gewöhnlich!"
+  ru: "История о семилетнем мальчике Никите, которого родители отправили в деревню
+    к двоюродной бабушке на все лето. Но бабушка совсем не обычная!"
+  en: "The story of a seven-year-old boy, Nikita, who is sent by his parents to
+    the countryside to stay with his great-aunt for the whole summer. But the
+    grandmother is not at all ordinary!"
+  de: "Die Geschichte eines siebenjährigen Jungen namens Nikita, der von seinen
+    Eltern auf das Land geschickt wird, um den ganzen Sommer über bei seiner
+    Großtante zu bleiben. Aber die Großmutter ist überhaupt nicht gewöhnlich!"
 directorsNote:
   ru: …со временем ты всё поймёшь. А пока — вымой посуду…
   en: …in time you will understand everything. But for now – wash the dishes…
@@ -276,25 +281,51 @@ videos:
   - provider: youtube
     id: Ot-YfOsoDjg
 awards:
-  - name: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального искусства «Ваш выход»
+  - name: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального
+      искусства «Ваш выход»
     year: 2023
-  - name: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI Фестиваль театрального искусства «Ваш выход»
+  - name: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
+      Фестиваль театрального искусства «Ваш выход»
     year: 2023
-  - name: Спектакль-победитель — Большой детский фестиваль 2023, категория «Драматические спектакли. Младшая возрастная категория»
+  - name: Спектакль-победитель — Большой детский фестиваль 2023, категория
+      «Драматические спектакли. Младшая возрастная категория»
     year: 2023
     city: Москва
 festivals: []
 press:
-  - title: Роман Бокланов выпускает в Архангельске «посвящение бабушкам»
+  - title:
+      ru: Роман Бокланов выпускает в Архангельске «посвящение бабушкам»
+      en: Roman Boklanov presents in Arkhangelsk "A Tribute to Grandmothers"
+      de: Roman Boklanov inszeniert in Archangelsk "Ein Gedenken an die Großmütter"
     url: "https://oteatre.info/boklanov-v-arhangelske/"
-  - title: В Архангельске новый сезон в Молодёжном театре открылся спектаклем для всей семьи
-    url: "https://bclass.ru/biznes/kultura/v-arkhangelske-novyy-sezon-v-molodyezhnom-teatre-otkrylsya-spektaklem-dlya-vsey-semi-/"
-  - title: "Снять спектакль на видео – и отправить бабушке!"
+  - title:
+      ru: В Архангельске новый сезон в Молодёжном театре открылся спектаклем для всей
+        семьи
+      en: In Arkhangelsk, a new season at the Youth Theatre opened with a
+        family-friendly performance
+      de: In Archangelsk eröffnete der Jugendtheater neue Spielzeit mit einem
+        Familienstück
+    url: "https://bclass.ru/biznes/kultura/v-arkhangelske-novyy-sezon-v-molodyezhno\
+      m-teatre-otkrylsya-spektaklem-dlya-vsey-semi-/"
+  - title:
+      ru: Снять спектакль на видео – и отправить бабушке!
+      en: Capture the Play on Video – and Send to Grandma
+      de: Ein Theaterstück auf Video aufnehmen – und es Großmutter schicken.
     url: "https://vk.com/@-736711-snyat-spektakl-na-video-i-otpravit-babushke"
-  - title: В Молодёжном театре показали спектакль для детей
+  - title:
+      ru: В Молодёжном театре показали спектакль для детей
+      en: At the Youth Theatre they showed a children's play
+      de: Im Jugendtheater wurde ein Kinderstück gezeigt
     url: "https://vk.com/video-73332929_456256660?list=38fb6b82a6efd7e305"
-  - title: "ИД «Двина», Александра Коковина: Театр Панова представил спектакль о мальчике, который исполнил свою мечту:"
-    url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-ispolnil-svoju-mechtu/"
+  - title:
+      ru: "ИД «Двина», Александра Коковина: Театр Панова представил спектакль о
+        мальчике, который исполнил свою мечту:"
+      en: 'The ID "Dvina", Alexander Kokovin: Pano Theatre presented a play about a
+        boy who fulfilled his dream:'
+      de: 'ID "Dwina", Alexander Kokovin: Theater Panoff stellte den Stück über einen
+        Jungen, der seine Träume erfüllte:'
+    url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-is\
+      polnil-svoju-mechtu/"
 externalLinks: []
 techRider: null
 pressKit: null

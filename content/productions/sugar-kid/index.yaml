@@ -7,9 +7,15 @@ title:
   en: Sugar Kid
   de: Zuckerkind
 synopsis:
-  ru: Сказка о жизни ребёнка в ссылке в 30–40-е годы, основанная на реальных событиях. Мама превращает лишения лагерной жизни в бесконечный калейдоскоп историй, чтобы сохранить дочери детство.
-  en: "The Sugar Child is a family-friendly play about the life of a child in exile in the 1930s–40s, based on Olga Gromova's novel. Based on the real events of Stella Nudolskaya's life."
-  de: Das Zuckerkind ist ein familienfreundliches Spiel über das Leben eines Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman. Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
+  ru: Сказка о жизни ребёнка в ссылке в 30–40-е годы, основанная на реальных
+    событиях. Мама превращает лишения лагерной жизни в бесконечный калейдоскоп
+    историй, чтобы сохранить дочери детство.
+  en: "The Sugar Child is a family-friendly play about the life of a child in
+    exile in the 1930s–40s, based on Olga Gromova's novel. Based on the real
+    events of Stella Nudolskaya's life."
+  de: Das Zuckerkind ist ein familienfreundliches Spiel über das Leben eines
+    Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman.
+    Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
 theatre:
   name: Новый Молодежный Нижнетагильский театр
   city: Nizhny Tagil
@@ -62,7 +68,22 @@ credits:
     - role: Actor
       name: Ksenia Chernolutskaya
       url: "https://teatr-nt.ru/actors/53/"
-  de: []
+  de:
+    - role: Regisseur
+      name: Ринат Кияков
+    - role: Bühnenbildner
+      name: Анастасия Копылова
+    - role: Bühnenregisseur für Puppen
+      name: Роман Бокланов
+    - role: Mitwirkende
+      name: Елена Агеева
+      url: https://teatr-nt.ru/actors/12/
+    - role: Mitwirkende
+      name: Влас Корепанов
+      url: https://teatr-nt.ru/actors/15/
+    - role: Mitwirkende
+      name: Ксения Чернолуцкая
+      url: https://teatr-nt.ru/actors/53/
 poster:
   src: /productions/sugar-kid/poster.jpg
   credit: null

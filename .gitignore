@@ -48,6 +48,9 @@ yarn-error.log*
 # claude code local settings (project skills are committed; local settings are not)
 .claude/settings.local.json
 
+# translation cache (translate-content.ts)
+.cache/translate/
+
 # python bytecode (from skill scripts)
 __pycache__/
 *.pyc

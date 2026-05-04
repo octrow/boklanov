@@ -7,13 +7,21 @@ title:
   en: Bury Me Behind the Baseboard
   de: Begraben Sie mich hinter der Fußleiste
 synopsis:
-  ru: Светлый разговор о одиночестве, сложном и непонятном взрослом мире, который выстроили вокруг героя близкие. На сцене БТК, режиссёр Роман Бокланов
-  en: Is a lighthearted talk about loneliness and the complicated and incomprehensible adult world that those close to him have built around it. Performed onstage at the BTK, directed by Roman Boklanov
-  de: Ein leichtherziger Vortrag über Einsamkeit und die komplizierte und unverständliche Erwachsenenwelt, die diejenigen um ihn herum aufgebaut haben. Auf der Bühne des BTK, unter der Regie von Roman Boklanov aufgeführt
+  ru: Светлый разговор о одиночестве, сложном и непонятном взрослом мире, который
+    выстроили вокруг героя близкие. На сцене БТК, режиссёр Роман Бокланов
+  en: Is a lighthearted talk about loneliness and the complicated and
+    incomprehensible adult world that those close to him have built around it.
+    Performed onstage at the BTK, directed by Roman Boklanov
+  de: Ein leichtherziger Vortrag über Einsamkeit und die komplizierte und
+    unverständliche Erwachsenenwelt, die diejenigen um ihn herum aufgebaut
+    haben. Auf der Bühne des BTK, unter der Regie von Roman Boklanov aufgeführt
 directorsNote:
-  ru: Бабушка была моей жизнью, мама — редким праздником. У праздника были свои правила, у жизни свои.
-  en: Grandma was my life, my mother was a rare holiday. The holiday had its own rules, life had its own rules.
-  de: Großmutter war mein Leben, Mutter war ein seltener Feiertag. Der Feiertag hatte seine eigenen Regeln, das Leben hatte seine eigenen.
+  ru: Бабушка была моей жизнью, мама — редким праздником. У праздника были свои
+    правила, у жизни свои.
+  en: Grandma was my life, my mother was a rare holiday. The holiday had its own
+    rules, life had its own rules.
+  de: Großmutter war mein Leben, Mutter war ein seltener Feiertag. Der Feiertag
+    hatte seine eigenen Regeln, das Leben hatte seine eigenen.
 tagline:
   ru: Автобиографичный спектакль-воспоминание
   en: An autobiographical play-memory
@@ -28,6 +36,7 @@ year: 2021
 premiereDate:
   ru: 24 марта 2021 г.
   en: 24 March 2021
+  de: 24. März 2021
 ticketsUrl: "https://puppets.ru/spec/115#performance=18484787"
 ageRating: 18+
 durationMin: 60
@@ -162,47 +171,98 @@ videos:
   - provider: youtube
     id: 1GWFJ0jfPq4
 awards:
-  - name: Спектакль-лауреат 1 степени — III Международный фестиваль камерных и моноспектаклей «Он.Она.Они»
+  - name: Спектакль-лауреат 1 степени — III Международный фестиваль камерных и
+      моноспектаклей «Он.Она.Они»
     year: 2021
     city: Екатеринбург
-  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — III Международный фестиваль «Он.Она.Они»
+  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — III
+      Международный фестиваль «Он.Она.Они»
     year: 2021
     city: Екатеринбург
-  - name: Специальный приз председателя жюри Олега Лоевского — открытый театральный фестиваль «СВОЙ(SVOY)»
+  - name: Специальный приз председателя жюри Олега Лоевского — открытый театральный
+      фестиваль «СВОЙ(SVOY)»
     year: 2022
     city: Екатеринбург
-  - name: Спектакль-лауреат 1 степени — IX фестиваль-конкурс моноспектаклей «МОНОfest»
+  - name: Спектакль-лауреат 1 степени — IX фестиваль-конкурс моноспектаклей
+      «МОНОfest»
     year: 2022
     city: Пермь
-  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — V Всероссийский фестиваль-конкурс камерных спектаклей «Один. Два. Три»
+  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — V
+      Всероссийский фестиваль-конкурс камерных спектаклей «Один. Два. Три»
     year: 2022
     city: Новосибирск
 festivals: []
 press:
   - title:
-      en: "Why is \"Bury Me behind the Baseboard\" one of the most important premieres of the season at BTK?"
-      ru: "Почему «Похороните меня за плинтусом» — один из главных премьер сезона в БТК?"
-      de: "Warum ist „Begraben Sie mich hinter der Fußleiste" eine der wichtigsten Premieren der Saison im BTK?"
+      en: "Why is \"Bury Me behind the Baseboard\" one of the most important premieres
+        of the season at BTK?"
+      ru: "Почему «Похороните меня за плинтусом» — один из главных премьер сезона в
+        БТК?"
+      de: "Warum ist „Begraben Sie mich hinter der Fußleiste“ eine der wichtigsten
+        Premieren der Saison im BTK?"
     url: "https://m.sobaka.ru/entertainment/theatre/128165"
-  - title: sobaka.ru
+  - title:
+      ru: sobaka.ru
+      en: sobaka.ru
+      de: sobaka.de
     url: "http://sobaka.ru/"
-  - title: "PEOPLE WITH AND WITHOUT: RUSLAN KUDASHOV'S COURSE"
-    url: "https://ptj.spb.ru/archive/103/puppet-home-103/lyudi-s-kuklami-i-bez-kurs-ruslana-kudashova/"
-  - title: Far-reaching Perspectives
+  - title:
+      ru: "PEOPLE WITH AND WITHOUT: RUSLAN KUDASHOV'S COURSE"
+      en: "PEOPLE WITH AND WITHOUT: RUSLAN KUDASHOV'S COURSE"
+      de: "LEUTE MIT UND OHNE: RUSLAN KUDASHOV'S KURS"
+    url: "https://ptj.spb.ru/archive/103/puppet-home-103/lyudi-s-kuklami-i-bez-kurs\
+      -ruslana-kudashova/"
+  - title:
+      ru: Far-reaching Perspectives
+      en: Far-reaching Perspectives
+      de: Weite Perspektiven
     url: "https://musecube.org/otchet/otchet-theatre/daleko-idushhie-perspektivy/"
-  - title: The Bolshoi Puppet Theatre presented the mono-performance Bury Me behind the Baseboard in Ryazan
-    url: "https://7info.ru/bolshoj-teatr-kukol-predstavil-v-ryazani-monospektakl-pohoronite-menya-za-plintusom/"
-  - title: Bury Me behind the Baseboard
-    url: "https://www.fontanka.ru/2021/03/25/69830810/?shareRecordImage=a31726bd080719c98a217b2965ba0568"
-  - title: fontanka.ru
+  - title:
+      ru: The Bolshoi Puppet Theatre presented the mono-performance Bury Me behind the
+        Baseboard in Ryazan
+      en: The Bolshoi Puppet Theatre presented the mono-performance Bury Me behind the
+        Baseboard in Ryazan
+      de: Die Große Puppentheaterschule präsentierte die Einmannshow Bury Me behind
+        the Baseboard in Ryazan
+    url: "https://7info.ru/bolshoj-teatr-kukol-predstavil-v-ryazani-monospektakl-po\
+      horonite-menya-za-plintusom/"
+  - title:
+      ru: Bury Me behind the Baseboard
+      en: Bury Me behind the Baseboard
+      de: Begrabe mich hinter der Fußleiste
+    url: "https://www.fontanka.ru/2021/03/25/69830810/?shareRecordImage=a31726bd080\
+      719c98a217b2965ba0568"
+  - title:
+      ru: fontanka.ru
+      en: Fontanka.ru
+      de: fontanka.de
     url: "http://fontanka.ru/"
-  - title: "St. Petersburg is the capital of the puppet theater! Guide to the best performances, for the sake of which you should come even for a day"
+  - title:
+      ru: St. Petersburg is the capital of the puppet theater! Guide to the best
+        performances, for the sake of which you should come even for a day
+      en: St. Petersburg is the capital of the puppet theater. Guide to the best
+        performances, for the sake of which you should come even for a day.
+      de: St. Petersburg ist die Hauptstadt des Puppentheaters. Führer zu den besten
+        Aufführungen, für die Sie sogar einen Tag lang kommen sollten.
     url: "https://www.sobaka.ru/entertainment/theatre/143084"
-  - title: sobaka.ru
+  - title:
+      ru: sobaka.ru
+      en: sobaka.ru
+      de: sobaka.de
     url: "http://sobaka.ru/"
-  - title: "\"Should have died by the age of 16\": a familiar story about funerals and the plinth in \"BTK\""
-    url: "https://sub-cult.ru/teatr/reports/12863-dolzhen-byl-sdokhnut-godam-k-16-znakomaya-istoriya-pro-pokhorony-i-pro-plintus-v-btk"
-  - title: sub-cult.ru
+  - title:
+      ru: '"Should have died by the age of 16": a familiar story about funerals and
+        the plinth in "BTK"'
+      en: '"Should have died by the age of 16": a familiar story about funerals and
+        the pedestal in "BTK"'
+      de: '"Als man 16 Jahre alt wäre, hätte man sterben sollen": eine vertraute
+        Geschichte über Beerdigungen und die Säule in "BTK"'
+    url: "https://sub-cult.ru/teatr/reports/12863-dolzhen-byl-sdokhnut-godam-k-16-z\
+      nakomaya-istoriya-pro-pokhorony-i-pro-plintus-v-btk"
+  - title:
+      ru: sub-cult.ru
+      en: Sub-cult.ru
+      de: sub-kult
     url: "http://sub-cult.ru/"
 externalLinks: []
 techRider: null

@@ -7,13 +7,25 @@ title:
   en: The Ape Star
   de: Der Affenstern
 synopsis:
-  ru: Cемейная рок-история для тех, кто не вписывается в рамки. Девятилетнюю девочку Юнну удочерила огромная черная горилла - с мохнатыми лапами и кривыми зубами. И что теперь делать девочке?
-  en: "Family rock story for those who don't fit in. A nine-year-old girl, Yunna, is adopted by a huge black gorilla - with shaggy paws and crooked teeth. What is the girl to do now?"
-  de: Familien-Rock-Geschichte für diejenigen, die nicht passen. Ein neunjähriges Mädchen namens Yunna wird von einem großen schwarzen Gorilla mit zotteligem Fell und schiefen Zähnen adoptiert. Was soll das Mädchen nun tun?
+  ru: Cемейная рок-история для тех, кто не вписывается в рамки. Девятилетнюю
+    девочку Юнну удочерила огромная черная горилла - с мохнатыми лапами и
+    кривыми зубами. И что теперь делать девочке?
+  en: "Family rock story for those who don't fit in. A nine-year-old girl, Yunna,
+    is adopted by a huge black gorilla - with shaggy paws and crooked teeth.
+    What is the girl to do now?"
+  de: Familien-Rock-Geschichte für diejenigen, die nicht passen. Ein neunjähriges
+    Mädchen namens Yunna wird von einem großen schwarzen Gorilla mit zotteligem
+    Fell und schiefen Zähnen adoptiert. Was soll das Mädchen nun tun?
 directorsNote:
-  ru: "Давай... давай откроем книжный киоск на колёсах и отправимся к океану, как мы и мечтали!!! Я совсем не хочу оставаться в приюте. Я хочу быть с тобой… Мама!"
-  en: "Let's... let's open a bookstore on wheels and go to the ocean like we dreamed of!!! I don't want to stay at the shelter at all. I want to be with you…Mom!"
-  de: "Lass uns... lass uns einen Bücherladen auf Rädern eröffnen und zum Ozean gehen, wie wir träumten!!! Ich will überhaupt nicht im Asyl bleiben. Ich will bei dir sein... Mutter!"
+  ru: "Давай... давай откроем книжный киоск на колёсах и отправимся к океану, как
+    мы и мечтали!!! Я совсем не хочу оставаться в приюте. Я хочу быть с тобой…
+    Мама!"
+  en: "Let's... let's open a bookstore on wheels and go to the ocean like we
+    dreamed of!!! I don't want to stay at the shelter at all. I want to be with
+    you…Mom!"
+  de: "Lass uns... lass uns einen Bücherladen auf Rädern eröffnen und zum Ozean
+    gehen, wie wir träumten!!! Ich will überhaupt nicht im Asyl bleiben. Ich
+    will bei dir sein... Mutter!"
 tagline:
   ru: Рок-история для тех, кто не вписывается в рамки
   en: "Rock-history for those who don't fit the mould"
@@ -278,33 +290,64 @@ videos:
   - provider: youtube
     id: BaWsgWMcB8Q
 awards:
-  - name: Высшая театральная премия Санкт-Петербурга «Золотой софит» — «Лучшая работа режиссёра в театре кукол»
+  - name: Высшая театральная премия Санкт-Петербурга «Золотой софит» — «Лучшая
+      работа режиссёра в театре кукол»
     year: 2021
-  - name: Международная театральная премия зрительских симпатий «Звезда театрала 2021» — «Лучший спектакль для детей и юношества», топ-3
+  - name: Международная театральная премия зрительских симпатий «Звезда театрала
+      2021» — «Лучший спектакль для детей и юношества», топ-3
     year: 2021
     city: Москва
-  - name: Участник программы «Детский WEEKEND» Российской Национальной театральной премии «Золотая маска»
+  - name: Участник программы «Детский WEEKEND» Российской Национальной театральной
+      премии «Золотая маска»
     year: 2021
     city: Москва
   - name: Лонг-лист Российской Национальной театральной премии «Золотая маска»
     year: 2022
-  - name: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучший режиссёр» (Роман Бокланов)
+  - name: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучший
+      режиссёр» (Роман Бокланов)
     year: 2022
-  - name: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучшая актриса» (Лидия Клирикова)
+  - name: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучшая
+      актриса» (Лидия Клирикова)
     year: 2022
 festivals: []
 press:
-  - title: "ROMAN BOKLANOV \"I WAS ADOPTED BY A GORILLA\", BIG PUPPET THEATER, ST. PETERSBURG"
+  - title:
+      ru: ROMAN BOKLANOV "I WAS ADOPTED BY A GORILLA", BIG PUPPET THEATER, ST.
+        PETERSBURG
+      en: Roman Boklanov "I Was Adopted by a Gorilla", Big Puppet Theater, St.
+        Petersburg
+      de: ROMAN BOKLANOV "ICH WURDE VON EINEM GORILLA ADOPTIERT", BIG PUPPET THEATER,
+        ST. PETERSBURG
     url: "http://maskbook.ru/roman-boklanov/"
-  - title: How foster families live in St. Petersburg
+  - title:
+      ru: How foster families live in St. Petersburg
+      en: How foster families live in St. Petersburg
+      de: Wie Pflegefamilien in St. Petersburg leben
     url: "http://www.1tvspb.ru/event/Priemnij_semi_v_Peterburge/"
-  - title: BTC produces premiere about unusual adoption
+  - title:
+      ru: BTC produces premiere about unusual adoption
+      en: Bolshoi Theatre Centre stages premiere about unusual adoption
+      de: BTC produziert Uraufführung über ungewöhnliche Adoption
     url: "http://oteatre.info/menya-udocherila-gorilla/"
-  - title: PORCELAIN AND FURRY
+  - title:
+      ru: PORCELAIN AND FURRY
+      en: Porcelain and Furry
+      de: PORZELLAN UND FELL
     url: "https://ptj.spb.ru/blog/farforovye-imoxnatye/"
-  - title: "\"I was adopted by a gorilla. BTC premiered a play about adoptive parents' relationship with their children"
-    url: "https://topspb.tv/news/2020/10/18/menya-udocherila-gorilla-v-bolshom-teatre-kukol-proshla-premera-spektaklya-ob-otnosheniyah-priemnyh-roditelej-s-detmi/"
-  - title: "Teaser for the play \"The Gorilla Adopted Me\" (dir. Roman Boklanov)"
+  - title:
+      ru: "\"I was adopted by a gorilla. BTC premiered a play about adoptive parents'
+        relationship with their children"
+      en: I Was Adopted by a Gorilla. BTC Premiered a Play About Adoptive Parents'
+        Relationship with Their Children
+      de: Ich wurde von einem Gorilla adoptiert. BTC hat eine Inszenierung über die
+        Beziehung adoptiver Eltern zu ihren Kindern uraufgeführt.
+    url: "https://topspb.tv/news/2020/10/18/menya-udocherila-gorilla-v-bolshom-teat\
+      re-kukol-proshla-premera-spektaklya-ob-otnosheniyah-priemnyh-roditelej-s-\
+      detmi/"
+  - title:
+      ru: Teaser for the play "The Gorilla Adopted Me" (dir. Roman Boklanov)
+      en: Teaser for the play "The Gorilla Adopted Me" (dir. Roman Boklanov)
+      de: 'Vorstellung "Der Gorilla adoptierte mich" (Regie: Roman Boklanov)'
     url: "https://youtu.be/BaWsgWMcB8Q"
 externalLinks: []
 techRider: null

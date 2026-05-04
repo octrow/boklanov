@@ -7,13 +7,24 @@ title:
   en: Aiaccio
   de: "Aiaccio: Die Geschichte eines Clowns"
 synopsis:
-  ru: "Однажды в дружную цирковую семью приходит большая любовь, а вместе с ней и страх ее потери. Эта нежная история проникнет в самое сердце. И кто знает, возможно, она останется там навсегда!"
-  en: "One day a big love comes to a friendly circus family, and with it the fear of losing it. This tender story will penetrate to the heart. And who knows, perhaps it will stay there forever!"
-  de: "Eines Tages kommt große Liebe in eine freundliche Zirkusfamilie, und mit ihr die Angst, sie zu verlieren. Diese zarte Geschichte wird bis ins Herz dringen. Und wer weiß, vielleicht bleibt sie für immer dort!"
+  ru: "Однажды в дружную цирковую семью приходит большая любовь, а вместе с ней и
+    страх ее потери. Эта нежная история проникнет в самое сердце. И кто знает,
+    возможно, она останется там навсегда!"
+  en: "One day a big love comes to a friendly circus family, and with it the fear
+    of losing it. This tender story will penetrate to the heart. And who knows,
+    perhaps it will stay there forever!"
+  de: "Eines Tages kommt große Liebe in eine freundliche Zirkusfamilie, und mit
+    ihr die Angst, sie zu verlieren. Diese zarte Geschichte wird bis ins Herz
+    dringen. Und wer weiß, vielleicht bleibt sie für immer dort!"
 directorsNote:
-  ru: Кто-то сомневался в существовании Джипси и Айяччо. А кто-то уверяет, что в тот вечер по морщинистой морде слонихи скатилась слеза — слеза счастья
-  en: Some doubted the existence of Gypsy and Aiaccio. And some assure that on that evening a tear rolled down the wrinkled face of the elephant—a tear of happiness
-  de: Einige zweifelten an der Existenz von Gypsy und Aiaccio. Und einige versichern, dass an jenem Abend eine Träne über das fältige Gesicht der Elefantenkuh rollte – eine Träne des Glücks
+  ru: Кто-то сомневался в существовании Джипси и Айяччо. А кто-то уверяет, что в
+    тот вечер по морщинистой морде слонихи скатилась слеза — слеза счастья
+  en: Some doubted the existence of Gypsy and Aiaccio. And some assure that on
+    that evening a tear rolled down the wrinkled face of the elephant—a tear of
+    happiness
+  de: Einige zweifelten an der Existenz von Gypsy und Aiaccio. Und einige
+    versichern, dass an jenem Abend eine Träne über das fältige Gesicht der
+    Elefantenkuh rollte – eine Träne des Glücks
 theatre:
   name: Большой театр кукол
   shortName: БТК
@@ -107,7 +118,42 @@ credits:
     - role: Actors
       name: Morozov Maxim
       url: "https://puppets.ru/pers/51"
-  de: []
+  de:
+    - role: Autor
+      name: Бьяджо Руссо
+    - role: Regisseur
+      name: Роман Бокланов
+    - role: Künstler
+      name: Дарья Лазарева
+    - role: Lichtdesignerin
+      name: Ксения Козлова
+    - role: Produzent
+      name: Елизавета Екимова
+    - role: Dramaturg
+      name: Гульнара Насырова
+    - role: Dramaturg
+      name: Роман Бокланов
+    - role: Mitwirkende
+      name: Дмитрий Чупахин
+      url: https://puppets.ru/pers/32
+    - role: Mitwirkende
+      name: Наталья Сизова
+      url: https://puppets.ru/pers/28
+    - role: Mitwirkende
+      name: Юлия Чербаджи
+      url: https://kinolift.com/ru/21712
+    - role: Mitwirkende
+      name: Мария Батрасова
+      url: https://puppets.ru/pers/19
+    - role: Mitwirkende
+      name: Лидия Клирикова
+      url: https://puppets.ru/pers/47
+    - role: Mitwirkende
+      name: Стефания Гараева-Жученко
+      url: https://puppets.ru/pers/43
+    - role: Mitwirkende
+      name: Морозов Максим
+      url: https://puppets.ru/pers/51
 poster:
   src: /productions/aiaccio/poster.jpg
   credit: null

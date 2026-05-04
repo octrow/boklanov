@@ -7,9 +7,20 @@ title:
   en: Holiday recipe
   de: Feierrezept
 synopsis:
-  ru: Жители лесной деревни ещё никогда не обходились без их традиционного лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают. Неужели пропажа испортит всем жителям деревни праздник и Новый год не наступит? Или найдется герой, который вернёт всем не только праздник, но и что-то более важное?
-  en: "A forest village is bustling with activity. The inhabitants are preparing for the New Year and waiting for the traditional holiday cake. After all, what is a New Year without a New Year's treat? But this time the holiday may not come! On New Year's Eve, all the pies mysteriously disappear."
-  de: "Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das Neujahr vor und warten auf den traditionellen Festkuchen. Schließlich, was ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht kommen! In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse Weise."
+  ru: Жители лесной деревни ещё никогда не обходились без их традиционного
+    лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают.
+    Неужели пропажа испортит всем жителям деревни праздник и Новый год не
+    наступит? Или найдется герой, который вернёт всем не только праздник, но и
+    что-то более важное?
+  en: "A forest village is bustling with activity. The inhabitants are preparing
+    for the New Year and waiting for the traditional holiday cake. After all,
+    what is a New Year without a New Year's treat? But this time the holiday may
+    not come! On New Year's Eve, all the pies mysteriously disappear."
+  de: "Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das
+    Neujahr vor und warten auf den traditionellen Festkuchen. Schließlich, was
+    ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht
+    kommen! In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse
+    Weise."
 tagline:
   ru: Новогодняя интерактивная сказка для семейного просмотра
   en: New Year interactive tale for family viewing
@@ -111,6 +122,61 @@ credits:
       name: 3+
     - role: Duración
       name: 40 minutos + merienda con tarta festiva
+  de:
+    - role: Künstlerischer Leiter, Ideengeber
+      name: Роман Бокланов
+    - role: Regisseur
+      name: Алёна Волкова
+    - role: Künstler
+      name: Алина Михайлова
+    - role: Lichtdesigner
+      name: Ксения Козлова
+    - role: Musikalische Gestaltung, Konzertmeister
+      name: Альберт Халмурзаев
+    - role: Regieassistenten
+      name: Елена Лысенко
+    - role: Regieassistenten
+      name: Наталья Богуславская
+    - role: In der Inszenierung mitwirkend
+      name: Заяц - Павел Самоловов
+    - role: In der Inszenierung mitwirkend
+      name: Папа заяц - Владимир Корчуков
+    - role: In der Inszenierung mitwirkend
+      name: Мама заяц - Марина Юнганс
+    - role: In der Inszenierung mitwirkend
+      name: Медведь - Василий Швечков
+    - role: In der Inszenierung mitwirkend
+      name: Бабочка - Антон Контушев
+    - role: In der Inszenierung mitwirkend
+      name: Кузнечик - Альберт Халмурзаев
+    - role: In der Inszenierung mitwirkend
+      name: Стрекоза - Мария Чернова
+    - role: In der Inszenierung mitwirkend
+      name: Комарик - Антон Захаров
+    - role: In der Inszenierung mitwirkend
+      name: Сестры овечки - Ярослава Бурлакова
+    - role: In der Inszenierung mitwirkend
+      name: Юлия Алпатова
+    - role: In der Inszenierung mitwirkend
+      name: Братья козлы - Максим Пацерин
+    - role: In der Inszenierung mitwirkend
+      name: Виктор Вальченко
+    - role: In der Inszenierung mitwirkend
+      name: Белка - Анастасия Землянская
+    - role: In der Inszenierung mitwirkend
+      name: Анастасия Соколовская
+    - role: In der Inszenierung mitwirkend
+      name: Бельчонок - Андрей Вареницын
+    - role: In der Inszenierung mitwirkend
+      name: Олень - Сергей Борисов
+    - role: In der Inszenierung mitwirkend
+      name: Лань - Любовь Орлова
+    - role: In der Inszenierung mitwirkend
+      name: Синица - Екатерина Наумова
+    - role: In der Inszenierung mitwirkend
+      name: Снегирь - заслуженный артист Республики Марий Эл Александр Егоров
+    - role: In der Inszenierung mitwirkend
+      name: Мышь полевая - Татьяна Рогачева
 poster:
   src: /productions/holiday-recipe/poster.jpg
   credit: null

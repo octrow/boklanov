@@ -7,9 +7,28 @@ title:
   en: Lina-Marlina
   de: Lina-Marlina
 synopsis:
-  ru: В подводном городе рождается русалка, одаренная прекрасным голосом и необычными синими волосами. Став подростком, она решает воплотить мечту — петь свои песни. Но родители, боясь за безопасность любимой дочери, заставляют ее гасить свою яркую индивидуальность.
-  en: "In an underwater town, a mermaid with a beautiful voice and unusual blue hair is born. As she grows up, she dreams of singing her own songs. However, her parents, who love her dearly, want to protect her from the dangers of the world and make her suppress her vibrant personality. The mermaid decides to leave her home and ventures into the dark waters where monsters lurk… This play-concert explores the themes of self-discovery and finding one's calling, friendship beyond stereotypes, the generational gap between parents and children, and the inner conflict between light and darkness."
-  de: In einer Unterwasserstadt wird eine Meerjungfrau mit wunderschöner Stimme und ungewöhnlichen blauen Haaren geboren. Als sie aufwächst, träumt sie davon, ihre eigenen Lieder zu singen. Aber ihre Eltern, die sie über alles lieben, wollen sie vor den Gefahren der Welt schützen und zwingen sie, ihre lebendige Persönlichkeit zu unterdrücken. Die Meerjungfrau beschließt, ihr Zuhause zu verlassen und wagt sich in die dunklen Gewässer, in denen Monster lauern… Dieses Spielkonzert erforscht die Themen Selbstentdeckung und Berufung, Freundschaft jenseits von Stereotypen, die Generationskluft zwischen Eltern und Kindern und den inneren Konflikt zwischen Licht und Dunkelheit.
+  ru: В подводном городе рождается русалка, одаренная прекрасным голосом и
+    необычными синими волосами. Став подростком, она решает воплотить мечту —
+    петь свои песни. Но родители, боясь за безопасность любимой дочери,
+    заставляют ее гасить свою яркую индивидуальность.
+  en: "In an underwater town, a mermaid with a beautiful voice and unusual blue
+    hair is born. As she grows up, she dreams of singing her own songs. However,
+    her parents, who love her dearly, want to protect her from the dangers of
+    the world and make her suppress her vibrant personality. The mermaid decides
+    to leave her home and ventures into the dark waters where monsters lurk…
+    This play-concert explores the themes of self-discovery and finding one's
+    calling, friendship beyond stereotypes, the generational gap between parents
+    and children, and the inner conflict between light and darkness."
+  de: In einer Unterwasserstadt wird eine Meerjungfrau mit wunderschöner Stimme
+    und ungewöhnlichen blauen Haaren geboren. Als sie aufwächst, träumt sie
+    davon, ihre eigenen Lieder zu singen. Aber ihre Eltern, die sie über alles
+    lieben, wollen sie vor den Gefahren der Welt schützen und zwingen sie, ihre
+    lebendige Persönlichkeit zu unterdrücken. Die Meerjungfrau beschließt, ihr
+    Zuhause zu verlassen und wagt sich in die dunklen Gewässer, in denen Monster
+    lauern… Dieses Spielkonzert erforscht die Themen Selbstentdeckung und
+    Berufung, Freundschaft jenseits von Stereotypen, die Generationskluft
+    zwischen Eltern und Kindern und den inneren Konflikt zwischen Licht und
+    Dunkelheit.
 tagline:
   ru: Концерт-фэнтези
   en: Fantasy Concert
@@ -53,7 +72,9 @@ credits:
       url: "https://theatre27.ru/ushakov"
     - role: Драматург
       name: Евгений Ионов
-      url: "https://ionovsozidaet.tilda.ws/?fbclid=PAAaae0ICUNv8J67gxOZOgPbeku3dCsehJUEY1F0kAO-EqhOy5LGTAtjeXG4Q_aem_AXnugS8Rc9mLMpuN-1YJmG7aqRRa-_6_7hDZCxv01f-6TsVjn9Snn0KvGvpY_bUf_Pk"
+      url: "https://ionovsozidaet.tilda.ws/?fbclid=PAAaae0ICUNv8J67gxOZOgPbeku3dCsehJ\
+        UEY1F0kAO-EqhOy5LGTAtjeXG4Q_aem_AXnugS8Rc9mLMpuN-1YJmG7aqRRa-_6_7hDZCxv\
+        01f-6TsVjn9Snn0KvGvpY_bUf_Pk"
     - role: Звукорежиссер
       name: Луиза Хасанова
       url: "https://theatre27.ru/khasanova"
@@ -108,7 +129,9 @@ credits:
       url: "https://theatre27.ru/ushakov"
     - role: Playwright
       name: Evgeny Ionov
-      url: "https://ionovsozidaet.tilda.ws/?fbclid=PAAaae0ICUNv8J67gxOZOgPbeku3dCsehJUEY1F0kAO-EqhOy5LGTAtjeXG4Q_aem_AXnugS8Rc9mLMpuN-1YJmG7aqRRa-_6_7hDZCxv01f-6TsVjn9Snn0KvGvpY_bUf_Pk"
+      url: "https://ionovsozidaet.tilda.ws/?fbclid=PAAaae0ICUNv8J67gxOZOgPbeku3dCsehJ\
+        UEY1F0kAO-EqhOy5LGTAtjeXG4Q_aem_AXnugS8Rc9mLMpuN-1YJmG7aqRRa-_6_7hDZCxv\
+        01f-6TsVjn9Snn0KvGvpY_bUf_Pk"
     - role: Sound Engineer
       name: Luiza Khasanova
       url: "https://theatre27.ru/khasanova"
@@ -140,7 +163,61 @@ credits:
       url: "https://theatre27.ru/romanovich"
     - role: Actors
       name: Leonid Parshin
-  de: []
+  de:
+    - role: Regisseur
+      name: Роман Бокланов
+    - role: Künstler
+      name: Никита Запаскин
+      url: https://theatre27.ru/zapaskin
+    - role: Lichtdesigner
+      name: Ксения Козлова
+      url: https://theatre27.ru/kozlova
+    - role: Kostümbildner
+      name: бренд VAREJA
+      url: https://www.vereja.com/
+    - role: Videoartist
+      name: Максим Баскаков
+      url: https://theatre27.ru/baskakov
+    - role: Liedtexter
+      name: Васса Бокова
+      url: https://music.yandex.ru/artist/5303228?utm_medium=copy_link
+    - role: Komponist
+      name: Игорь Ушаков
+      url: https://theatre27.ru/ushakov
+    - role: Dramaturg
+      name: Евгений Ионов
+      url: https://ionovsozidaet.tilda.ws/?fbclid=PAAaae0ICUNv8J67gxOZOgPbeku3dCsehJUEY1F0kAO-EqhOy5LGTAtjeXG4Q_aem_AXnugS8Rc9mLMpuN-1YJmG7aqRRa-_6_7hDZCxv01f-6TsVjn9Snn0KvGvpY_bUf_Pk
+    - role: Tonmeister
+      name: Луиза Хасанова
+      url: https://theatre27.ru/khasanova
+    - role: Elektrobühnenbeleuchtung
+      name: Дмитрий Шутов
+      url: https://theatre27.ru/shutov
+    - role: Produktionsgruppe
+      name: Анастасия Урусова
+      url: https://theatre27.ru/urusova_a
+    - role: Produktionsgruppe
+      name: Ксения Шаврина
+      url: https://theatre27.ru/shavrina
+    - role: Produktionsgruppe
+      name: Даниил Петров
+    - role: Zweiter Regisseur
+      name: Алена Волкова
+      url: https://theatre27.ru/volkova
+    - role: Mitwirkende
+      name: Васса Бокова
+      url: https://theatre27.ru/vassa
+    - role: Mitwirkende
+      name: Максим Морозов
+      url: https://theatre27.ru/morozov
+    - role: Mitwirkende
+      name: Юлия Чербаджи
+      url: https://theatre27.ru/ulia_cherbadzhi
+    - role: Mitwirkende
+      name: Алексей Романович
+      url: https://theatre27.ru/romanovich
+    - role: Mitwirkende
+      name: Леонид Паршин
 poster:
   src: /productions/lina-marlina/poster.webp
   credit: null
@@ -167,7 +244,11 @@ videos: []
 awards: []
 festivals: []
 press:
-  - title: Роман Бокланов выпускает «концерт-фэнтези» о русалке-подростке
+  - title:
+      ru: Роман Бокланов выпускает «концерт-фэнтези» о русалке-подростке
+      en: Roman Boklanov releases a concert-fantasy about a mermaid teenager
+      de: Roman Boklanov präsentiert ein Konzert-Fantasy über eine
+        Meerjungfrau-Teenager
     url: "https://oteatre.info/lina-marlina/"
 externalLinks: []
 techRider: null

@@ -7,9 +7,12 @@ title:
   en: The Giving Tree
   de: Der großzügige Baum
 synopsis:
-  ru: История о дереве, которое отдавало мальчику всё — от яблок до своего ствола. Спектакль о щедрости, любви и цене, которую мы платим за привязанность.
-  en: A story about a tree that gave a boy everything it had. A performance about generosity, love, and the price of attachment.
-  de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte. Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
+  ru: История о дереве, которое отдавало мальчику всё — от яблок до своего ствола.
+    Спектакль о щедрости, любви и цене, которую мы платим за привязанность.
+  en: A story about a tree that gave a boy everything it had. A performance about
+    generosity, love, and the price of attachment.
+  de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte.
+    Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
 theatre:
   name: Актюбинский областной театр кукол «Алакай»
   city: Aktobe
@@ -52,8 +55,52 @@ credits:
       name: Қазмағамбет Сұлтан
     - role: В спектакле участвуют
       name: Оралбай Гаухар
-  en: []
-  de: []
+  en:
+    - role: Director
+      name: Антон Зайцев
+    - role: Director
+      name: Роман Бокланов
+    - role: Artist
+      name: Антон Зайцев
+    - role: Artist
+      name: Асия Курманалина
+    - role: Choreographer
+      name: Арстан Туйжанов
+    - role: Composer
+      name: Алима Байтерекова
+    - role: The cast
+      name: Мұратов Нұрат
+    - role: The cast
+      name: Орынбасаров Алишер
+    - role: The cast
+      name: Әбжет Еламан
+    - role: The cast
+      name: Қазмағамбет Сұлтан
+    - role: The cast
+      name: Оралбай Гаухар
+  de:
+    - role: Regisseur
+      name: Антон Зайцев
+    - role: Regisseur
+      name: Роман Бокланов
+    - role: Künstler
+      name: Антон Зайцев
+    - role: Künstler
+      name: Асия Курманалина
+    - role: Tänzer
+      name: Арстан Туйжанов
+    - role: Komponist
+      name: Алима Байтерекова
+    - role: Mitwirkende
+      name: Мұратов Нұрат
+    - role: Mitwirkende
+      name: Орынбасаров Алишер
+    - role: Mitwirkende
+      name: Әбжет Еламан
+    - role: Mitwirkende
+      name: Қазмағамбет Сұлтан
+    - role: Mitwirkende
+      name: Оралбай Гаухар
 poster:
   src: /productions/the-giving-tree/poster.webp
   credit: null

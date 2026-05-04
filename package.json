@@ -21,6 +21,7 @@
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
     "lint-content": "tsx scripts/lint-content.ts",
+    "translate-content": "tsx scripts/translate-content.ts",
     "lint-tokens": "tsx scripts/lint-tokens.ts",
     "start": "next start",
     "deploy": "vercel deploy",
@@ -32,6 +33,7 @@
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.92.0",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/lora": "^5.2.8",
@@ -44,6 +46,7 @@
     "next": "^15.5.15",
     "next-intl": "^4.11.0",
     "next-mdx-remote": "^6.0.0",
+    "openai": "^6.35.0",
     "p-map": "^7.0.3",
     "posthog-js": "^1.249.4",
     "react": "^19.1.1",
