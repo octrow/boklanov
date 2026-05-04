@@ -36,7 +36,9 @@ details to Roman until D4 is live. Deadline: before 6 May 2026.
 - **8.3 — Fold overlay + retire Notion sync:**
   - `scripts/fold-overlay.ts`: one-shot script merged all 24
     `metadata.yml` overlays into `index.mdx` frontmatter
-    (overlay-wins); all `metadata.yml` files deleted
+    (overlay-wins); all `metadata.yml` files deleted.
+    *(2026-05-04: `index.mdx` later split into `index.yaml` +
+    `body.{ru,en,de}.md`; `fold-overlay.ts` moved to `scripts/_legacy/`.)*
   - `lib/content.ts`: simplified — `merge()`/`pick()` removed;
     replaced by lean `fromFm()` that reads frontmatter directly;
     `yaml` import dropped
@@ -133,14 +135,15 @@ Decap CMS deferred — activate only if Roman requests web editing (Phase 9).
 
 **Obsidian plugins Roman must install manually (one-time):**
 1. `obsidian-git` — commit/push from sidebar button
-2. `mdx-as-md` — opens `.mdx` files as editable markdown
+
+*(2026-05-02 also required `mdx-as-md`; retired 2026-05-04 in mdx→yaml split.)*
 
 ---
 
 ### Open content tasks (Roman fills these via Obsidian)
 
-- Photographer credits per gallery image → `gallery[].credit` in `index.mdx`
-- Any new productions → add folder + `index.mdx` following existing pattern
+- Photographer credits per gallery image → `gallery[].credit` in `index.yaml` *(2026-05-02 was `index.mdx`)*
+- Any new productions → copy `_PRODUCTION_TEMPLATE.yaml` → `<slug>/index.yaml`, write `body.{ru,en,de}.md` *(2026-05-02 was single `index.mdx`)*
 - Confirm `sugar-kid` + `kasztanka` titles in Obsidian Properties
   (orphan-audit-2026-05.md has the checklist)
 

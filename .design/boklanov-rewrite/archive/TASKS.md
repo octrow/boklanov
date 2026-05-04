@@ -162,7 +162,7 @@ Date: 2026-04-30
 | C2 — Production detail | ✅ done | `c7d58ae` | `app/[locale]/productions/[slug]/page.tsx` per DESIGN §7.3. Cover → title block (RU/EN/DE) → mono chips → Lora-italic synopsis → action bar (Watch/Tech rider/Press kit, conditional) → photos gallery with mono credits → press list (Lora italic blockquote-grade) → awards (mono year/name/city) → external links → sticky oxblood booking CTA with prefilled `mailto:roman.boklanov@web.de` (subject + body include show title, year, role; tour-window/venue/notes prompts). _Detail page count post-Q1: 24 productions × 3 locales = 72 routes (was 84 before bogus slugs filtered)._ |
 | C3 — Home | ✅ done | `2943216` | `app/[locale]/page.tsx`: type-led Lora wordmark (`--font-size-4xl`, lowercase), mono genre meta, Inter prose statement (65ch). Featured strip: `filter(featured && poster.src).slice(0, 6)` — no typographic fallback above the fold. Director-role grid below the fold (brief D5 default). Ghost "all →" link to /productions. 3 locales × SSG. |
 | C4 — Filter panel + URL state | ✅ done | `05600f1` | `<FilteredProductionsPanel>` Client Component with useSearchParams. Role radio (director default), form/age-bucket/country multi-select. Chips: JetBrains Mono uppercase, 2px radius, active = paper-raised + rule-strong border. Clear-all = oxblood only. Suspense boundary keeps build fully SSG. |
-| C5 — About + lineage | ✅ done | `cb0aaab` | `app/[locale]/about/page.tsx`: Lora display heading, Inter bio at 65ch (first para as Lora lead), mono milestones timeline, lineage grid (Кудашов/БТК/РГИСИ) in paper-sunken cards. Inline loader with RU→EN→DE fallback. `content/about/{ru,en}.mdx` with portrait/milestones/lineage frontmatter. |
+| C5 — About + lineage | ✅ done | `cb0aaab` | `app/[locale]/about/page.tsx`: Lora display heading, Inter bio at 65ch (first para as Lora lead), mono milestones timeline, lineage grid (Кудашов/БТК/РГИСИ) in paper-sunken cards. Inline loader with RU→EN→DE fallback. `content/about/{ru,en}.yaml` (data) + `.md` (prose) with portrait/milestones/lineage. *(2026-05-02 was `.mdx`; split 2026-05-04.)* |
 | C6 — Awards | ✅ done | `c7b80c5` | `app/[locale]/awards/page.tsx`: Lora page heading lowercase, awards aggregated from `getAllProductions()`, grouped by production with Lora `--font-size-xl` grouping header linked to detail page. Each award row: mono year (>1900 guard) · name · city/category. Hairline rules between groups and rows. 3 locales × SSG. |
 | C7 — Press | ✅ done | `2225975` | `app/[locale]/press/page.tsx`: card grid (1/2-col), Lora italic blockquote pull-quote (article title), mono outlet attribution with oxblood underline hover. Outlet falls back to URL domain. Mono production reference link. 3 locales × SSG. |
 | C8 — Contact | ✅ done | `292552f`; reordered `c7647bf` | `app/[locale]/contact/page.tsx`. Original C8: oxblood primary mailto + mono Telegram/Instagram secondary. **Reordered post-Q7 (2026-05-02):** Telegram + Instagram are now the oxblood primaries (side-by-side ≥768px), mailto demoted to hairline-bordered secondary under a mono "or by email" subhead. `CopyEmailButton` Client Component flashes "✓" on copy. PostHog `booking_cta_click` fires on all three channels with `data-ph-channel`. No form, no backend. 3 locales × SSG. |
@@ -208,15 +208,17 @@ when the legacy renderer was deleted. The build is clean under
   read the markdown, parse the title row, extract images from the sibling
   asset folder of the same name, **merge RU+EN siblings into one record
   by Notion-id pair from `_all.csv`** (brief §6 — 24 of 56 records are
-  EN-mirror duplicates). Emits `content/productions/<slug>.mdx` with the
-  frontmatter shape from brief §7. Heuristic-extract `ageRating`, `year`,
+  EN-mirror duplicates). Emits `content/productions/<slug>/index.mdx` with
+  the frontmatter shape from brief §7 *(now `index.yaml` + `body.{ru,en,de}.md`
+  per 2026-05-04 split)*. Heuristic-extract `ageRating`, `year`,
   `country`, `durationMin`, `role` from the MD body. Copies images to
   `public/productions/<slug>/`, runs `sharp` to generate 4:5 grid covers
   + originals + lqip placeholders. _New; re-runnable when Roman re-exports
   from Notion; the workhorse of Phase 3._
 
 - [x] **F5 — `metadata.yml` overlay + manual-pass workflow**: After F4
-  produces `content/productions/*.mdx`, generate one
+  produces `content/productions/<slug>/index.mdx` *(now `index.yaml` per
+  2026-05-04)*, generate one
   `content/productions/<slug>/metadata.yml` per production with the
   fields the heuristic missed (brief D6) — `lineage[]`, `form[]`,
   `featured`, photo `credits[]`, `techRider`, `pressKit`, video URLs.
@@ -291,7 +293,7 @@ when the legacy renderer was deleted. The build is clean under
   — long-form bio at `--max-width-prose` (65ch), Lora display heading,
   Inter body, mono pull-quotes for years/training milestones. Dedicated
   **lineage section** (brief D5: Кудашов / БТК / РГИСИ) with portrait +
-  three named institutions. Bio content from `content/about.{ru,en}.mdx`.
+  three named institutions. Bio content from `content/about/{ru,en}.yaml` (data) + `.md` (prose) *(originally `.mdx`; split 2026-05-04)*.
   _Depends on F3, F7._
 
 - [x] **C6 — Awards page**: `app/[locale]/awards/page.tsx` — timeline
@@ -575,7 +577,7 @@ production build before D1.
   in 2022. Both `2003 — РГИСИ` and `2008 — БТК director` were
   impossible (Роман would have been 10 and 15 in those years) —
   these were placeholder values from F4 that never got verified.
-  Replaced both `content/about/{ru,en}.mdx` milestone lists with
+  Replaced both `content/about/{ru,en}.mdx` *(now `.yaml` per 2026-05-04 split)* milestone lists with
   five dates anchored either in the Notion bio (1993, 2022) or in
   hard production data (2017 Golden Mask as performer, 2018
   Istropolitana Bratislava as performer, 2020 Bury Me Behind
@@ -771,7 +773,7 @@ production build before D1.
 - [x] **DA-2.D — Plinth tour band (§3.G.2)**: ✅ done `0bebf3c`
   (2026-05-02). `tour[]` wired in `lib/content.ts` `merge()` with
   `pick(overlay.tour, fm.tour ?? [])` — overlay wins, so seed data
-  lives in `metadata.yml` (not `index.mdx` which is gitignored).
+  lives in `metadata.yml` (not `index.mdx` which is gitignored). *(2026-05-02 the data file was `index.mdx`; split into `index.yaml` + `body.{ru,en,de}.md` on 2026-05-04.)*
   Seed 9 cities added to
   `content/productions/bury-me-behind-the-baseboard/metadata.yml`.
   `<section className={tourBand}>` inserted above gallery section
@@ -977,6 +979,9 @@ production build before D1.
   `.gitignore` updated (ignore workspace.json, cache, plugins/).
   `scripts/lint-mdx.ts` CI guard against `![[wikilink]]`.
   `npm run lint-mdx` script added.
+  *(2026-05-04 superseding: `.obsidian/types.json` removed, `mdx-as-md` dropped
+  from community-plugins, `lint-mdx` renamed `lint-content` — see CONTENT.md
+  § Retired.)*
 
 - [x] **8.2 — R2 image migration** ✅ code done `8339141` (2026-05-02),
   **CDN activation pending** (boklanov.com not on Cloudflare):
@@ -994,6 +999,8 @@ production build before D1.
 - [x] **8.3 — Fold overlay + retire Notion sync** ✅ done (2026-05-02):
   `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` files folded
   into `index.mdx` frontmatter (overlay-wins logic); files deleted.
+  *(2026-05-04 superseding: `index.mdx` then split into `index.yaml` +
+  `body.{ru,en,de}.md`; `fold-overlay.ts` moved to `scripts/_legacy/`.)*
   `lib/content.ts` simplified: `merge()` + `pick()` removed, replaced
   with lean `fromFm()` that reads frontmatter directly (no overlay step).
   `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header.

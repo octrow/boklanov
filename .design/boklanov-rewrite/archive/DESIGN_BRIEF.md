@@ -209,8 +209,11 @@ From `.design/boklanov-rewrite/photo-audit.md` (run on the local Notion export):
 
 ## 7. Content model — production frontmatter
 
-Single source of truth is `content/productions/<slug>/index.mdx`. All fields
-are edited via Obsidian Properties panel; no overlay file.
+Single source of truth is `content/productions/<slug>/index.yaml` (data) +
+`body.{ru,en,de}.md` (prose). All data fields are edited as plain YAML;
+prose as plain markdown. No overlay file.
+*(2026-05-02 was a single `content/productions/<slug>/index.mdx` edited via
+Obsidian Properties panel; split 2026-05-04 — see active CONTENT.md.)*
 
 ```yaml
 ---

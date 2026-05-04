@@ -18,7 +18,7 @@
 > | 7 — Deploy + cutover | 🔄 in progress | **R2 ✅ closed 2026-05-02** (Daniil signed off desktop + mobile on `boklanov.vercel.app`; `?gesture=off` gate lifted, slate-strike live for all). **D1 ✅ live** at https://boklanov.vercel.app/ (Vercel project `octrows-projects/boklanov`, `main` auto-deploys). **D2 ✅ Vercel stays** — no migration to Cloudflare Pages or Yandex Cloud (no CN/RU blocking observed). **D3/D4 🟡 in progress** — DNS at Spaceship.com; cutover to `boklanov.com` (canonical) + `www.boklanov.com` (301 alias) before **6 May 2026** deadline. Records: `A @ → 76.76.21.21`, `CNAME www → cname.vercel-dns.com`, TTL 300. Birthday-surprise constraint: do not reveal site to Roman until D4 live. |
 > | 7.5 — Editorial fingerprints (DESIGN_AMBITION) | ✅ done | **Round 1 ✅** (`c7a1b50`) folio · cue marks · edition stamp. **Round 2 ✅** (`0bebf3c`) credits `<dl>` · theatre slate · `ГДЕ СТАВИЛ` row · Plinth ON TOUR band · `PREM YYYY` cards · `tour[]` wired in `merge()`. **Round 3 ✅** (`7c26402`) slate-strike + static edition-frame fallback. R2 QA closed; `?gesture=off` gate lifted, animation live. Cuts kept: §3.D, §3.J, §4.1.B. |
 > | 7.6 — Editorial polish (post-D4) | ⏳ pending | Added 2026-05-02 in `.design/boklanov-rewrite/TASKS.md` Phase 7.6. **10 tasks**, 3 tiers, brief-compatible. Tier 1 (programme-grammar): marginalia (DA-7.6.A), print stylesheet (DA-7.6.B), director's note block (DA-7.6.C), run-of-show indicator (DA-7.6.D). Tier 2 (micro-typography): cue-count tag (E), language row (F), card year-anchor (G), DE chrome length audit (H). Tier 3 (first-impression): OG image chrome upgrade (I), editorial empty states (J). Schedule: post-D4 cutover; none blocks the birthday-surprise launch. |
-> | 8 — Authoring handoff (Obsidian + R2) | 🔄 in progress | Locked 2026-05-02 in `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` (F + R2 + trust-on-publish + `metadata.yml` **folded into MDX frontmatter** — single source of truth per field). **8.1 ✅ done** (`11bef4d`) — `.obsidian/{app,types,community-plugins}.json` committed; `useMarkdownLinks: true`; property types for `year`/`featured`/`ageRating`/`durationMin`/`ticketsUrl`/`form`/`lineage`/`tour`/`tags`; `scripts/lint-mdx.ts` CI guard against `![[wikilink]]`; Roman manually installs `obsidian-git` + `mdx-as-md` plugins. **8.2 🟡 code done, CDN activation blocked** — `lib/cdn.ts` helper, `scripts/upload-images.ts` (S3-compatible), `<Image>` `src` wrapped in `cdnUrl()`, `next.config.js` allows `cdn.boklanov.com`, `@aws-sdk/client-s3` + `dotenv` devDeps. **`cdn.boklanov.com` cannot connect to R2 until boklanov.com moves to Cloudflare DNS** — currently on Spaceship; defer R2 activation until/unless DNS migrates. **8.3 ⬜** fold overlay + retire Notion sync. **8.4 ⬜** `AUTHORING.ru.md` mini-guide for Roman. **8.5 ⬜** Cyrillic-only-Name orphan audit. |
+> | 8 — Authoring handoff (Obsidian + R2) | 🔄 in progress | Locked 2026-05-02 in `.design/boklanov-rewrite/CONTENT_WORKFLOW.md` (F + R2 + trust-on-publish + `metadata.yml` **folded into per-production data file** — single source of truth per field). **8.1 ✅ done** (`11bef4d`) — `.obsidian/{app,community-plugins}.json` committed; `useMarkdownLinks: true`; `scripts/lint-content.ts` CI guard against `![[wikilink]]`; Roman manually installs `obsidian-git` plugin. **8.2 🟡 code done, CDN activation blocked** — `lib/cdn.ts` helper, `scripts/upload-images.ts` (S3-compatible), `<Image>` `src` wrapped in `cdnUrl()`, `next.config.js` allows `cdn.boklanov.com`, `@aws-sdk/client-s3` + `dotenv` devDeps. **`cdn.boklanov.com` cannot connect to R2 until boklanov.com moves to Cloudflare DNS** — currently on Spaceship; defer R2 activation until/unless DNS migrates. **8.3 ⬜** fold overlay + retire Notion sync. **8.4 ⬜** `AUTHORING.ru.md` mini-guide for Roman. **8.5 ⬜** Cyrillic-only-Name orphan audit. *(2026-05-02 the data file was `index.mdx` with Properties panel + `mdx-as-md` plugin + `scripts/lint-mdx.ts`; superseded 2026-05-04 by `index.yaml` + `body.{ru,en,de}.md` split — see active CONTENT.md § Retired.)* |
 > | 9 — Decap CMS layer | 💤 deferred | Not on active roadmap. Activates on demand when Roman asks for web/mobile editing. Locks pre-set: `editorial_workflow: false`, `backend.branch: draft`, no `_diagnostics.md`. ~2 days when activated. See `CONTENT_WORKFLOW.md` §6B + TASKS.md Phase 9. |
 >
 > Decisions D1–D6 from §7 are all **confirmed migrate / editorial /
@@ -152,7 +152,7 @@ externalLinks: [ { label: "БТК", url: "https://puppets.ru/spec/115" } ]
 ---
 ```
 
-- Output: `content/productions/*.mdx`, `content/about.{ru,en}.mdx`, `content/contact.{ru,en}.mdx`
+- Output: `content/productions/<slug>/index.mdx`, `content/about/{ru,en}.mdx`, `content/contact.{ru,en}.mdx` *(now `index.yaml` + `body.{ru,en,de}.md` per 2026-05-04 split)*
 - Pull photos from Notion's CDN to `public/productions/<slug>/`. Run `lqip-modern` to pre-generate blur placeholders.
 - **Artifact:** ~30 MDX files + image assets, `scripts/notion-to-mdx.ts` (re-runnable for future updates)
 
@@ -229,8 +229,8 @@ new:
   app/[locale]/productions/{page,[slug]/page}.tsx
   app/[locale]/{about,awards,press,contact}/page.tsx
   components/{ProductionCard,ProductionGrid,Header,Footer,LangSwitch,...}.tsx
-  content/productions/*.mdx
-  content/{about,contact}.{ru,en}.mdx
+  content/productions/<slug>/index.mdx     # 2026-05-04: now index.yaml + body.{ru,en,de}.md
+  content/{about,contact}.{ru,en}.mdx      # 2026-05-04: now {ru,en}.yaml + .md
   scripts/notion-to-mdx.ts
   lib/{content,i18n,og}.ts
   public/productions/<slug>/*.jpg

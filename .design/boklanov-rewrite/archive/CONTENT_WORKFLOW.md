@@ -9,9 +9,9 @@
 
 | Sub-phase | Status | Notes |
 |-----------|--------|-------|
-| **8.1** Vault layout (Obsidian config) | ✅ done (`11bef4d`) | `.obsidian/{app,types,community-plugins}.json` committed. `useMarkdownLinks: true` (no `![[wikilink]]`). Property types defined for `year`/`featured`/`ageRating`/`durationMin`/`ticketsUrl`/`form`/`lineage`/`tour`/`tags`. `scripts/lint-mdx.ts` + `npm run lint-mdx` CI guard fails on Obsidian-flavoured wikilinks in `content/`. Roman manually installs `obsidian-git` + `mdx-as-md` plugins on first vault open. `.gitignore` now excludes `workspace.json`, `cache`, `plugins/`. |
+| **8.1** Vault layout (Obsidian config) | ✅ done (`11bef4d`) | `.obsidian/{app,community-plugins}.json` committed. `useMarkdownLinks: true` (no `![[wikilink]]`). `scripts/lint-content.ts` + `npm run lint-content` CI guard fails on Obsidian-flavoured wikilinks in `content/**/*.md`. Roman manually installs `obsidian-git` plugin on first vault open. `.gitignore` now excludes `workspace.json`, `cache`, `plugins/`. *(Property types + `mdx-as-md` plugin retired 2026-05-04 in mdx→yaml split.)* |
 | **8.2** R2 image migration | 🟡 code done, CDN activation **blocked** | `lib/cdn.ts` (`cdnUrl(path)` helper, no-op in dev), `scripts/upload-images.ts` (S3-compatible upload, `--slug` + `--dry-run` flags, skip-unchanged by size). `<Image>` `src` wrapped in `cdnUrl()` on `ProductionCard` + production detail. `next.config.js` `images.remotePatterns` allows `cdn.boklanov.com`. `npm run upload-images`. **Blocker:** `cdn.boklanov.com` cannot connect to R2 until `boklanov.com` DNS moves to Cloudflare; currently on Spaceship. Defer R2 activation until/unless DNS migrates. `NEXT_PUBLIC_CDN_BASE` unset in prod → images still serve from `public/` via Vercel. No regression. |
-| **8.3** Fold overlay + retire Notion sync | ✅ done (`c1c4436`) | `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` overlays folded into `index.mdx` frontmatter (overlay-wins), overlay files deleted. `lib/content.ts` simplified: `merge()`/`pick()` removed, replaced by lean `fromFm()` reading frontmatter directly, `yaml` import dropped. `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header. `npm run sync` → echo stub. `content/README.md` rewritten. |
+| **8.3** Fold overlay + retire Notion sync | ✅ done (`c1c4436`) | `scripts/fold-overlay.ts` ran — all 24 `metadata.yml` overlays folded into `index.yaml` data (overlay-wins), overlay files deleted. `lib/content.ts` simplified: `merge()`/`pick()` removed, replaced by lean `fromFm()` reading data directly. `scripts/sync-from-notion.ts` → `scripts/_legacy/` with FROZEN header. `npm run sync` → echo stub. `content/README.md` rewritten. *(2026-05-04: `index.mdx` later split into `index.yaml` + `body.{ru,en,de}.md`; `fold-overlay.ts` moved to `scripts/_legacy/`.)* |
 | **8.4** `content/AUTHORING.ru.md` | ✅ done (`c1c4436`) | Russian-language onboarding written: one-time install (desktop + mobile), Properties editing, prose editing, commit-and-push, draft branch, add new productions, swap photos, troubleshooting (5 cases). Replaces Notion-centric `content/README.md`. |
 | **8.5** Cyrillic-only-Name orphan audit | ✅ done (`c1c4436`) | `.design/boklanov-rewrite/orphan-audit-2026-05.md` created. Lists `sugar-kid` + `kasztanka` as MANUAL_SIBLING_PAIRS orphans for Roman to confirm titles in Obsidian after onboarding. One-shot. |
 
@@ -25,7 +25,7 @@
 | **Image hosting** | **R2 with custom CDN domain** | 10 GB free, free egress, slim repo, S3-compatible. Migrated alongside Q1 cutover (one rclone + path rewrite). |
 | **Edit cadence assumption** | Several / month, daily early on | Comfortably above the threshold where migration pays back. |
 | **Editorial workflow** | Trust-on-publish + `draft` branch for WIP | Vercel auto-deploys `main` → https://boklanov.vercel.app/. Preview URLs per branch. |
-| **`metadata.yml` overlay** | **Folded into MDX frontmatter** (overlay deprecated) | B4 answer 2026-05-02: single source of truth per field. Migration script merges every `overlay.*` field into `index.mdx` frontmatter once; `metadata.yml` is deleted. `lib/content.ts` `pick(overlay, fm)` collapses to `fm`. |
+| **`metadata.yml` overlay** | **Folded into `index.yaml` data** (overlay deprecated) | B4 answer 2026-05-02: single source of truth per field. Migration script merges every `overlay.*` field into `index.yaml` once; `metadata.yml` is deleted. `lib/content.ts` `pick(overlay, fm)` collapses to `fm`. *(2026-05-02 the file was `index.mdx`; split into `index.yaml` + `body.{ru,en,de}.md` on 2026-05-04.)* |
 | **Cyrillic-only-Name orphans** | Manual audit included in migration (Phase 8.5) | One-time correction before they freeze in the new source. |
 | **Roman onboarding** | Mini-guide (`AUTHORING.ru.md`) instead of screen-share | Async, repeatable, doubles as future onboarding for collaborators. |
 
@@ -60,7 +60,7 @@ Locked in brief D3, executed by `scripts/sync-from-notion.ts`:
 Roman edits in Notion  →  re-exports the *whole* DB to a ZIP  →
 drops the export into notion-data/Роман Бокланов/  →
 Daniil runs `npm run sync`  →
-sync regenerates content/productions/*/index.mdx + public/productions/<slug>/*  →
+sync regenerates content/productions/*/index.yaml + body.{ru,en,de}.md + public/productions/<slug>/*  →
 Daniil reviews diff, optionally hand-edits metadata.yml overlays  →
 Daniil commits + pushes to GitHub  →  Vercel rebuilds  →  live
 ```
@@ -213,9 +213,10 @@ mode for layout. **Overkill** for the current scope (one author,
 
 Roman installs Obsidian (free, including for commercial use — confirmed
 on `obsidian.md/license` 2026-05-02), clones the repo as a vault, and
-edits `content/productions/<slug>/index.mdx` directly. Frontmatter is
-rendered by Obsidian's **Properties** panel as a form (fields, dropdowns,
-dates) — Roman never sees raw YAML for known keys. The
+edits `content/productions/<slug>/index.yaml` (data) and
+`body.{ru,en,de}.md` (prose) directly. *(2026-05-02 was `index.mdx` with
+Properties panel; split into `index.yaml` + `body.*.md` on 2026-05-04 —
+Properties panel retired, YAML edited as plain text.)* The
 [obsidian-git](https://github.com/Vinzent03/obsidian-git) community
 plugin handles `pull` on open, `commit + push` on demand or schedule.
 Vercel rebuilds on push.
@@ -412,17 +413,19 @@ covers expected volume by ~30×). Phase 8 = Obsidian + R2 cutover.
 
 ### Phase 8.1 — Vault layout + Properties schema (½ day)
 
-- Register `.mdx` as markdown in Obsidian (community plugin
-  `obsidian-mdx-as-md` or `app.json` extensions setting).
-- Configure Obsidian Properties to render the canonical frontmatter
-  keys (`title`, `titleEn`, `year`, `theatre`, `premiereDate`,
-  `featured`, `public`, `tags`, `synopsis`, …) as typed form fields
-  with Cyrillic labels (`.obsidian/types.json` or settings UI).
+- *(2026-05-02 plan — superseded by 2026-05-04 mdx→yaml split.)* Originally:
+  register `.mdx` as markdown in Obsidian via the `mdx-as-md` plugin and
+  configure typed Properties for canonical frontmatter keys. **As of
+  2026-05-04** content is split into `index.yaml` (plain-text YAML) +
+  `body.{ru,en,de}.md` (native markdown) — the Properties panel and
+  `mdx-as-md` plugin are retired.
 - Add `obsidian-git` to `.obsidian/community-plugins.json`; commit
   the vault config so any clone gets the same setup.
-- Add a build-time linter (`scripts/lint-mdx.ts`) that fails on
-  Obsidian-flavoured `![[wikilink]]` syntax — enforces standard
-  markdown image refs in committed files.
+- Add a build-time linter (`scripts/lint-content.ts`, `npm run lint-content`)
+  that fails on Obsidian-flavoured `![[wikilink]]` syntax in any
+  `content/**/*.md` — enforces standard markdown image refs in
+  committed files. *(Originally `scripts/lint-mdx.ts`; renamed
+  2026-05-04.)*
 
 ### Phase 8.2 — R2 image migration (½ day)
 
@@ -443,15 +446,17 @@ covers expected volume by ~30×). Phase 8 = Obsidian + R2 cutover.
 
 ### Phase 8.3 — Retire the Notion sync pipeline + fold `metadata.yml` (½ day)
 
-- **Fold `metadata.yml` overlay into MDX frontmatter (one-shot).**
+- **Fold `metadata.yml` overlay into the per-production data file (one-shot).**
   Write `scripts/fold-overlay.ts`: for every
   `content/productions/<slug>/`, merge non-null `metadata.yml` fields
-  into `index.mdx` frontmatter (overlay-wins, matching today's
+  into `index.yaml` (overlay-wins, matching today's
   `lib/content.ts` precedence), then `git rm` the `metadata.yml`.
+  *(2026-05-02 the data file was `index.mdx`; split into `index.yaml`
+  + `body.{ru,en,de}.md` on 2026-05-04.)*
 - Simplify `lib/content.ts`: drop the `pick(overlay, fm)` helper and
-  every `overlay.*` reference; `getProduction()` reads only MDX
-  frontmatter. Single source of truth per field — closes P4
-  permanently.
+  every `overlay.*` reference; `getProduction()` reads only the
+  per-production data file. Single source of truth per field — closes
+  P4 permanently.
 - Move `scripts/sync-from-notion.ts` → `scripts/_legacy/sync-from-notion.ts`
   with header `// frozen 2026-05-02; do not re-run`. Kept 1–2 months
   for forensic reference, then deleted.
@@ -500,17 +505,19 @@ phase. Daniil also walks through it once (Telegram or async video).
 3. В Obsidian: **Open vault → Clone existing remote vault →
    `git@github.com:.../boklanov.git`**, использовать PAT как пароль.
 4. Установить плагины (уже включены в репо):
-   `obsidian-git` + `mdx-as-md`. Если Obsidian спросит "включить?"
-   — да, для всех.
+   `obsidian-git`. Если Obsidian спросит "включить?" — да.
+   *(2026-05-02 также требовался `mdx-as-md`; снят 2026-05-04
+   при переходе с `index.mdx` на `index.yaml` + `body.*.md`.)*
 5. Установить Obsidian Mobile на телефон, повторить шаг 3.
 
 ## Каждодневно
 
 ### Изменить поле спектакля (год, театр, флаг "опубликован")
 
-1. Открыть `content/productions/<slug>/index.mdx`.
-2. Вверху страницы — панель **Properties** (свойства). Это форма
-   с полями: Название, Год, Театр, Премьера, Опубликован, …
+1. Открыть `content/productions/<slug>/index.yaml`. *(2026-05-02
+   был `index.mdx` с панелью **Properties**; с 2026-05-04 — обычный
+   YAML текстом.)*
+2. Найти строку с нужным полем (Название, Год, Театр, Премьера, …).
 3. Нажать на значение, поправить, **Cmd+S** (или Ctrl+S).
 4. В сайдбаре справа — **Source Control** → **Commit** → ввести
    короткое описание ("исправил год сахарного ребёнка") →
@@ -529,7 +536,9 @@ phase. Daniil also walks through it once (Telegram or async video).
 1. Скопировать любой существующий `content/productions/<slug>/`
    как шаблон. Переименовать папку (slug — латиницей, дефисы вместо
    пробелов; пример: `solnyshko`, `bezymyannaya-zvezda`).
-2. Открыть `index.mdx`, заполнить Properties, написать описание.
+2. Открыть `index.yaml`, заполнить поля; описание — в `body.ru.md`
+   и `body.en.md` (соседние файлы). *(2026-05-02 всё было в одном
+   `index.mdx`.)*
 3. Положить фотографии в ту же папку (форматы: `.webp`, `.jpg`).
 4. Запустить `npm run upload-images` — фотографии уйдут на CDN.
    (Daniil настроит однократно; кнопку добавим в Obsidian.)
@@ -540,8 +549,8 @@ phase. Daniil also walks through it once (Telegram or async video).
 1. Положить новые файлы в `public/productions/<slug>/`.
 2. Удалить старые из той же папки.
 3. `npm run upload-images`.
-4. Если в `index.mdx` менялся набор картинок — отредактировать
-   галерею вручную (Daniil покажет где).
+4. Если в `index.yaml` менялся набор картинок — отредактировать
+   галерею вручную (Daniil покажет где). *(2026-05-02 — `index.mdx`.)*
 5. Commit-and-push.
 
 ## Черновики (если правка большая или сомнительная)
@@ -619,7 +628,7 @@ warrant another look.
 | Obsidian becomes paid / changes license                                              | Vault is plain markdown in our repo. Worst case Roman switches to VS Code or any editor; cost = 0.                                              |
 | `obsidian-git` plugin breaks on a release                                            | Roman runs `git pull` / `git push` from a terminal, or asks Daniil. Editing continues; only sync is interrupted.                                |
 | Roman accidentally publishes broken content                                          | Trust-on-publish + `draft` branch convention (see §6.5 mini-guide). Vercel preview URL per branch catches issues before `main`.                 |
-| Image embeds use Obsidian-flavoured `![[wikilinks]]` that don't render in production | `scripts/lint-mdx.ts` (Phase 8.1) fails the build on any `![[…]]`. Standard markdown enforced by CI.                                            |
+| Image embeds use Obsidian-flavoured `![[wikilinks]]` that don't render in production | `scripts/lint-content.ts` (Phase 8.1; originally `lint-mdx.ts`, renamed 2026-05-04) fails the build on any `![[…]]`. Standard markdown enforced by CI.                                            |
 | Daniil loses visibility into edits                                                   | All changes flow through git. `git log content/productions/` is the audit trail.                                                                |
 | R2 outage breaks images on the live site                                             | Cloudflare R2 SLA is 99.9%; in practice rare. Mitigation: keep `public/productions/` as a fallback for ~3 months post-cutover before removing.  |
 | R2 free tier exceeded (10 GB)                                                        | ~30× headroom today. Cloudflare dashboard alert at 80%; per-GB-pennies if it ever happens.                                                      |

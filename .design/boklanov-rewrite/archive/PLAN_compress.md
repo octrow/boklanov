@@ -12,7 +12,7 @@ Branch: rewrite/v2. Source of truth: TASKS.md, DESIGN.md.
 * P7.5: DONE. Editorial fingerprints (R1-R3).
 * P7.6: DONE. All 10 tasks shipped — Tier 1 `00c2501`, Tier 2 `3106d26`, DA-7.6.I `0288258`, DA-7.6.J `e1920af`.
 * P8: IN PROGRESS. 8.1–8.5 shipped (`11bef4d` `8339141` `c1c4436`). R2 CDN blocked on Cloudflare DNS (deferred with
-  D3/D4). Next: Roman onboarding (Obsidian + obsidian-git + mdx-as-md), orphan-title audit, photographer credits.
+  D3/D4). Next: Roman onboarding (Obsidian + obsidian-git), orphan-title audit, photographer credits. *(2026-05-02 also `mdx-as-md`; retired 2026-05-04 in mdx→yaml split.)*
 * P9: DEFERRED. Decap CMS — activates on Roman demand. ~2 days.
 
 ## ARCHITECTURE
@@ -47,7 +47,7 @@ Branch: rewrite/v2. Source of truth: TASKS.md, DESIGN.md.
 
 ## FILE MUTATIONS
 
-* CREATE: `app/[locale]/**/*.tsx`, `components/*.tsx`, `content/**/*.mdx`, `scripts/sync-from-notion.ts`,
+* CREATE: `app/[locale]/**/*.tsx`, `components/*.tsx`, `content/**/*.mdx` *(2026-05-04: now `index.yaml` + `body.{ru,en,de}.md`)*, `scripts/sync-from-notion.ts`,
   `lib/{content,i18n,og}.ts`, `DESIGN.md`.
 * DELETE: `pages/`, `styles/notion.css`, `components/Notion*.tsx`, `react-notion-x`, `notion-client`, `notion-types`,
   `notion-utils`.

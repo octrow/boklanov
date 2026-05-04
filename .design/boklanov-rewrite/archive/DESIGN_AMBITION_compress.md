@@ -42,7 +42,7 @@
     *   **Format**: Mono row. Hover-link to `?city=` filter.
 *   **Plinth Tour (Solo Show)**: `/productions/bury-me-behind-the-baseboard` only.
     *   **Label**: `ON TOUR`. Hairline rule top/bottom. Max 10 cities.
-    *   **Data**: Sourced from `tour[]` array in `index.mdx` frontmatter. Hide block if array empty. No links.
+    *   **Data**: Sourced from `tour[]` array in `index.yaml` *(was `index.mdx` frontmatter pre-2026-05-04)*. Hide block if array empty. No links.
 
 ### 6. Edition Stamp
 *   **Location**: `SiteFooter.tsx`.

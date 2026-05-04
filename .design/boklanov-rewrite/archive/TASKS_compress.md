@@ -4,7 +4,7 @@ Full version (original): .design/boklanov-rewrite/archive/TASKS.md
 
 **CODEBASE CONTEXT**
 Framework: Next.js App Router (v15.5.15). Legacy `pages/` and `react-notion-x` deleted.
-Data Source: Local MDX frontmatter via Obsidian (`content/productions/*.mdx`). Notion sync retired. `metadata.yml`
+Data Source: Local YAML data + sibling markdown prose via Obsidian (`content/productions/<slug>/index.yaml` + `body.{ru,en,de}.md`). *(2026-05-02 was MDX frontmatter at `content/productions/*.mdx`; split 2026-05-04.)* Notion sync retired. `metadata.yml`
 overlay flattened.
 Asset Hosting: R2 `boklanov-content` bucket. Local serving active; `cdn.boklanov.com` deferred pending Cloudflare
 migration.

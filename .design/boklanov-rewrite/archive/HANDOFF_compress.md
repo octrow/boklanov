@@ -8,6 +8,7 @@ STATE
 Phase 8 complete.
 `c1c4436` executed `scripts/fold-overlay.ts`. Merged 24 `metadata.yml` files into `index.mdx` frontmatter.
 `lib/content.ts` utilizes `fromFm()`. Deleted `yaml` import.
+*(2026-05-04 superseding: `index.mdx` split into `index.yaml` + `body.{ru,en,de}.md`; `yaml` re-added as runtime dep; `gray-matter` dropped; `fold-overlay.ts` moved to `scripts/_legacy/`.)*
 Moved `scripts/sync-from-notion.ts` to `scripts/_legacy/`. Notion API dead.
 Created `content/AUTHORING.ru.md` for Obsidian onboarding.
 
@@ -18,7 +19,7 @@ Configure Vercel: Add `boklanov.com` (canonical) and `www.boklanov.com` (301 red
 
 OPEN TASKS
 Author must use Obsidian to:
-Populate `gallery[].credit` in `index.mdx`.
+Populate `gallery[].credit` in `index.yaml` *(was `index.mdx` pre-2026-05-04)*.
 Confirm `sugar-kid` and `kasztanka` titles.
 
 CONSTRAINTS

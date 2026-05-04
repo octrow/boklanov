@@ -545,7 +545,7 @@ LONDON · EDINBURGH · BERN · WIEN · ALMATY · LISBOA · PORTO · LUXEMBOURG �
   the listed cities are real stops but the list is **not exhaustive**.
   Block ships only after Roman provides the canonical list (see §14.3).
   Until then, the band is data-driven from a `tour[]` array on the
-  Plinth's `index.mdx` frontmatter — empty array → block hidden.
+  Plinth's `index.yaml` *(was `index.mdx` frontmatter pre-2026-05-04)* — empty array → block hidden.
 - Year range: deliberately **omitted** until Roman gives the
   authoritative range (originally proposed `2024–2026`; needs Roman's
   voice on whether to include БТК home runs from 2020 onward or
@@ -1212,10 +1212,10 @@ tense-neutral — see §3.G.1 for the recommended labels.)
 Roman confirmed 2026-05-02 the seed list represents real stops
 but is **not exhaustive**. Until Roman provides the canonical
 list, §3.G.2 ships **data-driven** from a `tour[]` array on the
-Plinth's `index.mdx` frontmatter:
+Plinth's `index.yaml` *(was `index.mdx` frontmatter pre-2026-05-04)*:
 
 ```yaml
-# content/productions/bury-me-behind-the-baseboard/index.mdx
+# content/productions/bury-me-behind-the-baseboard/index.yaml  (was index.mdx pre-2026-05-04)
 tour:
   - city: London
   - city: Edinburgh
