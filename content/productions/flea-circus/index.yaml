@@ -12,15 +12,17 @@ synopsis:
   de: null
 theatre:
   name:
-    en: Taller de Talentos
-    ru: Taller de Talentos
-    de: Taller de Talentos
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
   city:
-    en: Torrevieja
-    ru: Торревьеха
-    de: Torrevieja
-  country: ES
-  url: null
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
 year: null
 premiereDate:
   ru: null
@@ -46,7 +48,7 @@ credits:
     - role: Regie
       name: Roman Boklanov
 poster:
-  src: null
+  src: productions/flea-circus/poster.webp
   credit: null
 gallery: [ ]
 videos: [ ]
