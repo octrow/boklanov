@@ -11,9 +11,18 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: null
 year: null
@@ -28,7 +37,7 @@ role: performer
 bookingCta: false
 form:
   - theater
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Артист
@@ -45,16 +54,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

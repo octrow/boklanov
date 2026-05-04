@@ -26,8 +26,14 @@ directorsNote:
   de: Es gibt gute Menschen auf der Welt, es gibt schlechtere, und es gibt solche,
     die sich ihres Bruders nicht schämen
 theatre:
-  name: Московский театр кукол
-  city: Moscow
+  name:
+    ru: Московский театр кукол
+    en: Moscow Puppet Theatre
+    de: Moskauer Puppentheater
+  city:
+    en: Moscow
+    ru: Москва
+    de: Moskau
   country: RU
   url: "https://puppetmo.ru/poster/kroshechka-havroshechka-5/?listim_open_widget=1"
 year: 2022
@@ -41,7 +47,7 @@ durationMin: 40
 role: director
 form:
   - ensemble
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -248,13 +254,16 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
+videos: [ ]
 awards:
-  - name: Большого детского фестиваля 2023
+  - name:
+      ru: Большого детского фестиваля 2023
+      en: Big Children's Festival 2023
+      de: Großen Kinderfestivals 2023
     year: 2023
-festivals: []
-press: []
-externalLinks: []
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -262,4 +271,4 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

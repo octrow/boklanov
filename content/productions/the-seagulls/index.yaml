@@ -7,13 +7,28 @@ title:
   en: The Seagulls
   de: Die Möwen
 synopsis:
-  ru: Учебная работа студентов режиссёрского курса Руслана Кудашова — динамичный спектакль по мотивам комедии Чехова, смонтированный из этюдов, визуальных метафор и современных ритмов.
-  en: "A student work from Ruslan Kudashov's directing course — a dynamic piece based on Chekhov's comedy, assembled from sketches, visual metaphors and contemporary rhythms."
-  de: Eine Studienarbeit aus Ruslan Kudashows Regiestudiengang — ein dynamisches Stück nach Tschechows Komödie, aus Etüden, visuellen Metaphern und zeitgenössischen Rhythmen zusammengesetzt.
+  ru: Учебная работа студентов режиссёрского курса Руслана Кудашова — динамичный
+    спектакль по мотивам комедии Чехова, смонтированный из этюдов, визуальных
+    метафор и современных ритмов.
+  en: "A student work from Ruslan Kudashov's directing course — a dynamic piece
+    based on Chekhov's comedy, assembled from sketches, visual metaphors and
+    contemporary rhythms."
+  de: Eine Studienarbeit aus Ruslan Kudashows Regiestudiengang — ein dynamisches
+    Stück nach Tschechows Komödie, aus Etüden, visuellen Metaphern und
+    zeitgenössischen Rhythmen zusammengesetzt.
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppets.ru/chaiki"
   year: 2019
@@ -28,7 +43,7 @@ role: performer
 bookingCta: false
 form:
   - ensemble
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Куратор
@@ -127,16 +142,16 @@ credits:
 poster:
   src: /productions/the-seagulls/poster.jpg
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

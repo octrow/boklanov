@@ -25,9 +25,18 @@ directorsNote:
   de: "Großartig ist nicht derjenige, der nie gefallen ist, sondern großartig ist
     derjenige, der fiel und aufstand! Konfuzius übrigens!"
 theatre:
-  name: Театр кукол «Бродячая Собачка»
-  shortName: Бродячая Собачка
-  city: Saint Petersburg
+  name:
+    ru: Театр кукол «Бродячая Собачка»
+    en: The Stray Dog Puppet Theater
+    de: Puppentheater „Streunendes Hündchen“
+  shortName:
+    ru: Бродячая Собачка
+    en: The Stray Dog
+    de: Brodjachaja Sobatschka
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppettheatre.spb.ru/index.php?id=183"
 year: 2022
@@ -41,7 +50,7 @@ durationMin: 55
 role: director
 form:
   - ensemble
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссер-постановщик спектакля и автор инсценировки
@@ -170,9 +179,9 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
 press:
   - title:
       ru: Премьера спектакля «Медведь в своем репертуаре» в театре кукол «Бродячая
@@ -182,7 +191,7 @@ press:
       de: Uraufführung des Stücks "Bär im eigenen Repertoire" am Puppentheater "Die
         treibe Hund"
     url: "https://www.gov.spb.ru/gov/otrasl/c_culture/news/236526/"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: true
@@ -190,4 +199,4 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
