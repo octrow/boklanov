@@ -49,7 +49,10 @@ export function ThemeToggle() {
   }, [])
 
   function toggle() {
-    const next: Theme = theme === 'gorky' ? 'paper' : 'gorky'
+    // Treat unhydrated state as gorky (the default), so the first click
+    // always lands on paper rather than no-op'ing.
+    const current: Theme = theme ?? 'gorky'
+    const next: Theme = current === 'gorky' ? 'paper' : 'gorky'
     setTheme(next)
     document.documentElement.dataset.theme = next
     try {
