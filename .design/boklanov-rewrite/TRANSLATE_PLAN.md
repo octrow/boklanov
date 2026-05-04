@@ -7,9 +7,14 @@
 ## 1. Constraints
 
 - Past-tense `ГДЕ СТАВИЛ` / `STAGED IN` / `INSZENIERTE IN` — translation must preserve past tense.
-- `notionIds`, slugs, URLs, dates (scalars), enums (`form`, `lineage`, `role`, `ageRating`, `tags`) → never touched.
-- Proper names (people, theatres, cities) → never translated; `credits[].role` is translated, `credits[].name` is not.
-- DE is best-effort; may stay empty for production-card chrome (that lives in `messages/de.json`, not here).
+- **Default: every text field is translatable.** Verbatim-only exceptions:
+  - Scalars: numbers, booleans, nulls.
+  - Identifiers / addresses: `slug`, `notionIds`, every `url`, `theatre.country` (ISO code), `press[].language` (ISO code).
+  - Enums: `form`, `lineage`, `role`, `ageRating`, `tags`, `videos[].provider` / `id`.
+  - Proper names of people: `credits[].name` is mirrored verbatim across all three locales (transliteration is the editor's job, not the script's).
+  - Asset paths: `gallery[].src`, `poster.src`, `techRider`, `pressKit`.
+- DE is best-effort; production-card chrome strings still live in `messages/de.json`, not in `content/`.
+- Theatre / venue names, award names, festival names: **translatable** (`lib/content.ts` now accepts `L10nString` for all of these — see §3). Script writes a `{ru, en, de}` object; if user wants a verbatim original, they can keep the field as a plain string (resolver supports both).
 
 ## 2. Source-of-truth rules
 
@@ -20,39 +25,57 @@ Use `--force` to overwrite existing prose.
 
 ## 3. Translatable surface
 
+`lib/content.ts` exports `L10nString = string | { ru?, en?, de? }`. Plain strings stay valid
+everywhere; the script upgrades them to `{ru, en, de}` objects when filling locales.
+
 | Path | Translated | Skipped |
 |------|-----------|---------|
 | `index.yaml` `title.{ru,en,de}` | yes | — |
 | `index.yaml` `synopsis.{ru,en,de}` | yes | — |
+| `index.yaml` `tagline.{ru,en,de}` | yes | — |
 | `index.yaml` `directorsNote.{ru,en,de}` | yes | — |
+| `index.yaml` `bookingCtaLabel.{ru,en,de}` | yes | — |
 | `index.yaml` `premiereDate.{ru,en,de}` | yes (locale-formatted date) | — |
-| `index.yaml` `credits.{ru,en,de}[]` | `role` only; `name` + `url` mirrored verbatim | `name`, `url` |
-| `index.yaml` `press[].title` | yes — plain string upgraded to `{ru,en,de}` object; existing locale-keyed titles filled | `url`, `outlet`, `language` |
+| `index.yaml` `theatre.{name,shortName,city}` | yes (L10nString — upgrade plain string in place) | `country`, `url` |
+| `index.yaml` `tour[]` | yes (city names per locale; upgrade plain string to object) | — |
+| `index.yaml` `credits.{ru,en,de}[].role` | yes | `name`, `url` (proper names verbatim) |
 | `index.yaml` `gallery[].caption.{ru,en,de}` | yes (when any source caption exists) | `src`, `credit` |
-| `index.yaml` `awards`, `festivals`, `externalLinks` | **no** | all |
-| `index.yaml` `theatre.*`, `tour`, `tags`, enums, scalars | no | all |
+| `index.yaml` `awards[].{name,category,city}` | yes (L10nString) | `year` |
+| `index.yaml` `festivals[].{name,category,city}` | yes (L10nString) | `year` |
+| `index.yaml` `externalLinks[].label` | yes (L10nString) | `url` |
+| `index.yaml` `runs[].{venue,city,count}` | yes (L10nString) | `yearFrom`, `yearTo` |
+| `index.yaml` `press[].title` | yes — plain string upgraded to `{ru,en,de}` object | `url`, `outlet`, `language` |
+| `index.yaml` enums + scalars (`form`, `lineage`, `role`, `ageRating`, `tags`, `featured`, `year`, `listOrder`, `durationMin`, `videos[]`, `notionIds`, `slug`, asset paths) | **no** | all |
 | `body.{ru,en,de}.md` | yes (only if missing/empty) | preserve YAML frontmatter if any |
-| `content/about/{ru,en,de}.yaml` | `milestones[].label`, `lineage[].role`, `lineage[].note`, `marginalia[]` | `name`, `key`, `institution`, `year` |
+| `content/about/{ru,en,de}.yaml` | `milestones[].label`, `lineage[].role`, `lineage[].note`, `marginalia[]`, any other text field | `name`, `key`, `institution`, `year`, urls |
 | `content/about/{ru,en,de}.md` | yes (only if missing/empty) | — |
 
-**Note on `press[].title`:** the site already handles both `title: "string"` and `title: {ru, en, de}` (see `lib/content.ts:331`). The script upgrades plain strings in place, preserving all other press fields.
+**Generic rule for any future field:** if it's a string carrying human prose → translate. If it's a
+URL, ISO code, slug, enum value, or scalar → skip. Proper names of people are mirrored verbatim.
 
 ## 4. Algorithm (per production / about page)
 
 ```
 1. Parse index.yaml with yaml.parseDocument (stable key order, comments preserved).
-2. For each translatable field group:
+2. For each locale-keyed field group (title, synopsis, tagline, directorsNote, bookingCtaLabel,
+   premiereDate, credits, gallery captions):
      pick source = first non-empty in [ru, en, de]
      for target in {ru,en,de} \ source where value is null/empty:
         translation = LLM(source, src_locale, target_locale, field_kind)
         doc.setIn([...path, locale], translation)
-3. credits: if target locale list is empty, copy source list, translate role, keep name/url.
-4. press[].title: if plain string, treat item.language (or 'ru') as source locale, wrap in object,
-   fill missing locales. If already locale-keyed, fill gaps.
+3. For each L10nString field (theatre.{name,shortName,city}, awards[].*, festivals[].*,
+   externalLinks[].label, runs[].*, press[].title, tour[]):
+     read current value
+     if plain string s:  src_locale = inferred (RU heuristic if Cyrillic, else 'en');
+                         upgrade to object { src: s }
+     for target in {ru,en,de} where missing:
+        translate from any present locale (priority ru→en→de)
+4. credits[].{ru,en,de}: align by index. If target locale list empty/missing, clone source list,
+   translate `role`, keep `name` + `url` verbatim.
 5. gallery[].caption: per item, fill missing locale captions when any locale has a caption.
-6. Write file only if changed. Lint-content runs after; failures restore from .bak.
-7. body.<lang>.md: if missing while a sibling exists, translate sibling whole.
-8. about/{locale}.yaml: if locale file missing, clone source doc then translate text fields.
+6. body.<lang>.md: if missing while a sibling exists, translate sibling whole.
+7. about/{locale}.{yaml,md}: if locale file missing, clone source then translate text fields.
+8. Write file only if changed. Lint-content runs after; failures restore from .bak.
 ```
 
 ## 5. CLI
@@ -131,9 +154,13 @@ Retry: 1 retry on 5xx / rate limit, 2 s delay. Hard-fail on 4xx.
 ## 10. Out of scope
 
 - Notion sync (frozen).
-- `awards`, `festivals`, `externalLinks` translation (original-language items).
-- `tagline`, `bookingCtaLabel` (not included; can be added with `--force` on specific slugs if needed).
 - New fields beyond existing schema.
+- Transliteration of `credits[].name` (proper names of people stay verbatim across locales).
+- URL / slug / enum / scalar mutation.
+
+> **Note on MAP §8 hard rule "Awards/press original-language only":** superseded 2026-05-05 by
+> owner request — every text field is now translatable by default. STATUS.md constraint list and
+> the relevant archive D-row need a supersession note on next ship. Flag at commit time.
 
 ## 11. Running the full translation
 

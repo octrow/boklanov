@@ -41,10 +41,12 @@ directorsNote:
   de: null
 
 # === Театр ===
+# Поля name, shortName, city можно писать строкой (для всех локалей одинаково)
+# или объектом { ru, en, de } — если название/город по-разному в разных языках.
 theatre:
-  name: ""                                # «Большой театр кукол»
+  name: ""                                # «Большой театр кукол» — или { ru: "...", en: "...", de: null }
   shortName: null                         # «БТК» - для компактных мест
-  city: ""                                # Saint Petersburg
+  city: ""                                # Saint Petersburg — или { ru: "Санкт-Петербург", en: "Saint Petersburg" }
   country: ""                             # двухбуквенный ISO: RU / KZ / DE / ES …
   url: null                               # официальная страница спектакля или театра
 
@@ -119,26 +121,30 @@ videos: []
 #   id: 1GWFJ0jfPq4
 
 # === Признание ===
+# name, category, city — текстовые поля: можно строкой или { ru, en, de }.
+# Пример строкой:  name: «Золотой софит»
+# Пример объектом: name: { ru: «Золотой софит», en: "Golden Spotlight", de: null }
 awards: []
-# - name: «Один. Два. Три»                 # название премии
+# - name: «Один. Два. Три»                 # название премии (строка или { ru, en, de })
 #   year: 2022
-#   category: null                         # номинация, если была
-#   city: null
+#   category: null                         # номинация (строка или { ru, en, de })
+#   city: null                             # город (строка или { ru, en, de })
 
 festivals: []
-# - name: «Фестиваль»                      # участие в фестивале (без приза)
+# - name: «Фестиваль»                      # участие без приза (строка или { ru, en, de })
 #   year: 2022
-#   category: null                         # программа / секция
-#   city: null
+#   category: null                         # программа / секция (строка или { ru, en, de })
+#   city: null                             # город (строка или { ru, en, de })
 
 press: []
-# - title: "Заголовок статьи"
+# - title: "Заголовок статьи"              # строка или { ru: "...", en: "...", de: null }
 #   url: https://...
 #   outlet: null                           # название издания (sobaka.ru), если хочется
 #   language: null                         # ru / en / de
 
+# label можно строкой или { ru, en, de }
 externalLinks: []
-# - label: "Канал спектакля"
+# - label: "Канал спектакля"               # или { ru: "Канал", en: "Channel", de: null }
 #   url: https://...
 
 techRider: null                            # ссылка на PDF, если есть
@@ -171,12 +177,13 @@ tour: []
 # - Vienna
 
 # История прокатов (показывается строкой над заголовком).
+# venue, city, count — строка или { ru, en, de }.
 runs: []
-# - venue: "БТК"
-#   city: "Saint Petersburg"
+# - venue: "БТК"                           # или { ru: "БТК", en: "BTK", de: null }
+#   city: "Saint Petersburg"               # или { ru: "Санкт-Петербург", en: "Saint Petersburg" }
 #   yearFrom: 2021
 #   yearTo: 2024
-#   count: "60+"
+#   count: "60+"                           # или { ru: "более 60 показов", en: "60+ performances" }
 
 # === Описание ===
 # Длинное описание лежит в отдельных файлах в той же папке:

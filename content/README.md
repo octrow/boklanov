@@ -51,6 +51,10 @@ redeploys automatically in 1–2 minutes.
 
 ## `index.yaml` fields
 
+> **L10nString** — any text field marked `L10nString` accepts either a plain string
+> (same value for all locales) or a locale-keyed object `{ ru: "...", en: "...", de: null }`.
+> Fallback chain when resolving: requested locale → `en` → `ru` → `de` → `""`.
+
 ### Identity
 
 | Field | Type | Notes |
