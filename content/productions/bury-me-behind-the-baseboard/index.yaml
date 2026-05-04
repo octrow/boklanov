@@ -107,10 +107,10 @@ credits:
     - role: Produzent
       name: Elizaveta Ekimova
 productionsPhoto:
-  src: /productions/bury-me-behind-the-baseboard/poster_eu.jpg
+  src: /productions/bury-me-behind-the-baseboard/poster_eu.webp
   credit: null
 featuredPhoto:
-  src: /productions/bury-me-behind-the-baseboard/poster_eu.jpg
+  src: /productions/bury-me-behind-the-baseboard/poster_eu.webp
   credit: null
 poster:
   src: /productions/bury-me-behind-the-baseboard/poster.jpg
