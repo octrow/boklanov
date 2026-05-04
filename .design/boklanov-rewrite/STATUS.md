@@ -123,7 +123,15 @@ Decisions:
 
 Birthday-surprise gate unchanged: site stays at `boklanov.vercel.app`; main auto-deploys; Roman doesn't see it.
 
-Implementation: 2 commits — docs (DESIGN.md §3 + archive/DESIGN_BRIEF.md D11 backfill + this section), then code.
+Shipped:
+
+- `732b48f` docs(theme): backfill D11 supersession + gorky default theme plan
+- `d708c90` feat(theme): gorky default + paper opt-in + desktop nav scale-up
+- `83bd39b` fix(theme-toggle): default null state to gorky so first click lands on paper
+
+Verification (2026-05-04, dev `localhost:3006`): fresh-load applies gorky cleanly, no flash. Anti-flash migrations work for both legacy keys (`theme=dark`→gorky, `theme=light`→paper). Toggle round-trips gorky↔paper and persists. Header at ≥1024px renders 72px tall; nav links 14.6px at 1920px width (was fixed 13px). Booking CTA on `/productions/[slug]` renders `#FF5A66` fill + `#080706` text ≈ 6.1:1 AA. Routes spot-checked: `/`, `/productions`, `/productions/[slug]`, `/about`, `/contact`. Mobile breakpoint untouched (no nav-size override below 1024px).
+
+Pending: `! git push origin main` (safety hook — Daniil pushes).
 
 ## Accessibility fixes (session 5 audit, uncommitted)
 
