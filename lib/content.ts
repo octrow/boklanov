@@ -30,6 +30,9 @@ const LQIP_DIR = path.resolve(process.cwd(), 'public', 'productions')
 // Types - public shape consumed by page routes
 // ---------------------------------------------------------------------------
 
+/** A string field that can optionally be locale-keyed. Resolved to string in ProjectionView. */
+export type L10nString = string | { ru?: string; en?: string; de?: string }
+
 export interface GalleryItem {
   src: string
   credit: string | null
@@ -49,9 +52,9 @@ export interface Production {
   synopsis: { ru?: string; en?: string; de?: string | null }
   body: { ru: string; en: string; de?: string }
   theatre: {
-    name?: string
-    shortName?: string
-    city?: string
+    name?: L10nString
+    shortName?: L10nString
+    city?: L10nString
     country?: string
     url?: string
   }
@@ -74,16 +77,16 @@ export interface Production {
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{
-    name: string
-    category?: string
+    name: L10nString
+    category?: L10nString
     year?: number
-    city?: string
+    city?: L10nString
   }>
   festivals: Array<{
-    name: string
-    category?: string
+    name: L10nString
+    category?: L10nString
     year?: number
-    city?: string
+    city?: L10nString
   }>
   press: Array<{
     title: string | { ru?: string; en?: string; de?: string }
@@ -91,7 +94,7 @@ export interface Production {
     outlet?: string
     language?: string
   }>
-  externalLinks: Array<{ label: string; url: string }>
+  externalLinks: Array<{ label: L10nString; url: string }>
   techRider: string | null
   pressKit: string | null
   featured: boolean
@@ -108,11 +111,11 @@ export interface Production {
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
   directorsNote: { ru?: string; en?: string; de?: string | null } | null
   runs: Array<{
-    venue?: string
-    city?: string
+    venue?: L10nString
+    city?: L10nString
     yearFrom?: number
     yearTo?: number
-    count?: string
+    count?: L10nString
   }>
 }
 
@@ -129,6 +132,11 @@ export interface ProductionView
     | 'directorsNote'
     | 'bookingCtaLabel'
     | 'press'
+    | 'awards'
+    | 'festivals'
+    | 'externalLinks'
+    | 'runs'
+    | 'theatre'
   > {
   title: string
   synopsis: string
@@ -139,6 +147,11 @@ export interface ProductionView
   directorsNote: string | null
   bookingCtaLabel: string | null
   press: Array<{ title: string; url: string; outlet?: string; language?: string }>
+  awards: Array<{ name: string; category?: string; year?: number; city?: string }>
+  festivals: Array<{ name: string; category?: string; year?: number; city?: string }>
+  externalLinks: Array<{ label: string; url: string }>
+  runs: Array<{ venue?: string; city?: string; yearFrom?: number; yearTo?: number; count?: string }>
+  theatre: { name?: string; shortName?: string; city?: string; country?: string; url?: string }
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
@@ -288,13 +301,26 @@ function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
 // Locale projection
 // ---------------------------------------------------------------------------
 
+function resolveL10n(val: L10nString | null | undefined, locale: Locale): string {
+  if (val == null) return ''
+  if (typeof val === 'string') return val
+  return val[locale] ?? val.en ?? val.ru ?? val.de ?? ''
+}
+
+function resolveL10nOpt(
+  val: L10nString | null | undefined,
+  locale: Locale
+): string | undefined {
+  if (val === undefined || val === null) return undefined
+  return resolveL10n(val, locale)
+}
+
 function project(p: Production, locale: Locale): ProductionView {
   // Fallback chain: requested → ru → en → '' (never throw).
   const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
   const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
   const b =
-    (locale === 'ru' && p.body.ru) ||
-    (locale === 'en' && p.body.en) ||
+    p.body[locale as 'ru' | 'en' | 'de'] ||
     p.body.ru ||
     p.body.en ||
     ''
@@ -330,15 +356,41 @@ function project(p: Production, locale: Locale): ProductionView {
 
   const resolvedPress = p.press.map((item) => ({
     ...item,
-    title:
-      typeof item.title === 'string'
-        ? item.title
-        : (item.title[locale] ??
-          item.title.en ??
-          item.title.ru ??
-          item.title.de ??
-          '')
+    title: resolveL10n(item.title, locale)
   }))
+
+  const resolvedAwards = p.awards.map((a) => ({
+    ...a,
+    name: resolveL10n(a.name, locale),
+    category: resolveL10nOpt(a.category, locale),
+    city: resolveL10nOpt(a.city, locale)
+  }))
+
+  const resolvedFestivals = p.festivals.map((f) => ({
+    ...f,
+    name: resolveL10n(f.name, locale),
+    category: resolveL10nOpt(f.category, locale),
+    city: resolveL10nOpt(f.city, locale)
+  }))
+
+  const resolvedExternalLinks = p.externalLinks.map((l) => ({
+    ...l,
+    label: resolveL10n(l.label, locale)
+  }))
+
+  const resolvedRuns = p.runs.map((r) => ({
+    ...r,
+    venue: resolveL10nOpt(r.venue, locale),
+    city: resolveL10nOpt(r.city, locale),
+    count: resolveL10nOpt(r.count, locale)
+  }))
+
+  const resolvedTheatre = {
+    ...p.theatre,
+    name: resolveL10nOpt(p.theatre.name, locale),
+    shortName: resolveL10nOpt(p.theatre.shortName, locale),
+    city: resolveL10nOpt(p.theatre.city, locale)
+  }
 
   const {
     title: _t,
@@ -350,6 +402,11 @@ function project(p: Production, locale: Locale): ProductionView {
     directorsNote: _dn,
     bookingCtaLabel: _bcl,
     press: _press,
+    awards: _awards,
+    festivals: _festivals,
+    externalLinks: _externalLinks,
+    runs: _runs,
+    theatre: _theatre,
     ...rest
   } = p
   return {
@@ -363,6 +420,11 @@ function project(p: Production, locale: Locale): ProductionView {
     directorsNote,
     bookingCtaLabel,
     press: resolvedPress,
+    awards: resolvedAwards,
+    festivals: resolvedFestivals,
+    externalLinks: resolvedExternalLinks,
+    runs: resolvedRuns,
+    theatre: resolvedTheatre,
     titles: p.title
   }
 }

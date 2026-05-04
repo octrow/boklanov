@@ -472,10 +472,15 @@ export default async function ProductionDetailPage({
             <div className={styles.bodyProse}>{compiledBody}</div>
           )}
 
-          {/* 5. Credits — DA-2.A: leader-dot <dl> table. */}
+          {/* 5. Credits — DA-2.A: leader-dot <dl> table, collapsed by default
+              (same disclosure pattern as TourRider §4.4). */}
           {production.credits.length > 0 && (
-            <section className={styles.creditsBlock}>
-              <h2 className={styles.sectionLabel}>{t('credits')}</h2>
+            <details className={styles.creditsBlock}>
+              <summary className={styles.creditsSummary}>
+                <span className={styles.creditsSummaryLabel}>
+                  {t('credits')}
+                </span>
+              </summary>
               <dl className={styles.creditsDl}>
                 {production.credits.map((c, i) => (
                   <div key={`${c.role}-${i}`} className={styles.creditsRow}>
@@ -497,7 +502,7 @@ export default async function ProductionDetailPage({
                   </div>
                 ))}
               </dl>
-            </section>
+            </details>
           )}
 
           {/* 6. Action bar — hide buttons whose assets are missing. */}

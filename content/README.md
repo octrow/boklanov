@@ -51,34 +51,101 @@ redeploys automatically in 1–2 minutes.
 
 ## `index.yaml` fields
 
+### Identity
+
 | Field | Type | Notes |
 |-------|------|-------|
-| `slug` | string | Latin + hyphens. Matches folder name. |
-| `notionIds.ru` / `.en` | string | Legacy Notion IDs. Keep for audit. |
-| `title.ru` / `.en` / `.de` | string | DE only for priority shows. |
-| `synopsis.ru` / `.en` / `.de` | string | Short description. |
-| `theatre.name` | string | Producing theatre. |
-| `theatre.url` | string | Theatre website. |
-| `year` | number | Premiere year. |
-| `premiereDate.ru` / `.en` | string | Full date string per locale. |
-| `ageRating` | string | `0+` / `3+` / `6+` / `12+` / `16+` / `18+` |
-| `durationMin` | number | Integer minutes. |
-| `role` | string | `director` / `performer` / `co-director` / `reader` |
-| `form` | string[] | `puppet` / `object` / `solo` / `ensemble` / `family` |
-| `lineage` | string[] | `btk` / `rgisi` / `kudashov` / `dotheatre` |
-| `featured` | boolean | Show in home featured row (4–6 max site-wide). |
-| `tour` | string[] | Tour cities. Used on Plinth detail page. |
-| `credits.ru` / `.en` | CreditEntry[] | `{ role, name, url? }` |
-| `gallery` | GalleryItem[] | `{ src, credit, caption: { ru, en } }` |
-| `awards` | Award[] | `{ name, year?, category?, city? }` |
-| `press` | Press[] | `{ title, url, outlet?, language? }` |
-| `videos` | Video[] | `{ provider: "youtube", id }` |
-| `ticketsUrl` | string\|null | Active tickets page. |
-| `techRider` | string\|null | Path to PDF. |
-| `pressKit` | string\|null | Path to ZIP. |
-| `tags` | string[] | Free tags. |
+| `slug` | string | Latin + hyphens. Must match folder name. |
+| `notionIds.ru` / `.en` | string\|null | Legacy Notion IDs. Keep for audit trail. |
 
-Long-form description ships in `body.<locale>.md` siblings - not
+### Titles & texts (locale-keyed)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `title.ru` / `.en` / `.de` | string | DE only for priority shows. |
+| `synopsis.ru` / `.en` / `.de` | string | 1–3 sentences; appears in cards and page header. |
+| `tagline.ru` / `.en` / `.de` | string\|null | Subtitle shown *above* the title on the production page. |
+| `directorsNote.ru` / `.en` / `.de` | string\|null | Director's quote shown *below* the synopsis. |
+
+### Theatre
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `theatre.name` | string\|L10nString | Producing theatre name. |
+| `theatre.shortName` | string\|L10nString\|null | Compact label for tight UI spots. |
+| `theatre.city` | string\|L10nString | City of the theatre. |
+| `theatre.country` | string | ISO-2 code: `RU` / `KZ` / `DE` / `ES` … |
+| `theatre.url` | string\|null | Official theatre or show page URL. |
+
+### Dates & metadata
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `year` | number\|null | Premiere year. |
+| `premiereDate.ru` / `.en` / `.de` | string\|null | Full date string per locale. |
+| `ticketsUrl` | string\|null | Active ticket purchase page. |
+| `ageRating` | string\|null | `0+` / `3+` / `6+` / `12+` / `16+` / `18+` |
+| `durationMin` | number\|null | Integer minutes. |
+
+### Classification
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `role` | string[] | Roman's role(s): `director` / `co-director` / `performer` / `playwright` / `designer` / `choreographer` / `mentor` / `reader` |
+| `form` | string[] | `theater` / `puppet` / `object` / `solo` / `mono` / `music` / `immersive` / `lab` / `festival` / `online` / `ensemble` / `family` |
+| `lineage` | string[] | `btk` / `rgisi` / `kudashov` / `dotheatre` / `school` / `lab` |
+| `tags` | string[] | Free-form filter/search tags. |
+
+### Credits
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `credits.ru` / `.en` / `.de` | CreditEntry[] | `{ role: string, name: string, url?: string }`. DE optional. |
+
+### Media
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `poster.src` | string\|null | Path to cover image, e.g. `/productions/<slug>/poster.jpg`. |
+| `poster.credit` | string\|null | Photographer name. |
+| `gallery` | GalleryItem[] | `{ src, credit, caption: { ru, en, de? } }`. |
+| `videos` | Video[] | `{ provider: "youtube"\|"vimeo", id: string }`. First item renders as trailer. |
+
+### Recognition
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `awards` | Award[] | `{ name, year?, category?, city? }`. `name` can be L10nString. |
+| `festivals` | Festival[] | `{ name, year?, category?, city? }`. Participation without prize. |
+| `press` | Press[] | `{ title, url, outlet?, language? }`. `title` can be L10nString. |
+
+### Links & files
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `externalLinks` | ExternalLink[] | `{ label: L10nString, url: string }`. |
+| `techRider` | string\|null | URL or path to PDF. |
+| `pressKit` | string\|null | URL or path to ZIP. |
+
+### Booking CTA
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `bookingCta` | boolean | `false` hides the "Write to Roman about touring" button. Default `true`. |
+| `bookingCtaLabel.ru` / `.en` / `.de` | string\|null | Override button label. `null` → default text. |
+| `bookingCtaUrl` | string\|null | Override button URL. `null` → default `mailto:`. |
+
+### Site placement
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `featured` | boolean | Show in home featured row (4–6 max site-wide). |
+| `featuredOrder` | number\|null | Sort order in the featured strip (1, 2, 3 …). |
+| `listOrder` | number\|null | Sort order in the full productions grid. `null` = not pinned. |
+| `tour` | string[] | Tour cities. Used on the Plinth detail page. |
+| `runs` | Run[] | Historical venue run data: `{ venue?, city?, yearFrom?, yearTo?, count? }`. All fields are L10nString-capable. Displays above the title on the production page. |
+
+Long-form description ships in `body.<locale>.md` siblings — not
 inside `index.yaml`.
 
 ---

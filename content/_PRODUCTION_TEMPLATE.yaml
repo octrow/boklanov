@@ -61,7 +61,7 @@ ageRating: null                           # "0+", "6+", "12+", "16+", "18+"
 durationMin: null                         # длительность в минутах, число
 
 # Роль Романа в постановке. Любое из:
-# director, performer, playwright, designer, choreographer, mentor
+# director, co-director, performer, playwright, designer, choreographer, mentor, reader
 role:
   - director
 
@@ -109,7 +109,7 @@ gallery: []
 #     caption:
 #       ru: null
 #       en: null
-#       de: null
+#       de: null                          # опционально
 
 # Видео. provider: youtube | vimeo. id: id ролика (не полный URL).
 # Первый ролик из списка показывается как встроенный трейлер

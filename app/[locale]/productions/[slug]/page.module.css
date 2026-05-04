@@ -125,13 +125,54 @@
   max-width: 60ch;
 }
 
-/* 5. Credits — DA-2.A: leader-dot <dl> table. */
+/* 5. Credits — DA-2.A: leader-dot <dl> table.
+   <details> disclosure mirrors TourRider §4.4: closed by default,
+   summary acts as the toggle. */
 .creditsBlock {
   margin: 0 0 var(--space-8);
 }
 
+.creditsSummary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.creditsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.creditsSummary::after {
+  content: '+';
+  color: var(--ink-faint);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-chip);
+}
+
+.creditsBlock[open] > .creditsSummary::after {
+  content: '−';
+}
+
+.creditsSummaryLabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.creditsSummary:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
 .creditsDl {
-  margin: 0;
+  margin: var(--space-3) 0 0;
   padding: 0;
 }
 
