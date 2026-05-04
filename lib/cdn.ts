@@ -4,5 +4,7 @@ const CDN = process.env.NEXT_PUBLIC_CDN_BASE ?? ''
 export function cdnUrl(path: string | null | undefined): string | null {
   if (!path) return null
   if (path.startsWith('http')) return path
-  return CDN ? `${CDN}${path}` : path
+  const base = CDN.endsWith('/') ? CDN.slice(0, -1) : CDN
+  const p = path.startsWith('/') ? path : `/${path}`
+  return `${base}${p}`
 }
