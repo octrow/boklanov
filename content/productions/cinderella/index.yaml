@@ -25,9 +25,18 @@ directorsNote:
   de: Mein liebes Kind, sei gütig und sanft, und der Herr wird dir immer helfen,
     und ich werde dich vom Himmel aus anschauen und werde immer bei dir sein
 theatre:
-  name: Театр кукол «Бродячая Собачка»
-  shortName: Бродячая Собачка
-  city: Saint Petersburg
+  name:
+    ru: Театр кукол «Бродячая Собачка»
+    en: Stray Dog Puppet Theater
+    de: Puppentheater "Brodyachaya Sobachka"
+  shortName:
+    ru: Бродячая Собачка
+    en: Stray Dog
+    de: Brodjachaja Sobatschka
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppettheatre.spb.ru/index.php?id=65"
 year: 2021
@@ -41,7 +50,7 @@ durationMin: 40
 role: director
 form:
   - ensemble
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссер-постановщик и автор текста
@@ -118,18 +127,36 @@ credits:
 poster:
   src: /productions/cinderella/poster.jpg
   credit: null
-videos: []
+videos: [ ]
 awards:
-  - name: «Золотой софит»
+  - name:
+      ru: «Золотой софит»
+      en: Golden Spotlight
+      de: Golden Spotlight
     year: 2021
-    category: Лучшая работа актёра в театре кукол (К. Кожев)
-    city: Санкт-Петербург
+    category:
+      ru: Лучшая работа актёра в театре кукол (К. Кожев)
+      en: Best Actor in a Puppet Theatre (K. Kozhev)
+      de: Beste schauspielerische Leistung im Puppentheater (K. Koshev)
+    city:
+      ru: Санкт-Петербург
+      en: Saint Petersburg
+      de: Sankt Petersburg
     url: "https://zolotoisofit.ru/sofit-2021/"
-  - name: XXX Международный фестиваль КУКАРТ
+  - name:
+      ru: XXX Международный фестиваль КУКАРТ
+      en: XXX International Puppet Festival
+      de: XXX International Puppet Festival
     year: 2021
-    category: Лучший спектакль о добре
-    city: Санкт-Петербург
-festivals: []
+    category:
+      ru: Лучший спектакль о добре
+      en: Best Play about Goodness
+      de: Bester Spiel um Gutes
+    city:
+      ru: Санкт-Петербург
+      en: Saint Petersburg
+      de: Sankt Petersburg
+festivals: [ ]
 press:
   - title:
       ru: Video from Stray Dog Puppet Theatre
@@ -150,7 +177,7 @@ press:
       en: Far-reaching Perspectives
       de: Weite Perspektiven
     url: "https://musecube.org/otchet/otchet-theatre/daleko-idushhie-perspektivy/"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -158,7 +185,7 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
 gallery:
   - src: /productions/cinderella/01.webp
     credit: null

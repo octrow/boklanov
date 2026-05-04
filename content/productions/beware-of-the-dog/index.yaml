@@ -26,9 +26,18 @@ directorsNote:
     absprechen: Er bekommt vom Vater genauso viel Schwierigkeiten wie ich von
     der Mutter"
 theatre:
-  name: Тотальный Театр
-  shortName: ТТ
-  city: Almaty
+  name:
+    ru: Тотальный Театр
+    en: Total Theatre
+    de: Totaler Theater
+  shortName:
+    ru: ТТ
+    en: TT
+    de: TT
+  city:
+    en: Almaty
+    ru: Алматы
+    de: Almaty
   country: KZ
 year: 2023
 premiereDate:
@@ -41,7 +50,7 @@ durationMin: 105
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -109,9 +118,9 @@ credits:
 poster:
   src: /productions/beware-of-the-dog/poster.jpg
   credit: null
-videos: []
-awards: []
-festivals: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
 press:
   - title:
       ru: Роман Бокланов выпускает в Казахстане премьеру для подростков
@@ -145,7 +154,7 @@ press:
       en: "\"Be Careful, the Devil's in the Details\": Bitten by Fate"
       de: "«Vorsicht, böse Hündin!»: von Schicksal gebissen"
     url: "https://orda.kz/ostorozhno-zlaya-sobaka-pokusannye-sudboj/"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: true
@@ -154,7 +163,7 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
 gallery:
   - src: /productions/beware-of-the-dog/01.webp
     credit: null

@@ -7,17 +7,42 @@ title:
   en: "Amundsen's Pole"
   de: Amundsens Pol
 synopsis:
-  ru: Спектакль с элементами интерактива о жизненном пути первооткрывателя Антарктиды Руаля Амундсена — и о том, как в каждом из нас живёт способность действенно мечтать.
-  en: An interactive performance about the life of Antarctic discoverer Roald Amundsen — and about the gift of purposeful dreaming that lives in each of us.
-  de: Eine interaktive Aufführung über den Lebensweg des Antarktis-Entdeckers Roald Amundsen — und über die Gabe des zielgerichteten Träumens, die in jedem von uns lebt.
+  ru: Спектакль с элементами интерактива о жизненном пути первооткрывателя
+    Антарктиды Руаля Амундсена — и о том, как в каждом из нас живёт способность
+    действенно мечтать.
+  en: An interactive performance about the life of Antarctic discoverer Roald
+    Amundsen — and about the gift of purposeful dreaming that lives in each of
+    us.
+  de: Eine interaktive Aufführung über den Lebensweg des Antarktis-Entdeckers
+    Roald Amundsen — und über die Gabe des zielgerichteten Träumens, die in
+    jedem von uns lebt.
 directorsNote:
-  ru: "Личность Амундсена и история его открытий настолько по-человечески пронзительны и неоднозначны, что не важно, увлекаетесь ли вы географией или путаете Северный полюс с Южным. Я бы сказала, что наш спектакль об удивительном даре: способности действенно мечтать."
-  en: "Amundsen's personality and the story of his discoveries are so humanly poignant and ambiguous that it doesn't matter whether you are passionate about geography or confuse the North Pole with the South. I would say that our show is about a remarkable gift: the ability to dream purposefully."
-  de: "Amundsens Persönlichkeit und die Geschichte seiner Entdeckungen sind so menschlich ergreifend und vielschichtig, dass es keine Rolle spielt, ob Sie sich für Geografie begeistern oder den Nordpol mit dem Südpol verwechseln. Ich würde sagen, dass unser Stück von einer bemerkenswerten Gabe handelt: der Fähigkeit, zielgerichtet zu träumen."
+  ru: "Личность Амундсена и история его открытий настолько по-человечески
+    пронзительны и неоднозначны, что не важно, увлекаетесь ли вы географией или
+    путаете Северный полюс с Южным. Я бы сказала, что наш спектакль об
+    удивительном даре: способности действенно мечтать."
+  en: "Amundsen's personality and the story of his discoveries are so humanly
+    poignant and ambiguous that it doesn't matter whether you are passionate
+    about geography or confuse the North Pole with the South. I would say that
+    our show is about a remarkable gift: the ability to dream purposefully."
+  de: "Amundsens Persönlichkeit und die Geschichte seiner Entdeckungen sind so
+    menschlich ergreifend und vielschichtig, dass es keine Rolle spielt, ob Sie
+    sich für Geografie begeistern oder den Nordpol mit dem Südpol verwechseln.
+    Ich würde sagen, dass unser Stück von einer bemerkenswerten Gabe handelt:
+    der Fähigkeit, zielgerichtet zu träumen."
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppets.ru/polyusamundsena"
   year: 2020
@@ -32,7 +57,7 @@ role: performer
 bookingCta: false
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -91,16 +116,24 @@ credits:
 poster:
   src: /productions/amundsen-pole/poster.png
   credit: null
-gallery: []
-videos: []
+gallery: [ ]
+videos: [ ]
 awards:
-  - name: Лучший актёрский ансамбль — 29-й фестиваль «Театры Санкт-Петербурга — детям»
+  - name:
+      ru: Лучший актёрский ансамбль — 29-й фестиваль «Театры Санкт-Петербурга — детям»
+      en: Best Actor Ensemble – 29th Festival of Theatres of Saint Petersburg for
+        Children
+      de: Бester Schauspielerensemble – 29. Festival «Theater in St. Petersburg für
+        Kinder»
     year: 2021
-  - name: Лучший актёрский ансамбль в театре кукол — «Золотой Софит»
+  - name:
+      ru: Лучший актёрский ансамбль в театре кукол — «Золотой Софит»
+      en: Best Actor Ensemble in Puppet Theatre – Golden Spotlight
+      de: Bester Schauspielerensemble im Puppentheater – Golden Spotlight
     year: 2021
-festivals: []
-press: []
-externalLinks: []
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -108,4 +141,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

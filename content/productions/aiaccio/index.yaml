@@ -26,9 +26,18 @@ directorsNote:
     versichern, dass an jenem Abend eine Träne über das fältige Gesicht der
     Elefantenkuh rollte – eine Träne des Glücks
 theatre:
-  name: Большой театр кукол
-  shortName: БТК
-  city: Saint Petersburg
+  name:
+    ru: Большой театр кукол
+    en: Great Puppet Theatre
+    de: Bolshoi Teatr Kukol
+  shortName:
+    ru: БТК
+    en: BTK
+    de: BTK
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://puppets.ru/spec/142"
 year: 2021
