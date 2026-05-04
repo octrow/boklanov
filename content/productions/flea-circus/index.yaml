@@ -31,8 +31,7 @@ premiereDate:
 ticketsUrl: null
 ageRating: 6+
 durationMin: null
-role: director
-status: in-development
+role: performer
 form:
   - theater
   - family
