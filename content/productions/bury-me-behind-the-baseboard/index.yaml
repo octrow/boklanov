@@ -179,7 +179,10 @@ awards:
     city: Новосибирск
 festivals: []
 press:
-  - title: "Why is \"Bury Me behind the Baseboard\" one of the most important premieres of the season at BTK?"
+  - title:
+      en: "Why is \"Bury Me behind the Baseboard\" one of the most important premieres of the season at BTK?"
+      ru: "Почему «Похороните меня за плинтусом» — один из главных премьер сезона в БТК?"
+      de: "Warum ist „Begraben Sie mich hinter der Fußleiste" eine der wichtigsten Premieren der Saison im BTK?"
     url: "https://m.sobaka.ru/entertainment/theatre/128165"
   - title: sobaka.ru
     url: "http://sobaka.ru/"

@@ -86,7 +86,7 @@ export interface Production {
     city?: string
   }>
   press: Array<{
-    title: string
+    title: string | { ru?: string; en?: string; de?: string }
     url: string
     outlet?: string
     language?: string
@@ -128,6 +128,7 @@ export interface ProductionView
     | 'tagline'
     | 'directorsNote'
     | 'bookingCtaLabel'
+    | 'press'
   > {
   title: string
   synopsis: string
@@ -137,6 +138,7 @@ export interface ProductionView
   tagline: string | null
   directorsNote: string | null
   bookingCtaLabel: string | null
+  press: Array<{ title: string; url: string; outlet?: string; language?: string }>
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
@@ -326,6 +328,18 @@ function project(p: Production, locale: Locale): ProductionView {
       null)
     : null
 
+  const resolvedPress = p.press.map((item) => ({
+    ...item,
+    title:
+      typeof item.title === 'string'
+        ? item.title
+        : (item.title[locale] ??
+          item.title.en ??
+          item.title.ru ??
+          item.title.de ??
+          '')
+  }))
+
   const {
     title: _t,
     synopsis: _s,
@@ -335,6 +349,7 @@ function project(p: Production, locale: Locale): ProductionView {
     tagline: _tg,
     directorsNote: _dn,
     bookingCtaLabel: _bcl,
+    press: _press,
     ...rest
   } = p
   return {
@@ -347,6 +362,7 @@ function project(p: Production, locale: Locale): ProductionView {
     tagline: tagline || null,
     directorsNote,
     bookingCtaLabel,
+    press: resolvedPress,
     titles: p.title
   }
 }

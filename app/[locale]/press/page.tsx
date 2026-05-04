@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
@@ -9,8 +10,38 @@ import { getAllProductions } from '@/lib/content'
 
 import styles from './page.module.css'
 
+const BASE = (
+  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
+).replace(/\/$/, '')
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'press' })
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+
+  const url = locale === 'en' ? `${BASE}/press` : `${BASE}/${locale}/press`
+  const title = `${tMeta('siteName')} — ${t('title')}`
+
+  return {
+    title,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${BASE}/press`,
+        de: `${BASE}/de/press`,
+        ru: `${BASE}/ru/press`
+      }
+    },
+    openGraph: { title, url, type: 'website' }
+  }
 }
 
 function outletFromUrl(url: string): string {
