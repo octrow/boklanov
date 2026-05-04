@@ -12,21 +12,11 @@
 
 .filterBar {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
-  /* Horizontal scroll on narrow viewports without revealing the scrollbar. */
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  /* Slight negative margin + padding trick to keep chips flush with the
-     page gutter while allowing the strip to scroll edge-to-edge. */
+  gap: var(--space-2) var(--space-3);
   padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--rule);
-}
-
-.filterBar::-webkit-scrollbar {
-  display: none;
 }
 
 /* Filter group: on mobile a flex row of chips; on desktop a column (label above chips). */
@@ -40,7 +30,7 @@
 /* Inner chip row — always a horizontal flex regardless of group direction. */
 .chipRow {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: var(--space-1);
 }
 
@@ -133,6 +123,51 @@
 .chipActive:hover {
   background: var(--paper-raised);
   border-color: var(--rule-strong);
+}
+
+/* ── Country popover — disclosure trigger + panel of country chips ──────── */
+
+/* On desktop align the country trigger with the chip row of other groups
+   (other groups have a label-row above the chip-row; country has no label
+   so it would otherwise float to the top of the bar). */
+@media (min-width: 768px) {
+  .groupCountry {
+    align-self: flex-end;
+  }
+}
+
+.countryWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.countryTrigger {
+  gap: var(--space-1);
+}
+
+.countryTriggerLabel {
+  display: inline-flex;
+}
+
+.caret {
+  font-size: 0.75em;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.countryPopover {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-width: max-content;
+  max-width: min(320px, calc(100vw - var(--space-4)));
+  padding: var(--space-2);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
 }
 
 /* ── Clear-all — DESIGN §5.2: oxblood, only when non-default filters active */

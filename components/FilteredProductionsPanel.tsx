@@ -66,20 +66,38 @@ export function FilteredProductionsPanel({
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  const [countryOpen, setCountryOpen] = React.useState(false)
+  const countryRef = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => {
+    if (!countryOpen) return
+    function onDocClick(e: MouseEvent) {
+      if (!countryRef.current?.contains(e.target as Node)) setCountryOpen(false)
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setCountryOpen(false)
+    }
+    document.addEventListener('mousedown', onDocClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDocClick)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [countryOpen])
 
   // ── Parse URL params (safe with null — hooks must run before any return) ─
   // `role` default = 'director' (brief D5 curator default)
   const activeRole = searchParams?.get('role') ?? 'director'
   const activeForm = searchParams?.get('form') ?? null
   const activeAges = parseList(searchParams?.get('age') ?? null)
-  const activeCountries = parseList(searchParams?.get('country') ?? null)
+  const activeCountry = searchParams?.get('country') ?? null
 
   // Non-default filters are "active" (show clear-all)
   const hasActiveFilters =
     activeRole !== 'director' ||
     activeForm !== null ||
     activeAges.length > 0 ||
-    activeCountries.length > 0
+    activeCountry !== null
 
   // ── Derive available options from data ───────────────────────────────
 
@@ -91,17 +109,21 @@ export function FilteredProductionsPanel({
     [productions]
   )
 
-  const availableCountries = React.useMemo(
-    () =>
-      [
-        ...new Set(
-          productions
-            .map((p) => countryCode(p.theatre.country))
-            .filter((c): c is string => c !== null)
-        )
-      ].sort(),
-    [productions]
-  )
+  // Countries derive from MDX (theatre.country). Sort alphabetical, but force
+  // KZ/RU to the tail so European venues read first regardless of frequency.
+  const availableCountries = React.useMemo(() => {
+    const demoted = new Set(['KZ', 'RU'])
+    const codes = [
+      ...new Set(
+        productions
+          .map((p) => countryCode(p.theatre.country))
+          .filter((c): c is string => c !== null)
+      )
+    ]
+    const head = codes.filter((c) => !demoted.has(c)).sort()
+    const tail = codes.filter((c) => demoted.has(c)).sort()
+    return [...head, ...tail]
+  }, [productions])
 
   // ── Filter productions ───────────────────────────────────────────────
 
@@ -116,13 +138,13 @@ export function FilteredProductionsPanel({
         const bucket = ageBucketValue(p.ageRating)
         if (!bucket || !activeAges.includes(bucket)) return false
       }
-      if (activeCountries.length > 0) {
+      if (activeCountry !== null) {
         const code = countryCode(p.theatre.country)
-        if (!code || !activeCountries.includes(code)) return false
+        if (code !== activeCountry) return false
       }
       return true
     })
-  }, [productions, activeRole, activeForm, activeAges, activeCountries])
+  }, [productions, activeRole, activeForm, activeAges, activeCountry])
 
   // Null during SSR in Suspense boundary — page fallback is shown instead.
   if (!searchParams) return null
@@ -163,8 +185,8 @@ export function FilteredProductionsPanel({
 
   return (
     <div className={styles.panel}>
-      {/* Filter strip — horizontally scrollable on mobile.
-          On desktop each group becomes a column: mono-caps label above chips. */}
+      {/* Filter strip — wraps on overflow. Country group is a disclosure popover
+          to keep the bar narrow even when many countries appear in the data. */}
       <div className={styles.filterBar} role='toolbar' aria-label='Filters'>
         {/* Role — radio group (single selection) */}
         <div className={styles.group} role='radiogroup' aria-label={labels.groupLabelRole}>
@@ -235,23 +257,49 @@ export function FilteredProductionsPanel({
           </div>
         </div>
 
-        {/* Country — multi-select (hidden when data has only one country) */}
+        {/* Country — single-select disclosure popover. Trigger doubles as group
+            label, so the mono-caps "СТРАНА" title is omitted here on purpose. */}
         {availableCountries.length > 1 && (
           <>
             <span className={styles.sep} aria-hidden="true">·</span>
-            <div className={styles.group} role='group' aria-label={labels.groupLabelCountry}>
-              <span className={styles.groupLabel} aria-hidden="true">{labels.groupLabelCountry}</span>
-              <div className={styles.chipRow}>
-                {availableCountries.map((code) => (
-                  <button
-                    key={code}
-                    className={`${styles.chip} ${activeCountries.includes(code) ? styles.chipActive : ''}`}
-                    aria-pressed={activeCountries.includes(code)}
-                    onClick={() => toggleMulti('country', code, activeCountries)}
+            <div className={`${styles.group} ${styles.groupCountry}`} role='group' aria-label={labels.groupLabelCountry}>
+              <div className={styles.countryWrap} ref={countryRef}>
+                <button
+                  type='button'
+                  className={`${styles.chip} ${styles.countryTrigger} ${activeCountry !== null ? styles.chipActive : ''}`}
+                  aria-haspopup='true'
+                  aria-expanded={countryOpen}
+                  aria-controls='country-popover'
+                  onClick={() => setCountryOpen((v) => !v)}
+                >
+                  <span className={styles.countryTriggerLabel}>
+                    {activeCountry ?? labels.groupLabelCountry}
+                  </span>
+                  <span className={styles.caret} aria-hidden='true'>▾</span>
+                </button>
+                {countryOpen && (
+                  <div
+                    id='country-popover'
+                    className={styles.countryPopover}
+                    role='radiogroup'
+                    aria-label={labels.groupLabelCountry}
                   >
-                    {code}
-                  </button>
-                ))}
+                    {availableCountries.map((code) => (
+                      <button
+                        key={code}
+                        className={`${styles.chip} ${activeCountry === code ? styles.chipActive : ''}`}
+                        role='radio'
+                        aria-checked={activeCountry === code}
+                        onClick={() => {
+                          setParam('country', activeCountry === code ? null : code)
+                          setCountryOpen(false)
+                        }}
+                      >
+                        {code}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </>
