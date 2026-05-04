@@ -26,9 +26,18 @@ tagline:
   en: Rock story for all the humiliated and abused
   de: Rock-Geschichte für alle Gedemütigten und Misshandelten
 theatre:
-  name: Няганский театр юного зрителя
-  shortName: НТЮЗ
-  city: Nyagan
+  name:
+    ru: Няганский театр юного зрителя
+    en: Nizhnevartovsk Youth Theatre
+    de: Njaganer Theater für junges Publikum
+  shortName:
+    ru: НТЮЗ
+    en: NTYP
+    de: NTYP
+  city:
+    en: Nyagan
+    ru: Няган
+    de: Nyagan
   country: RU
   url: "https://ntyz.ru/spektakl/%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80-%D0%B\
     4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80/"
@@ -44,7 +53,7 @@ durationMin: 95
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -218,9 +227,9 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
 press:
   - title:
       ru: В Няганском ТЮЗе выходит рок-история о дружбе с «полупсом»
@@ -234,7 +243,7 @@ press:
       en: DRIVE, DREAMS AND SOLITUDE
       de: TRAUM, TRÄUME UND EINZELNISSE
     url: "http://flyingcritic.ru/post/draiv-mechti-i-odinochestvo"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: true
@@ -244,4 +253,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

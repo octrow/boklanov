@@ -15,8 +15,14 @@ synopsis:
     Leben lockte sie mit Wärme und Essen. Aber eines Tages kam eine vertraute
     Stimme aus dem Publikum…
 theatre:
-  name: Театр у Нарвских ворот
-  city: Saint Petersburg
+  name:
+    ru: Театр у Нарвских ворот
+    en: Theatre by the Narva Gate
+    de: Theater am Narwes Tor
+  city:
+    en: Saint Petersburg
+    ru: Санкт-Петербург
+    de: Sankt Petersburg
   country: RU
   url: "https://www.teatrlutz.ru/performance/kashtanka-6/"
 year: 2020
@@ -31,7 +37,7 @@ role: co-director
 bookingCta: false
 form:
   - puppet
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: В спектакле участвуют
@@ -166,11 +172,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -178,4 +184,4 @@ tags:
   - performance for children
   - puppet
   - theater
-tour: []
+tour: [ ]

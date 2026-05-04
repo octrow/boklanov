@@ -11,8 +11,18 @@ synopsis:
   en: null
   de: null
 theatre:
-  name: Тотальный Театр
-  city: Almaty
+  name:
+    ru: Тотальный Театр
+    en: Total Theatre
+    de: Totaler Theater
+  shortName:
+    ru: ТТ
+    en: TT
+    de: TT
+  city:
+    en: Almaty
+    ru: Алматы
+    de: Almaty
   country: KZ
   url: null
 year: null
@@ -27,7 +37,7 @@ role: director
 status: in-development
 form:
   - theater
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -41,15 +51,15 @@ credits:
 poster:
   src: null
   credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+gallery: [ ]
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
-tour: []
+tour: [ ]

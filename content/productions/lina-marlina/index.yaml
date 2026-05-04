@@ -34,7 +34,10 @@ tagline:
   en: Fantasy Concert
   de: Fantasie-Konzert
 theatre:
-  name: ARTиШОК
+  name:
+    ru: ARTиШОК
+    en: ARTiSHOK
+    de: ARTiSHOK
   url: "https://artishock.kz/"
 year: 2023
 premiereDate:
@@ -47,7 +50,7 @@ durationMin: 100
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -240,9 +243,9 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
 press:
   - title:
       ru: Роман Бокланов выпускает «концерт-фэнтези» о русалке-подростке
@@ -250,7 +253,7 @@ press:
       de: Roman Boklanov präsentiert ein Konzert-Fantasy über eine
         Meerjungfrau-Teenager
     url: "https://oteatre.info/lina-marlina/"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -259,4 +262,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
