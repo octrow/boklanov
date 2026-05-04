@@ -1,3 +1,6 @@
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+
 import bundleAnalyzer from '@next/bundle-analyzer'
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -8,8 +11,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 export default withNextIntl(
   withBundleAnalyzer({
+    outputFileTracingRoot: __dirname,
     staticPageGenerationTimeout: 300,
     // gray-matter is CommonJS; let Node load it as-is on the server.
     serverExternalPackages: ['gray-matter'],
