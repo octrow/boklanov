@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-03 (session 15 — §2.4 broken-grid re-attempt: Option B + container queries).
+Current state + open work. Updated: 2026-05-04 (session 16 — gorky default theme + desktop nav scale-up).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -105,6 +105,25 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 - **Cover / afisha**: `max-height: 65vh`, `object-fit: contain`, centered — no cropping. `PosterLightbox` client component wraps cover; click opens full-image overlay (dark backdrop, Escape/click-outside to close).
 - **About photos**: `photos[]` array added to `AboutFrontmatter` + 2-col masonry grid rendered below geography section. Placeholder `photos: []` in `ru.mdx` + `en.mdx`. Roman adds entries when photos are ready.
 - **Archive compress docs**: all `*_compress.md` files registered in MAP.md §2; all active-doc archive links updated to compress-first.
+
+## Gorky default theme + desktop nav scale-up (session 16, 2026-05-04)
+
+User ask: dark Theatre-Gorky-style background as default; light "paper" as opt-in; bigger nav buttons on desktop.
+
+Decisions:
+
+- **Two themes, not three.** `gorky` (default, `:root`) + `paper` (opt-in, `[data-theme="paper"]`). Drop `[data-theme="dark"]` block + `prefers-color-scheme: dark` block — gorky is now root-default so they're redundant.
+- **Gorky tokens deepened from v3 dark.** `--paper #080706` (was `#0E0D0C`) — D10 floor preserved (`rgb(8,7,6)` ≠ pure black). `--ink #F4F0E8` (was `#E8E5DD`) — warmer for editorial register. `--ink-mute #A8A49C`, `--ink-faint #7A7771` — slightly lifted for AA on deeper paper. `--accent-vermillion #FF5A66` reused from v3 dark (no fresh AA risk).
+- **D11 backfill, not fresh unfreeze.** 9v3.0 (`2827654`) replaced oxblood with vermillion; the supersession was never recorded in `archive/DESIGN_BRIEF.md` D11 row. Backfilled 2026-05-04 with the same supersession also covering this default-flip. No new `MAP.md` §5 unfreeze event — admin cleanup of an old one.
+- **Desktop nav scale-up.** New tokens `--font-size-nav clamp(13px, 11.5px + 0.16vw, 16px)` and `--header-height-desktop 72px`. Applied at ≥1024px to `.navLink`, `.localeLink`, `.inner` height. Mobile drawer untouched.
+- **Legacy localStorage migrated.** `theme=dark` → `gorky`. `theme=light` → `paper`. New key `boklanov.theme`.
+- **Anti-flash script** in `app/[locale]/layout.tsx` always sets `data-theme` attribute (even for default gorky) so toggle is a clean swap.
+- **OG image `app/api/og/[slug]/route.tsx`** has hard-coded `#F4F2EC`/`#161514`/`#6B0F0F` — predates v3, untouched in this commit (separate concern; OG renders at build/edge, not theme-aware).
+- **DuotonePosterSprite** SVG `<feColorMatrix>` filters reference paper `#F2F0EA` literally (normalized RGB in matrix, not a CSS var). Acceptable: duotone only renders on `featured: true` cards on home (gated to `/`); the highlights mapping toward paper-cream on a gorky background is the intended screen-print register.
+
+Birthday-surprise gate unchanged: site stays at `boklanov.vercel.app`; main auto-deploys; Roman doesn't see it.
+
+Implementation: 2 commits — docs (DESIGN.md §3 + archive/DESIGN_BRIEF.md D11 backfill + this section), then code.
 
 ## Accessibility fixes (session 5 audit, uncommitted)
 

@@ -37,7 +37,25 @@ References (energy): gorki.de, hau-berlin.de, volksbuehne-berlin.de. Grammar (no
 
 v3 Plakat (2026-05-03): Bauhaus trio replaces v2 oxblood. `--ink` deepened for accent contrast.
 
-Light:
+**Two themes. `gorky` is default; `paper` is opt-in via ThemeToggle.** `[data-theme]` attr on `<html>` selects; legacy `theme=dark` migrates to gorky, legacy `theme=light` migrates to paper. D11 brief decision was superseded in 9v3.0 (`2827654`); annotation backfilled in `archive/DESIGN_BRIEF.md` D11 2026-05-04. D10 (soft black, never pure black) holds — gorky `--paper #080706` is `rgb(8,7,6)`, not `#000`.
+
+Gorky (default, dark plakat register):
+
+- `--paper #080706` near-black (one notch deeper than v3 dark `#0E0D0C` — Theatre-Gorky aesthetic; D10 floor preserved)
+- `--paper-raised #161413` cards/modals
+- `--paper-sunken #040303` inputs/wells
+- `--ink #F4F0E8` primary text (warmer than v3 `#E8E5DD` for editorial register on near-black)
+- `--ink-mute #A8A49C` secondary
+- `--ink-faint #7A7771` placeholder, decorative
+- `--ink-marginalia rgba(244,240,232,0.55)`
+- `--rule rgba(244,240,232,0.10)` hairlines
+- `--rule-strong rgba(244,240,232,0.18)`
+- `--accent-vermillion #FF5A66` primary stage. AA on `#080706` ≈ 6.1:1 ✓ (was AA on `#0E0D0C` ≈ 5.4:1; tighter paper improves contrast). Booking CTA, hover underline, focus ring.
+- `--accent-cobalt #5B82C2` secondary stage. AAA on gorky paper.
+- `--accent-mustard #C9A22F` tertiary, decorative only.
+- `--ink-on-accent #080706` text on accent fills (AA, matches new paper)
+
+Paper (opt-in, light editorial register — current v2 Vitrine, unchanged):
 
 - `--paper #F2F0EA` warm off-white
 - `--paper-raised #FBFAF6` cards/modals
@@ -52,16 +70,6 @@ Light:
 - `--accent-cobalt #1D3557` secondary stage. `/productions` SectionStripe, Sticker B. AAA on paper 12.4:1 ✓.
 - `--accent-mustard #F4D35E` tertiary stage. `/about` SectionStripe, TourTicker fill, Sticker C. **Decorative only — never for text** (AA fail on paper). Use `--ink-on-mustard` for text on mustard fills.
 - `--ink-on-accent #FBFAF6` text on accent fills (auto-selected per accent for AA)
-
-Dark:
-
-- `--paper #0E0D0C` soft black
-- `--ink #E8E5DD`
-- `--ink-mute #9E9A92`
-- `--rule rgba(232,229,221,0.10)`
-- `--accent-vermillion #FF5A66`
-- `--accent-cobalt #5B82C2`
-- `--accent-mustard #C9A22F`
 
 Status (muted, form-validation only): success `#3F6B3A`/`#6FA365`, warning `#8A5A18`/`#C28F3A`, error aliased to `--accent-vermillion`.
 
