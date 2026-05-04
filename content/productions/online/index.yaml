@@ -15,8 +15,18 @@ synopsis:
     Basierend auf echten Ereignissen, Interviews und offenen
     Netzwerkmaterialien.
 theatre:
-  name: Барнаульский молодёжный театр
-  city: Barnaul
+  name:
+    ru: Барнаульский молодёжный театр
+    en: Altai State Theater for Children and Youth
+    de: Altai Staatstheater für Kinder und Jugendliche
+  shortName:
+    ru: Молодёжный театр Алтая
+    en: Altai Youth Theater
+    de: Jugendtheater Altai
+  city:
+    en: Barnaul
+    ru: Барнаул
+    de: Barnaul
   country: RU
 year: 2020
 premiereDate:
@@ -29,7 +39,7 @@ durationMin: 80
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр
@@ -164,11 +174,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
+videos: [ ]
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: false
@@ -176,4 +186,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]

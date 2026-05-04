@@ -24,9 +24,18 @@ tagline:
   en: Dedicated to our grandmothers
   de: Unseren Großmüttern gewidmet
 theatre:
-  name: Архангельский молодёжный театр им. Панова
-  shortName: Театр Панова
-  city: Arkhangelsk
+  name:
+    ru: Архангельский молодёжный театр им. Панова
+    en: Panov Arkhangelsk Regional Youth Theatre
+    de: Archangelsker Jugendtheater Viktor Panow
+  shortName:
+    ru: Театр Панова
+    en: Panov Theater
+    de: Panow-Theater
+  city:
+    en: Arkhangelsk
+    ru: Архангельск
+    de: Archangelsk
   country: RU
   url: "http://www.teatrpanova.ru/youth/viewshows/98"
 year: 2022
@@ -40,7 +49,7 @@ durationMin: 80
 role: director
 form:
   - family
-lineage: []
+lineage: [ ]
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -281,17 +290,35 @@ videos:
   - provider: youtube
     id: Ot-YfOsoDjg
 awards:
-  - name: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального
-      искусства «Ваш выход»
+  - name:
+      ru: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального
+        искусства «Ваш выход»
+      en: Winner of the festival (Anastasia Polezhaeva) — XI Festival of Theatrical
+        Arts "Your Exit"
+      de: Лауреат des Festivals (Anastasia Polezhaeva) — XI Festival des Theaterkunst
+        «Your Exit»
     year: 2023
-  - name: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
-      Фестиваль театрального искусства «Ваш выход»
+  - name:
+      ru: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
+        Фестиваль театрального искусства «Ваш выход»
+      en: Special Diploma of the Association of Theatre Critics (Natalia Malevinskaya)
+        — XI Festival of Theatrical Art "Your Exit"
+      de: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
+        Фестиваль театрального искусства «Golden Spotlight»
     year: 2023
-  - name: Спектакль-победитель — Большой детский фестиваль 2023, категория
-      «Драматические спектакли. Младшая возрастная категория»
+  - name:
+      ru: Спектакль-победитель — Большой детский фестиваль 2023, категория
+        «Драматические спектакли. Младшая возрастная категория»
+      en: Winner Production - Big Children's Festival 2023, Category "Dramatic Plays.
+        Junior Age Category"
+      de: Победитель — Bolschoi Kinderfestspiele 2023, Kategorie «Dramatische Stücke.
+        Jüngste Alterskategorie»
     year: 2023
-    city: Москва
-festivals: []
+    city:
+      ru: Москва
+      en: Moscow
+      de: Moskau
+festivals: [ ]
 press:
   - title:
       ru: Роман Бокланов выпускает в Архангельске «посвящение бабушкам»
@@ -326,7 +353,7 @@ press:
         Jungen, der seine Träume erfüllte:'
     url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-is\
       polnil-svoju-mechtu/"
-externalLinks: []
+externalLinks: [ ]
 techRider: null
 pressKit: null
 featured: true
@@ -335,4 +362,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: []
+tour: [ ]
