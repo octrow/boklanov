@@ -116,7 +116,19 @@ export function GalleryLightbox({ items }: Props) {
                     aria-label='Previous photo'
                     onClick={goPrev}
                   >
-                    ←
+                    <svg
+                      className={styles.navIcon}
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      aria-hidden='true'
+                      focusable='false'
+                    >
+                      <polyline points='15 6 9 12 15 18' />
+                    </svg>
                   </button>
                   <button
                     type='button'
@@ -124,7 +136,19 @@ export function GalleryLightbox({ items }: Props) {
                     aria-label='Next photo'
                     onClick={goNext}
                   >
-                    →
+                    <svg
+                      className={styles.navIcon}
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      aria-hidden='true'
+                      focusable='false'
+                    >
+                      <polyline points='9 6 15 12 9 18' />
+                    </svg>
                   </button>
                 </>
               )}
