@@ -44,6 +44,13 @@ function readStoredTheme(): Theme {
 export function ThemeToggle() {
   const [theme, setTheme] = React.useState<Theme | null>(null)
 
+  // Re-apply data-theme from localStorage after every render.
+  // Next.js App Router wipes imperative DOM attributes on locale navigation;
+  // this useLayoutEffect restores them before the browser paints.
+  React.useLayoutEffect(() => {
+    document.documentElement.dataset.theme = readStoredTheme()
+  })
+
   React.useEffect(() => {
     setTheme(readStoredTheme())
   }, [])
