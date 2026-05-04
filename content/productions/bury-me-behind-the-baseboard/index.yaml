@@ -1,0 +1,223 @@
+slug: bury-me-behind-the-baseboard
+notionIds:
+  ru: ee2d7bea11484e16bcb03effc276a719
+  en: c6f2c93cbb534a19ba38b81226aa795b
+title:
+  ru: Похороните меня за плинтусом
+  en: Bury Me Behind the Baseboard
+  de: Begraben Sie mich hinter der Fußleiste
+synopsis:
+  ru: Светлый разговор о одиночестве, сложном и непонятном взрослом мире, который выстроили вокруг героя близкие. На сцене БТК, режиссёр Роман Бокланов
+  en: Is a lighthearted talk about loneliness and the complicated and incomprehensible adult world that those close to him have built around it. Performed onstage at the BTK, directed by Roman Boklanov
+  de: Ein leichtherziger Vortrag über Einsamkeit und die komplizierte und unverständliche Erwachsenenwelt, die diejenigen um ihn herum aufgebaut haben. Auf der Bühne des BTK, unter der Regie von Roman Boklanov aufgeführt
+directorsNote:
+  ru: Бабушка была моей жизнью, мама — редким праздником. У праздника были свои правила, у жизни свои.
+  en: Grandma was my life, my mother was a rare holiday. The holiday had its own rules, life had its own rules.
+  de: Großmutter war mein Leben, Mutter war ein seltener Feiertag. Der Feiertag hatte seine eigenen Regeln, das Leben hatte seine eigenen.
+tagline:
+  ru: Автобиографичный спектакль-воспоминание
+  en: An autobiographical play-memory
+  de: Ein autobiographisches Spiel-Gedächtnis
+theatre:
+  name: Большой театр кукол
+  shortName: БТК
+  city: Saint Petersburg
+  country: RU
+  url: "https://puppets.ru/spec/115#performance=18484787"
+year: 2021
+premiereDate:
+  ru: 24 марта 2021 г.
+  en: 24 March 2021
+ticketsUrl: "https://puppets.ru/spec/115#performance=18484787"
+ageRating: 18+
+durationMin: 60
+role:
+  - director
+  - performer
+form:
+  - solo
+lineage:
+  - btk
+  - kudashov
+credits:
+  ru:
+    - role: Режиссёр, автор инсценировки
+      name: Роман Бокланов
+      url: "https://puppets.ru/pers/40"
+    - role: Исполнители
+      name: Максим Морозов
+      url: "https://puppets.ru/pers/51"
+    - role: Исполнители
+      name: Лидия Клирикова
+      url: "https://puppets.ru/pers/47"
+    - role: Художник
+      name: Светлана Струкова
+    - role: Художник по свету
+      name: Анастасия Кузнецова
+    - role: Продюсер
+      name: Елизавета Екимова
+  en:
+    - role: Director
+      name: Roman Boklanov
+      url: "https://puppets.ru/pers/40"
+    - role: Actors
+      name: Maksim Morozov
+      url: "https://puppets.ru/pers/51"
+    - role: Actors
+      name: Lidia Klirikova
+      url: "https://puppets.ru/pers/47"
+    - role: Production designer
+      name: Svetlana Strukova
+    - role: Lighting Designer
+      name: Anastasia Kuznetsova
+    - role: Producer
+      name: Elizaveta Ekimova
+  de:
+    - role: Regie, Autor der Inszenierung
+      name: Roman Boklanov
+      url: "https://puppets.ru/pers/40"
+    - role: Schauspieler
+      name: Maksim Morozov
+      url: "https://puppets.ru/pers/51"
+    - role: Schauspieler
+      name: Lidia Klirikova
+      url: "https://puppets.ru/pers/47"
+    - role: Produktionsdesigner
+      name: Svetlana Strukova
+    - role: Lichttechnik
+      name: Anastasia Kuznetsova
+    - role: Produzent
+      name: Elizaveta Ekimova
+poster:
+  src: /productions/bury-me-behind-the-baseboard/poster.jpg
+  credit: null
+gallery:
+  - src: /productions/bury-me-behind-the-baseboard/01.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/02.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/03.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/04.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/05.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/06.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/07.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/08.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/09.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/10.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/bury-me-behind-the-baseboard/11.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+videos:
+  - provider: youtube
+    id: 1GWFJ0jfPq4
+awards:
+  - name: Спектакль-лауреат 1 степени — III Международный фестиваль камерных и моноспектаклей «Он.Она.Они»
+    year: 2021
+    city: Екатеринбург
+  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — III Международный фестиваль «Он.Она.Они»
+    year: 2021
+    city: Екатеринбург
+  - name: Специальный приз председателя жюри Олега Лоевского — открытый театральный фестиваль «СВОЙ(SVOY)»
+    year: 2022
+    city: Екатеринбург
+  - name: Спектакль-лауреат 1 степени — IX фестиваль-конкурс моноспектаклей «МОНОfest»
+    year: 2022
+    city: Пермь
+  - name: Лауреат в номинации «Лучшая мужская роль» (Максим Морозов) — V Всероссийский фестиваль-конкурс камерных спектаклей «Один. Два. Три»
+    year: 2022
+    city: Новосибирск
+festivals: []
+press:
+  - title: "Why is \"Bury Me behind the Baseboard\" one of the most important premieres of the season at BTK?"
+    url: "https://m.sobaka.ru/entertainment/theatre/128165"
+  - title: sobaka.ru
+    url: "http://sobaka.ru/"
+  - title: "PEOPLE WITH AND WITHOUT: RUSLAN KUDASHOV'S COURSE"
+    url: "https://ptj.spb.ru/archive/103/puppet-home-103/lyudi-s-kuklami-i-bez-kurs-ruslana-kudashova/"
+  - title: Far-reaching Perspectives
+    url: "https://musecube.org/otchet/otchet-theatre/daleko-idushhie-perspektivy/"
+  - title: The Bolshoi Puppet Theatre presented the mono-performance Bury Me behind the Baseboard in Ryazan
+    url: "https://7info.ru/bolshoj-teatr-kukol-predstavil-v-ryazani-monospektakl-pohoronite-menya-za-plintusom/"
+  - title: Bury Me behind the Baseboard
+    url: "https://www.fontanka.ru/2021/03/25/69830810/?shareRecordImage=a31726bd080719c98a217b2965ba0568"
+  - title: fontanka.ru
+    url: "http://fontanka.ru/"
+  - title: "St. Petersburg is the capital of the puppet theater! Guide to the best performances, for the sake of which you should come even for a day"
+    url: "https://www.sobaka.ru/entertainment/theatre/143084"
+  - title: sobaka.ru
+    url: "http://sobaka.ru/"
+  - title: "\"Should have died by the age of 16\": a familiar story about funerals and the plinth in \"BTK\""
+    url: "https://sub-cult.ru/teatr/reports/12863-dolzhen-byl-sdokhnut-godam-k-16-znakomaya-istoriya-pro-pokhorony-i-pro-plintus-v-btk"
+  - title: sub-cult.ru
+    url: "http://sub-cult.ru/"
+externalLinks: []
+techRider: null
+pressKit: null
+featured: true
+featuredOrder: 1
+listOrder: 1
+tags:
+  - mono-performance
+  - roman boklanov
+  - theater
+tour:
+  - London
+  - Edinburgh
+  - Bern
+  - Wien
+  - Almaty
+  - Lisboa
+  - Porto
+  - Luxembourg
+  - Alicante

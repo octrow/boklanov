@@ -1,0 +1,1 @@
+Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die Prinzipien des Renaissancetheatres nutzt! Dieser mobile Auftritt bringt die klassische Commedia dell'arte in zeitgenössischer Form zum Leben und bietet dem Publikum an verschiedenen Orten ein vergessenes Theatergenre wieder.

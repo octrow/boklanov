@@ -48,7 +48,8 @@
     "strictNullChecks": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "scripts/_legacy"
   ],
   "include": [
     "**/*.ts",

@@ -1,0 +1,56 @@
+slug: uber-den-zaun
+notionIds:
+  ru: null
+  en: null
+title:
+  ru: Über den Zaun
+  en: Over the Fence
+  de: Über den Zaun
+synopsis:
+  ru: Уличный спектакль немецкого театра Das Letzte Kleinod. Роман Бокланов участвовал в постановке в качестве актёра с 16 мая по 4 июля 2023 года.
+  en: An outdoor performance by the German theater Das Letzte Kleinod. Roman Boklanov participated in the production as a performer from May 16 to July 4, 2023.
+  de: Eine Freiluftaufführung des deutschen Theaters Das Letzte Kleinod. Roman Boklanov nahm vom 16. Mai bis 4. Juli 2023 als Darsteller an der Produktion teil.
+theatre:
+  name: Das Letzte Kleinod
+  city: Germany
+  country: DE
+  url: "https://www.das-letzte-kleinod.de/"
+year: 2023
+premiereDate:
+  ru: null
+  en: null
+  de: null
+ticketsUrl: null
+ageRating: null
+durationMin: null
+role: performer
+bookingCta: false
+form:
+  - theater
+lineage: []
+credits:
+  ru:
+    - role: Артист
+      name: Роман Бокланов
+  en:
+    - role: Performer
+      name: Roman Boklanov
+  de:
+    - role: Darsteller
+      name: Roman Boklanov
+poster:
+  src: null
+  credit: null
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - roman boklanov
+  - theater
+tour: []

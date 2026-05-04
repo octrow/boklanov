@@ -1,0 +1,307 @@
+slug: nikita-looking-for-the-sea
+notionIds:
+  ru: d42689bd05c2410db6c679d1b575088e
+  en: 310ad30a540f4ab282a55f5308f63303
+title:
+  ru: Никита ищет море
+  en: Nikita looking for the sea
+  de: Nikita sucht das Meer
+synopsis:
+  ru: "История о семилетнем мальчике Никите, которого родители отправили в деревню к двоюродной бабушке на все лето. Но бабушка совсем не обычная!"
+  en: "The story of a seven-year-old boy, Nikita, who is sent by his parents to the countryside to stay with his great-aunt for the whole summer. But the grandmother is not at all ordinary!"
+  de: "Die Geschichte eines siebenjährigen Jungen namens Nikita, der von seinen Eltern auf das Land geschickt wird, um den ganzen Sommer über bei seiner Großtante zu bleiben. Aber die Großmutter ist überhaupt nicht gewöhnlich!"
+directorsNote:
+  ru: …со временем ты всё поймёшь. А пока — вымой посуду…
+  en: …in time you will understand everything. But for now – wash the dishes…
+  de: …mit der Zeit wirst du alles verstehen. Aber jetzt – spüle das Geschirr…
+tagline:
+  ru: Посвящается нашим бабушкам
+  en: Dedicated to our grandmothers
+  de: Unseren Großmüttern gewidmet
+theatre:
+  name: Архангельский молодёжный театр им. Панова
+  shortName: Театр Панова
+  city: Arkhangelsk
+  country: RU
+  url: "http://www.teatrpanova.ru/youth/viewshows/98"
+year: 2022
+premiereDate:
+  ru: 17-18 сентября 2022 г.
+  en: September 17-18, 2022
+  de: 17.-18. September 2022
+ticketsUrl: "http://www.teatrpanova.ru/youth/viewshows/98"
+ageRating: 6+
+durationMin: 80
+role: director
+form:
+  - family
+lineage: []
+credits:
+  ru:
+    - role: Режиссёр, автор инсценировки
+      name: Роман Бокланов
+    - role: Художник и сценография
+      name: Алина Михайлова
+    - role: Композитор
+      name: Максим Морозов
+    - role: Художник по свету
+      name: Анастасия Кузнецова
+    - role: В спектакле участвуют
+      name: Антон Чистяков
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/34"
+    - role: В спектакле участвуют
+      name: Наталья Малевинская
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/24"
+    - role: В спектакле участвуют
+      name: Татьяна Смирнова
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/30"
+    - role: В спектакле участвуют
+      name: Александр Берестень
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/45"
+    - role: В спектакле участвуют
+      name: Анастасия Полежаева
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/53"
+    - role: В спектакле участвуют
+      name: Кирилл Ратенков
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/71"
+    - role: В спектакле участвуют
+      name: Илья Глущенко
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/15"
+    - role: В спектакле участвуют
+      name: Степан Полежаев
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/28"
+  en:
+    - role: Director, author of the staging
+      name: Roman Boklanov
+    - role: Designer and scenic designer
+      name: Alina Mikhailova
+    - role: Composer
+      name: Maxim Morozov
+    - role: Lighting designer
+      name: Anastasia Kuznetsova
+    - role: Actors
+      name: Anton Chistyakov
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/34"
+    - role: Actors
+      name: Natalia Malevinskaya
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/24"
+    - role: Actors
+      name: Tatiana Smirnova
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/30"
+    - role: Actors
+      name: Alexander Beresten
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/45"
+    - role: Actors
+      name: Anastasia Polezhaeva
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/53"
+    - role: Actors
+      name: Kirill Ratenkov
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/71"
+    - role: Actors
+      name: Ilya Glushchenko
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/15"
+    - role: Actors
+      name: Stepan Polezhaev
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/28"
+  de:
+    - role: Regie, Autor der Inszenierung
+      name: Roman Boklanov
+    - role: Bühnenbild und Szenografie
+      name: Alina Mikhailova
+    - role: Komponist
+      name: Maxim Morozov
+    - role: Lichttechnik
+      name: Anastasia Kuznetsova
+    - role: Schauspieler
+      name: Anton Chistyakov
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/34"
+    - role: Schauspieler
+      name: Natalia Malevinskaya
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/24"
+    - role: Schauspieler
+      name: Tatiana Smirnova
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/30"
+    - role: Schauspieler
+      name: Alexander Beresten
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/45"
+    - role: Schauspieler
+      name: Anastasia Polezhaeva
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/53"
+    - role: Schauspieler
+      name: Kirill Ratenkov
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/71"
+    - role: Schauspieler
+      name: Ilya Glushchenko
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/15"
+    - role: Schauspieler
+      name: Stepan Polezhaev
+      url: "http://www.teatrpanova.ru/youth/viewpeoples/28"
+poster:
+  src: /productions/nikita-looking-for-the-sea/poster.jpg
+  credit: null
+gallery:
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-11_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-25_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-29_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-49_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-13_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-20_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-34_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-38_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-40_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-65_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-42_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-51_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-55_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-58_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-99_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-86_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-100_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-105_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-115_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-122_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-71_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/nikita-looking-for-the-sea/2022.09.16_Nikita_ishchet_more_web-41_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+videos:
+  - provider: youtube
+    id: Ot-YfOsoDjg
+awards:
+  - name: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального искусства «Ваш выход»
+    year: 2023
+  - name: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI Фестиваль театрального искусства «Ваш выход»
+    year: 2023
+  - name: Спектакль-победитель — Большой детский фестиваль 2023, категория «Драматические спектакли. Младшая возрастная категория»
+    year: 2023
+    city: Москва
+festivals: []
+press:
+  - title: Роман Бокланов выпускает в Архангельске «посвящение бабушкам»
+    url: "https://oteatre.info/boklanov-v-arhangelske/"
+  - title: В Архангельске новый сезон в Молодёжном театре открылся спектаклем для всей семьи
+    url: "https://bclass.ru/biznes/kultura/v-arkhangelske-novyy-sezon-v-molodyezhnom-teatre-otkrylsya-spektaklem-dlya-vsey-semi-/"
+  - title: "Снять спектакль на видео – и отправить бабушке!"
+    url: "https://vk.com/@-736711-snyat-spektakl-na-video-i-otpravit-babushke"
+  - title: В Молодёжном театре показали спектакль для детей
+    url: "https://vk.com/video-73332929_456256660?list=38fb6b82a6efd7e305"
+  - title: "ИД «Двина», Александра Коковина: Театр Панова представил спектакль о мальчике, который исполнил свою мечту:"
+    url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-ispolnil-svoju-mechtu/"
+externalLinks: []
+techRider: null
+pressKit: null
+featured: true
+listOrder: 5
+tags:
+  - family show
+  - roman boklanov
+  - theater
+tour: []

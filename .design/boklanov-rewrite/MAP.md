@@ -170,8 +170,10 @@ After shipping: run the MAP.md §7 update prompt.
 Override docs on conflict.
 
 - `app/globals.css` — runtime tokens
-- `content/productions/<slug>/index.mdx` frontmatter — production data
+- `content/productions/<slug>/index.yaml` — production data fields
+- `content/productions/<slug>/body.{ru,en,de}.md` — production long-form prose (per locale)
+- `content/about/{ru,en,de}.yaml` + `.md` — about page data + prose (per locale)
 - `content/AUTHORING.ru.md` — Roman's RU day-to-day
 - `messages/{ru,en,de}.json` — UI chrome strings
-- `.obsidian/{app,types,community-plugins}.json` — Properties panel types
-- `scripts/lint-mdx.ts` — wikilink CI guard
+- `.obsidian/{app,community-plugins}.json` — Obsidian config
+- `scripts/lint-content.ts` — wikilink CI guard

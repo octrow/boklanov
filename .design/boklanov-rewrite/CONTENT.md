@@ -1,20 +1,21 @@
 # CONTENT
 
-How content gets into boklanov.com. Updated: 2026-05-02 (session 6).
+How content gets into boklanov.com. Updated: 2026-05-04 (mdx→yaml split).
 
-Owns: live workflow + frontmatter shape.
+Owns: live workflow + content shape.
 Roman-facing day-to-day RU: `content/AUTHORING.ru.md`.
 History (read-only, do not edit in routine work): `archive/CONTENT_WORKFLOW_compress.md` — 9-option matrix, Q&A,
 deferred Decap plan (full: `archive/CONTENT_WORKFLOW.md`).
 
-`content/about/{ru,en}.mdx` frontmatter: `photos[]` array — `- src: /path.jpg\n  credit: "…"`. Rendered as 2-col masonry
+`content/about/{ru,en}.yaml` `photos[]` array — `- src: /path.jpg\n  credit: "…"`. Rendered as 2-col masonry
 below the geography block. Empty array = section hidden.
 
 ## Source of truth
 
-- Vault = repo. Roman edits MDX directly via Obsidian Properties panel.
-- One `index.mdx` per production. Frontmatter is single source of truth per field.
+- Vault = repo. Per production: `index.yaml` (data) + `body.{ru,en,de}.md` (prose, optional per locale).
+- `index.yaml` is single source of truth per data field. Each `body.<locale>.md` is single source of truth for that locale's long-form prose.
 - No `metadata.yml` overlay (folded one-shot in Phase 8.3, `c1c4436`).
+- No `body` field inside frontmatter (split into sibling `.md` files in 2026-05-04 mdx→yaml migration).
 - No live Notion API. No CMS. No backend.
 - Edit -> commit-and-push from obsidian-git sidebar -> Vercel rebuilds `main`.
 - WIP: `draft` branch -> Vercel preview URL -> merge to `main` when ready.
@@ -23,10 +24,10 @@ below the geography block. Empty array = section hidden.
 
 - Obsidian (free, desktop + mobile). License `obsidian.md/license`.
 - `obsidian-git` plugin: pull on open, commit + push from sidebar. Manual install by Roman.
-- `mdx-as-md` plugin: opens `.mdx` as editable markdown. Manual install.
-- `.obsidian/{app,types,community-plugins}.json` committed. Property types defined for `year`, `featured`, `ageRating`,
-  `durationMin`, `ticketsUrl`, `form`, `lineage`, `tour`, `tags`. `useMarkdownLinks: true` (no `![[wikilink]]`).
-- `scripts/lint-mdx.ts` + `npm run lint-mdx`: CI fails on Obsidian wikilinks in `content/`.
+- `body.<locale>.md` open as plain markdown in Obsidian (native).
+- `index.yaml` opens as plain text — no Properties panel; YAML is hand-edited (`key: value` syntax). The `mdx-as-md` plugin was retired in the 2026-05-04 migration.
+- `.obsidian/{app,community-plugins}.json` committed. `useMarkdownLinks: true` (no `![[wikilink]]`).
+- `scripts/lint-content.ts` + `npm run lint-content`: CI fails on Obsidian wikilinks in `content/**/*.md`.
 
 ## Image hosting
 
@@ -41,21 +42,26 @@ below the geography block. Empty array = section hidden.
 - Set `NEXT_PUBLIC_CDN_BASE` in Vercel to activate CDN serving. Unset = images serve from `public/` via Vercel.
 - New photos: drop into `public/productions/<slug>/`, then `npm run upload-images -- --slug <slug>`.
 
-## Frontmatter shape
+## File shape
+
+Per production:
+```
+content/productions/<slug>/
+  index.yaml          # all data fields (see below)
+  body.ru.md          # long-form prose, RU
+  body.en.md          # long-form prose, EN
+  body.de.md          # long-form prose, DE (optional; only when present)
+```
+
+`index.yaml` shape (no leading `---` delimiters — pure YAML):
 
 ```yaml
----
 slug: bury-me-behind-the-baseboard
 notionIds: { ru: ..., en: ... }    # historical traceability only
 title: { ru: "...", en: "...", de: null }
 synopsis: { ru: "...", en: "...", de: null }
-body:                              # optional; long-form narrative, renders as prose below synopsis
-  ru: |-
-    Paragraph one.
-
-    Paragraph two with **bold** and *italic* and [links](url).
-  en: |-
-    English paragraph.
+# body lives in sibling files, not here:
+#   body.ru.md, body.en.md, body.de.md (optional)
 theatre: { name: "...", shortName: "...", city: "...", country: "RU", url: "..." }
 year: 2020
 premiereDate: { ru: "...", en: "..." }
@@ -85,18 +91,18 @@ pressKit: null                     # ZIP path
 featured: true                     # home strip selector
 status: undefined                  # `withdrawn` -> hide from grids+CmdK, suppress CTA
 tags: [ ]
----
 ```
 
 ## Editing rules
 
-- Edit `index.mdx` Properties panel. `Cmd+S`. Source Control -> Commit-and-push.
-- Add new production: copy existing `content/productions/<slug>/` folder. Latin slug, dashes-not-spaces. Fill
-  Properties. Commit.
+- Edit `index.yaml` as plain text in any editor (Obsidian opens it as text). `Cmd+S`. Source Control -> Commit-and-push.
+- Edit prose: `body.{ru,en,de}.md` as plain markdown in Obsidian. `Cmd+S`. Same commit flow.
+- Add new production: copy `content/_PRODUCTION_TEMPLATE.yaml` to `content/productions/<slug>/index.yaml`. Latin slug,
+  dashes-not-spaces. Fill fields. Create `body.ru.md` + `body.en.md` (and `body.de.md` if applicable). Commit.
 - New photos: drop into `public/productions/<slug>/`, run `npm run upload-images -- --slug <slug>`, commit.
 - Featured strip: set `featured: true`. Cards without poster filtered out (`p.featured && p.poster.src`).
-- About bio + milestones + lineage + marginalia notes: edit `content/about/{ru,en,de}.mdx` directly. `marginalia[]`
-  is an optional array (one entry per body paragraph, `null` for no note) that drives the ≥1280px gutter note.
+- About bio prose: `content/about/{ru,en,de}.md`. `marginalia` array, milestones, lineage, photos: `content/about/{ru,en,de}.yaml`.
+  `marginalia[]` is an optional array (one entry per body paragraph, `null` for no note) that drives the ≥1280px gutter note.
   `photos[]` — `- src: /path.jpg\n  credit: "Name"` — add once photos are ready; empty array = section hidden.
 - UI chrome strings: `messages/{ru,en,de}.json`. RU+EN required. DE chrome only.
 - Production-card text never translates to DE (IA D4).
@@ -131,6 +137,8 @@ common omissions; render is silent until populated.
 - `scripts/sync-from-notion.ts` -> `scripts/_legacy/`, FROZEN header. `npm run sync` echoes stub.
 - `notion-data/` -> `archive/notion-export-2026-05` branch (frees ~250 MB from `main`).
 - `metadata.yml` overlay -> deleted; folded into frontmatter.
+- `index.mdx` (frontmatter + body in one file) -> split into `index.yaml` + `body.{ru,en,de}.md` (2026-05-04). Legacy migrators (`scripts/migrate-body-to-frontmatter.ts`, `scripts/fold-overlay.ts`) -> `scripts/_legacy/`. `gray-matter` removed from `package.json`. `mdx-as-md` Obsidian plugin removed.
+- `scripts/lint-mdx.ts` -> renamed `scripts/lint-content.ts`; `npm run lint-mdx` -> `npm run lint-content`.
 
 ## Deferred
 

@@ -1,0 +1,5 @@
+🥀 "Das Zuckerkind" ist ein familienfreundliches Spiel über das Leben eines Kindes im Exil basierend auf der Geschichte des zeitgenössischen Schriftstellers Olga Gromova. Es basiert auf den realen Ereignissen von Stella Nudolskayas Leben.
+
+Die Hauptfigur ist die fünfjährige Stella, die, nachdem ihr Vater als "Volksfeind" erklärt wird, aus ihrer warmen, gemütlichen, liebevollen und sicheren Welt in die Realität des Lagerlebens in den 1930er und 1940er Jahren versetzt wird. Um ihre kindheit zu bewahren und sie nicht in Verzweiflung verfallen zu lassen, verwandelt ihre Mutter die Härten und Entbehrungen in ein Kaleidoskop der unerwartesten und faszinierendsten Geschichten aus Weltliteratur, Religion, Musik, Mythologie usw.
+
+Dies ist eine Geschichte über die wahre Kraft des menschlichen Geistes, innere Freiheit und menschliche Würde, die durch Objekttheater erzählt wird. Auf der Bühne werden die Zuschauer nicht nur die Hauptfiguren des Spiels treffen: Mutter, Vater und Tochter, sondern auch 18 Koffer. Jeder von ihnen enthält ganze Welten, zusammengesetzt aus geliebten Objekten, Spielzeugen, alten Fotografien.

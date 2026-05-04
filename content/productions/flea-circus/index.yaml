@@ -1,0 +1,57 @@
+slug: flea-circus
+notionIds:
+  ru: null
+  en: null
+title:
+  ru: Блошиный цирк
+  en: Flea Circus
+  de: Flohzirkus
+synopsis:
+  ru: null
+  en: null
+  de: null
+theatre:
+  name: null
+  city: Torrevieja
+  country: ES
+  url: null
+year: null
+premiereDate:
+  ru: null
+  en: null
+  de: null
+ticketsUrl: null
+ageRating: 6+
+durationMin: null
+role: director
+status: in-development
+form:
+  - theater
+  - family
+lineage: []
+credits:
+  ru:
+    - role: Режиссёр
+      name: Роман Бокланов
+  en:
+    - role: Director
+      name: Roman Boklanov
+  de:
+    - role: Regie
+      name: Roman Boklanov
+poster:
+  src: null
+  credit: null
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - theater
+  - family show
+tour: []

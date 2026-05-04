@@ -1,0 +1,163 @@
+slug: online
+notionIds:
+  en: 8e330830dea1460d818186215b135472
+  ru: bb19c2be63784efba072525d3e9369e4
+title:
+  ru: Онлайн
+  en: Online
+  de: Online
+synopsis:
+  ru: Документальный спектакль для подростков о жизни в интернете. Основан на реальных событиях, интервью и открытых материалах сети.
+  en: "Experience the real-life story of the Internet with ONLINE. Directed by Roman Boklanov and based on interviews and real events. Don't miss out!"
+  de: Ein dokumentarisches Stück für Teenager über das Leben im Internet. Basierend auf echten Ereignissen, Interviews und offenen Netzwerkmaterialien.
+theatre:
+  name: Барнаульский молодёжный театр
+  city: Barnaul
+  country: RU
+year: 2020
+premiereDate:
+  ru: 27 Марта 2020
+  en: March 27, 2020
+  de: 27. März 2020
+ticketsUrl: null
+ageRating: 12+
+durationMin: 80
+role: director
+form:
+  - family
+lineage: []
+credits:
+  ru: []
+  en:
+    - role: Director
+      name: Roman Boklanov
+    - role: Artist
+      name: Vera Petrovskaya
+    - role: Playwright
+      name: Katya Sverdlova
+  de: []
+poster:
+  src: /productions/online/poster.jpg
+  credit: null
+gallery:
+  - src: /productions/online/photo_2022-10-29_20-48-11.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/hX2xki4Lz4o.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/RH7QDDvlTbQ.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/IXNx6Pk1hww.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/_9lOlhFe974.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/1pkOldWxH8U.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/0vlef6lYrn8.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/jzYRVc9lCfg.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/-KtxS0tM1qA.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/f-I6O8_eSlQ.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/photo_2022-10-29_21-00-21.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/photo_2022-10-29_21-00-47.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/photo_2022-10-29_21-00-56.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/OZh1_v9dLsw.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/photo_2022-10-29_21-00-52.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/DtRqxsZNh28.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/DoCPjknE3QM.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/online/bogd-420.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - family show
+  - roman boklanov
+  - theater
+tour: []

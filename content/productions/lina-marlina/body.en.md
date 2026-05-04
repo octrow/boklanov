@@ -1,0 +1,3 @@
+In an underwater town, a mermaid with a beautiful voice and unusual blue hair is born. As she grows up, she dreams of singing her own songs. However, her parents, who love her dearly, want to protect her from the dangers of the world and make her suppress her vibrant personality. The mermaid decides to leave her home and ventures into the dark waters where monsters lurk…
+
+This play-concert explores the themes of self-discovery and finding one's calling, friendship beyond stereotypes, the generational gap between parents and children, and the inner conflict between light and darkness. The story of the mermaid can inspire people to overcome their fears of the dark waters of this world and pursue their dreams.

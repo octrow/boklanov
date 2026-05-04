@@ -1,0 +1,63 @@
+slug: minotavrum
+notionIds:
+  ru: null
+  en: null
+title:
+  ru: Минотаврум
+  en: Minotavrum
+  de: Minotavrum
+synopsis:
+  ru: Спектакль по мотивам древнегреческого мифа. Лабиринт, герой и чудовище — история об испытании, где граница между победителем и жертвой размыта. Роман Бокланов — в роли Тесея.
+  en: A performance inspired by the ancient Greek myth. A labyrinth, a hero, and a monster — a story of a trial where the line between victor and victim is blurred. Roman Boklanov as Theseus.
+  de: Eine Aufführung nach dem altgriechischen Mythos. Ein Labyrinth, ein Held und ein Monster — eine Geschichte über eine Prüfung, in der die Grenze zwischen Sieger und Opfer verschwimmt. Roman Boklanov als Theseus.
+theatre:
+  name: Большой театр кукол
+  shortName: БТК
+  city: Saint Petersburg
+  country: RU
+  url: "https://puppets.ru/spec/17"
+year: 2018
+premiereDate:
+  ru: null
+  en: null
+  de: null
+ticketsUrl: null
+ageRating: null
+durationMin: null
+role: performer
+bookingCta: false
+form:
+  - theater
+lineage: []
+credits:
+  ru:
+    - role: Артист
+      name: Роман Бокланов
+      url: "https://puppets.ru/pers/40"
+  en:
+    - role: Performer
+      name: Roman Boklanov
+      url: "https://puppets.ru/pers/40"
+  de:
+    - role: Darsteller
+      name: Roman Boklanov
+      url: "https://puppets.ru/pers/40"
+poster:
+  src: null
+  credit: null
+gallery: []
+videos: []
+awards:
+  - name: Гран-при фестиваля — Международный фестиваль театральных школ Istropolitana Project (роль Тесея)
+    year: 2018
+    city: Братислава, Словакия
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - roman boklanov
+  - theater
+tour: []

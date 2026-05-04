@@ -2,8 +2,9 @@
  * lib/content.ts - content loader API (F6)
  *
  * Pure functions over the content tree. No I/O outside build-time file reads.
- * Source of truth: content/productions/<slug>/index.mdx frontmatter + body.
- * (Phase 8.3: metadata.yml overlay folded into frontmatter - no overlay step.)
+ * Source of truth:
+ *   content/productions/<slug>/index.yaml         — structured data
+ *   content/productions/<slug>/body.{ru,en,de}.md — long-form prose (optional)
  *
  * Page routes call:
  *   - getAllProductions(locale)
@@ -12,8 +13,9 @@
  */
 
 import * as fs from 'node:fs'
-import matter from 'gray-matter'
 import * as path from 'node:path'
+
+import { parse as parseYaml } from 'yaml'
 
 import type { Locale } from '@/i18n/routing'
 
@@ -45,7 +47,7 @@ export interface Production {
   notionIds: { ru?: string; en?: string }
   title: { ru?: string; en?: string; de?: string | null }
   synopsis: { ru?: string; en?: string; de?: string | null }
-  body: { ru: string; en: string }
+  body: { ru: string; en: string; de?: string }
   theatre: {
     name?: string
     shortName?: string
@@ -161,13 +163,14 @@ function loadAll(): Production[] {
   const out: Production[] = []
   for (const slug of slugs) {
     const dir = path.join(CONTENT_DIR, slug)
-    const mdxPath = path.join(dir, 'index.mdx')
-    if (!fs.existsSync(mdxPath)) continue
+    const yamlPath = path.join(dir, 'index.yaml')
+    if (!fs.existsSync(yamlPath)) continue
 
-    const raw = fs.readFileSync(mdxPath, 'utf8')
-    const { data: frontmatter } = matter(raw)
+    const raw = fs.readFileSync(yamlPath, 'utf8')
+    const frontmatter = (parseYaml(raw) ?? {}) as Partial<Production>
+    frontmatter.body = readBodyFiles(dir)
 
-    const prod = fromFm(frontmatter as Partial<Production>, raw)
+    const prod = fromFm(frontmatter, raw)
 
     const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
     if (fs.existsSync(lqipPath)) {
@@ -201,8 +204,23 @@ function loadAll(): Production[] {
   return out
 }
 
-/** Build a Production directly from frontmatter (overlay already folded in). */
-function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
+/** Read body.{ru,en,de}.md siblings of index.yaml. Missing files → ''. */
+function readBodyFiles(dir: string): { ru: string; en: string; de?: string } {
+  const read = (locale: 'ru' | 'en' | 'de'): string => {
+    const p = path.join(dir, `body.${locale}.md`)
+    return fs.existsSync(p) ? fs.readFileSync(p, 'utf8').trim() : ''
+  }
+  const out: { ru: string; en: string; de?: string } = {
+    ru: read('ru'),
+    en: read('en')
+  }
+  const de = read('de')
+  if (de) out.de = de
+  return out
+}
+
+/** Build a Production from yaml frontmatter (body already injected). */
+function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
   return {
     slug: fm.slug as string,
     notionIds: fm.notionIds ?? {},
@@ -210,7 +228,8 @@ function fromFm(fm: Partial<Production>, _rawMdx: string): Production {
     synopsis: fm.synopsis ?? {},
     body: {
       ru: (fm.body as any)?.ru?.trim() ?? '',
-      en: (fm.body as any)?.en?.trim() ?? ''
+      en: (fm.body as any)?.en?.trim() ?? '',
+      ...((fm.body as any)?.de ? { de: (fm.body as any).de.trim() } : {})
     },
     theatre: fm.theatre ?? {},
     year: fm.year,

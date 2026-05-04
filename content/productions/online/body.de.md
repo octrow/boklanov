@@ -1,0 +1,1 @@
+„ONLINE" ist ein dokumentarisches Stück für Teenager. Es erzählt von Leben im Internet, und diese Geschichte ist aktueller als je zuvor. Das Stück basiert auf echten Ereignissen, Interviews und Materialien aus offenen Internetquellen.

@@ -1,0 +1,38 @@
+portrait:
+  src: null
+  credit: null
+photos: []
+milestones:
+  - year: 1993
+    label: Born in Ust-Kamenogorsk, Kazakhstan
+  - year: 2017
+    label: Performer in Golden Mask laureate production (Stary Dom, Novosibirsk)
+  - year: 2018
+    label: Grand Prix at the Istropolitana Project international theatre-school festival, Bratislava
+  - year: 2020
+    label: Premiere of Bury Me Behind the Baseboard at BTK (Saint Petersburg)
+  - year: 2021
+    label: Graduated RGISI — puppet theatre director, Kudashov studio (course at BTK)
+  - year: 2022
+    label: Returned to Almaty; staging across Kazakhstan and Europe
+marginalia:
+  - Kudashov · RGISI · BTK
+  - null
+  - null
+  - null
+lineage:
+  - key: kudashov
+    name: Andrei Kudashov
+    role: Studio master
+    institution: RGISI, Saint Petersburg
+    note: Trained a generation of Saint Petersburg puppet theatre directors
+  - key: btk
+    name: Grand Puppet Theatre
+    role: Director
+    institution: Saint Petersburg
+    note: "One of Russia's leading puppet theatres — where the professional voice was formed"
+  - key: rgisi
+    name: RGISI
+    role: Directing faculty
+    institution: Russian State Institute of Performing Arts
+    note: "Foundation: European puppet-theatre tradition, theatre of objects, contemporary directing"

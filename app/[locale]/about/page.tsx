@@ -1,9 +1,9 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-import matter from 'gray-matter'
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { parse as parseYaml } from 'yaml'
 import * as React from 'react'
 
 import { Marginalia } from '@/components/Marginalia'
@@ -50,18 +50,23 @@ function loadAbout(locale: Locale): {
 } {
   const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
   const deForthcoming =
-    locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
+    locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.yaml'))
   const candidates = [locale, 'en', 'ru'] // DE falls back to EN then RU
   for (const lang of candidates) {
-    const p = path.join(ABOUT_DIR, `${lang}.mdx`)
-    if (fs.existsSync(p)) {
-      const { data, content } = matter(fs.readFileSync(p, 'utf8'))
+    const yamlPath = path.join(ABOUT_DIR, `${lang}.yaml`)
+    if (fs.existsSync(yamlPath)) {
+      const data =
+        (parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as AboutFrontmatter
+      const mdPath = path.join(ABOUT_DIR, `${lang}.md`)
+      const content = fs.existsSync(mdPath)
+        ? fs.readFileSync(mdPath, 'utf8')
+        : ''
       const paragraphs = content
         .split(/\n{2,}/)
         .map((s) => s.trim())
         .filter(Boolean)
       return {
-        frontmatter: data as AboutFrontmatter,
+        frontmatter: data,
         paragraphs,
         deForthcoming
       }

@@ -1,0 +1,273 @@
+slug: commedia-dell-arte
+notionIds:
+  ru: d0a662ea9aa844dcab4c178357ef210a
+  en: e2b8cb0d3dcf4665b09a2d38f2fa9d4b
+title:
+  ru: Комедия Дель-Арте
+  en: "Commedia dell'arte"
+  de: "Commedia dell'arte"
+synopsis:
+  ru: "Передвижной спектакль-импровизация на красной ковровой дорожке, мастерски обыгрывающий принципы театра эпохи возрождения!"
+  en: "A travelling red-carpet improvisation, masterfully playing on the principles of Renaissance theatre!"
+  de: "Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die Prinzipien des Renaissancetheatres nutzt!"
+tagline:
+  ru: Передвижной спектакль-импровизация на красной ковровой дорожке
+  en: Travelling improvisation on the red carpet
+  de: Fahrende Improvisation auf dem roten Teppich
+theatre:
+  name: Большой театр кукол
+  shortName: БТК
+  city: Saint Petersburg
+  country: RU
+  url: "https://puppets.ru/pers/41"
+year: 2018
+premiereDate:
+  ru: 14 октября 2018 г.
+  en: October 14, 2018
+  de: 14. Oktober 2018
+ticketsUrl: null
+ageRating: 14+
+durationMin: null
+role: director
+form:
+  - family
+lineage:
+  - btk
+credits:
+  ru:
+    - role: Режиссер
+      name: Роман Бокланов
+    - role: В спектакле участвуют
+      name: Алёна Волкова
+      url: "https://puppets.ru/pers/41"
+    - role: В спектакле участвуют
+      name: Мария Гельштейн
+      url: "https://puppets.ru/pers/44"
+    - role: В спектакле участвуют
+      name: Алексей Егоров
+      url: "https://puppets.ru/pers/46"
+    - role: В спектакле участвуют
+      name: Стефания Жученко
+      url: "https://puppets.ru/pers/43"
+    - role: В спектакле участвуют
+      name: Дарья Левингер
+      url: "https://puppets.ru/pers/50"
+    - role: В спектакле участвуют
+      name: Максим Морозов
+      url: "https://puppets.ru/pers/51"
+    - role: В спектакле участвуют
+      name: Дмитрий Скрябин
+      url: "https://puppets.ru/pers/56"
+    - role: В спектакле участвуют
+      name: Владислав Тутак
+      url: "https://puppets.ru/pers/57"
+    - role: В спектакле участвуют
+      name: Jun-Hyung Choi
+      url: "https://puppets.ru/pers/42"
+    - role: Играли в пространствах
+      name: Библиотека Охта
+      url: "https://vk.com/wall-128420576_1817"
+  en:
+    - role: Director
+      name: Roman Boklanov
+    - role: Actors
+      name: Alyona Volkova
+    - role: Actors
+      name: Maria Gelstein
+    - role: Actors
+      name: Alexey Egorov
+    - role: Actors
+      name: Stefania Zhuchenko
+    - role: Actors
+      name: Daria Levinger
+    - role: Actors
+      name: Maxim Morozov
+    - role: Actors
+      name: Dmitry Skryabin
+    - role: Actors
+      name: Vladislav Tutak
+    - role: Actors
+      name: Jun-Hyung Choi
+    - role: Space
+      name: Okhta Library
+      url: "https://vk.com/wall-128420576_1817"
+  de: []
+poster:
+  src: /productions/commedia-dell-arte/poster.jpg
+  credit: null
+gallery:
+  - src: /productions/commedia-dell-arte/01.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/02.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/03.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/04.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/05.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/06.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/07.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/08.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/09.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/10.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/11.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/12.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/13.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/14.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/15.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/16.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/17.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/18.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/19.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/20.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/21.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/22.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/23.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/24.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/25.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/26.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/commedia-dell-arte/27.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - family show
+  - roman boklanov
+  - theater
+tour: []

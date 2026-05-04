@@ -1,6 +1,6 @@
 # STATUS
 
-Current state + open work. Updated: 2026-05-04 (session 16 — gorky default theme + desktop nav scale-up).
+Current state + open work. Updated: 2026-05-04 (session 17 — Lighthouse pass, prod 4×100).
 
 Owns: phase status, open tasks, commit hashes, next actions.
 Update: every shipped task. Status flows here -> nowhere (terminal).
@@ -54,11 +54,11 @@ R2 CDN note: 291 images uploaded to `boklanov-content` bucket 2026-05-02. Dev UR
 
 ## Open content tasks (Roman, via Obsidian)
 
-- Photographer credits per gallery image -> `gallery[].credit` in `index.mdx`
+- Photographer credits per gallery image -> `gallery[].credit` in `index.yaml`
 - Two festival-in-prose awards need overlay: `cinderella`, `sugar-kid`
 - Confirm RGISI / first-BTK milestone years
-- 18 productions show no theatre line (MD source has no `[Name](url)`). Roman adds `theatre:` in frontmatter
-- New productions: copy existing `<slug>/` folder, edit frontmatter via Properties
+- 18 productions show no theatre line (MD source has no `[Name](url)`). Roman adds `theatre:` in `index.yaml`
+- New productions: copy `_PRODUCTION_TEMPLATE.yaml` → `<slug>/index.yaml`, write `body.{ru,en,de}.md`
 
 ### Orphan-title audit (Phase 8.5)
 
@@ -103,8 +103,30 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 - **Hydration**: `suppressHydrationWarning` on `<html>` in `layout.tsx`. Silences `data-theme` / extension attribute mismatch.
 - **Folio on home + full format**: `folioFor` now returns `isHome:true` for `/`; folio band shows on every page. Format updated to `РОМАН БОКЛАНОВ ⟶ SECTION ⟶ 01/24` (director name prefix added).
 - **Cover / afisha**: `max-height: 65vh`, `object-fit: contain`, centered — no cropping. `PosterLightbox` client component wraps cover; click opens full-image overlay (dark backdrop, Escape/click-outside to close).
-- **About photos**: `photos[]` array added to `AboutFrontmatter` + 2-col masonry grid rendered below geography section. Placeholder `photos: []` in `ru.mdx` + `en.mdx`. Roman adds entries when photos are ready.
+- **About photos**: `photos[]` array added to `AboutFrontmatter` + 2-col masonry grid rendered below geography section. Placeholder `photos: []` in `ru.yaml` + `en.yaml`. Roman adds entries when photos are ready.
 - **Archive compress docs**: all `*_compress.md` files registered in MAP.md §2; all active-doc archive links updated to compress-first.
+
+## Lighthouse pass — prod 4×100 (session 17, 2026-05-04)
+
+Baseline: `archive/lighthouse_050426.json` (paper, mobile, LH 13.0.2) → home `99 / 90 / 100 / 83`. Post-fix prod re-test: `archive/lighthouse_050426_3.josn` → **`100 / 100 / 100 / 100`**. CWV: FCP 0.4 s, LCP 0.6 s, TBT 0 ms, CLS 0, SI 0.7 s. Plan + per-fix detail: `LIGHTHOUSE_IMPROVEMENT_PLAN.md`.
+
+Failures fixed (all under "audits relevant to" tabs):
+
+- `document-title` + `meta-description` (a11y +7, seo +2): `app/[locale]/layout.tsx` gained `generateMetadata` (localised `title.default` + description + OG + alternates) backed by new `meta.{siteName,siteDescription,homeTitle,homeDescription}` keys in `messages/{en,ru,de}.json`. `template: '%s'` keeps existing route-level titles (about, productions/[slug]) absolute. Production detail now falls back to `"{title} · {theatre} · {year}"` when synopsis is empty.
+- `heading-order` (a11y +3): `ProductionCard.tsx` `<h3>` → `<h2>`. CSS targets `.titleRu` class — visual unchanged.
+- `color-contrast` (a11y +7): paper `--ink-faint` `#8F8B83` → `#6E6B64` (≈ 4.6:1 on `#F2F0EA`); paper `--ink-marginalia` α 0.55 → 0.7 (`TheatreSlate.role` was 4.1:1, surfaced by detail-page audit `archive/lighthouse_050426_2.json`). Auto-formatter reverted `--ink-faint` between commits — re-applied in `ca3f6bc`.
+- `image-delivery` (perf, 529 KiB → 183 KiB): `ProductionCard` accepts `sizes?: string`; `FeaturedStrip` passes per-cell sizes (hero 600 / mediums 420 / smalls 320). `ProductionGrid` keeps the 320 default.
+- `lcp-discovery-insight` (perf): explicit `fetchPriority="high"` on the priority `<Image>` in `ProductionCard`.
+- `legacy-javascript-insight` (perf): `package.json` `browserslist` tightened (chrome/edge/firefox ≥110, safari/ios_saf ≥15.6). Residual 20 KiB still flagged — informational.
+
+Shipped:
+
+- `d630514` fix dash, add metadata, heading order, format
+- `ca3f6bc` update (paper contrast re-fix + production-detail meta-description fallback)
+
+Verification: `bun run build` clean (only the pre-existing `outputFileTracingRoot` workspace-root warning); prod Lighthouse re-run against `boklanov.com/` confirms 4×100. Localhost dev re-run on production-detail (`archive/lighthouse_050426_2.json`) showed 65/93/73/92 — Perf/BP drops there were dev-mode artefacts (HMR bundle, no minify, no CSP/HSTS/COOP headers on localhost, dev-mode third-party cookies), not regressions.
+
+Residual (informational, doesn't move score): 183 KiB image savings; 24 KiB unminified + 212 KiB unused JS (Vercel Analytics/RUM, out of our control); 20 KiB legacy JS despite tightened browserslist (per-dep audit deferred). Deferred for future regressions: lazy-load `CommandPaletteProvider` + lightboxes via `next/dynamic`; revisit `Lora-Italic-VF.woff2` render-blocking chain if detail-page LCP drifts.
 
 ## Gorky default theme + desktop nav scale-up (session 16, 2026-05-04)
 
@@ -319,6 +341,6 @@ Active priority: complete `design_v3` Plakat phases. Roman onboarding + cutover 
 
 - `main` has uncommitted `GalleryLightbox` work — finish on `main` separately or fold into `design_v3` after v3 merge. Decide: keep on `main` and rebase `design_v3` once before merge.
 - Marginalia float-into-margin (v2 outstanding item) gets resolved as part of 9v3.6, no longer a separate v2 ticket.
-- Roman onboarding (Obsidian + obsidian-git + mdx-as-md walkthrough) — unchanged, post-cutover.
+- Roman onboarding (Obsidian + obsidian-git walkthrough; YAML editing as plain text) — unchanged, post-cutover.
 - Roman closes orphan-title audit + photographer credits — unchanged.
 - D3/D4 cutover — only after v3 ships AND birthday-surprise reveal gate is opened by Daniil.

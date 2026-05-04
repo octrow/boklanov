@@ -1,0 +1,91 @@
+slug: sugar-kid
+notionIds:
+  ru: d09853f160604ca8ada2b3625456d703
+  en: 8cdb121ce5ee4c66a46885647b744348
+title:
+  ru: Сахарный ребёнок
+  en: Sugar Kid
+  de: Zuckerkind
+synopsis:
+  ru: Сказка о жизни ребёнка в ссылке в 30–40-е годы, основанная на реальных событиях. Мама превращает лишения лагерной жизни в бесконечный калейдоскоп историй, чтобы сохранить дочери детство.
+  en: "The Sugar Child is a family-friendly play about the life of a child in exile in the 1930s–40s, based on Olga Gromova's novel. Based on the real events of Stella Nudolskaya's life."
+  de: Das Zuckerkind ist ein familienfreundliches Spiel über das Leben eines Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman. Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
+theatre:
+  name: Новый Молодежный Нижнетагильский театр
+  city: Nizhny Tagil
+  country: RU
+  url: "https://teatr-nt.ru/saharnii-rebenok"
+year: 2022
+premiereDate:
+  ru: 10 октября 2022 г.
+  en: October 10, 2022
+  de: 10. Oktober 2022
+ticketsUrl: "https://teatr-nt.ru/performances/63/"
+ageRating: 6+
+durationMin: 60
+role: co-director
+bookingCta: false
+form:
+  - puppet
+  - family
+lineage: []
+credits:
+  ru:
+    - role: Режиссер-постановщик
+      name: Ринат Кияков
+    - role: Художник-постановщик
+      name: Анастасия Копылова
+    - role: Режиссер по кукольной пластике
+      name: Роман Бокланов
+    - role: В спектакле участвуют
+      name: Елена Агеева
+      url: "https://teatr-nt.ru/actors/12/"
+    - role: В спектакле участвуют
+      name: Влас Корепанов
+      url: "https://teatr-nt.ru/actors/15/"
+    - role: В спектакле участвуют
+      name: Ксения Чернолуцкая
+      url: "https://teatr-nt.ru/actors/53/"
+  en:
+    - role: Director
+      name: Rinat Kiyakov
+    - role: Production designer
+      name: Anastasia Kopylova
+    - role: Director of Puppetry
+      name: Roman Boklanov
+    - role: Actor
+      name: Elena Ageyeva
+      url: "https://teatr-nt.ru/actors/12/"
+    - role: Actor
+      name: Vlas Korepanov
+      url: "https://teatr-nt.ru/actors/15/"
+    - role: Actor
+      name: Ksenia Chernolutskaya
+      url: "https://teatr-nt.ru/actors/53/"
+  de: []
+poster:
+  src: /productions/sugar-kid/poster.jpg
+  credit: null
+gallery: []
+videos:
+  - provider: youtube
+    id: k0XujCi1UpA
+awards:
+  - name: Браво — 2022
+    year: 2022
+    category: За художественное воплощение исторической памяти в спектакле для детей
+    city: Екатеринбург
+  - name: V Всероссийский молодёжный фестиваль им. В.С. Золотухина
+    year: 2022
+    category: За важное художественное высказывание
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - family show
+  - theater
+  - puppet
+tour: []

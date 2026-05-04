@@ -1,0 +1,118 @@
+slug: the-giving-tree
+notionIds:
+  ru: d37908bd16ee4db5a13936dd44a36fb7
+  en: 1701d5d2fa3d483d8a740ca46a1f38eb
+title:
+  ru: Щедрое дерево
+  en: The Giving Tree
+  de: Der großzügige Baum
+synopsis:
+  ru: История о дереве, которое отдавало мальчику всё — от яблок до своего ствола. Спектакль о щедрости, любви и цене, которую мы платим за привязанность.
+  en: A story about a tree that gave a boy everything it had. A performance about generosity, love, and the price of attachment.
+  de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte. Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
+theatre:
+  name: Актюбинский областной театр кукол «Алакай»
+  city: Aktobe
+  country: KZ
+  url: null
+year: 2024
+premiereDate:
+  ru: 19 января 2024
+  en: January 19, 2024
+  de: 19. Januar 2024
+ticketsUrl: null
+ageRating: 12+
+durationMin: 50
+role: director
+form:
+  - puppet
+  - family
+lineage: []
+credits:
+  ru:
+    - role: Режиссер
+      name: Антон Зайцев
+    - role: Режиссер
+      name: Роман Бокланов
+    - role: Художник
+      name: Антон Зайцев
+    - role: Художник
+      name: Асия Курманалина
+    - role: Хореограф
+      name: Арстан Туйжанов
+    - role: Композитор
+      name: Алима Байтерекова
+    - role: В спектакле участвуют
+      name: Мұратов Нұрат
+    - role: В спектакле участвуют
+      name: Орынбасаров Алишер
+    - role: В спектакле участвуют
+      name: Әбжет Еламан
+    - role: В спектакле участвуют
+      name: Қазмағамбет Сұлтан
+    - role: В спектакле участвуют
+      name: Оралбай Гаухар
+  en: []
+  de: []
+poster:
+  src: /productions/the-giving-tree/poster.webp
+  credit: null
+gallery:
+  - src: /productions/the-giving-tree/01.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/02.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/03.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/04.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/05.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/06.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/the-giving-tree/07.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+videos:
+  - provider: youtube
+    id: br5rNxuUbVo
+awards: []
+festivals: []
+press: []
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - family show
+  - puppet
+  - roman boklanov
+  - theater
+tour: []

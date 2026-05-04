@@ -1,0 +1,1 @@
+This is a story about a mischievous, resourceful, but overly independent girl named Lika who wants to understand what is the most important thing. But by her nature, Lika cannot tolerate being given hints, advice, or even taught, which causes her to reject the person closest to her! Lika, Lika… I wonder if she will understand what is the most important thing?

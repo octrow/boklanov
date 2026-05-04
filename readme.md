@@ -18,9 +18,12 @@ components/               ProductionCard, SiteHeader, SiteFooter,
                           CommandPalette, ThemeToggle, FilteredProductionsPanel, Cue, ...
 
 content/
-  productions/<slug>/index.mdx     hand-edited via Obsidian Properties
-  about/{ru,en,de}.mdx
+  productions/<slug>/
+    index.yaml                     data fields (hand-edited as plain YAML)
+    body.{ru,en,de}.md             long-form prose, one file per locale
+  about/{ru,en,de}.{yaml,md}       data + prose split per locale
   AUTHORING.ru.md                  Roman's day-to-day RU guide
+  _PRODUCTION_TEMPLATE.yaml        starter template for new productions
 
 lib/
   content.ts              getAllProductions, getProduction, getRelated
@@ -31,17 +34,17 @@ lib/
 messages/{ru,en,de}.json  ~80 keys per locale
 
 scripts/
-  upload-images.ts        S3-compatible R2 upload (`npm run upload-images`)
-  lint-mdx.ts             CI guard against ![[wikilink]] (`npm run lint-mdx`)
-  lint-tokens.ts          CI guard against scoped-token leak (`npm run lint-tokens`)
-  fold-overlay.ts         retired one-shot
-  _legacy/sync-from-notion.ts  FROZEN
+  upload-images.ts            S3-compatible R2 upload (`npm run upload-images`)
+  lint-content.ts             CI guard against ![[wikilink]] (`npm run lint-content`)
+  lint-tokens.ts              CI guard against scoped-token leak (`npm run lint-tokens`)
+  migrate_mdx_to_yaml.py      one-shot mdx→yaml split (2026-05-04)
+  _legacy/                    sync-from-notion, fold-overlay, migrate-body-to-frontmatter — FROZEN
 
 public/
   fonts/                  Lora + Inter + JetBrains Mono woff2 subsetted
   productions/<slug>/     poster + gallery (until R2 activates)
 
-.obsidian/                Vault config: app, types, community-plugins
+.obsidian/                Vault config: app, community-plugins
 ```
 
 ## Dev
@@ -50,8 +53,8 @@ public/
 npm install                # Node ≥ 22, npm ≥ 10
 npm run dev                # http://localhost:3000
 npm run build && npm start
-npm test                   # runs lint + typecheck + lint-mdx
-npm run lint-mdx           # block ![[wikilink]] in content/
+npm test                   # runs lint + typecheck
+npm run lint-content       # block ![[wikilink]] in content/**/*.md
 npm run lint-tokens        # block scoped CSS tokens leaking outside owning module
 npm run upload-images      # S3 upload to R2 (post-DNS-cutover)
 ```
@@ -60,7 +63,7 @@ npm run upload-images      # S3 upload to R2 (post-DNS-cutover)
 
 ## Editing content
 
-Single source of truth: `content/productions/<slug>/index.mdx` frontmatter. Edit via Obsidian Properties panel. Commit-and-push from obsidian-git sidebar -> Vercel rebuilds.
+Single source of truth per production: `content/productions/<slug>/index.yaml` (data) + `body.{ru,en,de}.md` (prose). Edit YAML as plain text; edit `.md` in Obsidian. Commit-and-push from obsidian-git sidebar -> Vercel rebuilds.
 
 Full workflow: `.design/boklanov-rewrite/CONTENT.md`. Roman-facing RU walkthrough: `content/AUTHORING.ru.md`.
 
@@ -80,7 +83,7 @@ R2 CDN deferred until `boklanov.com` moves to Cloudflare DNS.
 |-----|------|
 | `.design/boklanov-rewrite/MAP.md` | Index of all docs + cascade rules |
 | `.design/boklanov-rewrite/STATUS.md` | Phase status, open tasks, next actions, constraints |
-| `.design/boklanov-rewrite/CONTENT.md` | Authoring workflow + frontmatter shape |
+| `.design/boklanov-rewrite/CONTENT.md` | Authoring workflow + content file shape |
 | `DESIGN.md` | Visual identity + IA + tokens + anti-patterns |
 | `content/AUTHORING.ru.md` | Roman's RU day-to-day |
 

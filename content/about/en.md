@@ -1,0 +1,7 @@
+Roman Boklanov is a director of puppet theatre and theatre of objects, working between Almaty, Saint Petersburg, and Europe.
+
+He makes shows for children, teenagers, and families — physical, hand-made, quiet-then-loud. His work has been seen in Russia, Kazakhstan, Germany, Spain, Austria, and Belarus.
+
+His artistic language was shaped by the Saint Petersburg school of puppet theatre: precise form, deliberate gesture, the material object as primary carrier of meaning. Each production attempts a conversation with children about the things that are hardest to talk about.
+
+30+ staged productions. 20+ awards at Russian and international festivals.

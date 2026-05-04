@@ -1,0 +1,230 @@
+slug: cinderella
+notionIds:
+  ru: cedfe4b7f0734277994b0fa1d71b621a
+  en: 248fdd348fc2436b8e605b2432a131aa
+title:
+  ru: Золушка
+  en: Cinderella
+  de: Aschenputtel
+synopsis:
+  ru: Где-то в глубинах старого дома играющие дети находят забытых кукол, оживляют их, и, проживая вместе с ними жизнь сказочных персонажей, ищут ответы на главные вопросы жизни.
+  en: "Experience the magic of Cinderella in a captivating puppet show. Discover the power of love, strength of spirit, and faith in the best. Suitable for ages 4+. Get your tickets now!"
+  de: "Erleben Sie die Magie von Aschenputtel in einem fesselnden Puppenspiel. Entdecken Sie die Kraft der Liebe, die Stärke des Geistes und den Glauben an das Beste. Geeignet für Kinder ab 4 Jahren. Holen Sie sich jetzt Ihre Karten!"
+directorsNote:
+  ru: Моё милое дитя, будь доброй и ласковой, и господь тебе всегда поможет, а я буду глядеть на тебя с неба и всегда буду возле тебя
+  en: My dear child, be kind and gentle, and the Lord will always help you, and I will look at you from heaven and will always be near you
+  de: Mein liebes Kind, sei gütig und sanft, und der Herr wird dir immer helfen, und ich werde dich vom Himmel aus anschauen und werde immer bei dir sein
+theatre:
+  name: Театр кукол «Бродячая Собачка»
+  shortName: Бродячая Собачка
+  city: Saint Petersburg
+  country: RU
+  url: "https://puppettheatre.spb.ru/index.php?id=65"
+year: 2021
+premiereDate:
+  ru: 23 апреля 2021 г.
+  en: April 23, 2021
+  de: 23. April 2021
+ticketsUrl: "https://puppettheatre.spb.ru/index.php?id=65"
+ageRating: 4+
+durationMin: 40
+role: director
+form:
+  - ensemble
+lineage: []
+credits:
+  ru:
+    - role: Режиссер-постановщик и автор текста
+      name: Роман Бокланов
+    - role: Художник-постановщик
+      name: Алина Михайлова
+    - role: Композитор
+      name: Алена Волкова
+    - role: Художник по свету
+      name: Игорь Мызовский
+    - role: Золушка
+      name: Софья Чудакова
+      url: "https://puppettheatre.spb.ru/index.php?id=24"
+    - role: принц, папа, крыса 2, дворецкий Франц
+      name: Андрей Бакун
+      url: "https://puppettheatre.spb.ru/index.php?id=12"
+    - role: мачеха, крыса 1, король, папарацци
+      name: Константин Кожев
+      url: "https://puppettheatre.spb.ru/index.php?id=16"
+    - role: сестра Люсильда, мама, телеведущая
+      name: Кристина Беканова
+      url: "https://puppettheatre.spb.ru/index.php?id=17"
+    - role: сестра Матильда, придворная дама 1и 2, фотограф
+      name: Элла Глазецкая
+      url: "https://puppettheatre.spb.ru/index.php?id=25"
+  en:
+    - role: Director and text writer
+      name: Roman Boklanov
+    - role: Production designer
+      name: Alina Mikhailova
+    - role: Composer
+      name: Alyona Volkova
+    - role: Lighting Designer
+      name: Igor Myzovsky
+    - role: Cinderella
+      name: Sofya Chudakova
+      url: "https://puppettheatre.spb.ru/index.php?id=24"
+    - role: Prince, Dad, Rat 2, Butler Franz
+      name: Andrey Bakun
+      url: "https://puppettheatre.spb.ru/index.php?id=12"
+    - role: Stepmother, Rat 1, King, Paparazzi
+      name: Konstantin Kozhev
+      url: "https://puppettheatre.spb.ru/index.php?id=16"
+    - role: Sister Lucinda, Mom, TV Host
+      name: Kristina Bekanova
+      url: "https://puppettheatre.spb.ru/index.php?id=17"
+    - role: "Sister Matilda, Court Ladies 1 & 2, Photographer"
+      name: Ella Glazetskaya
+      url: "https://puppettheatre.spb.ru/index.php?id=25"
+  de: []
+poster:
+  src: /productions/cinderella/poster.jpg
+  credit: null
+videos: []
+awards:
+  - name: «Золотой софит»
+    year: 2021
+    category: Лучшая работа актёра в театре кукол (К. Кожев)
+    city: Санкт-Петербург
+    url: "https://zolotoisofit.ru/sofit-2021/"
+  - name: XXX Международный фестиваль КУКАРТ
+    year: 2021
+    category: Лучший спектакль о добре
+    city: Санкт-Петербург
+festivals: []
+press:
+  - title: Video from Stray Dog Puppet Theatre
+    url: "https://vk.com/video-32253592_456239111?list=4023b21fb87266ba5e"
+  - title: "Director Roman Boklanov about the new production at the Puppet Theatre \"Stray Dog\""
+    url: "http://www.kirnews.ru/news/2021-04-20/rezhisser-roman-boklanov-o-novoy-postanovke-v-teatre-kukol--brodyachaya-sobachka/"
+  - title: Far-reaching Perspectives
+    url: "https://musecube.org/otchet/otchet-theatre/daleko-idushhie-perspektivy/"
+externalLinks: []
+techRider: null
+pressKit: null
+featured: false
+tags:
+  - performance for children
+  - roman boklanov
+  - theater
+tour: []
+gallery:
+  - src: /productions/cinderella/01.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/02.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/03.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/04.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/05.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/06.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/07.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/08.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/09.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/10.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/11.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/12.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/13.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/14.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/15.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/16.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/17.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/18.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/cinderella/19.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
