@@ -57,6 +57,7 @@ export function ProductionGrid({
             production={p}
             priority={priorityFirst && i === 0}
             sticker={i === 0 ? firstCardSticker : undefined}
+            coverPhoto={p.productionsPhoto ?? null}
           />
         )
         return duotoneAll ? (

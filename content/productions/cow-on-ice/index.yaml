@@ -45,7 +45,7 @@ credits:
     - role: Regie
       name: Roman Boklanov
 poster:
-  src: null
+  src: productions/cow-on-ice/poster.webp
   credit: null
 gallery: [ ]
 videos: [ ]

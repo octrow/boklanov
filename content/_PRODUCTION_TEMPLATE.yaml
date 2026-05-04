@@ -100,6 +100,19 @@ poster:
   src: null                               # /productions/<slug>/poster.jpg
   credit: null                            # фотограф, если известен
 
+# Обложка для страницы /productions (переопределяет poster на карточках списка).
+# Оставить null → используется poster.
+productionsPhoto:
+  src: null                               # /productions/<slug>/productions-cover.jpg
+  credit: null
+
+# Обложка для главной страницы «Избранные работы».
+# Цепочка: featuredPhoto → productionsPhoto → poster → текст.
+# Оставить null → используется следующий в цепочке.
+featuredPhoto:
+  src: null                               # /productions/<slug>/featured-cover.jpg
+  credit: null
+
 # Галерея. Файлы кладутся в public/productions/<slug>, что и index.yaml.
 # После добавления - написать Daniil, он зальёт фото в R2:
 #   npm run upload-images -- --slug <slug>

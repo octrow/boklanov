@@ -74,6 +74,10 @@ export interface Production {
     width: number | null
     height: number | null
   }
+  /** Optional photo override for the /productions card. Overrides poster. */
+  productionsPhoto: { src: string | null; credit: string | null } | null
+  /** Optional photo override for the home featured strip. Fallback: featuredPhoto → productionsPhoto → poster. */
+  featuredPhoto: { src: string | null; credit: string | null } | null
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{
@@ -147,12 +151,39 @@ export interface ProductionView
   tagline: string | null
   directorsNote: string | null
   bookingCtaLabel: string | null
-  press: Array<{ title: string; url: string; outlet?: string; language?: string }>
-  awards: Array<{ name: string; category?: string; year?: number; city?: string }>
-  festivals: Array<{ name: string; category?: string; year?: number; city?: string }>
+  press: Array<{
+    title: string
+    url: string
+    outlet?: string
+    language?: string
+  }>
+  awards: Array<{
+    name: string
+    category?: string
+    year?: number
+    city?: string
+  }>
+  festivals: Array<{
+    name: string
+    category?: string
+    year?: number
+    city?: string
+  }>
   externalLinks: Array<{ label: string; url: string }>
-  runs: Array<{ venue?: string; city?: string; yearFrom?: number; yearTo?: number; count?: string }>
-  theatre: { name?: string; shortName?: string; city?: string; country?: string; url?: string }
+  runs: Array<{
+    venue?: string
+    city?: string
+    yearFrom?: number
+    yearTo?: number
+    count?: string
+  }>
+  theatre: {
+    name?: string
+    shortName?: string
+    city?: string
+    country?: string
+    url?: string
+  }
   tour: string[]
   /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
@@ -265,6 +296,18 @@ function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
       width: null,
       height: null
     },
+    productionsPhoto: (fm as any).productionsPhoto?.src
+      ? {
+          src: (fm as any).productionsPhoto.src as string,
+          credit: (fm as any).productionsPhoto.credit ?? null
+        }
+      : null,
+    featuredPhoto: (fm as any).featuredPhoto?.src
+      ? {
+          src: (fm as any).featuredPhoto.src as string,
+          credit: (fm as any).featuredPhoto.credit ?? null
+        }
+      : null,
     gallery: (fm.gallery ?? []).map((g) => ({
       src: g.src,
       credit: g.credit ?? null,
@@ -303,7 +346,10 @@ function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
 // Locale projection
 // ---------------------------------------------------------------------------
 
-function resolveL10n(val: L10nString | null | undefined, locale: Locale): string {
+function resolveL10n(
+  val: L10nString | null | undefined,
+  locale: Locale
+): string {
   if (val == null) return ''
   if (typeof val === 'string') return val
   return val[locale] ?? val.en ?? val.ru ?? val.de ?? ''
@@ -321,11 +367,7 @@ function project(p: Production, locale: Locale): ProductionView {
   // Fallback chain: requested → ru → en → '' (never throw).
   const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
   const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
-  const b =
-    p.body[locale as 'ru' | 'en' | 'de'] ||
-    p.body.ru ||
-    p.body.en ||
-    ''
+  const b = p.body[locale as 'ru' | 'en' | 'de'] || p.body.ru || p.body.en || ''
   // Credits & premiere date: per-locale with RU→EN fallback, mirroring
   // the press/awards "original language" rule. DE chrome falls through
   // to RU credits (v1 has no DE bodies - that's a v2 fill).
@@ -394,7 +436,9 @@ function project(p: Production, locale: Locale): ProductionView {
     city: resolveL10nOpt(p.theatre.city, locale)
   }
 
-  const resolvedTour = p.tour.map((c) => resolveL10n(c, locale)).filter((c) => c !== '')
+  const resolvedTour = p.tour
+    .map((c) => resolveL10n(c, locale))
+    .filter((c) => c !== '')
 
   const {
     title: _t,

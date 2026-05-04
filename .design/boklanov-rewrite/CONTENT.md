@@ -73,6 +73,8 @@ form: [ puppet, solo ]
 lineage: [ btk, kudashov ]
 credits: { ru: [ { role, name, url? } ], en: [ ... ] }
 poster: { src: "/...", credit: null }
+productionsPhoto: { src: "/...", credit: null }  # optional; overrides poster on /productions cards
+featuredPhoto: { src: "/...", credit: null }      # optional; overrides on home featured strip (chain: featuredPhoto → productionsPhoto → poster → typographic)
 gallery: [ { src, credit, caption: { ru, en } } ]
 videos: [ { provider: youtube, id } ]
 awards: [ { name, category, year, city } ]

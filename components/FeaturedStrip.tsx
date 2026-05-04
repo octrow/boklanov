@@ -42,6 +42,7 @@ export function FeaturedStrip({
               production={p}
               priority={priorityFirst && i === 0}
               sizes={FEATURED_SIZES[i] ?? FEATURED_SIZES[5]}
+              coverPhoto={p.featuredPhoto ?? p.productionsPhoto ?? null}
               sticker={
                 i === 0 ? (
                   <Sticker accent='vermillion' rotate={3} shadow>

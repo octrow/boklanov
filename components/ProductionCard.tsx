@@ -19,6 +19,8 @@ export interface ProductionCardProps {
   priority?: boolean
   sticker?: React.ReactNode
   sizes?: string
+  /** Overrides production.poster for display. Follows caller-computed fallback chain. */
+  coverPhoto?: { src: string | null; credit: string | null } | null
 }
 
 const DEFAULT_SIZES =
@@ -28,7 +30,8 @@ export function ProductionCard({
   production,
   priority = false,
   sticker,
-  sizes = DEFAULT_SIZES
+  sizes = DEFAULT_SIZES,
+  coverPhoto
 }: ProductionCardProps) {
   const t = useTranslations('productionDetail')
   const titleMain = production.title
@@ -51,12 +54,14 @@ export function ProductionCard({
   ]
     .filter(Boolean)
     .join(', ')
-  const alt = production.poster.credit
-    ? `${altBase} (${production.poster.credit})`
+  const effectiveCover = (coverPhoto?.src ? coverPhoto : null) ?? production.poster
+  const alt = effectiveCover.credit
+    ? `${altBase} (${effectiveCover.credit})`
     : altBase
 
+  // Only use lqip blur-up when showing the poster (lqip is only computed for poster)
   const coverStyle =
-    production.poster.src && production.poster.lqip
+    !coverPhoto?.src && production.poster.src && production.poster.lqip
       ? {
           backgroundImage: `url(${production.poster.lqip})`,
           backgroundSize: 'cover' as const,
@@ -68,10 +73,10 @@ export function ProductionCard({
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
         {sticker}
-        {production.poster.src ? (
+        {effectiveCover.src ? (
           <Image
             className={styles.coverImg}
-            src={cdnUrl(production.poster.src)!}
+            src={cdnUrl(effectiveCover.src)!}
             alt={alt}
             fill
             sizes={sizes}
