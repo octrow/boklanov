@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
 import styles from './CreditLine.module.css'
@@ -21,14 +22,15 @@ interface CreditLineProps {
  * images, structured gallery credits). Current SpecimenPlate caption
  * already handles unstructured `gallery[].credit` strings directly.
  */
-export function CreditLine({ photographer, year }: CreditLineProps) {
+export async function CreditLine({ photographer, year }: CreditLineProps) {
+  const t = await getTranslations('common')
   const hasPhoto = !!photographer
   const hasYear = year !== null && year !== undefined && year !== ''
 
   if (!hasPhoto && !hasYear) return null
 
   const parts: React.ReactNode[] = []
-  if (hasPhoto) parts.push('Photo')
+  if (hasPhoto) parts.push(t('photo'))
   if (hasPhoto) parts.push(photographer)
   if (hasYear) parts.push(String(year))
 

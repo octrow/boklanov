@@ -7,13 +7,14 @@ import styles from './not-found.module.css'
 
 export default async function NotFound() {
   const t = await getTranslations('notFound')
+  const tA11y = await getTranslations('accessibility')
 
   return (
     <main className={styles.page}>
       <p className={styles.code}>404</p>
       <h1 className={styles.heading}>{t('heading')}</h1>
       <p className={styles.body}>{t('body')}</p>
-      <nav className={styles.links} aria-label='Return links'>
+      <nav className={styles.links} aria-label={tA11y('returnLinks')}>
         <Link href='/' className={styles.link}>
           {t('home')}
         </Link>

@@ -17,6 +17,7 @@ export default async function ProductionsIndexPage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('productions')
+  const tA11y = await getTranslations('accessibility')
   const productions = getAllProductions(locale)
 
   // Sort: productions with explicit `listOrder` float to the top (ascending),
@@ -48,7 +49,8 @@ export default async function ProductionsIndexPage({
     groupLabelRole: t('filterRole'),
     groupLabelForm: t('filterForm'),
     groupLabelAge: t('filterAge'),
-    groupLabelCountry: t('filterCountry')
+    groupLabelCountry: t('filterCountry'),
+    filtersAria: tA11y('filters')
   }
 
   return (

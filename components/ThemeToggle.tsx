@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import styles from './ThemeToggle.module.css'
@@ -61,6 +62,7 @@ function readStoredTheme(): Theme {
 }
 
 export function ThemeToggle() {
+  const t = useTranslations('accessibility')
   const [theme, setTheme] = React.useState<Theme | null>(null)
 
   // Re-apply data-theme from localStorage after every render.
@@ -96,7 +98,7 @@ export function ThemeToggle() {
       type='button'
       onClick={toggle}
       className={styles.toggle}
-      aria-label={isGorky ? 'Switch to paper theme' : 'Switch to gorky theme'}
+      aria-label={isGorky ? t('switchToPaper') : t('switchToGorky')}
     >
       {isGorky ? <SunIcon /> : <MoonIcon />}
     </button>

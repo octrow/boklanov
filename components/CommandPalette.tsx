@@ -252,7 +252,7 @@ export function CommandPalette({
         className={styles.modal}
         role='dialog'
         aria-modal='true'
-        aria-label='Search'
+        aria-label={t('dialogAria')}
         onKeyDown={handleKeyDown}
       >
         <div className={styles.inputWrapper}>
@@ -263,7 +263,7 @@ export function CommandPalette({
             onChange={(e) => setQuery(e.target.value)}
             className={styles.input}
             placeholder={t('placeholder')}
-            aria-label='Search'
+            aria-label={t('inputAria')}
             autoComplete='off'
             spellCheck={false}
           />
@@ -273,12 +273,12 @@ export function CommandPalette({
           <div
             className={styles.results}
             role='listbox'
-            aria-label='Search results'
+            aria-label={t('resultsAria')}
           >
             {grouped.length === 0 ? (
               <div className={styles.noResults}>
                 <span aria-hidden='true' className={styles.noResultsLabel}>
-                  ERRATA
+                  {t('errata')}
                 </span>
                 <p className={styles.noResultsBody}>{t('noResults')}</p>
               </div>

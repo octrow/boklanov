@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import styles from './PosterLightbox.module.css'
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function PosterLightbox({ src, alt, children }: Props) {
+  const t = useTranslations('accessibility')
   const [open, setOpen] = React.useState(false)
   const triggerRef = React.useRef<HTMLDivElement>(null)
   const closeRef = React.useRef<HTMLButtonElement>(null)
@@ -41,7 +43,7 @@ export function PosterLightbox({ src, alt, children }: Props) {
         className={styles.trigger}
         role='button'
         tabIndex={0}
-        aria-label='View full poster'
+        aria-label={t('viewFullPoster')}
         onClick={() => setOpen(true)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') setOpen(true)
@@ -55,7 +57,7 @@ export function PosterLightbox({ src, alt, children }: Props) {
           className={styles.overlay}
           role='dialog'
           aria-modal='true'
-          aria-label='Full poster'
+          aria-label={t('fullPoster')}
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
@@ -64,7 +66,7 @@ export function PosterLightbox({ src, alt, children }: Props) {
               ref={closeRef}
               type='button'
               className={styles.close}
-              aria-label='Close'
+              aria-label={t('close')}
               onClick={handleClose}
             >
               ✕

@@ -22,6 +22,7 @@
     "featuredLabel": "ausgewählte Werke",
     "allLabel": "Inszenierungen",
     "viewAll": "alle Inszenierungen →",
+    "featuredPick": "AUSWAHL",
     "stagingCities": [
       "ST. PETERSBURG",
       "MOSKAU",
@@ -141,6 +142,32 @@
     "groupPress": "PRESSE",
     "groupTheatres": "THEATER",
     "groupCities": "STÄDTE",
-    "placeholder": "Suche…"
+    "placeholder": "Suche…",
+    "errata": "ERRATA",
+    "dialogAria": "Suche",
+    "inputAria": "Suche",
+    "resultsAria": "Suchergebnisse"
+  },
+  "accessibility": {
+    "close": "Schließen",
+    "mainNav": "Hauptnavigation",
+    "mobileNav": "Mobile Navigation",
+    "langSwitcher": "Sprache",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "switchToPaper": "Zum Paper-Theme wechseln",
+    "switchToGorky": "Zum Gorky-Theme wechseln",
+    "viewFullPoster": "Plakat vergrößern",
+    "fullPoster": "Plakat in Vollbild",
+    "filters": "Filter",
+    "footerNav": "Fußbereich-Navigation",
+    "returnLinks": "Zurück-Links",
+    "viewPhotoOf": "Foto {index} von {total} ansehen",
+    "photoDialogOf": "Foto {index} von {total}",
+    "prevPhoto": "Vorheriges Foto",
+    "nextPhoto": "Nächstes Foto"
+  },
+  "common": {
+    "photo": "Foto"
   }
 }

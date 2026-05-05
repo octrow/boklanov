@@ -22,6 +22,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ productions }: SiteHeaderProps) {
   const locale = useLocale() as Locale
   const t = useTranslations('nav')
+  const tA11y = useTranslations('accessibility')
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = React.useState(false)
   const { toggle: toggleSearch } = React.useContext(CommandPaletteContext)
@@ -67,7 +68,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
         </Link>
 
         {/* Desktop nav */}
-        <nav className={styles.nav} aria-label='Main navigation'>
+        <nav className={styles.nav} aria-label={tA11y('mainNav')}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -85,7 +86,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
         {/* Controls: locale switcher + theme toggle (desktop) */}
         <div className={styles.controls}>
-          <nav className={styles.localeSwitcher} aria-label='Language'>
+          <nav className={styles.localeSwitcher} aria-label={tA11y('langSwitcher')}>
             {LOCALES.map((loc) => (
               <Link
                 key={loc}
@@ -142,7 +143,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
         <button
           type='button'
           className={styles.hamburger}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? tA11y('closeMenu') : tA11y('openMenu')}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((o) => !o)}
         >
@@ -154,7 +155,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
       {/* Mobile nav drawer */}
       {menuOpen && (
-        <nav className={styles.mobileNav} aria-label='Mobile navigation'>
+        <nav className={styles.mobileNav} aria-label={tA11y('mobileNav')}>
           {navLinks.map((link) => (
             <Link
               key={link.href}

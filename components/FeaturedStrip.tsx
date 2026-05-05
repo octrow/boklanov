@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
 import type { ProductionView } from '@/lib/content'
@@ -28,10 +29,11 @@ const FEATURED_SIZES = [
   '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw'
 ]
 
-export function FeaturedStrip({
+export async function FeaturedStrip({
   productions,
   priorityFirst = false
 }: FeaturedStripProps) {
+  const t = await getTranslations('home')
   const cards = productions.slice(0, 6)
   return (
     <ul className={styles.grid}>
@@ -46,7 +48,7 @@ export function FeaturedStrip({
               sticker={
                 i === 0 ? (
                   <Sticker accent='vermillion' rotate={3} shadow>
-                    PICK
+                    {t('featuredPick')}
                   </Sticker>
                 ) : undefined
               }

@@ -22,6 +22,7 @@
     "featuredLabel": "selected works",
     "allLabel": "productions",
     "viewAll": "all productions →",
+    "featuredPick": "PICK",
     "stagingCities": [
       "ST.PETERSBURG",
       "MOSCOW",
@@ -141,6 +142,32 @@
     "groupPress": "PRESS",
     "groupTheatres": "THEATRES",
     "groupCities": "CITIES",
-    "placeholder": "Search…"
+    "placeholder": "Search…",
+    "errata": "ERRATA",
+    "dialogAria": "Search",
+    "inputAria": "Search",
+    "resultsAria": "Search results"
+  },
+  "accessibility": {
+    "close": "Close",
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "langSwitcher": "Language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchToPaper": "Switch to paper theme",
+    "switchToGorky": "Switch to gorky theme",
+    "viewFullPoster": "View full poster",
+    "fullPoster": "Full poster",
+    "filters": "Filters",
+    "footerNav": "Footer navigation",
+    "returnLinks": "Return links",
+    "viewPhotoOf": "View photo {index} of {total}",
+    "photoDialogOf": "Photo {index} of {total}",
+    "prevPhoto": "Previous photo",
+    "nextPhoto": "Next photo"
+  },
+  "common": {
+    "photo": "Photo"
   }
 }

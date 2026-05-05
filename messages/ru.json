@@ -22,6 +22,7 @@
     "featuredLabel": "избранное",
     "allLabel": "постановки",
     "viewAll": "все постановки →",
+    "featuredPick": "ВЫБОР",
     "stagingCities": [
       "ПЕТЕРБУРГ",
       "МОСКВА",
@@ -141,6 +142,32 @@
     "groupPress": "ПРЕССА",
     "groupTheatres": "ТЕАТРЫ",
     "groupCities": "ГОРОДА",
-    "placeholder": "Поиск…"
+    "placeholder": "Поиск…",
+    "errata": "ERRATA",
+    "dialogAria": "Поиск",
+    "inputAria": "Поиск",
+    "resultsAria": "Результаты поиска"
+  },
+  "accessibility": {
+    "close": "Закрыть",
+    "mainNav": "Основная навигация",
+    "mobileNav": "Мобильная навигация",
+    "langSwitcher": "Язык",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
+    "switchToPaper": "Переключить на тему Paper",
+    "switchToGorky": "Переключить на тему Gorky",
+    "viewFullPoster": "Открыть плакат",
+    "fullPoster": "Плакат",
+    "filters": "Фильтры",
+    "footerNav": "Навигация в подвале",
+    "returnLinks": "Ссылки возврата",
+    "viewPhotoOf": "Просмотреть фото {index} из {total}",
+    "photoDialogOf": "Фото {index} из {total}",
+    "prevPhoto": "Предыдущее фото",
+    "nextPhoto": "Следующее фото"
+  },
+  "common": {
+    "photo": "Фото"
   }
 }

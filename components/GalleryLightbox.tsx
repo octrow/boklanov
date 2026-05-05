@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { SpecimenPlate } from './SpecimenPlate'
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export function GalleryLightbox({ items }: Props) {
+  const t = useTranslations('accessibility')
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null)
   const closeRef = React.useRef<HTMLButtonElement>(null)
   const triggerRefs = React.useRef<Array<HTMLDivElement | null>>([])
@@ -69,7 +71,7 @@ export function GalleryLightbox({ items }: Props) {
             className={styles.trigger}
             role='button'
             tabIndex={0}
-            aria-label={`View photo ${i + 1} of ${total}`}
+            aria-label={t('viewPhotoOf', { index: i + 1, total })}
             onClick={() => setActiveIndex(i)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
@@ -91,7 +93,7 @@ export function GalleryLightbox({ items }: Props) {
           className={styles.overlay}
           role='dialog'
           aria-modal='true'
-          aria-label={`Photo ${(activeIndex ?? 0) + 1} of ${total}`}
+          aria-label={t('photoDialogOf', { index: (activeIndex ?? 0) + 1, total })}
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
@@ -99,7 +101,7 @@ export function GalleryLightbox({ items }: Props) {
               ref={closeRef}
               type='button'
               className={styles.close}
-              aria-label='Close'
+              aria-label={t('close')}
               onClick={handleClose}
             >
               ✕
@@ -113,7 +115,7 @@ export function GalleryLightbox({ items }: Props) {
                   <button
                     type='button'
                     className={`${styles.navBtn} ${styles.navPrev}`}
-                    aria-label='Previous photo'
+                    aria-label={t('prevPhoto')}
                     onClick={goPrev}
                   >
                     <svg
@@ -133,7 +135,7 @@ export function GalleryLightbox({ items }: Props) {
                   <button
                     type='button'
                     className={`${styles.navBtn} ${styles.navNext}`}
-                    aria-label='Next photo'
+                    aria-label={t('nextPhoto')}
                     onClick={goNext}
                   >
                     <svg

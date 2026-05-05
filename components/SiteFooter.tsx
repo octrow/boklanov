@@ -12,13 +12,14 @@ const INSTAGRAM_URL = 'https://instagram.com/boklanovroman'
 export async function SiteFooter() {
   const t = await getTranslations('nav')
   const tFooter = await getTranslations('footer')
+  const tA11y = await getTranslations('accessibility')
   const year = new Date().getFullYear()
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
         {/* Col 1: Nav */}
-        <nav className={styles.col} aria-label='Footer navigation'>
+        <nav className={styles.col} aria-label={tA11y('footerNav')}>
           <Link href='/productions' className={styles.footerLink}>
             {t('productions')}
           </Link>

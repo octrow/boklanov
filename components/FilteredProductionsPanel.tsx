@@ -52,6 +52,7 @@ export interface FilterLabels {
   groupLabelForm: string
   groupLabelAge: string
   groupLabelCountry: string
+  filtersAria: string
 }
 
 export interface FilteredProductionsPanelProps {
@@ -188,7 +189,7 @@ export function FilteredProductionsPanel({
     <div className={styles.panel}>
       {/* Filter strip — wraps on overflow. Country group is a disclosure popover
           to keep the bar narrow even when many countries appear in the data. */}
-      <div className={styles.filterBar} role='toolbar' aria-label='Filters'>
+      <div className={styles.filterBar} role='toolbar' aria-label={labels.filtersAria}>
         {/* Role — radio group (single selection) */}
         <div
           className={styles.group}
