@@ -130,7 +130,11 @@ export default config({
               description: 'RU / KZ / DE / ES …',
               validation: { isRequired: false, length: { min: 0, max: 3 } }
             }),
-            url: fields.url({ label: 'Theatre URL' })
+            url: fields.url({ label: 'Theatre URL' }),
+            year: fields.integer({
+              label: 'Founded year',
+              validation: { isRequired: false }
+            })
           },
           { label: 'Theatre' }
         ),
@@ -288,7 +292,8 @@ export default config({
               validation: { isRequired: false }
             }),
             category: l10nOpt('Category'),
-            city: l10nOpt('City')
+            city: l10nOpt('City'),
+            url: fields.url({ label: 'Award URL' })
           }),
           {
             label: 'Awards',

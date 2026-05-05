@@ -29,11 +29,17 @@ directorsNote:
 # Поля name, shortName, city можно писать строкой (для всех локалей одинаково)
 # или объектом { ru, en, de } — если название/город по-разному в разных языках.
 theatre:
-  name: ""                                # «Большой театр кукол» — или { ru: "...", en: "...", de: null }
-  shortName: null                         # «БТК» - для компактных мест
-  city: ""                                # Saint Petersburg — или { ru: "Санкт-Петербург", en: "Saint Petersburg" }
-  country: ""                             # двухбуквенный ISO: RU / KZ / DE / ES …
-  url: null                               # официальная страница спектакля или театра
+  name:
+    ru: null
+    en: null
+    de: null
+  shortName: null
+  city:
+    ru: null
+    en: null
+    de: null
+  country: ""
+  url: null
 
 # === Даты ===
 year: null                                # год премьеры, например 2021
