@@ -43,39 +43,74 @@ interface AboutFrontmatter {
 
 // ── Loader ───────────────────────────────────────────────────────────────
 
+/** Split an MDX file with optional `---`-fenced YAML frontmatter into
+ *  (frontmatter, body). Keystatic's singleton config
+ *  `format: { data: 'yaml', contentField: 'body' }` writes everything
+ *  into one .mdx file with frontmatter prepended. */
+function splitFrontmatter(raw: string): {
+  data: Record<string, unknown>
+  body: string
+} {
+  const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
+  if (!m) return { data: {}, body: raw }
+  const data = (parseYaml(m[1]) ?? {}) as Record<string, unknown>
+  return { data, body: m[2] }
+}
+
 function loadAbout(locale: Locale): {
   frontmatter: AboutFrontmatter
   paragraphs: string[]
   deForthcoming: boolean
 } {
   const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
-  const deForthcoming =
-    locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.yaml'))
-  const candidates = [locale, 'en', 'ru'] // DE falls back to EN then RU
+  const candidates = [locale, 'en', 'ru'] as const // DE falls back to EN then RU
+
+  // Source-of-truth precedence per locale: .mdx with inline frontmatter
+  // (the Keystatic Cloud format) wins; falls back to the legacy
+  // <locale>.yaml + <locale>.md(x) split, which is now dead but kept for
+  // graceful migration if someone reverts.
   for (const lang of candidates) {
+    const mdxPath = path.join(ABOUT_DIR, `${lang}.mdx`)
+    const mdPath = path.join(ABOUT_DIR, `${lang}.md`)
     const yamlPath = path.join(ABOUT_DIR, `${lang}.yaml`)
+
+    if (fs.existsSync(mdxPath)) {
+      const raw = fs.readFileSync(mdxPath, 'utf8')
+      const { data, body } = splitFrontmatter(raw)
+      // If .mdx has no frontmatter (pre-Keystatic state), pull data from
+      // the sibling .yaml file.
+      const fm =
+        Object.keys(data).length === 0 && fs.existsSync(yamlPath)
+          ? ((parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as Record<
+              string,
+              unknown
+            >)
+          : data
+      return {
+        frontmatter: fm as unknown as AboutFrontmatter,
+        paragraphs: body
+          .split(/\n{2,}/)
+          .map((s) => s.trim())
+          .filter(Boolean),
+        deForthcoming: false
+      }
+    }
+
     if (fs.existsSync(yamlPath)) {
       const data =
         (parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as AboutFrontmatter
-      const mdxPath = path.join(ABOUT_DIR, `${lang}.mdx`)
-      const mdPath = path.join(ABOUT_DIR, `${lang}.md`)
-      const bodyPath = fs.existsSync(mdxPath)
-        ? mdxPath
-        : fs.existsSync(mdPath)
-          ? mdPath
-          : null
-      const content = bodyPath ? fs.readFileSync(bodyPath, 'utf8') : ''
-      const paragraphs = content
-        .split(/\n{2,}/)
-        .map((s) => s.trim())
-        .filter(Boolean)
+      const body = fs.existsSync(mdPath) ? fs.readFileSync(mdPath, 'utf8') : ''
       return {
         frontmatter: data,
-        paragraphs,
-        deForthcoming
+        paragraphs: body
+          .split(/\n{2,}/)
+          .map((s) => s.trim())
+          .filter(Boolean),
+        deForthcoming: false
       }
     }
   }
+
   return {
     frontmatter: {
       portrait: { src: null, credit: null },
@@ -83,7 +118,8 @@ function loadAbout(locale: Locale): {
       lineage: []
     },
     paragraphs: [],
-    deForthcoming
+    deForthcoming:
+      locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
   }
 }
 

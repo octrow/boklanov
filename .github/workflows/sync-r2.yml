@@ -6,11 +6,21 @@ on:
     paths:
       - 'public/productions/**'
       - 'public/about/**'
+  workflow_dispatch: {} # Allow manual re-sync from the Actions tab
 
 # Avoid two pushes racing on the same paths.
 concurrency:
   group: r2-sync
   cancel-in-progress: false
+
+env:
+  # R2_BUCKET secret is optional — falls back to the default bucket name
+  # used by scripts/upload-images.ts so a missing secret doesn't break sync.
+  R2_BUCKET: ${{ secrets.R2_BUCKET || 'boklanov-content' }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: auto
+  R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
 jobs:
   sync:
@@ -18,28 +28,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify required secrets
+        run: |
+          : "${AWS_ACCESS_KEY_ID:?R2_ACCESS_KEY_ID secret is missing}"
+          : "${AWS_SECRET_ACCESS_KEY:?R2_SECRET_ACCESS_KEY secret is missing}"
+          if [ "$R2_ENDPOINT" = "https://.r2.cloudflarestorage.com" ]; then
+            echo "::error::R2_ACCOUNT_ID secret is missing"
+            exit 1
+          fi
+          echo "Bucket: $R2_BUCKET"
+          echo "Endpoint: $R2_ENDPOINT"
+
       - name: Sync productions/
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: auto
         run: |
           aws s3 sync public/productions/ \
-            "s3://${{ secrets.R2_BUCKET }}/productions/" \
-            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" \
+            "s3://${R2_BUCKET}/productions/" \
+            --endpoint-url "${R2_ENDPOINT}" \
             --size-only \
             --delete
 
       - name: Sync about/
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: auto
         run: |
           if [ -d public/about ]; then
             aws s3 sync public/about/ \
-              "s3://${{ secrets.R2_BUCKET }}/about/" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" \
+              "s3://${R2_BUCKET}/about/" \
+              --endpoint-url "${R2_ENDPOINT}" \
               --size-only \
               --delete
           fi
