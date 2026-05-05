@@ -130,9 +130,18 @@ export default config({
       slugField: 'slug',
       path: 'content/productions/*/',
       format: { data: 'yaml' },
-      entryLayout: 'content',
+      // No entryLayout: 'content' here — that mode requires format.contentField,
+      // which can only point to ONE mdx field. We have three (bodyRu/En/De)
+      // and migrating to a single primary content file would rename
+      // bodyRu.mdx → index.mdx across every entry. Stick with 'form' layout
+      // and rely on field ordering below for editor scannability.
       previewUrl: '/ru/productions/{slug}',
       columns: ['year', 'durationMin', 'status'],
+      // Schema field order = editor UI order. Most-edited / narrative fields
+      // first, admin / legacy at the bottom. Bodies live near the top because
+      // they hold the primary editorial content. Section dividers follow:
+      //   identity → bodies → media → theatre/dates → taxonomy → credits
+      //   → recognition → history → booking → placement → tech → legacy.
       schema: {
         slug: fields.slug({
           name: {
@@ -141,115 +150,19 @@ export default config({
           }
         }),
 
-        // === Titles & texts ===
+        // === Identity & short prose ===
         title: l10n('Title'),
-        synopsis: l10n('Synopsis'),
         tagline: l10nOpt('Tagline'),
+        synopsis: l10n('Synopsis'),
         directorsNote: l10nOpt("Director's note"),
 
-        // === Theatre ===
-        theatre: fields.object(
-          {
-            name: l10n('Theatre name'),
-            shortName: l10nOpt('Short name'),
-            city: l10n('City'),
-            // Stays as text: ~8 entries have country: null. fields.select
-            // requires defaultValue and would silently coerce null → default
-            // on first save. Convert to select once those entries are filled
-            // (Tier 2 migration). COUNTRY_OPTIONS preserved for that future work.
-            country: fields.text({
-              label: 'Country (ISO-2)',
-              description: 'RU / KZ / DE / AT / ES …',
-              validation: { isRequired: false, length: { min: 0, max: 3 } }
-            }),
-            url: fields.url({ label: 'Theatre URL' }),
-            year: fields.integer({
-              label: 'Founded year',
-              validation: { isRequired: false }
-            })
-          },
-          { label: 'Theatre' }
-        ),
-
-        // === Dates & markers ===
-        year: fields.integer({
-          label: 'Premiere year',
-          validation: { isRequired: false, min: 1900, max: 2100 }
-        }),
-        premiereDate: l10nOpt('Premiere date (free text)'),
-        ticketsUrl: fields.url({ label: 'Tickets URL' }),
-        status: fields.text({
-          label: 'Status',
-          description: 'Free-form. e.g. "in-development". Leave blank for live.'
-        }),
-        ageRating: fields.text({
-          label: 'Age rating',
-          description: '0+, 6+, 12+, 16+, 18+'
-        }),
-        durationMin: fields.integer({
-          label: 'Duration (minutes)',
-          description: 'Performance length including intermission',
-          validation: { isRequired: false }
-        }),
-
-        role: fields.multiselect({
-          label: "Roman's role(s)",
-          description: 'Roman’s contribution to this production',
-          options: ROLE_OPTIONS
-        }),
-        form: fields.multiselect({
-          label: 'Form',
-          description: 'Theatrical form / genre tags',
-          options: FORM_OPTIONS
-        }),
-        lineage: fields.multiselect({
-          label: 'Lineage',
-          description: 'Tradition or school the production traces back to',
-          options: LINEAGE_OPTIONS
-        }),
-
-        // === Credits ===
-        credits: fields.object(
-          {
-            ru: fields.array(
-              fields.object({
-                role: fields.text({ label: 'Role' }),
-                name: fields.text({ label: 'Name' }),
-                url: fields.url({ label: 'URL' })
-              }),
-              {
-                label: 'RU credits',
-                itemLabel: (p) =>
-                  `${p.fields.role.value} — ${p.fields.name.value}`
-              }
-            ),
-            en: fields.array(
-              fields.object({
-                role: fields.text({ label: 'Role' }),
-                name: fields.text({ label: 'Name' }),
-                url: fields.url({ label: 'URL' })
-              }),
-              {
-                label: 'EN credits',
-                itemLabel: (p) =>
-                  `${p.fields.role.value} — ${p.fields.name.value}`
-              }
-            ),
-            de: fields.array(
-              fields.object({
-                role: fields.text({ label: 'Role' }),
-                name: fields.text({ label: 'Name' }),
-                url: fields.url({ label: 'URL' })
-              }),
-              {
-                label: 'DE credits',
-                itemLabel: (p) =>
-                  `${p.fields.role.value} — ${p.fields.name.value}`
-              }
-            )
-          },
-          { label: 'Credits' }
-        ),
+        // === Body — full editorial per locale ===
+        // Per Keystatic Discussion #361: with format.data='yaml' and no
+        // contentField, each fields.mdx is written as <fieldKey>.mdx next to
+        // index.yaml (bodyRu.mdx / bodyEn.mdx / bodyDe.mdx).
+        bodyRu: fields.mdx({ label: 'Body (RU)' }),
+        bodyEn: fields.mdx({ label: 'Body (EN)' }),
+        bodyDe: fields.mdx({ label: 'Body (DE)' }),
 
         // === Media ===
         poster: fields.object(
@@ -326,6 +239,114 @@ export default config({
           }
         ),
 
+        // === Theatre & dates ===
+        theatre: fields.object(
+          {
+            name: l10n('Theatre name'),
+            shortName: l10nOpt('Short name'),
+            city: l10n('City'),
+            // Stays as text: ~8 entries have country: null. fields.select
+            // requires defaultValue and would silently coerce null → default
+            // on first save. Convert to select once those entries are filled
+            // (Tier 2 migration). See KEYSTATIC_IMPROVEMENT_PLAN.md.
+            country: fields.text({
+              label: 'Country (ISO-2)',
+              description: 'RU / KZ / DE / AT / ES …',
+              validation: { isRequired: false, length: { min: 0, max: 3 } }
+            }),
+            url: fields.url({ label: 'Theatre URL' }),
+            year: fields.integer({
+              label: 'Founded year',
+              validation: { isRequired: false }
+            })
+          },
+          { label: 'Theatre' }
+        ),
+
+        year: fields.integer({
+          label: 'Premiere year',
+          validation: { isRequired: false, min: 1900, max: 2100 }
+        }),
+        premiereDate: l10nOpt('Premiere date (free text)'),
+        ticketsUrl: fields.url({ label: 'Tickets URL' }),
+        durationMin: fields.integer({
+          label: 'Duration (minutes)',
+          description: 'Performance length including intermission',
+          validation: { isRequired: false }
+        }),
+        ageRating: fields.text({
+          label: 'Age rating',
+          description: '0+, 6+, 12+, 16+, 18+'
+        }),
+        status: fields.text({
+          label: 'Status',
+          description: 'Free-form. e.g. "in-development". Leave blank for live.'
+        }),
+
+        // === Roles & taxonomy ===
+        role: fields.multiselect({
+          label: "Roman's role(s)",
+          description: 'Roman’s contribution to this production',
+          options: ROLE_OPTIONS
+        }),
+        form: fields.multiselect({
+          label: 'Form',
+          description: 'Theatrical form / genre tags',
+          options: FORM_OPTIONS
+        }),
+        lineage: fields.multiselect({
+          label: 'Lineage',
+          description: 'Tradition or school the production traces back to',
+          options: LINEAGE_OPTIONS
+        }),
+        tags: fields.array(fields.text({ label: 'Tag' }), {
+          label: 'Tags',
+          itemLabel: (p) => p.value || 'tag'
+        }),
+
+        // === Credits ===
+        credits: fields.object(
+          {
+            ru: fields.array(
+              fields.object({
+                role: fields.text({ label: 'Role' }),
+                name: fields.text({ label: 'Name' }),
+                url: fields.url({ label: 'URL' })
+              }),
+              {
+                label: 'RU credits',
+                itemLabel: (p) =>
+                  `${p.fields.role.value} — ${p.fields.name.value}`
+              }
+            ),
+            en: fields.array(
+              fields.object({
+                role: fields.text({ label: 'Role' }),
+                name: fields.text({ label: 'Name' }),
+                url: fields.url({ label: 'URL' })
+              }),
+              {
+                label: 'EN credits',
+                itemLabel: (p) =>
+                  `${p.fields.role.value} — ${p.fields.name.value}`
+              }
+            ),
+            de: fields.array(
+              fields.object({
+                role: fields.text({ label: 'Role' }),
+                name: fields.text({ label: 'Name' }),
+                url: fields.url({ label: 'URL' })
+              }),
+              {
+                label: 'DE credits',
+                itemLabel: (p) =>
+                  `${p.fields.role.value} — ${p.fields.name.value}`
+              }
+            )
+          },
+          { label: 'Credits' }
+        ),
+
         // === Recognition ===
         awards: fields.array(
           fields.object({
@@ -392,40 +413,7 @@ export default config({
           }
         ),
 
-        techRider: fields.url({ label: 'Tech rider PDF URL' }),
-        pressKit: fields.url({ label: 'Press kit PDF URL' }),
-
-        // === Booking CTA ===
-        bookingCta: fields.checkbox({
-          label: 'Show «booking» CTA',
-          defaultValue: true
-        }),
-        bookingCtaLabel: l10nOpt('Booking CTA label'),
-        bookingCtaUrl: fields.url({
-          label: 'Booking CTA URL (overrides mailto)'
-        }),
-
-        // === Placement ===
-        featured: fields.checkbox({
-          label: 'Show on home featured strip',
-          description: 'Surfaces this production on the home page'
-        }),
-        featuredOrder: fields.integer({
-          label: 'Featured order (1, 2, 3 …)',
-          description: 'Lower numbers appear first. Only used when "Show on home featured strip" is on.',
-          validation: { isRequired: false }
-        }),
-        listOrder: fields.integer({
-          label: 'Order in /productions grid',
-          description: 'Lower numbers appear first. Leave blank to fall back to premiere year (newest first).',
-          validation: { isRequired: false }
-        }),
-
-        tags: fields.array(fields.text({ label: 'Tag' }), {
-          label: 'Tags',
-          itemLabel: (p) => p.value || 'tag'
-        }),
-
+        // === Performance history ===
         tour: fields.array(l10n('City'), {
           label: 'Tour cities',
           description: 'Cities where this production has toured (not the premiere venue)',
@@ -452,6 +440,36 @@ export default config({
           }
         ),
 
+        // === Booking CTA ===
+        bookingCta: fields.checkbox({
+          label: 'Show «booking» CTA',
+          defaultValue: true
+        }),
+        bookingCtaLabel: l10nOpt('Booking CTA label'),
+        bookingCtaUrl: fields.url({
+          label: 'Booking CTA URL (overrides mailto)'
+        }),
+
+        // === Site placement ===
+        featured: fields.checkbox({
+          label: 'Show on home featured strip',
+          description: 'Surfaces this production on the home page'
+        }),
+        featuredOrder: fields.integer({
+          label: 'Featured order (1, 2, 3 …)',
+          description: 'Lower numbers appear first. Only used when "Show on home featured strip" is on.',
+          validation: { isRequired: false }
+        }),
+        listOrder: fields.integer({
+          label: 'Order in /productions grid',
+          description: 'Lower numbers appear first. Leave blank to fall back to premiere year (newest first).',
+          validation: { isRequired: false }
+        }),
+
+        // === Tech / press assets ===
+        techRider: fields.url({ label: 'Tech rider PDF URL' }),
+        pressKit: fields.url({ label: 'Press kit PDF URL' }),
+
         // === Legacy Notion sync IDs — kept so existing YAML round-trips ===
         notionIds: fields.object(
           {
@@ -459,14 +477,7 @@ export default config({
             en: fields.text({ label: 'Notion ID (EN)' })
           },
           { label: 'Notion IDs (legacy)' }
-        ),
-
-        // === Body files (sibling docs — produce bodyRu.mdx / bodyEn.mdx / bodyDe.mdx) ===
-        // Per Discussion #361: each non-primary document field is written as
-        // <fieldKey>.<ext> next to index.yaml.
-        bodyRu: fields.mdx({ label: 'Body (RU)' }),
-        bodyEn: fields.mdx({ label: 'Body (EN)' }),
-        bodyDe: fields.mdx({ label: 'Body (DE)' })
+        )
       }
     })
   },
@@ -487,7 +498,13 @@ function aboutSingleton(label: string, locale: 'ru' | 'en' | 'de') {
     label: `About — ${label}`,
     path: `content/about/${locale}`,
     format: { data: 'yaml', contentField: 'body' },
+    // contentField is already 'body', so entryLayout 'content' gives the bio
+    // prominent UI placement and pushes the structured fields to the sidebar.
+    entryLayout: 'content',
+    // Field order = editor UI order. Bio first (the narrative), then visuals,
+    // then biographical structure, then small notes.
     schema: {
+      body: fields.mdx({ label: 'Bio' }),
       portrait: fields.object(
         {
           src: fields.image({
@@ -526,10 +543,6 @@ function aboutSingleton(label: string, locale: 'ru' | 'en' | 'de') {
           itemLabel: (p) => `${p.fields.year.value ?? '—'} ${p.fields.label.value}`
         }
       ),
-      marginalia: fields.array(fields.text({ label: 'Note' }), {
-        label: 'Marginalia',
-        itemLabel: (p) => p.value || '—'
-      }),
       lineage: fields.array(
         fields.object({
           key: fields.text({ label: 'Key (slug)' }),
@@ -543,7 +556,10 @@ function aboutSingleton(label: string, locale: 'ru' | 'en' | 'de') {
           itemLabel: (p) => p.fields.name.value || 'entry'
         }
       ),
-      body: fields.mdx({ label: 'Bio' })
+      marginalia: fields.array(fields.text({ label: 'Note' }), {
+        label: 'Marginalia',
+        itemLabel: (p) => p.value || '—'
+      })
     }
   })
 }

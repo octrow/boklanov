@@ -334,3 +334,31 @@ Not shipped (intentionally deferred to Tier 2):
 - Conditional fields for `bookingCta` and `featured`.
 - `country` / `ageRating` / `status` selects.
 - Image fields, markdoc-inline director's note, pathReference for PDFs.
+
+## Shipped — 2026-05-06 (Tier 1 second PR — field reordering)
+
+Schema field order = editor UI order (JS preserves object-literal insertion
+order). Reorganised the productions schema by editing frequency / narrative
+importance:
+
+1. `slug` (auto, always first)
+2. **Identity & short prose** — title, tagline, synopsis, directorsNote
+3. **Body — full editorial per locale** — bodyRu / bodyEn / bodyDe (was at the bottom)
+4. **Media** — poster, productionsPhoto, featuredPhoto, gallery, videos
+5. **Theatre & dates** — theatre, year, premiereDate, ticketsUrl, durationMin, ageRating, status
+6. **Roles & taxonomy** — role, form, lineage, tags
+7. **Credits**
+8. **Recognition** — awards, festivals, press, externalLinks
+9. **Performance history** — tour, runs
+10. **Booking CTA** — bookingCta + label + url
+11. **Site placement** — featured, featuredOrder, listOrder
+12. **Tech / press assets** — techRider, pressKit
+13. **Legacy** — notionIds
+
+Same treatment on the About singletons: `body` (Bio) moves from last to first.
+
+Side-effect cleanup found while doing this:
+- Productions had `entryLayout: 'content'` set, but no `format.contentField` — Keystatic silently falls back to `form` layout in that case, so the line was dead config. Removed with an explanatory comment. Enabling `entryLayout: 'content'` properly would require picking a single primary body field (one of three locales) and renaming its file from `bodyRu.mdx` to `index.mdx` across all entries — a YAML/file-layout migration we don't want to take on for a marginal UI gain.
+- About singletons already had `format.contentField: 'body'`, so adding `entryLayout: 'content'` there is a free win — Bio gets the prominent editor pane and the structured fields move to a sidebar. Enabled.
+
+Files changed: only `keystatic.config.ts`. No YAML touched.
