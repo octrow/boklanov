@@ -11,59 +11,49 @@
  *     bodyEn.mdx
  *     bodyDe.mdx
  *
- * Storage / auth — driven by env vars so we can flip without a code change:
+ * Storage:
+ *   - dev (`npm run dev`): `kind: 'local'` — writes to disk directly.
+ *   - prod (Vercel build): `kind: 'cloud'` — Keystatic Cloud handles auth.
  *
- *   KEYSTATIC_STORAGE=local           (default in dev)
- *   KEYSTATIC_STORAGE=cloud           (Keystatic Cloud, magic-link auth)
- *     + KEYSTATIC_CLOUD_PROJECT=team/project
- *   KEYSTATIC_STORAGE=github          (self-hosted, requires a GitHub App)
- *     + KEYSTATIC_GITHUB_REPO=octrow/boklanov
+ * The switch is on `process.env.NODE_ENV`, NOT a custom env var. Why:
+ * `keystatic.config.ts` is bundled into BOTH the server route handler AND
+ * the client-side Keystatic UI. Next.js only inlines `NEXT_PUBLIC_*` and
+ * `NODE_ENV` into the client bundle — any other `process.env.X` becomes
+ * `undefined` on the client. If we used `KEYSTATIC_STORAGE`, the client
+ * would think we're in local mode while the server thinks we're in cloud,
+ * the protocols would mismatch, and every API request would 404. Hard-won
+ * lesson; do not re-add env-var-driven storage.
  *
- * Production access — the admin UI and API routes are 404 in prod by default
- * to prevent anonymous edits while we're still on local mode. Set
- * KEYSTATIC_ENABLE=1 once cloud/github auth is configured to re-enable.
+ * Auth:
+ *   - prod: Keystatic Cloud — log in at /keystatic via email magic-link.
+ *           Roman + Daniil are members of the `boklanov` team there.
+ *   - dev: trusted-local, no auth. Only listens on localhost.
  *
- * See docs:
+ * Docs:
  *   https://keystatic.com/docs/cloud
- *   https://keystatic.com/docs/github-mode
  *   https://keystatic.com/docs/recipes/nextjs-disable-admin-ui-in-production
  */
 
 import { config, fields, collection, singleton } from '@keystatic/core'
 
 // ---------------------------------------------------------------------------
-// Production guard — see "Disable Admin UI Routes in Production" recipe.
-// In dev: always show. In prod: only if explicitly opted in via env, AND only
-// when storage is something other than 'local' (local can't write on Vercel).
-// ---------------------------------------------------------------------------
-
-const STORAGE_KIND = (process.env.KEYSTATIC_STORAGE ?? 'local') as
-  | 'local'
-  | 'cloud'
-  | 'github'
-
-export const showAdminUI =
-  process.env.NODE_ENV === 'development' ||
-  (process.env.KEYSTATIC_ENABLE === '1' && STORAGE_KIND !== 'local')
-
-// ---------------------------------------------------------------------------
-// Resolve storage block based on env.
+// Storage — NODE_ENV-gated so the value is identical on client and server.
 // ---------------------------------------------------------------------------
 
 const storage =
-  STORAGE_KIND === 'cloud'
+  process.env.NODE_ENV === 'production'
     ? ({ kind: 'cloud' } as const)
-    : STORAGE_KIND === 'github'
-      ? ({
-          kind: 'github',
-          repo: (process.env.KEYSTATIC_GITHUB_REPO ?? 'octrow/boklanov') as `${string}/${string}`
-        } as const)
-      : ({ kind: 'local' } as const)
+    : ({ kind: 'local' } as const)
 
-// Cloud project key from keystatic.cloud — overridable via env if it ever
-// changes. Set on https://keystatic.cloud → team `boklanov` → project `boklanov`.
-const cloudProject =
-  process.env.KEYSTATIC_CLOUD_PROJECT ?? 'boklanov/boklanov'
+/** Belt-and-suspenders gate used by app/keystatic/layout.tsx and
+ *  app/api/keystatic/[...params]/route.ts. With cloud storage in prod,
+ *  Keystatic Cloud already enforces auth — this just kills the route
+ *  entirely if someone accidentally redeploys with local storage. */
+export const showAdminUI =
+  process.env.NODE_ENV !== 'production' || storage.kind !== 'local'
+
+// Cloud project — must be a literal so it makes it into the client bundle.
+const cloudProject = 'boklanov/boklanov' as const
 
 // ---------------------------------------------------------------------------
 // Field helpers
