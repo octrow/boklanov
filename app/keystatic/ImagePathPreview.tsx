@@ -259,53 +259,57 @@ function scanRows(root: ParentNode) {
     if (!IMG_EXT.test(label)) {
       const stale = row.querySelector<HTMLElement>(`[${ROW_THUMB_MARK}="1"]`)
       if (stale) stale.remove()
+      // Restore the row's original padding-right when the row stops
+      // being a thumbnail row (image filename → other label). Without
+      // this, switching the field's src to empty would leave a 64px
+      // gutter forever.
+      if (row.dataset.imgRowAnchored) {
+        row.style.paddingRight = row.dataset.imgRowOrigPadRight || ''
+        delete row.dataset.imgRowAnchored
+        delete row.dataset.imgRowOrigPadRight
+      }
       return
     }
     const src = dirPrefix + label
 
-    // Find an insertion container: prefer the deepest single-child wrapper
-    // that's also a flex/grid layout (the row's content cell). Fall back
-    // to the row itself.
-    let host: HTMLElement = row
-    {
-      let cur: HTMLElement | null = row.firstElementChild as HTMLElement | null
-      while (cur) {
-        const cs = window.getComputedStyle(cur)
-        if (cs.display === 'flex' || cs.display === 'grid' || cs.display === 'inline-flex') {
-          host = cur
-          break
-        }
-        cur = cur.firstElementChild as HTMLElement | null
+    // The thumb is positioned ABSOLUTELY so it never participates in the
+    // row's intrinsic flex/grid layout — that's what kept breaking when
+    // we inserted it as a flex item (it pushed siblings and overlapped
+    // controls). The row gets position: relative (idempotent — only set
+    // once via dataset flag) so the thumb anchors to it.
+    if (!row.dataset.imgRowAnchored) {
+      const cs = window.getComputedStyle(row)
+      if (cs.position === 'static') {
+        row.style.position = 'relative'
       }
-      if (host === row && row.firstElementChild instanceof HTMLElement) {
-        host = row.firstElementChild
-      }
+      // Reserve a strip on the right edge so the thumb doesn't overlap
+      // the row's text label / controls. 64px = 48 thumb + 8 gap on each
+      // side. Save the original padding so we don't double-up if React
+      // re-renders the row.
+      const origPadRight = row.style.paddingRight
+      row.dataset.imgRowOrigPadRight = origPadRight
+      row.style.paddingRight = `calc(${origPadRight || '0px'} + 64px)`
+      row.dataset.imgRowAnchored = '1'
     }
 
-    let thumb = host.querySelector<HTMLElement>(`:scope > [${ROW_THUMB_MARK}="1"]`)
+    let thumb = row.querySelector<HTMLElement>(`:scope > [${ROW_THUMB_MARK}="1"]`)
     if (!thumb) {
       thumb = document.createElement('span')
       thumb.setAttribute(ROW_THUMB_MARK, '1')
       thumb.style.cssText = [
-        'flex:0 0 auto',
-        'display:inline-block',
+        'position:absolute',
+        'right:8px',
+        'top:50%',
+        'transform:translateY(-50%)',
         'width:48px',
         'height:36px',
-        'margin-right:10px',
-        'align-self:center',
         'border:1px solid var(--kui-color-border-neutral, #d4d4d8)',
         'border-radius:3px',
         'background:var(--kui-color-background-surface, #fafafa) center/cover no-repeat',
-        'pointer-events:none'
+        'pointer-events:none',
+        'z-index:1'
       ].join(';')
-      // Insert as second child so the drag handle / focus-anchor stays
-      // first; if there's no first child, just prepend.
-      const first = host.firstElementChild
-      if (first && first.nextSibling) {
-        host.insertBefore(thumb, first.nextSibling)
-      } else {
-        host.insertBefore(thumb, host.firstChild)
-      }
+      row.appendChild(thumb)
     }
     if (thumb.dataset.src !== src) {
       thumb.dataset.src = src
