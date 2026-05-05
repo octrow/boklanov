@@ -66,7 +66,11 @@ async function uploadToR2(
   const client = new S3Client({
     region: 'auto',
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-    credentials: { accessKeyId: keyId, secretAccessKey: keySecret }
+    credentials: { accessKeyId: keyId, secretAccessKey: keySecret },
+    // R2 account-level endpoint requires path-style — without this the SDK
+    // prepends the bucket to the hostname (virtual-hosted style) and the
+    // computed signature doesn't match what R2 expects.
+    forcePathStyle: true
   })
 
   await client.send(new PutObjectCommand({
