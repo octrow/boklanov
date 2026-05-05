@@ -21,6 +21,7 @@
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
     "lint-content": "tsx scripts/lint-content.ts",
+    "audit-keystatic": "tsx scripts/audit-keystatic-schema.ts",
     "translate-content": "tsx scripts/translate-content.ts",
     "lint-tokens": "tsx scripts/lint-tokens.ts",
     "start": "next start",
