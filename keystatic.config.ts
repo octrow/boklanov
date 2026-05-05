@@ -214,14 +214,25 @@ export default config({
         }),
 
         // === Media ===
+        // poster / productionsPhoto / featuredPhoto / gallery use fields.image
+        // since 2026-05-06. Existing YAML values like
+        // `src: /productions/<slug>/poster.jpg` are byte-identical to what
+        // fields.image emits (publicPath + entry-slug + filename), so the
+        // migration was schema-only — no YAML rewrite, no file moves.
+        // Editor now sees a native upload UI and can keep original filenames
+        // (transformFilename defaults to identity). Empty {} entries from
+        // "Add" without a file are still possible — lib/content.ts:316
+        // filters those out via .filter(g => g?.src) before render.
         poster: fields.object(
           {
-            src: fields.text({
-              label: 'Poster image path',
+            src: fields.image({
+              label: 'Poster image',
               description: desc(
-                'Путь к постеру в public/. Пример: /productions/bury-me-behind-the-baseboard/poster.jpg',
-                'Path to the poster in public/. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg'
-              )
+                'Главное изображение продакшена. Загружается в public/productions/<slug>/ под оригинальным именем файла (или тем, которое впишешь в поле имени).',
+                'Production poster. Uploaded to public/productions/<slug>/ under the original filename (or whatever you type in the filename field).'
+              ),
+              directory: 'public/productions',
+              publicPath: '/productions/'
             }),
             credit: fields.text({
               label: 'Photographer credit',
@@ -243,12 +254,14 @@ export default config({
 
         productionsPhoto: fields.object(
           {
-            src: fields.text({
-              label: 'Productions list cover path',
+            src: fields.image({
+              label: 'Productions list cover',
               description: desc(
-                'Переопределяет постер в карточке на /productions. Пример: /productions/{slug}/cover.webp',
-                'Overrides poster on the /productions card. e.g. /productions/{slug}/cover.webp'
-              )
+                'Переопределяет постер в карточке на /productions. Если не задано — fall back на poster.',
+                'Overrides the poster on the /productions card. Falls back to poster when blank.'
+              ),
+              directory: 'public/productions',
+              publicPath: '/productions/'
             }),
             credit: fields.text({
               label: 'Credit',
@@ -270,12 +283,14 @@ export default config({
 
         featuredPhoto: fields.object(
           {
-            src: fields.text({
-              label: 'Featured strip cover path',
+            src: fields.image({
+              label: 'Featured strip cover',
               description: desc(
-                'Переопределяет productionsPhoto на главной (featured strip). Пример: /productions/{slug}/featured.webp',
-                'Overrides productionsPhoto on the home featured strip. e.g. /productions/{slug}/featured.webp'
-              )
+                'Переопределяет productionsPhoto на главной. Каскад: featuredPhoto → productionsPhoto → poster.',
+                'Overrides productionsPhoto on the home featured strip. Cascade: featuredPhoto → productionsPhoto → poster.'
+              ),
+              directory: 'public/productions',
+              publicPath: '/productions/'
             }),
             credit: fields.text({
               label: 'Credit',
@@ -298,12 +313,14 @@ export default config({
         gallery: fields.array(
           fields.object(
             {
-              src: fields.text({
-                label: 'Image path',
+              src: fields.image({
+                label: 'Image',
                 description: desc(
-                  'Путь к изображению. Пример: /productions/{slug}/01.jpg',
-                  'Path to the image. e.g. /productions/{slug}/01.jpg'
-                )
+                  'Изображение галереи. Дай каждому файлу уникальное имя — иначе при повторной загрузке Keystatic перезапишет предыдущий.',
+                  'Gallery image. Give each file a unique name — otherwise Keystatic will overwrite the previous one on re-upload.'
+                ),
+                directory: 'public/productions',
+                publicPath: '/productions/'
               }),
               credit: fields.text({
                 label: 'Credit',
@@ -326,12 +343,13 @@ export default config({
               'Доп. фотографии продакшена. Порядок здесь = порядок на странице.',
               'Extra production photos. Order here = order on the page.'
             ),
-            itemLabel: (p) => {
-              const src = p.fields.src.value
-              return src
-                ? src.split('/').pop() || src
-                : p.fields.credit.value || 'image'
-            }
+            // fields.image.value in the editor is { data, extension, filename }
+            // (or null on a fresh row). Use filename for the label so each
+            // gallery row is identifiable when collapsed.
+            itemLabel: (p) =>
+              p.fields.src.value?.filename ||
+              p.fields.credit.value ||
+              'image'
           }
         ),
 

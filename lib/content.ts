@@ -313,15 +313,21 @@ function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
           credit: (fm as any).featuredPhoto.credit ?? null
         }
       : null,
-    gallery: (fm.gallery ?? []).map((g) => ({
-      src: g.src,
-      credit: g.credit ?? null,
-      caption: {
-        ru: (g.caption as any)?.ru ?? null,
-        en: (g.caption as any)?.en ?? null,
-        de: (g.caption as any)?.de ?? null
-      }
-    })),
+    // Defensive filter: Keystatic's fields.image accepts an "Add" without a
+    // file selected, which writes `- {}` (empty object, no src) into the
+    // YAML array. Drop those before downstream consumers map over the
+    // gallery — otherwise an <img> with no src renders invisibly.
+    gallery: (fm.gallery ?? [])
+      .filter((g: any) => g && typeof g.src === 'string' && g.src.length > 0)
+      .map((g) => ({
+        src: g.src,
+        credit: g.credit ?? null,
+        caption: {
+          ru: (g.caption as any)?.ru ?? null,
+          en: (g.caption as any)?.en ?? null,
+          de: (g.caption as any)?.de ?? null
+        }
+      })),
     videos: fm.videos ?? [],
     awards: fm.awards ?? [],
     festivals: fm.festivals ?? [],
