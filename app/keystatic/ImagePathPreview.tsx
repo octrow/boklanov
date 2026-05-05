@@ -79,12 +79,15 @@ async function uploadFile(file: File, directory: string): Promise<string> {
 function buildAddon(input: HTMLInputElement): HTMLElement {
   const addon = document.createElement('div')
   addon.setAttribute(MARK, '1')
+  // gap + margin-top sized to match Keystatic's own field-to-field vertical
+  // rhythm (~1rem) so the upload button doesn't visually "stick" to the
+  // input above and the preview doesn't crowd the button.
   addon.style.cssText = [
     'display:flex',
     'flex-direction:column',
     'align-items:flex-start',
-    'gap:8px',
-    'margin-top:8px'
+    'gap:16px',
+    'margin-top:16px'
   ].join(';')
 
   const fileInput = document.createElement('input')

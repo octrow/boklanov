@@ -746,10 +746,84 @@ roadmap are:
 
 1. Editor backfill of `ageRating` (16 nulls) and `theatre.country` (3 nulls),
    then promote both to `fields.select`. Editor-paced.
-2. `techRider` / `pressKit` decision (drop or wire).
-3. Tier 2.2 image fields, with the defensive-filter pattern landed first.
+2. ~~`techRider` / `pressKit` decision~~ — kept as-is per editor (already
+   wired through `TourRider`, just unfilled across all entries).
+3. ~~Tier 2.2 image fields~~ — **tried and reverted**. See "Shipped — 2026-05-06
+   (Tier 2.2 attempted + reverted)" below.
 4. Optional: Tier 2.1 directorsNote → markdoc.inline (low leverage).
 5. Optional: Opus #13 `template` for new entries (low frequency of use).
 
 Everything else from the original reviews is either shipped, rejected
 with rationale, or parked under Tier 3 normalisation.
+
+---
+
+## Shipped — 2026-05-06 (Tier 2.2 attempted + reverted)
+
+Two-commit detour. Net effect on data: zero. Net effect on the editor: zero.
+Net effect on durable lessons: substantial — see below.
+
+### What was tried (commit b906c59)
+
+Swap `fields.text` → `fields.image` for `poster.src`,
+`productionsPhoto.src`, `featuredPhoto.src`, and `gallery[].src`. After a
+closer read of Keystatic's source (not just docs), the migration appeared
+trivial:
+
+- `fields.image` preserves the original upload filename by default
+  (`transformFilename` is `x => x`).
+- Path composition is `<publicPath>/<entry-slug>/<filename>` — no
+  parent-object-key prefix in the path.
+- Existing YAML values like
+  `poster: { src: /productions/<slug>/poster.jpg, credit: ... }` are
+  byte-identical to what `fields.image` emits.
+
+Migration plan in that PR: schema swap only, no YAML rewrite, no file
+moves, no reader changes. Defensive `.filter(g => g?.src)` in
+`lib/content.ts:316` to guard against the `- {}` Keystatic-empty-add bug.
+`ImagePathPreview.tsx` and `/api/keystatic-asset` removed as redundant.
+
+### What was wrong (commit 4214e40 reverts the schema bits)
+
+`fields.image` is **upload-only**. There is no native affordance to
+**paste a path string** to an existing file — the editor's only entry
+point is the file picker. That breaks several real workflows for this
+site:
+
+1. Legacy R2-synced images are already on disk — the editor wants to
+   reference them by path without re-uploading.
+2. Cross-entry image references (e.g. festival programmes reusing a
+   production poster) need a typed path.
+3. Manual edits when a single byte in YAML needs a tweak — the upload
+   UI fights you.
+
+The original `ImagePathPreview` component delivered all three — text
+path input *plus* a thumbnail preview *plus* an "Upload" button (POST to
+`/api/keystatic-asset`) *plus* injected thumbs into collapsed gallery
+rows. Its existence wasn't a workaround for missing native image
+support — it was deliberately better than `fields.image` for this
+editor's workflow.
+
+### What stayed shipped from the detour
+
+- `lib/content.ts:316` keeps the defensive filter:
+  `.filter(g => g && typeof g.src === 'string' && g.src.length > 0)`
+  before the `.map(...)`. Catches both the original `{}` artifact and the
+  empty-string-src case under `fields.text`. Net positive.
+- This decision-log entry exists so the next person evaluating Tier 2.2
+  reads "tried, reverted, here's why" rather than re-litigating.
+
+### Updated rule
+
+**`fields.image` is rejected for productions media.** Editor workflow
+requires the paste-path entry point. Don't propose this swap again
+without a concrete plan to preserve the typed-path workflow alongside
+the picker (`fields.conditional` with two modes is the only structural
+fit, but it reshapes YAML — see Tier 2 conditional-fields entry).
+
+### Subsequent polish (commit pending)
+
+Spacing between the Upload button and the preview thumbnail in
+`ImagePathPreview` was 8px gap + 8px margin-top — visually crowded
+against Keystatic's surrounding form rhythm. Bumped to 16px / 16px to
+match the field-to-field cadence.
