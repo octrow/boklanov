@@ -516,3 +516,240 @@ Output legend:
 
 Add new fields to the `PRODUCTION_FIELDS` list at the top of the script
 when they become candidates for promotion.
+
+---
+
+## Shipped — 2026-05-06 (audit + photo-log distillation)
+
+Two follow-ups from the hotfix dust-settling, no schema changes.
+
+### Audit run — current data shape
+
+`npm run audit-keystatic` against the live YAML (54 productions). Results
+sharpened the next-step picture:
+
+| Field | Audit | Implication |
+|-------|-------|-------------|
+| `status` | ✓ select-ready (already promoted, 52 use default) | No work needed |
+| `role` | ✓ select-ready (already promoted) | No work needed |
+| `videos[].provider` | ✓ select-ready (already promoted) | No work needed |
+| `bookingCta` | ✓ select-ready (already a checkbox, 22 false / 3 true / 29 default) | No work needed |
+| `ageRating` | ⚠ NULL/EMPTY — 16 entries with literal `null` | **Editor backfill required** before select promotion |
+| `theatre.country` | ⚠ NULL/EMPTY — 3 entries with literal `null` | **Editor backfill required** before select promotion |
+| `press[].language` | — field unused (0 entries set, 85 missing) | Earlier "10 null" claim in decision log was wrong (or stale). Now safe to promote — *but* `defaultValue` would silent-fill on save, so leave as text until any `language:` data exists |
+| `press[].outlet` | — field unused (0 entries set, 85 missing) | Same; not a select candidate |
+| `form` / `lineage` / `tags` | ✓ select-ready by cardinality | Intentionally kept open per editor feedback |
+| `techRider` / `pressKit` | All 54 entries are `null` | **Field is dead** — not used anywhere. See note below. |
+
+Concretely actionable from this audit:
+
+1. **`ageRating` and `theatre.country` need editor backfill, not a code change.**
+   The 16 + 3 entries are listed in the audit output. Promoting to `fields.select`
+   *before* backfill would crash the client (literal `null` rejected). Backfill
+   in Keystatic itself, then ship the schema change.
+2. **`press[].language` and `press[].outlet` are zero-set** — promoting them
+   is safe *now* (no nulls to crash on), but `fields.select` with `defaultValue`
+   would write the default into every press item on first save. Leave as text
+   until at least one entry has the field filled.
+3. **`techRider` / `pressKit` are 100% null.** Not referenced anywhere in
+   `lib/content.ts`, `app/[locale]/productions/[slug]/page.tsx`, or any
+   component. Two options for a future PR: (a) drop the fields entirely
+   (one-line schema removal + YAML migration to strip the `null` keys),
+   or (b) wire a UI affordance ("Download tech rider" button on the
+   production page) and start filling them. Don't churn until one or the
+   other is decided.
+
+### Photo-render lessons codified
+
+Untracked log file `attept_1_fix_no_photo_about.log` was an in-progress
+debugging session for the about page. Moved to
+`archive/about_photo_render_2026-05-05.log` and the durable lessons pulled
+out below so future schema work doesn't relearn them.
+
+#### Keystatic image-array fields allow saving items with no file
+
+Clicking "Add" in a `fields.array(fields.image())` UI without first selecting
+a file writes a literal `- {}` (empty object) into the YAML array. The
+schema doesn't reject it. Consequences:
+
+- The consumer sees an array entry with `src: undefined`.
+- Naïve renderers (`photos.length > 0 && photos.map(...)`) produce broken
+  images (e.g. `<img>` with no `src` attribute → invisible).
+
+**Defensive pattern (already applied to `app/[locale]/about/page.tsx`):**
+
+```ts
+const validPhotos = photos?.filter((p) => p.src) ?? []
+```
+
+Apply the same filter to **every consumer** of an image-array field. If
+Tier 2.2 (productions images) ships, `lib/content.ts`,
+`components/ProductionCard.tsx`, `app/[locale]/productions/[slug]/page.tsx`,
+and `app/api/og/[slug]/route.tsx` all need the guard before mapping over
+`gallery` / `poster` / etc.
+
+#### "Field exists in schema" ≠ "field renders on the page"
+
+The original about-page bug wasn't a Keystatic data issue at all — the
+`portrait` field was loaded into memory by `loadAbout()` and silently
+dropped at render time (the JSX never destructured `portrait` and had no
+`<img>` for it). Six commits passed before anyone noticed. Lesson:
+
+When wiring a new image / asset field, the **render check must be visual**,
+not just "does Keystatic save it". Add the field to the page, navigate to
+the page, confirm the asset shows. A type-checker / build pass / "Keystatic
+shows the field in the editor" all pass even when the render path is
+missing.
+
+This applies double for Tier 2.2: every image-shape change needs a visual
+smoke test on a real entry, not just `npm run build`.
+
+### Updated "what's next"
+
+Supersedes the original "Recommended order" given current audit + lessons:
+
+1. **`techRider` / `pressKit` decision** (smallest unit, no editor input
+   needed once the call is made). Drop or wire — don't leave as 100%-null
+   schema noise.
+2. **Editor backfills `ageRating` (16 entries) and `theatre.country` (3
+   entries)** in Keystatic itself. Re-run audit; both flip to ✓ select-ready;
+   then promote each to `fields.select` in a follow-up PR.
+3. **Tier 2.2 image fields** — only with the defensive-filter pattern
+   applied to *every* consumer up front. Photo-log lessons say "land the
+   guards first, then migrate". Otherwise you ship invisible-image
+   regressions to production.
+4. **Tier 2.1 directorsNote → markdoc.inline** — viable but lower-leverage.
+   Bodies are 1–2 sentences; the formatting upside is small and the
+   renderer change (string → Markdoc tree → `@markdoc/markdoc/react`)
+   isn't free. Bundle with Tier 2.2 if doing both, otherwise defer.
+5. **Tier 3 (entity normalisation)** — still deferred per the original
+   plan. Audit didn't change that calculus.
+
+Order is risk-graded: 1 is mechanical, 2 is editor-paced, 3 is the big
+swing, 4–5 are optional. Don't bundle 1 with anything else — it's a clean
+single-decision PR.
+
+---
+
+## Shipped — 2026-05-06 (field-description sweep)
+
+Pure-config, no YAML touched. Filled in `description:` props for fields
+the editor would hit cold on:
+
+- `tags` — distinguish from `form` / `lineage`.
+- `credits` — explain three parallel arrays (and added a comment in the
+  schema noting why we keep them parallel rather than unified).
+- `awards` — clarify scope-to-production (no recipient field) and the
+  Awards-vs-Festivals distinction.
+- `festivals` — selection without an award.
+- `press` — outlet + headline + link, one entry per publication.
+- `externalLinks` — the catch-all bucket.
+- `runs` — venue history.
+- `bookingCta` / `bookingCtaUrl` — surface the on/off semantics and the
+  mailto fallback.
+- `year` (numeric premiere year) — separation from free-text `premiereDate`.
+- `ticketsUrl` — must include https://.
+- `techRider` / `pressKit` — note they're currently unrendered (matches
+  the audit verdict "all entries null, not used anywhere").
+- `notionIds` — explicit "leave as-is" guidance.
+
+Also added inline schema comments for two areas that turn up in code
+review:
+
+- The `credits` block carries a comment explaining why three parallel
+  arrays beat a single structured array (Opus #7) for the current data.
+- The `bookingCta` block notes that `fields.conditional` is deliberately
+  not yet applied (would reshape YAML — Tier 2).
+- The `premiereDate` block notes why it stays free-text l10n vs `fields.date`.
+- `techRider` / `pressKit` carry a "drop or wire" pointer.
+- `notionIds` carries an explicit "do NOT switch to fields.ignored()" note
+  (which would erase data on save — Gemini #10's suggestion is rejected).
+
+`npx tsc --noEmit` clean. No YAML touched, no readers affected.
+
+---
+
+## Suggestions reviewed — disposition table
+
+The two original reviews surfaced 35 (Opus) + 18 (Gemini) suggestions.
+Many are now done; some are explicitly rejected; a few are still on the
+roadmap. Tracking each one here so a future reader doesn't have to
+re-derive the rationale.
+
+### Opus review (35 items)
+
+| # | Suggestion | Status | Notes |
+|---|------------|--------|-------|
+| 1 | `entryLayout: 'content'` + l10n side-by-side | ✅ Shipped | Tier 1 PR 1 — `layout: [4, 4, 4]` on `l10n()`; `entryLayout` kept on productions per hotfix |
+| 2 | Collection `columns` config | ✅ Shipped | Tier 1 PR 1 — switched to `['year', 'durationMin', 'status']` |
+| 3 | Slug field appears duplicated | ✅ Resolved | Schema uses single `fields.slug({ name: ... })` — was a misread of the screenshots |
+| 4 | Free-text → select (country/ageRating/status/role) | 🔶 Partial | `status` ✅, `role` ✅. `country` and `ageRating` blocked by null backfill (audit). Editor-paced |
+| 5 | Image fields with directory/publicPath | ⏸ Tier 2.2 | Deferred; needs migration + defensive guards (see photo-log lessons) |
+| 6 | Gallery alt text per locale | ❌ Rejected | Current `caption` (l10n) doubles as visible+alt text. Adding a separate per-locale `alt` triples the editor work for marginal a11y gain when caption is present. Revisit if caption is intentionally left blank often |
+| 7 | Unify three parallel `credits` arrays | ❌ Rejected | Role labels are full Russian/English/German phrases, not slugs from a closed enum. Unifying would force a translation table for ad-hoc roles. Decision recorded in schema comment |
+| 8 | Tags as separate collection | ⏸ Tier 3 | Deferred — small finite cast |
+| 9 | Conditional fields (booking CTA, featured) | ⏸ Tier 2 | Reshapes YAML; needs migration. Current schema notes the deferral inline |
+| 10 | Videos with conditional select | ✅ Shipped (variant) | Provider is a `fields.select`, ID is a separate `fields.text`. Not nested under conditional, but yields the same editor UX. YAML stays flat |
+| 11 | Inconsistent translation patterns | ✅ Largely addressed | All non-credits fields use the unified `l10n()` helper. Credits is the explicit exception (#7) |
+| 12 | Sidebar navigation grouping | ✅ Shipped | Tier 1 PR 1 |
+| 13 | `previewURL` + `template` | 🔶 Partial | `previewUrl` ✅. `template` ❌ — deferred; new entries are rare for this site |
+| 14 | Theatres collection | ⏸ Tier 3 | Deferred per decision log |
+| 15 | People / cities / festivals collections | ⏸ Tier 3 | Same |
+| 16 | `premiereDate` as `fields.date` | ❌ Rejected | Fuzzy dates ("весна 2021"). Numeric `year` carries the sort key; locale free text remains for prose |
+| 17 | Director's note as `markdoc.inline` | ⏸ Tier 2.1 | Viable; lower-leverage (bodies are 1–2 sentences). Would also need a `@markdoc/markdoc` renderer in `[slug]/page.tsx` |
+| 18 | PDFs as `fields.pathReference` | ⏸ / dead | Audit shows `techRider` / `pressKit` are 100% null. Pending "drop or wire" decision. If wired, `fields.url` is the right choice (PDFs likely external), so `pathReference` is moot |
+| 19 | URL fields use `fields.url` | ✅ Shipped | `theatre.url`, `ticketsUrl`, `bookingCtaUrl`, `techRider`, `pressKit`, `awards[].url`, `press[].url`, `externalLinks[].url`, `credits[*].url` |
+| 20 | `form` as single select (not array) | ❌ Rejected | Editor confirmed productions can have multiple forms (e.g. "puppet" + "family"). Plus open taxonomy means even `multiselect` was reverted |
+| 21 | Validation / `isRequired` everywhere | ❌ Rejected | Would block legacy entries with sparse fields. Plan calls out only adding required to genuinely-required new fields |
+| 22 | Conditional `featuredOrder` on `featured` | ⏸ Tier 2 | Same YAML-reshape concern as #9 |
+| 23 | `parseSlugForSort` for chronological default | ❌ Rejected | Slugs don't encode year (`bury-me-behind-the-baseboard` etc). Adding the prefix would break live URLs. List columns include `year`, which the editor can sort by clicking |
+| 24 | Move Notion IDs out of view / `fields.ignored()` | ❌ Rejected | `fields.ignored()` erases on save; we need round-trip. Kept as labelled "(legacy)" with explicit description |
+| 25 | Lock slug after first save | ❌ Rejected | Not enforceable in Keystatic; one-editor site doesn't justify the custom workaround |
+| 26 | Runs as own collection | ⏸ Tier 3 | Inline runs already have a structured shape (venue/city/yearFrom/yearTo/count) |
+| 27 | Press language tagging | 🔶 Partial | `press[].language` field exists as text. Audit shows it's currently unused (0 set). Promote to select once at least one entry carries it (otherwise default-fill would silently write to all) |
+| 28 | Awards `recipient` field | ❌ Rejected (for now) | Recipients live in the `category` string when needed. Adding a relationship requires a `people` collection (Tier 3) |
+| 29 | Section grouping with descriptions | ✅ Largely shipped | Schema uses `fields.object` for theatre / poster / credits / etc. Field descriptions sweep also done above |
+| 30 | UI brand `mark` (logo) | ❌ Rejected | No admin logo asset; bare brand name suffices for a one-editor site |
+| 31 | Keystatic Cloud | ✅ Shipped | `cloud: { project: 'boklanov/boklanov' }` in config; Roman + Daniil are members |
+| 32 | Field descriptions everywhere | ✅ Largely shipped | Today's sweep filled the remaining gaps |
+| 33 | Featured strip cover fall-back UI hint | ❌ Skipped | Keystatic can't render a "would use poster" preview. Description on the field already explains the override semantics |
+| 34 | Rename `role` key to generic | ❌ Rejected | Bikeshedding for a one-site repo (plan author's own framing). Schema key stays `role`; label stays "Roman's role(s)" |
+| 35 | "Things Keystatic can't do" awareness | ✅ Acknowledged | Informational only; nothing to ship |
+
+### Gemini review (18 items, deduped against Opus)
+
+| # | Suggestion | Status | Notes |
+|---|------------|--------|-------|
+| 1 | Image uploaders | ⏸ Tier 2.2 | Same as Opus #5 |
+| 2 | Side-by-side translations | ✅ Shipped | Same as Opus #1 |
+| 3 | Group fields with `fields.object` + grids | ✅ Shipped | Theatre / poster / credits / etc. already grouped |
+| 4 | Better list view columns | ✅ Shipped | Same as Opus #2 |
+| 5 | Markdoc inline for synopsis / director's note | ⏸ Tier 2.1 | Same as Opus #17 |
+| 6 | Sidebar navigation | ✅ Shipped | Same as Opus #12 |
+| 7 | `itemLabel` for arrays | ✅ Shipped | Every array field has an `itemLabel` (gallery, videos, awards, festivals, press, externalLinks, tour, runs, credits.{ru,en,de}) |
+| 8 | Conditional booking CTA | ⏸ Tier 2 | Same as Opus #9 |
+| 9 | Selects / multiselects | 🔶 Partial | Status, role, videos[].provider done. Country, ageRating, press.language pending |
+| 10 | `fields.ignored()` for Notion IDs | ❌ Rejected | Same as Opus #24 |
+| 11 | Easier video input (URL not protocol-prefix) | ✅ Shipped (variant) | Same as Opus #10 |
+| 12 | Helper text / descriptions | ✅ Shipped | Same as Opus #32 |
+| 13 | Auto-slug from title | ❌ Rejected | Slugs are curated and stable; auto-gen risks breaking live URLs |
+| 14 | Theatres database / relationships | ⏸ Tier 3 | Same as Opus #14 |
+| 15 | Roles as multiselect | ✅ Shipped | Editor re-promoted in commit 6390e34 |
+| 16 | URL field validation | ✅ Shipped | Same as Opus #19 |
+| 17 | Press structured (quote/publisher/link) | 🔶 Partial | Press has structure (title/url/outlet/language). No `quote` field — current rendering is link-only, so a separate excerpt field would be unrendered noise. Add only if the production page grows a "quoted excerpts" treatment |
+| 18 | Validation rules / required | ❌ Rejected | Same as Opus #21 |
+
+### Net read
+
+After this disposition pass, the **only** items still genuinely on the
+roadmap are:
+
+1. Editor backfill of `ageRating` (16 nulls) and `theatre.country` (3 nulls),
+   then promote both to `fields.select`. Editor-paced.
+2. `techRider` / `pressKit` decision (drop or wire).
+3. Tier 2.2 image fields, with the defensive-filter pattern landed first.
+4. Optional: Tier 2.1 directorsNote → markdoc.inline (low leverage).
+5. Optional: Opus #13 `template` for new entries (low frequency of use).
+
+Everything else from the original reviews is either shipped, rejected
+with rationale, or parked under Tier 3 normalisation.
