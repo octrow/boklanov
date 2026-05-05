@@ -11,12 +11,56 @@
  *     bodyEn.mdx
  *     bodyDe.mdx
  *
- * Storage:
- *   - 'local' for now: writes to disk in dev. Run `npm run dev`, open /keystatic.
- *   - swap to { kind: 'github', repo: 'octrow/boklanov' } for prod once a GitHub App is provisioned.
+ * Storage / auth — driven by env vars so we can flip without a code change:
+ *
+ *   KEYSTATIC_STORAGE=local           (default in dev)
+ *   KEYSTATIC_STORAGE=cloud           (Keystatic Cloud, magic-link auth)
+ *     + KEYSTATIC_CLOUD_PROJECT=team/project
+ *   KEYSTATIC_STORAGE=github          (self-hosted, requires a GitHub App)
+ *     + KEYSTATIC_GITHUB_REPO=octrow/boklanov
+ *
+ * Production access — the admin UI and API routes are 404 in prod by default
+ * to prevent anonymous edits while we're still on local mode. Set
+ * KEYSTATIC_ENABLE=1 once cloud/github auth is configured to re-enable.
+ *
+ * See docs:
+ *   https://keystatic.com/docs/cloud
+ *   https://keystatic.com/docs/github-mode
+ *   https://keystatic.com/docs/recipes/nextjs-disable-admin-ui-in-production
  */
 
 import { config, fields, collection, singleton } from '@keystatic/core'
+
+// ---------------------------------------------------------------------------
+// Production guard — see "Disable Admin UI Routes in Production" recipe.
+// In dev: always show. In prod: only if explicitly opted in via env, AND only
+// when storage is something other than 'local' (local can't write on Vercel).
+// ---------------------------------------------------------------------------
+
+const STORAGE_KIND = (process.env.KEYSTATIC_STORAGE ?? 'local') as
+  | 'local'
+  | 'cloud'
+  | 'github'
+
+export const showAdminUI =
+  process.env.NODE_ENV === 'development' ||
+  (process.env.KEYSTATIC_ENABLE === '1' && STORAGE_KIND !== 'local')
+
+// ---------------------------------------------------------------------------
+// Resolve storage block based on env.
+// ---------------------------------------------------------------------------
+
+const storage =
+  STORAGE_KIND === 'cloud'
+    ? ({ kind: 'cloud' } as const)
+    : STORAGE_KIND === 'github'
+      ? ({
+          kind: 'github',
+          repo: (process.env.KEYSTATIC_GITHUB_REPO ?? 'octrow/boklanov') as `${string}/${string}`
+        } as const)
+      : ({ kind: 'local' } as const)
+
+const cloudProject = process.env.KEYSTATIC_CLOUD_PROJECT
 
 // ---------------------------------------------------------------------------
 // Field helpers
@@ -46,7 +90,10 @@ const l10nOpt = l10n
 // ---------------------------------------------------------------------------
 
 export default config({
-  storage: { kind: 'local' },
+  storage,
+  ...(cloudProject
+    ? { cloud: { project: cloudProject as `${string}/${string}` } }
+    : {}),
   ui: {
     brand: { name: 'boklanov.com' }
   },

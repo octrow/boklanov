@@ -1,5 +1,7 @@
 import * as React from 'react'
+import { notFound } from 'next/navigation'
 
+import { showAdminUI } from '../../keystatic.config'
 import KeystaticApp from './keystatic'
 
 export const metadata = {
@@ -12,6 +14,7 @@ export default function KeystaticLayout({
 }: {
   children: React.ReactNode
 }) {
+  if (!showAdminUI) notFound()
   return (
     <html lang='en'>
       <body style={{ margin: 0 }}>
