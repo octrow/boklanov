@@ -76,38 +76,16 @@ const l10n = (label: string) =>
  *  a runtime "is everything empty" check, so we model these the same.) */
 const l10nOpt = l10n
 
-// Enum option lists for multiselects. Every value here is also present in
-// YAML, otherwise existing entries fail to load. Audit before extending:
-//   python3 -c "import yaml,glob;print(sorted({v for f in glob.glob('content/productions/*/index.yaml') for v in (yaml.safe_load(open(f)) or {}).get('role') or []}))"
-//
-// fields.select cannot represent unset/null, so country and ageRating stay
-// as text until their null entries are filled (see KEYSTATIC_IMPROVEMENT_PLAN.md
-// Tier 2).
-
-const ROLE_OPTIONS = [
-  { label: 'Director', value: 'director' },
-  { label: 'Co-director', value: 'co-director' },
-  { label: 'Performer', value: 'performer' },
-  { label: 'Art director', value: 'art-director' },
-  { label: 'Playwright', value: 'playwright' },
-  { label: 'Producer', value: 'producer' }
-] as const
-
-const FORM_OPTIONS = [
-  { label: 'Solo', value: 'solo' },
-  { label: 'Ensemble', value: 'ensemble' },
-  { label: 'Puppet', value: 'puppet' },
-  { label: 'Theater', value: 'theater' },
-  { label: 'Family', value: 'family' },
-  { label: 'Festival', value: 'festival' },
-  { label: 'Immersive', value: 'immersive' },
-  { label: 'Reading', value: 'reading' }
-] as const
-
-const LINEAGE_OPTIONS = [
-  { label: 'BTK (Bolshoi Puppet Theatre)', value: 'btk' },
-  { label: 'Kudashov studio', value: 'kudashov' },
-  { label: 'RGISI', value: 'rgisi' }
+// Status is the only enum we lock down — every editor we expect uses one of
+// these four values, and adding a new status is a code change (the frontend
+// likely cares). role / form / lineage stay as free-text arrays because the
+// editor needs to coin new tags as work evolves; Keystatic's multiselect is
+// a closed enum with no "creatable" mode.
+const STATUS_OPTIONS = [
+  { label: 'Live', value: 'live' },
+  { label: 'In development', value: 'in-development' },
+  { label: 'Archived', value: 'archived' },
+  { label: 'On tour', value: 'on-tour' }
 ] as const
 
 // ---------------------------------------------------------------------------
@@ -278,26 +256,36 @@ export default config({
           label: 'Age rating',
           description: '0+, 6+, 12+, 16+, 18+'
         }),
-        status: fields.text({
+        status: fields.select({
           label: 'Status',
-          description: 'Free-form. e.g. "in-development". Leave blank for live.'
+          description: 'Lifecycle of this production. Most entries should be "Live".',
+          options: STATUS_OPTIONS,
+          defaultValue: 'live'
         }),
 
         // === Roles & taxonomy ===
-        role: fields.multiselect({
+        // role / form / lineage are free-text arrays so editors can coin new
+        // tags without a code change. Closed multiselects were tried and
+        // reverted — `fields.multiselect` has no "creatable" mode. Established
+        // values for reference (extend freely):
+        //   role:    director, co-director, performer, art-director,
+        //            playwright, producer
+        //   form:    solo, puppet, theater, family, festival, reading
+        //   lineage: btk, kudashov, rgisi
+        role: fields.array(fields.text({ label: 'Role tag' }), {
           label: "Roman's role(s)",
-          description: 'Roman’s contribution to this production',
-          options: ROLE_OPTIONS
+          description: 'Roman’s contribution to this production. Add any role term you need.',
+          itemLabel: (p) => p.value || 'role'
         }),
-        form: fields.multiselect({
+        form: fields.array(fields.text({ label: 'Form tag' }), {
           label: 'Form',
-          description: 'Theatrical form / genre tags',
-          options: FORM_OPTIONS
+          description: 'Theatrical form / genre. Free-form — type any tag.',
+          itemLabel: (p) => p.value || 'form'
         }),
-        lineage: fields.multiselect({
+        lineage: fields.array(fields.text({ label: 'Lineage tag' }), {
           label: 'Lineage',
-          description: 'Tradition or school the production traces back to',
-          options: LINEAGE_OPTIONS
+          description: 'Tradition or school the production traces back to. Add as needed.',
+          itemLabel: (p) => p.value || 'tag'
         }),
         tags: fields.array(fields.text({ label: 'Tag' }), {
           label: 'Tags',

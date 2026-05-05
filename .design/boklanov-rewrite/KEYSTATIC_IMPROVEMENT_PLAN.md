@@ -362,3 +362,27 @@ Side-effect cleanup found while doing this:
 - About singletons already had `format.contentField: 'body'`, so adding `entryLayout: 'content'` there is a free win — Bio gets the prominent editor pane and the structured fields move to a sidebar. Enabled.
 
 Files changed: only `keystatic.config.ts`. No YAML touched.
+
+## Shipped — 2026-05-06 (Tier 1 third PR — multiselect revert + status select)
+
+**Reverted role / form / lineage to free-text arrays.** Tier 1 PR 1 had
+converted them to `fields.multiselect`. Editor feedback during dogfooding:
+they need to coin new tags ("duo show", "site-specific", a new lineage
+school) without a code deploy. `fields.multiselect` is a closed enum with
+no "creatable" mode — there is no schema option that lets the editor type
+in a value that isn't in the option list. Reverting is the only Keystatic-
+native answer; the comment in `keystatic.config.ts` lists the established
+values so they can be re-typed consistently, but the field accepts anything.
+
+**Status promoted to `fields.select`.** Editor confirmed status doesn't need
+to be open-ended (the four lifecycle states cover everything). Options:
+`live` / `in-development` / `archived` / `on-tour`, default `live`. Only
+2 of 30+ entries actually have a `status:` key in YAML (both
+`in-development`); the rest will pick up `defaultValue: 'live'` on first
+form load and write it back on first save — no migration script needed.
+Nothing in `lib/content.ts` or any component reads `status` at runtime,
+so the schema-only change is safe.
+
+Reasoning for the asymmetry: status is a system-level enum (the frontend
+might one day filter by it); role / form / lineage are editorial taxonomies
+that grow organically.
