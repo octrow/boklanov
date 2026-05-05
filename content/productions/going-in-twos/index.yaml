@@ -7,13 +7,9 @@ title:
   en: Going in twos
   de: Gemeinsam unterwegs
 synopsis:
-  ru: Трогательная история о настоящей дружбе Бельчонка и Медвежонка будет
-    проходить внутри большого шатра, в котором разместятся большие и маленькие
-    зрители.
-  en: The touching story of a true friendship between Squirrel and Bear will take
-    place inside a large marquee, with large and small audiences.
-  de: Die ergreifende Geschichte von echter Freundschaft zwischen Eichhörnchen und
-    Bär wird in einem großen Zelt für große und kleine Zuschauer stattfinden.
+  ru: Трогательная история о настоящей дружбе Бельчонка и Медвежонка будет проходить внутри большого шатра, в котором разместятся большие и маленькие зрители.
+  en: The touching story of a true friendship between Squirrel and Bear will take place inside a large marquee, with large and small audiences.
+  de: Die ergreifende Geschichte von echter Freundschaft zwischen Eichhörnchen und Bär wird in einem großen Zelt für große und kleine Zuschauer stattfinden.
 directorsNote:
   ru: Мама, папа, приходите скорей, вместе нам будет жить веселей…
   en: Mom, Dad, come soon, together we will live more happily…
@@ -41,7 +37,8 @@ premiereDate:
 ticketsUrl: "https://hmtk.ru/m/afisha/4882/"
 ageRating: 3+
 durationMin: 40
-role: director
+role:
+  - director
 form:
   - ensemble
 lineage: []
@@ -222,30 +219,22 @@ videos:
     id: oUls9xHOkpE
 awards:
   - name:
-      ru: IV конкурс «Лучшие актёрские работы в театрах ХМАО-Югры», победительница в
-        номинации «Лучшая женская роль» (Екатерина Цыганец)
-      en: IV Best Acting Works in the Theatres of Khanty-Mansiysk Autonomous Okrug -
-        Ugra, Winner in the Category Best Female Role (Ekaterina Tsiganets)
-      de: IV. Theaterpreise der besten Schauspielleistungen in den Theatern der
-        Hanty-Mansijsk-Jugra, Gewinnerin in der Kategorie "Beste weibliche
-        Rolle" (Jekaterina Zsyganec)
+      ru: IV конкурс «Лучшие актёрские работы в театрах ХМАО-Югры», победительница в номинации «Лучшая женская роль» (Екатерина Цыганец)
+      en: IV Best Acting Works in the Theatres of Khanty-Mansiysk Autonomous Okrug - Ugra, Winner in the Category Best Female Role (Ekaterina Tsiganets)
+      de: IV. Theaterpreise der besten Schauspielleistungen in den Theatern der Hanty-Mansijsk-Jugra, Gewinnerin in der Kategorie "Beste weibliche Rolle" (Jekaterina Zsyganec)
     year: 2022
 festivals: []
 press:
   - title:
       ru: В Ханты-Мансийском театре кукол появится спектакль в шатре с тенями
       en: In the Khanty-Mansi Puppet Theatre, a shadow puppet show will appear.
-      de: Im Hanty-Mansijskischen Theater der Puppen wird ein Stück im Schattenzelt
-        auftreten.
+      de: Im Hanty-Mansijskischen Theater der Puppen wird ein Stück im Schattenzelt auftreten.
     url: "http://oteatre.info/v-hanty-mansijskom-teatre/"
   - title:
       ru: Репертуар Ханты-Мансийского театра кукол пополнился новым шедевром
-      en: Repertoire of the Khanty-Mansiysk Puppet Theatre has been supplemented with
-        a new masterpiece
-      de: Repertoire des Theaters für Puppenspiel in Hanty-Mansijsk wurde um ein neues
-        Meisterwerk erweitert
-    url: "https://ugra.aif.ru/culture/repertuar_hanty-mansiyskogo_teatra_kukol_popo\
-      lnilsya_novym_shedevrom?from_inject=1"
+      en: Repertoire of the Khanty-Mansiysk Puppet Theatre has been supplemented with a new masterpiece
+      de: Repertoire des Theaters für Puppenspiel in Hanty-Mansijsk wurde um ein neues Meisterwerk erweitert
+    url: "https://ugra.aif.ru/culture/repertuar_hanty-mansiyskogo_teatra_kukol_popolnilsya_novym_shedevrom?from_inject=1"
 externalLinks: []
 techRider: null
 pressKit: null

@@ -6,15 +6,9 @@ title:
   en: The Old Man and the Sea
   de: Der alte Mann und das Meer
 synopsis:
-  ru: Nachdem er den Wunderfish verloren hat, ohne Ruder und Harpune, nachdem er
-    eine vernichtende Niederlage erlitten hat, fand der alte Mann etwas sehr
-    Wichtiges auf dieser Reise, sagt Regisseur Rinat Kiyakov über das Stück.
-  en: Having lost the miracle fish, left without oars and harpoon, having suffered
-    a crushing defeat, the Old Man found something very important in this
-    journey, director Rinat Kiyakov says about the play.
-  de: Nachdem er den Wunderfish verloren hat, ohne Ruder und Harpune, nachdem er
-    eine vernichtende Niederlage erlitten hat, fand der alte Mann etwas sehr
-    Wichtiges auf dieser Reise, sagt Regisseur Rinat Kiyakov über das Stück.
+  ru: Nachdem er den Wunderfish verloren hat, ohne Ruder und Harpune, nachdem er eine vernichtende Niederlage erlitten hat, fand der alte Mann etwas sehr Wichtiges auf dieser Reise, sagt Regisseur Rinat Kiyakov über das Stück.
+  en: Having lost the miracle fish, left without oars and harpoon, having suffered a crushing defeat, the Old Man found something very important in this journey, director Rinat Kiyakov says about the play.
+  de: Nachdem er den Wunderfish verloren hat, ohne Ruder und Harpune, nachdem er eine vernichtende Niederlage erlitten hat, fand der alte Mann etwas sehr Wichtiges auf dieser Reise, sagt Regisseur Rinat Kiyakov über das Stück.
 theatre:
   name:
     en: Baltic House Theatre
@@ -29,12 +23,13 @@ premiereDate:
 ticketsUrl: "https://baltic-house.ru/afisha/?ELEMENT_ID=910"
 ageRating: 12+
 durationMin: 65
-role: co-director
+role:
+  - co-director
 bookingCta: false
 form:
   - puppet
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Автор и режиссер постановки
@@ -151,11 +146,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -163,4 +158,4 @@ tags:
   - family show
   - puppet
   - theater
-tour: [ ]
+tour: []

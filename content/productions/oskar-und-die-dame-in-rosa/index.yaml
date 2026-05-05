@@ -7,16 +7,9 @@ title:
   en: Oskar und die Dame in Rosa
   de: Oskar und die Dame in Rosa
 synopsis:
-  ru: Спектакль для семейного просмотра в жанре фигуративного театра учит
-    принимать жизнь во всех её проявлениях и ценить каждую секунду. Предложив
-    Оскару сыграть в игру, согласно которой каждый прожитый им день будет
-    считаться за десять лет, Розовая дама помогает мальчику за двенадцать дней
-    прожить целую жизнь.
-  en: A play for the whole family in the genre of figurative theater that teaches
-    to embrace life in all its forms and appreciate every second.
-  de: Ein Theaterstück für die ganze Familie im Genre des figurativen Theaters,
-    das lehrt, das Leben in all seinen Formen anzunehmen und jede Sekunde zu
-    schätzen.
+  ru: Спектакль для семейного просмотра в жанре фигуративного театра учит принимать жизнь во всех её проявлениях и ценить каждую секунду. Предложив Оскару сыграть в игру, согласно которой каждый прожитый им день будет считаться за десять лет, Розовая дама помогает мальчику за двенадцать дней прожить целую жизнь.
+  en: A play for the whole family in the genre of figurative theater that teaches to embrace life in all its forms and appreciate every second.
+  de: Ein Theaterstück für die ganze Familie im Genre des figurativen Theaters, das lehrt, das Leben in all seinen Formen anzunehmen und jede Sekunde zu schätzen.
 theatre:
   name:
     en: Theater 8+
@@ -30,10 +23,11 @@ premiereDate:
 ticketsUrl: null
 ageRating: 18+
 durationMin: 80
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер
@@ -151,10 +145,10 @@ gallery:
 videos:
   - provider: youtube
     id: jrNukeGuteM
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -162,4 +156,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

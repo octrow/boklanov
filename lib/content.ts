@@ -252,11 +252,16 @@ function loadAll(): Production[] {
   return out
 }
 
-/** Read body.{ru,en,de}.md siblings of index.yaml. Missing files → ''. */
+/** Read body{Ru,En,De}.mdx siblings of index.yaml (Keystatic layout).
+ *  Missing files → ''. Falls back to the legacy body.{ru,en,de}.md naming
+ *  so half-migrated checkouts still build. */
 function readBodyFiles(dir: string): { ru: string; en: string; de?: string } {
   const read = (locale: 'ru' | 'en' | 'de'): string => {
-    const p = path.join(dir, `body.${locale}.md`)
-    return fs.existsSync(p) ? fs.readFileSync(p, 'utf8').trim() : ''
+    const cap = locale === 'ru' ? 'Ru' : locale === 'en' ? 'En' : 'De'
+    const mdx = path.join(dir, `body${cap}.mdx`)
+    if (fs.existsSync(mdx)) return fs.readFileSync(mdx, 'utf8').trim()
+    const legacy = path.join(dir, `body.${locale}.md`)
+    return fs.existsSync(legacy) ? fs.readFileSync(legacy, 'utf8').trim() : ''
   }
   const out: { ru: string; en: string; de?: string } = {
     ru: read('ru'),

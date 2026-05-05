@@ -7,15 +7,9 @@ title:
   en: The Seagulls
   de: Die Möwen
 synopsis:
-  ru: Учебная работа студентов режиссёрского курса Руслана Кудашова — динамичный
-    спектакль по мотивам комедии Чехова, смонтированный из этюдов, визуальных
-    метафор и современных ритмов.
-  en: "A student work from Ruslan Kudashov's directing course — a dynamic piece
-    based on Chekhov's comedy, assembled from sketches, visual metaphors and
-    contemporary rhythms."
-  de: Eine Studienarbeit aus Ruslan Kudashows Regiestudiengang — ein dynamisches
-    Stück nach Tschechows Komödie, aus Etüden, visuellen Metaphern und
-    zeitgenössischen Rhythmen zusammengesetzt.
+  ru: Учебная работа студентов режиссёрского курса Руслана Кудашова — динамичный спектакль по мотивам комедии Чехова, смонтированный из этюдов, визуальных метафор и современных ритмов.
+  en: "A student work from Ruslan Kudashov's directing course — a dynamic piece based on Chekhov's comedy, assembled from sketches, visual metaphors and contemporary rhythms."
+  de: Eine Studienarbeit aus Ruslan Kudashows Regiestudiengang — ein dynamisches Stück nach Tschechows Komödie, aus Etüden, visuellen Metaphern und zeitgenössischen Rhythmen zusammengesetzt.
 theatre:
   name:
     ru: Большой театр кукол
@@ -39,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/chaiki"
 ageRating: 16+
 durationMin: 150
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Куратор
@@ -142,16 +137,16 @@ credits:
 poster:
   src: /productions/the-seagulls/poster.jpg
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

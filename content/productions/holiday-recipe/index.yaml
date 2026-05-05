@@ -7,20 +7,9 @@ title:
   en: Holiday recipe
   de: Feierrezept
 synopsis:
-  ru: Жители лесной деревни ещё никогда не обходились без их традиционного
-    лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают.
-    Неужели пропажа испортит всем жителям деревни праздник и Новый год не
-    наступит? Или найдется герой, который вернёт всем не только праздник, но и
-    что-то более важное?
-  en: "A forest village is bustling with activity. The inhabitants are preparing
-    for the New Year and waiting for the traditional holiday cake. After all,
-    what is a New Year without a New Year's treat? But this time the holiday may
-    not come! On New Year's Eve, all the pies mysteriously disappear."
-  de: "Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das
-    Neujahr vor und warten auf den traditionellen Festkuchen. Schließlich, was
-    ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht
-    kommen! In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse
-    Weise."
+  ru: Жители лесной деревни ещё никогда не обходились без их традиционного лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают. Неужели пропажа испортит всем жителям деревни праздник и Новый год не наступит? Или найдется герой, который вернёт всем не только праздник, но и что-то более важное?
+  en: "A forest village is bustling with activity. The inhabitants are preparing for the New Year and waiting for the traditional holiday cake. After all, what is a New Year without a New Year's treat? But this time the holiday may not come! On New Year's Eve, all the pies mysteriously disappear."
+  de: "Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das Neujahr vor und warten auf den traditionellen Festkuchen. Schließlich, was ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht kommen! In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse Weise."
 tagline:
   ru: Новогодняя интерактивная сказка для семейного просмотра
   en: New Year interactive tale for family viewing
@@ -44,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://dramteatr39.ru/spektakli/recept-prazdnika-"
 ageRating: 6+
 durationMin: 70
-role: director
+role:
+  - director
 form:
   - puppet
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Художественный руководитель, автор идеи
@@ -283,11 +273,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -298,4 +288,4 @@ tags:
   - roman boklanov
   - theater
   - puppet
-tour: [ ]
+tour: []

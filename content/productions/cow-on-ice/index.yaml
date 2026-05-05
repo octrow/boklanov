@@ -29,11 +29,12 @@ premiereDate:
 ticketsUrl: null
 ageRating: 6+
 durationMin: null
-role: director
+role:
+  - director
 form:
   - theater
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр
@@ -47,16 +48,16 @@ credits:
 poster:
   src: productions/cow-on-ice/poster.webp
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
   - family show
-tour: [ ]
+tour: []

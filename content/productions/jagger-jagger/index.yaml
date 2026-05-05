@@ -7,16 +7,9 @@ title:
   en: Jagger, Jagger
   de: "Jagger, Jagger!"
 synopsis:
-  ru: "Cемейная рок-история для всех униженных и оскорбленных. Восьмилетний
-    мальчик Бенгт не хочет выходить из дома, потому что дети со двора издеваются
-    над ним. Но все меняется, когда он знакомится с бездомным псом Джаггером!"
-  en: "Family rock story for all the humiliated and abused. The eight-year-old boy
-    Bengt doesn't want to leave the house because children from the yard bully
-    him. But everything changes when he meets Jagger, a homeless dog!"
-  de: "Familienrock-Geschichte für alle Gedemütigten und Misshandelten. Der
-    achtjährige Junge Bengt will das Haus nicht verlassen, weil ihn die Kinder
-    aus dem Hof mobben. Aber alles ändert sich, als er den obdachlosen Hund
-    Jagger trifft!"
+  ru: "Cемейная рок-история для всех униженных и оскорбленных. Восьмилетний мальчик Бенгт не хочет выходить из дома, потому что дети со двора издеваются над ним. Но все меняется, когда он знакомится с бездомным псом Джаггером!"
+  en: "Family rock story for all the humiliated and abused. The eight-year-old boy Bengt doesn't want to leave the house because children from the yard bully him. But everything changes when he meets Jagger, a homeless dog!"
+  de: "Familienrock-Geschichte für alle Gedemütigten und Misshandelten. Der achtjährige Junge Bengt will das Haus nicht verlassen, weil ihn die Kinder aus dem Hof mobben. Aber alles ändert sich, als er den obdachlosen Hund Jagger trifft!"
 directorsNote:
   ru: "…Наоборот всё шло кувырком до того, как он появился!"
   en: "…Everything was going topsy-turvy before he appeared!"
@@ -39,35 +32,31 @@ theatre:
     ru: Няган
     de: Nyagan
   country: RU
-  url: "https://ntyz.ru/spektakl/%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80-%D0%B\
-    4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80/"
+  url: "https://ntyz.ru/spektakl/%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80-%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80/"
 year: 2021
 premiereDate:
   ru: 5 июня 2021 г.
   en: 5 June 2021
   de: 5. Juni 2021
-ticketsUrl: "https://ntyz.ru/spektakl/%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%8\
-  0-%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80/"
+ticketsUrl: "https://ntyz.ru/spektakl/%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80-%D0%B4%D0%B6%D0%B0%D0%B3%D0%B3%D0%B5%D1%80/"
 ageRating: 6+
 durationMin: 95
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
       name: Роман Бокланов
-      url: "https://ntyz.ru/profile/%d1%80%d0%be%d0%bc%d0%b0%d0%bd-%d0%b1%d0%be%d0%ba\
-        %d0%bb%d0%b0%d0%bd%d0%be%d0%b2/"
+      url: "https://ntyz.ru/profile/%d1%80%d0%be%d0%bc%d0%b0%d0%bd-%d0%b1%d0%be%d0%ba%d0%bb%d0%b0%d0%bd%d0%be%d0%b2/"
     - role: Художник
       name: Оганес Айрапетян
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9\
-        %d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
+      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
     - role: Художник по свету
       name: Ксения Козлова
-      url: "https://ntyz.ru/profile/%d0%ba%d1%81%d0%b5%d0%bd%d0%b8%d1%8f-%d0%ba%d0%be\
-        %d0%b7%d0%bb%d0%be%d0%b2%d0%b0/"
+      url: "https://ntyz.ru/profile/%d0%ba%d1%81%d0%b5%d0%bd%d0%b8%d1%8f-%d0%ba%d0%be%d0%b7%d0%bb%d0%be%d0%b2%d0%b0/"
     - role: Композитор
       name: Максим Морозов
       url: "https://puppets.ru/pers/51"
@@ -93,16 +82,13 @@ credits:
   en:
     - role: Director, Adaptation Author
       name: Roman Boklanov
-      url: "https://ntyz.ru/profile/%d1%80%d0%be%d0%bc%d0%b0%d0%bd-%d0%b1%d0%be%d0%ba\
-        %d0%bb%d0%b0%d0%bd%d0%be%d0%b2/"
+      url: "https://ntyz.ru/profile/%d1%80%d0%be%d0%bc%d0%b0%d0%bd-%d0%b1%d0%be%d0%ba%d0%bb%d0%b0%d0%bd%d0%be%d0%b2/"
     - role: Performance Designer
       name: Hovhannes Hayrapetyan
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9\
-        %d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
+      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
     - role: Lighting Designer
       name: Ksenia Kozlova
-      url: "https://ntyz.ru/profile/%d0%ba%d1%81%d0%b5%d0%bd%d0%b8%d1%8f-%d0%ba%d0%be\
-        %d0%b7%d0%bb%d0%be%d0%b2%d0%b0/"
+      url: "https://ntyz.ru/profile/%d0%ba%d1%81%d0%b5%d0%bd%d0%b8%d1%8f-%d0%ba%d0%be%d0%b7%d0%bb%d0%be%d0%b2%d0%b0/"
     - role: Composer
       name: Maksim Morozov
       url: "https://puppets.ru/pers/51"
@@ -227,23 +213,21 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
+videos: []
+awards: []
+festivals: []
 press:
   - title:
       ru: В Няганском ТЮЗе выходит рок-история о дружбе с «полупсом»
-      en: In Nizhnevartovsk TЮZ, a rock story about friendship with a "half-breed"
-        premieres
-      de: In der Njaganer Tscheki Dacha geht eine Rock-Geschichte über Freundschaft
-        mit "Polupsem" auf die Bühne
+      en: In Nizhnevartovsk TЮZ, a rock story about friendship with a "half-breed" premieres
+      de: In der Njaganer Tscheki Dacha geht eine Rock-Geschichte über Freundschaft mit "Polupsem" auf die Bühne
     url: "http://oteatre.info/dzhagger-boklanov-nyagan/"
   - title:
       ru: ДРАЙВ, МЕЧТЫ И ОДИНОЧЕСТВО
       en: DRIVE, DREAMS AND SOLITUDE
       de: TRAUM, TRÄUME UND EINZELNISSE
     url: "http://flyingcritic.ru/post/draiv-mechti-i-odinochestvo"
-externalLinks: [ ]
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -253,4 +237,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

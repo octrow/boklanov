@@ -7,14 +7,9 @@ title:
   en: Lika and ray
   de: Lika und der Strahl
 synopsis:
-  ru: История об озорной, находчивой, но чересчур самостоятельной девочке Лике,
-    которая хочет понять, что же это - самое важное, главное?
-  en: The performance of Lika and Beam. This story is about a mischievous,
-    resourceful, but over-independent girl, Lika, who wants to understand what
-    is the most important thing?
-  de: Die Aufführung von Lika und dem Strahl. Diese Geschichte handelt von einem
-    frechen, einfallsreichen, aber überunabhängigen Mädchen namens Lika, das
-    verstehen möchte, was das Wichtigste ist.
+  ru: История об озорной, находчивой, но чересчур самостоятельной девочке Лике, которая хочет понять, что же это - самое важное, главное?
+  en: The performance of Lika and Beam. This story is about a mischievous, resourceful, but over-independent girl, Lika, who wants to understand what is the most important thing?
+  de: Die Aufführung von Lika und dem Strahl. Diese Geschichte handelt von einem frechen, einfallsreichen, aber überunabhängigen Mädchen namens Lika, das verstehen möchte, was das Wichtigste ist.
 theatre: {}
 year: 2019
 premiereDate:
@@ -24,7 +19,8 @@ premiereDate:
 ticketsUrl: null
 ageRating: 5+
 durationMin: null
-role: director
+role:
+  - director
 form:
   - ensemble
 lineage: []

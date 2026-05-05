@@ -7,14 +7,9 @@ title:
   en: Letov. The Fool
   de: Letov. Der Narr
 synopsis:
-  ru: Спектакль-концерт для солнценеспящих в двух действиях. Голос Егора Летова —
-    символ распада великой державы — в исполнении молодого поколения БТК.
-  en: "A concert-play for the sun-sleepless in two acts. Yegor Letov's voice —
-    symbol of the collapse of a great power — performed by the young generation
-    of BTK."
-  de: Ein Konzert-Theaterstück für die Sonnenschlaflosen in zwei Akten. Jegor
-    Letows Stimme — Symbol des Zerfalls einer Großmacht — aufgeführt von der
-    jungen Generation des BPT.
+  ru: Спектакль-концерт для солнценеспящих в двух действиях. Голос Егора Летова — символ распада великой державы — в исполнении молодого поколения БТК.
+  en: "A concert-play for the sun-sleepless in two acts. Yegor Letov's voice — symbol of the collapse of a great power — performed by the young generation of BTK."
+  de: Ein Konzert-Theaterstück für die Sonnenschlaflosen in zwei Akten. Jegor Letows Stimme — Symbol des Zerfalls einer Großmacht — aufgeführt von der jungen Generation des BPT.
 theatre:
   name:
     ru: Большой театр кукол
@@ -38,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/letovdurachok"
 ageRating: 18+
 durationMin: 140
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Художественный руководитель
@@ -113,16 +109,16 @@ credits:
 poster:
   src: /productions/letov-the-fool/poster.jpg
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

@@ -7,16 +7,9 @@ title:
   en: Aibolit
   de: Aibolit
 synopsis:
-  ru: Патетическая оратория для хора работников медицинских учреждений. На сцене
-    историю доктора Айболита поют доктора и медсёстры в белых халатах, а сцена
-    превращается в дикие африканские джунгли.
-  en: A pathetic oratorio for a choir of medical workers. On stage, the story of
-    Doctor Aibolit is sung by doctors and nurses in white coats, while the stage
-    transforms into wild African jungles.
-  de: Eine pathetische Oratorien für einen Chor von Mitarbeitern medizinischer
-    Einrichtungen. Auf der Bühne wird die Geschichte von Doktor Aibolit von
-    Ärzten und Krankenschwestern in weißen Kitteln gesungen, während sich die
-    Bühne in wilde afrikanische Dschungel verwandelt.
+  ru: Патетическая оратория для хора работников медицинских учреждений. На сцене историю доктора Айболита поют доктора и медсёстры в белых халатах, а сцена превращается в дикие африканские джунгли.
+  en: A pathetic oratorio for a choir of medical workers. On stage, the story of Doctor Aibolit is sung by doctors and nurses in white coats, while the stage transforms into wild African jungles.
+  de: Eine pathetische Oratorien für einen Chor von Mitarbeitern medizinischer Einrichtungen. Auf der Bühne wird die Geschichte von Doktor Aibolit von Ärzten und Krankenschwestern in weißen Kitteln gesungen, während sich die Bühne in wilde afrikanische Dschungel verwandelt.
 theatre:
   name:
     ru: Большой театр кукол
@@ -40,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/aibolit"
 ageRating: 0+
 durationMin: 45
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссура и художественное оформление
@@ -125,12 +119,12 @@ credits:
 poster:
   src: /productions/aibolit/poster.jpg
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -138,4 +132,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

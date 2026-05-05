@@ -7,15 +7,9 @@ title:
   en: Sugar Kid
   de: Zuckerkind
 synopsis:
-  ru: Сказка о жизни ребёнка в ссылке в 30–40-е годы, основанная на реальных
-    событиях. Мама превращает лишения лагерной жизни в бесконечный калейдоскоп
-    историй, чтобы сохранить дочери детство.
-  en: "The Sugar Child is a family-friendly play about the life of a child in
-    exile in the 1930s–40s, based on Olga Gromova's novel. Based on the real
-    events of Stella Nudolskaya's life."
-  de: Das Zuckerkind ist ein familienfreundliches Spiel über das Leben eines
-    Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman.
-    Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
+  ru: Сказка о жизни ребёнка в ссылке в 30–40-е годы, основанная на реальных событиях. Мама превращает лишения лагерной жизни в бесконечный калейдоскоп историй, чтобы сохранить дочери детство.
+  en: "The Sugar Child is a family-friendly play about the life of a child in exile in the 1930s–40s, based on Olga Gromova's novel. Based on the real events of Stella Nudolskaya's life."
+  de: Das Zuckerkind ist ein familienfreundliches Spiel über das Leben eines Kindes im Exil in den 1930er–40er Jahren, basierend auf Olga Gromovas Roman. Basierend auf den realen Ereignissen von Stella Nudolskayas Leben.
 theatre:
   name:
     ru: Новый Молодежный Нижнетагильский театр
@@ -35,12 +29,13 @@ premiereDate:
 ticketsUrl: "https://teatr-nt.ru/performances/63/"
 ageRating: 6+
 durationMin: 60
-role: co-director
+role:
+  - co-director
 bookingCta: false
 form:
   - puppet
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер-постановщик
@@ -93,7 +88,7 @@ credits:
 poster:
   src: /productions/sugar-kid/poster.jpg
   credit: null
-gallery: [ ]
+gallery: []
 videos:
   - provider: youtube
     id: k0XujCi1UpA
@@ -106,8 +101,7 @@ awards:
     category:
       ru: За художественное воплощение исторической памяти в спектакле для детей
       en: For artistic embodiment of historical memory in a children's play
-      de: Für die künstlerische Umsetzung historischer Erinnerungen in einem
-        Kinderstück
+      de: Für die künstlerische Umsetzung historischer Erinnerungen in einem Kinderstück
     city:
       ru: Екатеринбург
       en: Yekaterinburg
@@ -115,16 +109,15 @@ awards:
   - name:
       ru: V Всероссийский молодёжный фестиваль им. В.С. Золотухина
       en: All-Russian Youth Festival named after V.S. Zolotukhin
-      de: Всероссийский молодёжный фестиваль имени В.С. Золотухина → Всероссийский
-        молодёжный фестиваль имени В.С. Золотухина
+      de: Всероссийский молодёжный фестиваль имени В.С. Золотухина → Всероссийский молодёжный фестиваль имени В.С. Золотухина
     year: 2022
     category:
       ru: За важное художественное высказывание
       en: For Important Artistic Statement
       de: Für ein bedeutendes künstlerisches Statement
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -132,4 +125,4 @@ tags:
   - family show
   - theater
   - puppet
-tour: [ ]
+tour: []

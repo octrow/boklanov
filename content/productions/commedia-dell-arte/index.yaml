@@ -7,12 +7,9 @@ title:
   en: "Commedia dell'arte"
   de: "Commedia dell'arte"
 synopsis:
-  ru: "Передвижной спектакль-импровизация на красной ковровой дорожке, мастерски
-    обыгрывающий принципы театра эпохи возрождения!"
-  en: "A travelling red-carpet improvisation, masterfully playing on the
-    principles of Renaissance theatre!"
-  de: "Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die
-    Prinzipien des Renaissancetheatres nutzt!"
+  ru: "Передвижной спектакль-импровизация на красной ковровой дорожке, мастерски обыгрывающий принципы театра эпохи возрождения!"
+  en: "A travelling red-carpet improvisation, masterfully playing on the principles of Renaissance theatre!"
+  de: "Eine fahrende Improvisation auf dem roten Teppich, die meisterhaft die Prinzipien des Renaissancetheatres nutzt!"
 tagline:
   ru: Передвижной спектакль-импровизация на красной ковровой дорожке
   en: Travelling improvisation on the red carpet
@@ -40,7 +37,8 @@ premiereDate:
 ticketsUrl: null
 ageRating: 14+
 durationMin: null
-role: director
+role:
+  - director
 form:
   - family
 lineage:
@@ -302,11 +300,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -314,4 +312,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

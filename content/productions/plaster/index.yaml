@@ -7,24 +7,13 @@ title:
   en: Plaster
   de: Gips
 synopsis:
-  ru: Это семейный спектакль о любви, которую боимся потерять, и о любви, которую
-    ждём. Подростки, их родители, бабушки и дедушки – каждому придется пережить
-    вместе с Фитц ужас от грядущего развода родителей, негодование, изумление,
-    радость и влюбленность…
-  en: "This is a family play! Teenagers, their parents, grandparents - everyone
-    will experience with Fitz the horror of their parents' impending divorce,
-    the indignation, the amazement, the joy and the falling in love…"
-  de: "Dies ist ein Familienspiel! Jugendliche, ihre Eltern, Großeltern – jeder
-    wird mit Fitz den Horror der bevorstehenden Scheidung der Eltern, die
-    Empörung, die Verwunderung, die Freude und den Verliebtsein erleben…"
+  ru: Это семейный спектакль о любви, которую боимся потерять, и о любви, которую ждём. Подростки, их родители, бабушки и дедушки – каждому придется пережить вместе с Фитц ужас от грядущего развода родителей, негодование, изумление, радость и влюбленность…
+  en: "This is a family play! Teenagers, their parents, grandparents - everyone will experience with Fitz the horror of their parents' impending divorce, the indignation, the amazement, the joy and the falling in love…"
+  de: "Dies ist ein Familienspiel! Jugendliche, ihre Eltern, Großeltern – jeder wird mit Fitz den Horror der bevorstehenden Scheidung der Eltern, die Empörung, die Verwunderung, die Freude und den Verliebtsein erleben…"
 directorsNote:
-  ru: …я поняла, о чём говорила моя мама. Вот каково это — быть кем-то ещё. И
-    может, когда мне будет сорок два, я иногда буду скучать по этому дню
-  en: "I understood what my mother was talking about. That's what it's like to be
-    somebody else. And maybe when I'm forty-two, I'll miss this day sometimes."
-  de: Ich verstand, wovon meine Mutter sprach. Das ist, wie es sich anfühlt,
-    jemand anderen zu sein. Und vielleicht werde ich diesen Tag vermissen, wenn
-    ich zweiundvierzig bin.
+  ru: …я поняла, о чём говорила моя мама. Вот каково это — быть кем-то ещё. И может, когда мне будет сорок два, я иногда буду скучать по этому дню
+  en: "I understood what my mother was talking about. That's what it's like to be somebody else. And maybe when I'm forty-two, I'll miss this day sometimes."
+  de: Ich verstand, wovon meine Mutter sprach. Das ist, wie es sich anfühlt, jemand anderen zu sein. Und vielleicht werde ich diesen Tag vermissen, wenn ich zweiundvierzig bin.
 theatre:
   name:
     ru: Калининградский областной драматический театр
@@ -44,18 +33,18 @@ premiereDate:
 ticketsUrl: "https://dramteatr39.ru/spektakli/gips"
 ageRating: 12+
 durationMin: 105
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер, автор инсценировки
       name: Роман Бокланов
     - role: Художник
       name: Оганес Айрапетян
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9\
-        %d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
+      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
     - role: Художник по свету, музыкальное оформление
       name: Максим Морозов
     - role: Помощники режиссёра
@@ -67,8 +56,7 @@ credits:
       name: Roman Boklanov
     - role: Artist
       name: Oganes Ayrapetyan
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9\
-        %d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
+      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
     - role: Lighting Designer, set design
       name: Maksim Morozov
     - role: Fitz
@@ -124,8 +112,7 @@ credits:
       name: Roman Boklanov
     - role: Bühnenbild
       name: Oganes Ajrapetjan
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9\
-        %d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
+      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
     - role: Lichttechnik und Musikgestaltung
       name: Maxim Morozov
     - role: Fitz
@@ -317,54 +304,38 @@ videos:
     id: QJsPrvhP1aw
 awards:
   - name:
-      ru: Лонг-лист Российской Национальной премии в области театрального искусства
-        для детей «Арлекин»
-      en: Long List of the Russian National Prize in the Field of Children's Theatre
-        Art "Arlekin"
-      de: Long-List der Russischen Nationalen Preis für das Theaterkunst für Kinder
-        "Arlekin"
+      ru: Лонг-лист Российской Национальной премии в области театрального искусства для детей «Арлекин»
+      en: Long List of the Russian National Prize in the Field of Children's Theatre Art "Arlekin"
+      de: Long-List der Russischen Nationalen Preis für das Theaterkunst für Kinder "Arlekin"
     year: 2023
   - name:
-      ru: Лауреат театральной премии «Своё лицо» Калининградского драматического
-        театра в номинации «За раскрытие творческой индивидуальности»
-        (Александра Черных, роль Примулы)
-      en: Winner of the Kaliningrad Drama Theatre's own face award in the category of
-        revealing creative individuality (Alexandra Chernykh, role of Primula)
-      de: Лауреат der Theaterpreis "Swoje Gesicht" Königsberger Dramatisches Theater
-        in der Nominierung "Für die Entfaltung der kreativen Individualität"
-        (Alexandra Tschernych, Rolle Primula)
+      ru: Лауреат театральной премии «Своё лицо» Калининградского драматического театра в номинации «За раскрытие творческой индивидуальности» (Александра Черных, роль Примулы)
+      en: Winner of the Kaliningrad Drama Theatre's own face award in the category of revealing creative individuality (Alexandra Chernykh, role of Primula)
+      de: Лауреат der Theaterpreis "Swoje Gesicht" Königsberger Dramatisches Theater in der Nominierung "Für die Entfaltung der kreativen Individualität" (Alexandra Tschernych, Rolle Primula)
     year: 2023
-festivals: [ ]
+festivals: []
 press:
   - title:
       ru: "Режиссер Роман Бокланов: «Моя задача - чтобы было больно, но светло»"
       en: 'Director Roman Boklanov: "My task is to make it painful but light"'
-      de: 'Regisseur Roman Boklanov: "Meine Aufgabe ist es, dass es wehtut, aber hell
-        ist"'
-    url: "https://dramteatr39.ru/news/rejisser-roman-boklanov:-%C2%ABmoya-zadacha--\
-      -chtoby-bylo-bolno,-no-svetlo%C2%BB?skip=0"
+      de: 'Regisseur Roman Boklanov: "Meine Aufgabe ist es, dass es wehtut, aber hell ist"'
+    url: "https://dramteatr39.ru/news/rejisser-roman-boklanov:-%C2%ABmoya-zadacha---chtoby-bylo-bolno,-no-svetlo%C2%BB?skip=0"
   - title:
-      ru: Калининградские артисты в спектакле Бокланова поговорят с подростками о
-        разводе
+      ru: Калининградские артисты в спектакле Бокланова поговорят с подростками о разводе
       en: Kaliningrad Actors in Boklanov's Play to Discuss Divorce with Teenagers
-      de: Kaliningrader Künstler in Boklanows Stück sprechen mit Jugendlichen über
-        Scheidung
-    url: "http://oteatre.info/kaliningradskie-artisty-v-spektakle-boklanova-pogovor\
-      yat-s-podrostkami-o-razvode/"
+      de: Kaliningrader Künstler in Boklanows Stück sprechen mit Jugendlichen über Scheidung
+    url: "http://oteatre.info/kaliningradskie-artisty-v-spektakle-boklanova-pogovoryat-s-podrostkami-o-razvode/"
   - title:
       ru: "Розовые мишки и живая музыка: в Драмтеатре премьера спектакля «Гипс»"
       en: 'Pink Mice and Live Music: Premiere of the Play "Gips" at the Dramtheatre'
-      de: 'Rosinenmäuse und lebendige Musik: Uraufführung des Stücks "Gips" im
-        Dramtheater'
-    url: "https://vesti-kaliningrad.ru/rozovye-mishki-i-zhivaya-muzyka-v-dramteatre\
-      -premera/"
+      de: 'Rosinenmäuse und lebendige Musik: Uraufführung des Stücks "Gips" im Dramtheater'
+    url: "https://vesti-kaliningrad.ru/rozovye-mishki-i-zhivaya-muzyka-v-dramteatre-premera/"
   - title:
       ru: В Калининградском драмтеатре поставили спектакль для подростков о разводе
       en: In Kaliningrad Drama Theatre, a play about divorce for teenagers was staged
-      de: In Königsberger Theater wurde ein Stück für Jugendliche über die Scheidung
-        aufgeführt
+      de: In Königsberger Theater wurde ein Stück für Jugendliche über die Scheidung aufgeführt
     url: "https://m.newkaliningrad.ru/short/2021/11/29/23967262.html"
-externalLinks: [ ]
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -373,4 +344,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

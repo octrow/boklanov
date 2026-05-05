@@ -29,7 +29,8 @@ premiereDate:
 ticketsUrl: "https://teatr2ky.ru/afisha/chemodan-dlya-morya/"
 ageRating: 3+
 durationMin: 35
-role: director
+role:
+  - director
 form:
   - ensemble
 lineage: []

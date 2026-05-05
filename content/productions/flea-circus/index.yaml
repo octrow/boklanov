@@ -31,11 +31,12 @@ premiereDate:
 ticketsUrl: null
 ageRating: 6+
 durationMin: null
-role: performer
+role:
+  - performer
 form:
   - theater
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр
@@ -49,16 +50,16 @@ credits:
 poster:
   src: productions/flea-circus/poster.webp
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - theater
   - family show
-tour: [ ]
+tour: []

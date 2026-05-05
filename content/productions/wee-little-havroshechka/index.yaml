@@ -7,24 +7,17 @@ title:
   en: Wee Little Havroshechka
   de: Kleine Havroshechka
 synopsis:
-  ru: Трудно живется девочке в чужой семье, и только доставшаяся ей в наследство
-    коровушка Рябушка помогает ей своей волшебной силой.
-  en: It is difficult for the girl to live in a foreign family, and only the cow
-    she inherited, Ryabushka, helps her with her magical powers.
-  de: Es ist schwierig für das Mädchen, in einer fremden Familie zu leben, und nur
-    die Kuh, die sie geerbt hat, Ryabushka, hilft ihr mit ihren magischen
-    Kräften.
+  ru: Трудно живется девочке в чужой семье, и только доставшаяся ей в наследство коровушка Рябушка помогает ей своей волшебной силой.
+  en: It is difficult for the girl to live in a foreign family, and only the cow she inherited, Ryabushka, helps her with her magical powers.
+  de: Es ist schwierig für das Mädchen, in einer fremden Familie zu leben, und nur die Kuh, die sie geerbt hat, Ryabushka, hilft ihr mit ihren magischen Kräften.
 tagline:
   ru: Посвящается нашим прародителям
   en: Dedicated to our ancestors
   de: Unseren Vorfahren gewidmet
 directorsNote:
-  ru: Есть на свете люди хорошие, есть и похуже, есть и такие, которые своего
-    брата не стыдятся
-  en: There are good people in this world, there are worse ones, and there are
-    those who are not ashamed of their brother
-  de: Es gibt gute Menschen auf der Welt, es gibt schlechtere, und es gibt solche,
-    die sich ihres Bruders nicht schämen
+  ru: Есть на свете люди хорошие, есть и похуже, есть и такие, которые своего брата не стыдятся
+  en: There are good people in this world, there are worse ones, and there are those who are not ashamed of their brother
+  de: Es gibt gute Menschen auf der Welt, es gibt schlechtere, und es gibt solche, die sich ihres Bruders nicht schämen
 theatre:
   name:
     ru: Московский театр кукол
@@ -44,10 +37,11 @@ premiereDate:
 ticketsUrl: "https://puppetmo.ru/poster/kroshechka-havroshechka-5/?listim_open_widget=1"
 ageRating: 6+
 durationMin: 40
-role: director
+role:
+  - director
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -254,16 +248,16 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
+videos: []
 awards:
   - name:
       ru: Большого детского фестиваля 2023
       en: Big Children's Festival 2023
       de: Großen Kinderfestivals 2023
     year: 2023
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -271,4 +265,4 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

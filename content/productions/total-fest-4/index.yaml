@@ -23,7 +23,8 @@ premiereDate:
 ticketsUrl: null
 ageRating: null
 durationMin: null
-role: director
+role:
+  - director
 status: in-development
 form:
   - festival

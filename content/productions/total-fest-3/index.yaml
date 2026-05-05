@@ -23,7 +23,8 @@ premiereDate:
 ticketsUrl: null
 ageRating: null
 durationMin: null
-role: art-director
+role:
+  - art-director
 form:
   - festival
 lineage: []

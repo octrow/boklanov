@@ -7,15 +7,9 @@ title:
   en: The Blue Bird
   de: Der Blaue Vogel
 synopsis:
-  ru: История о волшебном путешествии брата и сестры Тильтиль и Митиль за
-    сказочной Синей птицей — второй спектакль гуманистической трилогии Руслана
-    Кудашова с участием 57 кукол разного формата.
-  en: "The story of the magical journey of brother and sister Tiltil and Mytil in
-    search of the Blue Bird — the second performance in Ruslan Kudashov's
-    humanistic trilogy, featuring 57 puppets of various formats."
-  de: Die Geschichte der magischen Reise von Bruder und Schwester Tiltil und Mytil
-    auf der Suche nach dem Blauen Vogel — die zweite Aufführung in Ruslan
-    Kudashows humanistischer Trilogie mit 57 Puppen verschiedener Formate.
+  ru: История о волшебном путешествии брата и сестры Тильтиль и Митиль за сказочной Синей птицей — второй спектакль гуманистической трилогии Руслана Кудашова с участием 57 кукол разного формата.
+  en: "The story of the magical journey of brother and sister Tiltil and Mytil in search of the Blue Bird — the second performance in Ruslan Kudashov's humanistic trilogy, featuring 57 puppets of various formats."
+  de: Die Geschichte der magischen Reise von Bruder und Schwester Tiltil und Mytil auf der Suche nach dem Blauen Vogel — die zweite Aufführung in Ruslan Kudashows humanistischer Trilogie mit 57 Puppen verschiedener Formate.
 theatre:
   name:
     ru: Большой театр кукол
@@ -39,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/sinyayaptica"
 ageRating: 6+
 durationMin: 60
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр
@@ -126,12 +121,12 @@ credits:
 poster:
   src: /productions/the-blue-bird/poster.png
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -139,4 +134,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

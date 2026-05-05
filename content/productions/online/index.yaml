@@ -7,13 +7,9 @@ title:
   en: Online
   de: Online
 synopsis:
-  ru: Документальный спектакль для подростков о жизни в интернете. Основан на
-    реальных событиях, интервью и открытых материалах сети.
-  en: "Experience the real-life story of the Internet with ONLINE. Directed by
-    Roman Boklanov and based on interviews and real events. Don't miss out!"
-  de: Ein dokumentarisches Stück für Teenager über das Leben im Internet.
-    Basierend auf echten Ereignissen, Interviews und offenen
-    Netzwerkmaterialien.
+  ru: Документальный спектакль для подростков о жизни в интернете. Основан на реальных событиях, интервью и открытых материалах сети.
+  en: "Experience the real-life story of the Internet with ONLINE. Directed by Roman Boklanov and based on interviews and real events. Don't miss out!"
+  de: Ein dokumentarisches Stück für Teenager über das Leben im Internet. Basierend auf echten Ereignissen, Interviews und offenen Netzwerkmaterialien.
 theatre:
   name:
     ru: Барнаульский молодёжный театр
@@ -36,10 +32,11 @@ premiereDate:
 ticketsUrl: null
 ageRating: 12+
 durationMin: 80
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр
@@ -174,11 +171,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -186,4 +183,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

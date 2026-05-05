@@ -7,12 +7,9 @@ title:
   en: "Richter's Fairytale"
   de: Richters Märchen
 synopsis:
-  ru: Сказка Рихтера предоставляет представление о жизни Святослава Рихтера
-    (1915–1997), одного из величайших советских пианистов в истории музыки.
-  en: "RICHTER'S FAIRYTALE provides an insight into the life of Swjatoslaw Richter
-    (1915-1997), one of the greatest Soviet pianists in the history of music."
-  de: RICHTERS MÄRCHEN bietet einen Einblick in das Leben von Swjatoslaw Richter
-    (1915-1997), einem der größten sowjetischen Pianisten der Musikgeschichte.
+  ru: Сказка Рихтера предоставляет представление о жизни Святослава Рихтера (1915–1997), одного из величайших советских пианистов в истории музыки.
+  en: "RICHTER'S FAIRYTALE provides an insight into the life of Swjatoslaw Richter (1915-1997), one of the greatest Soviet pianists in the history of music."
+  de: RICHTERS MÄRCHEN bietet einen Einblick in das Leben von Swjatoslaw Richter (1915-1997), einem der größten sowjetischen Pianisten der Musikgeschichte.
 theatre:
   name:
     en: URBAN THEATER
@@ -32,11 +29,12 @@ premiereDate:
 ticketsUrl: "https://www.kontramarka.de/de/tour/spektakl-richters-fairytale/"
 ageRating: 18+
 durationMin: 60
-role: co-director
+role:
+  - co-director
 bookingCta: false
 form:
   - puppet
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Театр
@@ -90,11 +88,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -102,4 +100,4 @@ tags:
   - puppet
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

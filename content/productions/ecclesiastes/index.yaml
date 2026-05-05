@@ -7,16 +7,9 @@ title:
   en: Ecclesiastes
   de: Kohelet
 synopsis:
-  ru: Пластическая импровизация на тему книги Ветхого Завета, авторство которой
-    приписывается царю Соломону. Минимум декораций и слов, игровое пространство
-    усыпано песком — за основу взят образный язык танца.
-  en: A plastic improvisation on the theme of the Old Testament book attributed to
-    King Solomon. Minimum of scenery and words — the playing space is strewn
-    with sand, and the figurative language of dance is at its core.
-  de: Eine plastische Improvisation zum Thema des alttestamentlichen Buches, das
-    König Salomon zugeschrieben wird. Ein Minimum an Bühnenbild und Worten — der
-    Spielraum ist mit Sand bestreut und die bildhafte Sprache des Tanzes steht
-    im Mittelpunkt.
+  ru: Пластическая импровизация на тему книги Ветхого Завета, авторство которой приписывается царю Соломону. Минимум декораций и слов, игровое пространство усыпано песком — за основу взят образный язык танца.
+  en: A plastic improvisation on the theme of the Old Testament book attributed to King Solomon. Minimum of scenery and words — the playing space is strewn with sand, and the figurative language of dance is at its core.
+  de: Eine plastische Improvisation zum Thema des alttestamentlichen Buches, das König Salomon zugeschrieben wird. Ein Minimum an Bühnenbild und Worten — der Spielraum ist mit Sand bestreut und die bildhafte Sprache des Tanzes steht im Mittelpunkt.
 theatre:
   name:
     ru: Большой театр кукол
@@ -40,11 +33,12 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/ekklesiast"
 ageRating: 16+
 durationMin: 80
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссура и хореография
@@ -119,16 +113,16 @@ credits:
 poster:
   src: /productions/ecclesiastes/poster.jpg
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

@@ -29,11 +29,12 @@ premiereDate:
 ticketsUrl: null
 ageRating: null
 durationMin: null
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - theater
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Артист
@@ -47,16 +48,16 @@ credits:
 poster:
   src: null
   credit: null
-gallery: [ ]
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+gallery: []
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
 tags:
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

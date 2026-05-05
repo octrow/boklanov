@@ -1,0 +1,45 @@
+name: Sync media to R2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/productions/**'
+      - 'public/about/**'
+
+# Avoid two pushes racing on the same paths.
+concurrency:
+  group: r2-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync productions/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          aws s3 sync public/productions/ \
+            "s3://${{ secrets.R2_BUCKET }}/productions/" \
+            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" \
+            --size-only \
+            --delete
+
+      - name: Sync about/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          if [ -d public/about ]; then
+            aws s3 sync public/about/ \
+              "s3://${{ secrets.R2_BUCKET }}/about/" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" \
+              --size-only \
+              --delete
+          fi

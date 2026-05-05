@@ -7,14 +7,9 @@ title:
   en: Nikita looking for the sea
   de: Nikita sucht das Meer
 synopsis:
-  ru: "История о семилетнем мальчике Никите, которого родители отправили в деревню
-    к двоюродной бабушке на все лето. Но бабушка совсем не обычная!"
-  en: "The story of a seven-year-old boy, Nikita, who is sent by his parents to
-    the countryside to stay with his great-aunt for the whole summer. But the
-    grandmother is not at all ordinary!"
-  de: "Die Geschichte eines siebenjährigen Jungen namens Nikita, der von seinen
-    Eltern auf das Land geschickt wird, um den ganzen Sommer über bei seiner
-    Großtante zu bleiben. Aber die Großmutter ist überhaupt nicht gewöhnlich!"
+  ru: "История о семилетнем мальчике Никите, которого родители отправили в деревню к двоюродной бабушке на все лето. Но бабушка совсем не обычная!"
+  en: "The story of a seven-year-old boy, Nikita, who is sent by his parents to the countryside to stay with his great-aunt for the whole summer. But the grandmother is not at all ordinary!"
+  de: "Die Geschichte eines siebenjährigen Jungen namens Nikita, der von seinen Eltern auf das Land geschickt wird, um den ganzen Sommer über bei seiner Großtante zu bleiben. Aber die Großmutter ist überhaupt nicht gewöhnlich!"
 directorsNote:
   ru: …со временем ты всё поймёшь. А пока — вымой посуду…
   en: …in time you will understand everything. But for now – wash the dishes…
@@ -46,10 +41,11 @@ premiereDate:
 ticketsUrl: "http://www.teatrpanova.ru/youth/viewshows/98"
 ageRating: 6+
 durationMin: 80
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр, автор инсценировки
@@ -291,34 +287,25 @@ videos:
     id: Ot-YfOsoDjg
 awards:
   - name:
-      ru: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального
-        искусства «Ваш выход»
-      en: Winner of the festival (Anastasia Polezhaeva) — XI Festival of Theatrical
-        Arts "Your Exit"
-      de: Лауреат des Festivals (Anastasia Polezhaeva) — XI Festival des Theaterkunst
-        «Your Exit»
+      ru: Лауреат фестиваля (Анастасия Полежаева) — XI Фестиваль театрального искусства «Ваш выход»
+      en: Winner of the festival (Anastasia Polezhaeva) — XI Festival of Theatrical Arts "Your Exit"
+      de: Лауреат des Festivals (Anastasia Polezhaeva) — XI Festival des Theaterkunst «Your Exit»
     year: 2023
   - name:
-      ru: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
-        Фестиваль театрального искусства «Ваш выход»
-      en: Special Diploma of the Association of Theatre Critics (Natalia Malevinskaya)
-        — XI Festival of Theatrical Art "Your Exit"
-      de: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI
-        Фестиваль театрального искусства «Golden Spotlight»
+      ru: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI Фестиваль театрального искусства «Ваш выход»
+      en: Special Diploma of the Association of Theatre Critics (Natalia Malevinskaya) — XI Festival of Theatrical Art "Your Exit"
+      de: Особый диплом Ассоциации театральных критиков (Наталья Малевинская) — XI Фестиваль театрального искусства «Golden Spotlight»
     year: 2023
   - name:
-      ru: Спектакль-победитель — Большой детский фестиваль 2023, категория
-        «Драматические спектакли. Младшая возрастная категория»
-      en: Winner Production - Big Children's Festival 2023, Category "Dramatic Plays.
-        Junior Age Category"
-      de: Победитель — Bolschoi Kinderfestspiele 2023, Kategorie «Dramatische Stücke.
-        Jüngste Alterskategorie»
+      ru: Спектакль-победитель — Большой детский фестиваль 2023, категория «Драматические спектакли. Младшая возрастная категория»
+      en: Winner Production - Big Children's Festival 2023, Category "Dramatic Plays. Junior Age Category"
+      de: Победитель — Bolschoi Kinderfestspiele 2023, Kategorie «Dramatische Stücke. Jüngste Alterskategorie»
     year: 2023
     city:
       ru: Москва
       en: Moscow
       de: Moskau
-festivals: [ ]
+festivals: []
 press:
   - title:
       ru: Роман Бокланов выпускает в Архангельске «посвящение бабушкам»
@@ -326,14 +313,10 @@ press:
       de: Roman Boklanov inszeniert in Archangelsk "Ein Gedenken an die Großmütter"
     url: "https://oteatre.info/boklanov-v-arhangelske/"
   - title:
-      ru: В Архангельске новый сезон в Молодёжном театре открылся спектаклем для всей
-        семьи
-      en: In Arkhangelsk, a new season at the Youth Theatre opened with a
-        family-friendly performance
-      de: In Archangelsk eröffnete der Jugendtheater neue Spielzeit mit einem
-        Familienstück
-    url: "https://bclass.ru/biznes/kultura/v-arkhangelske-novyy-sezon-v-molodyezhno\
-      m-teatre-otkrylsya-spektaklem-dlya-vsey-semi-/"
+      ru: В Архангельске новый сезон в Молодёжном театре открылся спектаклем для всей семьи
+      en: In Arkhangelsk, a new season at the Youth Theatre opened with a family-friendly performance
+      de: In Archangelsk eröffnete der Jugendtheater neue Spielzeit mit einem Familienstück
+    url: "https://bclass.ru/biznes/kultura/v-arkhangelske-novyy-sezon-v-molodyezhnom-teatre-otkrylsya-spektaklem-dlya-vsey-semi-/"
   - title:
       ru: Снять спектакль на видео – и отправить бабушке!
       en: Capture the Play on Video – and Send to Grandma
@@ -345,15 +328,11 @@ press:
       de: Im Jugendtheater wurde ein Kinderstück gezeigt
     url: "https://vk.com/video-73332929_456256660?list=38fb6b82a6efd7e305"
   - title:
-      ru: "ИД «Двина», Александра Коковина: Театр Панова представил спектакль о
-        мальчике, который исполнил свою мечту:"
-      en: 'The ID "Dvina", Alexander Kokovin: Pano Theatre presented a play about a
-        boy who fulfilled his dream:'
-      de: 'ID "Dwina", Alexander Kokovin: Theater Panoff stellte den Stück über einen
-        Jungen, der seine Träume erfüllte:'
-    url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-is\
-      polnil-svoju-mechtu/"
-externalLinks: [ ]
+      ru: "ИД «Двина», Александра Коковина: Театр Панова представил спектакль о мальчике, который исполнил свою мечту:"
+      en: 'The ID "Dvina", Alexander Kokovin: Pano Theatre presented a play about a boy who fulfilled his dream:'
+      de: 'ID "Dwina", Alexander Kokovin: Theater Panoff stellte den Stück über einen Jungen, der seine Träume erfüllte:'
+    url: "https://dvina29.ru/teatr-panova-predstavil-spektakl-o-malchike-kotoryj-ispolnil-svoju-mechtu/"
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -362,4 +341,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

@@ -7,12 +7,9 @@ title:
   en: The Giving Tree
   de: Der großzügige Baum
 synopsis:
-  ru: История о дереве, которое отдавало мальчику всё — от яблок до своего ствола.
-    Спектакль о щедрости, любви и цене, которую мы платим за привязанность.
-  en: A story about a tree that gave a boy everything it had. A performance about
-    generosity, love, and the price of attachment.
-  de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte.
-    Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
+  ru: История о дереве, которое отдавало мальчику всё — от яблок до своего ствола. Спектакль о щедрости, любви и цене, которую мы платим за привязанность.
+  en: A story about a tree that gave a boy everything it had. A performance about generosity, love, and the price of attachment.
+  de: Eine Geschichte über einen Baum, der einem Jungen alles gab, was er hatte. Eine Aufführung über Großzügigkeit, Liebe und den Preis der Bindung.
 theatre:
   name:
     ru: Актюбинский областной театр кукол «Алакай»
@@ -32,11 +29,12 @@ premiereDate:
 ticketsUrl: null
 ageRating: 12+
 durationMin: 50
-role: director
+role:
+  - director
 form:
   - puppet
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер
@@ -156,10 +154,10 @@ gallery:
 videos:
   - provider: youtube
     id: br5rNxuUbVo
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -168,4 +166,4 @@ tags:
   - puppet
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

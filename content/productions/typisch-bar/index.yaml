@@ -7,23 +7,17 @@ title:
   en: Typisch bär
   de: Typischer Bär
 synopsis:
-  ru: В самом-самом обыкновенном лесу, среди самых-самых обыкновенных зверей живет
-    не вполне обыкновенный Медведь. Что же с ним не так?
-  en: "In a very ordinary forest, among very ordinary animals, lives a not quite
-    ordinary Bear. What's wrong with him?"
-  de: In einem sehr gewöhnlichen Wald lebt unter sehr gewöhnlichen Tieren ein
-    nicht ganz gewöhnlicher Bär. Was stimmt nicht mit ihm?
+  ru: В самом-самом обыкновенном лесу, среди самых-самых обыкновенных зверей живет не вполне обыкновенный Медведь. Что же с ним не так?
+  en: "In a very ordinary forest, among very ordinary animals, lives a not quite ordinary Bear. What's wrong with him?"
+  de: In einem sehr gewöhnlichen Wald lebt unter sehr gewöhnlichen Tieren ein nicht ganz gewöhnlicher Bär. Was stimmt nicht mit ihm?
 tagline:
   ru: История для «не таких как все»
   en: "A story for those who don't fit in"
   de: Eine Geschichte für diejenigen, die nicht passen
 directorsNote:
-  ru: "Не тот велик, кто никогда не падал, а тот велик — кто падал и вставал!
-    Конфуций между прочим!"
-  en: "Great is not the one who never fell, but great is the one who fell and got
-    up! Confucius by the way!"
-  de: "Großartig ist nicht derjenige, der nie gefallen ist, sondern großartig ist
-    derjenige, der fiel und aufstand! Konfuzius übrigens!"
+  ru: "Не тот велик, кто никогда не падал, а тот велик — кто падал и вставал! Конфуций между прочим!"
+  en: "Great is not the one who never fell, but great is the one who fell and got up! Confucius by the way!"
+  de: "Großartig ist nicht derjenige, der nie gefallen ist, sondern großartig ist derjenige, der fiel und aufstand! Konfuzius übrigens!"
 theatre:
   name:
     ru: Театр кукол «Бродячая Собачка»
@@ -47,10 +41,11 @@ premiereDate:
 ticketsUrl: "https://puppettheatre.spb.ru/index.php?id=183"
 ageRating: 5+
 durationMin: 55
-role: director
+role:
+  - director
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер-постановщик спектакля и автор инсценировки
@@ -179,19 +174,16 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
+videos: []
+awards: []
+festivals: []
 press:
   - title:
-      ru: Премьера спектакля «Медведь в своем репертуаре» в театре кукол «Бродячая
-        собачка»
-      en: World Premiere of the Play "Bear in His Repertoire" at the Puppet Theatre
-        "Stray Dog"
-      de: Uraufführung des Stücks "Bär im eigenen Repertoire" am Puppentheater "Die
-        treibe Hund"
+      ru: Премьера спектакля «Медведь в своем репертуаре» в театре кукол «Бродячая собачка»
+      en: World Premiere of the Play "Bear in His Repertoire" at the Puppet Theatre "Stray Dog"
+      de: Uraufführung des Stücks "Bär im eigenen Repertoire" am Puppentheater "Die treibe Hund"
     url: "https://www.gov.spb.ru/gov/otrasl/c_culture/news/236526/"
-externalLinks: [ ]
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -199,4 +191,4 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

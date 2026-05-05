@@ -26,7 +26,8 @@ premiereDate:
 ticketsUrl: null
 ageRating: null
 durationMin: null
-role: performer
+role:
+  - performer
 bookingCta: false
 form:
   - theater
@@ -49,7 +50,7 @@ gallery: []
 videos: []
 awards: []
 festivals: []
-press: [ ]
+press: []
 externalLinks: []
 techRider: null
 pressKit: null

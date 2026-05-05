@@ -7,13 +7,9 @@ title:
   en: Kasztanka
   de: Kastanka
 synopsis:
-  ru: Каштанка нашла нового хозяина — клоуна цирка. Новая жизнь поманила её теплом
-    и едой. Но однажды из зрительного зала донёсся знакомый голос…
-  en: Kashtanka found a new owner — a circus clown. A new life beckoned with
-    warmth and food. But one day a familiar voice came from the audience…
-  de: Kastanka hat einen neuen Besitzer gefunden – einen Zirkusclown. Das neue
-    Leben lockte sie mit Wärme und Essen. Aber eines Tages kam eine vertraute
-    Stimme aus dem Publikum…
+  ru: Каштанка нашла нового хозяина — клоуна цирка. Новая жизнь поманила её теплом и едой. Но однажды из зрительного зала донёсся знакомый голос…
+  en: Kashtanka found a new owner — a circus clown. A new life beckoned with warmth and food. But one day a familiar voice came from the audience…
+  de: Kastanka hat einen neuen Besitzer gefunden – einen Zirkusclown. Das neue Leben lockte sie mit Wärme und Essen. Aber eines Tages kam eine vertraute Stimme aus dem Publikum…
 theatre:
   name:
     ru: Театр у Нарвских ворот
@@ -33,11 +29,12 @@ premiereDate:
 ticketsUrl: "https://www.teatrlutz.ru/performance/kashtanka-6/"
 ageRating: 6+
 durationMin: null
-role: co-director
+role:
+  - co-director
 bookingCta: false
 form:
   - puppet
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: В спектакле участвуют
@@ -172,11 +169,11 @@ gallery:
       ru: null
       en: null
       de: null
-videos: [ ]
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+videos: []
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -184,4 +181,4 @@ tags:
   - performance for children
   - puppet
   - theater
-tour: [ ]
+tour: []

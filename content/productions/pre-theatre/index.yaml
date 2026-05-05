@@ -7,15 +7,9 @@ title:
   en: DOTHEATRE
   de: DOTHEATRE
 synopsis:
-  ru: Реконструкция событий, которые были возле Александринского театра. Вы
-    увидите, как создавался ландшафт, какими он наполнялся звуками и голосами,
-    природными и человеческими.
-  en: A reconstruction of the events that took place outside the Alexandrinsky
-    Theatre. You will see how the landscape was created, how it was filled with
-    sounds and voices, natural and human.
-  de: Eine Rekonstruktion der Ereignisse, die außerhalb des Alexandrinsky-Theaters
-    stattfanden. Sie werden sehen, wie die Landschaft geschaffen wurde und wie
-    sie mit Klängen und Stimmen, natürlichen und menschlichen, gefüllt wurde.
+  ru: Реконструкция событий, которые были возле Александринского театра. Вы увидите, как создавался ландшафт, какими он наполнялся звуками и голосами, природными и человеческими.
+  en: A reconstruction of the events that took place outside the Alexandrinsky Theatre. You will see how the landscape was created, how it was filled with sounds and voices, natural and human.
+  de: Eine Rekonstruktion der Ereignisse, die außerhalb des Alexandrinsky-Theaters stattfanden. Sie werden sehen, wie die Landschaft geschaffen wurde und wie sie mit Klängen und Stimmen, natürlichen und menschlichen, gefüllt wurde.
 tagline:
   ru: Спектакль — прогулка
   en: Performance — walk
@@ -35,10 +29,11 @@ year: 2022
 ticketsUrl: null
 ageRating: null
 durationMin: null
-role: director
+role:
+  - director
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссёр
@@ -149,10 +144,10 @@ gallery:
 videos:
   - provider: youtube
     id: qa6BI_AAjUw
-awards: [ ]
-festivals: [ ]
-press: [ ]
-externalLinks: [ ]
+awards: []
+festivals: []
+press: []
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -160,4 +155,4 @@ tags:
   - immersive theater
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

@@ -7,25 +7,13 @@ title:
   en: The Ape Star
   de: Der Affenstern
 synopsis:
-  ru: Cемейная рок-история для тех, кто не вписывается в рамки. Девятилетнюю
-    девочку Юнну удочерила огромная черная горилла - с мохнатыми лапами и
-    кривыми зубами. И что теперь делать девочке?
-  en: "Family rock story for those who don't fit in. A nine-year-old girl, Yunna,
-    is adopted by a huge black gorilla - with shaggy paws and crooked teeth.
-    What is the girl to do now?"
-  de: Familien-Rock-Geschichte für diejenigen, die nicht passen. Ein neunjähriges
-    Mädchen namens Yunna wird von einem großen schwarzen Gorilla mit zotteligem
-    Fell und schiefen Zähnen adoptiert. Was soll das Mädchen nun tun?
+  ru: Cемейная рок-история для тех, кто не вписывается в рамки. Девятилетнюю девочку Юнну удочерила огромная черная горилла - с мохнатыми лапами и кривыми зубами. И что теперь делать девочке?
+  en: "Family rock story for those who don't fit in. A nine-year-old girl, Yunna, is adopted by a huge black gorilla - with shaggy paws and crooked teeth. What is the girl to do now?"
+  de: Familien-Rock-Geschichte für diejenigen, die nicht passen. Ein neunjähriges Mädchen namens Yunna wird von einem großen schwarzen Gorilla mit zotteligem Fell und schiefen Zähnen adoptiert. Was soll das Mädchen nun tun?
 directorsNote:
-  ru: "Давай... давай откроем книжный киоск на колёсах и отправимся к океану, как
-    мы и мечтали!!! Я совсем не хочу оставаться в приюте. Я хочу быть с тобой…
-    Мама!"
-  en: "Let's... let's open a bookstore on wheels and go to the ocean like we
-    dreamed of!!! I don't want to stay at the shelter at all. I want to be with
-    you…Mom!"
-  de: "Lass uns... lass uns einen Bücherladen auf Rädern eröffnen und zum Ozean
-    gehen, wie wir träumten!!! Ich will überhaupt nicht im Asyl bleiben. Ich
-    will bei dir sein... Mutter!"
+  ru: "Давай... давай откроем книжный киоск на колёсах и отправимся к океану, как мы и мечтали!!! Я совсем не хочу оставаться в приюте. Я хочу быть с тобой… Мама!"
+  en: "Let's... let's open a bookstore on wheels and go to the ocean like we dreamed of!!! I don't want to stay at the shelter at all. I want to be with you…Mom!"
+  de: "Lass uns... lass uns einen Bücherladen auf Rädern eröffnen und zum Ozean gehen, wie wir träumten!!! Ich will überhaupt nicht im Asyl bleiben. Ich will bei dir sein... Mutter!"
 tagline:
   ru: Рок-история для тех, кто не вписывается в рамки
   en: "Rock-history for those who don't fit the mould"
@@ -53,10 +41,11 @@ premiereDate:
 ticketsUrl: "https://puppets.ru/spec/94"
 ageRating: 6+
 durationMin: 70
-role: director
+role:
+  - director
 form:
   - family
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер
@@ -300,32 +289,23 @@ videos:
     id: BaWsgWMcB8Q
 awards:
   - name:
-      ru: Высшая театральная премия Санкт-Петербурга «Золотой софит» — «Лучшая работа
-        режиссёра в театре кукол»
+      ru: Высшая театральная премия Санкт-Петербурга «Золотой софит» — «Лучшая работа режиссёра в театре кукол»
       en: The Golden Spotlight – Best Director's Work in a Puppet Theatre
-      de: Высшая театральная премия Санкт-Петербурга «Golden Spotlight» — «Best
-        Director's Work in a Puppet Theatre»
+      de: Высшая театральная премия Санкт-Петербурга «Golden Spotlight» — «Best Director's Work in a Puppet Theatre»
     year: 2021
   - name:
-      ru: Международная театральная премия зрительских симпатий «Звезда театрала 2021»
-        — «Лучший спектакль для детей и юношества», топ-3
-      en: International Theatre Audience Award "Theatre Star 2021" – Best Show for
-        Children and Youth, top-3
-      de: Международer Theaterpreis der Zuschauerfreundlichkeiten «Stern des
-        Theatralikers 2021» — «Bester Spiel für Kinder und Jugendliche», Top-3
+      ru: Международная театральная премия зрительских симпатий «Звезда театрала 2021» — «Лучший спектакль для детей и юношества», топ-3
+      en: International Theatre Audience Award "Theatre Star 2021" – Best Show for Children and Youth, top-3
+      de: Международer Theaterpreis der Zuschauerfreundlichkeiten «Stern des Theatralikers 2021» — «Bester Spiel für Kinder und Jugendliche», Top-3
     year: 2021
     city:
       ru: Москва
       en: Moscow
       de: Moskau
   - name:
-      ru: Участник программы «Детский WEEKEND» Российской Национальной театральной
-        премии «Золотая маска»
-      en: Participant of the "Children's WEEKEND" program of the Golden Mask Russian
-        National Theatre Award
-      de: Участник программы «Детский WEEKEND» Российской Национальной театральной
-        премии «Золотая маска» → Teilnehmer der Programmreihe «Kinder-WEEKEND»
-        der Russischen Nationalen Theaterpreis «Goldene Maske»
+      ru: Участник программы «Детский WEEKEND» Российской Национальной театральной премии «Золотая маска»
+      en: Participant of the "Children's WEEKEND" program of the Golden Mask Russian National Theatre Award
+      de: Участник программы «Детский WEEKEND» Российской Национальной театральной премии «Золотая маска» → Teilnehmer der Programmreihe «Kinder-WEEKEND» der Russischen Nationalen Theaterpreis «Goldene Maske»
     year: 2021
     city:
       ru: Москва
@@ -337,30 +317,21 @@ awards:
       de: Long-List der Russischen Nationalen Theaterpreis "Goldene Maske"
     year: 2022
   - name:
-      ru: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучший
-        режиссёр» (Роман Бокланов)
-      en: 13th Saint Petersburg Young Theatre Award «Breakthrough» — «Best Director»
-        (Roman Boklanov)
-      de: 13. St. Petersburg Theater Award for Young Talents "Breakthrough" – "Best
-        Director" (Roman Boklanov)
+      ru: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучший режиссёр» (Роман Бокланов)
+      en: 13th Saint Petersburg Young Theatre Award «Breakthrough» — «Best Director» (Roman Boklanov)
+      de: 13. St. Petersburg Theater Award for Young Talents "Breakthrough" – "Best Director" (Roman Boklanov)
     year: 2022
   - name:
-      ru: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучшая
-        актриса» (Лидия Клирикова)
-      en: 13th Saint Petersburg Young Theatre Award «Breakthrough» — «Best Actress»
-        (Lydia Klirovich)
-      de: 13. St. Petersburg Theater Award for Young Talents "Breakthrough" – "Best
-        Actress" (Lidia Klirovikova)
+      ru: 13-я Санкт-Петербургская театральная премия для молодых «Прорыв» — «Лучшая актриса» (Лидия Клирикова)
+      en: 13th Saint Petersburg Young Theatre Award «Breakthrough» — «Best Actress» (Lydia Klirovich)
+      de: 13. St. Petersburg Theater Award for Young Talents "Breakthrough" – "Best Actress" (Lidia Klirovikova)
     year: 2022
-festivals: [ ]
+festivals: []
 press:
   - title:
-      ru: ROMAN BOKLANOV "I WAS ADOPTED BY A GORILLA", BIG PUPPET THEATER, ST.
-        PETERSBURG
-      en: Roman Boklanov "I Was Adopted by a Gorilla", Big Puppet Theater, St.
-        Petersburg
-      de: ROMAN BOKLANOV "ICH WURDE VON EINEM GORILLA ADOPTIERT", BIG PUPPET THEATER,
-        ST. PETERSBURG
+      ru: ROMAN BOKLANOV "I WAS ADOPTED BY A GORILLA", BIG PUPPET THEATER, ST. PETERSBURG
+      en: Roman Boklanov "I Was Adopted by a Gorilla", Big Puppet Theater, St. Petersburg
+      de: ROMAN BOKLANOV "ICH WURDE VON EINEM GORILLA ADOPTIERT", BIG PUPPET THEATER, ST. PETERSBURG
     url: "http://maskbook.ru/roman-boklanov/"
   - title:
       ru: How foster families live in St. Petersburg
@@ -378,21 +349,16 @@ press:
       de: PORZELLAN UND FELL
     url: "https://ptj.spb.ru/blog/farforovye-imoxnatye/"
   - title:
-      ru: "\"I was adopted by a gorilla. BTC premiered a play about adoptive parents'
-        relationship with their children"
-      en: I Was Adopted by a Gorilla. BTC Premiered a Play About Adoptive Parents'
-        Relationship with Their Children
-      de: Ich wurde von einem Gorilla adoptiert. BTC hat eine Inszenierung über die
-        Beziehung adoptiver Eltern zu ihren Kindern uraufgeführt.
-    url: "https://topspb.tv/news/2020/10/18/menya-udocherila-gorilla-v-bolshom-teat\
-      re-kukol-proshla-premera-spektaklya-ob-otnosheniyah-priemnyh-roditelej-s-\
-      detmi/"
+      ru: "\"I was adopted by a gorilla. BTC premiered a play about adoptive parents' relationship with their children"
+      en: I Was Adopted by a Gorilla. BTC Premiered a Play About Adoptive Parents' Relationship with Their Children
+      de: Ich wurde von einem Gorilla adoptiert. BTC hat eine Inszenierung über die Beziehung adoptiver Eltern zu ihren Kindern uraufgeführt.
+    url: "https://topspb.tv/news/2020/10/18/menya-udocherila-gorilla-v-bolshom-teatre-kukol-proshla-premera-spektaklya-ob-otnosheniyah-priemnyh-roditelej-s-detmi/"
   - title:
       ru: Teaser for the play "The Gorilla Adopted Me" (dir. Roman Boklanov)
       en: Teaser for the play "The Gorilla Adopted Me" (dir. Roman Boklanov)
       de: 'Vorstellung "Der Gorilla adoptierte mich" (Regie: Roman Boklanov)'
     url: "https://youtu.be/BaWsgWMcB8Q"
-externalLinks: [ ]
+externalLinks: []
 techRider: null
 pressKit: null
 featured: true
@@ -401,4 +367,4 @@ tags:
   - family show
   - roman boklanov
   - theater
-tour: [ ]
+tour: []

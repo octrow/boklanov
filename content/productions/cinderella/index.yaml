@@ -7,23 +7,13 @@ title:
   en: Cinderella
   de: Aschenputtel
 synopsis:
-  ru: Где-то в глубинах старого дома играющие дети находят забытых кукол, оживляют
-    их, и, проживая вместе с ними жизнь сказочных персонажей, ищут ответы на
-    главные вопросы жизни.
-  en: "Experience the magic of Cinderella in a captivating puppet show. Discover
-    the power of love, strength of spirit, and faith in the best. Suitable for
-    ages 4+. Get your tickets now!"
-  de: "Erleben Sie die Magie von Aschenputtel in einem fesselnden Puppenspiel.
-    Entdecken Sie die Kraft der Liebe, die Stärke des Geistes und den Glauben an
-    das Beste. Geeignet für Kinder ab 4 Jahren. Holen Sie sich jetzt Ihre
-    Karten!"
+  ru: Где-то в глубинах старого дома играющие дети находят забытых кукол, оживляют их, и, проживая вместе с ними жизнь сказочных персонажей, ищут ответы на главные вопросы жизни.
+  en: "Experience the magic of Cinderella in a captivating puppet show. Discover the power of love, strength of spirit, and faith in the best. Suitable for ages 4+. Get your tickets now!"
+  de: "Erleben Sie die Magie von Aschenputtel in einem fesselnden Puppenspiel. Entdecken Sie die Kraft der Liebe, die Stärke des Geistes und den Glauben an das Beste. Geeignet für Kinder ab 4 Jahren. Holen Sie sich jetzt Ihre Karten!"
 directorsNote:
-  ru: Моё милое дитя, будь доброй и ласковой, и господь тебе всегда поможет, а я
-    буду глядеть на тебя с неба и всегда буду возле тебя
-  en: My dear child, be kind and gentle, and the Lord will always help you, and I
-    will look at you from heaven and will always be near you
-  de: Mein liebes Kind, sei gütig und sanft, und der Herr wird dir immer helfen,
-    und ich werde dich vom Himmel aus anschauen und werde immer bei dir sein
+  ru: Моё милое дитя, будь доброй и ласковой, и господь тебе всегда поможет, а я буду глядеть на тебя с неба и всегда буду возле тебя
+  en: My dear child, be kind and gentle, and the Lord will always help you, and I will look at you from heaven and will always be near you
+  de: Mein liebes Kind, sei gütig und sanft, und der Herr wird dir immer helfen, und ich werde dich vom Himmel aus anschauen und werde immer bei dir sein
 theatre:
   name:
     ru: Театр кукол «Бродячая Собачка»
@@ -47,10 +37,11 @@ premiereDate:
 ticketsUrl: "https://puppettheatre.spb.ru/index.php?id=65"
 ageRating: 4+
 durationMin: 40
-role: director
+role:
+  - director
 form:
   - ensemble
-lineage: [ ]
+lineage: []
 credits:
   ru:
     - role: Режиссер-постановщик и автор текста
@@ -127,7 +118,7 @@ credits:
 poster:
   src: /productions/cinderella/poster.jpg
   credit: null
-videos: [ ]
+videos: []
 awards:
   - name:
       ru: «Золотой софит»
@@ -156,7 +147,7 @@ awards:
       ru: Санкт-Петербург
       en: Saint Petersburg
       de: Sankt Petersburg
-festivals: [ ]
+festivals: []
 press:
   - title:
       ru: Video from Stray Dog Puppet Theatre
@@ -164,20 +155,16 @@ press:
       de: Video aus dem Stray Dog Puppet Theatre
     url: "https://vk.com/video-32253592_456239111?list=4023b21fb87266ba5e"
   - title:
-      ru: Director Roman Boklanov about the new production at the Puppet Theatre
-        "Stray Dog"
-      en: Director Roman Boklanov about the new production at the Puppet Theatre Stray
-        Dog
-      de: Regisseur Roman Boklanov über die neue Inszenierung am Marionettentheater
-        "Stray Dog"
-    url: "http://www.kirnews.ru/news/2021-04-20/rezhisser-roman-boklanov-o-novoy-po\
-      stanovke-v-teatre-kukol--brodyachaya-sobachka/"
+      ru: Director Roman Boklanov about the new production at the Puppet Theatre "Stray Dog"
+      en: Director Roman Boklanov about the new production at the Puppet Theatre Stray Dog
+      de: Regisseur Roman Boklanov über die neue Inszenierung am Marionettentheater "Stray Dog"
+    url: "http://www.kirnews.ru/news/2021-04-20/rezhisser-roman-boklanov-o-novoy-postanovke-v-teatre-kukol--brodyachaya-sobachka/"
   - title:
       ru: Far-reaching Perspectives
       en: Far-reaching Perspectives
       de: Weite Perspektiven
     url: "https://musecube.org/otchet/otchet-theatre/daleko-idushhie-perspektivy/"
-externalLinks: [ ]
+externalLinks: []
 techRider: null
 pressKit: null
 featured: false
@@ -185,7 +172,7 @@ tags:
   - performance for children
   - roman boklanov
   - theater
-tour: [ ]
+tour: []
 gallery:
   - src: /productions/cinderella/01.webp
     credit: null
