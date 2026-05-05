@@ -696,7 +696,7 @@ re-derive the rationale.
 | 14 | Theatres collection | ⏸ Tier 3 | Deferred per decision log |
 | 15 | People / cities / festivals collections | ⏸ Tier 3 | Same |
 | 16 | `premiereDate` as `fields.date` | ❌ Rejected | Fuzzy dates ("весна 2021"). Numeric `year` carries the sort key; locale free text remains for prose |
-| 17 | Director's note as `markdoc.inline` | ⏸ Tier 2.1 | Viable; lower-leverage (bodies are 1–2 sentences). Would also need a `@markdoc/markdoc` renderer in `[slug]/page.tsx` |
+| 17 | Director's note as `markdoc.inline` | ✅ Shipped | Tier 2.1 — commit 5a01aa6. `l10nMarkdoc` helper + `<InlineMarkdoc>` renderer with document-wrapper override. YAML round-trips unchanged |
 | 18 | PDFs as `fields.pathReference` | ⏸ / dead | Audit shows `techRider` / `pressKit` are 100% null. Pending "drop or wire" decision. If wired, `fields.url` is the right choice (PDFs likely external), so `pathReference` is moot |
 | 19 | URL fields use `fields.url` | ✅ Shipped | `theatre.url`, `ticketsUrl`, `bookingCtaUrl`, `techRider`, `pressKit`, `awards[].url`, `press[].url`, `externalLinks[].url`, `credits[*].url` |
 | 20 | `form` as single select (not array) | ❌ Rejected | Editor confirmed productions can have multiple forms (e.g. "puppet" + "family"). Plus open taxonomy means even `multiselect` was reverted |
@@ -724,7 +724,7 @@ re-derive the rationale.
 | 2 | Side-by-side translations | ✅ Shipped | Same as Opus #1 |
 | 3 | Group fields with `fields.object` + grids | ✅ Shipped | Theatre / poster / credits / etc. already grouped |
 | 4 | Better list view columns | ✅ Shipped | Same as Opus #2 |
-| 5 | Markdoc inline for synopsis / director's note | ⏸ Tier 2.1 | Same as Opus #17 |
+| 5 | Markdoc inline for synopsis / director's note | ✅ Shipped (directorsNote) | Same as Opus #17 — directorsNote done, synopsis stays plain text (cards/SEO need raw strings) |
 | 6 | Sidebar navigation | ✅ Shipped | Same as Opus #12 |
 | 7 | `itemLabel` for arrays | ✅ Shipped | Every array field has an `itemLabel` (gallery, videos, awards, festivals, press, externalLinks, tour, runs, credits.{ru,en,de}) |
 | 8 | Conditional booking CTA | ⏸ Tier 2 | Same as Opus #9 |
@@ -745,13 +745,15 @@ After this disposition pass, the **only** items still genuinely on the
 roadmap are:
 
 1. Editor backfill of `ageRating` (16 nulls) and `theatre.country` (3 nulls),
-   then promote both to `fields.select`. Editor-paced.
+   then promote both to `fields.select`. Editor-paced — purely waiting on
+   data entry, not code.
 2. ~~`techRider` / `pressKit` decision~~ — kept as-is per editor (already
    wired through `TourRider`, just unfilled across all entries).
 3. ~~Tier 2.2 image fields~~ — **tried and reverted**. See "Shipped — 2026-05-06
    (Tier 2.2 attempted + reverted)" below.
-4. Optional: Tier 2.1 directorsNote → markdoc.inline (low leverage).
-5. Optional: Opus #13 `template` for new entries (low frequency of use).
+4. ~~Tier 2.1 directorsNote → markdoc.inline~~ — **shipped 5a01aa6**.
+5. Optional: Opus #13 `template` for new entries (low frequency of use; no
+   editor demand).
 
 Everything else from the original reviews is either shipped, rejected
 with rationale, or parked under Tier 3 normalisation.
@@ -821,9 +823,71 @@ without a concrete plan to preserve the typed-path workflow alongside
 the picker (`fields.conditional` with two modes is the only structural
 fit, but it reshapes YAML — see Tier 2 conditional-fields entry).
 
-### Subsequent polish (commit pending)
+### Subsequent polish (commit a885963)
 
 Spacing between the Upload button and the preview thumbnail in
 `ImagePathPreview` was 8px gap + 8px margin-top — visually crowded
 against Keystatic's surrounding form rhythm. Bumped to 16px / 16px to
 match the field-to-field cadence.
+
+---
+
+## Shipped — 2026-05-06 (Tier 2.1)
+
+Ref commit: 5a01aa6.
+
+`directorsNote` is now `fields.markdoc.inline` per locale. Editor sees an
+inline rich-text editor supporting italic / bold / links instead of a
+plain text input.
+
+### Why now
+
+Originally framed as "low leverage" because bodies are 1-2 sentence
+quotes. Editor decided the editorial flexibility (italic for emphasis,
+links for cited sources) was worth the small renderer cost. All 16
+existing values round-trip identically through Markdoc — plain prose
+without syntax is valid markdoc.
+
+### What changed
+
+- `keystatic.config.ts` — new `l10nMarkdoc` helper (mirror of `l10n` but
+  with `fields.markdoc.inline` for each locale). `directorsNote` now
+  uses it.
+- `package.json` — `@markdoc/markdoc@^0.4.0` promoted from transitive to
+  a direct dep so the renderer doesn't depend on Keystatic continuing
+  to ship it.
+- `lib/markdoc.tsx` (new) — `<InlineMarkdoc value className />`
+  component. Wraps parse → transform → renderers.react with two schema
+  overrides:
+  - `document` returns children directly (no default `<article>`
+    wrapper),
+  - `paragraph` renders `<p className={...}>` so the existing
+    `.directorsNoteText` style survives the migration.
+- `app/[locale]/productions/[slug]/page.tsx` — replaces
+  `<p className={...}>{production.directorsNote}</p>` with
+  `<InlineMarkdoc value={...} className={...} />`. Same DOM output for
+  current entries; rich text appears the moment any editor adds syntax.
+
+### What didn't change
+
+- YAML — every existing value parses as plain markdoc. Migration script
+  was unnecessary.
+- `lib/content.ts` — `directorsNote` is still a string. Markdoc parsing
+  happens at render time, not read time.
+
+### Risk and verification
+
+- `npx tsc --noEmit` clean.
+- `npm run audit-keystatic` — no schema regression.
+- Visual smoke: open `/ru/productions/bury-me-behind-the-baseboard`
+  (production with a directorsNote value) and confirm the blockquote
+  renders identically to before. The editor surface in `/keystatic`
+  swaps from a single-line text input to a rich inline editor.
+
+### Lesson
+
+The Markdoc inline-rendering pipeline produces a default `<article>`
+wrapper. For embedding into custom semantic containers (`<blockquote>`,
+`<aside>`, etc.), override the `document` node to pass children through
+without wrapping. Codified in `lib/markdoc.tsx` with a comment so the
+next Markdoc-powered field doesn't repeat the discovery.
