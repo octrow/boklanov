@@ -95,6 +95,7 @@ export default config({
       path: 'content/productions/*/',
       format: { data: 'yaml' },
       entryLayout: 'content',
+      previewUrl: '/ru/productions/{slug}',
       columns: ['slug', 'year'],
       schema: {
         slug: fields.slug({

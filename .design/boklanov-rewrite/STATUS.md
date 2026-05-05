@@ -106,6 +106,44 @@ Rationale ledger (history, read-only): `archive/DESIGN_AMBITION_compress.md` §1
 - **About photos**: `photos[]` array added to `AboutFrontmatter` + 2-col masonry grid rendered below geography section. Placeholder `photos: []` in `ru.yaml` + `en.yaml`. Roman adds entries when photos are ready.
 - **Archive compress docs**: all `*_compress.md` files registered in MAP.md §2; all active-doc archive links updated to compress-first.
 
+## Keystatic admin improvements (2026-05-05)
+
+Changes to `keystatic.config.ts` to improve the productions editing experience.
+
+### What was done
+
+- **`notionIds` moved to bottom** — was second field after `slug`, now just before the body MDX fields. Reduces cognitive noise for editors who never touch legacy IDs.
+- **Image `src` fields → `fields.text`** — `poster.src`, `productionsPhoto.src`, `featuredPhoto.src`, `gallery[].src` changed from `fields.image` to `fields.text` with descriptive labels and path format hints. Stores the same string value in YAML; now the path is always visible in the admin.
+- **Gallery `itemLabel` shows filename** — was always `"image"` (fallback when credit is null). Now shows the filename extracted from the path (`01.jpg`, `02.jpg`, …).
+- **`previewUrl` added** — `previewUrl: '/ru/productions/{slug}'`. Keystatic toolbar shows an external-link button; one click opens the live production page in the browser so editors can see all images rendered in context.
+
+### Inline image thumbnails
+
+`fields.image` requires Keystatic to load image binary data via its API. For images placed manually in `public/` (not uploaded through Keystatic), it shows an empty "Choose file" button with no thumbnail. Options weighed:
+
+| Option | Decision |
+|---|---|
+| `fields.image` | Rejected — shows empty for externally-managed images |
+| `fields.cloudImage` | Requires Keystatic Cloud Pro + Image Library ($10+/mo) — not set up |
+| Client-side DOM injection | **Adopted** — see `app/keystatic/ImagePathPreview.tsx` |
+
+**Implementation**: `ImagePathPreview` is a client component mounted by `app/keystatic/layout.tsx` next to `<KeystaticApp />`. It runs only on `/keystatic/*` routes (the layout owns that subtree). On mount it sets up a `MutationObserver` on `document.body` and does two things on each settled batch:
+
+1. **Per-input addon** — for every `<input type="text">` whose value matches `jpg|jpeg|png|webp|gif|svg|avif` (or whose field description text contains an image-ext example), it walks up to the field's column container (the `flex-direction: column` ancestor that wraps label + description + input row) and appends a flat vertical stack: an "Upload image" button on one line, then a 240×180 preview thumbnail on the next, then a status line that only fills when an upload is in flight. The input keeps its native full width — no nested boxes, no horizontal split. The button POSTs the chosen file as multipart to `/api/keystatic-asset`; on success the new path is written back into Keystatic's input via the React-aware setter (`Object.getOwnPropertyDescriptor(prototype,'value').set` + `dispatchEvent('input')`) so Keystatic's onChange picks it up. The target directory is derived from the input's existing value (`/<dir>/<file>` → `<dir>`); empty inputs fall back to URL pattern (`/keystatic/collection/<col>/item/<slug>` → `<col>/<slug>`).
+2. **Per-row thumbnail** — for every `[role="row"][aria-label]` whose label ends in an image extension (Keystatic's collapsed array rows), it inserts a 48×36 thumbnail into the row's grid (after the drag handle, before the label). `src` is composed from the URL's `<col>/<slug>` plus the row label, so collapsed Gallery items render thumbnails without expanding each one. Restricted to `productions/<slug>/` URLs since that's the only collection where label = filename and items live under `public/<col>/<slug>/`.
+
+Paths missing a leading `/` are normalised (so the `featuredPhoto.src` `productions/...` inconsistency renders too); `previewUrl` is unchanged.
+
+**Upload route**: `app/api/keystatic-asset/route.ts`. POST multipart `file` + `directory`; writes to `public/<directory>/<filename>` after sanitising path segments and rejecting traversal / overwrites / non-image extensions / >25 MB. 403 in production — the deployed bundle is read-only and Cloud's Image Library would handle uploads if it's ever enabled.
+
+Why setTimeout (not rAF) for the scan debounce: rAF callbacks are paused on backgrounded tabs and delayed initial scans during dev hot reloads. 50 ms timeout is fine — Keystatic batches mutations heavily.
+
+### Data inconsistency found
+
+`featuredPhoto.src` in `bury-me-behind-the-baseboard/index.yaml` is `productions/bury-me-behind-the-baseboard/poster_de.webp` (missing leading `/`). Now visible as text in the admin — fix via Keystatic form or direct YAML edit.
+
+---
+
 ## Lighthouse pass — prod 4×100 (session 17, 2026-05-04)
 
 Baseline: `archive/lighthouse_050426.json` (paper, mobile, LH 13.0.2) → home `99 / 90 / 100 / 83`. Post-fix prod re-test: `archive/lighthouse_050426_3.josn` → **`100 / 100 / 100 / 100`**. CWV: FCP 0.4 s, LCP 0.6 s, TBT 0 ms, CLS 0, SI 0.7 s. Plan + per-fix detail: `LIGHTHOUSE_IMPROVEMENT_PLAN.md`.

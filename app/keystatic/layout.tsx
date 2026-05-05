@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { showAdminUI } from '../../keystatic.config'
 import KeystaticApp from './keystatic'
+import { ImagePathPreview } from './ImagePathPreview'
 
 export const metadata = {
   title: 'Keystatic — boklanov.com',
@@ -19,6 +20,7 @@ export default function KeystaticLayout({
     <html lang='en' suppressHydrationWarning>
       <body style={{ margin: 0 }}>
         <KeystaticApp />
+        <ImagePathPreview />
         {children}
       </body>
     </html>
