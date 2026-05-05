@@ -54,7 +54,7 @@ export async function SiteFooter() {
             rel='noopener noreferrer'
             className={styles.footerLink}
           >
-            Telegram
+            {tFooter('telegram')}
           </a>
           <a
             href={INSTAGRAM_URL}
@@ -62,7 +62,7 @@ export async function SiteFooter() {
             rel='noopener noreferrer'
             className={styles.footerLink}
           >
-            Instagram
+            {tFooter('instagram')}
           </a>
         </div>
 

@@ -90,7 +90,7 @@ export async function TourRider({
           rel='noreferrer noopener'
           aria-label={t('riderTechRiderAria')}
         >
-          PDF
+          {t('riderTechRiderLink')}
         </a>
       )
     })
@@ -106,7 +106,7 @@ export async function TourRider({
           rel='noreferrer noopener'
           aria-label={t('riderPressKitAria')}
         >
-          ZIP
+          {t('riderPressKitLink')}
         </a>
       )
     })

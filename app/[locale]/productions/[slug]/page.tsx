@@ -199,7 +199,7 @@ export default async function ProductionDetailPage({
   const chips: string[] = []
   if (production.ageRating) chips.push(production.ageRating)
   if (production.year) chips.push(String(production.year))
-  if (production.durationMin) chips.push(`${production.durationMin} MIN`)
+  if (production.durationMin) chips.push(`${production.durationMin} ${t('riderMin')}`)
   if (country) chips.push(country)
 
   const roleLabelMap: Record<string, string> = {
@@ -377,7 +377,7 @@ export default async function ProductionDetailPage({
                 if (run.count) parts.push(run.count)
                 return (
                   <li key={i} className={styles.runLine}>
-                    <span className={styles.runMark}>RUN</span>
+                    <span className={styles.runMark}>{t('riderRun')}</span>
                     {parts.length > 0 && (
                       <>&thinsp;·&thinsp;{parts.join(' · ')}</>
                     )}

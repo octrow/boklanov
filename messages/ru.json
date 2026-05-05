@@ -116,6 +116,8 @@
     "riderTechRider": "ТЕХ. РАЙДЕР",
     "riderPressKit": "ПРЕСС-КИТ",
     "riderSpecSheet": "ТЕХПАСПОРТ",
+    "riderTechRiderLink": "PDF",
+    "riderPressKitLink": "ZIP",
     "riderTechRiderAria": "Технический райдер, PDF",
     "riderPressKitAria": "Пресс-кит, ZIP",
     "premPrefix": "ПРЕМ"
@@ -133,7 +135,9 @@
     "productions": "все постановки"
   },
   "footer": {
-    "colophon": "2026 ИЗДАНИЕ"
+    "colophon": "2026 ИЗДАНИЕ",
+    "telegram": "Telegram",
+    "instagram": "Instagram"
   },
   "search": {
     "noResults": "ничего не найдено",
