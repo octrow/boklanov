@@ -39,20 +39,29 @@ jobs:
           echo "Bucket: $R2_BUCKET"
           echo "Endpoint: $R2_ENDPOINT"
 
-      # --exclude 'lqip.json' / 'lqip.*': these are build-time blur-placeholder
-      # metadata read from disk by lib/content.ts; never fetched over the
-      # network. No reason to ship them to R2.
+      # Behaviour parity with scripts/upload-images.ts:
+      # - whitelist image extensions only (skip lqip.json + any other
+      #   non-image build artefacts)
+      # - 1-year immutable Cache-Control header so Cloudflare edge can
+      #   cache aggressively (this matches what upload-images.ts wrote
+      #   via PutObject ContentType+CacheControl)
+      # - additive only, no --delete; orphan cleanup stays manual.
       #
-      # No --delete: R2 may contain historical assets that were uploaded
-      # manually before this workflow existed and aren't in the repo. We
-      # additively sync; orphan cleanup is a separate manual step (use the
-      # workflow_dispatch trigger with a one-off --delete run if desired).
+      # The aws CLI infers Content-Type from the file extension via Python's
+      # mimetypes module. .webp / .jpg / .png / .gif are registered. .avif
+      # is registered on Ubuntu 22.04+ runners, but if it ever falls back to
+      # application/octet-stream and that becomes a problem, add an explicit
+      # `--content-type` per-format step.
       - name: Sync productions/
         run: |
           aws s3 sync public/productions/ \
             "s3://${R2_BUCKET}/productions/" \
             --endpoint-url "${R2_ENDPOINT}" \
-            --exclude '*.json' \
+            --exclude '*' \
+            --include '*.jpg' --include '*.jpeg' \
+            --include '*.png' --include '*.webp' \
+            --include '*.gif' --include '*.avif' \
+            --cache-control 'public, max-age=31536000, immutable' \
             --size-only
 
       - name: Sync about/
@@ -61,6 +70,10 @@ jobs:
             aws s3 sync public/about/ \
               "s3://${R2_BUCKET}/about/" \
               --endpoint-url "${R2_ENDPOINT}" \
-              --exclude '*.json' \
+              --exclude '*' \
+              --include '*.jpg' --include '*.jpeg' \
+              --include '*.png' --include '*.webp' \
+              --include '*.gif' --include '*.avif' \
+              --cache-control 'public, max-age=31536000, immutable' \
               --size-only
           fi
