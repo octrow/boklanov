@@ -42,12 +42,12 @@ Decisions taken during implementation (see §8 questions):
 ### ⚠️ Partially implemented / deferred
 
 - ~~**Other content collections (`content/about/`).**~~ ✅ Done — see "Fully implemented" above. Future blog still deferred (no blog content exists in the repo yet).
-- **Auth — production lockdown shipped, auth wiring still TBD.**
-  - `keystatic.config.ts` now exports `showAdminUI` per the official ["Disable Admin UI Routes in Production"](https://keystatic.com/docs/recipes/nextjs-disable-admin-ui-in-production) recipe. Both `app/keystatic/layout.tsx` and `app/api/keystatic/[...params]/route.ts` return 404 in production unless `KEYSTATIC_ENABLE=1` AND `KEYSTATIC_STORAGE` is set to `cloud` or `github`. **Anonymous edits at `/keystatic` are no longer possible on the deployed site.**
-  - Storage `kind` is now env-driven (`KEYSTATIC_STORAGE` ∈ `local | cloud | github`). To turn the editor on in prod, set the appropriate env vars on Vercel and redeploy. No code change needed.
-  - **Two paths to actually enable editing on prod:**
-    - **(recommended) Keystatic Cloud:** sign up at [keystatic.cloud](https://keystatic.cloud) (free ≤ 3 users forever), create a team and project linked to `octrow/boklanov`, then on Vercel set `KEYSTATIC_STORAGE=cloud`, `KEYSTATIC_CLOUD_PROJECT=team/project`, `KEYSTATIC_ENABLE=1`. Roman logs in with email magic-link, no GitHub account needed.
-    - **Self-hosted GitHub mode:** create a GitHub App with `contents: write` per the [GitHub mode docs](https://keystatic.com/docs/github-mode), add credentials to Vercel, set `KEYSTATIC_STORAGE=github`, `KEYSTATIC_GITHUB_REPO=octrow/boklanov`, `KEYSTATIC_ENABLE=1`. Both editors need GitHub accounts.
+- **Auth — Keystatic Cloud, NODE_ENV-gated.**
+  - `keystatic.config.ts` switches storage on `process.env.NODE_ENV`: `cloud` in prod, `local` in dev. Project key `boklanov/boklanov` (set up at https://keystatic.cloud).
+  - Why NODE_ENV and not a custom env var: `keystatic.config.ts` is bundled into BOTH the server route handler AND the client-side admin UI. Next.js only inlines `NEXT_PUBLIC_*` and `NODE_ENV` into the client bundle — any other `process.env.X` becomes `undefined` on the client, which causes a client/server protocol mismatch (the symptom: client thinks it's local mode, server is cloud, every API request 404s as "Not Found" plain text and the UI fails to parse JSON).
+  - `showAdminUI` is now belt-and-suspenders: derived from `storage.kind` itself, no separate flag needed.
+  - **Setup needed on Vercel: nothing.** No env vars. The team/project membership at keystatic.cloud is what controls who can edit.
+  - GitHub mode (self-hosted via a GitHub App) was an alternative path but is not used; Cloud is simpler and gives Roman magic-link auth without a GitHub account.
 - **R2 secrets in GitHub Actions.** Workflow file is committed but the secrets (`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`) need to be present in **GitHub Actions** secrets, not just Vercel env. User to verify / add. Until then, the Action will fail at runtime; behaviour reverts to the existing manual flow (`npm run upload-images`).
 - **`scripts/upload-images.ts` retirement.** Old script is still in the repo and `package.json`. Plan was to delete it once the Action is verified working in prod. Kept as a safety net for now.
 - **Live UAT.** Only build-time smoke test has passed (`next build` → 162 pages). Roman has not yet edited a production through `/keystatic` end-to-end with full round-trip. First in-browser test surfaced two schema gaps (`notionIds`, `status`) — both patched. There may be more nested-key gaps once awards/festivals/press lists are exercised.
