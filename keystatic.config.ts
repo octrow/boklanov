@@ -16,7 +16,7 @@
  *   - swap to { kind: 'github', repo: 'octrow/boklanov' } for prod once a GitHub App is provisioned.
  */
 
-import { config, fields, collection } from '@keystatic/core'
+import { config, fields, collection, singleton } from '@keystatic/core'
 
 // ---------------------------------------------------------------------------
 // Field helpers
@@ -360,5 +360,81 @@ export default config({
         bodyDe: fields.mdx({ label: 'Body (DE)' })
       }
     })
+  },
+  singletons: {
+    aboutRu: aboutSingleton('RU', 'ru'),
+    aboutEn: aboutSingleton('EN', 'en'),
+    aboutDe: aboutSingleton('DE', 'de')
   }
 })
+
+// ---------------------------------------------------------------------------
+// About page singletons — one per locale.
+// Each writes content/about/<locale>.yaml + content/about/<locale>.mdx.
+// ---------------------------------------------------------------------------
+
+function aboutSingleton(label: string, locale: 'ru' | 'en' | 'de') {
+  return singleton({
+    label: `About — ${label}`,
+    path: `content/about/${locale}`,
+    format: { data: 'yaml', contentField: 'body' },
+    schema: {
+      portrait: fields.object(
+        {
+          src: fields.image({
+            label: 'Portrait image',
+            directory: 'public/about',
+            publicPath: '/about/'
+          }),
+          credit: fields.text({ label: 'Credit' })
+        },
+        { label: 'Portrait' }
+      ),
+      photos: fields.array(
+        fields.object({
+          src: fields.image({
+            label: 'Photo',
+            directory: 'public/about',
+            publicPath: '/about/'
+          }),
+          credit: fields.text({ label: 'Credit' })
+        }),
+        {
+          label: 'Photos',
+          itemLabel: (p) => p.fields.credit.value || 'photo'
+        }
+      ),
+      milestones: fields.array(
+        fields.object({
+          year: fields.integer({
+            label: 'Year',
+            validation: { isRequired: false }
+          }),
+          label: fields.text({ label: 'Label', multiline: true })
+        }),
+        {
+          label: 'Milestones',
+          itemLabel: (p) => `${p.fields.year.value ?? '—'} ${p.fields.label.value}`
+        }
+      ),
+      marginalia: fields.array(fields.text({ label: 'Note' }), {
+        label: 'Marginalia',
+        itemLabel: (p) => p.value || '—'
+      }),
+      lineage: fields.array(
+        fields.object({
+          key: fields.text({ label: 'Key (slug)' }),
+          name: fields.text({ label: 'Name' }),
+          role: fields.text({ label: 'Role' }),
+          institution: fields.text({ label: 'Institution' }),
+          note: fields.text({ label: 'Note', multiline: true })
+        }),
+        {
+          label: 'Lineage',
+          itemLabel: (p) => p.fields.name.value || 'entry'
+        }
+      ),
+      body: fields.mdx({ label: 'Bio' })
+    }
+  })
+}

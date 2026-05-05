@@ -57,10 +57,14 @@ function loadAbout(locale: Locale): {
     if (fs.existsSync(yamlPath)) {
       const data =
         (parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as AboutFrontmatter
+      const mdxPath = path.join(ABOUT_DIR, `${lang}.mdx`)
       const mdPath = path.join(ABOUT_DIR, `${lang}.md`)
-      const content = fs.existsSync(mdPath)
-        ? fs.readFileSync(mdPath, 'utf8')
-        : ''
+      const bodyPath = fs.existsSync(mdxPath)
+        ? mdxPath
+        : fs.existsSync(mdPath)
+          ? mdPath
+          : null
+      const content = bodyPath ? fs.readFileSync(bodyPath, 'utf8') : ''
       const paragraphs = content
         .split(/\n{2,}/)
         .map((s) => s.trim())
