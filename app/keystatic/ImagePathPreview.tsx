@@ -12,7 +12,8 @@
  *
  * A MutationObserver picks up Keystatic's array re-renders (gallery
  * add/remove/reorder). In development the upload route writes to public/;
- * in production it uploads to Cloudflare R2 (R2_* env vars in Vercel).
+ * in production it commits the file to the GitHub repo (Vercel rebuilds and
+ * the image becomes visible after the deploy finishes).
  */
 
 import { useEffect } from 'react'
@@ -64,16 +65,23 @@ function setReactInputValue(input: HTMLInputElement, value: string) {
   input.dispatchEvent(new Event('change', { bubbles: true }))
 }
 
-async function uploadFile(file: File, directory: string): Promise<string> {
+async function uploadFile(
+  file: File,
+  directory: string
+): Promise<{ src: string; deferred: boolean }> {
   const fd = new FormData()
   fd.append('file', file)
   fd.append('directory', directory)
   const res = await fetch('/api/keystatic-asset', { method: 'POST', body: fd })
-  const json = (await res.json()) as { src?: string; error?: string }
+  const json = (await res.json()) as {
+    src?: string
+    error?: string
+    deferred?: boolean
+  }
   if (!res.ok || !json.src) {
     throw new Error(json.error || `upload failed (${res.status})`)
   }
-  return json.src
+  return { src: json.src, deferred: !!json.deferred }
 }
 
 function buildAddon(input: HTMLInputElement): HTMLElement {
@@ -153,9 +161,14 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
     status.textContent = `Uploading ${file.name}…`
     status.style.color = '#71717a'
     try {
-      const src = await uploadFile(file, dir)
+      const { src, deferred } = await uploadFile(file, dir)
       setReactInputValue(input, src)
-      status.textContent = `Saved to ${src}`
+      // Deferred = production GitHub commit; image is committed to the repo
+      // but only visible on the live site after Vercel finishes redeploying.
+      // The local preview thumbnail will also stay blank until then.
+      status.textContent = deferred
+        ? `Committed to repo at public${src} — visible after the next deploy (~1–2 min)`
+        : `Saved to ${src}`
       status.style.color = '#15803d'
     } catch (err) {
       status.textContent = (err as Error).message
