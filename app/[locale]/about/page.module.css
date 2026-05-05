@@ -29,6 +29,27 @@
   border-bottom: 1px solid var(--rule);
 }
 
+/* ── Portrait ────────────────────────────────────────────────────────── */
+
+.portrait {
+  margin: 0 0 var(--space-7);
+  max-width: var(--max-width-prose);
+}
+
+.portraitImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portraitCredit {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-faint);
+  margin-top: var(--space-2);
+}
+
 /* ── Bio block ───────────────────────────────────────────────────────── */
 
 /* No max-width here — Marginalia component handles the 65ch prose column.

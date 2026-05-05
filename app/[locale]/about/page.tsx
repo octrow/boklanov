@@ -193,7 +193,11 @@ export default async function AboutPage({
   const tHome = await getTranslations('home')
 
   const { frontmatter, paragraphs, deForthcoming } = loadAbout(locale)
-  const { milestones, lineage, marginalia, photos } = frontmatter
+  const { portrait, milestones, lineage, marginalia, photos } = frontmatter
+  // Keystatic allows saving a photo item without selecting a file, which
+  // writes `- {}` to the YAML. Filter these out so no invisible img renders.
+  const validPhotos = photos?.filter(p => p.src) ?? []
+  const portraitUrl = cdnUrl(portrait?.src)
 
   // First paragraph is the lead (displayed in Lora); the rest are body.
   const [leadParagraph, ...bodyParagraphs] = paragraphs
@@ -207,6 +211,22 @@ export default async function AboutPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <h1 className={styles.heading}>{t('about')}</h1>
+
+      {portraitUrl && (
+        <figure className={styles.portrait}>
+          <img
+            className={styles.portraitImg}
+            src={portraitUrl}
+            alt={portrait?.credit ?? 'Roman Boklanov'}
+            loading='eager'
+          />
+          {portrait?.credit && (
+            <figcaption className={styles.portraitCredit}>
+              {portrait.credit}
+            </figcaption>
+          )}
+        </figure>
+      )}
 
       {/* Bio prose — DA-7.6.A: Marginalia grid at ≥1024px.
           DE forthcoming: annotate lead paragraph; suppress RU margin notes. */}
@@ -243,17 +263,17 @@ export default async function AboutPage({
       </section>
 
       {/* Photos of Roman */}
-      {photos && photos.length > 0 && (
+      {validPhotos.length > 0 && (
         <section className={styles.photosSection}>
           <div className={styles.photosGrid}>
-            {photos.map((photo, i) => (
+            {validPhotos.map((photo, i) => (
               <SpecimenPlate
                 key={i}
                 src={cdnUrl(photo.src)!}
                 alt={photo.credit ?? 'Roman Boklanov'}
                 credit={photo.credit}
                 plateNumber={i + 1}
-                total={photos.length}
+                total={validPhotos.length}
               />
             ))}
           </div>

@@ -16,7 +16,7 @@ export default function KeystaticLayout({
 }) {
   if (!showAdminUI) notFound()
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body style={{ margin: 0 }}>
         <KeystaticApp />
         {children}

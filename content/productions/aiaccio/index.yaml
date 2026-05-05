@@ -19,7 +19,7 @@ synopsis:
     Eines Tages kommt große Liebe in eine freundliche Zirkusfamilie, und mit ihr
     die Angst, sie zu verlieren. Diese zarte Geschichte wird bis ins Herz
     dringen. Und wer weiß, vielleicht bleibt sie für immer dort!
-tagline: {}
+tagline: { }
 directorsNote:
   ru: >-
     Кто-то сомневался в существовании Джипси и Айяччо. А кто-то уверяет, что в
@@ -171,45 +171,152 @@ credits:
     - role: Mitwirkende
       name: Морозов Максим
       url: https://puppets.ru/pers/51
-poster: {}
-productionsPhoto: {}
-featuredPhoto: {}
+poster:
+  src: /productions/aiaccio/poster.jpg
+  credit: null
+productionsPhoto: { }
+featuredPhoto: { }
 gallery:
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
-  - caption: {}
+  - src: /productions/aiaccio/photo_0029_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0059_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0068_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0075_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0082_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0119_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0127_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0137_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0154_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0171_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0040_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0061_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0071_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0093_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0118_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0122_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0132_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0146_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0158_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_0172_result.webp
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
+  - src: /productions/aiaccio/photo_2022-10-27_14-40-46.jpg
+    credit: null
+    caption:
+      ru: null
+      en: null
+      de: null
 videos:
   - provider: youtube
     id: dmqRNwipzmw
-awards: []
-festivals: []
-press: []
-externalLinks: []
+awards: [ ]
+festivals: [ ]
+press: [ ]
+externalLinks: [ ]
 bookingCta: true
-bookingCtaLabel: {}
+bookingCtaLabel: { }
 featured: true
 listOrder: 3
 tags:
   - family show
   - roman boklanov
   - theater
-tour: []
-runs: []
+tour: [ ]
+runs: [ ]
