@@ -163,7 +163,7 @@ export default config({
             }),
             credit: fields.text({ label: 'Photographer credit' })
           },
-          { label: 'Poster' }
+          { label: 'Poster', layout: [8, 4] }
         ),
 
         productionsPhoto: fields.object(
@@ -174,7 +174,7 @@ export default config({
             }),
             credit: fields.text({ label: 'Credit' })
           },
-          { label: 'Productions list cover' }
+          { label: 'Productions list cover', layout: [8, 4] }
         ),
 
         featuredPhoto: fields.object(
@@ -185,7 +185,7 @@ export default config({
             }),
             credit: fields.text({ label: 'Credit' })
           },
-          { label: 'Featured strip cover' }
+          { label: 'Featured strip cover', layout: [8, 4] }
         ),
 
         gallery: fields.array(
@@ -250,15 +250,25 @@ export default config({
               validation: { isRequired: false }
             })
           },
-          { label: 'Theatre' }
+          // layout: name/shortName/city span full width (l10n sub-grids);
+          // country/url/year share a single row at 1/3 each.
+          { label: 'Theatre', layout: [12, 12, 12, 4, 4, 4] }
         ),
 
         year: fields.integer({
           label: 'Premiere year',
+          description:
+            'Numeric year used for sort and display. Distinct from the per-locale free-text date below.',
           validation: { isRequired: false, min: 1900, max: 2100 }
         }),
+        // Kept as l10n free text (not fields.date) so fuzzy values like
+        // "весна 2021" / "Spring 2021" remain expressible. Numeric `year`
+        // above carries the structured value for sort.
         premiereDate: l10nOpt('Premiere date (free text)'),
-        ticketsUrl: fields.url({ label: 'Tickets URL' }),
+        ticketsUrl: fields.url({
+          label: 'Tickets URL',
+          description: 'Public ticketing page if one exists. Must include https://'
+        }),
         durationMin: fields.integer({
           label: 'Duration (minutes)',
           description: 'Performance length including intermission',
@@ -301,10 +311,19 @@ export default config({
         }),
         tags: fields.array(fields.text({ label: 'Tag' }), {
           label: 'Tags',
+          description:
+            'Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).',
           itemLabel: (p) => p.value || 'tag'
         }),
 
         // === Credits ===
+        // Three parallel arrays (ru/en/de) instead of one structured array
+        // with role-key + per-locale labels. Reviewed and kept: role labels
+        // here are full Russian phrases ("Режиссёр, автор инсценировки"),
+        // not slugs — there's no closed enum to translate from. Unifying
+        // would force every editor to maintain a translation table for
+        // ad-hoc role strings, which is more work than typing the line in
+        // each locale. Revisit only if a closed role taxonomy emerges.
         credits: fields.object(
           {
             ru: fields.array(
@@ -344,10 +363,20 @@ export default config({
               }
             )
           },
-          { label: 'Credits' }
+          {
+            label: 'Credits',
+            description:
+              'Cast & crew per locale. Each locale is independent — translate role + name in place.'
+          }
         ),
 
         // === Recognition ===
+        // Awards are scoped to the production, not to a person — no
+        // `recipient` field. If a future award singles out one performer
+        // (e.g. "Best male performance to Maksim Morozov"), record it in
+        // `category` ("Best male performance — Maksim Morozov"). Adding a
+        // proper recipient relationship is parked under Tier 3 (people
+        // collection).
         awards: fields.array(
           fields.object({
             name: l10n('Award name'),
@@ -361,6 +390,8 @@ export default config({
           }),
           {
             label: 'Awards',
+            description:
+              'Wins or nominations. Use Festivals for participation without an award.',
             itemLabel: (p) => p.fields.name.fields.ru.value || 'award'
           }
         ),
@@ -377,6 +408,8 @@ export default config({
           }),
           {
             label: 'Festivals',
+            description:
+              'Festival selections / programmes the production was part of (without an award).',
             itemLabel: (p) => p.fields.name.fields.ru.value || 'festival'
           }
         ),
@@ -386,9 +419,12 @@ export default config({
             title: l10n('Headline'),
             url: fields.url({ label: 'URL' }),
             outlet: fields.text({ label: 'Outlet' }),
-            // Stays as text: ~10 entries have language: null. fields.select
-            // requires defaultValue and rejects literal null in YAML. Backfill
-            // the nulls (or strip the key) before promoting to select.
+            // Stays as text: previously documented as "~10 null entries" but
+            // current audit (2026-05-06) shows the key is unused (0 set / 85
+            // missing). Promotion to select is technically safe but would
+            // silent-fill the default on every press item's first save. Keep
+            // as text until at least one press entry actually carries a
+            // language value.
             language: fields.text({
               label: 'Language',
               description: 'ru / en / de'
@@ -396,6 +432,8 @@ export default config({
           }),
           {
             label: 'Press',
+            description:
+              'Reviews and interviews. Each item is one publication — outlet name + headline + link.',
             itemLabel: (p) => p.fields.title.fields.ru.value || 'press'
           }
         ),
@@ -407,6 +445,8 @@ export default config({
           }),
           {
             label: 'External links',
+            description:
+              'Anything that doesn’t fit Press / Awards / Festivals — partner pages, behind-the-scenes posts, etc.',
             itemLabel: (p) => p.fields.label.fields.ru.value || 'link'
           }
         ),
@@ -434,18 +474,29 @@ export default config({
           }),
           {
             label: 'Runs',
+            description:
+              'Venue history — where the production has been performed and roughly how many times.',
             itemLabel: (p) => p.fields.venue.fields.ru.value || 'run'
           }
         ),
 
         // === Booking CTA ===
+        // The three CTA fields are NOT wrapped in fields.conditional yet —
+        // doing so reshapes YAML (introduces discriminant/value keys) and
+        // would force a migration across all 54 entries. Tracked under
+        // Tier 2 in KEYSTATIC_IMPROVEMENT_PLAN.md. For now the label/url
+        // fields are simply ignored at render time when the checkbox is off.
         bookingCta: fields.checkbox({
           label: 'Show «booking» CTA',
+          description:
+            'When off, the production page hides the booking call-to-action — label/URL below are ignored.',
           defaultValue: true
         }),
         bookingCtaLabel: l10nOpt('Booking CTA label'),
         bookingCtaUrl: fields.url({
-          label: 'Booking CTA URL (overrides mailto)'
+          label: 'Booking CTA URL (overrides mailto)',
+          description:
+            'Optional. Leave blank to fall back to the default mailto link.'
         }),
 
         // === Site placement ===
@@ -465,16 +516,34 @@ export default config({
         }),
 
         // === Tech / press assets ===
-        techRider: fields.url({ label: 'Tech rider PDF URL' }),
-        pressKit: fields.url({ label: 'Press kit PDF URL' }),
+        // 100% null across all 54 entries as of 2026-05-06. Kept as schema
+        // affordances pending a "drop or wire" decision (see plan). Not
+        // referenced by any renderer today, so saving a value would not
+        // surface anywhere on the live site without further work.
+        techRider: fields.url({
+          label: 'Tech rider PDF URL',
+          description: 'External link to a PDF tech rider. Currently not rendered on the public site.'
+        }),
+        pressKit: fields.url({
+          label: 'Press kit PDF URL',
+          description: 'External link to a PDF press kit. Currently not rendered on the public site.'
+        }),
 
         // === Legacy Notion sync IDs — kept so existing YAML round-trips ===
+        // Do NOT switch to fields.ignored() — that erases the values on save
+        // and we still need them for any future cross-reference back to the
+        // pre-migration Notion DB.
         notionIds: fields.object(
           {
             ru: fields.text({ label: 'Notion ID (RU)' }),
             en: fields.text({ label: 'Notion ID (EN)' })
           },
-          { label: 'Notion IDs (legacy)' }
+          {
+            label: 'Notion IDs (legacy)',
+            description:
+              'From the original Notion-based CMS. Read-only in spirit — leave as-is unless re-migrating.',
+            layout: [6, 6]
+          }
         )
       }
     })
