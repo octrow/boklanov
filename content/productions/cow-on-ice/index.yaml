@@ -14,7 +14,9 @@ poster:
 productionsPhoto:
   src: /productions/cow-on-ice/3-Bremen.webp
 featuredPhoto: {}
-gallery: []
+gallery:
+  - src: /uploads/--------------.webp
+    caption: {}
 videos: []
 theatre:
   name:
