@@ -258,10 +258,30 @@ for (const loc of ['ru', 'en', 'de'] as const) migrateAbout(loc)
 
 ### Pre-flight checklist
 
-Before running any migration:
+Before running any migration **or** promoting a free-text field to a
+`fields.select` / `fields.multiselect` / similar enum-shaped field:
 
 - [ ] `git status` clean (or work on a branch).
 - [ ] Tag the pre-migration state: `git tag pre-keystatic-<change>-$(date +%Y%m%d)`.
+- [ ] **Audit for `null` presence**, not just unique non-null values.
+      Keystatic select rejects literal `null` in YAML — the field will
+      crash the client even if every other entry is fine. Use:
+
+      ```python
+      python3 -c "
+      import yaml, glob
+      null_entries = []
+      for f in glob.glob('content/productions/*/index.yaml'):
+          d = yaml.safe_load(open(f)) or {}
+          # ↓ adjust dotted path for the field you're auditing
+          v = d.get('press') or []
+          if any(p.get('language') is None for p in v):
+              null_entries.append(f.split('/')[-2])
+      print(f'{len(null_entries)} entries with null:', null_entries)
+      "
+      ```
+
+      Backfill or strip the null keys **before** promoting the schema.
 - [ ] Snapshot diff a single entry by hand to confirm the transform is correct.
 - [ ] Dry-run the script with writes commented out, log the diff.
 
@@ -306,6 +326,9 @@ gets messy.
 | 2026-05-06 | Keep `premiereDate` as free-text l10n, not `fields.date` | Fuzzy dates ("весна 2021") not representable as ISO |
 | 2026-05-06 | `country` and `ageRating` stay `fields.text`, defer to Tier 2 | `fields.select` requires `defaultValue` and has no optional/null mode. 8 entries have `country: null`, ~25 have `ageRating: null` — converting now would silently default-fill them on first save. Migrate the nulls first, then switch to select. |
 | 2026-05-06 | `bookingCta` / `featured` not yet wrapped in `fields.conditional` | Conditional reshapes YAML (introduces `discriminant`/`value` keys) — Tier 2 with migration script |
+| 2026-05-06 | `press[].language` reverted to `fields.text` (regression) | 10 entries have literal `language: null` in YAML; select rejects null → client crash on edit page. Same null-mismatch class as country/ageRating. Backfill before re-promoting. |
+| 2026-05-06 | `entryLayout: 'content'` kept on productions despite no `contentField` | Keystatic docs say it's a no-op without `contentField`, but empirically the wider editor canvas DOES render — and removing it left forms squished into the left half of the viewport. Restored as a load-bearing config until upgrades break it. |
+| 2026-05-06 (user) | `role` re-promoted to `fields.multiselect` (commit 6390e34) | Editor decided the closed checklist UX is worth the trade-off for the role field specifically — the role list is small and stable. `form` and `lineage` stay free-text. |
 
 ---
 
@@ -386,3 +409,65 @@ so the schema-only change is safe.
 Reasoning for the asymmetry: status is a system-level enum (the frontend
 might one day filter by it); role / form / lineage are editorial taxonomies
 that grow organically.
+
+## Shipped — 2026-05-06 (Tier 1 hotfix — unblock editor)
+
+Two regressions surfaced when opening
+`/keystatic/collection/productions/item/bury-me-behind-the-baseboard`:
+
+1. **Client crashed on the production.** 10 entries have
+   `press[].language: null` literally in YAML (the field was set up but never
+   filled). My Tier 1 PR had promoted that field to `fields.select` —
+   Keystatic select rejects null and the entire client SPA failed to render.
+   Reverted `press[].language` to `fields.text` with a comment noting the
+   nulls need backfilling before any future re-promotion.
+
+2. **Editor canvas squished into the left half of the viewport, right side
+   empty.** My second Tier 1 PR (field reorder) had removed
+   `entryLayout: 'content'` from the productions collection on the basis
+   that Keystatic docs say it requires `format.contentField`. Empirically
+   the wider canvas does still render without one. Restored, with a comment
+   explaining the docs discrepancy and the migration path
+   (`format.contentField: 'bodyRu'` + rename `bodyRu.mdx` → `index.mdx`
+   across every entry) if a future Keystatic upgrade strict-enforces.
+
+Also captured in this hotfix: user's own commit (6390e34) putting `role`
+back to `fields.multiselect` — small stable role list earned the
+closed-checklist treatment; `form` / `lineage` stay free-text.
+
+## Lessons learned
+
+These apply to every future schema change that touches an enum-style field.
+
+### Audit for null *presence*, not just unique non-null values
+
+The Tier 1 PR audit looked like this:
+
+```python
+seen = sorted({d.get('press', {}).get('language') for f in ...} - {None})
+# returned [], so press.language looked safe to convert to select
+```
+
+It excluded `None` from the result set, masking the fact that 10 entries
+had literal `language: null` in YAML. When promoted to `fields.select`,
+those entries crashed the editor on load. Correct audit:
+
+```python
+seen_or_null = {d.get('press', {}).get('language') for f in ...}
+# returned {None}; flag for backfill before any select conversion
+```
+
+Codified in the Migration Playbook below as a pre-flight requirement.
+
+### Keystatic docs vs. runtime behaviour can drift
+
+`entryLayout: 'content'` was documented as requiring `format.contentField`,
+but Keystatic still renders a wider editor canvas without one. Never
+trust docs alone for layout-affecting config — verify visually in
+`/keystatic` against the same entry before merging.
+
+### `fields.multiselect` is closed-enum only
+
+There is no "creatable" / "tags-mode" multiselect in Keystatic. If editors
+need to coin new values, the field must be `fields.array(fields.text(...))`.
+Not negotiable; do not propose multiselect for an open taxonomy again.
