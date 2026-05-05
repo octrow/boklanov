@@ -6,21 +6,12 @@ on:
     paths:
       - 'public/productions/**'
       - 'public/about/**'
-  workflow_dispatch: {} # Allow manual re-sync from the Actions tab
+  workflow_dispatch: {}
 
 # Avoid two pushes racing on the same paths.
 concurrency:
   group: r2-sync
   cancel-in-progress: false
-
-env:
-  # R2_BUCKET secret is optional — falls back to the default bucket name
-  # used by scripts/upload-images.ts so a missing secret doesn't break sync.
-  R2_BUCKET: ${{ secrets.R2_BUCKET || 'boklanov-content' }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: auto
-  R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
 jobs:
   sync:
@@ -28,52 +19,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify required secrets
-        run: |
-          : "${AWS_ACCESS_KEY_ID:?R2_ACCESS_KEY_ID secret is missing}"
-          : "${AWS_SECRET_ACCESS_KEY:?R2_SECRET_ACCESS_KEY secret is missing}"
-          if [ "$R2_ENDPOINT" = "https://.r2.cloudflarestorage.com" ]; then
-            echo "::error::R2_ACCOUNT_ID secret is missing"
-            exit 1
-          fi
-          echo "Bucket: $R2_BUCKET"
-          echo "Endpoint: $R2_ENDPOINT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-      # Behaviour parity with scripts/upload-images.ts:
-      # - whitelist image extensions only (skip lqip.json + any other
-      #   non-image build artefacts)
-      # - 1-year immutable Cache-Control header so Cloudflare edge can
-      #   cache aggressively (this matches what upload-images.ts wrote
-      #   via PutObject ContentType+CacheControl)
-      # - additive only, no --delete; orphan cleanup stays manual.
-      #
-      # The aws CLI infers Content-Type from the file extension via Python's
-      # mimetypes module. .webp / .jpg / .png / .gif are registered. .avif
-      # is registered on Ubuntu 22.04+ runners, but if it ever falls back to
-      # application/octet-stream and that becomes a problem, add an explicit
-      # `--content-type` per-format step.
-      - name: Sync productions/
-        run: |
-          aws s3 sync public/productions/ \
-            "s3://${R2_BUCKET}/productions/" \
-            --endpoint-url "${R2_ENDPOINT}" \
-            --exclude '*' \
-            --include '*.jpg' --include '*.jpeg' \
-            --include '*.png' --include '*.webp' \
-            --include '*.gif' --include '*.avif' \
-            --cache-control 'public, max-age=31536000, immutable' \
-            --size-only
+      - run: npm ci
 
-      - name: Sync about/
-        run: |
-          if [ -d public/about ]; then
-            aws s3 sync public/about/ \
-              "s3://${R2_BUCKET}/about/" \
-              --endpoint-url "${R2_ENDPOINT}" \
-              --exclude '*' \
-              --include '*.jpg' --include '*.jpeg' \
-              --include '*.png' --include '*.webp' \
-              --include '*.gif' --include '*.avif' \
-              --cache-control 'public, max-age=31536000, immutable' \
-              --size-only
-          fi
+      - name: Sync images to R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET || 'boklanov-content' }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: npm run upload-images
