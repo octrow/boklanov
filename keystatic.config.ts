@@ -60,7 +60,10 @@ const storage =
         } as const)
       : ({ kind: 'local' } as const)
 
-const cloudProject = process.env.KEYSTATIC_CLOUD_PROJECT
+// Cloud project key from keystatic.cloud — overridable via env if it ever
+// changes. Set on https://keystatic.cloud → team `boklanov` → project `boklanov`.
+const cloudProject =
+  process.env.KEYSTATIC_CLOUD_PROJECT ?? 'boklanov/boklanov'
 
 // ---------------------------------------------------------------------------
 // Field helpers
@@ -91,9 +94,7 @@ const l10nOpt = l10n
 
 export default config({
   storage,
-  ...(cloudProject
-    ? { cloud: { project: cloudProject as `${string}/${string}` } }
-    : {}),
+  cloud: { project: cloudProject as `${string}/${string}` },
   ui: {
     brand: { name: 'boklanov.com' }
   },
