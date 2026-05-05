@@ -1,0 +1,30 @@
+/*
+ * keystatic-shim.css — UI overrides for the bundled Keystatic admin app.
+ *
+ * Keystatic ships its own component library; we can't easily theme it through
+ * its API, so a small handful of CSS overrides patch the worst editor UX
+ * issues. Loaded only on /keystatic/* via app/keystatic/layout.tsx.
+ *
+ * Fragility note: the selector targets Keystatic's internal DOM structure
+ * (`div > div > div > input[data-adornment]`). After every Keystatic upgrade,
+ * eyeball the editor on a wide viewport — if standalone text fields revert
+ * to full-canvas width, the internal layout changed and this rule needs an
+ * update. Long-term: replace with explicit `layout: [4]` props per field in
+ * keystatic.config.ts (more verbose but upgrade-resilient).
+ */
+
+@media (min-width: 1024px) {
+  /*
+   * Cap top-level standalone text fields at ~1/3 of the form width so a
+   * single-line slug or year doesn't stretch across the whole canvas.
+   *
+   * The :has() selector finds the Keystatic field-slot div that wraps an
+   * <input data-adornment>. The :not([role="group"] *) excludes inputs
+   * inside l10n sub-field grids (which already have their own narrow
+   * layout via fields.object({ layout: [4, 4, 4] })).
+   */
+  #item-edit-form
+    div:has(> div > div > input[data-adornment]):not([role='group'] *) {
+    max-width: 33.333%;
+  }
+}
