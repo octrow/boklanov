@@ -232,11 +232,19 @@ function isImagePathInput(input: HTMLInputElement): boolean {
 
 const ROW_THUMB_MARK = 'data-image-row-thumb'
 
-/** Inject a small thumbnail into each collapsed gallery / array row whose
- *  aria-label is an image filename. The src is inferred from the URL
- *  (collection/<col>/item/<slug>) plus the label filename — works for
- *  productions galleries because every gallery item lives under
- *  `public/<col>/<slug>/`. */
+/** Inject a small thumbnail into each collapsed array-of-images row whose
+ *  aria-label looks like an image filename. The src is inferred from the
+ *  URL (collection/<col>/item/<slug>) plus the label filename — works
+ *  because every productions gallery image lives under `/<col>/<slug>/`.
+ *
+ *  DOM-coupling note: Keystatic's array UI is built on react-aria
+ *  GridList, so each row carries `role="row"` and the itemLabel returned
+ *  from keystatic.config.ts surfaces as `aria-label`. The internal class
+ *  names ("kui:ListViewItem-grid" in older builds) are NOT a stable API
+ *  — earlier versions of this scanner relied on them and silently broke
+ *  when Keystatic's bundle reshuffled. Now we lean only on
+ *  `[role="row"][aria-label]` and pick the first element-children
+ *  container we can find for insertion. */
 function scanRows(root: ParentNode) {
   if (typeof window === 'undefined') return
   const m = window.location.pathname.match(
@@ -254,10 +262,27 @@ function scanRows(root: ParentNode) {
       return
     }
     const src = dirPrefix + label
-    const grid = row.querySelector<HTMLElement>('.kui\\:ListViewItem-grid')
-      ?? row.firstElementChild as HTMLElement | null
-    if (!grid) return
-    let thumb = grid.querySelector<HTMLElement>(`[${ROW_THUMB_MARK}="1"]`)
+
+    // Find an insertion container: prefer the deepest single-child wrapper
+    // that's also a flex/grid layout (the row's content cell). Fall back
+    // to the row itself.
+    let host: HTMLElement = row
+    {
+      let cur: HTMLElement | null = row.firstElementChild as HTMLElement | null
+      while (cur) {
+        const cs = window.getComputedStyle(cur)
+        if (cs.display === 'flex' || cs.display === 'grid' || cs.display === 'inline-flex') {
+          host = cur
+          break
+        }
+        cur = cur.firstElementChild as HTMLElement | null
+      }
+      if (host === row && row.firstElementChild instanceof HTMLElement) {
+        host = row.firstElementChild
+      }
+    }
+
+    let thumb = host.querySelector<HTMLElement>(`:scope > [${ROW_THUMB_MARK}="1"]`)
     if (!thumb) {
       thumb = document.createElement('span')
       thumb.setAttribute(ROW_THUMB_MARK, '1')
@@ -268,16 +293,18 @@ function scanRows(root: ParentNode) {
         'height:36px',
         'margin-right:10px',
         'align-self:center',
-        'border:1px solid #d4d4d8',
+        'border:1px solid var(--kui-color-border-neutral, #d4d4d8)',
         'border-radius:3px',
-        'background:#fafafa center/cover no-repeat'
+        'background:var(--kui-color-background-surface, #fafafa) center/cover no-repeat',
+        'pointer-events:none'
       ].join(';')
-      // Insert as second child — after the drag handle, before the label.
-      const dragHandle = grid.firstElementChild
-      if (dragHandle && dragHandle.nextSibling) {
-        grid.insertBefore(thumb, dragHandle.nextSibling)
+      // Insert as second child so the drag handle / focus-anchor stays
+      // first; if there's no first child, just prepend.
+      const first = host.firstElementChild
+      if (first && first.nextSibling) {
+        host.insertBefore(thumb, first.nextSibling)
       } else {
-        grid.insertBefore(thumb, grid.firstChild)
+        host.insertBefore(thumb, host.firstChild)
       }
     }
     if (thumb.dataset.src !== src) {
