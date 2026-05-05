@@ -11,8 +11,8 @@
  *   2. a 240×180 preview thumbnail on the next line
  *
  * A MutationObserver picks up Keystatic's array re-renders (gallery
- * add/remove/reorder). The upload route is dev-only; in cloud/prod the
- * Keystatic admin isn't reachable from the public site anyway.
+ * add/remove/reorder). In development the upload route writes to public/;
+ * in production it uploads to Cloudflare R2 (R2_* env vars in Vercel).
  */
 
 import { useEffect } from 'react'
