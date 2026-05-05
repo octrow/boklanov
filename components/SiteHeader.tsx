@@ -181,6 +181,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
                 {loc.toUpperCase()}
               </Link>
             ))}
+            <ThemeToggle />
           </div>
         </nav>
       )}
