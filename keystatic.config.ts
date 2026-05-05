@@ -88,6 +88,15 @@ const STATUS_OPTIONS = [
   { label: 'On tour', value: 'on-tour' }
 ] as const
 
+const ROLE_OPTIONS = [
+  { label: 'Director', value: 'director' },
+  { label: 'Co-director', value: 'co-director' },
+  { label: 'Performer', value: 'performer' },
+  { label: 'Art director', value: 'art-director' },
+  { label: 'Playwright', value: 'playwright' },
+  { label: 'Producer', value: 'producer' }
+] as const
+
 // ---------------------------------------------------------------------------
 // Collections
 // ---------------------------------------------------------------------------
@@ -272,10 +281,10 @@ export default config({
         //            playwright, producer
         //   form:    solo, puppet, theater, family, festival, reading
         //   lineage: btk, kudashov, rgisi
-        role: fields.array(fields.text({ label: 'Role tag' }), {
+        role: fields.multiselect({
           label: "Roman's role(s)",
-          description: 'Roman’s contribution to this production. Add any role term you need.',
-          itemLabel: (p) => p.value || 'role'
+          description: 'Roman’s contribution to this production',
+          options: ROLE_OPTIONS
         }),
         form: fields.array(fields.text({ label: 'Form tag' }), {
           label: 'Form',
