@@ -37,7 +37,7 @@ theatre:
     ru: null
     en: null
     de: null
-  country: ""
+  country: null
   url: null
 
 # === Даты ===

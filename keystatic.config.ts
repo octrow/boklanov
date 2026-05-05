@@ -60,7 +60,8 @@ const cloudProject = 'boklanov/boklanov' as const
 // ---------------------------------------------------------------------------
 
 /** Always-object L10n string — three locales, all optional. Migration normalised
- *  bare-string YAML values to this shape so Keystatic can round-trip them. */
+ *  bare-string YAML values to this shape so Keystatic can round-trip them.
+ *  layout: [4, 4, 4] renders RU/EN/DE side-by-side in a 3-column grid. */
 const l10n = (label: string) =>
   fields.object(
     {
@@ -68,15 +69,46 @@ const l10n = (label: string) =>
       en: fields.text({ label: `${label} — EN` }),
       de: fields.text({ label: `${label} — DE` })
     },
-    { label }
+    { label, layout: [4, 4, 4] }
   )
 
 /** Optional l10n — same shape, different label hint. (Keystatic doesn't have
  *  a runtime "is everything empty" check, so we model these the same.) */
 const l10nOpt = l10n
 
-// role / form kept as free-form text arrays so legacy values that aren't in a
-// fixed enum (e.g. "family") don't fail Keystatic's loader.
+// Enum option lists for multiselects. Every value here is also present in
+// YAML, otherwise existing entries fail to load. Audit before extending:
+//   python3 -c "import yaml,glob;print(sorted({v for f in glob.glob('content/productions/*/index.yaml') for v in (yaml.safe_load(open(f)) or {}).get('role') or []}))"
+//
+// fields.select cannot represent unset/null, so country and ageRating stay
+// as text until their null entries are filled (see KEYSTATIC_IMPROVEMENT_PLAN.md
+// Tier 2).
+
+const ROLE_OPTIONS = [
+  { label: 'Director', value: 'director' },
+  { label: 'Co-director', value: 'co-director' },
+  { label: 'Performer', value: 'performer' },
+  { label: 'Art director', value: 'art-director' },
+  { label: 'Playwright', value: 'playwright' },
+  { label: 'Producer', value: 'producer' }
+] as const
+
+const FORM_OPTIONS = [
+  { label: 'Solo', value: 'solo' },
+  { label: 'Ensemble', value: 'ensemble' },
+  { label: 'Puppet', value: 'puppet' },
+  { label: 'Theater', value: 'theater' },
+  { label: 'Family', value: 'family' },
+  { label: 'Festival', value: 'festival' },
+  { label: 'Immersive', value: 'immersive' },
+  { label: 'Reading', value: 'reading' }
+] as const
+
+const LINEAGE_OPTIONS = [
+  { label: 'BTK (Bolshoi Puppet Theatre)', value: 'btk' },
+  { label: 'Kudashov studio', value: 'kudashov' },
+  { label: 'RGISI', value: 'rgisi' }
+] as const
 
 // ---------------------------------------------------------------------------
 // Collections
@@ -86,7 +118,11 @@ export default config({
   storage,
   cloud: { project: cloudProject as `${string}/${string}` },
   ui: {
-    brand: { name: 'boklanov.com' }
+    brand: { name: 'boklanov.com' },
+    navigation: {
+      Productions: ['productions'],
+      'About page': ['aboutRu', 'aboutEn', 'aboutDe']
+    }
   },
   collections: {
     productions: collection({
@@ -96,7 +132,7 @@ export default config({
       format: { data: 'yaml' },
       entryLayout: 'content',
       previewUrl: '/ru/productions/{slug}',
-      columns: ['slug', 'year'],
+      columns: ['year', 'durationMin', 'status'],
       schema: {
         slug: fields.slug({
           name: {
@@ -117,9 +153,13 @@ export default config({
             name: l10n('Theatre name'),
             shortName: l10nOpt('Short name'),
             city: l10n('City'),
+            // Stays as text: ~8 entries have country: null. fields.select
+            // requires defaultValue and would silently coerce null → default
+            // on first save. Convert to select once those entries are filled
+            // (Tier 2 migration). COUNTRY_OPTIONS preserved for that future work.
             country: fields.text({
               label: 'Country (ISO-2)',
-              description: 'RU / KZ / DE / ES …',
+              description: 'RU / KZ / DE / AT / ES …',
               validation: { isRequired: false, length: { min: 0, max: 3 } }
             }),
             url: fields.url({ label: 'Theatre URL' }),
@@ -148,20 +188,24 @@ export default config({
         }),
         durationMin: fields.integer({
           label: 'Duration (minutes)',
+          description: 'Performance length including intermission',
           validation: { isRequired: false }
         }),
 
-        role: fields.array(fields.text({ label: 'Role tag' }), {
-          label: 'Roman’s role(s)',
-          itemLabel: (p) => p.value || 'role'
+        role: fields.multiselect({
+          label: "Roman's role(s)",
+          description: 'Roman’s contribution to this production',
+          options: ROLE_OPTIONS
         }),
-        form: fields.array(fields.text({ label: 'Form tag' }), {
+        form: fields.multiselect({
           label: 'Form',
-          itemLabel: (p) => p.value || 'form'
+          description: 'Theatrical form / genre tags',
+          options: FORM_OPTIONS
         }),
-        lineage: fields.array(fields.text({ label: 'Lineage tag' }), {
+        lineage: fields.multiselect({
           label: 'Lineage',
-          itemLabel: (p) => p.value || 'tag'
+          description: 'Tradition or school the production traces back to',
+          options: LINEAGE_OPTIONS
         }),
 
         // === Credits ===
@@ -263,11 +307,18 @@ export default config({
 
         videos: fields.array(
           fields.object({
-            provider: fields.text({
+            provider: fields.select({
               label: 'Provider',
-              description: 'youtube | vimeo'
+              options: [
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'Vimeo', value: 'vimeo' }
+              ],
+              defaultValue: 'youtube'
             }),
-            id: fields.text({ label: 'Video ID' })
+            id: fields.text({
+              label: 'Video ID',
+              description: 'Just the ID, not the full URL (e.g. 1GWFJ0jfPq4)'
+            })
           }),
           {
             label: 'Videos',
@@ -314,7 +365,15 @@ export default config({
             title: l10n('Headline'),
             url: fields.url({ label: 'URL' }),
             outlet: fields.text({ label: 'Outlet' }),
-            language: fields.text({ label: 'Language (ru/en/de)' })
+            language: fields.select({
+              label: 'Language',
+              options: [
+                { label: 'Russian', value: 'ru' },
+                { label: 'English', value: 'en' },
+                { label: 'German', value: 'de' }
+              ],
+              defaultValue: 'ru'
+            })
           }),
           {
             label: 'Press',
@@ -347,13 +406,18 @@ export default config({
         }),
 
         // === Placement ===
-        featured: fields.checkbox({ label: 'Show on home featured strip' }),
+        featured: fields.checkbox({
+          label: 'Show on home featured strip',
+          description: 'Surfaces this production on the home page'
+        }),
         featuredOrder: fields.integer({
           label: 'Featured order (1, 2, 3 …)',
+          description: 'Lower numbers appear first. Only used when "Show on home featured strip" is on.',
           validation: { isRequired: false }
         }),
         listOrder: fields.integer({
           label: 'Order in /productions grid',
+          description: 'Lower numbers appear first. Leave blank to fall back to premiere year (newest first).',
           validation: { isRequired: false }
         }),
 
@@ -364,6 +428,7 @@ export default config({
 
         tour: fields.array(l10n('City'), {
           label: 'Tour cities',
+          description: 'Cities where this production has toured (not the premiere venue)',
           itemLabel: (p) => p.fields.ru.value || p.fields.en.value || 'city'
         }),
 
