@@ -104,15 +104,6 @@ export default config({
           }
         }),
 
-        // Legacy Notion sync IDs — kept so existing YAML round-trips.
-        notionIds: fields.object(
-          {
-            ru: fields.text({ label: 'Notion ID (RU)' }),
-            en: fields.text({ label: 'Notion ID (EN)' })
-          },
-          { label: 'Notion IDs (legacy)' }
-        ),
-
         // === Titles & texts ===
         title: l10n('Title'),
         synopsis: l10n('Synopsis'),
@@ -218,10 +209,9 @@ export default config({
         // === Media ===
         poster: fields.object(
           {
-            src: fields.image({
-              label: 'Poster image',
-              directory: 'public/productions/{slug}',
-              publicPath: '/productions/{slug}/'
+            src: fields.text({
+              label: 'Poster image path',
+              description: 'e.g. /productions/bury-me-behind-the-baseboard/poster.jpg'
             }),
             credit: fields.text({ label: 'Photographer credit' })
           },
@@ -230,10 +220,9 @@ export default config({
 
         productionsPhoto: fields.object(
           {
-            src: fields.image({
-              label: 'Cover for /productions card (overrides poster)',
-              directory: 'public/productions/{slug}',
-              publicPath: '/productions/{slug}/'
+            src: fields.text({
+              label: 'Productions list cover path',
+              description: 'Overrides poster on the /productions card. e.g. /productions/{slug}/cover.webp'
             }),
             credit: fields.text({ label: 'Credit' })
           },
@@ -242,11 +231,9 @@ export default config({
 
         featuredPhoto: fields.object(
           {
-            src: fields.image({
-              label:
-                'Cover for home featured strip (overrides productionsPhoto)',
-              directory: 'public/productions/{slug}',
-              publicPath: '/productions/{slug}/'
+            src: fields.text({
+              label: 'Featured strip cover path',
+              description: 'Overrides productionsPhoto on the home featured strip. e.g. /productions/{slug}/featured.webp'
             }),
             credit: fields.text({ label: 'Credit' })
           },
@@ -255,17 +242,21 @@ export default config({
 
         gallery: fields.array(
           fields.object({
-            src: fields.image({
-              label: 'Image',
-              directory: 'public/productions/{slug}',
-              publicPath: '/productions/{slug}/'
+            src: fields.text({
+              label: 'Image path',
+              description: 'e.g. /productions/{slug}/01.jpg'
             }),
             credit: fields.text({ label: 'Credit' }),
             caption: l10nOpt('Caption')
           }),
           {
             label: 'Gallery',
-            itemLabel: (p) => p.fields.credit.value || 'image'
+            itemLabel: (p) => {
+              const src = p.fields.src.value
+              return src
+                ? src.split('/').pop() || src
+                : p.fields.credit.value || 'image'
+            }
           }
         ),
 
@@ -393,6 +384,15 @@ export default config({
             label: 'Runs',
             itemLabel: (p) => p.fields.venue.fields.ru.value || 'run'
           }
+        ),
+
+        // === Legacy Notion sync IDs — kept so existing YAML round-trips ===
+        notionIds: fields.object(
+          {
+            ru: fields.text({ label: 'Notion ID (RU)' }),
+            en: fields.text({ label: 'Notion ID (EN)' })
+          },
+          { label: 'Notion IDs (legacy)' }
         ),
 
         // === Body files (sibling docs — produce bodyRu.mdx / bodyEn.mdx / bodyDe.mdx) ===
