@@ -471,3 +471,48 @@ trust docs alone for layout-affecting config — verify visually in
 There is no "creatable" / "tags-mode" multiselect in Keystatic. If editors
 need to coin new values, the field must be `fields.array(fields.text(...))`.
 Not negotiable; do not propose multiselect for an open taxonomy again.
+
+### Don't conflate *missing* and *null* in audits
+
+Python's `dict.get(key)` returns `None` for both an absent key AND an
+explicit `key: null`. They are NOT equivalent for Keystatic:
+
+- **Missing key** + schema `fields.select({ defaultValue })` → field
+  defaults silently on form load. No crash. Editor save will write the
+  default value into YAML (so a "save without editing" produces a real
+  diff).
+- **Literal `key: null`** + same schema → Keystatic rejects null at parse
+  time → client SPA refuses to render the entry.
+- **Literal `key: ""`** + same schema → same reject as null.
+
+When auditing, distinguish the three. The audit script does this; ad-hoc
+Python one-liners with `.get()` quietly do not.
+
+The hotfix that reverted `press[].language` from select to text was still
+the right call — every press item across every entry is *missing* the
+`language` key, so converting to select would have silently default-filled
+all 41 items on first save. Just not for the reason originally given.
+
+## Pre-flight tooling
+
+`scripts/audit-keystatic-schema.ts` reports per-field nullability,
+cardinality, and select-readiness. Run before any schema change that
+narrows a field type:
+
+```bash
+npm run audit-keystatic            # report only
+npm run audit-keystatic -- --strict # exit 1 if any null/empty mismatches
+```
+
+Output legend:
+
+- `⚠ NULL/EMPTY` — field has literal null or empty-string values; will
+  crash `fields.select`. Backfill before promoting.
+- `✓ select-ready` — low-cardinality, no null/empty mismatches. Safe to
+  consider promotion.
+- `— open taxonomy` — too many distinct values; keep as text array.
+- `— field unused` — no entries have a value; either drop the field or
+  start filling it.
+
+Add new fields to the `PRODUCTION_FIELDS` list at the top of the script
+when they become candidates for promotion.
