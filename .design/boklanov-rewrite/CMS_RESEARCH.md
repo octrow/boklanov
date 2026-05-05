@@ -4,6 +4,79 @@
 > `archive/CMS_RESEARCH_GEMINI.md`. Several earlier claims in this doc
 > were corrected after the cross-check; see §11 for the corrections log.
 
+---
+
+## 0. Implementation status (2026-05-05)
+
+Decisions taken during implementation (see §8 questions):
+
+| # | Question | Decision |
+|---|---|---|
+| Q1 | File-rename tolerance | **Yes, renamed** to `bodyRu.mdx` / `bodyEn.mdx` / `bodyDe.mdx` |
+| Q2 | Primary editing surface | Laptop (mobile is nice-to-have) → **Keystatic** chosen |
+| Q3 | Editor URL | `/keystatic` on the production domain (same Vercel project) |
+| Q4 | Auth | **Local mode** for dev — GitHub/Cloud auth deferred (see "Not yet" below) |
+| Q5 | Drafts (direct-to-main vs `cms/*` PR) | **Direct-to-main** — matches the Obsidian flow which has run without incident since 2026-05-02 |
+| Q6 | `L10nString` shape | Normalised to **always-object** `{ ru, en, de }`; bare-string YAML values rewritten by the migration script |
+| Q7 | R2 secrets | **TBD** — user to confirm whether they're already in GitHub Actions secrets or only in Vercel env |
+| Q8 | Image sync flavour | **§5b** (`aws s3 sync --delete`) — `scripts/upload-images.ts` kept as fallback until the Action is observed working in prod |
+
+### ✅ Fully implemented
+
+- **Keystatic installed + mounted.** `@keystatic/core` + `@keystatic/next` (commit `2edb3e3`).
+  - `app/keystatic/[[...params]]/page.tsx` + own `<html>` layout.
+  - `app/api/keystatic/[...params]/route.ts`.
+  - `middleware.ts` matcher updated to skip `/keystatic` so `next-intl` doesn't redirect it.
+- **`keystatic.config.ts`** — productions collection covering all 36 top-level YAML keys, including `notionIds` and `status` (added after first smoke-test surfaced "Key not allowed" errors). L10n via `fields.object({ ru, en, de })` everywhere — no `discriminant` noise.
+- **Migration script** `scripts/migrate-to-keystatic.ts` — idempotent.
+  - Renamed `body.{ru,en,de}.md` → `bodyRu.mdx` / `bodyEn.mdx` / `bodyDe.mdx` for all 35 entries that had body files (**105 files**).
+  - Normalised bare-string L10n fields (`theatre.{name,shortName,city}`, `awards/festivals[].{name,category,city}`, `press[].title`, `externalLinks[].label`, `runs[].{venue,city,count}`, `tour[]`) to `{ ru, en, de }` objects.
+  - Wrapped scalar `role: 'director'` in arrays. **51 YAMLs** changed.
+- **`lib/content.ts` `readBodyFiles`** patched to read `body{Ru,En,De}.mdx` with a fallback to legacy `body.<locale>.md` so half-migrated checkouts still build.
+- **R2 sync GitHub Action** `.github/workflows/sync-r2.yml` — `aws s3 sync --delete` for `public/productions/` and `public/about/` on push to `main`. Replaces the manual "ping Daniil → `npm run upload-images`" step.
+- **`content/AUTHORING.ru.md`** — dual-mode top-of-doc blurb (Keystatic + Obsidian); body file references updated; the two "написать Daniil" lines (195 and 210) retired. Obsidian section preserved verbatim for power users.
+- **Build passes.** `npm run build` produces 162 prerendered production pages plus the new `/keystatic` and `/api/keystatic/*` routes. Verified in commit `2edb3e3`.
+
+### ⚠️ Partially implemented / deferred
+
+- **Other content collections (`content/about/`, future blog).** The user said "and else" — only `productions` is in the schema today. Adding the `about` singletons (`content/about/{ru,en,de}.yaml` + `.md`) is a 30–60 minute follow-up: declare three Keystatic singletons, one per locale, sharing a `bio` markdoc field and `photos[]` array. Deferred so the productions path could ship first.
+- **Auth.** Currently `storage: { kind: 'local' }` — works in `npm run dev` because Keystatic writes through its API to disk on the same machine, **does not work on a deployed Vercel build**. Two paths to finish:
+  - (a) Self-hosted GitHub mode: create a GitHub App with `contents: write`, set its credentials as Vercel env vars, swap to `storage: { kind: 'github', repo: 'octrow/boklanov' }`. Both editors need GitHub accounts.
+  - (b) **Keystatic Cloud (recommended for Roman):** sign up at keystatic.com/cloud (free ≤ 3 users forever), link the repo, swap to `storage: { kind: 'cloud', project: '...' }`. Roman gets a magic-link login, never sees GitHub.
+- **R2 secrets in GitHub Actions.** Workflow file is committed but the secrets (`R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`) need to be present in **GitHub Actions** secrets, not just Vercel env. User to verify / add. Until then, the Action will fail at runtime; behaviour reverts to the existing manual flow (`npm run upload-images`).
+- **`scripts/upload-images.ts` retirement.** Old script is still in the repo and `package.json`. Plan was to delete it once the Action is verified working in prod. Kept as a safety net for now.
+- **Live UAT.** Only build-time smoke test has passed (`next build` → 162 pages). Roman has not yet edited a production through `/keystatic` end-to-end with full round-trip. First in-browser test surfaced two schema gaps (`notionIds`, `status`) — both patched. There may be more nested-key gaps once awards/festivals/press lists are exercised.
+
+### ❌ Not yet implemented (consciously)
+
+- **Phase 9 `branchPrefix: 'cms/'` PR workflow.** §3a documented this as pre-decided architecture, but per Q5 the user explicitly relaxed it (Obsidian has been direct-to-main since 2026-05-02 without incident). Easy to re-enable later — one config line.
+- **MDX Component Blocks** (e.g., embedded video widget that renders inside the editor preview). Not in scope for v1; Roman authors plain prose. Add when there's a concrete need.
+- **`fields.conditional` discriminator escape hatch.** §6.2 described the dual-shape `string | { ru, en, de }` path. Skipped — the migration normalised everything to objects, so the schema doesn't need conditional fields.
+- **Mobile-first UX hardening.** Per Q2 the user accepted Keystatic's desktop-first UI. If mobile becomes the primary surface later, fall back to Sveltia per §7.
+- **Removing the legacy `body.<locale>.md` fallback in `lib/content.ts`.** Defensive code that's a no-op once the migration is committed everywhere. Delete in a follow-up cleanup pass.
+- **About / blog Keystatic schemas.** See "Partially implemented" above.
+
+### Files added/changed by the implementation
+
+```
+keystatic.config.ts                       (new)
+app/keystatic/layout.tsx                  (new)
+app/keystatic/keystatic.tsx               (new)
+app/keystatic/[[...params]]/page.tsx      (new)
+app/api/keystatic/[...params]/route.ts    (new)
+middleware.ts                             (matcher: skip /keystatic)
+lib/content.ts                            (readBodyFiles)
+scripts/migrate-to-keystatic.ts           (new)
+.github/workflows/sync-r2.yml             (new)
+content/AUTHORING.ru.md                   (dual-mode rewrite)
+content/productions/<slug>/               (105 body renames, 51 yaml normalisations)
+package.json + package-lock.json          (Keystatic deps)
+```
+
+Commits on `main`: `00d89b6` (keystatic skeleton) → `72a7d9d` (middleware) → `2edb3e3` (schema + migration + reader + Action + AUTHORING).
+
+---
+
 
 > Goal: give Roman (and future authors) a **clean, friendly editor** for
 > adding/editing productions (and `content/about/*`, future blog, etc.)
