@@ -9,7 +9,8 @@ directorsNote:
   ru: ''
   en: ''
   de: ''
-poster: {}
+poster:
+  src: /uploads/poster.webp
 productionsPhoto:
   src: /uploads/3-Bremen.webp
 featuredPhoto: {}
