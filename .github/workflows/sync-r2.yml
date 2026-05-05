@@ -39,13 +39,21 @@ jobs:
           echo "Bucket: $R2_BUCKET"
           echo "Endpoint: $R2_ENDPOINT"
 
+      # --exclude 'lqip.json' / 'lqip.*': these are build-time blur-placeholder
+      # metadata read from disk by lib/content.ts; never fetched over the
+      # network. No reason to ship them to R2.
+      #
+      # No --delete: R2 may contain historical assets that were uploaded
+      # manually before this workflow existed and aren't in the repo. We
+      # additively sync; orphan cleanup is a separate manual step (use the
+      # workflow_dispatch trigger with a one-off --delete run if desired).
       - name: Sync productions/
         run: |
           aws s3 sync public/productions/ \
             "s3://${R2_BUCKET}/productions/" \
             --endpoint-url "${R2_ENDPOINT}" \
-            --size-only \
-            --delete
+            --exclude '*.json' \
+            --size-only
 
       - name: Sync about/
         run: |
@@ -53,6 +61,6 @@ jobs:
             aws s3 sync public/about/ \
               "s3://${R2_BUCKET}/about/" \
               --endpoint-url "${R2_ENDPOINT}" \
-              --size-only \
-              --delete
+              --exclude '*.json' \
+              --size-only
           fi
