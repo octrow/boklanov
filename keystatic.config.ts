@@ -117,11 +117,14 @@ export default config({
       slugField: 'slug',
       path: 'content/productions/*/',
       format: { data: 'yaml' },
-      // No entryLayout: 'content' here — that mode requires format.contentField,
-      // which can only point to ONE mdx field. We have three (bodyRu/En/De)
-      // and migrating to a single primary content file would rename
-      // bodyRu.mdx → index.mdx across every entry. Stick with 'form' layout
-      // and rely on field ordering below for editor scannability.
+      // entryLayout: 'content' is kept even though we don't have a single
+      // contentField — Keystatic's docs say it only takes effect with one,
+      // but in practice the wider editor canvas rendered that way before
+      // and editors miss it when removed (form gets squished into the left
+      // half of the viewport). If a future Keystatic upgrade makes this a
+      // hard error, switch to format.contentField: 'bodyRu' and rename
+      // bodyRu.mdx → index.mdx across every entry.
+      entryLayout: 'content',
       previewUrl: '/ru/productions/{slug}',
       columns: ['year', 'durationMin', 'status'],
       // Schema field order = editor UI order. Most-edited / narrative fields
@@ -383,14 +386,12 @@ export default config({
             title: l10n('Headline'),
             url: fields.url({ label: 'URL' }),
             outlet: fields.text({ label: 'Outlet' }),
-            language: fields.select({
+            // Stays as text: ~10 entries have language: null. fields.select
+            // requires defaultValue and rejects literal null in YAML. Backfill
+            // the nulls (or strip the key) before promoting to select.
+            language: fields.text({
               label: 'Language',
-              options: [
-                { label: 'Russian', value: 'ru' },
-                { label: 'English', value: 'en' },
-                { label: 'German', value: 'de' }
-              ],
-              defaultValue: 'ru'
+              description: 'ru / en / de'
             })
           }),
           {
