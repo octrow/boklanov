@@ -9,10 +9,9 @@ directorsNote:
   ru: ''
   en: ''
   de: ''
-poster:
-  src: productions/cow-on-ice/poster.webp
+poster: {}
 productionsPhoto:
-  src: /productions/cow-on-ice/3-Bremen.webp
+  src: /uploads/3-Bremen.webp
 featuredPhoto: {}
 gallery: []
 videos: []
