@@ -264,9 +264,9 @@ function scanRows(root: ParentNode) {
       // this, switching the field's src to empty would leave a 64px
       // gutter forever.
       if (row.dataset.imgRowAnchored) {
-        row.style.paddingRight = row.dataset.imgRowOrigPadRight || ''
+        row.style.paddingLeft = row.dataset.imgRowOrigPadLeft || ''
         delete row.dataset.imgRowAnchored
-        delete row.dataset.imgRowOrigPadRight
+        delete row.dataset.imgRowOrigPadLeft
       }
       return
     }
@@ -282,13 +282,13 @@ function scanRows(root: ParentNode) {
       if (cs.position === 'static') {
         row.style.position = 'relative'
       }
-      // Reserve a strip on the right edge so the thumb doesn't overlap
+      // Reserve a strip on the left edge so the thumb doesn't overlap
       // the row's text label / controls. 64px = 48 thumb + 8 gap on each
       // side. Save the original padding so we don't double-up if React
       // re-renders the row.
-      const origPadRight = row.style.paddingRight
-      row.dataset.imgRowOrigPadRight = origPadRight
-      row.style.paddingRight = `calc(${origPadRight || '0px'} + 64px)`
+      const origPadLeft = row.style.paddingLeft
+      row.dataset.imgRowOrigPadLeft = origPadLeft
+      row.style.paddingLeft = `calc(${origPadLeft || '0px'} + 64px)`
       row.dataset.imgRowAnchored = '1'
     }
 
@@ -298,7 +298,7 @@ function scanRows(root: ParentNode) {
       thumb.setAttribute(ROW_THUMB_MARK, '1')
       thumb.style.cssText = [
         'position:absolute',
-        'right:8px',
+        'left:8px',
         'top:50%',
         'transform:translateY(-50%)',
         'width:48px',
