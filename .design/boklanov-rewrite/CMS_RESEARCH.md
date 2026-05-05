@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Implementation status (2026-05-05)
+## 0. Implementation status (2026-05-05, updated)
 
 Decisions taken during implementation (see §8 questions):
 
@@ -36,10 +36,12 @@ Decisions taken during implementation (see §8 questions):
 - **R2 sync GitHub Action** `.github/workflows/sync-r2.yml` — `aws s3 sync --delete` for `public/productions/` and `public/about/` on push to `main`. Replaces the manual "ping Daniil → `npm run upload-images`" step.
 - **`content/AUTHORING.ru.md`** — dual-mode top-of-doc blurb (Keystatic + Obsidian); body file references updated; the two "написать Daniil" lines (195 and 210) retired. Obsidian section preserved verbatim for power users.
 - **Build passes.** `npm run build` produces 162 prerendered production pages plus the new `/keystatic` and `/api/keystatic/*` routes. Verified in commit `2edb3e3`.
+- **About singletons** (commit `1b7e2cd`-ish, post-585aacf). Three Keystatic singletons (`aboutRu`, `aboutEn`, `aboutDe`) each writing `content/about/<locale>.{yaml,mdx}`. Schema covers `portrait`, `photos[]`, `milestones[]`, `marginalia[]`, `lineage[]`, plus the body via `format.contentField`. Renamed `.md` → `.mdx` and patched `app/[locale]/about/page.tsx` to prefer `.mdx` with `.md` fallback. Build now produces **190 pages** (was 162; +28 are the about + various secondary routes).
+- **Housekeeping.** `temp.log` and `tsconfig.tsbuildinfo` added to `.gitignore`; `tsconfig.tsbuildinfo` untracked from the repo (it's a TypeScript build cache).
 
 ### ⚠️ Partially implemented / deferred
 
-- **Other content collections (`content/about/`, future blog).** The user said "and else" — only `productions` is in the schema today. Adding the `about` singletons (`content/about/{ru,en,de}.yaml` + `.md`) is a 30–60 minute follow-up: declare three Keystatic singletons, one per locale, sharing a `bio` markdoc field and `photos[]` array. Deferred so the productions path could ship first.
+- ~~**Other content collections (`content/about/`).**~~ ✅ Done — see "Fully implemented" above. Future blog still deferred (no blog content exists in the repo yet).
 - **Auth.** Currently `storage: { kind: 'local' }` — works in `npm run dev` because Keystatic writes through its API to disk on the same machine, **does not work on a deployed Vercel build**. Two paths to finish:
   - (a) Self-hosted GitHub mode: create a GitHub App with `contents: write`, set its credentials as Vercel env vars, swap to `storage: { kind: 'github', repo: 'octrow/boklanov' }`. Both editors need GitHub accounts.
   - (b) **Keystatic Cloud (recommended for Roman):** sign up at keystatic.com/cloud (free ≤ 3 users forever), link the repo, swap to `storage: { kind: 'cloud', project: '...' }`. Roman gets a magic-link login, never sees GitHub.
@@ -54,26 +56,34 @@ Decisions taken during implementation (see §8 questions):
 - **`fields.conditional` discriminator escape hatch.** §6.2 described the dual-shape `string | { ru, en, de }` path. Skipped — the migration normalised everything to objects, so the schema doesn't need conditional fields.
 - **Mobile-first UX hardening.** Per Q2 the user accepted Keystatic's desktop-first UI. If mobile becomes the primary surface later, fall back to Sveltia per §7.
 - **Removing the legacy `body.<locale>.md` fallback in `lib/content.ts`.** Defensive code that's a no-op once the migration is committed everywhere. Delete in a follow-up cleanup pass.
-- **About / blog Keystatic schemas.** See "Partially implemented" above.
+- ~~**About Keystatic schemas.**~~ ✅ Done. Future blog/posts schema deferred until a posts collection actually exists in `content/`.
 
 ### Files added/changed by the implementation
 
 ```
-keystatic.config.ts                       (new)
+keystatic.config.ts                       (new — productions collection + 3 about singletons)
 app/keystatic/layout.tsx                  (new)
 app/keystatic/keystatic.tsx               (new)
 app/keystatic/[[...params]]/page.tsx      (new)
 app/api/keystatic/[...params]/route.ts    (new)
+app/[locale]/about/page.tsx               (.mdx → .md fallback in reader)
 middleware.ts                             (matcher: skip /keystatic)
 lib/content.ts                            (readBodyFiles)
 scripts/migrate-to-keystatic.ts           (new)
 .github/workflows/sync-r2.yml             (new)
 content/AUTHORING.ru.md                   (dual-mode rewrite)
 content/productions/<slug>/               (105 body renames, 51 yaml normalisations)
+content/about/                            (3 .md → .mdx renames)
+.gitignore                                (+temp.log, +tsconfig.tsbuildinfo)
 package.json + package-lock.json          (Keystatic deps)
 ```
 
-Commits on `main`: `00d89b6` (keystatic skeleton) → `72a7d9d` (middleware) → `2edb3e3` (schema + migration + reader + Action + AUTHORING).
+Commits on `main`:
+`00d89b6` (keystatic skeleton) →
+`72a7d9d` (middleware) →
+`2edb3e3` (schema + migration + reader + Action + AUTHORING) →
+`585aacf` (CMS_RESEARCH status doc) →
+**latest** (about singletons + housekeeping).
 
 ---
 
