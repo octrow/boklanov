@@ -1,40 +1,44 @@
 slug: cow-on-ice
-notionIds:
-  ru: null
-  en: null
 title:
   ru: Корова на льду
   en: Cow on the Ice
   de: Eine Kuh auf dem Eis
-synopsis:
-  ru: null
-  en: null
-  de: null
+tagline: {}
+synopsis: {}
+directorsNote:
+  ru: ''
+  en: ''
+  de: ''
+poster:
+  src: productions/cow-on-ice/poster.webp
+productionsPhoto:
+  src: /productions/cow-on-ice/3-Bremen.webp
+featuredPhoto: {}
+gallery: []
+videos: []
 theatre:
   name:
-    en: Bremen 11
     ru: Бремен 11
+    en: Bremen 11
     de: Bremen 11
+  shortName: {}
   city:
-    en: Bremen
     ru: Бремен
+    en: Bremen
     de: Bremen
   country: DE
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
+premiereDate: {}
 ageRating: 6+
-durationMin: null
+status: live
 role:
   - director
 form:
   - theater
   - family
 lineage: []
+tags:
+  - theater
+  - family show
 credits:
   ru:
     - role: Режиссёр
@@ -45,19 +49,13 @@ credits:
   de:
     - role: Regie
       name: Roman Boklanov
-poster:
-  src: productions/cow-on-ice/poster.webp
-  credit: null
-gallery: []
-videos: []
 awards: []
 festivals: []
 press: []
 externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - theater
-  - family show
 tour: []
+runs: []
+bookingCta: true
+bookingCtaLabel: {}
+featured: false
+notionIds: {}
