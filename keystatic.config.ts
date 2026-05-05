@@ -90,6 +90,21 @@ const l10n = (label: string, description?: string) =>
  *  a runtime "is everything empty" check, so we model these the same.) */
 const l10nOpt = l10n
 
+/** L10n with markdoc.inline editors per locale instead of plain text. Used
+ *  for prose where the editor benefits from inline formatting (italic,
+ *  links). Storage shape on disk stays a bilingual object of strings —
+ *  plain prose without markdoc syntax is still valid markdoc, so legacy
+ *  values round-trip unchanged. */
+const l10nMarkdoc = (label: string, description?: string) =>
+  fields.object(
+    {
+      ru: fields.markdoc.inline({ label: `${label} — RU` }),
+      en: fields.markdoc.inline({ label: `${label} — EN` }),
+      de: fields.markdoc.inline({ label: `${label} — DE` })
+    },
+    { label, description, layout: [4, 4, 4] }
+  )
+
 // Status is the only enum we lock down — every editor we expect uses one of
 // these four values, and adding a new status is a code change (the frontend
 // likely cares). role / form / lineage stay as free-text arrays because the
@@ -179,11 +194,16 @@ export default config({
             'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars is the SEO sweet spot.'
           )
         ),
-        directorsNote: l10nOpt(
+        // markdoc.inline editor — supports italic / bold / links.
+        // Existing plain-text values like "Мама, папа, приходите скорей…"
+        // round-trip identically (plain prose is valid markdoc). The
+        // production page renders this through @markdoc/markdoc; see
+        // app/[locale]/productions/[slug]/page.tsx.
+        directorsNote: l10nMarkdoc(
           "Director's note",
           desc(
-            'Цитата от Романа в один абзац — отображается blockquote на странице. Свободный текст без форматирования.',
-            'Single-paragraph note from Roman, rendered as a blockquote on the page. Plain text — no formatting.'
+            'Цитата от Романа — рендерится как blockquote на странице. Поддерживает курсив / жирный / ссылки через инлайн-редактор.',
+            "Note from Roman — rendered as a blockquote on the page. Inline editor supports italic / bold / links."
           )
         ),
 

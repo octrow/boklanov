@@ -21,6 +21,7 @@ import {
   getProduction,
   type ProductionView
 } from '@/lib/content'
+import { InlineMarkdoc } from '@/lib/markdoc'
 
 import styles from './page.module.css'
 
@@ -123,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale === 'en'
       ? `${base}/productions/${slug}`
       : `${base}/${locale}/productions/${slug}`
-  const ogImage = `${base}/api/og/${slug}`
+  const ogImage = `${base}/api/og/${slug}?locale=${locale}`
 
   const descriptionParts = [production.title, production.theatre.name, production.year]
     .filter(Boolean)
@@ -455,12 +456,16 @@ export default async function ProductionDetailPage({
             <p className={styles.tagline}>{production.tagline}</p>
           )}
 
-          {/* DA-7.6.C — Director's note, gated by directorsNote field */}
+          {/* DA-7.6.C — Director's note, gated by directorsNote field.
+              Stored as fields.markdoc.inline since 2026-05-06; renderer
+              parses + transforms + renders to a <p className=...>. Plain
+              prose round-trips unchanged through Markdoc. */}
           {production.directorsNote && (
             <blockquote className={styles.directorsNote}>
-              <p className={styles.directorsNoteText}>
-                {production.directorsNote}
-              </p>
+              <InlineMarkdoc
+                value={production.directorsNote}
+                className={styles.directorsNoteText}
+              />
               <footer className={styles.directorsNoteAttr}>
                 {t('directorsNoteAttr')}
               </footer>

@@ -40,6 +40,7 @@
     "@fontsource/lora": "^5.2.8",
     "@keystatic/core": "^0.5.50",
     "@keystatic/next": "^5.0.4",
+    "@markdoc/markdoc": "^0.4.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/og": "^0.0.19",
     "@vercel/speed-insights": "^2.0.0",
