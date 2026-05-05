@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import type { NextRequest } from 'next/server'
 
 import type { Locale } from '@/i18n/routing'
@@ -9,17 +10,6 @@ const BASE = (
 
 function localeBase(locale: Locale): string {
   return locale === 'en' ? BASE : `${BASE}/${locale}`
-}
-
-const FEED_META: Record<'ru' | 'en', { title: string; desc: string }> = {
-  ru: {
-    title: 'Роман Бокланов — постановки',
-    desc: 'Режиссёр театра кукол и театра объекта'
-  },
-  en: {
-    title: 'Roman Boklanov — productions',
-    desc: 'Puppet theatre and theatre of objects director'
-  }
 }
 
 // DE is chrome-only — no RSS per IA.
@@ -37,9 +27,16 @@ export async function GET(
     return new Response(null, { status: 404 })
   }
 
+  const [tMeta, tNav, tFeed] = await Promise.all([
+    getTranslations({ locale, namespace: 'meta' }),
+    getTranslations({ locale, namespace: 'nav' }),
+    getTranslations({ locale, namespace: 'feed' })
+  ])
+
   const productions = getAllProductions(locale)
   const base = localeBase(locale)
-  const meta = FEED_META[locale]
+  const feedTitle = `${tMeta('siteName')} — ${tNav('productions')}`
+  const feedDesc = tFeed('description')
 
   const items = productions
     .filter((p) => p.role.includes('director'))
@@ -66,9 +63,9 @@ export async function GET(
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${meta.title}</title>
+    <title>${feedTitle}</title>
     <link>${base}</link>
-    <description>${meta.desc}</description>
+    <description>${feedDesc}</description>
     <language>${locale}</language>
     <atom:link href="${base}/feed" rel="self" type="application/rss+xml"/>
 ${items}

@@ -1,10 +1,13 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
+import { getTranslations } from 'next-intl/server'
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 import * as React from 'react'
 
+import type { Locale } from '@/i18n/routing'
+import { routing } from '@/i18n/routing'
 import { getProduction } from '@/lib/content'
 
 // Node runtime — needed for fs-based content + font loading.
@@ -64,6 +67,19 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
+  const { searchParams } = new URL(request.url)
+  const localeParam = searchParams.get('locale') ?? routing.defaultLocale
+  const locale: Locale = routing.locales.includes(localeParam as Locale)
+    ? (localeParam as Locale)
+    : routing.defaultLocale
+
+  const [tMeta, tNav, tProductions, tFooter] = await Promise.all([
+    getTranslations({ locale, namespace: 'meta' }),
+    getTranslations({ locale, namespace: 'nav' }),
+    getTranslations({ locale, namespace: 'productions' }),
+    getTranslations({ locale, namespace: 'footer' })
+  ])
+
   const production = getProduction(slug, 'ru')
   if (!production) return new Response('Not found', { status: 404 })
 
@@ -121,7 +137,7 @@ export async function GET(
             textTransform: 'uppercase'
           }}
         >
-          ROMAN BOKLANOV · PRODUCTIONS
+          {tMeta('siteName').toUpperCase()} · {tProductions('title').toUpperCase()}
         </span>
       </div>
 
@@ -214,7 +230,7 @@ export async function GET(
             textTransform: 'uppercase'
           }}
         >
-          2026 EDITION
+          {tFooter('colophon')}
         </span>
       </div>
     </div>
@@ -245,7 +261,7 @@ export async function GET(
           whiteSpace: 'nowrap'
         }}
       >
-        роман бокланов
+        {tNav('wordmark')}
       </div>
     </div>
   )

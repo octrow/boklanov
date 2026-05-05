@@ -173,5 +173,8 @@
   },
   "common": {
     "photo": "Foto"
+  },
+  "feed": {
+    "description": "Regisseur für Figuren- und Objekttheater"
   }
 }

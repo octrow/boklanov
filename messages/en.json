@@ -173,5 +173,8 @@
   },
   "common": {
     "photo": "Photo"
+  },
+  "feed": {
+    "description": "Puppet theatre and theatre of objects director"
   }
 }
