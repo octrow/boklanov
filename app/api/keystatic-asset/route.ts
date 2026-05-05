@@ -8,19 +8,25 @@
  *
  * In development: writes directly to public/<directory>/<filename> on disk.
  *
- * In production: commits the file to the GitHub repo at
- * public/<directory>/<filename> on the configured branch via the Contents
- * API. Vercel auto-deploys the new commit; the .github/workflows/sync-r2.yml
- * action additionally mirrors public/productions/** + public/about/** to R2.
+ * In production: writes the same file to two places in parallel:
+ *   1. R2 bucket at <directory>/<filename> — so cdnUrl() (which prepends
+ *      NEXT_PUBLIC_CDN_BASE → pub-...r2.dev) can serve it immediately, both
+ *      to the live page after a YAML save and to the Keystatic preview tile.
+ *   2. The GitHub repo at public/<directory>/<filename> via the Contents API
+ *      — so the file is in git as source of truth and is included in future
+ *      Vercel deploys / fresh clones. The sync-r2 workflow re-uploads on push,
+ *      which is harmless (idempotent overwrite).
  *
- * Why GitHub and not direct R2: the live site reads images from public/ in
- * the deployed bundle (cdn.boklanov.com is currently misconfigured), so a
- * file uploaded only to R2 is invisible to the page. Writing to git puts the
- * image in the same place the dev workflow puts it.
+ * If R2 succeeds but GitHub fails, the response is a 500 — the user retries,
+ * R2 silently overwrites, GitHub commit is attempted again. If GitHub
+ * succeeds but R2 fails, sync-r2 will catch it on the next push, so the page
+ * still gets the file after deploy.
  *
  * Required Vercel env vars in production:
- *   GITHUB_TOKEN  — fine-grained PAT (or app token) with Contents: read+write
- *                   on the boklanov repo. Used to PUT files via the Contents API.
+ *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (R2_BUCKET optional,
+ *   defaults to boklanov-content). Same credentials as npm run upload-images.
+ *   GITHUB_TOKEN  — fine-grained PAT with Contents: read+write on the
+ *                   boklanov repo.
  *   GITHUB_OWNER  — defaults to 'octrow'
  *   GITHUB_REPO   — defaults to 'boklanov'
  *   GITHUB_BRANCH — defaults to 'main'
@@ -35,6 +41,16 @@ const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '
 const PUBLIC_ROOT = path.resolve(process.cwd(), 'public')
 const MAX_BYTES = 25 * 1024 * 1024 // 25 MB — matches typical poster size budget
 
+const MIME: Record<string, string> = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.avif': 'image/avif'
+}
+
 function sanitizeSegment(s: string): string {
   return s.replace(/[^a-z0-9._-]/gi, '-')
 }
@@ -46,6 +62,38 @@ function sanitizeDirectory(dir: string): string | null {
   const parts = trimmed.split('/')
   if (parts.some(p => p === '' || p === '..' || p === '.')) return null
   return parts.map(sanitizeSegment).join('/')
+}
+
+async function uploadToR2(
+  buffer: Buffer,
+  key: string,
+  contentType: string
+): Promise<void> {
+  const accountId = process.env.R2_ACCOUNT_ID
+  const bucket = process.env.R2_BUCKET ?? 'boklanov-content'
+  const keyId = process.env.R2_ACCESS_KEY_ID
+  const keySecret = process.env.R2_SECRET_ACCESS_KEY
+
+  if (!accountId || !keyId || !keySecret) {
+    throw new Error('R2 env vars not configured (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)')
+  }
+
+  const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3')
+  const client = new S3Client({
+    region: 'auto',
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: { accessKeyId: keyId, secretAccessKey: keySecret },
+    forcePathStyle: true
+  })
+
+  await client.send(new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: buffer,
+    ContentType: contentType,
+    ContentLength: buffer.byteLength,
+    CacheControl: 'public, max-age=31536000, immutable'
+  }))
 }
 
 type GitHubError = { ok: false; status: number; message: string }
@@ -150,16 +198,25 @@ export async function POST(req: Request) {
   const buffer = Buffer.from(await file.arrayBuffer())
 
   if (process.env.NODE_ENV === 'production') {
-    // Commit straight to the repo so Vercel rebuilds with the file in public/.
-    // The image will be visible at boklanov.com${src} after the deploy.
+    // Run R2 upload and the GitHub commit in parallel: R2 makes the file
+    // immediately reachable via cdnUrl() (so the Keystatic preview tile and
+    // the live page can show it without waiting for a deploy), and the
+    // GitHub commit puts the file in git for source-of-truth.
+    const r2Key = `${directory}/${filename}`
     const repoPath = `public/${directory}/${filename}`
-    try {
-      await commitToGitHub(buffer, repoPath, `chore(media): upload ${repoPath} via keystatic`)
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
-      return NextResponse.json({ error: msg }, { status: 500 })
+    const contentType = MIME[ext] ?? 'application/octet-stream'
+
+    const results = await Promise.allSettled([
+      uploadToR2(buffer, r2Key, contentType),
+      commitToGitHub(buffer, repoPath, `chore(media): upload ${repoPath} via keystatic`)
+    ])
+    const failures = results
+      .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
+      .map((r) => (r.reason instanceof Error ? r.reason.message : String(r.reason)))
+    if (failures.length > 0) {
+      return NextResponse.json({ error: failures.join('; ') }, { status: 500 })
     }
-    return NextResponse.json({ src, bytes: buffer.byteLength, deferred: true })
+    return NextResponse.json({ src, bytes: buffer.byteLength })
   }
 
   // Development: write to public/ on disk so Next.js serves it immediately.

@@ -24,12 +24,21 @@ const MARK = 'data-image-path-preview'
 const PREVIEW_W = 240
 const PREVIEW_H = 180
 
+// Mirrors lib/cdn.ts. Inlined so the client bundle can read it without an
+// extra import (the cdn helper is server-and-client safe but the env var
+// reference here makes the intent explicit at the call site).
+const CDN_BASE = (process.env.NEXT_PUBLIC_CDN_BASE ?? '').replace(/\/+$/, '')
+
 function resolveSrc(raw: string): string | null {
   const v = raw.trim()
   if (!v) return null
   if (!IMG_EXT.test(v)) return null
   if (/^https?:\/\//i.test(v)) return v
-  return v.startsWith('/') ? v : '/' + v
+  const p = v.startsWith('/') ? v : '/' + v
+  // In production CDN_BASE points at the R2 public URL — using it here lets
+  // the preview tile show files that exist in R2 but aren't yet on the
+  // Vercel deploy (e.g. just-uploaded via the admin Upload button).
+  return CDN_BASE ? CDN_BASE + p : p
 }
 
 /** Derive the target directory for an upload from the input's current value
@@ -65,23 +74,16 @@ function setReactInputValue(input: HTMLInputElement, value: string) {
   input.dispatchEvent(new Event('change', { bubbles: true }))
 }
 
-async function uploadFile(
-  file: File,
-  directory: string
-): Promise<{ src: string; deferred: boolean }> {
+async function uploadFile(file: File, directory: string): Promise<string> {
   const fd = new FormData()
   fd.append('file', file)
   fd.append('directory', directory)
   const res = await fetch('/api/keystatic-asset', { method: 'POST', body: fd })
-  const json = (await res.json()) as {
-    src?: string
-    error?: string
-    deferred?: boolean
-  }
+  const json = (await res.json()) as { src?: string; error?: string }
   if (!res.ok || !json.src) {
     throw new Error(json.error || `upload failed (${res.status})`)
   }
-  return { src: json.src, deferred: !!json.deferred }
+  return json.src
 }
 
 function buildAddon(input: HTMLInputElement): HTMLElement {
@@ -161,14 +163,9 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
     status.textContent = `Uploading ${file.name}…`
     status.style.color = '#71717a'
     try {
-      const { src, deferred } = await uploadFile(file, dir)
+      const src = await uploadFile(file, dir)
       setReactInputValue(input, src)
-      // Deferred = production GitHub commit; image is committed to the repo
-      // but only visible on the live site after Vercel finishes redeploying.
-      // The local preview thumbnail will also stay blank until then.
-      status.textContent = deferred
-        ? `Committed to repo at public${src} — visible after the next deploy (~1–2 min)`
-        : `Saved to ${src}`
+      status.textContent = `Saved to ${src}`
       status.style.color = '#15803d'
     } catch (err) {
       status.textContent = (err as Error).message
@@ -272,6 +269,7 @@ function scanRows(root: ParentNode) {
     if (!IMG_EXT.test(label)) {
       const stale = row.querySelector<HTMLElement>(`[${ROW_THUMB_MARK}="1"]`)
       if (stale) stale.remove()
+      // Reset padding-left below; fall through.
       // Restore the row's original padding-right when the row stops
       // being a thumbnail row (image filename → other label). Without
       // this, switching the field's src to empty would leave a 64px
@@ -283,7 +281,8 @@ function scanRows(root: ParentNode) {
       }
       return
     }
-    const src = dirPrefix + label
+    const path = dirPrefix + label
+    const src = CDN_BASE ? CDN_BASE + path : path
 
     // The thumb is positioned ABSOLUTELY so it never participates in the
     // row's intrinsic flex/grid layout — that's what kept breaking when
