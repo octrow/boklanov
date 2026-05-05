@@ -90,6 +90,9 @@ export default async function HomePage({
           emptyLabel={tProductions('empty')}
           duotoneAll
         />
+        <Link href='/productions' className={styles.allProductionsBtn}>
+          {t('viewAll')}
+        </Link>
       </section>
     </main>
   )

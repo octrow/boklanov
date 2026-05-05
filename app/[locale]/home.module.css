@@ -81,3 +81,44 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
 }
+
+/* Full-width "all productions" button below the grid.
+   Mobile: accent red border + text for clear CTA.
+   Desktop: muted gray — same quiet register as the section label. */
+.allProductionsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: var(--space-7);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  transition: color var(--duration-fast) var(--easing-default),
+  border-color var(--duration-fast) var(--easing-default),
+  background var(--duration-fast) var(--easing-default);
+}
+
+.allProductionsBtn:hover {
+  background: var(--accent);
+  color: var(--ink-on-accent);
+}
+
+@media (min-width: 1024px) {
+  .allProductionsBtn {
+    border-color: var(--ink-faint);
+    color: var(--ink-mute);
+  }
+
+  .allProductionsBtn:hover {
+    border-color: var(--ink-mute);
+    color: var(--ink);
+    background: transparent;
+  }
+}
