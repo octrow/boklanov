@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { FeaturedStrip } from '@/components/FeaturedStrip'
+import { IconArrowRight } from '@/components/IconArrowRight'
 import { ProductionGrid } from '@/components/ProductionGrid'
 import { SiteHero } from '@/components/SiteHero'
 import { TourTicker } from '@/components/TourTicker'
@@ -91,7 +92,8 @@ export default async function HomePage({
           duotoneAll
         />
         <Link href='/productions' className={styles.allProductionsBtn}>
-          {t('viewAll')}
+          <span>{t('viewAll').replace(/\s*→\s*$/, '')}</span>
+          <IconArrowRight size={14} />
         </Link>
       </section>
     </main>

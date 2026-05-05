@@ -154,3 +154,47 @@
 .credit {
   color: rgba(255, 255, 255, 0.3);
 }
+
+/* Mobile — smaller controls, lighter overlay */
+@media (max-width: 767px) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.75);
+    padding: var(--space-4);
+  }
+
+  .navBtn {
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .navBtn:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .navIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .navPrev {
+    left: var(--space-2);
+  }
+
+  .navNext {
+    right: var(--space-2);
+  }
+
+  .close {
+    width: 36px;
+    height: 36px;
+    top: calc(-1 * var(--space-5));
+    right: calc(-1 * var(--space-5));
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .img {
+    max-height: 70vh;
+  }
+}
