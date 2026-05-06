@@ -12,11 +12,9 @@ directorsNote:
 poster:
   src: /uploads/poster.webp
 productionsPhoto:
-  src: /uploads/Boklanov-big.webp
+  src: /uploads/3-Bremen.webp
 featuredPhoto: {}
-gallery:
-  - src: /uploads/Boklanov-big.webp
-    caption: {}
+gallery: []
 videos: []
 theatre:
   name:
