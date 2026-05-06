@@ -1,5 +1,10 @@
 # Keystatic media — R2-only single-commit plan
 
+> **Status: SHIPPED 2026-05-06.** Live reference is
+> [`KEYSTATIC_IMAGE_UPLOAD.md`](KEYSTATIC_IMAGE_UPLOAD.md). This plan
+> doc is preserved for the rationale and migration steps; do not edit
+> the body to track new behaviour.
+
 Goal: when an editor uploads an image and saves an entry through Keystatic,
 the repo gets **one** commit on `main` (the bot's YAML save), not two.
 

@@ -8,18 +8,27 @@
 
 ## 0. Implementation status (2026-05-05, updated)
 
+> **Superseded for media flow (2026-05-06):** the `sync-r2.yml` /
+> `aws s3 sync --delete` model below was retired during the
+> R2-only migration. Editor uploads now write to R2 only; git
+> catches up via `backup-r2-to-git.yml`. Live reference:
+> [`KEYSTATIC_IMAGE_UPLOAD.md`](KEYSTATIC_IMAGE_UPLOAD.md). Rationale +
+> migration log: [`KEYSTATIC_R2_ONLY_PLAN.md`](KEYSTATIC_R2_ONLY_PLAN.md).
+> The Keystatic install / migration / l10n decisions in this doc are
+> still authoritative — only Q7/Q8 are superseded.
+
 Decisions taken during implementation (see §8 questions):
 
-| # | Question | Decision |
-|---|---|---|
-| Q1 | File-rename tolerance | **Yes, renamed** to `bodyRu.mdx` / `bodyEn.mdx` / `bodyDe.mdx` |
-| Q2 | Primary editing surface | Laptop (mobile is nice-to-have) → **Keystatic** chosen |
-| Q3 | Editor URL | `/keystatic` on the production domain (same Vercel project) |
-| Q4 | Auth | **Local mode** for dev — GitHub/Cloud auth deferred (see "Not yet" below) |
-| Q5 | Drafts (direct-to-main vs `cms/*` PR) | **Direct-to-main** — matches the Obsidian flow which has run without incident since 2026-05-02 |
-| Q6 | `L10nString` shape | Normalised to **always-object** `{ ru, en, de }`; bare-string YAML values rewritten by the migration script |
-| Q7 | R2 secrets | **TBD** — user to confirm whether they're already in GitHub Actions secrets or only in Vercel env |
-| Q8 | Image sync flavour | **§5b** (`aws s3 sync --delete`) — `scripts/upload-images.ts` kept as fallback until the Action is observed working in prod |
+| #   | Question                              | Decision                                                                                                                    |
+| --- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Q1  | File-rename tolerance                 | **Yes, renamed** to `bodyRu.mdx` / `bodyEn.mdx` / `bodyDe.mdx`                                                              |
+| Q2  | Primary editing surface               | Laptop (mobile is nice-to-have) → **Keystatic** chosen                                                                      |
+| Q3  | Editor URL                            | `/keystatic` on the production domain (same Vercel project)                                                                 |
+| Q4  | Auth                                  | **Local mode** for dev — GitHub/Cloud auth deferred (see "Not yet" below)                                                   |
+| Q5  | Drafts (direct-to-main vs `cms/*` PR) | **Direct-to-main** — matches the Obsidian flow which has run without incident since 2026-05-02                              |
+| Q6  | `L10nString` shape                    | Normalised to **always-object** `{ ru, en, de }`; bare-string YAML values rewritten by the migration script                 |
+| Q7  | R2 secrets                            | **TBD** — user to confirm whether they're already in GitHub Actions secrets or only in Vercel env                           |
+| Q8  | Image sync flavour                    | **§5b** (`aws s3 sync --delete`) — `scripts/upload-images.ts` kept as fallback until the Action is observed working in prod |
 
 ### ✅ Fully implemented
 
@@ -44,7 +53,7 @@ Decisions taken during implementation (see §8 questions):
 - ~~**Other content collections (`content/about/`).**~~ ✅ Done — see "Fully implemented" above. Future blog still deferred (no blog content exists in the repo yet).
 - **Auth — Keystatic Cloud, NODE_ENV-gated.**
   - `keystatic.config.ts` switches storage on `process.env.NODE_ENV`: `cloud` in prod, `local` in dev. Project key `boklanov/boklanov` (set up at https://keystatic.cloud).
-  - Why NODE_ENV and not a custom env var: `keystatic.config.ts` is bundled into BOTH the server route handler AND the client-side admin UI. Next.js only inlines `NEXT_PUBLIC_*` and `NODE_ENV` into the client bundle — any other `process.env.X` becomes `undefined` on the client, which causes a client/server protocol mismatch (the symptom: client thinks it's local mode, server is cloud, every API request 404s as "Not Found" plain text and the UI fails to parse JSON).
+  - Why NODE*ENV and not a custom env var: `keystatic.config.ts` is bundled into BOTH the server route handler AND the client-side admin UI. Next.js only inlines `NEXT_PUBLIC*\*`and`NODE_ENV`into the client bundle — any other`process.env.X`becomes`undefined` on the client, which causes a client/server protocol mismatch (the symptom: client thinks it's local mode, server is cloud, every API request 404s as "Not Found" plain text and the UI fails to parse JSON).
   - `showAdminUI` is now belt-and-suspenders: derived from `storage.kind` itself, no separate flag needed.
   - **Setup needed on Vercel: nothing.** No env vars. The team/project membership at keystatic.cloud is what controls who can edit.
   - GitHub mode (self-hosted via a GitHub App) was an alternative path but is not used; Cloud is simpler and gives Roman magic-link auth without a GitHub account.
@@ -90,7 +99,6 @@ Commits on `main`:
 
 ---
 
-
 > Goal: give Roman (and future authors) a **clean, friendly editor** for
 > adding/editing productions (and `content/about/*`, future blog, etc.)
 > **without replacing** the current source of truth — `content/**` still
@@ -104,17 +112,17 @@ Author: Daniil
 
 ## 1. Constraints we must respect
 
-| # | Constraint | Why it matters |
-|---|---|---|
-| C1 | `content/productions/<slug>/index.yaml` + `body.{ru,en,de}.md` stays the source of truth | All page routes go through `lib/content.ts`; the build is a static `next build` from these files. No DB. |
-| C2 | Must coexist with the current Obsidian + obsidian-git flow described in `content/AUTHORING.ru.md` | Roman already knows it; the new editor is *additional*, not replacing. |
-| C3 | Multilingual fields = either string OR `{ ru, en, de }` object (`L10nString`) | The CMS schema must allow both shapes (or we normalize on save). |
-| C4 | Images are written to `public/productions/<slug>/` and then **uploaded to R2** by `scripts/upload-images.ts`. The site reads them via `lib/cdn.ts`. | Whatever uploader the CMS ships with, we still need the R2 step. |
-| C5 | Author has no terminal skills — currently we say "ping Daniil to run npm run upload-images" | The new flow should remove that hand-off. |
-| C6 | Auth restricted to a tiny set of users (Roman, Daniil) | No public sign-ups; ideally GitHub OAuth or a single-tenant magic-link. |
-| C7 | Hosting story should not add a stateful server. Vercel-friendly. | Site is a static export on Vercel; no DB exists. |
-| C8 | Budget: ideally $0/month. SaaS only if free tier covers two seats indefinitely. | Personal site for a director. |
-| C9 | **Free; open-source preferred.** Avoid paid tiers and avoid closed-source SaaS where reasonable. | Future-proofing — if the vendor folds, an OSS tool can be self-hosted. License (MIT/Apache/MPL) preferred over "source-available". |
+| #   | Constraint                                                                                                                                          | Why it matters                                                                                                                     |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| C1  | `content/productions/<slug>/index.yaml` + `body.{ru,en,de}.md` stays the source of truth                                                            | All page routes go through `lib/content.ts`; the build is a static `next build` from these files. No DB.                           |
+| C2  | Must coexist with the current Obsidian + obsidian-git flow described in `content/AUTHORING.ru.md`                                                   | Roman already knows it; the new editor is _additional_, not replacing.                                                             |
+| C3  | Multilingual fields = either string OR `{ ru, en, de }` object (`L10nString`)                                                                       | The CMS schema must allow both shapes (or we normalize on save).                                                                   |
+| C4  | Images are written to `public/productions/<slug>/` and then **uploaded to R2** by `scripts/upload-images.ts`. The site reads them via `lib/cdn.ts`. | Whatever uploader the CMS ships with, we still need the R2 step.                                                                   |
+| C5  | Author has no terminal skills — currently we say "ping Daniil to run npm run upload-images"                                                         | The new flow should remove that hand-off.                                                                                          |
+| C6  | Auth restricted to a tiny set of users (Roman, Daniil)                                                                                              | No public sign-ups; ideally GitHub OAuth or a single-tenant magic-link.                                                            |
+| C7  | Hosting story should not add a stateful server. Vercel-friendly.                                                                                    | Site is a static export on Vercel; no DB exists.                                                                                   |
+| C8  | Budget: ideally $0/month. SaaS only if free tier covers two seats indefinitely.                                                                     | Personal site for a director.                                                                                                      |
+| C9  | **Free; open-source preferred.** Avoid paid tiers and avoid closed-source SaaS where reasonable.                                                    | Future-proofing — if the vendor folds, an OSS tool can be self-hosted. License (MIT/Apache/MPL) preferred over "source-available". |
 
 ---
 
@@ -123,6 +131,7 @@ Author: Daniil
 Eight options were considered. Five are summarised here; the rest were rejected up-front (Notion-as-CMS — tried and abandoned per `notion-data/`; Strapi/Directus — require a DB; Forestry/TinaCloud SaaS-only — paid).
 
 ### A. Keystatic (`@keystatic/core` + `@keystatic/next`)
+
 - **What it is:** open-source, git-backed CMS by Thinkmill. Runs **inside** the Next.js app at e.g. `/keystatic`. ~2k stars, Thinkmill ships continuously, used on thinkmill.com.au.
 - **Storage modes:** `local` (writes directly to disk in dev) and `github` (commits via GitHub App in prod). Optional `branchPrefix: 'cms/'` scopes commits to `cms/*` branches.
 - **Schema:** TypeScript — `fields.text`, `fields.array`, `fields.object`, `fields.image`, `fields.markdoc/mdx`, **`fields.conditional`** (real, first-class — solves `L10nString` cleanly). Maps to the `Production` type in `lib/content.ts`.
@@ -136,9 +145,10 @@ Eight options were considered. Five are summarised here; the rest were rejected 
 - **Risk:** must keep schema in sync with `lib/content.ts` types (mitigated by `createReader`).
 
 ### B. Sveltia CMS
+
 - **What it is:** Decap rewrite in Svelte 5 by Kohei Yoshino (solo maintainer). ~2k stars, ~300 KB bundle vs Decap's 1.5 MB, weekly releases through 2025, v0.126 in late 2025, **v1.0 expected early/mid 2026**. Static SPA at `/admin/index.html`, no backend.
 - **Schema:** YAML (`public/admin/config.yml`), Decap-compatible — drop-in script-tag replacement.
-- **Auth:** GitHub OAuth via Sveltia's free hosted proxy *or* `sveltia-cms-auth` Cloudflare Worker (5 min, free). Both users need GitHub accounts (no email magic-link option).
+- **Auth:** GitHub OAuth via Sveltia's free hosted proxy _or_ `sveltia-cms-auth` Cloudflare Worker (5 min, free). Both users need GitHub accounts (no email magic-link option).
 - **Local dev:** uses **File System Access API** — browser writes directly to the local repo, no proxy server needed for `npm run dev`-equivalent.
 - **Storage:** writes via GitHub GraphQL/REST API directly. No build step.
 - **Image handling:** built-in media library, commits binaries to repo. Per-collection media folders supported. **No native R2/S3 backend** — same GitHub Action sidecar as Keystatic.
@@ -152,6 +162,7 @@ Eight options were considered. Five are summarised here; the rest were rejected 
   - `L10nString` shape (`string | { ru, en, de }`) has no clean primitive — must pick one shape.
 
 ### C. Pages CMS (pagescms.org)
+
 - **What it is:** GitHub-only CMS at `app.pagescms.org`, configured via `.pages.yml` in the repo root. Hosted UI; no code in our app.
 - **Auth:** GitHub OAuth **or magic-link email** — only candidate that ships email magic-link out of the box (and doesn't need a separate Cloud product to get it).
 - **Storage:** GitHub API, commits to a branch.
@@ -159,34 +170,37 @@ Eight options were considered. Five are summarised here; the rest were rejected 
 - **❌ Disqualifier: no i18n support at all.** Open issue #221, no implementation in sight. Cannot model our three-locale body files. Strike from the candidate list despite the otherwise great UX.
 
 ### D. Decap CMS (classic)
+
 - Same idea as Sveltia but older, slower UI, semi-maintained. Listed for completeness — **prefer Sveltia**.
 
 ### E. TinaCMS
+
 - Visual / inline editing inside the live page. Powerful, but: requires running `tinacms` backend or paying for Tina Cloud, schema lives in `tina/` and overlaps with our existing types, free tier has user/edit caps. **Not recommended** for a two-author personal site.
 
 ---
 
 ## 3. Comparison matrix
 
-| Criterion | Keystatic | Sveltia | Pages CMS | Decap | Tina |
-|---|---|---|---|---|---|
-| Free | ✅ | ✅ | ✅ | ✅ | ⚠️ caps |
-| OSS license (C9) | ✅ MIT | ✅ MIT | ⚠️ open core, single-vendor hosted UI | ✅ MIT | ⚠️ paid Tina Cloud for prod |
-| No extra server | ✅ (Next.js admin route) | ✅ (static SPA) | ✅ (hosted) | ✅ | ❌ |
-| Type-safe schema | ✅ TS | ❌ YAML | ❌ YAML | ❌ | ✅ TS |
-| Mobile-friendly UX | ⚠️ desktop-first | ✅ best-in-class | ✅ | ❌ | ✅ |
-| Round-trips our **`index.yaml + body.{ru,en,de}.md`** layout | ⚠️ requires rename to `bodyRu.mdx` etc. (§6.1) | ⚠️ closest is `index.<locale>.md` with **triplicated frontmatter** (§6.1) | ❌ no i18n at all | same as Sveltia | n/a |
-| Handles `L10nString` (string \| {ru,en,de}) | ✅ `fields.conditional` (with discriminator key) | ⚠️ pick one shape, no clean union | ❌ | ⚠️ | ✅ |
-| Email magic-link login (no GitHub account for Roman) | ✅ via Keystatic Cloud (free ≤ 3 users) | ❌ GitHub-only | ✅ native | ❌ | ✅ |
-| Editorial / branch-per-entry workflow | ❌ | ❌ (deferred to v2.0) | ❌ | ⚠️ buggy legacy | ✅ |
-| Static-export host compatible (CF Pages, S3, GH Pages) | ❌ needs server runtime | ✅ pure static | ✅ | ✅ | ❌ |
-| Native R2/S3 media backend | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Active in 2026 | ✅ | ✅ (weekly) | ✅ | ⚠️ slow | ✅ |
-| Time-to-ship | medium (2–3 days, includes file rename) | small (½–1 day) | n/a | small | large |
+| Criterion                                                    | Keystatic                                        | Sveltia                                                                   | Pages CMS                             | Decap           | Tina                        |
+| ------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------- | --------------- | --------------------------- |
+| Free                                                         | ✅                                               | ✅                                                                        | ✅                                    | ✅              | ⚠️ caps                     |
+| OSS license (C9)                                             | ✅ MIT                                           | ✅ MIT                                                                    | ⚠️ open core, single-vendor hosted UI | ✅ MIT          | ⚠️ paid Tina Cloud for prod |
+| No extra server                                              | ✅ (Next.js admin route)                         | ✅ (static SPA)                                                           | ✅ (hosted)                           | ✅              | ❌                          |
+| Type-safe schema                                             | ✅ TS                                            | ❌ YAML                                                                   | ❌ YAML                               | ❌              | ✅ TS                       |
+| Mobile-friendly UX                                           | ⚠️ desktop-first                                 | ✅ best-in-class                                                          | ✅                                    | ❌              | ✅                          |
+| Round-trips our **`index.yaml + body.{ru,en,de}.md`** layout | ⚠️ requires rename to `bodyRu.mdx` etc. (§6.1)   | ⚠️ closest is `index.<locale>.md` with **triplicated frontmatter** (§6.1) | ❌ no i18n at all                     | same as Sveltia | n/a                         |
+| Handles `L10nString` (string \| {ru,en,de})                  | ✅ `fields.conditional` (with discriminator key) | ⚠️ pick one shape, no clean union                                         | ❌                                    | ⚠️              | ✅                          |
+| Email magic-link login (no GitHub account for Roman)         | ✅ via Keystatic Cloud (free ≤ 3 users)          | ❌ GitHub-only                                                            | ✅ native                             | ❌              | ✅                          |
+| Editorial / branch-per-entry workflow                        | ❌                                               | ❌ (deferred to v2.0)                                                     | ❌                                    | ⚠️ buggy legacy | ✅                          |
+| Static-export host compatible (CF Pages, S3, GH Pages)       | ❌ needs server runtime                          | ✅ pure static                                                            | ✅                                    | ✅              | ❌                          |
+| Native R2/S3 media backend                                   | ❌                                               | ❌                                                                        | ❌                                    | ❌              | ❌                          |
+| Active in 2026                                               | ✅                                               | ✅ (weekly)                                                               | ✅                                    | ⚠️ slow         | ✅                          |
+| Time-to-ship                                                 | medium (2–3 days, includes file rename)          | small (½–1 day)                                                           | n/a                                   | small           | large                       |
 
 **Key takeaways:**
+
 - **No CMS in 2026 has a configurable R2 backend.** Confirmed across Keystatic Discussion #491, Sveltia roadmap, Decap, Pages CMS. R2 sync is therefore solved out-of-band by a GitHub Action regardless of CMS choice (§5).
-- **No CMS produces our exact on-disk layout for free.** Keystatic asks for a one-time file rename (`body.ru.md` → `bodyRu.mdx`). Sveltia asks us to accept triplicated frontmatter. There is no third option that preserves both the filenames *and* the single shared YAML.
+- **No CMS produces our exact on-disk layout for free.** Keystatic asks for a one-time file rename (`body.ru.md` → `bodyRu.mdx`). Sveltia asks us to accept triplicated frontmatter. There is no third option that preserves both the filenames _and_ the single shared YAML.
 - **Pages CMS is out** (no i18n). Decap is dominated by Sveltia. Tina fails on cost / OSS.
 
 ---
@@ -198,15 +212,15 @@ specifies a Phase 9 "Decap CMS Layer" that was approved-but-deferred when
 Phase 8 closed (2026-05-02). Its constraints are pre-decided architecture
 and apply to whatever editor we ship — Decap, Sveltia, or Keystatic:
 
-| Phase 9 constraint | Translation for Keystatic / Sveltia |
-|---|---|
-| `public/admin/index.html` + `public/admin/config.yml` | Sveltia matches verbatim. Keystatic equivalent: `app/keystatic/[[...params]]/page.tsx` + `keystatic.config.ts`. |
-| Vercel serverless GitHub OAuth proxy | Sveltia: deploy `sveltia-cms-auth` Worker or use the hosted proxy. Keystatic: GitHub App handles auth — no proxy needed. ✅ Keystatic simpler here. |
-| `editorial_workflow: false` (commit directly to branch) | Sveltia/Decap config flag. Keystatic equivalent: `storage.kind: 'github'` without branch/PR option. |
-| `backend.branch: draft` — **never push direct to main, require manual merge** | **Important.** Both editors must be configured to write to a `cms` (or `draft`) branch, not `main`. Daniil reviews PR → merges. This overrides the "drafts" question in §8.4 — the prior decision is **PR workflow, not direct-to-main**. |
-| No `_diagnostics.md` generation | Was a Decap quirk; n/a for Keystatic/Sveltia. |
-| Media library uses S3-compatible R2 endpoint | Decap supports this natively; Sveltia inherits it. **Keystatic does not have a built-in R2 backend** — its image fields commit binaries to git. We solve this with the GitHub Action in §5 (commit → Action uploads to R2). Net effect is identical for the reader; the difference is just *where* the upload happens. |
-| Schema mirrors frontmatter with Cyrillic labels | All three support `label_ru` / Russian labels in the schema. |
+| Phase 9 constraint                                                            | Translation for Keystatic / Sveltia                                                                                                                                                                                                                                                                                    |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `public/admin/index.html` + `public/admin/config.yml`                         | Sveltia matches verbatim. Keystatic equivalent: `app/keystatic/[[...params]]/page.tsx` + `keystatic.config.ts`.                                                                                                                                                                                                        |
+| Vercel serverless GitHub OAuth proxy                                          | Sveltia: deploy `sveltia-cms-auth` Worker or use the hosted proxy. Keystatic: GitHub App handles auth — no proxy needed. ✅ Keystatic simpler here.                                                                                                                                                                    |
+| `editorial_workflow: false` (commit directly to branch)                       | Sveltia/Decap config flag. Keystatic equivalent: `storage.kind: 'github'` without branch/PR option.                                                                                                                                                                                                                    |
+| `backend.branch: draft` — **never push direct to main, require manual merge** | **Important.** Both editors must be configured to write to a `cms` (or `draft`) branch, not `main`. Daniil reviews PR → merges. This overrides the "drafts" question in §8.4 — the prior decision is **PR workflow, not direct-to-main**.                                                                              |
+| No `_diagnostics.md` generation                                               | Was a Decap quirk; n/a for Keystatic/Sveltia.                                                                                                                                                                                                                                                                          |
+| Media library uses S3-compatible R2 endpoint                                  | Decap supports this natively; Sveltia inherits it. **Keystatic does not have a built-in R2 backend** — its image fields commit binaries to git. We solve this with the GitHub Action in §5 (commit → Action uploads to R2). Net effect is identical for the reader; the difference is just _where_ the upload happens. |
+| Schema mirrors frontmatter with Cyrillic labels                               | All three support `label_ru` / Russian labels in the schema.                                                                                                                                                                                                                                                           |
 
 **Net effect on §4 recommendation:** unchanged — Keystatic still wins on DX
 and on auth simplicity (no OAuth proxy). The Phase 9 lockdown shifts §6.4
@@ -321,6 +335,7 @@ lines 195 and 210.
 ## 6. Implementation plan — Keystatic path
 
 ### Phase K1 — Install & mount (½ day)
+
 1. `npm i @keystatic/core @keystatic/next`
 2. Create `keystatic.config.ts` at repo root with:
    - `storage: process.env.NODE_ENV === 'development' ? { kind: 'local' } : { kind: 'github', repo: 'octrow/boklanov' }`
@@ -331,6 +346,7 @@ lines 195 and 210.
 4. Verify `npm run dev` → `localhost:3000/keystatic` opens, lists no collections.
 
 ### Phase K2 — `productions` collection (1 day)
+
 Schema mirrors `content/_PRODUCTION_TEMPLATE.yaml` exactly. Sketch:
 
 ```ts
@@ -342,48 +358,78 @@ productions: collection({
   entryLayout: 'content',
   schema: {
     slug: fields.slug({ name: { label: 'Slug' } }),
-    title: localizedString({ label: 'Title' }),       // helper that returns object {ru,en,de}
+    title: localizedString({ label: 'Title' }), // helper that returns object {ru,en,de}
     synopsis: localizedString({ label: 'Synopsis' }),
     tagline: localizedString({ label: 'Tagline', allowEmpty: true }),
-    directorsNote: localizedString({ label: "Director's note", allowEmpty: true }),
+    directorsNote: localizedString({
+      label: "Director's note",
+      allowEmpty: true
+    }),
     theatre: fields.object({
       name: l10nOrString({ label: 'Theatre name' }),
       shortName: l10nOrString({ label: 'Short name', allowEmpty: true }),
       city: l10nOrString({ label: 'City' }),
-      country: fields.text({ label: 'ISO country code', validation: { length: { min: 2, max: 2 } } }),
-      url: fields.url({ label: 'Website', validation: { isRequired: false } }),
+      country: fields.text({
+        label: 'ISO country code',
+        validation: { length: { min: 2, max: 2 } }
+      }),
+      url: fields.url({ label: 'Website', validation: { isRequired: false } })
     }),
-    year: fields.integer({ label: 'Year', validation: { min: 1900, max: 2100 } }),
+    year: fields.integer({
+      label: 'Year',
+      validation: { min: 1900, max: 2100 }
+    }),
     ageRating: fields.select({
-      options: [{ value: '0+', label: '0+' }, { value: '6+', label: '6+' }, /* ... */]
+      options: [
+        { value: '0+', label: '0+' },
+        { value: '6+', label: '6+' } /* ... */
+      ]
     }),
     durationMin: fields.integer({ label: 'Duration (min)' }),
-    role: fields.multiselect({ options: [/* director, performer, ... */] }),
-    form: fields.multiselect({ options: [/* theater, puppet, solo ... */] }),
+    role: fields.multiselect({
+      options: [
+        /* director, performer, ... */
+      ]
+    }),
+    form: fields.multiselect({
+      options: [
+        /* theater, puppet, solo ... */
+      ]
+    }),
     poster: fields.object({
       src: fields.image({
         directory: 'public/productions/{slug}',
-        publicPath: '/productions/{slug}/',
+        publicPath: '/productions/{slug}/'
       }),
-      credit: fields.text({ label: 'Photo credit', allowEmpty: true }),
+      credit: fields.text({ label: 'Photo credit', allowEmpty: true })
     }),
     gallery: fields.array(
       fields.object({
-        src: fields.image({ directory: 'public/productions/{slug}', publicPath: '/productions/{slug}/' }),
+        src: fields.image({
+          directory: 'public/productions/{slug}',
+          publicPath: '/productions/{slug}/'
+        }),
         credit: fields.text({ allowEmpty: true }),
-        caption: localizedString({ allowEmpty: true }),
+        caption: localizedString({ allowEmpty: true })
       }),
       { label: 'Gallery', itemLabel: (p) => p.fields.src.value ?? 'image' }
     ),
-    awards: fields.array(/* name, year, category, city — l10nOrString fields */),
+    awards:
+      fields.array(/* name, year, category, city — l10nOrString fields */),
     festivals: fields.array(/* same shape */),
     press: fields.array(/* title, url, outlet, language */),
     runs: fields.array(/* venue, city, yearFrom, yearTo, count */),
     featured: fields.checkbox({ label: 'Show on home featured strip' }),
-    featuredOrder: fields.integer({ label: 'Featured order', validation: { isRequired: false } }),
-    listOrder: fields.integer({ label: 'List order', validation: { isRequired: false } }),
-    body: fields.mdx({ label: 'Body' }), // writes body.md — see §6.1
-  },
+    featuredOrder: fields.integer({
+      label: 'Featured order',
+      validation: { isRequired: false }
+    }),
+    listOrder: fields.integer({
+      label: 'List order',
+      validation: { isRequired: false }
+    }),
+    body: fields.mdx({ label: 'Body' }) // writes body.md — see §6.1
+  }
 })
 ```
 
@@ -393,7 +439,7 @@ This is the most-corrected part of the analysis. Cross-referencing the Opus
 and Gemini memos and Keystatic Discussion #361:
 
 **Today's shape** — unusual: one shared `index.yaml` + three sibling
-`body.{ru,en,de}.md` files per entry. *Metadata-shared, body-localized.*
+`body.{ru,en,de}.md` files per entry. _Metadata-shared, body-localized._
 No CMS i18n model targets this layout directly.
 
 **Keystatic's idiomatic fit (Discussion #361, confirmed by Thinkmill):**
@@ -404,13 +450,13 @@ filename for each non-primary document field is `<fieldKey>.<ext>` (e.g.
 ```ts
 collection({
   path: 'content/productions/*/',
-  format: { data: 'yaml' },           // index.yaml only — no contentField
+  format: { data: 'yaml' }, // index.yaml only — no contentField
   schema: {
     // ...index.yaml fields...
     bodyRu: fields.mdx({ label: 'Body (RU)' }),
     bodyEn: fields.mdx({ label: 'Body (EN)' }),
-    bodyDe: fields.mdx({ label: 'Body (DE)' }),
-  },
+    bodyDe: fields.mdx({ label: 'Body (DE)' })
+  }
 })
 ```
 
@@ -426,7 +472,7 @@ content/productions/<slug>/
 
 **Migration cost:** one-shot `git mv body.ru.md bodyRu.mdx` (etc.) +
 ~30-line patch in `lib/content.ts`. Plain Markdown is valid MDX, so the
-file *content* doesn't change. **Do not** set `format.contentField` —
+file _content_ doesn't change. **Do not** set `format.contentField` —
 Keystatic permits only one contentField per entry, and using it kills the
 multi-body pattern.
 
@@ -450,6 +496,7 @@ need to pick one locale's `index.<locale>.md` as canonical for `lib/content.ts`
 and ignore the other two's frontmatter.
 
 **Verdict:**
+
 - If we accept the file rename → **Keystatic wins decisively** (clean
   layout, no triplication, type-safe access via `createReader`).
 - If we cannot rename → **Sveltia, with the triplication wart**.
@@ -458,9 +505,10 @@ and ignore the other two's frontmatter.
   ongoing maintenance.
 
 #### 6.2 The `L10nString` problem
+
 Two helpers in `keystatic.config.ts`:
 
-- `localizedString({ label, allowEmpty })` → `fields.object({ ru: text, en: text, de: text })` — for fields that are *always* per-locale.
+- `localizedString({ label, allowEmpty })` → `fields.object({ ru: text, en: text, de: text })` — for fields that are _always_ per-locale.
 - `l10nOrString({ label })` → `fields.conditional(fields.select({ options: [{value:'shared'},{value:'localized'}] }), { shared: fields.text(...), localized: fields.object({ ru, en, de }) })` — for fields where authors choose.
 
 **Important on-disk wart (per Opus memo):** `fields.conditional` writes a
@@ -495,22 +543,26 @@ Alternative: drop the dual-shape and **always store the object form**
 schema-simplification we could do for free. Question 6 in §8 asks the user.
 
 ### Phase K3 — `about` & singletons (¼ day)
+
 - Singleton for `content/about/ru.yaml`, `en.yaml`, `de.yaml` — fields:
   `bio`, `quote`, `stats`, `whereTaught`, `photos[]`. Each photo object
   has `src` (image field) + `credit`.
 - Markdown bios → singletons writing `content/about/{ru,en,de}.md`.
 
 ### Phase K4 — auth & deploy (½ day)
+
 1. Create a GitHub App (per Keystatic docs) with `contents: write` for the repo.
 2. Add app credentials to Vercel env vars.
 3. Restrict the `/keystatic` route to authenticated repo collaborators only — Keystatic's GitHub mode handles this out of the box; double-check the Vercel deployment guards `/api/keystatic/*` behind auth.
 4. Smoke test: open `/keystatic` on prod, edit a production title, verify a commit lands on `main`, Vercel rebuilds, R2 GitHub Action fires for image-touching commits.
 
 ### Phase K5 — author handoff (¼ day)
+
 - Update `content/AUTHORING.ru.md`: add a **«Editor in browser»** section pointing to `https://boklanov.com/keystatic`. Keep the Obsidian section intact for power-user mode.
 - Record a 3-min Loom for Roman.
 
 ### Phase K6 — fold image upload into the loop (¼ day)
+
 - Ship the GitHub Action from §5.
 - Remove the "написать Daniil" sentences from `AUTHORING.ru.md` lines 195
   and 210 — replace with «коммит → R2 обновится сам через 1–2 минуты».
@@ -575,7 +627,7 @@ Mechanical follow-ups (don't change the recommendation):
    (If Vercel-only, add to GitHub Actions secrets before shipping §5.)
 8. **Image sync flavour:** §5a (reuse existing `upload-images.ts`) or
    §5b (replace with `aws s3 sync --delete`)? Recommend 5b unless we have
-   files in R2 that are *not* in repo and would be deleted by `--delete`.
+   files in R2 that are _not_ in repo and would be deleted by `--delete`.
 
 ---
 
@@ -593,10 +645,10 @@ package.json                                  # +@keystatic deps OR nothing for 
 scripts/upload-images.ts                      # extend to walk public/about/ too (small)
 ```
 
-**Update after cross-check:** `lib/content.ts` *will* change — either to
+**Update after cross-check:** `lib/content.ts` _will_ change — either to
 read `bodyRu.mdx` filenames (Keystatic path) or to merge metadata from
 one canonical `index.<locale>.md` and ignore frontmatter triplication
-(Sveltia path). The on-disk *layout* — folder per slug, YAML metadata,
+(Sveltia path). The on-disk _layout_ — folder per slug, YAML metadata,
 locale bodies — stays the same shape.
 
 ---
@@ -604,7 +656,7 @@ locale bodies — stays the same shape.
 ## 10. Known footguns (consolidated from both deep-research memos)
 
 1. **Keystatic + `output: 'export'` are mutually exclusive** (Discussion #826). Verified ✅ — our `next.config.js` doesn't set static export, so we're already fine. If we ever migrate off Vercel to a static-only host (Cloudflare Pages, GitHub Pages), Keystatic's admin breaks; we'd flip to Sveltia.
-2. **Keystatic Cloud Images is *not* a configurable R2 adapter.** It's Thinkmill's CDN. To get images on *our* R2 bucket, use the §5 GitHub Action.
+2. **Keystatic Cloud Images is _not_ a configurable R2 adapter.** It's Thinkmill's CDN. To get images on _our_ R2 bucket, use the §5 GitHub Action.
 3. **Sveltia editorial workflow / branch-per-entry is not implemented** (deferred to v2.0, late 2026). Our manual `cms` → `main` merge is the substitute.
 4. **Sveltia is a one-person project.** Yoshino has shipped weekly through 2025–2026 and v1.0 is imminent, but bus factor is real. Mitigations: MIT, config is Decap-compatible, fallback to Decap is a script-tag swap.
 5. **Keystatic `fields.conditional` writes a `discriminant` key into YAML.** Reader needs a normalizer (see §6.2). A clean union without the discriminator requires a custom widget — not worth it.
@@ -620,14 +672,14 @@ locale bodies — stays the same shape.
 
 Cross-checked against `archive/CMS_RESEARCH_OPUS.md` and `archive/CMS_RESEARCH_GEMINI.md`. The following claims in earlier drafts of this doc were wrong and have been fixed:
 
-| Earlier (wrong) claim | Corrected (this version) |
-|---|---|
-| "Sveltia natively supports our `body.{ru,en,de}.md` shape." | None of Sveltia's three i18n structures produces shared YAML + body siblings. Closest is `index.<locale>.md` with triplicated frontmatter. |
-| "Keystatic body files via sibling singletons" (Option B in original §6.1). | The actual idiom (Discussion #361) is multiple peer document fields in one collection, producing `bodyRu.mdx` etc. — not singletons. |
-| "Keystatic supports plain `.md` body files." | `fields.mdx` writes `.mdx`, `fields.markdoc` writes `.mdoc`. One-shot rename required. |
-| "Auth via GitHub OAuth — repo collaborators only." | Adds **Keystatic Cloud** as a third auth option (free ≤ 3 users, magic-link, Roman skips GitHub entirely). |
-| "Mobile-friendly UX ✅" for Keystatic. | Keystatic is desktop-first; **Sveltia is the mobile-friendly one**. Phone-first editing flips the recommendation. |
-| "Pages CMS is a soft fail on C9." | **Pages CMS is a hard fail** — no i18n, period (issue #221, no implementation). Strike from candidate list. |
-| "Decap (stale)" in rejection. | Decap is slow but not stale (richtext widget shipped April 2026). Still rejected — Sveltia dominates. |
-| Static export (`output: 'export'`) constraint not addressed. | Confirmed not in use; called out as a future-direction footgun (#1). |
-| "We can extend `upload-images.ts`" only. | Added §5b — `aws s3 sync --delete` replaces the script entirely. |
+| Earlier (wrong) claim                                                      | Corrected (this version)                                                                                                                   |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Sveltia natively supports our `body.{ru,en,de}.md` shape."                | None of Sveltia's three i18n structures produces shared YAML + body siblings. Closest is `index.<locale>.md` with triplicated frontmatter. |
+| "Keystatic body files via sibling singletons" (Option B in original §6.1). | The actual idiom (Discussion #361) is multiple peer document fields in one collection, producing `bodyRu.mdx` etc. — not singletons.       |
+| "Keystatic supports plain `.md` body files."                               | `fields.mdx` writes `.mdx`, `fields.markdoc` writes `.mdoc`. One-shot rename required.                                                     |
+| "Auth via GitHub OAuth — repo collaborators only."                         | Adds **Keystatic Cloud** as a third auth option (free ≤ 3 users, magic-link, Roman skips GitHub entirely).                                 |
+| "Mobile-friendly UX ✅" for Keystatic.                                     | Keystatic is desktop-first; **Sveltia is the mobile-friendly one**. Phone-first editing flips the recommendation.                          |
+| "Pages CMS is a soft fail on C9."                                          | **Pages CMS is a hard fail** — no i18n, period (issue #221, no implementation). Strike from candidate list.                                |
+| "Decap (stale)" in rejection.                                              | Decap is slow but not stale (richtext widget shipped April 2026). Still rejected — Sveltia dominates.                                      |
+| Static export (`output: 'export'`) constraint not addressed.               | Confirmed not in use; called out as a future-direction footgun (#1).                                                                       |
+| "We can extend `upload-images.ts`" only.                                   | Added §5b — `aws s3 sync --delete` replaces the script entirely.                                                                           |
