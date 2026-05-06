@@ -1,11 +1,39 @@
 # Keystatic Image Upload — Architecture & Setup
 
+## Overall goal
+
+From the Keystatic admin UI — both at
+**https://boklanov.com/keystatic** and **http://localhost:3000/keystatic** —
+the editor must be able to **add, update, and remove one or many photos**
+on any content entry (productions, about, etc.).
+
+A single upload action performs three things end-to-end:
+
+1. **Add the file to `public/<directory>/<filename>`**
+   - Dev: written directly to disk so Next.js serves it locally.
+   - Prod: committed to GitHub via the Contents API so it lands in
+     `public/` on the next deploy and exists in git as source of truth.
+2. **Link the path in YAML** — the editor's `ImagePathPreview` field stores
+   the bare path (`/productions/cow-on-ice/foo.jpg`) into the entry's text
+   field; Keystatic's normal Save persists the YAML change.
+3. **Upload the file to R2** at the same key
+   (`<directory>/<filename>`), so `cdnUrl()` (which prepends
+   `NEXT_PUBLIC_CDN_BASE`) can serve the image immediately in both the
+   Keystatic preview thumbnail and the live page — no deploy wait.
+
+Removal is handled by deleting/clearing the YAML reference; orphaned files
+in R2 / `public/` are cleaned up out-of-band (sync-r2 keeps R2 aligned
+with `public/` on push).
+
 ## TL;DR
 
-Keystatic Cloud's GitHub App credentials are internal and unexposed. There
-is no API to piggyback on them for custom binary uploads. The correct approach
-is a fine-grained GitHub PAT stored in Vercel. The production upload route
-already implements this; only the `GITHUB_TOKEN` env var is missing.
+The upload route at `app/api/keystatic-asset/route.ts` is the single
+endpoint that fans out the file to disk/GitHub + R2. All required Vercel
+env vars (`R2_*`, `GITHUB_TOKEN`, `NEXT_PUBLIC_CDN_BASE`) are now set, so
+both environments perform the full goal above.
+
+The legacy `KEYSTATIC_STORAGE` / `KEYSTATIC_ENABLE` Vercel vars are not
+referenced in the codebase and can be deleted to reduce clutter.
 
 ---
 
@@ -49,14 +77,15 @@ The productions schema keeps images as `fields.text` (path strings) because:
 
 ---
 
-## Current production upload flow
+## Upload flow (unified across dev + prod)
 
 ```
 Editor clicks "Upload image" in Keystatic
   → POST /api/keystatic-asset  { file, directory }
   → app/api/keystatic-asset/route.ts
 
-  In PARALLEL:
+  ── Production (NODE_ENV=production) ──────────
+  In PARALLEL (both required, 500 on any failure):
   ┌─────────────────────────────────────────────┐
   │ 1. R2 upload                                │
   │    S3Client → boklanov-content R2 bucket    │
@@ -69,13 +98,19 @@ Editor clicks "Upload image" in Keystatic
   │    PUT /repos/octrow/boklanov/contents/     │
   │       public/productions/cow-on-ice/foo.jpg │
   │    Auth: GITHUB_TOKEN (fine-grained PAT)    │
+  │    Overwrites existing files (uses sha)     │
   │    Commit: "chore(media): upload … via ks"  │
   └─────────────────────────────────────────────┘
+
+  ── Development (localhost) ───────────────────
+  1. Write to public/<directory>/<filename> on disk (overwrite OK).
+  2. Best-effort R2 upload using local R2_* env vars; skipped with
+     a warning if creds aren't set so dev still works offline.
 
   → Returns { src: "/productions/cow-on-ice/foo.jpg" }
   → ImagePathPreview sets the text field value
   → Editor saves YAML → Keystatic Cloud commits index.yaml
-  → Vercel redeploys (both commits on main)
+  → Vercel redeploys (both commits on main in prod)
   → sync-r2.yml GitHub Action re-syncs public/ → R2 (idempotent)
 ```
 
@@ -100,14 +135,23 @@ If only GitHub → image isn't on R2 yet; preview blank until sync-r2 runs after
 
 ## Required Vercel environment variables
 
-All four R2 vars are already set (confirmed working after credentials fix).
-The only missing piece:
+All required vars are set in Production + Preview as of 2026-05-06:
 
-| Variable | Value | Where to create |
-|----------|-------|-----------------|
-| `GITHUB_TOKEN` | Fine-grained PAT | GitHub → Settings → Developer settings → Fine-grained personal access tokens |
+| Variable | Status | Notes |
+|----------|--------|-------|
+| `R2_ACCOUNT_ID` | set | Cloudflare account id |
+| `R2_ACCESS_KEY_ID` | set | R2 API token id |
+| `R2_SECRET_ACCESS_KEY` | set | R2 API token secret |
+| `R2_BUCKET` | optional | defaults to `boklanov-content` |
+| `NEXT_PUBLIC_CDN_BASE` | set | R2 public URL, used by `cdnUrl()` |
+| `GITHUB_TOKEN` | set | fine-grained PAT, Contents: read+write on `octrow/boklanov` |
 
-### Creating the PAT
+Stale / orphaned (safe to delete from Vercel — not referenced in code):
+
+- `KEYSTATIC_STORAGE`
+- `KEYSTATIC_ENABLE`
+
+### Creating the GitHub PAT (for reference / future rotation)
 
 1. GitHub → your profile → **Settings**
 2. **Developer settings** → **Fine-grained personal access tokens** → **Generate new token**
