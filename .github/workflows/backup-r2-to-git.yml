@@ -1,18 +1,24 @@
 name: Backup R2 to git
 
-# Phase 1 of KEYSTATIC_R2_ONLY_PLAN.md ships this with workflow_dispatch
-# only, so the user can verify a no-op run on a clean tree before any
-# auto-triggers exist. Phase 5 of the plan adds:
+# Mirrors Cloudflare R2 → public/ in this repo, batched into one
+# `chore(media): backup N upload(s) from R2` commit per run. Re-establishes
+# git as eventual source of truth for editor-uploaded media so the
+# Keystatic save flow can stay one-commit-per-save (the bot's YAML commit).
 #
-#   push:
-#     branches: [main]
-#     paths: ['content/**']
-#   schedule:
-#     - cron: '0 3 * * *'    # daily 03:00 UTC safety net
+# Triggered by:
+#   - push to main on content/**  → catches every editor save promptly
+#   - daily cron 03:00 UTC        → safety net for uploads with no YAML save
+#   - manual workflow_dispatch    → for ad-hoc runs / smoke tests
 #
-# Until then the workflow runs only when triggered manually.
+# See .design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md.
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/**'
+  schedule:
+    - cron: '0 3 * * *'
   workflow_dispatch: {}
 
 concurrency:
@@ -30,7 +36,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
