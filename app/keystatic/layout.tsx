@@ -19,12 +19,14 @@ export default function KeystaticLayout({
   if (!showAdminUI) notFound()
   return (
     <html lang='en' suppressHydrationWarning>
-      {/* Seed dark theme before React hydrates so Keystatic reads it from localStorage */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `if(!localStorage.getItem('keystatic-color-scheme'))localStorage.setItem('keystatic-color-scheme','dark')`
-        }}
-      />
+      <head>
+        {/* Seed dark theme before React hydrates so Keystatic reads it from localStorage */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(!localStorage.getItem('keystatic-color-scheme'))localStorage.setItem('keystatic-color-scheme','dark')`
+          }}
+        />
+      </head>
       <body style={{ margin: 0 }}>
         <KeystaticApp />
         <ImagePathPreview />
