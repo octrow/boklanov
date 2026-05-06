@@ -14,7 +14,9 @@ poster:
 productionsPhoto:
   src: /uploads/3-Bremen.webp
 featuredPhoto: {}
-gallery: []
+gallery:
+  - src: /uploads/Boklanov-big.webp
+    caption: {}
 videos: []
 theatre:
   name:
