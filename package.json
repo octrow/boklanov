@@ -20,6 +20,7 @@
     "build": "next build",
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
+    "backup-r2-to-git": "tsx scripts/backup-r2-to-git.ts",
     "lint-content": "tsx scripts/lint-content.ts",
     "audit-keystatic": "tsx scripts/audit-keystatic-schema.ts",
     "translate-content": "tsx scripts/translate-content.ts",

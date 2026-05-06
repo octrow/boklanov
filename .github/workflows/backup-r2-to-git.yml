@@ -1,0 +1,57 @@
+name: Backup R2 to git
+
+# Phase 1 of KEYSTATIC_R2_ONLY_PLAN.md ships this with workflow_dispatch
+# only, so the user can verify a no-op run on a clean tree before any
+# auto-triggers exist. Phase 5 of the plan adds:
+#
+#   push:
+#     branches: [main]
+#     paths: ['content/**']
+#   schedule:
+#     - cron: '0 3 * * *'    # daily 03:00 UTC safety net
+#
+# Until then the workflow runs only when triggered manually.
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: backup-r2-to-git
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Download R2-only objects into public/
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET || 'boklanov-content' }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: npm run --silent backup-r2-to-git
+
+      - name: Commit and push if anything changed
+        run: |
+          if [ -z "$(git status --porcelain public/)" ]; then
+            echo "no R2-only objects — nothing to back up"
+            exit 0
+          fi
+          count=$(git status --porcelain public/ | wc -l | tr -d ' ')
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/
+          git commit -m "chore(media): backup ${count} upload(s) from R2"
+          git push origin HEAD:main
