@@ -52,12 +52,18 @@ jobs:
       - name: Commit and push if anything changed
         run: |
           if [ -z "$(git status --porcelain public/)" ]; then
-            echo "no R2-only objects — nothing to back up"
+            echo "no public/ ↔ R2 drift — nothing to back up"
             exit 0
           fi
-          count=$(git status --porcelain public/ | wc -l | tr -d ' ')
+          adds=$(git status --porcelain public/ | grep -E '^\?\?|^A ' | wc -l | tr -d ' ')
+          mods=$(git status --porcelain public/ | grep -E '^.M' | wc -l | tr -d ' ')
+          dels=$(git status --porcelain public/ | grep -E '^.D' | wc -l | tr -d ' ')
+          summary=""
+          [ "$adds" != "0" ] && summary="${summary}${adds} add"
+          [ "$mods" != "0" ] && summary="${summary}${summary:+, }${mods} update"
+          [ "$dels" != "0" ] && summary="${summary}${summary:+, }${dels} remove"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/
-          git commit -m "chore(media): backup ${count} upload(s) from R2"
+          git add -A public/
+          git commit -m "chore(media): sync R2 → public/ (${summary})"
           git push origin HEAD:main

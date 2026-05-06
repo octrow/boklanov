@@ -1,5 +1,8 @@
 /**
- * Asset uploader for the Keystatic admin UI.
+ * Asset uploader + remover for the Keystatic admin UI.
+ *
+ * POST   — upload an image to R2 (and disk in dev).
+ * DELETE — remove an image from R2 (and disk in dev).
  *
  * Goal (both dev and prod):
  *   1. Upload the file to Cloudflare R2 at <directory>/<filename> so the
@@ -19,7 +22,9 @@
  *   - Binaries no longer land in the GitHub repo synchronously. The
  *     .github/workflows/backup-r2-to-git.yml workflow mirrors R2 -> public/
  *     on a schedule + content-push so git stays the eventual source of
- *     truth (see .design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md).
+ *     truth (see .design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md). The
+ *     same workflow also removes public/ files no longer in R2, so an
+ *     editor remove-then-save propagates into git asynchronously.
  *
  * Required env vars:
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
@@ -27,7 +32,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'node:fs/promises'
+import { writeFile, mkdir, unlink } from 'node:fs/promises'
 import path from 'node:path'
 
 const ALLOWED_EXT = new Set([
@@ -39,6 +44,10 @@ const ALLOWED_EXT = new Set([
   '.svg',
   '.avif'
 ])
+// Mirror of scripts/backup-r2-to-git.ts. Limits which prefixes the editor
+// can write to and (more importantly) delete from, so a malformed src
+// can't reach into anything outside the editor-managed media tree.
+const ALLOWED_DELETE_PREFIXES = ['productions/', 'about/', 'uploads/']
 const PUBLIC_ROOT = path.resolve(process.cwd(), 'public')
 const MAX_BYTES = 25 * 1024 * 1024 // 25 MB
 
@@ -110,8 +119,61 @@ async function uploadToR2(
   )
 }
 
+async function deleteFromR2(key: string): Promise<void> {
+  const accountId = process.env.R2_ACCOUNT_ID
+  const bucket = process.env.R2_BUCKET ?? 'boklanov-content'
+  const keyId = process.env.R2_ACCESS_KEY_ID
+  const keySecret = process.env.R2_SECRET_ACCESS_KEY
+
+  if (!accountId || !keyId || !keySecret) {
+    throw new Error(
+      'R2 credentials not configured (R2_ACCOUNT_ID / R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY)'
+    )
+  }
+
+  const { S3Client, DeleteObjectCommand } = await import('@aws-sdk/client-s3')
+  const client = new S3Client({
+    region: 'auto',
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: { accessKeyId: keyId, secretAccessKey: keySecret },
+    forcePathStyle: true
+  })
+
+  // R2 DeleteObject is free per docs/r2-operations.md, and is idempotent:
+  // it returns 204 even if the key doesn't exist, which matches our
+  // "ensure absent" semantics for the editor remove flow.
+  await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }))
+}
+
 // ---------------------------------------------------------------------------
-// Route handler
+// Helpers shared by POST and DELETE
+// ---------------------------------------------------------------------------
+
+/**
+ * Decompose `/uploads/foo.webp` (the YAML-stored form) into
+ * `{ directory: 'uploads', filename: 'foo.webp', r2Key: 'uploads/foo.webp' }`,
+ * sanitising both halves and refusing anything that escapes
+ * ALLOWED_DELETE_PREFIXES.
+ */
+function decomposeSrc(
+  src: string
+): { directory: string; filename: string; r2Key: string } | null {
+  const trimmed = src.trim().replace(/^\/+/, '')
+  if (!trimmed) return null
+  const lastSlash = trimmed.lastIndexOf('/')
+  if (lastSlash <= 0) return null
+  const directory = sanitizeDirectory(trimmed.slice(0, lastSlash))
+  const filename = sanitizeSegment(trimmed.slice(lastSlash + 1))
+  if (!directory || !filename) return null
+  const ext = path.extname(filename).toLowerCase()
+  if (!ALLOWED_EXT.has(ext)) return null
+  const r2Key = `${directory}/${filename}`
+  if (!ALLOWED_DELETE_PREFIXES.some((p) => r2Key.startsWith(p))) return null
+  return { directory, filename, r2Key }
+}
+
+// ---------------------------------------------------------------------------
+// Route handlers
 // ---------------------------------------------------------------------------
 
 export async function POST(req: Request) {
@@ -194,6 +256,72 @@ export async function POST(req: Request) {
   return NextResponse.json({
     src,
     bytes: buffer.byteLength,
+    ...(r2Warning ? { r2Warning } : {})
+  })
+}
+
+export async function DELETE(req: Request) {
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'expected JSON body' }, { status: 400 })
+  }
+
+  const srcRaw = (body as { src?: unknown })?.src
+  if (typeof srcRaw !== 'string') {
+    return NextResponse.json({ error: 'missing src' }, { status: 400 })
+  }
+
+  const parts = decomposeSrc(srcRaw)
+  if (!parts) {
+    return NextResponse.json(
+      { error: 'invalid src (must be /<allowed-prefix>/<image>)' },
+      { status: 400 }
+    )
+  }
+  const { directory, filename, r2Key } = parts
+  const src = `/${r2Key}`
+
+  // ── Production ────────────────────────────────────────────────────────────
+  // R2 only. The backup-r2-to-git workflow notices the orphan in public/
+  // (file present in git, no matching key in R2) and removes it on its
+  // next run, so the deletion lands in git asynchronously.
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      await deleteFromR2(r2Key)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      return NextResponse.json({ error: message }, { status: 500 })
+    }
+    return NextResponse.json({ src, removed: true })
+  }
+
+  // ── Development ───────────────────────────────────────────────────────────
+  // Best-effort R2 delete + best-effort disk delete. Either may already be
+  // absent (e.g. dev tree without R2 creds, or a re-click after success);
+  // both are no-ops in that case.
+  let r2Warning: string | undefined
+  try {
+    await deleteFromR2(r2Key)
+  } catch (err) {
+    r2Warning = err instanceof Error ? err.message : String(err)
+  }
+
+  const targetPath = path.join(PUBLIC_ROOT, directory, filename)
+  const rel = path.relative(PUBLIC_ROOT, targetPath)
+  if (!rel.startsWith('..') && !path.isAbsolute(rel)) {
+    try {
+      await unlink(targetPath)
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code
+      if (code !== 'ENOENT') throw err
+    }
+  }
+
+  return NextResponse.json({
+    src,
+    removed: true,
     ...(r2Warning ? { r2Warning } : {})
   })
 }

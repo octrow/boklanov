@@ -1,10 +1,13 @@
 /**
  * backup-r2-to-git.ts
  *
- * Lists every object in the R2 bucket and downloads any that are missing
- * (or size-mismatched) under `public/`. Used by
- * `.github/workflows/backup-r2-to-git.yml` to re-establish git as
- * eventual source of truth for editor-uploaded media — see
+ * Mirrors the R2 bucket → `public/` for the allowlisted editor-managed
+ * prefixes (productions/, about/, uploads/). Two-way:
+ *   1. Downloads R2-only objects so additions land in git.
+ *   2. Removes public/ files no longer in R2 so editor "Remove" clicks
+ *      propagate into git as the next backup commit.
+ *
+ * Used by `.github/workflows/backup-r2-to-git.yml`. Rationale:
  * `.design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md`.
  *
  * Required env vars (Vercel / GitHub Actions secrets):
@@ -12,13 +15,13 @@
  *   R2_BUCKET (optional, default 'boklanov-content')
  *
  * Usage:
- *   npm run backup-r2-to-git              # download new R2-only objects
+ *   npm run backup-r2-to-git              # apply adds + deletes
  *   npm run backup-r2-to-git -- --dry-run # list what would change
  *
  * Exit codes:
  *   0  normal — workflow inspects working tree afterwards to decide whether
  *      to commit
- *   1  missing env vars or R2 / disk error
+ *   1  missing env vars, R2 / disk error, or safety threshold tripped
  */
 
 import {
@@ -26,8 +29,15 @@ import {
   ListObjectsV2Command,
   GetObjectCommand
 } from '@aws-sdk/client-s3'
-import { existsSync, mkdirSync, statSync, writeFileSync } from 'fs'
-import { dirname, join } from 'path'
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  statSync,
+  unlinkSync,
+  writeFileSync
+} from 'fs'
+import { dirname, extname, join, relative } from 'path'
 
 const ACCOUNT_ID = process.env.R2_ACCOUNT_ID
 const BUCKET = process.env.R2_BUCKET ?? 'boklanov-content'
@@ -68,6 +78,24 @@ function isBackupCandidate(key: string): boolean {
   const dot = key.lastIndexOf('.')
   if (dot === -1) return false
   return ALLOWED_EXT.has(key.slice(dot).toLowerCase())
+}
+
+// Cap on how many files a single run is allowed to delete from public/.
+// Real editor flows produce 1–3 deletions per backup-triggering save;
+// anything wildly past that is more likely an R2 outage / mis-config than
+// genuine editor activity, and we'd rather fail loud than silently wipe
+// `public/`. Override with BACKUP_DELETE_LIMIT for one-off catch-up runs.
+const DELETE_LIMIT = Number(process.env.BACKUP_DELETE_LIMIT ?? 50)
+
+function walkImageFiles(dir: string): string[] {
+  if (!existsSync(dir)) return []
+  const out: string[] = []
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name)
+    if (entry.isDirectory()) out.push(...walkImageFiles(full))
+    else if (ALLOWED_EXT.has(extname(entry.name).toLowerCase())) out.push(full)
+  }
+  return out
 }
 
 const client = new S3Client({
@@ -148,8 +176,45 @@ async function main() {
     if (!dryRun) await download(Key, target)
   }
 
+  // ── Orphan deletion ──────────────────────────────────────────────────────
+  // Walk public/ under each allowed prefix. Any image file there that is
+  // NOT present in R2 was either (a) edited out via the Keystatic Remove
+  // button [DELETE /api/keystatic-asset], or (b) a stale upload from before
+  // an out-of-band R2 cleanup. Either way, we mirror R2 by removing it.
+  const remoteKeys = new Set(remote.map((o) => o.Key))
+  const orphans: string[] = []
+
+  for (const prefix of ALLOWED_PREFIXES) {
+    const prefixRoot = join(PUBLIC_ROOT, prefix.replace(/\/$/, ''))
+    for (const localPath of walkImageFiles(prefixRoot)) {
+      const key = relative(PUBLIC_ROOT, localPath).replace(/\\/g, '/')
+      if (!remoteKeys.has(key)) orphans.push(localPath)
+    }
+  }
+
+  if (orphans.length > DELETE_LIMIT) {
+    console.error(
+      `[backup-r2-to-git] safety abort: ${orphans.length} proposed deletion(s) exceeds limit ${DELETE_LIMIT}.`
+    )
+    console.error(
+      '[backup-r2-to-git] this usually means R2 is unexpectedly empty / mis-listed, NOT genuine editor activity.'
+    )
+    console.error(
+      '[backup-r2-to-git] override with BACKUP_DELETE_LIMIT=<n> if this is intentional.'
+    )
+    process.exit(1)
+  }
+
+  let removed = 0
+  for (const localPath of orphans) {
+    const rel = relative(PUBLIC_ROOT, localPath)
+    console.log(`[backup-r2-to-git] orphan ${rel}`)
+    if (!dryRun) unlinkSync(localPath)
+    removed++
+  }
+
   console.log(
-    `[backup-r2-to-git] summary: added ${added}, overwritten ${mismatched}, skipped ${skipped}, filtered ${filtered}`
+    `[backup-r2-to-git] summary: added ${added}, overwritten ${mismatched}, skipped ${skipped}, filtered ${filtered}, removed ${removed}`
   )
 }
 

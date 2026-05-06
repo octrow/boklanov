@@ -25,12 +25,18 @@ End-to-end, an image upload performs two synchronous steps:
    change.
 
 A backup workflow then runs (on every push to `content/**`, plus a
-daily cron) and mirrors any new R2 objects into `public/` in one
-batched `chore(media): backup N upload(s) from R2` commit. This keeps
-git as eventual source of truth without forcing two commits per save.
+daily cron) and mirrors R2 ↔ `public/` in one batched
+`chore(media): sync R2 → public/ (...)` commit: it both downloads any
+new R2 objects and removes any `public/` files that no longer exist in
+R2. This keeps git as eventual source of truth without forcing two
+commits per save.
 
-Removal is handled by deleting/clearing the YAML reference; orphaned
-files in R2 / `public/` are cleaned up out-of-band when desired.
+**Removing a photo** uses the `Remove` button next to `Upload image`
+in the same field. One click `DELETE`s the binary from R2 (and from
+disk in dev) and clears the field value; the editor then saves the
+entry to commit the cleared YAML reference. The next backup-workflow
+run sees the orphaned `public/` file and `git rm`s it, so removals
+land in git the same way uploads do.
 
 ## TL;DR
 
@@ -129,18 +135,31 @@ page loads the image from R2 even before the backup commit lands.
 
 ## Backup workflow
 
-`.github/workflows/backup-r2-to-git.yml` mirrors R2 → `public/`:
+`.github/workflows/backup-r2-to-git.yml` keeps `public/` in sync with
+R2 in both directions:
 
-| Trigger                              | Purpose                                  |
-| ------------------------------------ | ---------------------------------------- |
-| `push` to `main`, paths `content/**` | Catches new uploads alongside YAML saves |
-| `schedule: cron '0 3 * * *'`         | Daily safety net for stray uploads       |
-| `workflow_dispatch`                  | Manual smoke runs                        |
+| Trigger                              | Purpose                              |
+| ------------------------------------ | ------------------------------------ |
+| `push` to `main`, paths `content/**` | Catches changes alongside YAML saves |
+| `schedule: cron '0 3 * * *'`         | Daily safety net for stray uploads   |
+| `workflow_dispatch`                  | Manual smoke runs                    |
 
 The script `scripts/backup-r2-to-git.ts` allowlists prefixes
-(`productions/`, `about/`, `uploads/`) and image extensions. Anything
-else in R2 — runtime caches, debug dumps, etc. — is filtered out and
-never committed.
+(`productions/`, `about/`, `uploads/`) and image extensions. For each
+run it:
+
+1. **Adds**: lists R2, downloads any allowlisted image not in `public/`.
+2. **Removes**: walks `public/` under the allowlisted prefixes; any
+   image file not present in R2 is `unlink`ed locally so the workflow's
+   `git add -A public/` captures it as a deletion.
+
+Anything else in R2 — runtime caches, debug dumps, etc. — is filtered
+out and neither downloaded nor allowed to influence the deletion set.
+
+A safety cap (`BACKUP_DELETE_LIMIT`, default 50) aborts the run if a
+single invocation would delete more files than that. This prevents an
+empty / mis-listed R2 bucket from silently wiping `public/`. Bump the
+env var for one-off catch-up runs.
 
 ---
 

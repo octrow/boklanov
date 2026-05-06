@@ -86,6 +86,16 @@ async function uploadFile(file: File, directory: string): Promise<string> {
   return json.src
 }
 
+async function deleteFile(src: string): Promise<void> {
+  const res = await fetch('/api/keystatic-asset', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ src })
+  })
+  const json = (await res.json().catch(() => ({}))) as { error?: string }
+  if (!res.ok) throw new Error(json.error || `delete failed (${res.status})`)
+}
+
 function buildAddon(input: HTMLInputElement): HTMLElement {
   const addon = document.createElement('div')
   addon.setAttribute(MARK, '1')
@@ -102,7 +112,8 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
 
   const fileInput = document.createElement('input')
   fileInput.type = 'file'
-  fileInput.accept = 'image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/avif'
+  fileInput.accept =
+    'image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/avif'
   fileInput.style.display = 'none'
 
   // Clone the markup of an existing Keystatic ActionButton (e.g. "Reset
@@ -112,30 +123,49 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
   const ref = document.querySelector<HTMLButtonElement>(
     'button.kui\\:ActionButton:not([data-image-path-button])'
   )
-  const refSpan = ref?.querySelector<HTMLSpanElement>('span.kui\\:ActionButton-text')
-  const button = document.createElement('button')
-  button.type = 'button'
-  button.className = ref?.className ?? 'kui:ActionButton kui:reset'
-  button.setAttribute('data-image-path-button', '1')
-  if (refSpan) {
-    const labelSpan = document.createElement('span')
-    labelSpan.className = refSpan.className
-    labelSpan.textContent = 'Upload image'
-    button.appendChild(labelSpan)
-  } else {
-    button.textContent = 'Upload image'
+  const refSpan = ref?.querySelector<HTMLSpanElement>(
+    'span.kui\\:ActionButton-text'
+  )
+
+  function makeActionButton(label: string, mark: string): HTMLButtonElement {
+    const b = document.createElement('button')
+    b.type = 'button'
+    b.className = ref?.className ?? 'kui:ActionButton kui:reset'
+    b.setAttribute('data-image-path-button', '1')
+    b.dataset.role = mark
+    if (refSpan) {
+      const labelSpan = document.createElement('span')
+      labelSpan.className = refSpan.className
+      labelSpan.textContent = label
+      b.appendChild(labelSpan)
+    } else {
+      b.textContent = label
+    }
+    // Keystatic's css-l97xxv sets `height: var(--kui-size-element-regular)`
+    // (32px). Inside a column-flex parent, the button gets `flex: 1 1 0%`
+    // from cascade and shrinks to content (~19px). Pin flex so the var-
+    // driven height wins and the button matches Keystatic's other action
+    // buttons exactly.
+    b.style.flex = '0 0 auto'
+    return b
   }
-  // Keystatic's css-l97xxv sets `height: var(--kui-size-element-regular)`
-  // (32px). Inside a column-flex parent, the button gets `flex: 1 1 0%`
-  // from cascade and shrinks to content (~19px). Pin flex so the var-
-  // driven height wins and the button matches Keystatic's other action
-  // buttons exactly.
-  button.style.flex = '0 0 auto'
+
+  const buttonRow = document.createElement('div')
+  buttonRow.style.cssText =
+    'display:flex;flex-direction:row;gap:8px;align-items:center'
+
+  const button = makeActionButton('Upload image', 'upload')
   button.addEventListener('click', (e) => {
     e.preventDefault()
     e.stopPropagation()
     fileInput.click()
   })
+
+  const removeButton = makeActionButton('Remove', 'remove')
+  // Hidden until the field has a value — set in ensureAddon().
+  removeButton.style.display = 'none'
+
+  buttonRow.append(button, removeButton)
 
   const status = document.createElement('span')
   status.dataset.role = 'status'
@@ -175,7 +205,37 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
     }
   })
 
-  addon.append(button, fileInput, preview, status)
+  removeButton.addEventListener('click', async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const current = input.value.trim()
+    if (!current) return
+    if (
+      !window.confirm(
+        `Remove this image from R2?\n\n${current}\n\nThe field will be cleared. Save the entry afterwards to commit the change.`
+      )
+    ) {
+      return
+    }
+    removeButton.disabled = true
+    button.disabled = true
+    status.textContent = `Removing ${current}…`
+    status.style.color = '#71717a'
+    try {
+      await deleteFile(current)
+      setReactInputValue(input, '')
+      status.textContent = `Removed from R2 — save the entry to drop the YAML reference.`
+      status.style.color = '#15803d'
+    } catch (err) {
+      status.textContent = (err as Error).message
+      status.style.color = '#b91c1c'
+    } finally {
+      removeButton.disabled = false
+      button.disabled = false
+    }
+  })
+
+  addon.append(buttonRow, fileInput, preview, status)
   return addon
 }
 
@@ -220,6 +280,14 @@ function ensureAddon(input: HTMLInputElement): HTMLElement | null {
     preview.style.backgroundImage = `url("${src.replace(/"/g, '\\"')}")`
   }
 
+  // Remove button only makes sense when there's something to remove.
+  const removeBtn = addon.querySelector<HTMLButtonElement>(
+    '[data-role="remove"]'
+  )
+  if (removeBtn) {
+    removeBtn.style.display = input.value.trim() ? '' : 'none'
+  }
+
   return addon
 }
 
@@ -234,7 +302,10 @@ function isImagePathInput(input: HTMLInputElement): boolean {
   const grand = input.closest('div')?.parentElement
   if (!grand) return false
   const desc = grand.querySelector('span, p')
-  if (desc && /\.(jpe?g|png|webp|gif|svg|avif)\b/i.test(desc.textContent || '')) {
+  if (
+    desc &&
+    /\.(jpe?g|png|webp|gif|svg|avif)\b/i.test(desc.textContent || '')
+  ) {
     return true
   }
   return false
@@ -304,7 +375,9 @@ function scanRows(root: ParentNode) {
       row.dataset.imgRowAnchored = '1'
     }
 
-    let thumb = row.querySelector<HTMLElement>(`:scope > [${ROW_THUMB_MARK}="1"]`)
+    let thumb = row.querySelector<HTMLElement>(
+      `:scope > [${ROW_THUMB_MARK}="1"]`
+    )
     if (!thumb) {
       thumb = document.createElement('span')
       thumb.setAttribute(ROW_THUMB_MARK, '1')
@@ -340,7 +413,10 @@ function scan(root: ParentNode) {
       const container = findFieldContainer(input)
       if (container) {
         for (const child of Array.from(container.children)) {
-          if (child instanceof HTMLElement && child.getAttribute(MARK) === '1') {
+          if (
+            child instanceof HTMLElement &&
+            child.getAttribute(MARK) === '1'
+          ) {
             child.remove()
           }
         }
