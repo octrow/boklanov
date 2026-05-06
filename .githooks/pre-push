@@ -59,4 +59,26 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   exit_code=1
 done
 
-exit "$exit_code"
+# If we rebased above, exit_code is already 1 and we want the user to retry
+# `git push` so the new refs are sent. Skip validation in that case.
+[ "$exit_code" -ne 0 ] && exit "$exit_code"
+
+# ── Content + design-token validation ────────────────────────────────────────
+# These are cheap (a few seconds each) and catch the foot-guns we've hit
+# repeatedly: Obsidian wikilinks landing in content/ and token drift between
+# tokens.css and the Tailwind theme. ESLint + prettier-check are NOT here —
+# pre-commit already auto-formats, and ESLint is left to CI.
+echo ""
+echo "pre-push: running content + token checks..."
+
+if ! npm run --silent lint-content; then
+  echo "pre-push: lint-content failed — push aborted."
+  exit 1
+fi
+
+if ! npm run --silent lint-tokens; then
+  echo "pre-push: lint-tokens failed — push aborted."
+  exit 1
+fi
+
+exit 0

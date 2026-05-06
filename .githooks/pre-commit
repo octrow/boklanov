@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# pre-commit: auto-format staged files with prettier and re-stage them.
+# Scoped to this repo via `git config --local core.hooksPath .githooks`.
+#
+# Runs only on the files actually staged for this commit, so it stays
+# fast even on large changes elsewhere in the tree. Touches the same
+# extensions Prettier supports here (code + YAML + Markdown + CSS).
+
+set -u
+
+mapfile -d '' staged < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+formattable=()
+for f in "${staged[@]}"; do
+  case "$f" in
+    *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) formattable+=("$f") ;;
+    *.json|*.md|*.mdx)                 formattable+=("$f") ;;
+    *.yaml|*.yml)                      formattable+=("$f") ;;
+    *.css|*.scss)                      formattable+=("$f") ;;
+  esac
+done
+
+[ ${#formattable[@]} -eq 0 ] && exit 0
+
+echo "pre-commit: formatting ${#formattable[@]} staged file(s) with prettier..."
+
+if ! npx --no-install prettier --write --log-level warn "${formattable[@]}"; then
+  echo "pre-commit: prettier failed — fix syntax errors in the listed files, then retry."
+  exit 1
+fi
+
+# Re-stage anything prettier rewrote. Files that didn't change are no-ops.
+git add -- "${formattable[@]}"
+
+exit 0
