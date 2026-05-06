@@ -1,45 +1,39 @@
 /**
- * Asset uploader for the Keystatic admin.
+ * Asset uploader for the Keystatic admin UI.
  *
- * Keystatic's `fields.image` doesn't show thumbnails for files placed
- * manually under `public/`, and we keep image references as `fields.text`
- * paths so the YAML is human-editable. This route lets the admin UI upload
- * an image so the editor can pick a file without leaving Keystatic.
+ * Goal (both dev and prod):
+ *   1. Add the file to public/<directory>/<filename>
+ *   2. Upload the file to Cloudflare R2 at <directory>/<filename>
+ *   (Step 3 — linking the path in YAML — is done by the editor saving in Keystatic.)
  *
- * In development: writes directly to public/<directory>/<filename> on disk.
+ * Dev  (localhost): writes to public/ on disk AND uploads to R2.
+ *   - R2 upload is best-effort: if credentials aren't in .env the disk write
+ *     still succeeds and the dev server serves the file locally.
+ *   - Overwrites are allowed (replace existing file).
  *
- * In production: writes the same file to two places in parallel:
- *   1. R2 bucket at <directory>/<filename> — so cdnUrl() (which prepends
- *      NEXT_PUBLIC_CDN_BASE → pub-...r2.dev) can serve it immediately, both
- *      to the live page after a YAML save and to the Keystatic preview tile.
- *   2. The GitHub repo at public/<directory>/<filename> via the Contents API
- *      — so the file is in git as source of truth and is included in future
- *      Vercel deploys / fresh clones. The sync-r2 workflow re-uploads on push,
- *      which is harmless (idempotent overwrite).
+ * Prod (Vercel):    uploads to R2 AND commits to GitHub in parallel.
+ *   - R2 makes the file immediately reachable via NEXT_PUBLIC_CDN_BASE
+ *     so the Keystatic preview thumbnail shows up right away.
+ *   - GitHub commit adds the file to public/ in the repo; Vercel rebuilds
+ *     and the sync-r2 workflow re-syncs (idempotent).
+ *   - Both are required; returns 500 if either fails.
  *
- * If R2 succeeds but GitHub fails, the response is a 500 — the user retries,
- * R2 silently overwrites, GitHub commit is attempted again. If GitHub
- * succeeds but R2 fails, sync-r2 will catch it on the next push, so the page
- * still gets the file after deploy.
- *
- * Required Vercel env vars in production:
- *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (R2_BUCKET optional,
- *   defaults to boklanov-content). Same credentials as npm run upload-images.
- *   GITHUB_TOKEN  — fine-grained PAT with Contents: read+write on the
- *                   boklanov repo.
- *   GITHUB_OWNER  — defaults to 'octrow'
- *   GITHUB_REPO   — defaults to 'boklanov'
- *   GITHUB_BRANCH — defaults to 'main'
+ * Required env vars:
+ *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
+ *   R2_BUCKET       (optional, default: boklanov-content)
+ *   GITHUB_TOKEN    (prod only) fine-grained PAT, Contents: read+write on boklanov repo
+ *   GITHUB_OWNER    (optional, default: octrow)
+ *   GITHUB_REPO     (optional, default: boklanov)
+ *   GITHUB_BRANCH   (optional, default: main)
  */
 
 import { NextResponse } from 'next/server'
-import { writeFile, mkdir, access } from 'node:fs/promises'
-import { constants as fsConstants } from 'node:fs'
+import { writeFile, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 
 const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif'])
 const PUBLIC_ROOT = path.resolve(process.cwd(), 'public')
-const MAX_BYTES = 25 * 1024 * 1024 // 25 MB — matches typical poster size budget
+const MAX_BYTES = 25 * 1024 * 1024 // 25 MB
 
 const MIME: Record<string, string> = {
   '.jpg': 'image/jpeg',
@@ -51,12 +45,15 @@ const MIME: Record<string, string> = {
   '.avif': 'image/avif'
 }
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
 function sanitizeSegment(s: string): string {
   return s.replace(/[^a-z0-9._-]/gi, '-')
 }
 
 function sanitizeDirectory(dir: string): string | null {
-  // Strip leading/trailing slashes, collapse repeats, reject `..`
   const trimmed = dir.replace(/^\/+|\/+$/g, '')
   if (!trimmed) return null
   const parts = trimmed.split('/')
@@ -64,18 +61,18 @@ function sanitizeDirectory(dir: string): string | null {
   return parts.map(sanitizeSegment).join('/')
 }
 
-async function uploadToR2(
-  buffer: Buffer,
-  key: string,
-  contentType: string
-): Promise<void> {
+// ---------------------------------------------------------------------------
+// R2
+// ---------------------------------------------------------------------------
+
+async function uploadToR2(buffer: Buffer, key: string, contentType: string): Promise<void> {
   const accountId = process.env.R2_ACCOUNT_ID
-  const bucket = process.env.R2_BUCKET ?? 'boklanov-content'
-  const keyId = process.env.R2_ACCESS_KEY_ID
+  const bucket    = process.env.R2_BUCKET ?? 'boklanov-content'
+  const keyId     = process.env.R2_ACCESS_KEY_ID
   const keySecret = process.env.R2_SECRET_ACCESS_KEY
 
   if (!accountId || !keyId || !keySecret) {
-    throw new Error('R2 env vars not configured (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY)')
+    throw new Error('R2 credentials not configured (R2_ACCOUNT_ID / R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY)')
   }
 
   const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3')
@@ -83,6 +80,8 @@ async function uploadToR2(
     region: 'auto',
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: keyId, secretAccessKey: keySecret },
+    // Account-level endpoint requires path-style; virtual-hosted style causes
+    // a signature mismatch because the bucket is prepended to the hostname.
     forcePathStyle: true
   })
 
@@ -96,72 +95,55 @@ async function uploadToR2(
   }))
 }
 
-type GitHubError = { ok: false; status: number; message: string }
-type GitHubOk = { ok: true; sha?: string }
+// ---------------------------------------------------------------------------
+// GitHub Contents API
+// ---------------------------------------------------------------------------
 
-async function getExistingSha(
-  owner: string,
-  repo: string,
-  branch: string,
-  pathInRepo: string,
-  token: string
-): Promise<GitHubOk | GitHubError> {
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURI(pathInRepo)}?ref=${encodeURIComponent(branch)}`
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    },
-    cache: 'no-store'
-  })
-  if (res.status === 200) {
-    const data = (await res.json()) as { sha?: string }
-    return { ok: true, sha: data.sha }
-  }
-  if (res.status === 404) return { ok: true }
-  return { ok: false, status: res.status, message: await res.text() }
-}
-
-async function commitToGitHub(
-  buffer: Buffer,
-  pathInRepo: string,
-  message: string
-): Promise<void> {
-  const token = process.env.GITHUB_TOKEN
-  const owner = process.env.GITHUB_OWNER ?? 'octrow'
-  const repo = process.env.GITHUB_REPO ?? 'boklanov'
+async function commitToGitHub(buffer: Buffer, pathInRepo: string, message: string): Promise<void> {
+  const token  = process.env.GITHUB_TOKEN
+  const owner  = process.env.GITHUB_OWNER  ?? 'octrow'
+  const repo   = process.env.GITHUB_REPO   ?? 'boklanov'
   const branch = process.env.GITHUB_BRANCH ?? 'main'
 
-  if (!token) {
-    throw new Error('GITHUB_TOKEN env var is required for production uploads')
+  if (!token) throw new Error('GITHUB_TOKEN env var is required for production uploads')
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  }
+  const contentsUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURI(pathInRepo)}`
+
+  // Fetch existing SHA so we can overwrite (GitHub requires it for updates).
+  const getRes = await fetch(`${contentsUrl}?ref=${encodeURIComponent(branch)}`, {
+    headers,
+    cache: 'no-store'
+  })
+  let sha: string | undefined
+  if (getRes.status === 200) {
+    sha = ((await getRes.json()) as { sha?: string }).sha
+  } else if (getRes.status !== 404) {
+    throw new Error(`github GET ${pathInRepo}: ${getRes.status} ${await getRes.text()}`)
   }
 
-  const existing = await getExistingSha(owner, repo, branch, pathInRepo, token)
-  if (!existing.ok) {
-    throw new Error(`github GET ${pathInRepo}: ${existing.status} ${existing.message}`)
-  }
-
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURI(pathInRepo)}`
-  const res = await fetch(url, {
+  const putRes = await fetch(contentsUrl, {
     method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    },
+    headers: { ...headers, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       message,
       content: buffer.toString('base64'),
       branch,
-      ...(existing.sha ? { sha: existing.sha } : {})
+      ...(sha ? { sha } : {})
     })
   })
-  if (!res.ok) {
-    throw new Error(`github PUT ${pathInRepo}: ${res.status} ${await res.text()}`)
+  if (!putRes.ok) {
+    throw new Error(`github PUT ${pathInRepo}: ${putRes.status} ${await putRes.text()}`)
   }
 }
+
+// ---------------------------------------------------------------------------
+// Route handler
+// ---------------------------------------------------------------------------
 
 export async function POST(req: Request) {
   let form: FormData
@@ -171,8 +153,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'expected multipart/form-data' }, { status: 400 })
   }
 
-  const file = form.get('file')
+  const file        = form.get('file')
   const directoryRaw = form.get('directory')
+
   if (!(file instanceof File)) {
     return NextResponse.json({ error: 'missing file' }, { status: 400 })
   }
@@ -193,55 +176,55 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'file too large' }, { status: 413 })
   }
 
-  const filename = sanitizeSegment(file.name) || `upload${ext}`
-  const src = '/' + directory + '/' + filename
-  const buffer = Buffer.from(await file.arrayBuffer())
+  const filename    = sanitizeSegment(file.name) || `upload${ext}`
+  const src         = `/${directory}/${filename}`
+  const r2Key       = `${directory}/${filename}`
+  const contentType = MIME[ext] ?? 'application/octet-stream'
+  const buffer      = Buffer.from(await file.arrayBuffer())
 
+  // ── Production ────────────────────────────────────────────────────────────
   if (process.env.NODE_ENV === 'production') {
-    // Run R2 upload and the GitHub commit in parallel: R2 makes the file
-    // immediately reachable via cdnUrl() (so the Keystatic preview tile and
-    // the live page can show it without waiting for a deploy), and the
-    // GitHub commit puts the file in git for source-of-truth.
-    const r2Key = `${directory}/${filename}`
     const repoPath = `public/${directory}/${filename}`
-    const contentType = MIME[ext] ?? 'application/octet-stream'
 
     const results = await Promise.allSettled([
       uploadToR2(buffer, r2Key, contentType),
       commitToGitHub(buffer, repoPath, `chore(media): upload ${repoPath} via keystatic`)
     ])
+
     const failures = results
       .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
-      .map((r) => (r.reason instanceof Error ? r.reason.message : String(r.reason)))
+      .map(r => (r.reason instanceof Error ? r.reason.message : String(r.reason)))
+
     if (failures.length > 0) {
       return NextResponse.json({ error: failures.join('; ') }, { status: 500 })
     }
     return NextResponse.json({ src, bytes: buffer.byteLength })
   }
 
-  // Development: write to public/ on disk so Next.js serves it immediately.
-  const targetDir = path.join(PUBLIC_ROOT, directory)
+  // ── Development ───────────────────────────────────────────────────────────
+  // 1. Write to public/ on disk (overwrite OK — dev experiments are ephemeral).
+  const targetDir  = path.join(PUBLIC_ROOT, directory)
   const targetPath = path.join(targetDir, filename)
 
-  // Belt-and-suspenders: ensure target stays under public/.
   const rel = path.relative(PUBLIC_ROOT, targetPath)
   if (rel.startsWith('..') || path.isAbsolute(rel)) {
     return NextResponse.json({ error: 'path escapes public/' }, { status: 400 })
   }
 
-  // Reject overwrite — let editors rename instead of silently clobbering.
-  try {
-    await access(targetPath, fsConstants.F_OK)
-    return NextResponse.json(
-      { error: 'file already exists', src },
-      { status: 409 }
-    )
-  } catch {
-    // ENOENT — good, write it.
-  }
-
   await mkdir(targetDir, { recursive: true })
   await writeFile(targetPath, buffer)
 
-  return NextResponse.json({ src, bytes: buffer.byteLength })
+  // 2. Upload to R2 (best-effort — skip gracefully if credentials absent).
+  let r2Warning: string | undefined
+  try {
+    await uploadToR2(buffer, r2Key, contentType)
+  } catch (err) {
+    r2Warning = err instanceof Error ? err.message : String(err)
+  }
+
+  return NextResponse.json({
+    src,
+    bytes: buffer.byteLength,
+    ...(r2Warning ? { r2Warning } : {})
+  })
 }
