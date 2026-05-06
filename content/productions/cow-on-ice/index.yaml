@@ -11,8 +11,7 @@ directorsNote:
   de: ''
 poster:
   src: /uploads/poster.webp
-productionsPhoto:
-  src: /uploads/3-Bremen.webp
+productionsPhoto: {}
 featuredPhoto: {}
 gallery: []
 videos: []
