@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# pre-push: auto-rebase when the local branch is behind its remote tracking
+# branch. Scoped to this repo via `git config --local core.hooksPath .githooks`.
+#
+# Why this exists: the Keystatic Cloud bot regularly commits YAML/media
+# straight to `main` (editor saves + uploads). A normal `git push` from a
+# local dev machine that hasn't fetched in a while is rejected with
+# "Updates were rejected because the remote contains work that you do not
+# have locally." This hook handles that for you instead of stopping work.
+#
+# Behaviour:
+#   - clean working tree, behind remote: fetch + rebase, then exit non-zero
+#     with a "re-run push" message (the original push refs are now stale,
+#     so we can't continue it from inside the hook).
+#   - dirty working tree, behind remote: refuse and tell you to stash.
+#   - up to date or ahead: pass through, push proceeds normally.
+#   - rebase conflicts: stops with `git rebase` mid-flight and tells you
+#     how to continue. Nothing is force-pushed; nothing is discarded.
+
+set -u
+
+remote="$1"
+
+zero='0000000000000000000000000000000000000000'
+exit_code=0
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "${local_ref:-}" ] && continue
+  [ "$local_sha" = "$zero" ] && continue           # branch deletion
+  [ "$remote_sha" = "$zero" ] && continue          # new branch on remote
+
+  behind=$(git rev-list --count "$local_sha..$remote_sha" 2>/dev/null || echo 0)
+  [ "$behind" -eq 0 ] && continue                  # nothing to do
+
+  branch="${local_ref#refs/heads/}"
+  echo ""
+  echo "pre-push: '$branch' is behind '$remote/$branch' by $behind commit(s)."
+
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "  Working tree is dirty — refusing to auto-rebase."
+    echo "  Run: git stash push -u -m wip && git pull --rebase && git stash pop"
+    exit_code=1
+    continue
+  fi
+
+  echo "  Auto-rebasing onto $remote/$branch..."
+  if ! git fetch "$remote" "$branch" >/dev/null 2>&1; then
+    echo "  fetch failed — push aborted."
+    exit_code=1
+    continue
+  fi
+
+  if git rebase "$remote/$branch"; then
+    echo "  Rebased clean. Re-run 'git push' to publish."
+  else
+    echo "  Rebase has conflicts. Resolve, then 'git rebase --continue', then push."
+  fi
+  exit_code=1
+done
+
+exit "$exit_code"
