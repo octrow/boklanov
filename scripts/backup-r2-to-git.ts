@@ -44,6 +44,32 @@ if (!ACCOUNT_ID || !KEY_ID || !KEY_SECRET) {
 const PUBLIC_ROOT = join(process.cwd(), 'public')
 const dryRun = process.argv.includes('--dry-run')
 
+// Only mirror these prefixes back into git. R2 also holds runtime caches
+// (`cache/preview/`, `cache/recordmap/`) and any future ephemeral data
+// that we explicitly do NOT want in `public/`. New editor-upload prefixes
+// must be added here when they appear in keystatic.config.ts.
+const ALLOWED_PREFIXES = ['productions/', 'about/', 'uploads/']
+
+// Defensive second filter — the keystatic-asset route only accepts these
+// extensions, so anything else in R2 under an allowed prefix is suspicious
+// and we skip it rather than commit it.
+const ALLOWED_EXT = new Set([
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.webp',
+  '.gif',
+  '.svg',
+  '.avif'
+])
+
+function isBackupCandidate(key: string): boolean {
+  if (!ALLOWED_PREFIXES.some((p) => key.startsWith(p))) return false
+  const dot = key.lastIndexOf('.')
+  if (dot === -1) return false
+  return ALLOWED_EXT.has(key.slice(dot).toLowerCase())
+}
+
 const client = new S3Client({
   region: 'auto',
   endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
@@ -96,8 +122,13 @@ async function main() {
   let added = 0
   let mismatched = 0
   let skipped = 0
+  let filtered = 0
 
   for (const { Key, Size } of remote) {
+    if (!isBackupCandidate(Key)) {
+      filtered++
+      continue
+    }
     const target = join(PUBLIC_ROOT, Key)
     if (existsSync(target)) {
       const localSize = statSync(target).size
@@ -118,7 +149,7 @@ async function main() {
   }
 
   console.log(
-    `[backup-r2-to-git] summary: added ${added}, overwritten ${mismatched}, skipped ${skipped}`
+    `[backup-r2-to-git] summary: added ${added}, overwritten ${mismatched}, skipped ${skipped}, filtered ${filtered}`
   )
 }
 
