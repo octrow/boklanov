@@ -63,7 +63,7 @@ export default async function HomePage({
       {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
       <TourTicker
         cities={t.raw('stagingCities') as string[]}
-        accent='mustard'
+        accent='paper'
         label={tAbout('stagedIn')}
       />
 

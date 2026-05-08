@@ -27,7 +27,7 @@ For most reviews. Zero deps, runs inside this Claude Code session, uses the Chro
 
 1. **Make sure dev server (or prod) is reachable.** For uncommitted work: `npm run dev` then point at `http://localhost:3000/en`. For shipped work: `https://boklanov.vercel.app/en`.
 2. **Ask Claude in this CLI:**
-   > Run a design review of `<URL>` using `.design/review/PROMPT.md`. Capture full-page screenshots at 1440 and 390 viewports, save them to `.design/review/<today>-<slug>/`, and write the report to `REPORT.md` in the same folder.
+   > Run a design review of `<URL>` using `.design/review/PROMPT.md`. Capture full-page screenshots at 1440 and 390 viewports, save them to `.design/review/<datetime>-<slug>/`, and write the report to `REPORT.md` in the same folder.
 3. Claude opens the URL via Chrome MCP, resizes the window, captures full-page screenshots, fills in the **Page under review** block of `PROMPT.md`, runs the prompt against its own vision, and writes `REPORT.md`.
 4. Skim the report. Promote any **[fix]**-tagged finding to a phase task (or `gsd:add-todo`). **[polish]** items go to a polish-pass batch. **[strategic]** items stay as DESIGN.md follow-up notes.
 

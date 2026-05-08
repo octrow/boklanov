@@ -8,9 +8,18 @@
   padding: var(--space-2) 0;
 }
 
-.section[data-accent="vermillion"] { background: var(--accent-vermillion); }
-.section[data-accent="cobalt"]     { background: var(--accent-cobalt); }
-.section[data-accent="mustard"]    { background: var(--accent-mustard); }
+.section[data-accent='vermillion'] {
+  background: var(--accent-vermillion);
+}
+.section[data-accent='cobalt'] {
+  background: var(--accent-cobalt);
+}
+.section[data-accent='mustard'] {
+  background: var(--accent-mustard);
+}
+.section[data-accent='paper'] {
+  background: var(--band-reverse-bg);
+}
 
 /* Track: doubled city band for seamless loop. Translate -50% moves from
    the first copy to the start of the second copy = one clean loop. */
@@ -34,19 +43,38 @@
   font-synthesis: none;
 }
 
-.section[data-accent="vermillion"] .track,
-.section[data-accent="cobalt"]     .track { color: var(--ink-on-accent); }
-.section[data-accent="mustard"]    .track { color: var(--ink-on-mustard); }
+.section[data-accent='vermillion'] .track,
+.section[data-accent='cobalt'] .track {
+  color: var(--ink-on-accent);
+}
+.section[data-accent='mustard'] .track {
+  color: var(--ink-on-mustard);
+}
+.section[data-accent='paper'] .track {
+  color: var(--band-reverse-ink);
+}
 
-.track:hover { animation-play-state: paused; }
+.track:hover {
+  animation-play-state: paused;
+}
 
 @keyframes ticker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .track { animation: none; }
+  .track {
+    animation: none;
+  }
 }
 
-@media print { .section { display: none; } }
+@media print {
+  .section {
+    display: none;
+  }
+}

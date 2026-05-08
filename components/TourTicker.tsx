@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import styles from './TourTicker.module.css'
 
-type TickerAccent = 'vermillion' | 'cobalt' | 'mustard'
+type TickerAccent = 'vermillion' | 'cobalt' | 'mustard' | 'paper'
 
 interface TourTickerProps {
   cities: string[]
