@@ -11,7 +11,7 @@
  * Prefer --kui-color-* variable overrides over element selectors: they survive
  * DOM refactors better.
  *
- * WS-3: slug input width   WS-5: Obsidian Pro tonal layers
+ * WS-5: Obsidian Pro tonal layers
  */
 
 /* ---------------------------------------------------------------------------
@@ -49,43 +49,9 @@
   --kui-color-border-emphasis: #464554;
 }
 
-/* ---------------------------------------------------------------------------
- * WS-3 — Standalone text-input width cap
- *
- * Keystatic's entryLayout:'content' gives the form a wide canvas. Without a
- * cap, single-line inputs (year, country code) stretch the full width.
- *
- * The :has() selector matches the field-slot div wrapping a text input that
- * has the Keystatic adornment attribute. :not([role='group'] *) excludes
- * inputs nested inside fields.object groups (l10n grids, object sub-fields),
- * which already have their own layout via the schema `layout:` option.
- *
- * After WS-1 the only top-level standalone input is the slug field, so the
- * first rule becomes a slug-only cap automatically.
- * --------------------------------------------------------------------------- */
-
-@media (min-width: 1024px) {
-  /* Cap standalone top-level text inputs at ~1/3 canvas width */
-  #item-edit-form
-    div:has(> div > div > input[data-adornment]):not([role='group'] *) {
-    max-width: 33.333%;
-  }
-
-  /*
-   * Override for the slug input: the full slug string (e.g.
-   * "bury-me-behind-the-baseboard") must not be truncated.
-   * The slug field renders its inner input with aria-label matching the
-   * name.label we set ("URL slug"). If the aria-label selector doesn't
-   * match in a future Keystatic version, the 33.333% rule above still
-   * applies — no regression, just truncation returns.
-   */
-  #item-edit-form
-    div:has(> div > div > input[aria-label='URL slug']):not([role='group'] *),
-  #item-edit-form
-    div:has(> div > div > input[aria-label*='slug' i]):not([role='group'] *) {
-    max-width: min(640px, 60%);
-  }
-}
+/* WS-3 — removed. Slug field moved to Settings tab; its grid-column and
+ * max-width are now set by hideSlugRegenerate() in KeystaticEnhancements.tsx.
+ * No other top-level standalone inputs exist after WS-1. */
 
 /* ---------------------------------------------------------------------------
  * WS-6 — Tab strip

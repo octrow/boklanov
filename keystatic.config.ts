@@ -158,7 +158,8 @@ export default config({
       // Keystatic columns only accepts top-level field names.
       schema: {
         slug: fields.slug({
-          name: {
+          name: { label: 'URL slug' },
+          slug: {
             label: 'URL slug',
             description: desc(
               'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',

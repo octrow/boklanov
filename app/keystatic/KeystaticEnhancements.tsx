@@ -218,16 +218,17 @@ function initTabs(form: HTMLElement): boolean {
     }
   }
 
-  // Assign every other top-level grid child (slug field today, anything
-  // schema-level we add later) to the FIRST tab so it appears alongside
-  // Identity rather than floating above every panel.
+  // Assign every other top-level grid child (the slug field) to the Settings
+  // tab so it lives alongside the other config fields. Falls back to the first
+  // tab if Settings isn't present for some reason.
   const gridContainer = groups[0].parentElement?.parentElement ?? form
   const firstTabId = Array.from(cellsByTab.keys())[0]
-  const firstTab = cellsByTab.get(firstTabId)!
+  const slugTargetTab =
+    cellsByTab.get('settings') ?? cellsByTab.get(firstTabId)!
   for (const child of Array.from(gridContainer.children)) {
     if (!(child instanceof HTMLElement)) continue
     if (groupCells.has(child)) continue
-    firstTab.cells.unshift(child)
+    slugTargetTab.cells.unshift(child)
   }
 
   const hashTab = getHashTab()
@@ -253,22 +254,42 @@ function initTabs(form: HTMLElement): boolean {
 function hideSlugRegenerate(form: HTMLElement): void {
   if (form.dataset.ksSlugHidden) return
 
-  // Find the Regenerate button by its text content — more reliable than a DOM
-  // path because Keystatic's slug field structure can shift across upgrades.
-  let regenBtn: HTMLButtonElement | null = null
-  for (const btn of form.querySelectorAll<HTMLButtonElement>('button')) {
-    if (/^regenerate$/i.test(btn.textContent?.trim() ?? '')) {
-      regenBtn = btn
-      break
-    }
-  }
+  // Keystatic sets aria-label="regenerate" on the ActionButton — more stable
+  // than matching text content, which can include icon SVG titles.
+  const regenBtn = form.querySelector<HTMLButtonElement>(
+    'button[aria-label="regenerate"]'
+  )
   if (!regenBtn) return
 
   regenBtn.style.display = 'none'
 
-  // Walk up from the button and hide any direct-child hr / [role="separator"]
-  // so the visual divider line above the slug field also disappears.
-  let el: HTMLElement | null = regenBtn.parentElement
+  // The slug field renders: outer [col] → [name TextField] + [slug+regen row]
+  //   slug+regen row → [slug TextField] + [regen col]
+  //   regen col → [Regenerate button]
+  // Walking up: btn → regen col → slug+regen row → outer col → slug grid cell
+  const regenCol = regenBtn.parentElement
+  const slugRow = regenCol?.parentElement
+  const outerCol = slugRow?.parentElement
+  // The grid cell is outerCol's parent — it gets a narrow span-N by Keystatic.
+  // Override to full-canvas width so the slug input isn't squished.
+  const slugGridCell = outerCol?.parentElement as HTMLElement | null
+  if (slugGridCell) {
+    slugGridCell.style.gridColumn = '1 / -1'
+  }
+  if (outerCol) {
+    // Hide the name field (first child = name TextField).
+    const nameField = outerCol.firstElementChild as HTMLElement | null
+    if (nameField && nameField !== slugRow) {
+      nameField.style.display = 'none'
+    }
+    // Cap the slug content at a readable width.
+    outerCol.style.maxWidth = 'min(640px, 100%)'
+  }
+
+  // Walk up and hide any hr / [role="separator"] between the slug field and
+  // the tab strip so the divider line disappears.
+  let el: HTMLElement | null =
+    slugGridCell?.parentElement ?? regenBtn.parentElement
   while (el && el !== form && el.getAttribute('role') !== 'group') {
     for (const child of Array.from(el.children)) {
       if (
