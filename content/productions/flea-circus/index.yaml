@@ -1,65 +1,73 @@
 slug: flea-circus
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Блошиный цирк
-  en: Flea Circus
-  de: Flohzirkus
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name:
-    ru: Большой театр кукол
-    en: Great Puppet Theatre
-    de: Bolshoi Teatr Kukol
-  shortName:
-    ru: БТК
-    en: BTK
-    de: BTK
-  city:
-    en: Saint Petersburg
-    ru: Санкт-Петербург
-    de: Sankt Petersburg
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: 6+
-durationMin: null
-role:
-  - performer
-form:
-  - theater
-  - family
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-  en:
-    - role: Director
-      name: Roman Boklanov
-  de:
-    - role: Regie
-      name: Roman Boklanov
-poster:
-  src: productions/flea-circus/poster.webp
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - theater
-  - family show
-tour: []
+identity:
+  title:
+    ru: Блошиный цирк
+    en: Flea Circus
+    de: Flohzirkus
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: productions/flea-circus/poster.webp
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Большой театр кукол
+      en: Great Puppet Theatre
+      de: Bolshoi Teatr Kukol
+    shortName:
+      ru: БТК
+      en: BTK
+      de: BTK
+    city:
+      en: Saint Petersburg
+      ru: Санкт-Петербург
+      de: Sankt Petersburg
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: 6+
+taxonomy:
+  role:
+    - performer
+  form:
+    - theater
+    - family
+  lineage: []
+  tags:
+    - theater
+    - family show
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+    en:
+      - role: Director
+        name: Roman Boklanov
+    de:
+      - role: Regie
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

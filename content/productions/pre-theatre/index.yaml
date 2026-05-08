@@ -1,158 +1,172 @@
 slug: pre-theatre
-notionIds:
-  ru: 769a1063d1004b78a41d8bfa73529b39
-  en: 03e57821e8ae43f4bf5c96d72f0049c6
-title:
-  ru: ДОТЕАТР
-  en: DOTHEATRE
-  de: DOTHEATRE
-synopsis:
-  ru: Реконструкция событий, которые были возле Александринского театра. Вы увидите, как создавался ландшафт, какими он наполнялся звуками и голосами, природными и человеческими.
-  en: A reconstruction of the events that took place outside the Alexandrinsky Theatre. You will see how the landscape was created, how it was filled with sounds and voices, natural and human.
-  de: Eine Rekonstruktion der Ereignisse, die außerhalb des Alexandrinsky-Theaters stattfanden. Sie werden sehen, wie die Landschaft geschaffen wurde und wie sie mit Klängen und Stimmen, natürlichen und menschlichen, gefüllt wurde.
-tagline:
-  ru: Спектакль — прогулка
-  en: Performance — walk
-  de: Aufführung — Spaziergang
-theatre:
-  name:
-    ru: Александринский театр
-    en: Alexanderinsky Theatre
-    de: Alexandrinski-Theater
-  city:
-    en: Saint Petersburg
-    ru: Санкт-Петербург
-    de: Sankt Petersburg
-  country: RU
-  url: "https://alexandrinsky.ru/proekty/anotherstage.php"
-year: 2022
-ticketsUrl: null
-ageRating: null
-durationMin: null
-role:
-  - director
-form:
-  - ensemble
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-    - role: Композитор
-      name: Даниил Коронкевич
-    - role: IT-художник
-      name: Леф Васильев
-    - role: Драматург
-      name: Алина Шклярская
-    - role: Координатор
-      name: Наталия Эфендиева
-    - role: Текст читает
-      name: Аркадий Волгин
-      url: "https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/"
-  en:
-    - role: Director
-      name: Roman Boklanov
-    - role: Composer
-      name: Daniel Koronkevich
-    - role: IT Artist
-      name: Lef Vasiliev
-    - role: Dramaturgist
-      name: Alina Shklyarskaya
-    - role: Coordinator
-      name: Natalia Efendieva
-    - role: Text reader
-      name: Arkady Volgin
-      url: "https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/"
-  de:
-    - role: Regie
-      name: Roman Boklanov
-    - role: Komponist
-      name: Daniel Koronkevich
-    - role: IT-Künstler
-      name: Lef Vasiliev
-    - role: Dramaturg
-      name: Alina Shklyarskaya
-    - role: Koordinator
-      name: Natalia Efendieva
-    - role: Textleser
-      name: Arkady Volgin
-      url: "https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/"
-poster:
-  src: /productions/pre-theatre/poster.jpg
-  credit: null
-gallery:
-  - src: /productions/pre-theatre/01.jpg
+identity:
+  title:
+    ru: ДОТЕАТР
+    en: DOTHEATRE
+    de: DOTHEATRE
+  tagline:
+    ru: Спектакль — прогулка
+    en: Performance — walk
+    de: Aufführung — Spaziergang
+  synopsis:
+    ru:
+      Реконструкция событий, которые были возле Александринского театра. Вы увидите, как создавался ландшафт, какими он
+      наполнялся звуками и голосами, природными и человеческими.
+    en:
+      A reconstruction of the events that took place outside the Alexandrinsky Theatre. You will see how the landscape was
+      created, how it was filled with sounds and voices, natural and human.
+    de:
+      Eine Rekonstruktion der Ereignisse, die außerhalb des Alexandrinsky-Theaters stattfanden. Sie werden sehen, wie die
+      Landschaft geschaffen wurde und wie sie mit Klängen und Stimmen, natürlichen und menschlichen, gefüllt wurde.
+media:
+  poster:
+    src: /productions/pre-theatre/poster.jpg
     credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/02.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/03.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/04.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/05.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/06.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/07.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/08.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/09.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/pre-theatre/10.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-videos:
-  - provider: youtube
-    id: qa6BI_AAjUw
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - immersive theater
-  - roman boklanov
-  - theater
-tour: []
+  gallery:
+    - src: /productions/pre-theatre/01.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/02.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/03.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/04.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/05.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/06.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/07.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/08.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/09.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/pre-theatre/10.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+  videos:
+    - provider: youtube
+      id: qa6BI_AAjUw
+production:
+  theatre:
+    name:
+      ru: Александринский театр
+      en: Alexanderinsky Theatre
+      de: Alexandrinski-Theater
+    city:
+      en: Saint Petersburg
+      ru: Санкт-Петербург
+      de: Sankt Petersburg
+    country: RU
+    url: https://alexandrinsky.ru/proekty/anotherstage.php
+  year: 2022
+  ticketsUrl: null
+  durationMin: null
+  ageRating: null
+taxonomy:
+  role:
+    - director
+  form:
+    - ensemble
+  lineage: []
+  tags:
+    - immersive theater
+    - roman boklanov
+    - theater
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+      - role: Композитор
+        name: Даниил Коронкевич
+      - role: IT-художник
+        name: Леф Васильев
+      - role: Драматург
+        name: Алина Шклярская
+      - role: Координатор
+        name: Наталия Эфендиева
+      - role: Текст читает
+        name: Аркадий Волгин
+        url: https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/
+    en:
+      - role: Director
+        name: Roman Boklanov
+      - role: Composer
+        name: Daniel Koronkevich
+      - role: IT Artist
+        name: Lef Vasiliev
+      - role: Dramaturgist
+        name: Alina Shklyarskaya
+      - role: Coordinator
+        name: Natalia Efendieva
+      - role: Text reader
+        name: Arkady Volgin
+        url: https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/
+    de:
+      - role: Regie
+        name: Roman Boklanov
+      - role: Komponist
+        name: Daniel Koronkevich
+      - role: IT-Künstler
+        name: Lef Vasiliev
+      - role: Dramaturg
+        name: Alina Shklyarskaya
+      - role: Koordinator
+        name: Natalia Efendieva
+      - role: Textleser
+        name: Arkady Volgin
+        url: https://alexandrinsky.ru/o-teatre/truppa/volgin-arkadiy-naumovich/
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: 769a1063d1004b78a41d8bfa73529b39
+    en: 03e57821e8ae43f4bf5c96d72f0049c6

@@ -1,56 +1,64 @@
 slug: total-fest-4
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: IV Международный театральный фестиваль «Total Fest»
-  en: "IV International Theatre Festival \"Total Fest\""
-  de: "IV. Internationales Theaterfestival „Total Fest\""
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name: null
-  city: null
-  country: KZ
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: null
-durationMin: null
-role:
-  - director
-status: in-development
-form:
-  - festival
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-  en:
-    - role: Director
-      name: Roman Boklanov
-  de:
-    - role: Regie
-      name: Roman Boklanov
-poster:
-  src: null
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - festival
-tour: []
+identity:
+  title:
+    ru: IV Международный театральный фестиваль «Total Fest»
+    en: IV International Theatre Festival "Total Fest"
+    de: IV. Internationales Theaterfestival „Total Fest"
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: null
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name: null
+    city: null
+    country: KZ
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: null
+  status: in-development
+taxonomy:
+  role:
+    - director
+  form:
+    - festival
+  lineage: []
+  tags:
+    - festival
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+    en:
+      - role: Director
+        name: Roman Boklanov
+    de:
+      - role: Regie
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

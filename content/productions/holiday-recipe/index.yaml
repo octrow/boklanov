@@ -1,291 +1,308 @@
 slug: holiday-recipe
-notionIds:
-  ru: 525a304db4834166ab91fcb0bd5e75ff
-  en: bf94dde2452d431483e92dcecc6fed3c
-title:
-  ru: Рецепт праздника
-  en: Holiday recipe
-  de: Feierrezept
-synopsis:
-  ru: Жители лесной деревни ещё никогда не обходились без их традиционного лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают. Неужели пропажа испортит всем жителям деревни праздник и Новый год не наступит? Или найдется герой, который вернёт всем не только праздник, но и что-то более важное?
-  en: "A forest village is bustling with activity. The inhabitants are preparing for the New Year and waiting for the traditional holiday cake. After all, what is a New Year without a New Year's treat? But this time the holiday may not come! On New Year's Eve, all the pies mysteriously disappear."
-  de: "Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das Neujahr vor und warten auf den traditionellen Festkuchen. Schließlich, was ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht kommen! In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse Weise."
-tagline:
-  ru: Новогодняя интерактивная сказка для семейного просмотра
-  en: New Year interactive tale for family viewing
-  de: Neujahrs-Interaktives Märchen für Familie
-theatre:
-  name:
-    ru: Калининградский областной драматический театр
-    en: Kaliningrad Oblast Drama Theatre
-    de: Kalininrader Theater
-  city:
-    en: Kaliningrad
-    ru: Калининград
-    de: Kaliningrad
-  country: RU
-  url: "https://dramteatr39.ru/spektakli/recept-prazdnika-"
-year: 2022
-premiereDate:
-  ru: 26 декабря 2022 г.
-  en: December 26, 2022
-  de: 26. Dezember 2022
-ticketsUrl: "https://dramteatr39.ru/spektakli/recept-prazdnika-"
-ageRating: 6+
-durationMin: 70
-role:
-  - director
-form:
-  - puppet
-  - family
-lineage: []
-credits:
-  ru:
-    - role: Художественный руководитель, автор идеи
-      name: Роман Бокланов
-    - role: Режиссер
-      name: Алёна Волкова
-    - role: Художник
-      name: Алина Михайлова
-    - role: Художник по свету
-      name: Ксения Козлова
-    - role: Музыкальное оформление, концертмейстер
-      name: Альберт Халмурзаев
-    - role: Помощники режиссера
-      name: Елена Лысенко
-    - role: Помощники режиссера
-      name: Наталья Богуславская
-    - role: В спектакле заняты
-      name: Заяц - Павел Самоловов
-    - role: В спектакле заняты
-      name: Папа заяц - Владимир Корчуков
-    - role: В спектакле заняты
-      name: Мама заяц - Марина Юнганс
-    - role: В спектакле заняты
-      name: Медведь - Василий Швечков
-    - role: В спектакле заняты
-      name: Бабочка - Антон Контушев
-    - role: В спектакле заняты
-      name: Кузнечик - Альберт Халмурзаев
-    - role: В спектакле заняты
-      name: Стрекоза - Мария Чернова
-    - role: В спектакле заняты
-      name: Комарик - Антон Захаров
-    - role: В спектакле заняты
-      name: Сестры овечки - Ярослава Бурлакова
-    - role: В спектакле заняты
-      name: Юлия Алпатова
-    - role: В спектакле заняты
-      name: Братья козлы - Максим Пацерин
-    - role: В спектакле заняты
-      name: Виктор Вальченко
-    - role: В спектакле заняты
-      name: Белка - Анастасия Землянская
-    - role: В спектакле заняты
-      name: Анастасия Соколовская
-    - role: В спектакле заняты
-      name: Бельчонок - Андрей Вареницын
-    - role: В спектакле заняты
-      name: Олень - Сергей Борисов
-    - role: В спектакле заняты
-      name: Лань - Любовь Орлова
-    - role: В спектакле заняты
-      name: Синица - Екатерина Наумова
-    - role: В спектакле заняты
-      name: Снегирь - заслуженный артист Республики Марий Эл Александр Егоров
-    - role: В спектакле заняты
-      name: Мышь полевая - Татьяна Рогачева
-  en:
-    - role: Director
-      name: Roman Boklanov
-    - role: Artists
-      name: Maria Zhukova
-    - role: Artists
-      name: Ekaterina Rostovskaya
-    - role: Producer
-      name: Anastasia Urusova
-    - role: Age Limitations
-      name: 3+
-    - role: Director
-      name: Roman Boklanov
-    - role: Artistas
-      name: Maria Zhukova
-    - role: Artistas
-      name: Ekaterina Rostovskaya
-    - role: Productora
-      name: Anastasia Urusova
-    - role: Limitaciones de edad
-      name: 3+
-    - role: Duración
-      name: 40 minutos + merienda con tarta festiva
-  de:
-    - role: Künstlerischer Leiter, Ideengeber
-      name: Роман Бокланов
-    - role: Regisseur
-      name: Алёна Волкова
-    - role: Künstler
-      name: Алина Михайлова
-    - role: Lichtdesigner
-      name: Ксения Козлова
-    - role: Musikalische Gestaltung, Konzertmeister
-      name: Альберт Халмурзаев
-    - role: Regieassistenten
-      name: Елена Лысенко
-    - role: Regieassistenten
-      name: Наталья Богуславская
-    - role: In der Inszenierung mitwirkend
-      name: Заяц - Павел Самоловов
-    - role: In der Inszenierung mitwirkend
-      name: Папа заяц - Владимир Корчуков
-    - role: In der Inszenierung mitwirkend
-      name: Мама заяц - Марина Юнганс
-    - role: In der Inszenierung mitwirkend
-      name: Медведь - Василий Швечков
-    - role: In der Inszenierung mitwirkend
-      name: Бабочка - Антон Контушев
-    - role: In der Inszenierung mitwirkend
-      name: Кузнечик - Альберт Халмурзаев
-    - role: In der Inszenierung mitwirkend
-      name: Стрекоза - Мария Чернова
-    - role: In der Inszenierung mitwirkend
-      name: Комарик - Антон Захаров
-    - role: In der Inszenierung mitwirkend
-      name: Сестры овечки - Ярослава Бурлакова
-    - role: In der Inszenierung mitwirkend
-      name: Юлия Алпатова
-    - role: In der Inszenierung mitwirkend
-      name: Братья козлы - Максим Пацерин
-    - role: In der Inszenierung mitwirkend
-      name: Виктор Вальченко
-    - role: In der Inszenierung mitwirkend
-      name: Белка - Анастасия Землянская
-    - role: In der Inszenierung mitwirkend
-      name: Анастасия Соколовская
-    - role: In der Inszenierung mitwirkend
-      name: Бельчонок - Андрей Вареницын
-    - role: In der Inszenierung mitwirkend
-      name: Олень - Сергей Борисов
-    - role: In der Inszenierung mitwirkend
-      name: Лань - Любовь Орлова
-    - role: In der Inszenierung mitwirkend
-      name: Синица - Екатерина Наумова
-    - role: In der Inszenierung mitwirkend
-      name: Снегирь - заслуженный артист Республики Марий Эл Александр Егоров
-    - role: In der Inszenierung mitwirkend
-      name: Мышь полевая - Татьяна Рогачева
-poster:
-  src: /productions/holiday-recipe/poster.jpg
-  credit: null
-gallery:
-  - src: /productions/holiday-recipe/01.webp
+identity:
+  title:
+    ru: Рецепт праздника
+    en: Holiday recipe
+    de: Feierrezept
+  tagline:
+    ru: Новогодняя интерактивная сказка для семейного просмотра
+    en: New Year interactive tale for family viewing
+    de: Neujahrs-Interaktives Märchen für Familie
+  synopsis:
+    ru:
+      Жители лесной деревни ещё никогда не обходились без их традиционного лакомства. Но в этот раз в канун праздника все
+      пироги таинственно исчезают. Неужели пропажа испортит всем жителям деревни праздник и Новый год не наступит? Или
+      найдется герой, который вернёт всем не только праздник, но и что-то более важное?
+    en:
+      A forest village is bustling with activity. The inhabitants are preparing for the New Year and waiting for the
+      traditional holiday cake. After all, what is a New Year without a New Year's treat? But this time the holiday may
+      not come! On New Year's Eve, all the pies mysteriously disappear.
+    de:
+      Ein Walddorf ist voller Aktivität. Die Bewohner bereiten sich auf das Neujahr vor und warten auf den traditionellen
+      Festkuchen. Schließlich, was ist Neujahr ohne Neujahrsgeschenk? Aber dieses Mal könnte der Feiertag nicht kommen!
+      In der Silvesternaacht verschwinden alle Kuchen auf mysteriöse Weise.
+media:
+  poster:
+    src: /productions/holiday-recipe/poster.jpg
     credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/02.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/03.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/04.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/05.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/06.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/07.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/08.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/09.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/10.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/11.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/12.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/13.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/14.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/15.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/holiday-recipe/16.webp
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: true
-listOrder: 9
-tags:
-  - family show
-  - performance for children
-  - roman boklanov
-  - theater
-  - puppet
-tour: []
+  gallery:
+    - src: /productions/holiday-recipe/01.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/02.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/03.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/04.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/05.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/06.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/07.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/08.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/09.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/10.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/11.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/12.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/13.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/14.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/15.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/holiday-recipe/16.webp
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Калининградский областной драматический театр
+      en: Kaliningrad Oblast Drama Theatre
+      de: Kalininrader Theater
+    city:
+      en: Kaliningrad
+      ru: Калининград
+      de: Kaliningrad
+    country: RU
+    url: https://dramteatr39.ru/spektakli/recept-prazdnika-
+  year: 2022
+  premiereDate:
+    ru: 26 декабря 2022 г.
+    en: December 26, 2022
+    de: 26. Dezember 2022
+  ticketsUrl: https://dramteatr39.ru/spektakli/recept-prazdnika-
+  durationMin: 70
+  ageRating: 6+
+taxonomy:
+  role:
+    - director
+  form:
+    - puppet
+    - family
+  lineage: []
+  tags:
+    - family show
+    - performance for children
+    - roman boklanov
+    - theater
+    - puppet
+team:
+  credits:
+    ru:
+      - role: Художественный руководитель, автор идеи
+        name: Роман Бокланов
+      - role: Режиссер
+        name: Алёна Волкова
+      - role: Художник
+        name: Алина Михайлова
+      - role: Художник по свету
+        name: Ксения Козлова
+      - role: Музыкальное оформление, концертмейстер
+        name: Альберт Халмурзаев
+      - role: Помощники режиссера
+        name: Елена Лысенко
+      - role: Помощники режиссера
+        name: Наталья Богуславская
+      - role: В спектакле заняты
+        name: Заяц - Павел Самоловов
+      - role: В спектакле заняты
+        name: Папа заяц - Владимир Корчуков
+      - role: В спектакле заняты
+        name: Мама заяц - Марина Юнганс
+      - role: В спектакле заняты
+        name: Медведь - Василий Швечков
+      - role: В спектакле заняты
+        name: Бабочка - Антон Контушев
+      - role: В спектакле заняты
+        name: Кузнечик - Альберт Халмурзаев
+      - role: В спектакле заняты
+        name: Стрекоза - Мария Чернова
+      - role: В спектакле заняты
+        name: Комарик - Антон Захаров
+      - role: В спектакле заняты
+        name: Сестры овечки - Ярослава Бурлакова
+      - role: В спектакле заняты
+        name: Юлия Алпатова
+      - role: В спектакле заняты
+        name: Братья козлы - Максим Пацерин
+      - role: В спектакле заняты
+        name: Виктор Вальченко
+      - role: В спектакле заняты
+        name: Белка - Анастасия Землянская
+      - role: В спектакле заняты
+        name: Анастасия Соколовская
+      - role: В спектакле заняты
+        name: Бельчонок - Андрей Вареницын
+      - role: В спектакле заняты
+        name: Олень - Сергей Борисов
+      - role: В спектакле заняты
+        name: Лань - Любовь Орлова
+      - role: В спектакле заняты
+        name: Синица - Екатерина Наумова
+      - role: В спектакле заняты
+        name: Снегирь - заслуженный артист Республики Марий Эл Александр Егоров
+      - role: В спектакле заняты
+        name: Мышь полевая - Татьяна Рогачева
+    en:
+      - role: Director
+        name: Roman Boklanov
+      - role: Artists
+        name: Maria Zhukova
+      - role: Artists
+        name: Ekaterina Rostovskaya
+      - role: Producer
+        name: Anastasia Urusova
+      - role: Age Limitations
+        name: 3+
+      - role: Director
+        name: Roman Boklanov
+      - role: Artistas
+        name: Maria Zhukova
+      - role: Artistas
+        name: Ekaterina Rostovskaya
+      - role: Productora
+        name: Anastasia Urusova
+      - role: Limitaciones de edad
+        name: 3+
+      - role: Duración
+        name: 40 minutos + merienda con tarta festiva
+    de:
+      - role: Künstlerischer Leiter, Ideengeber
+        name: Роман Бокланов
+      - role: Regisseur
+        name: Алёна Волкова
+      - role: Künstler
+        name: Алина Михайлова
+      - role: Lichtdesigner
+        name: Ксения Козлова
+      - role: Musikalische Gestaltung, Konzertmeister
+        name: Альберт Халмурзаев
+      - role: Regieassistenten
+        name: Елена Лысенко
+      - role: Regieassistenten
+        name: Наталья Богуславская
+      - role: In der Inszenierung mitwirkend
+        name: Заяц - Павел Самоловов
+      - role: In der Inszenierung mitwirkend
+        name: Папа заяц - Владимир Корчуков
+      - role: In der Inszenierung mitwirkend
+        name: Мама заяц - Марина Юнганс
+      - role: In der Inszenierung mitwirkend
+        name: Медведь - Василий Швечков
+      - role: In der Inszenierung mitwirkend
+        name: Бабочка - Антон Контушев
+      - role: In der Inszenierung mitwirkend
+        name: Кузнечик - Альберт Халмурзаев
+      - role: In der Inszenierung mitwirkend
+        name: Стрекоза - Мария Чернова
+      - role: In der Inszenierung mitwirkend
+        name: Комарик - Антон Захаров
+      - role: In der Inszenierung mitwirkend
+        name: Сестры овечки - Ярослава Бурлакова
+      - role: In der Inszenierung mitwirkend
+        name: Юлия Алпатова
+      - role: In der Inszenierung mitwirkend
+        name: Братья козлы - Максим Пацерин
+      - role: In der Inszenierung mitwirkend
+        name: Виктор Вальченко
+      - role: In der Inszenierung mitwirkend
+        name: Белка - Анастасия Землянская
+      - role: In der Inszenierung mitwirkend
+        name: Анастасия Соколовская
+      - role: In der Inszenierung mitwirkend
+        name: Бельчонок - Андрей Вареницын
+      - role: In der Inszenierung mitwirkend
+        name: Олень - Сергей Борисов
+      - role: In der Inszenierung mitwirkend
+        name: Лань - Любовь Орлова
+      - role: In der Inszenierung mitwirkend
+        name: Синица - Екатерина Наумова
+      - role: In der Inszenierung mitwirkend
+        name: Снегирь - заслуженный артист Республики Марий Эл Александр Егоров
+      - role: In der Inszenierung mitwirkend
+        name: Мышь полевая - Татьяна Рогачева
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: true
+  listOrder: 9
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: 525a304db4834166ab91fcb0bd5e75ff
+    en: bf94dde2452d431483e92dcecc6fed3c

@@ -1,62 +1,70 @@
 slug: snow-queen
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Снежная королева
-  en: The Snow Queen
-  de: Die Schneekönigin
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name:
-    ru: Театр+Музей
-    en: Theatre Museum
-    de: Theater+Museum
-  city: null
-  country: RU
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: null
-durationMin: null
-role:
-  - performer
-bookingCta: false
-form:
-  - theater
-  - family
-lineage: []
-credits:
-  ru:
-    - role: Артист
-      name: Роман Бокланов
-  en:
-    - role: Performer
-      name: Roman Boklanov
-  de:
-    - role: Darsteller
-      name: Roman Boklanov
-poster:
-  src: null
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - roman boklanov
-  - theater
-  - family show
-tour: []
+identity:
+  title:
+    ru: Снежная королева
+    en: The Snow Queen
+    de: Die Schneekönigin
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: null
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Театр+Музей
+      en: Theatre Museum
+      de: Theater+Museum
+    city: null
+    country: RU
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: null
+taxonomy:
+  role:
+    - performer
+  form:
+    - theater
+    - family
+  lineage: []
+  tags:
+    - roman boklanov
+    - theater
+    - family show
+team:
+  credits:
+    ru:
+      - role: Артист
+        name: Роман Бокланов
+    en:
+      - role: Performer
+        name: Roman Boklanov
+    de:
+      - role: Darsteller
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  bookingCta: false
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

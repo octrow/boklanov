@@ -1,62 +1,70 @@
 slug: dogs-dont-dance-ballet
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Собаки не танцуют балет
-  en: "Dogs Don't Dance Ballet"
-  de: Hunde tanzen kein Ballett
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name:
-    ru: Театральная студия 8+
-    en: Theatre Studio 8+
-    de: Theaterstudio 8+
-  city:
-    en: Vienna
-    ru: Вена
-    de: Wien
-  country: AT
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: 6+
-durationMin: null
-role:
-  - director
-form:
-  - theater
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-  en:
-    - role: Director
-      name: Roman Boklanov
-  de:
-    - role: Regie
-      name: Roman Boklanov
-poster:
-  src: productions/dogs-dont-dance-ballet/poster.webp
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - theater
-  - family show
-tour: []
+identity:
+  title:
+    ru: Собаки не танцуют балет
+    en: Dogs Don't Dance Ballet
+    de: Hunde tanzen kein Ballett
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: productions/dogs-dont-dance-ballet/poster.webp
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Театральная студия 8+
+      en: Theatre Studio 8+
+      de: Theaterstudio 8+
+    city:
+      en: Vienna
+      ru: Вена
+      de: Wien
+    country: AT
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: 6+
+taxonomy:
+  role:
+    - director
+  form:
+    - theater
+  lineage: []
+  tags:
+    - theater
+    - family show
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+    en:
+      - role: Director
+        name: Roman Boklanov
+    de:
+      - role: Regie
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

@@ -1,30 +1,123 @@
 /*
  * keystatic-shim.css — UI overrides for the bundled Keystatic admin app.
  *
- * Keystatic ships its own component library; we can't easily theme it through
- * its API, so a small handful of CSS overrides patch the worst editor UX
- * issues. Loaded only on /keystatic/* via app/keystatic/layout.tsx.
+ * Keystatic ships its own component library (@keystar/ui). We can't easily
+ * theme it through its public API, so a handful of CSS overrides patch the
+ * worst editor UX issues. Loaded only on /keystatic/* via layout.tsx.
  *
- * Fragility note: the selector targets Keystatic's internal DOM structure
- * (`div > div > div > input[data-adornment]`). After every Keystatic upgrade,
- * eyeball the editor on a wide viewport — if standalone text fields revert
- * to full-canvas width, the internal layout changed and this rule needs an
- * update. Long-term: replace with explicit `layout: [4]` props per field in
- * keystatic.config.ts (more verbose but upgrade-resilient).
+ * Fragility note: selectors target Keystatic's internal DOM structure and
+ * @keystar/ui CSS custom properties. After every Keystatic upgrade eyeball
+ * the editor — if a rule stops working, inspect the new selectors in DevTools.
+ * Prefer --kui-color-* variable overrides over element selectors: they survive
+ * DOM refactors better.
+ *
+ * WS-3: slug input width   WS-5: Obsidian Pro tonal layers
  */
 
+/* ---------------------------------------------------------------------------
+ * WS-5 — Obsidian Pro tonal palette (dark mode only)
+ *
+ * Overrides @keystar/ui's built-in slate scale for the dark scheme so the
+ * five surface layers are visually distinguishable without sacrificing
+ * Keystatic's own interactive-state tokens (hover, focus, etc.).
+ *
+ * Selector: .kui-scheme--dark is applied by KeystarProvider when
+ * localStorage('keystatic-color-scheme') === 'dark', which layout.tsx seeds
+ * before hydration.
+ * --------------------------------------------------------------------------- */
+
+.kui-scheme--dark {
+  /* Page canvas — outermost background */
+  --kui-color-background-canvas: #0b1326;
+  /* Form section / tab panel — one level up from canvas */
+  --kui-color-background-surface: #171f33;
+  /* Secondary surface (sidebar panels, cards) */
+  --kui-color-background-surface-secondary: #1e2740;
+  /* Tertiary surface (nested cards, accordions) */
+  --kui-color-background-surface-tertiary: #222a3d;
+  /* Input fields — intentionally darker than the container */
+  --kui-color-alias-background-idle: color-mix(
+    in srgb,
+    transparent,
+    #8098c0 4%
+  );
+  /* Muted border between sections */
+  --kui-color-border-muted: #2d3650;
+  /* Neutral border (input borders) */
+  --kui-color-border-neutral: #3a4460;
+  /* Emphasis border (focused section headings) */
+  --kui-color-border-emphasis: #464554;
+}
+
+/* ---------------------------------------------------------------------------
+ * WS-3 — Standalone text-input width cap
+ *
+ * Keystatic's entryLayout:'content' gives the form a wide canvas. Without a
+ * cap, single-line inputs (year, country code) stretch the full width.
+ *
+ * The :has() selector matches the field-slot div wrapping a text input that
+ * has the Keystatic adornment attribute. :not([role='group'] *) excludes
+ * inputs nested inside fields.object groups (l10n grids, object sub-fields),
+ * which already have their own layout via the schema `layout:` option.
+ *
+ * After WS-1 the only top-level standalone input is the slug field, so the
+ * first rule becomes a slug-only cap automatically.
+ * --------------------------------------------------------------------------- */
+
 @media (min-width: 1024px) {
-  /*
-   * Cap top-level standalone text fields at ~1/3 of the form width so a
-   * single-line slug or year doesn't stretch across the whole canvas.
-   *
-   * The :has() selector finds the Keystatic field-slot div that wraps an
-   * <input data-adornment>. The :not([role="group"] *) excludes inputs
-   * inside l10n sub-field grids (which already have their own narrow
-   * layout via fields.object({ layout: [4, 4, 4] })).
-   */
+  /* Cap standalone top-level text inputs at ~1/3 canvas width */
   #item-edit-form
     div:has(> div > div > input[data-adornment]):not([role='group'] *) {
     max-width: 33.333%;
   }
+
+  /*
+   * Override for the slug input: the full slug string (e.g.
+   * "bury-me-behind-the-baseboard") must not be truncated.
+   * The slug field renders its inner input with aria-label matching the
+   * name.label we set ("URL slug"). If the aria-label selector doesn't
+   * match in a future Keystatic version, the 33.333% rule above still
+   * applies — no regression, just truncation returns.
+   */
+  #item-edit-form
+    div:has(> div > div > input[aria-label='URL slug']):not([role='group'] *),
+  #item-edit-form
+    div:has(> div > div > input[aria-label*='slug' i]):not([role='group'] *) {
+    max-width: min(640px, 60%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * WS-6 — Tab strip
+ *
+ * The JS in KeystaticEnhancements.tsx injects a .ks-tabs strip into the form's
+ * grid container and clones Keystatic's ActionButton class onto each tab
+ * button — so font / padding / hover / focus all come from @keystar/ui.
+ * Visibility of each tab's content is toggled by setting `display:none` on
+ * the original Keystatic span-N grid cells (nothing wrapped, nothing moved).
+ *
+ * These rules cover only the strip's own layout + the active-button cue.
+ * --------------------------------------------------------------------------- */
+
+.ks-tabs {
+  /* Span every column when the parent is the form's 12-column grid; harmless
+   * when the parent is flex/block. */
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-block: 4px;
+  background: var(--kui-color-background-canvas);
+  border-bottom: 1px solid var(--kui-color-border-muted);
+}
+
+/* Active tab cue: invert the ActionButton via Keystatic's own accent token.
+ * Keeping this inside `[role="tablist"]` scopes it so we don't restyle
+ * unrelated ActionButtons elsewhere on the page. */
+[role='tablist'] [data-ks-tab][aria-selected='true'] {
+  background: var(--kui-color-background-accent-emphasis);
+  color: var(--kui-color-foreground-onEmphasis);
 }

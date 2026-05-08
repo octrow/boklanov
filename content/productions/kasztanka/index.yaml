@@ -1,184 +1,198 @@
 slug: kasztanka
-notionIds:
-  ru: 29924e09ef544b7e93f6463e8612ea39
-  en: 321b7743e16245af81633e84c34963f3
-title:
-  ru: Каштанка
-  en: Kasztanka
-  de: Kastanka
-synopsis:
-  ru: Каштанка нашла нового хозяина — клоуна цирка. Новая жизнь поманила её теплом и едой. Но однажды из зрительного зала донёсся знакомый голос…
-  en: Kashtanka found a new owner — a circus clown. A new life beckoned with warmth and food. But one day a familiar voice came from the audience…
-  de: Kastanka hat einen neuen Besitzer gefunden – einen Zirkusclown. Das neue Leben lockte sie mit Wärme und Essen. Aber eines Tages kam eine vertraute Stimme aus dem Publikum…
-theatre:
-  name:
-    ru: Театр у Нарвских ворот
-    en: Theatre by the Narva Gate
-    de: Theater am Narwes Tor
-  city:
-    en: Saint Petersburg
-    ru: Санкт-Петербург
-    de: Sankt Petersburg
-  country: RU
-  url: "https://www.teatrlutz.ru/performance/kashtanka-6/"
-year: 2020
-premiereDate:
-  ru: 26 сентября 2020 г.
-  en: September 26, 2020
-  de: 26. September 2020
-ticketsUrl: "https://www.teatrlutz.ru/performance/kashtanka-6/"
-ageRating: 6+
-durationMin: null
-role:
-  - co-director
-bookingCta: false
-form:
-  - puppet
-lineage: []
-credits:
-  ru:
-    - role: В спектакле участвуют
-      name: Анастасия Башкирова - Каштанка
-    - role: В спектакле участвуют
-      name: Антон Хатеев - Старый хозяин
-    - role: В спектакле участвуют
-      name: Павел Москалёв/Руслан Бальбуциев - Новый хозяин (он же Клоун)
-    - role: В спектакле участвуют
-      name: Максим Шабалин - Кот
-    - role: В спектакле участвуют
-      name: Иннокентий Граб/ Артём Бедринский - Гусь
-    - role: В спектакле участвуют
-      name: Людмила Меньшикова -Свинья
-    - role: Режиссер-постановщик
-      name: Ринат Кияков
-    - role: Художник-постановщик
-      name: Анастасия Копылова
-    - role: Балетмейстер
-      name: Резеда Гаянова
-    - role: Композитор
-      name: Динара Антонова
-    - role: Режиссер по кукольной пластике
-      name: Роман Бокланов
-  en:
-    - role: In the performance, take part
-      name: Anastasia Bashkirova - Kashtanka
-    - role: In the performance, take part
-      name: Anton Hateyev - Old Master
-    - role: In the performance, take part
-      name: Pavel Moskaliev/Ruslan Balbutsiev - The New Host (aka The Clown)
-    - role: In the performance, take part
-      name: Maxim Shabalin - The Cat
-    - role: In the performance, take part
-      name: Innokenty Grab/Artem Bedrinsky - The Goose
-    - role: In the performance, take part
-      name: Ludmilla Menshikova - The Pig
-    - role: Director
-      name: Rinat Kiyakov
-    - role: Production designer
-      name: Anastasia Kopylova
-    - role: Ballet master
-      name: Rezeda Gayanova
-    - role: Composer
-      name: Dinara Antonova
-    - role: Director of Puppetry
-      name: Roman Boklanov
-  de:
-    - role: Mitwirkende
-      name: Анастасия Башкирова - Каштанка
-    - role: Mitwirkende
-      name: Антон Хатеев - Старый хозяин
-    - role: Mitwirkende
-      name: Павел Москалёв/Руслан Бальбуциев - Новый хозяин (он же Клоун)
-    - role: Mitwirkende
-      name: Максим Шабалин - Кот
-    - role: Mitwirkende
-      name: Иннокентий Граб/ Артём Бедринский - Гусь
-    - role: Mitwirkende
-      name: Людмила Меньшикова -Свинья
-    - role: Regisseur
-      name: Ринат Кияков
-    - role: Bühnenbildner
-      name: Анастасия Копылова
-    - role: Koreograf
-      name: Резеда Гаянова
-    - role: Komponist
-      name: Динара Антонова
-    - role: Bühnenregisseur für Puppen
-      name: Роман Бокланов
-poster:
-  src: /productions/kasztanka/poster.jpg
-  credit: null
-gallery:
-  - src: /productions/kasztanka/01.jpg
+identity:
+  title:
+    ru: Каштанка
+    en: Kasztanka
+    de: Kastanka
+  synopsis:
+    ru:
+      Каштанка нашла нового хозяина — клоуна цирка. Новая жизнь поманила её теплом и едой. Но однажды из зрительного зала
+      донёсся знакомый голос…
+    en:
+      Kashtanka found a new owner — a circus clown. A new life beckoned with warmth and food. But one day a familiar voice
+      came from the audience…
+    de:
+      Kastanka hat einen neuen Besitzer gefunden – einen Zirkusclown. Das neue Leben lockte sie mit Wärme und Essen. Aber
+      eines Tages kam eine vertraute Stimme aus dem Publikum…
+media:
+  poster:
+    src: /productions/kasztanka/poster.jpg
     credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/02.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/03.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/04.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/05.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/06.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/07.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/08.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/09.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/kasztanka/10.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - performance for children
-  - puppet
-  - theater
-tour: []
+  gallery:
+    - src: /productions/kasztanka/01.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/02.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/03.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/04.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/05.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/06.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/07.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/08.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/09.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/kasztanka/10.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Театр у Нарвских ворот
+      en: Theatre by the Narva Gate
+      de: Theater am Narwes Tor
+    city:
+      en: Saint Petersburg
+      ru: Санкт-Петербург
+      de: Sankt Petersburg
+    country: RU
+    url: https://www.teatrlutz.ru/performance/kashtanka-6/
+  year: 2020
+  premiereDate:
+    ru: 26 сентября 2020 г.
+    en: September 26, 2020
+    de: 26. September 2020
+  ticketsUrl: https://www.teatrlutz.ru/performance/kashtanka-6/
+  durationMin: null
+  ageRating: 6+
+taxonomy:
+  role:
+    - co-director
+  form:
+    - puppet
+  lineage: []
+  tags:
+    - performance for children
+    - puppet
+    - theater
+team:
+  credits:
+    ru:
+      - role: В спектакле участвуют
+        name: Анастасия Башкирова - Каштанка
+      - role: В спектакле участвуют
+        name: Антон Хатеев - Старый хозяин
+      - role: В спектакле участвуют
+        name: Павел Москалёв/Руслан Бальбуциев - Новый хозяин (он же Клоун)
+      - role: В спектакле участвуют
+        name: Максим Шабалин - Кот
+      - role: В спектакле участвуют
+        name: Иннокентий Граб/ Артём Бедринский - Гусь
+      - role: В спектакле участвуют
+        name: Людмила Меньшикова -Свинья
+      - role: Режиссер-постановщик
+        name: Ринат Кияков
+      - role: Художник-постановщик
+        name: Анастасия Копылова
+      - role: Балетмейстер
+        name: Резеда Гаянова
+      - role: Композитор
+        name: Динара Антонова
+      - role: Режиссер по кукольной пластике
+        name: Роман Бокланов
+    en:
+      - role: In the performance, take part
+        name: Anastasia Bashkirova - Kashtanka
+      - role: In the performance, take part
+        name: Anton Hateyev - Old Master
+      - role: In the performance, take part
+        name: Pavel Moskaliev/Ruslan Balbutsiev - The New Host (aka The Clown)
+      - role: In the performance, take part
+        name: Maxim Shabalin - The Cat
+      - role: In the performance, take part
+        name: Innokenty Grab/Artem Bedrinsky - The Goose
+      - role: In the performance, take part
+        name: Ludmilla Menshikova - The Pig
+      - role: Director
+        name: Rinat Kiyakov
+      - role: Production designer
+        name: Anastasia Kopylova
+      - role: Ballet master
+        name: Rezeda Gayanova
+      - role: Composer
+        name: Dinara Antonova
+      - role: Director of Puppetry
+        name: Roman Boklanov
+    de:
+      - role: Mitwirkende
+        name: Анастасия Башкирова - Каштанка
+      - role: Mitwirkende
+        name: Антон Хатеев - Старый хозяин
+      - role: Mitwirkende
+        name: Павел Москалёв/Руслан Бальбуциев - Новый хозяин (он же Клоун)
+      - role: Mitwirkende
+        name: Максим Шабалин - Кот
+      - role: Mitwirkende
+        name: Иннокентий Граб/ Артём Бедринский - Гусь
+      - role: Mitwirkende
+        name: Людмила Меньшикова -Свинья
+      - role: Regisseur
+        name: Ринат Кияков
+      - role: Bühnenbildner
+        name: Анастасия Копылова
+      - role: Koreograf
+        name: Резеда Гаянова
+      - role: Komponist
+        name: Динара Антонова
+      - role: Bühnenregisseur für Puppen
+        name: Роман Бокланов
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  bookingCta: false
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: 29924e09ef544b7e93f6463e8612ea39
+    en: 321b7743e16245af81633e84c34963f3

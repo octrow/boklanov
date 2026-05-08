@@ -1,55 +1,63 @@
 slug: total-fest-3
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: III Международный театральный фестиваль «Total Fest. Диалоги»
-  en: "III International Theatre Festival \"Total Fest. Dialogues\""
-  de: "III. Internationales Theaterfestival „Total Fest. Dialoge\""
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name: null
-  city: null
-  country: null
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: null
-durationMin: null
-role:
-  - art-director
-form:
-  - festival
-lineage: []
-credits:
-  ru:
-    - role: Арт-директор
-      name: Роман Бокланов
-  en:
-    - role: Art Director
-      name: Roman Boklanov
-  de:
-    - role: Künstlerischer Leiter
-      name: Roman Boklanov
-poster:
-  src: productions/total-fest-3/poster.jpg
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - festival
-tour: []
+identity:
+  title:
+    ru: III Международный театральный фестиваль «Total Fest. Диалоги»
+    en: III International Theatre Festival "Total Fest. Dialogues"
+    de: III. Internationales Theaterfestival „Total Fest. Dialoge"
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: productions/total-fest-3/poster.jpg
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name: null
+    city: null
+    country: null
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: null
+taxonomy:
+  role:
+    - art-director
+  form:
+    - festival
+  lineage: []
+  tags:
+    - festival
+team:
+  credits:
+    ru:
+      - role: Арт-директор
+        name: Роман Бокланов
+    en:
+      - role: Art Director
+        name: Roman Boklanov
+    de:
+      - role: Künstlerischer Leiter
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

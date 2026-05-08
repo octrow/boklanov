@@ -1,347 +1,374 @@
 slug: plaster
-notionIds:
-  ru: d9a81d6aa35f42ebacfc04d68b7c6141
-  en: feda57dbf95340dda8467e462d29d16d
-title:
-  ru: Гипс
-  en: Plaster
-  de: Gips
-synopsis:
-  ru: Это семейный спектакль о любви, которую боимся потерять, и о любви, которую ждём. Подростки, их родители, бабушки и дедушки – каждому придется пережить вместе с Фитц ужас от грядущего развода родителей, негодование, изумление, радость и влюбленность…
-  en: "This is a family play! Teenagers, their parents, grandparents - everyone will experience with Fitz the horror of their parents' impending divorce, the indignation, the amazement, the joy and the falling in love…"
-  de: "Dies ist ein Familienspiel! Jugendliche, ihre Eltern, Großeltern – jeder wird mit Fitz den Horror der bevorstehenden Scheidung der Eltern, die Empörung, die Verwunderung, die Freude und den Verliebtsein erleben…"
-directorsNote:
-  ru: …я поняла, о чём говорила моя мама. Вот каково это — быть кем-то ещё. И может, когда мне будет сорок два, я иногда буду скучать по этому дню
-  en: "I understood what my mother was talking about. That's what it's like to be somebody else. And maybe when I'm forty-two, I'll miss this day sometimes."
-  de: Ich verstand, wovon meine Mutter sprach. Das ist, wie es sich anfühlt, jemand anderen zu sein. Und vielleicht werde ich diesen Tag vermissen, wenn ich zweiundvierzig bin.
-theatre:
-  name:
-    ru: Калининградский областной драматический театр
-    en: Kaliningrad Regional Drama Theatre
-    de: Regionaltheater für Drama Kaliningrad
-  city:
-    en: Kaliningrad
-    ru: Калининград
-    de: Kaliningrad
-  country: RU
-  url: "https://dramteatr39.ru/spektakli/gips"
-year: 2021
-premiereDate:
-  ru: 10-12 декабря 2021 г.
-  en: December 10-12, 2021
-  de: 10.-12. Dezember 2021
-ticketsUrl: "https://dramteatr39.ru/spektakli/gips"
-ageRating: 12+
-durationMin: 105
-role:
-  - director
-form:
-  - family
-lineage: []
-credits:
-  ru:
-    - role: Режиссер, автор инсценировки
-      name: Роман Бокланов
-    - role: Художник
-      name: Оганес Айрапетян
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
-    - role: Художник по свету, музыкальное оформление
-      name: Максим Морозов
-    - role: Помощники режиссёра
-      name: Наталья Богуславская
-    - role: Помощники режиссёра
-      name: Елена Лысенко
-  en:
-    - role: Director, author of the staging
-      name: Roman Boklanov
-    - role: Artist
-      name: Oganes Ayrapetyan
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
-    - role: Lighting Designer, set design
-      name: Maksim Morozov
-    - role: Fitz
-      name: Yaroslava Burlakova
-      url: "https://dramteatr39.ru/peoples/burlakova-yaroslava-dmitrievna"
-    - role: Mom
-      name: Maria Avramenko
-      url: "https://dramteatr39.ru/peoples/avramenko-mariya-alekseevna"
-    - role: Daddy
-      name: Vasily Shvechkov Jr
-      url: "https://dramteatr39.ru/peoples/shvechkov-vasilij-vasil-evich-mladshij"
-    - role: Bente
-      name: Anastasia Zemlyanskaya
-      url: "https://dramteatr39.ru/peoples/zemlyanskaya-anastasiya-anatol-evna"
-    - role: Adam
-      name: Pavel Samolovov
-      url: "https://dramteatr39.ru/peoples/samolovov-pavel-dmitrievich"
-    - role: Primrose
-      name: Alexandra Chernykh
-      url: "https://dramteatr39.ru/peoples/chernyh-aleksandra-vladimirovna"
-    - role: "Yasmin, \"Divorce\" band (bass guitar)"
-      name: Maria Chernova
-      url: "https://dramteatr39.ru/public/peoples/savel-eva-mariya-vyacheslavovna"
-    - role: "Dr. Van Goyer, \"Divorce\" band (drums)"
-      name: Vladislav Lepin
-      url: "https://dramteatr39.ru/peoples/lepin-vladislav-alekseevich"
-    - role: Dauve
-      name: Anton Kontushev
-      url: "https://dramteatr39.ru/peoples/kontushev-anton"
-    - role: Dr. Sarah
-      name: Marina Jungans
-      url: "https://dramteatr39.ru/peoples/yungans-marina-sergeevna"
-    - role: "Doctor, \"Divorce\" band (electric guitar)"
-      name: Albert Khalmurzaev
-      url: "https://dramteatr39.ru/peoples/halmurzaev-al-bert"
-    - role: "Doctor, \"Divorce\" band (keyboards)"
-      name: Alexey Gryzunov
-      url: "https://dramteatr39.ru/peoples/gryzunov-aleksej-pavlovich"
-    - role: Santa Claus
-      name: Honoured Artist of Mari El Alexander Egorov
-      url: "https://dramteatr39.ru/peoples/egorov-aleksandr-valer-evich"
-    - role: Bears
-      name: Sergey Borisov
-      url: "https://dramteatr39.ru/peoples/borisov-sergej-aleksandrovich"
-    - role: Bears
-      name: Viktor Valchenko
-      url: "https://dramteatr39.ru/peoples/val-chenko-viktor-viktorovich"
-    - role: Bears
-      name: Andrey Varenitsyn
-      url: "https://dramteatr39.ru/peoples/varenicyn-andrej"
-  de:
-    - role: Regie, Autor der Inszenierung
-      name: Roman Boklanov
-    - role: Bühnenbild
-      name: Oganes Ajrapetjan
-      url: "https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/"
-    - role: Lichttechnik und Musikgestaltung
-      name: Maxim Morozov
-    - role: Fitz
-      name: Yaroslava Burlakova
-      url: "https://dramteatr39.ru/peoples/burlakova-yaroslava-dmitrievna"
-    - role: Mutter
-      name: Maria Avramenko
-      url: "https://dramteatr39.ru/peoples/avramenko-mariya-alekseevna"
-    - role: Vater
-      name: Vasily Shvechkov Jr.
-      url: "https://dramteatr39.ru/peoples/shvechkov-vasilij-vasil-evich-mladshij"
-    - role: Bente
-      name: Anastasia Zemlyanskaya
-      url: "https://dramteatr39.ru/peoples/zemlyanskaya-anastasiya-anatol-evna"
-    - role: Adam
-      name: Pavel Samolovov
-      url: "https://dramteatr39.ru/peoples/samolovov-pavel-dmitrievich"
-    - role: Primrose
-      name: Alexandra Chernykh
-      url: "https://dramteatr39.ru/peoples/chernyh-aleksandra-vladimirovna"
-    - role: "Yasmin, Band „Scheidung\" (Bassgitarre)"
-      name: Maria Chernova
-      url: "https://dramteatr39.ru/public/peoples/savel-eva-mariya-vyacheslavovna"
-    - role: "Dr. Van Goyer, Band „Scheidung\" (Schlagzeug)"
-      name: Vladislav Lepin
-      url: "https://dramteatr39.ru/peoples/lepin-vladislav-alekseevich"
-    - role: Dauve
-      name: Anton Kontushev
-      url: "https://dramteatr39.ru/peoples/kontushev-anton"
-    - role: Dr. Sarah
-      name: Marina Jungans
-      url: "https://dramteatr39.ru/peoples/yungans-marina-sergeevna"
-    - role: "Arzt, Band „Scheidung\" (E-Gitarre)"
-      name: Albert Khalmurzaev
-      url: "https://dramteatr39.ru/peoples/halmurzaev-al-bert"
-    - role: "Arzt, Band „Scheidung\" (Keyboard)"
-      name: Alexey Gryzunov
-      url: "https://dramteatr39.ru/peoples/gryzunov-aleksej-pavlovich"
-    - role: Väterchen Frost
-      name: Verdienter Künstler von Mari El Alexander Egorov
-      url: "https://dramteatr39.ru/peoples/egorov-aleksandr-valer-evich"
-    - role: Bären
-      name: Sergey Borisov
-      url: "https://dramteatr39.ru/peoples/borisov-sergej-aleksandrovich"
-    - role: Bären
-      name: Viktor Valchenko
-      url: "https://dramteatr39.ru/peoples/val-chenko-viktor-viktorovich"
-    - role: Bären
-      name: Andrey Varenitsyn
-      url: "https://dramteatr39.ru/peoples/varenicyn-andrej"
-poster:
-  src: /productions/plaster/poster.jpg
-  credit: null
-gallery:
-  - src: /productions/plaster/01.jpg
+identity:
+  title:
+    ru: Гипс
+    en: Plaster
+    de: Gips
+  synopsis:
+    ru:
+      Это семейный спектакль о любви, которую боимся потерять, и о любви, которую ждём. Подростки, их родители, бабушки и
+      дедушки – каждому придется пережить вместе с Фитц ужас от грядущего развода родителей, негодование, изумление,
+      радость и влюбленность…
+    en:
+      This is a family play! Teenagers, their parents, grandparents - everyone will experience with Fitz the horror of
+      their parents' impending divorce, the indignation, the amazement, the joy and the falling in love…
+    de:
+      Dies ist ein Familienspiel! Jugendliche, ihre Eltern, Großeltern – jeder wird mit Fitz den Horror der bevorstehenden
+      Scheidung der Eltern, die Empörung, die Verwunderung, die Freude und den Verliebtsein erleben…
+  directorsNote:
+    ru:
+      …я поняла, о чём говорила моя мама. Вот каково это — быть кем-то ещё. И может, когда мне будет сорок два, я иногда
+      буду скучать по этому дню
+    en:
+      I understood what my mother was talking about. That's what it's like to be somebody else. And maybe when I'm
+      forty-two, I'll miss this day sometimes.
+    de:
+      Ich verstand, wovon meine Mutter sprach. Das ist, wie es sich anfühlt, jemand anderen zu sein. Und vielleicht werde
+      ich diesen Tag vermissen, wenn ich zweiundvierzig bin.
+media:
+  poster:
+    src: /productions/plaster/poster.jpg
     credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/02.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/03.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/04.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/05.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/06.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/07.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/08.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/09.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/10.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/11.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/12.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/13.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/14.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/15.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/16.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/17.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/18.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/19.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/20.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/21.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/plaster/22.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-videos:
-  - provider: youtube
-    id: QJsPrvhP1aw
-awards:
-  - name:
-      ru: Лонг-лист Российской Национальной премии в области театрального искусства для детей «Арлекин»
-      en: Long List of the Russian National Prize in the Field of Children's Theatre Art "Arlekin"
-      de: Long-List der Russischen Nationalen Preis für das Theaterkunst für Kinder "Arlekin"
-    year: 2023
-  - name:
-      ru: Лауреат театральной премии «Своё лицо» Калининградского драматического театра в номинации «За раскрытие творческой индивидуальности» (Александра Черных, роль Примулы)
-      en: Winner of the Kaliningrad Drama Theatre's own face award in the category of revealing creative individuality (Alexandra Chernykh, role of Primula)
-      de: Лауреат der Theaterpreis "Swoje Gesicht" Königsberger Dramatisches Theater in der Nominierung "Für die Entfaltung der kreativen Individualität" (Alexandra Tschernych, Rolle Primula)
-    year: 2023
-festivals: []
-press:
-  - title:
-      ru: "Режиссер Роман Бокланов: «Моя задача - чтобы было больно, но светло»"
-      en: 'Director Roman Boklanov: "My task is to make it painful but light"'
-      de: 'Regisseur Roman Boklanov: "Meine Aufgabe ist es, dass es wehtut, aber hell ist"'
-    url: "https://dramteatr39.ru/news/rejisser-roman-boklanov:-%C2%ABmoya-zadacha---chtoby-bylo-bolno,-no-svetlo%C2%BB?skip=0"
-  - title:
-      ru: Калининградские артисты в спектакле Бокланова поговорят с подростками о разводе
-      en: Kaliningrad Actors in Boklanov's Play to Discuss Divorce with Teenagers
-      de: Kaliningrader Künstler in Boklanows Stück sprechen mit Jugendlichen über Scheidung
-    url: "http://oteatre.info/kaliningradskie-artisty-v-spektakle-boklanova-pogovoryat-s-podrostkami-o-razvode/"
-  - title:
-      ru: "Розовые мишки и живая музыка: в Драмтеатре премьера спектакля «Гипс»"
-      en: 'Pink Mice and Live Music: Premiere of the Play "Gips" at the Dramtheatre'
-      de: 'Rosinenmäuse und lebendige Musik: Uraufführung des Stücks "Gips" im Dramtheater'
-    url: "https://vesti-kaliningrad.ru/rozovye-mishki-i-zhivaya-muzyka-v-dramteatre-premera/"
-  - title:
-      ru: В Калининградском драмтеатре поставили спектакль для подростков о разводе
-      en: In Kaliningrad Drama Theatre, a play about divorce for teenagers was staged
-      de: In Königsberger Theater wurde ein Stück für Jugendliche über die Scheidung aufgeführt
-    url: "https://m.newkaliningrad.ru/short/2021/11/29/23967262.html"
-externalLinks: []
-techRider: null
-pressKit: null
-featured: true
-listOrder: 8
-tags:
-  - family show
-  - roman boklanov
-  - theater
-tour: []
+  gallery:
+    - src: /productions/plaster/01.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/02.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/03.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/04.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/05.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/06.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/07.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/08.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/09.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/10.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/11.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/12.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/13.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/14.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/15.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/16.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/17.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/18.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/19.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/20.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/21.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/plaster/22.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+  videos:
+    - provider: youtube
+      id: QJsPrvhP1aw
+production:
+  theatre:
+    name:
+      ru: Калининградский областной драматический театр
+      en: Kaliningrad Regional Drama Theatre
+      de: Regionaltheater für Drama Kaliningrad
+    city:
+      en: Kaliningrad
+      ru: Калининград
+      de: Kaliningrad
+    country: RU
+    url: https://dramteatr39.ru/spektakli/gips
+  year: 2021
+  premiereDate:
+    ru: 10-12 декабря 2021 г.
+    en: December 10-12, 2021
+    de: 10.-12. Dezember 2021
+  ticketsUrl: https://dramteatr39.ru/spektakli/gips
+  durationMin: 105
+  ageRating: 12+
+taxonomy:
+  role:
+    - director
+  form:
+    - family
+  lineage: []
+  tags:
+    - family show
+    - roman boklanov
+    - theater
+team:
+  credits:
+    ru:
+      - role: Режиссер, автор инсценировки
+        name: Роман Бокланов
+      - role: Художник
+        name: Оганес Айрапетян
+        url: https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/
+      - role: Художник по свету, музыкальное оформление
+        name: Максим Морозов
+      - role: Помощники режиссёра
+        name: Наталья Богуславская
+      - role: Помощники режиссёра
+        name: Елена Лысенко
+    en:
+      - role: Director, author of the staging
+        name: Roman Boklanov
+      - role: Artist
+        name: Oganes Ayrapetyan
+        url: https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/
+      - role: Lighting Designer, set design
+        name: Maksim Morozov
+      - role: Fitz
+        name: Yaroslava Burlakova
+        url: https://dramteatr39.ru/peoples/burlakova-yaroslava-dmitrievna
+      - role: Mom
+        name: Maria Avramenko
+        url: https://dramteatr39.ru/peoples/avramenko-mariya-alekseevna
+      - role: Daddy
+        name: Vasily Shvechkov Jr
+        url: https://dramteatr39.ru/peoples/shvechkov-vasilij-vasil-evich-mladshij
+      - role: Bente
+        name: Anastasia Zemlyanskaya
+        url: https://dramteatr39.ru/peoples/zemlyanskaya-anastasiya-anatol-evna
+      - role: Adam
+        name: Pavel Samolovov
+        url: https://dramteatr39.ru/peoples/samolovov-pavel-dmitrievich
+      - role: Primrose
+        name: Alexandra Chernykh
+        url: https://dramteatr39.ru/peoples/chernyh-aleksandra-vladimirovna
+      - role: Yasmin, "Divorce" band (bass guitar)
+        name: Maria Chernova
+        url: https://dramteatr39.ru/public/peoples/savel-eva-mariya-vyacheslavovna
+      - role: Dr. Van Goyer, "Divorce" band (drums)
+        name: Vladislav Lepin
+        url: https://dramteatr39.ru/peoples/lepin-vladislav-alekseevich
+      - role: Dauve
+        name: Anton Kontushev
+        url: https://dramteatr39.ru/peoples/kontushev-anton
+      - role: Dr. Sarah
+        name: Marina Jungans
+        url: https://dramteatr39.ru/peoples/yungans-marina-sergeevna
+      - role: Doctor, "Divorce" band (electric guitar)
+        name: Albert Khalmurzaev
+        url: https://dramteatr39.ru/peoples/halmurzaev-al-bert
+      - role: Doctor, "Divorce" band (keyboards)
+        name: Alexey Gryzunov
+        url: https://dramteatr39.ru/peoples/gryzunov-aleksej-pavlovich
+      - role: Santa Claus
+        name: Honoured Artist of Mari El Alexander Egorov
+        url: https://dramteatr39.ru/peoples/egorov-aleksandr-valer-evich
+      - role: Bears
+        name: Sergey Borisov
+        url: https://dramteatr39.ru/peoples/borisov-sergej-aleksandrovich
+      - role: Bears
+        name: Viktor Valchenko
+        url: https://dramteatr39.ru/peoples/val-chenko-viktor-viktorovich
+      - role: Bears
+        name: Andrey Varenitsyn
+        url: https://dramteatr39.ru/peoples/varenicyn-andrej
+    de:
+      - role: Regie, Autor der Inszenierung
+        name: Roman Boklanov
+      - role: Bühnenbild
+        name: Oganes Ajrapetjan
+        url: https://ntyz.ru/profile/%d0%be%d0%b3%d0%b0%d0%bd%d0%b5%d1%81-%d0%b0%d0%b9%d1%80%d0%b0%d0%bf%d0%b5%d1%82%d1%8f%d0%bd/
+      - role: Lichttechnik und Musikgestaltung
+        name: Maxim Morozov
+      - role: Fitz
+        name: Yaroslava Burlakova
+        url: https://dramteatr39.ru/peoples/burlakova-yaroslava-dmitrievna
+      - role: Mutter
+        name: Maria Avramenko
+        url: https://dramteatr39.ru/peoples/avramenko-mariya-alekseevna
+      - role: Vater
+        name: Vasily Shvechkov Jr.
+        url: https://dramteatr39.ru/peoples/shvechkov-vasilij-vasil-evich-mladshij
+      - role: Bente
+        name: Anastasia Zemlyanskaya
+        url: https://dramteatr39.ru/peoples/zemlyanskaya-anastasiya-anatol-evna
+      - role: Adam
+        name: Pavel Samolovov
+        url: https://dramteatr39.ru/peoples/samolovov-pavel-dmitrievich
+      - role: Primrose
+        name: Alexandra Chernykh
+        url: https://dramteatr39.ru/peoples/chernyh-aleksandra-vladimirovna
+      - role: Yasmin, Band „Scheidung" (Bassgitarre)
+        name: Maria Chernova
+        url: https://dramteatr39.ru/public/peoples/savel-eva-mariya-vyacheslavovna
+      - role: Dr. Van Goyer, Band „Scheidung" (Schlagzeug)
+        name: Vladislav Lepin
+        url: https://dramteatr39.ru/peoples/lepin-vladislav-alekseevich
+      - role: Dauve
+        name: Anton Kontushev
+        url: https://dramteatr39.ru/peoples/kontushev-anton
+      - role: Dr. Sarah
+        name: Marina Jungans
+        url: https://dramteatr39.ru/peoples/yungans-marina-sergeevna
+      - role: Arzt, Band „Scheidung" (E-Gitarre)
+        name: Albert Khalmurzaev
+        url: https://dramteatr39.ru/peoples/halmurzaev-al-bert
+      - role: Arzt, Band „Scheidung" (Keyboard)
+        name: Alexey Gryzunov
+        url: https://dramteatr39.ru/peoples/gryzunov-aleksej-pavlovich
+      - role: Väterchen Frost
+        name: Verdienter Künstler von Mari El Alexander Egorov
+        url: https://dramteatr39.ru/peoples/egorov-aleksandr-valer-evich
+      - role: Bären
+        name: Sergey Borisov
+        url: https://dramteatr39.ru/peoples/borisov-sergej-aleksandrovich
+      - role: Bären
+        name: Viktor Valchenko
+        url: https://dramteatr39.ru/peoples/val-chenko-viktor-viktorovich
+      - role: Bären
+        name: Andrey Varenitsyn
+        url: https://dramteatr39.ru/peoples/varenicyn-andrej
+recognition:
+  awards:
+    - name:
+        ru: Лонг-лист Российской Национальной премии в области театрального искусства для детей «Арлекин»
+        en: Long List of the Russian National Prize in the Field of Children's Theatre Art "Arlekin"
+        de: Long-List der Russischen Nationalen Preis für das Theaterkunst für Kinder "Arlekin"
+      year: 2023
+    - name:
+        ru:
+          Лауреат театральной премии «Своё лицо» Калининградского драматического театра в номинации «За раскрытие творческой
+          индивидуальности» (Александра Черных, роль Примулы)
+        en:
+          Winner of the Kaliningrad Drama Theatre's own face award in the category of revealing creative individuality
+          (Alexandra Chernykh, role of Primula)
+        de:
+          Лауреат der Theaterpreis "Swoje Gesicht" Königsberger Dramatisches Theater in der Nominierung "Für die Entfaltung
+          der kreativen Individualität" (Alexandra Tschernych, Rolle Primula)
+      year: 2023
+  festivals: []
+  press:
+    - title:
+        ru: 'Режиссер Роман Бокланов: «Моя задача - чтобы было больно, но светло»'
+        en: 'Director Roman Boklanov: "My task is to make it painful but light"'
+        de: 'Regisseur Roman Boklanov: "Meine Aufgabe ist es, dass es wehtut, aber hell ist"'
+      url: https://dramteatr39.ru/news/rejisser-roman-boklanov:-%C2%ABmoya-zadacha---chtoby-bylo-bolno,-no-svetlo%C2%BB?skip=0
+    - title:
+        ru: Калининградские артисты в спектакле Бокланова поговорят с подростками о разводе
+        en: Kaliningrad Actors in Boklanov's Play to Discuss Divorce with Teenagers
+        de: Kaliningrader Künstler in Boklanows Stück sprechen mit Jugendlichen über Scheidung
+      url: http://oteatre.info/kaliningradskie-artisty-v-spektakle-boklanova-pogovoryat-s-podrostkami-o-razvode/
+    - title:
+        ru: 'Розовые мишки и живая музыка: в Драмтеатре премьера спектакля «Гипс»'
+        en: 'Pink Mice and Live Music: Premiere of the Play "Gips" at the Dramtheatre'
+        de: 'Rosinenmäuse und lebendige Musik: Uraufführung des Stücks "Gips" im Dramtheater'
+      url: https://vesti-kaliningrad.ru/rozovye-mishki-i-zhivaya-muzyka-v-dramteatre-premera/
+    - title:
+        ru: В Калининградском драмтеатре поставили спектакль для подростков о разводе
+        en: In Kaliningrad Drama Theatre, a play about divorce for teenagers was staged
+        de: In Königsberger Theater wurde ein Stück für Jugendliche über die Scheidung aufgeführt
+      url: https://m.newkaliningrad.ru/short/2021/11/29/23967262.html
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: true
+  listOrder: 8
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: d9a81d6aa35f42ebacfc04d68b7c6141
+    en: feda57dbf95340dda8467e462d29d16d

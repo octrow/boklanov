@@ -193,6 +193,39 @@ export interface ProductionView
 // Internal: load + merge
 // ---------------------------------------------------------------------------
 
+/**
+ * WS-1: flatten a possibly-migrated (nested) YAML frontmatter into the flat
+ * shape that the rest of this file expects. If the YAML has already been
+ * migrated (identity: key present) the groups are spread to top-level keys.
+ * Un-migrated entries pass through unchanged so the reader works during a
+ * partial or rolled-back migration.
+ */
+function flattenFm(raw: Record<string, unknown>): Record<string, unknown> {
+  if (!('identity' in raw)) return raw // not yet migrated — pass through
+  const {
+    identity = {},
+    media = {},
+    production = {},
+    taxonomy = {},
+    team = {},
+    recognition = {},
+    history = {},
+    settings = {},
+    ...rest
+  } = raw as Record<string, Record<string, unknown>>
+  return {
+    ...rest,
+    ...(identity as object),
+    ...(media as object),
+    ...(production as object),
+    ...(taxonomy as object),
+    ...(team as object),
+    ...(recognition as object),
+    ...(history as object),
+    ...(settings as object)
+  }
+}
+
 let _cache: Production[] | null = null
 
 function loadAll(): Production[] {
@@ -215,7 +248,8 @@ function loadAll(): Production[] {
     if (!fs.existsSync(yamlPath)) continue
 
     const raw = fs.readFileSync(yamlPath, 'utf8')
-    const frontmatter = (parseYaml(raw) ?? {}) as Partial<Production>
+    const rawFm = flattenFm((parseYaml(raw) ?? {}) as Record<string, unknown>)
+    const frontmatter = rawFm as Partial<Production>
     frontmatter.body = readBodyFiles(dir)
 
     const prod = fromFm(frontmatter, raw)
