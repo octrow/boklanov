@@ -1,66 +1,74 @@
 slug: mcqueen-blood-beneath-skin
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Александр Маккуин. Кровь под кожей
-  en: Alexander McQueen. Blood Beneath the Skin
-  de: Alexander McQueen. Blut unter der Haut
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name:
-    ru: Тотальный Театр
-    en: Total Theatre
-    de: Totaler Theater
-  shortName:
-    ru: ТТ
-    en: TT
-    de: TT
-  city:
-    en: Almaty
-    ru: Алматы
-    de: Almaty
-  country: KZ
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: 18+
-durationMin: null
-role:
-  - director
-status: in-development
-form:
-  - theater
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-  en:
-    - role: Director
-      name: Roman Boklanov
-  de:
-    - role: Regie
-      name: Roman Boklanov
-poster:
-  src: null
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - theater
-tour: []
+identity:
+  title:
+    ru: Александр Маккуин. Кровь под кожей
+    en: Alexander McQueen. Blood Beneath the Skin
+    de: Alexander McQueen. Blut unter der Haut
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: null
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Тотальный Театр
+      en: Total Theatre
+      de: Totaler Theater
+    shortName:
+      ru: ТТ
+      en: TT
+      de: TT
+    city:
+      en: Almaty
+      ru: Алматы
+      de: Almaty
+    country: KZ
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: 18+
+  status: in-development
+taxonomy:
+  role:
+    - director
+  form:
+    - theater
+  lineage: []
+  tags:
+    - theater
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+    en:
+      - role: Director
+        name: Roman Boklanov
+    de:
+      - role: Regie
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

@@ -1,61 +1,69 @@
 slug: kto-ya
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Кто я?
-  en: Who Am I?
-  de: Wer bin ich?
-synopsis:
-  ru: null
-  en: null
-  de: null
-theatre:
-  name:
-    en: Taller de talentos
-    ru: Taller de talentos
-    de: Taller de talentos
-  city:
-    en: Torrevieja
-    ru: Торревьеха
-    de: Torrevieja
-  country: ES
-  url: null
-year: null
-premiereDate:
-  ru: null
-  en: null
-  de: null
-ticketsUrl: null
-ageRating: 6+
-durationMin: null
-role:
-  - director
-form:
-  - theater
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-  en:
-    - role: Director
-      name: Roman Boklanov
-  de:
-    - role: Regie
-      name: Roman Boklanov
-poster:
-  src: productions/kto-ya/poster.webp
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - theater
-tour: []
+identity:
+  title:
+    ru: Кто я?
+    en: Who Am I?
+    de: Wer bin ich?
+  synopsis:
+    ru: null
+    en: null
+    de: null
+media:
+  poster:
+    src: productions/kto-ya/poster.webp
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      en: Taller de talentos
+      ru: Taller de talentos
+      de: Taller de talentos
+    city:
+      en: Torrevieja
+      ru: Торревьеха
+      de: Torrevieja
+    country: ES
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: 6+
+taxonomy:
+  role:
+    - director
+  form:
+    - theater
+  lineage: []
+  tags:
+    - theater
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+    en:
+      - role: Director
+        name: Roman Boklanov
+    de:
+      - role: Regie
+        name: Roman Boklanov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

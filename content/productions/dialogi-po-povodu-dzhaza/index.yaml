@@ -1,196 +1,91 @@
 slug: dialogi-po-povodu-dzhaza
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: "Диалоги по поводу джаза"
-  en: "Discussions on Jazz"
-  de: Dialoge über Jazz
-
-synopsis:
-  ru: ""                                  # 1–3 предложения, появляется в карточке и шапке
-  en: ""
-  de: null
-
-# Подзаголовок над названием на странице спектакля. Опционально.
-tagline:
-  ru: null                                # "Автобиографичный спектакль-воспоминание"
-  en: null
-  de: null
-
-# Цитата режиссёра под синопсисом. Опционально.
-directorsNote:
-  ru: null
-  en: null
-  de: null
-
-# === Театр ===
-# Поля name, shortName, city можно писать строкой (для всех локалей одинаково)
-# или объектом { ru, en, de } — если название/город по-разному в разных языках.
-theatre:
-  name:
+identity:
+  title:
+    ru: Диалоги по поводу джаза
+    en: Discussions on Jazz
+    de: Dialoge über Jazz
+  tagline:
     ru: null
     en: null
     de: null
-  shortName: null
-  city:
+  synopsis:
+    ru: ''
+    en: ''
+    de: null
+  directorsNote:
     ru: null
     en: null
     de: null
-  country: null
-  url: null
-
-# === Даты ===
-year: null                                # год премьеры, например 2021
-premiereDate:
-  ru: null                                # «24 марта 2021 г.»
-  en: null                                # "24 March 2021"
-  de: null
-ticketsUrl: null                          # ссылка на покупку билетов, если есть
-
-# === Маркеры ===
-ageRating: null                           # "0+", "6+", "12+", "16+", "18+"
-durationMin: null                         # длительность в минутах, число
-
-# Роль Романа в постановке. Любое из:
-# director, co-director, performer, playwright, designer, choreographer, mentor, reader
-role:
-  - director
-
-# Форма спектакля. Любое из:
-# theater, puppet, solo, mono, music, immersive, lab, festival, online …
-form: [ ]
-
-# Линия преемственности / школа. Используется для блока «Похожие спектакли».
-# Примеры значений: btk, kudashov, mejerhold, lab, school
-lineage: [ ]
-
-# === Команда ===
-# Роль + имя. URL опционален. Списки по локалям - заполнить ru и en минимум.
-credits:
-  ru:
-    - role: Режиссёр
-      name: Роман Бокланов
-      url: https://puppets.ru/pers/40
-    # - role: Художник
-    #   name: ""
-    # - role: Исполнители
-    #   name: ""
-  en:
-    - role: Director
-      name: Roman Boklanov
-      url: https://puppets.ru/pers/40
-    # - role: Production designer
-    #   name: ""
-  de: [ ]
-
-# === Медиа ===
-# Постер: обложка спектакля. Положить файл в папку public/productions/<slug> (.webp / .jpg).
-poster:
-  src: productions/dialogi-po-povodu-dzhaza/poster.webp
-  credit: null                            # фотограф, если известен
-
-# Обложка для страницы /productions (переопределяет poster на карточках списка).
-# Оставить null → используется poster.
-productionsPhoto:
-  src: null                               # /productions/<slug>/productions-cover.jpg
-  credit: null
-
-# Обложка для главной страницы «Избранные работы».
-# Цепочка: featuredPhoto → productionsPhoto → poster → текст.
-# Оставить null → используется следующий в цепочке.
-featuredPhoto:
-  src: null                               # /productions/<slug>/featured-cover.jpg
-  credit: null
-
-# Галерея. Файлы кладутся в public/productions/<slug>, что и index.yaml.
-# После добавления - написать Daniil, он зальёт фото в R2:
-#   npm run upload-images -- --slug <slug>
-gallery: [ ]
-# Пример заполненной записи:
-# gallery:
-#   - src: /productions/<slug>/01.jpg
-#     credit: null                        # имя фотографа или null
-#     caption:
-#       ru: null
-#       en: null
-#       de: null                          # опционально
-
-# Видео. provider: youtube | vimeo. id: id ролика (не полный URL).
-# Первый ролик из списка показывается как встроенный трейлер
-# на странице спектакля под кнопкой «Написать Роману о гастролях…».
-videos: [ ]
-# - provider: youtube
-#   id: 1GWFJ0jfPq4
-
-# === Признание ===
-# name, category, city — текстовые поля: можно строкой или { ru, en, de }.
-# Пример строкой:  name: «Золотой софит»
-# Пример объектом: name: { ru: «Золотой софит», en: "Golden Spotlight", de: null }
-awards: [ ]
-# - name: «Один. Два. Три»                 # название премии (строка или { ru, en, de })
-#   year: 2022
-#   category: null                         # номинация (строка или { ru, en, de })
-#   city: null                             # город (строка или { ru, en, de })
-
-festivals: [ ]
-# - name: «Фестиваль»                      # участие без приза (строка или { ru, en, de })
-#   year: 2022
-#   category: null                         # программа / секция (строка или { ru, en, de })
-#   city: null                             # город (строка или { ru, en, de })
-
-press: [ ]
-# - title: "Заголовок статьи"              # строка или { ru: "...", en: "...", de: null }
-#   url: https://...
-#   outlet: null                           # название издания (sobaka.ru), если хочется
-#   language: null                         # ru / en / de
-
-# label можно строкой или { ru, en, de }
-externalLinks: [ ]
-# - label: "Канал спектакля"               # или { ru: "Канал", en: "Channel", de: null }
-#   url: https://...
-
-techRider: null                            # ссылка на PDF, если есть
-pressKit: null                             # ссылка на PDF, если есть
-
-# === Кнопка «Написать Роману о гастролях этого спектакля» ===
-# По умолчанию кнопка показывается с типовым текстом и ведёт на mailto.
-# Можно скрыть, поменять подпись и/или ссылку для конкретного спектакля.
-bookingCta: true                           # false → кнопка не показывается
-bookingCtaLabel: # null → используется подпись по умолчанию
-  ru: null                                 # например, "Заказать показ"
-  en: null
-  de: null
-bookingCtaUrl: null                        # null → mailto по умолчанию; иначе любая ссылка
-
-# === Размещение на сайте ===
-featured: false                            # true → попадает на главную
-featuredOrder: null                        # порядок в featured-стрипе (1, 2, 3 …); null если featured=false
-listOrder: null                            # порядок в сетке режиссёрских работ (главная + страница /productions); null - не показывать на главной
-
-# Теги для фильтрации. Свободная форма.
-tags: [ ]
-# - mono-performance
-# - puppet
-# - roman boklanov
-
-# Города гастролей. Простой список строк.
-tour: [ ]
-# - Almaty
-# - Vienna
-
-# История прокатов (показывается строкой над заголовком).
-# venue, city, count — строка или { ru, en, de }.
-runs: [ ]
-# - venue: "БТК"                           # или { ru: "БТК", en: "BTK", de: null }
-#   city: "Saint Petersburg"               # или { ru: "Санкт-Петербург", en: "Saint Petersburg" }
-#   yearFrom: 2021
-#   yearTo: 2024
-#   count: "60+"                           # или { ru: "более 60 показов", en: "60+ performances" }
-
-# === Описание ===
-# Длинное описание лежит в отдельных файлах в той же папке:
-#   body.ru.md   ← обязательно (русский)
-#   body.en.md   ← обязательно (английский)
-#   body.de.md   ← опционально (немецкий)
-# Markdown поддерживается: **жирный**, _курсив_, [ссылки](url), пустые строки = новый абзац.
+media:
+  poster:
+    src: productions/dialogi-po-povodu-dzhaza/poster.webp
+    credit: null
+  productionsPhoto:
+    src: null
+    credit: null
+  featuredPhoto:
+    src: null
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: null
+      en: null
+      de: null
+    shortName: null
+    city:
+      ru: null
+      en: null
+      de: null
+    country: null
+    url: null
+  year: null
+  premiereDate:
+    ru: null
+    en: null
+    de: null
+  ticketsUrl: null
+  durationMin: null
+  ageRating: null
+taxonomy:
+  role:
+    - director
+  form: []
+  lineage: []
+  tags: []
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Роман Бокланов
+        url: https://puppets.ru/pers/40
+    en:
+      - role: Director
+        name: Roman Boklanov
+        url: https://puppets.ru/pers/40
+    de: []
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+  runs: []
+settings:
+  bookingCta: true
+  bookingCtaLabel:
+    ru: null
+    en: null
+    de: null
+  bookingCtaUrl: null
+  featured: false
+  featuredOrder: null
+  listOrder: null
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

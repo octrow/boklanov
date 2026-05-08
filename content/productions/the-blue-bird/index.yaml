@@ -1,137 +1,151 @@
 slug: the-blue-bird
-notionIds:
-  ru: null
-  en: null
-title:
-  ru: Синяя птица
-  en: The Blue Bird
-  de: Der Blaue Vogel
-synopsis:
-  ru: История о волшебном путешествии брата и сестры Тильтиль и Митиль за сказочной Синей птицей — второй спектакль гуманистической трилогии Руслана Кудашова с участием 57 кукол разного формата.
-  en: "The story of the magical journey of brother and sister Tiltil and Mytil in search of the Blue Bird — the second performance in Ruslan Kudashov's humanistic trilogy, featuring 57 puppets of various formats."
-  de: Die Geschichte der magischen Reise von Bruder und Schwester Tiltil und Mytil auf der Suche nach dem Blauen Vogel — die zweite Aufführung in Ruslan Kudashows humanistischer Trilogie mit 57 Puppen verschiedener Formate.
-theatre:
-  name:
-    ru: Большой театр кукол
-    en: Great Puppet Theatre
-    de: Bolshoi Teatr Kukol
-  shortName:
-    ru: БТК
-    en: BTK
-    de: BTK
-  city:
-    en: Saint Petersburg
-    ru: Санкт-Петербург
-    de: Sankt Petersburg
-  country: RU
-  url: "https://puppets.ru/sinyayaptica"
-  year: 2021
-premiereDate:
-  ru: 6–7 февраля 2021 г.
-  en: February 6–7, 2021
-  de: 6.–7. Februar 2021
-ticketsUrl: "https://puppets.ru/sinyayaptica"
-ageRating: 6+
-durationMin: 60
-role:
-  - performer
-bookingCta: false
-form:
-  - family
-lineage: []
-credits:
-  ru:
-    - role: Режиссёр
-      name: Руслан Кудашов
-    - role: Художник
-      name: Марина Завьялова-Лаврова
-    - role: Художник по свету
-      name: Анастасия Кузнецова
-    - role: Композитор
-      name: Игорь Ушаков
-    - role: Видеоконтент
-      name: Егор Лавров
-    - role: Артист
-      name: Роман Бокланов
-      url: "https://puppets.ru/pers/40"
-    - role: Тильтиль
-      name: Игорь Ушаков
-    - role: Митиль
-      name: Алёна Волкова
-    - role: Пёс
-      name: Иван Солнцев
-    - role: Кошка
-      name: Анна Сомкина
-    - role: Ночь, Фея, Соседка
-      name: Василиса Ушакова
-    - role: Ночь, Фея, Соседка
-      name: Наталья Сизова
-    - role: Огонь, Сосна
-      name: Платон Селивановский
-    - role: Дедушка, Бык
-      name: Роман Дадаев
-    - role: Дедушка, Бык
-      name: Максим Морозов
-    - role: Папа, Каштан
-      name: Анатолий Гущин
-    - role: Папа, Каштан
-      name: Владислав Тутак
-    - role: Мама, Бабушка
-      name: Наталья Смаль
-    - role: Мама, Бабушка
-      name: Виктория Войнич-Слуцкая
-    - role: Душа света
-      name: Алёна Первухина
-    - role: Хлеб
-      name: Сергей Беспалов
-    - role: Плющ
-      name: Дмитрий Скрябин
-  en:
-    - role: Director
-      name: Ruslan Kudashov
-    - role: Set Designer
-      name: Marina Zavyalova-Lavrova
-    - role: Lighting Designer
-      name: Anastasia Kuznetsova
-    - role: Composer
-      name: Igor Ushakov
-    - role: Performer
-      name: Roman Boklanov
-      url: "https://puppets.ru/pers/40"
-    - role: Tiltil
-      name: Igor Ushakov
-    - role: Mytil
-      name: Alyona Volkova
-    - role: The Dog
-      name: Ivan Solntsev
-    - role: The Cat
-      name: Anna Somkina
-  de:
-    - role: Regie
-      name: Ruslan Kudashov
-    - role: Bühnenbild
-      name: Marina Zavyalova-Lavrova
-    - role: Lichttechnik
-      name: Anastasia Kuznetsova
-    - role: Komponist
-      name: Igor Ushakov
-    - role: Darsteller
-      name: Roman Boklanov
-      url: "https://puppets.ru/pers/40"
-poster:
-  src: /productions/the-blue-bird/poster.png
-  credit: null
-gallery: []
-videos: []
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - family show
-  - roman boklanov
-  - theater
-tour: []
+identity:
+  title:
+    ru: Синяя птица
+    en: The Blue Bird
+    de: Der Blaue Vogel
+  synopsis:
+    ru:
+      История о волшебном путешествии брата и сестры Тильтиль и Митиль за сказочной Синей птицей — второй спектакль
+      гуманистической трилогии Руслана Кудашова с участием 57 кукол разного формата.
+    en:
+      The story of the magical journey of brother and sister Tiltil and Mytil in search of the Blue Bird — the second
+      performance in Ruslan Kudashov's humanistic trilogy, featuring 57 puppets of various formats.
+    de:
+      Die Geschichte der magischen Reise von Bruder und Schwester Tiltil und Mytil auf der Suche nach dem Blauen Vogel —
+      die zweite Aufführung in Ruslan Kudashows humanistischer Trilogie mit 57 Puppen verschiedener Formate.
+media:
+  poster:
+    src: /productions/the-blue-bird/poster.png
+    credit: null
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Большой театр кукол
+      en: Great Puppet Theatre
+      de: Bolshoi Teatr Kukol
+    shortName:
+      ru: БТК
+      en: BTK
+      de: BTK
+    city:
+      en: Saint Petersburg
+      ru: Санкт-Петербург
+      de: Sankt Petersburg
+    country: RU
+    url: https://puppets.ru/sinyayaptica
+    year: 2021
+  premiereDate:
+    ru: 6–7 февраля 2021 г.
+    en: February 6–7, 2021
+    de: 6.–7. Februar 2021
+  ticketsUrl: https://puppets.ru/sinyayaptica
+  durationMin: 60
+  ageRating: 6+
+taxonomy:
+  role:
+    - performer
+  form:
+    - family
+  lineage: []
+  tags:
+    - family show
+    - roman boklanov
+    - theater
+team:
+  credits:
+    ru:
+      - role: Режиссёр
+        name: Руслан Кудашов
+      - role: Художник
+        name: Марина Завьялова-Лаврова
+      - role: Художник по свету
+        name: Анастасия Кузнецова
+      - role: Композитор
+        name: Игорь Ушаков
+      - role: Видеоконтент
+        name: Егор Лавров
+      - role: Артист
+        name: Роман Бокланов
+        url: https://puppets.ru/pers/40
+      - role: Тильтиль
+        name: Игорь Ушаков
+      - role: Митиль
+        name: Алёна Волкова
+      - role: Пёс
+        name: Иван Солнцев
+      - role: Кошка
+        name: Анна Сомкина
+      - role: Ночь, Фея, Соседка
+        name: Василиса Ушакова
+      - role: Ночь, Фея, Соседка
+        name: Наталья Сизова
+      - role: Огонь, Сосна
+        name: Платон Селивановский
+      - role: Дедушка, Бык
+        name: Роман Дадаев
+      - role: Дедушка, Бык
+        name: Максим Морозов
+      - role: Папа, Каштан
+        name: Анатолий Гущин
+      - role: Папа, Каштан
+        name: Владислав Тутак
+      - role: Мама, Бабушка
+        name: Наталья Смаль
+      - role: Мама, Бабушка
+        name: Виктория Войнич-Слуцкая
+      - role: Душа света
+        name: Алёна Первухина
+      - role: Хлеб
+        name: Сергей Беспалов
+      - role: Плющ
+        name: Дмитрий Скрябин
+    en:
+      - role: Director
+        name: Ruslan Kudashov
+      - role: Set Designer
+        name: Marina Zavyalova-Lavrova
+      - role: Lighting Designer
+        name: Anastasia Kuznetsova
+      - role: Composer
+        name: Igor Ushakov
+      - role: Performer
+        name: Roman Boklanov
+        url: https://puppets.ru/pers/40
+      - role: Tiltil
+        name: Igor Ushakov
+      - role: Mytil
+        name: Alyona Volkova
+      - role: The Dog
+        name: Ivan Solntsev
+      - role: The Cat
+        name: Anna Somkina
+    de:
+      - role: Regie
+        name: Ruslan Kudashov
+      - role: Bühnenbild
+        name: Marina Zavyalova-Lavrova
+      - role: Lichttechnik
+        name: Anastasia Kuznetsova
+      - role: Komponist
+        name: Igor Ushakov
+      - role: Darsteller
+        name: Roman Boklanov
+        url: https://puppets.ru/pers/40
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  bookingCta: false
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: null
+    en: null

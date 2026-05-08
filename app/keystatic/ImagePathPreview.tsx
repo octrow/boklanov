@@ -21,8 +21,17 @@ import { useEffect } from 'react'
 const IMG_EXT = /\.(jpe?g|png|webp|gif|svg|avif)$/i
 const MARK = 'data-image-path-preview'
 
+// Default preview dimensions (general image path fields)
 const PREVIEW_W = 240
 const PREVIEW_H = 180
+
+// Poster: 2:3 portrait (production identity asset)
+const POSTER_W = 192
+const POSTER_H = 288
+
+// Featured strip: 16:9 (home featured band)
+const FEATURED_W = 320
+const FEATURED_H = 180
 
 // Mirrors lib/cdn.ts. Inlined so the client bundle can read it without an
 // extra import (the cdn helper is server-and-client safe but the env var
@@ -96,7 +105,22 @@ async function deleteFile(src: string): Promise<void> {
   if (!res.ok) throw new Error(json.error || `delete failed (${res.status})`)
 }
 
+/** Detect the visual type of an image field by inspecting its label/description.
+ *  Returns the appropriate preview dimensions. */
+function detectPreviewSize(input: HTMLInputElement): [number, number] {
+  // Walk up to find the nearest label or description sibling that identifies the field.
+  const container = findFieldContainer(input)
+  if (container) {
+    const text = container.textContent ?? ''
+    if (/poster/i.test(text)) return [POSTER_W, POSTER_H]
+    if (/featured.*strip|strip.*cover/i.test(text))
+      return [FEATURED_W, FEATURED_H]
+  }
+  return [PREVIEW_W, PREVIEW_H]
+}
+
 function buildAddon(input: HTMLInputElement): HTMLElement {
+  const [pw, ph] = detectPreviewSize(input)
   const addon = document.createElement('div')
   addon.setAttribute(MARK, '1')
   // gap + margin-top sized to match Keystatic's own field-to-field vertical
@@ -176,11 +200,11 @@ function buildAddon(input: HTMLInputElement): HTMLElement {
   preview.dataset.role = 'preview'
   preview.style.cssText = [
     'display:block',
-    `width:${PREVIEW_W}px`,
-    `height:${PREVIEW_H}px`,
-    'border:1px solid #d4d4d8',
+    `width:${pw}px`,
+    `height:${ph}px`,
+    'border:1px solid var(--kui-color-border-muted,#d4d4d8)',
     'border-radius:6px',
-    'background:#fafafa center/contain no-repeat',
+    'background:var(--kui-color-background-surface,#fafafa) center/contain no-repeat',
     'overflow:hidden'
   ].join(';')
 
@@ -371,7 +395,7 @@ function scanRows(root: ParentNode) {
       // re-renders the row.
       const origPadLeft = row.style.paddingLeft
       row.dataset.imgRowOrigPadLeft = origPadLeft
-      row.style.paddingLeft = `calc(${origPadLeft || '0px'} + 64px)`
+      row.style.paddingLeft = `calc(${origPadLeft || '0px'} + 72px)`
       row.dataset.imgRowAnchored = '1'
     }
 
@@ -386,10 +410,10 @@ function scanRows(root: ParentNode) {
         'left:8px',
         'top:50%',
         'transform:translateY(-50%)',
-        'width:48px',
-        'height:36px',
+        'width:56px',
+        'height:56px',
         'border:1px solid var(--kui-color-border-neutral, #d4d4d8)',
-        'border-radius:3px',
+        'border-radius:4px',
         'background:var(--kui-color-background-surface, #fafafa) center/cover no-repeat',
         'pointer-events:none',
         'z-index:1'

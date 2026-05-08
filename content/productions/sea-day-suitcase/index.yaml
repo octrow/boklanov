@@ -1,113 +1,133 @@
 slug: sea-day-suitcase
-notionIds:
-  ru: 354b5e41461e4dda9ac7e53a1c1666b7
-  en: 4192a5050eb24a94a15ce4665e75a4a5
-title:
-  ru: Чемодан для моря
-  en: Suitcase for the sea
-  de: Koffer für das Meer
-synopsis:
-  ru: "Удивительный и трогательный спектакль с соленым запахом моря и шумом прибоя в ракушке. А еще с песней под гитару. И рыжим котом!"
-  en: "An amazing and touching performance with the salty smell of the sea and the sound of the surf in a seashell. And also with a guitar song. And a ginger cat!"
-  de: "Ein erstaunliches und ergreifendes Schauspiel mit salzigem Meergeruch und dem Rauschen der Brandung in einer Muschel. Und auch mit einem Gitarrenlied. Und eine rote Katze!"
-directorsNote:
-  ru: "Твою мечту, уснувшую на антресолях, совсем загрызла моль, проела такую огромную плешь, что ты рискуешь забыть о своей мечте!"
-  en: "Your dream, which has been sleeping on the windowsills, has been eaten by mold, making such a huge hole that you risk forgetting your dream!"
-  de: "Dein Traum, der auf den Regalen schlief, wurde von Motten gefressen, ein so großes Loch gefressen, dass du Gefahr läufst, deinen Traum zu vergessen!"
-tagline:
-  ru: Спектакль для тех, кто перестал мечтать
-  en: A play for those who stopped dreaming
-  de: Ein Spiel für diejenigen, die aufgehört haben zu träumen
-theatre:
-  url: "https://teatr2ky.ru"
-  country: RU
-  year: 2019
-premiereDate:
-  ru: 28 сентября 2019 г.
-  en: September 28, 2019
-  de: 28. September 2019
-ticketsUrl: "https://teatr2ky.ru/afisha/chemodan-dlya-morya/"
-ageRating: 3+
-durationMin: 35
-role:
-  - director
-form:
-  - ensemble
-lineage: []
-credits:
-  ru:
-    - role: Автор и исполнитель
-      name: Ольга Горелова
-    - role: Режиссер
-      name: Бокланов Роман
-    - role: Мультипликатор
-      name: Артур Шугуров
-  en:
-    - role: Author and artist
-      name: Olga Gorelova
-    - role: Director
-      name: Boklanov Roman
-    - role: Animator
-      name: Artur Shugurov
-  de:
-    - role: Autor und Künstler
-      name: Olga Gorelova
-    - role: Regie
-      name: Boklanov Roman
-    - role: Animator
-      name: Artur Shugurov
-poster:
-  src: /productions/sea-day-suitcase/poster.webp
-  credit: null
-gallery:
-  - src: /productions/sea-day-suitcase/01.jpg
+identity:
+  title:
+    ru: Чемодан для моря
+    en: Suitcase for the sea
+    de: Koffer für das Meer
+  tagline:
+    ru: Спектакль для тех, кто перестал мечтать
+    en: A play for those who stopped dreaming
+    de: Ein Spiel für diejenigen, die aufgehört haben zu träumen
+  synopsis:
+    ru:
+      Удивительный и трогательный спектакль с соленым запахом моря и шумом прибоя в ракушке. А еще с песней под гитару. И
+      рыжим котом!
+    en:
+      An amazing and touching performance with the salty smell of the sea and the sound of the surf in a seashell. And
+      also with a guitar song. And a ginger cat!
+    de:
+      Ein erstaunliches und ergreifendes Schauspiel mit salzigem Meergeruch und dem Rauschen der Brandung in einer
+      Muschel. Und auch mit einem Gitarrenlied. Und eine rote Katze!
+  directorsNote:
+    ru:
+      Твою мечту, уснувшую на антресолях, совсем загрызла моль, проела такую огромную плешь, что ты рискуешь забыть о
+      своей мечте!
+    en:
+      Your dream, which has been sleeping on the windowsills, has been eaten by mold, making such a huge hole that you
+      risk forgetting your dream!
+    de:
+      Dein Traum, der auf den Regalen schlief, wurde von Motten gefressen, ein so großes Loch gefressen, dass du Gefahr
+      läufst, deinen Traum zu vergessen!
+media:
+  poster:
+    src: /productions/sea-day-suitcase/poster.webp
     credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/sea-day-suitcase/02.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/sea-day-suitcase/03.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/sea-day-suitcase/04.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/sea-day-suitcase/05.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-  - src: /productions/sea-day-suitcase/06.jpg
-    credit: null
-    caption:
-      ru: null
-      en: null
-      de: null
-videos:
-  - provider: youtube
-    id: CpzkXLfWGyc
-awards: []
-festivals: []
-press: []
-externalLinks: []
-techRider: null
-pressKit: null
-featured: false
-tags:
-  - performance for children
-  - roman boklanov
-  - theater
-tour: []
+  gallery:
+    - src: /productions/sea-day-suitcase/01.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/sea-day-suitcase/02.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/sea-day-suitcase/03.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/sea-day-suitcase/04.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/sea-day-suitcase/05.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+    - src: /productions/sea-day-suitcase/06.jpg
+      credit: null
+      caption:
+        ru: null
+        en: null
+        de: null
+  videos:
+    - provider: youtube
+      id: CpzkXLfWGyc
+production:
+  theatre:
+    url: https://teatr2ky.ru
+    country: RU
+    year: 2019
+  premiereDate:
+    ru: 28 сентября 2019 г.
+    en: September 28, 2019
+    de: 28. September 2019
+  ticketsUrl: https://teatr2ky.ru/afisha/chemodan-dlya-morya/
+  durationMin: 35
+  ageRating: 3+
+taxonomy:
+  role:
+    - director
+  form:
+    - ensemble
+  lineage: []
+  tags:
+    - performance for children
+    - roman boklanov
+    - theater
+team:
+  credits:
+    ru:
+      - role: Автор и исполнитель
+        name: Ольга Горелова
+      - role: Режиссер
+        name: Бокланов Роман
+      - role: Мультипликатор
+        name: Артур Шугуров
+    en:
+      - role: Author and artist
+        name: Olga Gorelova
+      - role: Director
+        name: Boklanov Roman
+      - role: Animator
+        name: Artur Shugurov
+    de:
+      - role: Autor und Künstler
+        name: Olga Gorelova
+      - role: Regie
+        name: Boklanov Roman
+      - role: Animator
+        name: Artur Shugurov
+recognition:
+  awards: []
+  festivals: []
+  press: []
+  externalLinks: []
+history:
+  tour: []
+settings:
+  featured: false
+  techRider: null
+  pressKit: null
+  notionIds:
+    ru: 354b5e41461e4dda9ac7e53a1c1666b7
+    en: 4192a5050eb24a94a15ce4665e75a4a5
