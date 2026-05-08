@@ -7,13 +7,15 @@
  * patch-package against the minified @keystatic/core bundle is fragile across
  * upgrades. The component runs once on mount and re-triggers on route changes.
  *
- * Two enhancements:
+ * Three enhancements:
  *   1. Tab strip — wraps top-level [role="group"] sections in the entry form
  *      into tab panels. Tab labels come from the group's aria-labelledby text.
  *      Active tab is mirrored to/from the URL hash (#tab=<slug>).
  *   2. body[data-ks-dirty] reflection — watches the toolbar Save button's
  *      disabled state; when the form has unsaved changes the save button is
  *      enabled. Toggles body[data-ks-dirty='true'|'false'] accordingly.
+ *   3. Slug Regenerate hidden — hides the Regenerate button and its divider
+ *      line in the slug field so only the URL slug input is visible.
  */
 
 import { useEffect } from 'react'
@@ -204,6 +206,16 @@ function initTabs(form: HTMLElement): boolean {
     const label = getLabelText(group)
     const id = toTabId(label) || `tab-${cellsByTab.size}`
     cellsByTab.set(id, { label, cells: [cell] })
+
+    // The active tab button already shows the section name — hide the
+    // in-panel heading element so each panel starts with the description
+    // line directly. Keystatic renders the label as a sibling of the
+    // [role="group"], referenced by aria-labelledby.
+    const labelledBy = group.getAttribute('aria-labelledby')
+    if (labelledBy) {
+      const labelEl = document.getElementById(labelledBy)
+      if (labelEl) labelEl.style.display = 'none'
+    }
   }
 
   // Assign every other top-level grid child (slug field today, anything
@@ -234,6 +246,42 @@ function initTabs(form: HTMLElement): boolean {
   applyTabVisibility(cellsByTab, activeId)
 
   return true
+}
+
+// ── Slug regenerate hiding ────────────────────────────────────────────────
+
+function hideSlugRegenerate(form: HTMLElement): void {
+  if (form.dataset.ksSlugHidden) return
+
+  // Find the Regenerate button by its text content — more reliable than a DOM
+  // path because Keystatic's slug field structure can shift across upgrades.
+  let regenBtn: HTMLButtonElement | null = null
+  for (const btn of form.querySelectorAll<HTMLButtonElement>('button')) {
+    if (/^regenerate$/i.test(btn.textContent?.trim() ?? '')) {
+      regenBtn = btn
+      break
+    }
+  }
+  if (!regenBtn) return
+
+  regenBtn.style.display = 'none'
+
+  // Walk up from the button and hide any direct-child hr / [role="separator"]
+  // so the visual divider line above the slug field also disappears.
+  let el: HTMLElement | null = regenBtn.parentElement
+  while (el && el !== form && el.getAttribute('role') !== 'group') {
+    for (const child of Array.from(el.children)) {
+      if (
+        child instanceof HTMLElement &&
+        (child.tagName === 'HR' || child.getAttribute('role') === 'separator')
+      ) {
+        child.style.display = 'none'
+      }
+    }
+    el = el.parentElement
+  }
+
+  form.dataset.ksSlugHidden = '1'
 }
 
 // ── Dirty-state reflection ─────────────────────────────────────────────────
@@ -279,6 +327,7 @@ export function KeystaticEnhancements() {
       const form = document.getElementById(FORM_ID)
       if (form) {
         initTabs(form)
+        hideSlugRegenerate(form)
         if (!dirtyObs) {
           dirtyObs = observeDirtyState()
         }
