@@ -6,17 +6,12 @@ name: Backup R2 to git
 # Keystatic save flow can stay one-commit-per-save (the bot's YAML commit).
 #
 # Triggered by:
-#   - push to main on content/**  → catches every editor save promptly
-#   - daily cron 03:00 UTC        → safety net for uploads with no YAML save
-#   - manual workflow_dispatch    → for ad-hoc runs / smoke tests
+#   - daily cron 03:00 UTC     → runs once a day, commits only if R2 has drifted
+#   - manual workflow_dispatch → for ad-hoc runs / smoke tests
 #
 # See .design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'content/**'
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch: {}

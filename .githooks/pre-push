@@ -1,74 +1,39 @@
 #!/usr/bin/env bash
 #
-# pre-push: auto-rebase when the local branch is behind its remote tracking
-# branch. Scoped to this repo via `git config --local core.hooksPath .githooks`.
+# pre-push: integrate bot commits to /content (Keystatic Cloud) and /public
+# (backup-r2-to-git workflow), then push, in one shot.
 #
-# Why this exists: the Keystatic Cloud bot regularly commits YAML/media
-# straight to `main` (editor saves + uploads). A normal `git push` from a
-# local dev machine that hasn't fetched in a while is rejected with
-# "Updates were rejected because the remote contains work that you do not
-# have locally." This hook handles that for you instead of stopping work.
+# Why empty stdin must be handled:
+#   git's transport pre-filters refs marked REF_STATUS_REJECT_NONFASTFORWARD
+#   from the hook's stdin (transport.c). When local 'origin/main' tracking
+#   matches the bot's commit but our local main has diverged from it, git
+#   pre-rejects the ref and gives this hook an empty stdin — so we fall
+#   back to the current branch.
 #
-# Behaviour:
-#   - clean working tree, behind remote: fetch + rebase, then exit non-zero
-#     with a "re-run push" message (the original push refs are now stale,
-#     so we can't continue it from inside the hook).
-#   - dirty working tree, behind remote: refuse and tell you to stash.
-#   - up to date or ahead: pass through, push proceeds normally.
-#   - rebase conflicts: stops with `git rebase` mid-flight and tells you
-#     how to continue. Nothing is force-pushed; nothing is discarded.
+# Strategy:
+#   1. Run content + token lint first (validate before doing any push).
+#   2. Determine branches to check (from stdin, or current HEAD if empty).
+#   3. Query the live remote SHA via `git ls-remote` (no cache).
+#   4. If diverged: `git pull --rebase --autostash`, then inner-push with
+#      GIT_HOOK_REENTRANT=1 to bypass this hook on the inner call.
+#   5. After a successful inner push, exit 1 — this suppresses the outer
+#      push attempt that git would otherwise reject with "non-fast-forward"
+#      (its decision was made before this hook ran). The inner push has
+#      already landed the changes; the message tells the user that.
+#
+# Re-entry guard: the inner push re-triggers this hook; the env var short-
+# circuits the second invocation.
 
 set -u
 
+if [ "${GIT_HOOK_REENTRANT:-0}" = "1" ]; then
+  exit 0
+fi
+
 remote="$1"
-
 zero='0000000000000000000000000000000000000000'
-exit_code=0
 
-while read -r local_ref local_sha remote_ref remote_sha; do
-  [ -z "${local_ref:-}" ] && continue
-  [ "$local_sha" = "$zero" ] && continue           # branch deletion
-  [ "$remote_sha" = "$zero" ] && continue          # new branch on remote
-
-  behind=$(git rev-list --count "$local_sha..$remote_sha" 2>/dev/null || echo 0)
-  [ "$behind" -eq 0 ] && continue                  # nothing to do
-
-  branch="${local_ref#refs/heads/}"
-  echo ""
-  echo "pre-push: '$branch' is behind '$remote/$branch' by $behind commit(s)."
-
-  if ! git diff --quiet || ! git diff --cached --quiet; then
-    echo "  Working tree is dirty — refusing to auto-rebase."
-    echo "  Run: git stash push -u -m wip && git pull --rebase && git stash pop"
-    exit_code=1
-    continue
-  fi
-
-  echo "  Auto-rebasing onto $remote/$branch..."
-  if ! git fetch "$remote" "$branch" >/dev/null 2>&1; then
-    echo "  fetch failed — push aborted."
-    exit_code=1
-    continue
-  fi
-
-  if git rebase "$remote/$branch"; then
-    echo "  Rebased clean. Re-run 'git push' to publish."
-  else
-    echo "  Rebase has conflicts. Resolve, then 'git rebase --continue', then push."
-  fi
-  exit_code=1
-done
-
-# If we rebased above, exit_code is already 1 and we want the user to retry
-# `git push` so the new refs are sent. Skip validation in that case.
-[ "$exit_code" -ne 0 ] && exit "$exit_code"
-
-# ── Content + design-token validation ────────────────────────────────────────
-# These are cheap (a few seconds each) and catch the foot-guns we've hit
-# repeatedly: Obsidian wikilinks landing in content/ and token drift between
-# tokens.css and the Tailwind theme. ESLint + prettier-check are NOT here —
-# pre-commit already auto-formats, and ESLint is left to CI.
-echo ""
+# ── Content + design-token validation (always first) ─────────────────────────
 echo "pre-push: running content + token checks..."
 
 if ! npm run --silent lint-content; then
@@ -78,6 +43,90 @@ fi
 
 if ! npm run --silent lint-tokens; then
   echo "pre-push: lint-tokens failed — push aborted."
+  exit 1
+fi
+
+# ── Divergence handling ──────────────────────────────────────────────────────
+inner_pushed=0
+
+handle_branch() {
+  local branch="$1"
+  local local_sha actual_remote_sha
+
+  local_sha=$(git rev-parse "$branch" 2>/dev/null) || return 0
+
+  actual_remote_sha=$(git ls-remote "$remote" "refs/heads/$branch" 2>/dev/null | head -n1 | cut -f1)
+  [ -z "$actual_remote_sha" ] && return 0
+  [ "$actual_remote_sha" = "$local_sha" ] && return 0
+
+  if ! git cat-file -e "$actual_remote_sha" 2>/dev/null; then
+    git fetch "$remote" "$branch" >/dev/null 2>&1 || true
+  fi
+
+  if ! git cat-file -e "$actual_remote_sha" 2>/dev/null; then
+    echo "pre-push: cannot retrieve remote SHA $actual_remote_sha — aborting."
+    return 1
+  fi
+
+  # Remote already in our history → push will fast-forward, nothing to do.
+  if git merge-base --is-ancestor "$actual_remote_sha" "$local_sha"; then
+    return 0
+  fi
+
+  local behind ahead
+  behind=$(git rev-list --count "$local_sha..$actual_remote_sha" 2>/dev/null || echo "?")
+  ahead=$(git rev-list --count "$actual_remote_sha..$local_sha" 2>/dev/null || echo "?")
+
+  echo ""
+  echo "pre-push: '$branch' diverged from '$remote/$branch' (local +$ahead, remote +$behind) — pulling with rebase..."
+
+  if ! git pull --rebase --autostash "$remote" "$branch"; then
+    echo "pre-push: rebase has conflicts. Resolve, then 'git rebase --continue', then push."
+    return 1
+  fi
+
+  echo "pre-push: rebased clean — pushing the rebased branch directly..."
+  if ! GIT_HOOK_REENTRANT=1 git push "$remote" "$branch"; then
+    echo "pre-push: inner push failed — re-run 'git push'."
+    return 1
+  fi
+
+  inner_pushed=1
+  echo "pre-push: pushed. Your commits are now on '$remote/$branch'."
+  return 0
+}
+
+branches=()
+while read -r local_ref local_sha _ _; do
+  [ -z "${local_ref:-}" ] && continue
+  [ "$local_sha" = "$zero" ] && continue
+  branches+=("${local_ref#refs/heads/}")
+done
+
+# Empty stdin = git pre-filtered all refs as REJECT_NONFASTFORWARD.
+# Fall back to the current branch.
+if [ ${#branches[@]} -eq 0 ]; then
+  current=$(git symbolic-ref --short HEAD 2>/dev/null || true)
+  if [ -n "${current:-}" ]; then
+    branches+=("$current")
+  fi
+fi
+
+exit_code=0
+for branch in "${branches[@]}"; do
+  if ! handle_branch "$branch"; then
+    exit_code=1
+  fi
+done
+
+[ "$exit_code" -ne 0 ] && exit "$exit_code"
+
+# If we did an inner push, the rebased commits are already on the remote.
+# Abort the outer push to avoid git's "non-fast-forward" rejection error
+# (its decision was set before this hook ran and isn't revisited).
+if [ "$inner_pushed" -eq 1 ]; then
+  echo ""
+  echo "pre-push: outer push aborted (changes already pushed via the inner rebase+push above)."
   exit 1
 fi
 
