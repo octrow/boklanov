@@ -276,7 +276,7 @@
   /* v3 Bauhaus stage trio — lifted variants for AA on near-black paper */
   --accent-vermillion: #ff5a66; /* primary stage — AA on #080706 ≈ 6.1:1 ✓ */
   --accent-cobalt: #5b82c2; /* secondary stage */
-  --accent-mustard: #c9a22f; /* tertiary — DECORATIVE ONLY (sticker/marquee fill) */
+  --accent-mustard: #a68729; /* tertiary — DECORATIVE ONLY — desaturated ochre, tamed from #c9a22f */
   --ink-on-accent: #080706; /* text on accent fills (matches paper for AA) */
   --ink-on-mustard: #080706;
   --band-reverse-bg: #fbfaf6; /* cream band on near-black = reverse contrast */
@@ -479,7 +479,7 @@
   /* v3 Bauhaus stage trio — paper-tuned for AA on warm off-white */
   --accent-vermillion: #cc2530;
   --accent-cobalt: #1d3557;
-  --accent-mustard: #f4d35e;
+  --accent-mustard: #b8923a; /* desaturated ochre — tamed from #f4d35e */
   --ink-on-accent: #fbfaf6;
   --ink-on-mustard: #0f0e0d;
   --band-reverse-bg: #0f0e0d; /* dark band on cream = still reverse contrast */
