@@ -198,10 +198,13 @@ nav
   padding: 0;
 }
 
-/* H3 — current item slug. Bright, semi-bold, between H2 and H4 in size. */
+/* H3 — current item slug. Bright, semi-bold, between H2 and H4 in size.
+ * font-family is forced because the browser's default <h3> stylesheet
+ * picks a serif on some platforms; we want Keystatic's base font here. */
 .ks-sidebar-context__slug {
   margin: 0;
   color: var(--kui-color-foreground-neutralEmphasis, #ffffff);
+  font-family: var(--kui-typography-font-family-base, inherit);
   font-size: var(--kui-typography-text-regular-size, 0.9375rem);
   font-weight: 600;
   line-height: 1.4;
