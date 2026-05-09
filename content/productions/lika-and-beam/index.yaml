@@ -1,4 +1,6 @@
 slug: lika-and-beam
+year: 2019
+durationMin: null
 identity:
   title:
     ru: Лика и луч
@@ -76,13 +78,11 @@ media:
   videos: []
 production:
   theatre: {}
-  year: 2019
   premiereDate:
     ru: Август 2019 г.
     en: August 2019
     de: August 2019
   ticketsUrl: null
-  durationMin: null
   ageRating: 5+
 taxonomy:
   role:

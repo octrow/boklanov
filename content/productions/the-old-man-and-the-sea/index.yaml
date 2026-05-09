@@ -1,4 +1,6 @@
 slug: the-old-man-and-the-sea
+year: 2020
+durationMin: 65
 identity:
   title:
     ru: Старик и море
@@ -93,13 +95,11 @@ production:
       ru: Балтийский дом
       de: Baltic House Theatre
     url: https://baltic-house.ru/afisha/?ELEMENT_ID=910
-  year: 2020
   premiereDate:
     ru: 28 ноября 2020
     en: November 28, 2020
     de: 28. November 2020
   ticketsUrl: https://baltic-house.ru/afisha/?ELEMENT_ID=910
-  durationMin: 65
   ageRating: 12+
 taxonomy:
   role:

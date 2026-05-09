@@ -1,4 +1,6 @@
 slug: aiaccio
+year: 2021
+durationMin: 70
 identity:
   title:
     ru: 'Айяччо: история одного клоуна'
@@ -177,13 +179,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/spec/142
-  year: 2021
   premiereDate:
     ru: 10 октября 2021 г.
     en: October 10, 2021
     de: 10. Oktober 2021
   ticketsUrl: https://puppets.ru/spec/142
-  durationMin: 70
   ageRating: 6+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: single-one-on-the-moon
+year: null
+durationMin: null
 identity:
   title:
     ru: SINGLE. Один на луне
@@ -26,13 +28,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

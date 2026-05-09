@@ -1,4 +1,6 @@
 slug: dogs-dont-dance-ballet
+year: null
+durationMin: null
 identity:
   title:
     ru: Собаки не танцуют балет
@@ -26,13 +28,11 @@ production:
       de: Wien
     country: AT
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: 6+
 taxonomy:
   role:

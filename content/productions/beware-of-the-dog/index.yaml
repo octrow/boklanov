@@ -1,4 +1,6 @@
 slug: beware-of-the-dog
+year: 2023
+durationMin: 105
 identity:
   title:
     ru: Осторожно, злая собака!!!
@@ -188,13 +190,11 @@ production:
       ru: Алматы
       de: Almaty
     country: KZ
-  year: 2023
   premiereDate:
     ru: 18-19 Марта 2023 г
     en: March 18-19, 2023
     de: 18.-19. März 2023
   ticketsUrl: https://ticketon.kz/event/ostorozhno-pitbul-tere
-  durationMin: 105
   ageRating: 12+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: total-fest-3
+year: null
+durationMin: null
 identity:
   title:
     ru: III Международный театральный фестиваль «Total Fest. Диалоги»
@@ -20,13 +22,11 @@ production:
     city: null
     country: null
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

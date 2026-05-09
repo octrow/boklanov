@@ -1,4 +1,6 @@
 slug: flea-circus
+year: null
+durationMin: null
 identity:
   title:
     ru: Блошиный цирк
@@ -28,13 +30,11 @@ production:
       en: Saint Petersburg
       ru: Санкт-Петербург
       de: Sankt Petersburg
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: 6+
 taxonomy:
   role:

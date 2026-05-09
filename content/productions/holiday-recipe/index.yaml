@@ -1,4 +1,6 @@
 slug: holiday-recipe
+year: 2022
+durationMin: 70
 identity:
   title:
     ru: Рецепт праздника
@@ -135,13 +137,11 @@ production:
       de: Kaliningrad
     country: RU
     url: https://dramteatr39.ru/spektakli/recept-prazdnika-
-  year: 2022
   premiereDate:
     ru: 26 декабря 2022 г.
     en: December 26, 2022
     de: 26. Dezember 2022
   ticketsUrl: https://dramteatr39.ru/spektakli/recept-prazdnika-
-  durationMin: 70
   ageRating: 6+
 taxonomy:
   role:

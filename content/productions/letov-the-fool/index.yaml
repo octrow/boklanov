@@ -1,4 +1,5 @@
 slug: letov-the-fool
+durationMin: 140
 identity:
   title:
     ru: Летов. Дурачок
@@ -42,7 +43,6 @@ production:
     en: April 14, 2019
     de: 14. April 2019
   ticketsUrl: https://puppets.ru/letovdurachok
-  durationMin: 140
   ageRating: 18+
 taxonomy:
   role:

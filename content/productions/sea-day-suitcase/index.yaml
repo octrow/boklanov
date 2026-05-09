@@ -1,4 +1,5 @@
 slug: sea-day-suitcase
+durationMin: 35
 identity:
   title:
     ru: Чемодан для моря
@@ -82,7 +83,6 @@ production:
     en: September 28, 2019
     de: 28. September 2019
   ticketsUrl: https://teatr2ky.ru/afisha/chemodan-dlya-morya/
-  durationMin: 35
   ageRating: 3+
 taxonomy:
   role:

@@ -1,4 +1,5 @@
 slug: ecclesiastes
+durationMin: 80
 identity:
   title:
     ru: Екклесиаст
@@ -43,7 +44,6 @@ production:
     en: February 14, 2012
     de: 14. Februar 2012
   ticketsUrl: https://puppets.ru/ekklesiast
-  durationMin: 80
   ageRating: 16+
 taxonomy:
   role:

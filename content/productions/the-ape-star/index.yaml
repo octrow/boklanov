@@ -1,4 +1,6 @@
 slug: the-ape-star
+year: 2020
+durationMin: 70
 identity:
   title:
     ru: Меня удочерила Горилла
@@ -198,13 +200,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/spec/94
-  year: 2020
   premiereDate:
     ru: 19 сентября 2020 г.
     en: 19 September 2020
     de: 19. September 2020
   ticketsUrl: https://puppets.ru/spec/94
-  durationMin: 70
   ageRating: 6+
 taxonomy:
   role:

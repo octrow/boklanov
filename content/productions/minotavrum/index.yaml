@@ -1,4 +1,6 @@
 slug: minotavrum
+year: 2018
+durationMin: null
 identity:
   title:
     ru: Минотаврум
@@ -36,13 +38,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/spec/17
-  year: 2018
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

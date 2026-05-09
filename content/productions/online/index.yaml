@@ -1,4 +1,6 @@
 slug: online
+year: 2020
+durationMin: 80
 identity:
   title:
     ru: Онлайн
@@ -143,13 +145,11 @@ production:
       ru: Барнаул
       de: Barnaul
     country: RU
-  year: 2020
   premiereDate:
     ru: 27 Марта 2020
     en: March 27, 2020
     de: 27. März 2020
   ticketsUrl: null
-  durationMin: 80
   ageRating: 12+
 taxonomy:
   role:

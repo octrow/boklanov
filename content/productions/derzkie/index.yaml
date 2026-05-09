@@ -1,4 +1,6 @@
 slug: derzkie
+year: null
+durationMin: null
 identity:
   title:
     ru: Дерзкие
@@ -26,13 +28,11 @@ production:
       de: Bremen
     country: DE
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: 12+
 taxonomy:
   role:

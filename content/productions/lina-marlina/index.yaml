@@ -1,4 +1,6 @@
 slug: lina-marlina
+year: 2023
+durationMin: 100
 identity:
   title:
     ru: Лина-Марлина
@@ -58,13 +60,11 @@ production:
       en: ARTiSHOK
       de: ARTiSHOK
     url: https://artishock.kz/
-  year: 2023
   premiereDate:
     ru: 29-30 августа 2023г. Алматы (Казахстан)
     en: August 29-30, 2023 Almaty (Kazakhstan)
     de: 29.-30. August 2023 Almaty (Kasachstan)
   ticketsUrl: https://theatre27.ru/lina-marlina
-  durationMin: 100
   ageRating: 12+
 taxonomy:
   role:

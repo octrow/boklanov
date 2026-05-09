@@ -1,4 +1,6 @@
 slug: cinderella
+year: 2021
+durationMin: 40
 identity:
   title:
     ru: Золушка
@@ -161,13 +163,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppettheatre.spb.ru/index.php?id=65
-  year: 2021
   premiereDate:
     ru: 23 апреля 2021 г.
     en: April 23, 2021
     de: 23. April 2021
   ticketsUrl: https://puppettheatre.spb.ru/index.php?id=65
-  durationMin: 40
   ageRating: 4+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: snegurochka
+year: 2016
+durationMin: null
 identity:
   title:
     ru: Снегурочка
@@ -34,13 +36,11 @@ production:
       de: Nowosibirsk
     country: RU
     url: https://web.archive.org/web/20211028163039/https://old-house.ru/en/snegurochka.html
-  year: 2016
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

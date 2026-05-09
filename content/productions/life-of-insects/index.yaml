@@ -1,4 +1,6 @@
 slug: life-of-insects
+year: null
+durationMin: null
 identity:
   title:
     ru: Жизнь насекомых
@@ -30,13 +32,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

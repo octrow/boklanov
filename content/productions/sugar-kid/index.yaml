@@ -1,4 +1,6 @@
 slug: sugar-kid
+year: 2022
+durationMin: 60
 identity:
   title:
     ru: Сахарный ребёнок
@@ -34,13 +36,11 @@ production:
       de: Nischny Tagil
     country: RU
     url: https://teatr-nt.ru/saharnii-rebenok
-  year: 2022
   premiereDate:
     ru: 10 октября 2022 г.
     en: October 10, 2022
     de: 10. Oktober 2022
   ticketsUrl: https://teatr-nt.ru/performances/63/
-  durationMin: 60
   ageRating: 6+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: plaster
+year: 2021
+durationMin: 105
 identity:
   title:
     ru: Гипс
@@ -177,13 +179,11 @@ production:
       de: Kaliningrad
     country: RU
     url: https://dramteatr39.ru/spektakli/gips
-  year: 2021
   premiereDate:
     ru: 10-12 декабря 2021 г.
     en: December 10-12, 2021
     de: 10.-12. Dezember 2021
   ticketsUrl: https://dramteatr39.ru/spektakli/gips
-  durationMin: 105
   ageRating: 12+
 taxonomy:
   role:

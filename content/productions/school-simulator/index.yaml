@@ -1,4 +1,6 @@
 slug: school-simulator
+year: 2019
+durationMin: null
 identity:
   title:
     ru: Симулятор школы
@@ -26,13 +28,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: null
-  year: 2019
   premiereDate:
     ru: 30 июля 2019 г. (лаборатория)
     en: July 30, 2019 (laboratory)
     de: 30. Juli 2019 (Labor)
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

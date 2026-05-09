@@ -1,4 +1,6 @@
 slug: kasztanka
+year: 2020
+durationMin: null
 identity:
   title:
     ru: Каштанка
@@ -92,13 +94,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://www.teatrlutz.ru/performance/kashtanka-6/
-  year: 2020
   premiereDate:
     ru: 26 сентября 2020 г.
     en: September 26, 2020
     de: 26. September 2020
   ticketsUrl: https://www.teatrlutz.ru/performance/kashtanka-6/
-  durationMin: null
   ageRating: 6+
 taxonomy:
   role:

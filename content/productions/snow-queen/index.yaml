@@ -1,4 +1,6 @@
 slug: snow-queen
+year: null
+durationMin: null
 identity:
   title:
     ru: Снежная королева
@@ -23,13 +25,11 @@ production:
     city: null
     country: RU
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

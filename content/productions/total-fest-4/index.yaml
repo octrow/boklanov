@@ -1,4 +1,7 @@
 slug: total-fest-4
+year: null
+durationMin: null
+status: in-development
 identity:
   title:
     ru: IV Международный театральный фестиваль «Total Fest»
@@ -20,15 +23,12 @@ production:
     city: null
     country: KZ
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
-  status: in-development
 taxonomy:
   role:
     - director

@@ -1,4 +1,5 @@
 slug: oskar-und-die-dame-in-rosa
+durationMin: 80
 identity:
   title:
     ru: Оскар и Розовая дама
@@ -107,7 +108,6 @@ production:
     en: Nov 30, 2023
     de: 30. November 2023
   ticketsUrl: null
-  durationMin: 80
   ageRating: 18+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: god-of-carnage
+year: null
+durationMin: null
 identity:
   title:
     ru: Бог резни
@@ -26,13 +28,11 @@ production:
       de: Wien
     country: AT
     url: null
-  year: null
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: 18+
 taxonomy:
   role:

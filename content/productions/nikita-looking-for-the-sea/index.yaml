@@ -1,4 +1,6 @@
 slug: nikita-looking-for-the-sea
+year: 2022
+durationMin: 80
 identity:
   title:
     ru: Никита ищет море
@@ -178,13 +180,11 @@ production:
       de: Archangelsk
     country: RU
     url: http://www.teatrpanova.ru/youth/viewshows/98
-  year: 2022
   premiereDate:
     ru: 17-18 сентября 2022 г.
     en: September 17-18, 2022
     de: 17.-18. September 2022
   ticketsUrl: http://www.teatrpanova.ru/youth/viewshows/98
-  durationMin: 80
   ageRating: 6+
 taxonomy:
   role:

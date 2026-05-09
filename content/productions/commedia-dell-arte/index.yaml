@@ -1,4 +1,6 @@
 slug: commedia-dell-arte
+year: 2018
+durationMin: null
 identity:
   title:
     ru: Комедия Дель-Арте
@@ -198,13 +200,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/pers/41
-  year: 2018
   premiereDate:
     ru: 14 октября 2018 г.
     en: October 14, 2018
     de: 14. Oktober 2018
   ticketsUrl: null
-  durationMin: null
   ageRating: 14+
 taxonomy:
   role:

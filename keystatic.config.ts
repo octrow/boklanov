@@ -154,8 +154,12 @@ export default config({
       // bodyRu.mdx → index.mdx across every entry.
       entryLayout: 'content',
       previewUrl: '/ru/productions/{slug}',
-      // columns removed — year/durationMin/status moved into production group,
-      // Keystatic columns only accepts top-level field names.
+      // Keystatic's `columns` only accepts top-level scalar fields, so the
+      // three list-view scalars below (year / durationMin / status) live at
+      // the root rather than inside the `production` group. lib/content.ts
+      // flattens both shapes, so the on-disk YAML and the runtime API stay
+      // unchanged from the consumer's perspective.
+      columns: ['year', 'durationMin', 'status'],
       schema: {
         slug: fields.slug({
           name: { label: 'URL slug' },
@@ -166,6 +170,39 @@ export default config({
               "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
             )
           }
+        }),
+
+        // ── Top-level list-view columns ────────────────────────────────────
+        // year / durationMin / status sit at the root (not inside the
+        // `production` group below) so Keystatic's `columns: [...]` config
+        // can show them in the productions list view. Keystatic's `columns`
+        // type only accepts scalar fields whose key lives at the top of
+        // `schema`. lib/content.ts's flattenFm() spreads both root and
+        // `production` to a flat shape, so the runtime API is identical.
+        year: fields.integer({
+          label: 'Premiere year',
+          description: desc(
+            'Числовой год премьеры — используется для сортировки и в карточках. Отдельно от свободного текста даты в блоке Production.',
+            'Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.'
+          ),
+          validation: { isRequired: false, min: 1900, max: 2100 }
+        }),
+        durationMin: fields.integer({
+          label: 'Duration (minutes)',
+          description: desc(
+            'Длительность спектакля в минутах, с антрактом. Опционально.',
+            'Performance length in minutes including intermission. Optional.'
+          ),
+          validation: { isRequired: false }
+        }),
+        status: fields.select({
+          label: 'Status',
+          description: desc(
+            'Жизненный цикл продакшена. По умолчанию — «Live» (идёт сейчас).',
+            'Lifecycle of this production. Default is "Live" (currently running).'
+          ),
+          options: STATUS_OPTIONS,
+          defaultValue: 'live'
         }),
 
         // ── WS-1: all fields wrapped in labeled object groups ──────────────
@@ -490,17 +527,10 @@ export default config({
               }
             ),
 
-            year: fields.integer({
-              label: 'Premiere year',
-              description: desc(
-                'Числовой год премьеры — используется для сортировки и в карточках. Отдельно от свободного текста даты ниже.',
-                'Numeric year used for sort and display. Distinct from the per-locale free-text date below.'
-              ),
-              validation: { isRequired: false, min: 1900, max: 2100 }
-            }),
             // Kept as l10n free text (not fields.date) so fuzzy values like
             // "весна 2021" / "Spring 2021" remain expressible. Numeric `year`
-            // above carries the structured value for sort.
+            // (top-level, used for list-view columns + sort) carries the
+            // structured value.
             premiereDate: l10nOpt(
               'Premiere date (free text)',
               desc(
@@ -515,36 +545,19 @@ export default config({
                 'Public ticketing page if one exists. Must include https://'
               )
             }),
-            durationMin: fields.integer({
-              label: 'Duration (minutes)',
-              description: desc(
-                'Длительность спектакля в минутах, с антрактом. Опционально.',
-                'Performance length in minutes including intermission. Optional.'
-              ),
-              validation: { isRequired: false }
-            }),
             ageRating: fields.text({
               label: 'Age rating',
               description: desc(
                 'Возрастное ограничение по российскому стандарту: 0+, 6+, 12+, 16+, 18+.',
                 'Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.'
               )
-            }),
-            status: fields.select({
-              label: 'Status',
-              description: desc(
-                'Жизненный цикл продакшена. По умолчанию — «Live» (идёт сейчас).',
-                'Lifecycle of this production. Default is "Live" (currently running).'
-              ),
-              options: STATUS_OPTIONS,
-              defaultValue: 'live'
             })
           },
           {
             label: 'Production',
             description: desc(
-              'Театр-производитель, даты, длительность, статус и билеты.',
-              'Producing theatre, premiere dates, duration, status, and tickets.'
+              'Театр-производитель, даты премьеры, возрастной рейтинг и билеты. Год, длительность и статус — наверху страницы (показываются в списке коллекций).',
+              'Producing theatre, premiere dates, age rating, and tickets. Year, duration, and status live at the top of the page — they appear in the collection list view.'
             )
           }
         ),

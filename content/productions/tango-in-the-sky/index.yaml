@@ -1,4 +1,5 @@
 slug: tango-in-the-sky
+durationMin: 80
 identity:
   title:
     ru: Танго, упавшее в небо
@@ -57,7 +58,6 @@ production:
     en: December 10–12, 2020
     de: 10.–12. Dezember 2020
   ticketsUrl: https://puppets.ru/tangoupavsheevnebo
-  durationMin: 80
   ageRating: 16+
 taxonomy:
   role:

@@ -1,4 +1,5 @@
 slug: the-blue-bird
+durationMin: 60
 identity:
   title:
     ru: Синяя птица
@@ -42,7 +43,6 @@ production:
     en: February 6–7, 2021
     de: 6.–7. Februar 2021
   ticketsUrl: https://puppets.ru/sinyayaptica
-  durationMin: 60
   ageRating: 6+
 taxonomy:
   role:

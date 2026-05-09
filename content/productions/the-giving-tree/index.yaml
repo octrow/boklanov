@@ -1,4 +1,6 @@
 slug: the-giving-tree
+year: 2024
+durationMin: 50
 identity:
   title:
     ru: Щедрое дерево
@@ -76,13 +78,11 @@ production:
       de: Aktobe
     country: KZ
     url: null
-  year: 2024
   premiereDate:
     ru: 19 января 2024
     en: January 19, 2024
     de: 19. Januar 2024
   ticketsUrl: null
-  durationMin: 50
   ageRating: 12+
 taxonomy:
   role:

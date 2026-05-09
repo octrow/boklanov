@@ -1,4 +1,6 @@
 slug: no-winer-way
+year: 2023
+durationMin: null
 identity:
   title:
     ru: NO WINER WAY
@@ -32,13 +34,11 @@ production:
       de: Geestenseth
     country: DE
     url: https://www.das-letzte-kleinod.de/
-  year: 2023
   premiereDate:
     ru: null
     en: null
     de: null
   ticketsUrl: null
-  durationMin: null
   ageRating: null
 taxonomy:
   role:

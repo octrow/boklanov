@@ -1,4 +1,6 @@
 slug: bury-me-behind-the-baseboard
+year: 2021
+durationMin: 60
 identity:
   title:
     ru: Похороните меня за плинтусом
@@ -120,13 +122,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/spec/115#performance=18484787
-  year: 2021
   premiereDate:
     ru: 24 марта 2021 г.
     en: 24 March 2021
     de: 24. März 2021
   ticketsUrl: https://puppets.ru/spec/115#performance=18484787
-  durationMin: 60
   ageRating: 18+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: holiday-recipe-es
+year: 2023
+durationMin: null
 identity:
   title:
     ru: Рецепт праздника
@@ -32,13 +34,11 @@ production:
       de: Alicante
     country: ES
     url: null
-  year: 2023
   premiereDate:
     ru: 26 декабря 2023 г.
     en: December 26, 2023
     de: 26. Dezember 2023
   ticketsUrl: null
-  durationMin: null
   ageRating: 3+
 taxonomy:
   role:

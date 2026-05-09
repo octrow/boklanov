@@ -1,4 +1,5 @@
 slug: amundsen-pole
+durationMin: 50
 identity:
   title:
     ru: Полюс Амундсена
@@ -55,7 +56,6 @@ production:
     en: October 3, 2020
     de: 3. Oktober 2020
   ticketsUrl: https://puppets.ru/polyusamundsena
-  durationMin: 50
   ageRating: 6+
 taxonomy:
   role:

@@ -1,4 +1,6 @@
 slug: richters-fairytale
+year: 2024
+durationMin: 60
 identity:
   title:
     ru: Сказка Рихтера
@@ -38,13 +40,11 @@ production:
       de: Berlin
     country: DE
     url: https://www.facebook.com/theater.urban
-  year: 2024
   premiereDate:
     en: May 11, 2024
     ru: 11 Мая 2023
     de: 11. Mai 2024
   ticketsUrl: https://www.kontramarka.de/de/tour/spektakl-richters-fairytale/
-  durationMin: 60
   ageRating: 18+
 taxonomy:
   role:

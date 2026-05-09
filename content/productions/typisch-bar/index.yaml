@@ -1,4 +1,6 @@
 slug: typisch-bar
+year: 2022
+durationMin: 55
 identity:
   title:
     ru: Медведь в своём репертуаре
@@ -98,13 +100,11 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppettheatre.spb.ru/index.php?id=183
-  year: 2022
   premiereDate:
     ru: 29 апреля 2022 г.
     en: April 29, 2022
     de: 29. April 2022
   ticketsUrl: https://puppettheatre.spb.ru/index.php?id=183
-  durationMin: 55
   ageRating: 5+
 taxonomy:
   role:

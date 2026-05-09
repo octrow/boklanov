@@ -1,4 +1,6 @@
 slug: wee-little-havroshechka
+year: 2022
+durationMin: 40
 identity:
   title:
     ru: Крошечка-Хаврошечка
@@ -178,13 +180,11 @@ production:
       de: Moskau
     country: RU
     url: https://puppetmo.ru/poster/kroshechka-havroshechka-5/?listim_open_widget=1
-  year: 2022
   premiereDate:
     ru: 27 марта 2022 г.
     en: 27 March 2022
     de: 27. März 2022
   ticketsUrl: https://puppetmo.ru/poster/kroshechka-havroshechka-5/?listim_open_widget=1
-  durationMin: 40
   ageRating: 6+
 taxonomy:
   role:

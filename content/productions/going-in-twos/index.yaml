@@ -1,4 +1,6 @@
 slug: going-in-twos
+year: 2022
+durationMin: 40
 identity:
   title:
     ru: Идём вдвоём
@@ -168,13 +170,11 @@ production:
       de: Hanty-Mansijskij
     country: RU
     url: https://hmtk.ru/m/afisha/4882/
-  year: 2022
   premiereDate:
     ru: 21 мая 2022 г.
     en: 21 May 2022
     de: 21. Mai 2022
   ticketsUrl: https://hmtk.ru/m/afisha/4882/
-  durationMin: 40
   ageRating: 3+
 taxonomy:
   role:
