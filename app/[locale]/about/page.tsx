@@ -15,6 +15,10 @@ import styles from './page.module.css'
 
 // ── About content types ──────────────────────────────────────────────────
 
+/** Always-object L10n string written by Keystatic's `l10n()` helper. Each
+ *  locale is optional; treat missing/empty as "no value for this locale". */
+type L10nString = { ru?: string | null; en?: string | null; de?: string | null }
+
 interface Milestone {
   year: number
   label: string
@@ -41,20 +45,80 @@ interface AboutFrontmatter {
   marginalia?: Array<string | null>
 }
 
+/** Raw shape on disk after the unification (content/about/index.yaml).
+ *  milestones[].label, lineage[].{name,role,institution,note}, marginalia[]
+ *  are now per-locale objects rather than bare strings. */
+interface AboutRawFrontmatter {
+  portrait?: { src?: string | null; credit?: string | null } | null
+  photos?: AboutPhoto[] | null
+  milestones?: Array<{
+    year?: number | null
+    label?: L10nString | string
+  }> | null
+  lineage?: Array<{
+    key?: string
+    name?: L10nString | string
+    role?: L10nString | string
+    institution?: L10nString | string
+    note?: L10nString | string
+  }> | null
+  marginalia?: Array<L10nString | string | null> | null
+}
+
 // ── Loader ───────────────────────────────────────────────────────────────
 
-/** Split an MDX file with optional `---`-fenced YAML frontmatter into
- *  (frontmatter, body). Keystatic's singleton config
- *  `format: { data: 'yaml', contentField: 'body' }` writes everything
- *  into one .mdx file with frontmatter prepended. */
-function splitFrontmatter(raw: string): {
-  data: Record<string, unknown>
-  body: string
-} {
-  const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
-  if (!m) return { data: {}, body: raw }
-  const data = (parseYaml(m[1]) ?? {}) as Record<string, unknown>
-  return { data, body: m[2] }
+/** Pick the locale's value out of an l10n object, with EN→RU fallback for DE
+ *  and EN, mirroring the previous bare-string locale-fallback in this loader.
+ *  Bare-string legacy values pass through unchanged. */
+function pickL10n(
+  v: L10nString | string | null | undefined,
+  locale: Locale
+): string {
+  if (!v) return ''
+  if (typeof v === 'string') return v
+  const order =
+    locale === 'de'
+      ? (['de', 'en', 'ru'] as const)
+      : ([locale, 'en', 'ru'] as const)
+  for (const l of order) {
+    const s = v[l]
+    if (typeof s === 'string' && s.trim()) return s
+  }
+  return ''
+}
+
+/** Project the raw on-disk frontmatter (with l10n objects) down to the flat
+ *  per-locale shape that the page renderer expects. Same shape as the
+ *  pre-unification frontmatter so the JSX below is unchanged. */
+function projectFrontmatter(
+  raw: AboutRawFrontmatter,
+  locale: Locale
+): AboutFrontmatter {
+  return {
+    portrait: {
+      src: raw.portrait?.src ?? null,
+      credit: raw.portrait?.credit ?? null
+    },
+    photos: (raw.photos ?? []).filter((p): p is AboutPhoto => !!p?.src),
+    milestones: (raw.milestones ?? [])
+      .map((m) => ({
+        year: typeof m.year === 'number' ? m.year : 0,
+        label: pickL10n(m.label ?? '', locale)
+      }))
+      // Drop entries that have neither a year nor a label after locale projection.
+      .filter((m) => m.year || m.label),
+    lineage: (raw.lineage ?? []).map((l) => ({
+      key: l.key ?? '',
+      name: pickL10n(l.name, locale),
+      role: pickL10n(l.role, locale),
+      institution: pickL10n(l.institution, locale),
+      note: pickL10n(l.note, locale) || undefined
+    })),
+    marginalia: (raw.marginalia ?? []).map((m) => {
+      const s = pickL10n(m ?? '', locale)
+      return s ? s : null
+    })
+  }
 }
 
 function loadAbout(locale: Locale): {
@@ -63,63 +127,58 @@ function loadAbout(locale: Locale): {
   deForthcoming: boolean
 } {
   const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
-  const candidates = [locale, 'en', 'ru'] as const // DE falls back to EN then RU
+  const indexPath = path.join(ABOUT_DIR, 'index.yaml')
 
-  // Source-of-truth precedence per locale: .mdx with inline frontmatter
-  // (the Keystatic Cloud format) wins; falls back to the legacy
-  // <locale>.yaml + <locale>.md(x) split, which is now dead but kept for
-  // graceful migration if someone reverts.
-  for (const lang of candidates) {
-    const mdxPath = path.join(ABOUT_DIR, `${lang}.mdx`)
-    const mdPath = path.join(ABOUT_DIR, `${lang}.md`)
-    const yamlPath = path.join(ABOUT_DIR, `${lang}.yaml`)
-
-    if (fs.existsSync(mdxPath)) {
-      const raw = fs.readFileSync(mdxPath, 'utf8')
-      const { data, body } = splitFrontmatter(raw)
-      // If .mdx has no frontmatter (pre-Keystatic state), pull data from
-      // the sibling .yaml file.
-      const fm =
-        Object.keys(data).length === 0 && fs.existsSync(yamlPath)
-          ? ((parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as Record<
-              string,
-              unknown
-            >)
-          : data
-      return {
-        frontmatter: fm as unknown as AboutFrontmatter,
-        paragraphs: body
-          .split(/\n{2,}/)
-          .map((s) => s.trim())
-          .filter(Boolean),
-        deForthcoming: false
-      }
+  if (!fs.existsSync(indexPath)) {
+    return {
+      frontmatter: {
+        portrait: { src: null, credit: null },
+        milestones: [],
+        lineage: []
+      },
+      paragraphs: [],
+      deForthcoming: false
     }
+  }
 
-    if (fs.existsSync(yamlPath)) {
-      const data =
-        (parseYaml(fs.readFileSync(yamlPath, 'utf8')) ?? {}) as AboutFrontmatter
-      const body = fs.existsSync(mdPath) ? fs.readFileSync(mdPath, 'utf8') : ''
-      return {
-        frontmatter: data,
-        paragraphs: body
-          .split(/\n{2,}/)
-          .map((s) => s.trim())
-          .filter(Boolean),
-        deForthcoming: false
+  const raw = (parseYaml(fs.readFileSync(indexPath, 'utf8')) ??
+    {}) as AboutRawFrontmatter
+  const frontmatter = projectFrontmatter(raw, locale)
+
+  // Body files: bodyRu.mdx / bodyEn.mdx / bodyDe.mdx beside index.yaml.
+  // DE falls back to EN then RU when its body file is missing or empty.
+  const bodyForLocale: Record<Locale, string> = {
+    ru: 'bodyRu.mdx',
+    en: 'bodyEn.mdx',
+    de: 'bodyDe.mdx'
+  } as const
+  const candidates: Locale[] =
+    locale === 'de' ? ['de', 'en', 'ru'] : [locale, 'en', 'ru']
+
+  let body = ''
+  let resolvedLocale: Locale | null = null
+  for (const l of candidates) {
+    const p = path.join(ABOUT_DIR, bodyForLocale[l])
+    if (fs.existsSync(p)) {
+      const text = fs.readFileSync(p, 'utf8').trim()
+      if (text) {
+        body = text
+        resolvedLocale = l
+        break
       }
     }
   }
 
+  const paragraphs = body
+    .split(/\n{2,}/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+
   return {
-    frontmatter: {
-      portrait: { src: null, credit: null },
-      milestones: [],
-      lineage: []
-    },
-    paragraphs: [],
-    deForthcoming:
-      locale === 'de' && !fs.existsSync(path.join(ABOUT_DIR, 'de.mdx'))
+    frontmatter,
+    paragraphs,
+    // "DE forthcoming" cue: requested DE but we fell back to a non-DE body.
+    deForthcoming: locale === 'de' && resolvedLocale !== 'de'
   }
 }
 
@@ -196,7 +255,7 @@ export default async function AboutPage({
   const { portrait, milestones, lineage, marginalia, photos } = frontmatter
   // Keystatic allows saving a photo item without selecting a file, which
   // writes `- {}` to the YAML. Filter these out so no invisible img renders.
-  const validPhotos = photos?.filter(p => p.src) ?? []
+  const validPhotos = photos?.filter((p) => p.src) ?? []
   const portraitUrl = cdnUrl(portrait?.src)
 
   // First paragraph is the lead (displayed in Lora); the rest are body.

@@ -136,7 +136,7 @@ export default config({
     brand: { name: 'boklanov.com' },
     navigation: {
       Productions: ['productions'],
-      'About page': ['aboutRu', 'aboutEn', 'aboutDe']
+      'About page': ['about']
     }
   },
   collections: {
@@ -1058,185 +1058,252 @@ export default config({
     })
   },
   singletons: {
-    aboutRu: aboutSingleton('RU', 'ru'),
-    aboutEn: aboutSingleton('EN', 'en'),
-    aboutDe: aboutSingleton('DE', 'de')
+    about: singleton({
+      label: 'About page',
+      path: 'content/about',
+      format: { data: 'yaml' },
+      // entryLayout: 'content' gives the editor a wider canvas (matches the
+      // productions tabbed UX). The KeystaticEnhancements tab strip wraps
+      // the four top-level groups below into tabs; visible content fills
+      // the canvas at full width.
+      entryLayout: 'content',
+      schema: {
+        // Tab 1 — Bio: three locale-specific MDX bodies, written as
+        // bodyRu.mdx / bodyEn.mdx / bodyDe.mdx beside index.yaml. Same
+        // disk pattern productions use (Discussion #361).
+        bio: fields.object(
+          {
+            bodyRu: fields.mdx({
+              label: 'Bio (RU)',
+              description: desc(
+                'Биографический текст на русском. MDX — заголовки, абзацы, цитаты.',
+                'Biography body in Russian. MDX — headings, paragraphs, quotes.'
+              )
+            }),
+            bodyEn: fields.mdx({
+              label: 'Bio (EN)',
+              description: desc(
+                'Биографический текст на английском.',
+                'Biography body in English.'
+              )
+            }),
+            bodyDe: fields.mdx({
+              label: 'Bio (DE)',
+              description: desc(
+                'Биографический текст на немецком.',
+                'Biography body in German.'
+              )
+            })
+          },
+          {
+            label: 'Bio',
+            description: desc(
+              'Биографический текст на трёх локалях. Первый абзац — лид (отображается крупным шрифтом).',
+              'Biography body across three locales. First paragraph is the lead (rendered prominently).'
+            )
+          }
+        ),
+
+        // Tab 2 — Visuals: shared portrait + photos (no per-locale split).
+        visuals: fields.object(
+          {
+            portrait: fields.object(
+              {
+                src: fields.image({
+                  label: 'Portrait image',
+                  description: desc(
+                    'Главное портретное фото. Загружается в public/about/.',
+                    'Main portrait photo. Uploaded into public/about/.'
+                  ),
+                  directory: 'public/about',
+                  publicPath: '/about/'
+                }),
+                credit: fields.text({
+                  label: 'Credit',
+                  description: desc('Имя фотографа.', 'Photographer name.')
+                })
+              },
+              {
+                label: 'Portrait',
+                description: desc(
+                  'Большой портрет в начале страницы About.',
+                  'Large portrait at the top of the About page.'
+                ),
+                layout: [8, 4]
+              }
+            ),
+            photos: fields.array(
+              fields.object(
+                {
+                  src: fields.image({
+                    label: 'Photo',
+                    description: desc(
+                      'Дополнительное фото. Загружается в public/about/.',
+                      'Additional photo. Uploaded into public/about/.'
+                    ),
+                    directory: 'public/about',
+                    publicPath: '/about/'
+                  }),
+                  credit: fields.text({
+                    label: 'Credit',
+                    description: desc('Имя фотографа.', 'Photographer name.')
+                  })
+                },
+                { layout: [8, 4] }
+              ),
+              {
+                label: 'Photos',
+                description: desc(
+                  'Доп. фото для блока внизу страницы. Пустые элементы фильтруются на рендере.',
+                  'Extra photos for the bottom block. Empty entries are filtered at render time.'
+                ),
+                itemLabel: (p) => p.fields.credit.value || 'photo'
+              }
+            )
+          },
+          {
+            label: 'Visuals',
+            description: desc(
+              'Общие изображения для всех локалей: портрет и галерея.',
+              'Shared images across all locales: portrait and photo gallery.'
+            )
+          }
+        ),
+
+        // Tab 3 — Timeline: milestones (year shared, label l10n) +
+        // lineage (key shared, name/role/institution/note l10n).
+        timeline: fields.object(
+          {
+            milestones: fields.array(
+              fields.object(
+                {
+                  year: fields.integer({
+                    label: 'Year',
+                    description: desc(
+                      'Год вехи. Опционально (для нечётких дат — пустой год, описание в label).',
+                      'Milestone year. Optional — leave blank and describe in label for fuzzy dates.'
+                    ),
+                    validation: { isRequired: false }
+                  }),
+                  label: l10n(
+                    'Label',
+                    desc(
+                      'Описание вехи в трёх локалях.',
+                      'Milestone description in all three locales.'
+                    )
+                  )
+                },
+                { layout: [3, 9] }
+              ),
+              {
+                label: 'Milestones',
+                description: desc(
+                  'Биографическая таймлайн. Год + краткое описание на трёх языках.',
+                  'Biographical timeline. Year + short label per locale.'
+                ),
+                itemLabel: (p) =>
+                  `${p.fields.year.value ?? '—'} ${
+                    p.fields.label.fields.ru.value ||
+                    p.fields.label.fields.en.value ||
+                    ''
+                  }`
+              }
+            ),
+            lineage: fields.array(
+              fields.object({
+                key: fields.text({
+                  label: 'Key (slug)',
+                  description: desc(
+                    'Стабильный slug-ключ (например, kudashov, btk). Общий для всех локалей.',
+                    'Stable slug key (e.g. kudashov, btk). Shared across locales.'
+                  )
+                }),
+                name: l10n(
+                  'Name',
+                  desc(
+                    'Имя учителя / организации в трёх локалях.',
+                    'Teacher / institution name in all three locales.'
+                  )
+                ),
+                role: l10n(
+                  'Role',
+                  desc(
+                    'Роль / отношение (мастер, ректор и т. п.).',
+                    'Role / relationship (master, rector, etc.).'
+                  )
+                ),
+                institution: l10n(
+                  'Institution',
+                  desc(
+                    'Название института / театра, если применимо.',
+                    'Institution / theatre, if applicable.'
+                  )
+                ),
+                note: l10n(
+                  'Note',
+                  desc(
+                    'Опциональная пометка о связи / влиянии.',
+                    'Optional note about the connection / influence.'
+                  )
+                )
+              }),
+              {
+                label: 'Lineage',
+                description: desc(
+                  'Учителя и школы, к которым восходит работа Романа.',
+                  "Teachers and schools Roman's work traces back to."
+                ),
+                itemLabel: (p) =>
+                  p.fields.name.fields.ru.value ||
+                  p.fields.name.fields.en.value ||
+                  p.fields.key.value ||
+                  'entry'
+              }
+            )
+          },
+          {
+            label: 'Timeline',
+            description: desc(
+              'Хронология вех и линия преемственности (учителя/школы).',
+              'Milestones timeline and lineage (teachers / schools).'
+            )
+          }
+        ),
+
+        // Tab 4 — Margins: marginalia notes (per-locale text array).
+        margins: fields.object(
+          {
+            marginalia: fields.array(
+              l10n(
+                'Note',
+                desc(
+                  'Короткая пометка в трёх локалях.',
+                  'Short marginal note across three locales.'
+                )
+              ),
+              {
+                label: 'Marginalia',
+                description: desc(
+                  'Маленькие текстовые врезки в полях About-страницы.',
+                  'Small textual notes in the margin of the About page.'
+                ),
+                itemLabel: (p) =>
+                  p.fields.ru.value ||
+                  p.fields.en.value ||
+                  p.fields.de.value ||
+                  '—'
+              }
+            )
+          },
+          {
+            label: 'Margins',
+            description: desc(
+              'Маргиналии — короткие пометки рядом с абзацами.',
+              'Marginalia — short notes alongside body paragraphs.'
+            )
+          }
+        )
+      }
+    })
   }
 })
-
-// ---------------------------------------------------------------------------
-// About page singletons — one per locale.
-// Each writes content/about/<locale>.yaml + content/about/<locale>.mdx.
-// ---------------------------------------------------------------------------
-
-function aboutSingleton(label: string, locale: 'ru' | 'en' | 'de') {
-  return singleton({
-    label: `About — ${label}`,
-    path: `content/about/${locale}`,
-    format: { data: 'yaml', contentField: 'body' },
-    // contentField is already 'body', so entryLayout 'content' gives the bio
-    // prominent UI placement and pushes the structured fields to the sidebar.
-    entryLayout: 'content',
-    // Field order = editor UI order. Bio first (the narrative), then visuals,
-    // then biographical structure, then small notes.
-    schema: {
-      body: fields.mdx({
-        label: 'Bio',
-        description: desc(
-          'Биографический текст About-страницы на этой локали. MDX — поддерживает заголовки, абзацы, цитаты.',
-          'About-page biography body in this locale. MDX — supports headings, paragraphs, quotes.'
-        )
-      }),
-      portrait: fields.object(
-        {
-          src: fields.image({
-            label: 'Portrait image',
-            description: desc(
-              'Главное портретное фото. Загружается в public/about/ под именем поля.',
-              'Main portrait photo. Uploaded into public/about/ under the field name.'
-            ),
-            directory: 'public/about',
-            publicPath: '/about/'
-          }),
-          credit: fields.text({
-            label: 'Credit',
-            description: desc('Имя фотографа.', 'Photographer name.')
-          })
-        },
-        {
-          label: 'Portrait',
-          description: desc(
-            'Большой портрет в начале страницы About.',
-            'Large portrait at the top of the About page.'
-          ),
-          layout: [8, 4]
-        }
-      ),
-      photos: fields.array(
-        fields.object(
-          {
-            src: fields.image({
-              label: 'Photo',
-              description: desc(
-                'Дополнительное фото. Загружается в public/about/.',
-                'Additional photo. Uploaded into public/about/.'
-              ),
-              directory: 'public/about',
-              publicPath: '/about/'
-            }),
-            credit: fields.text({
-              label: 'Credit',
-              description: desc('Имя фотографа.', 'Photographer name.')
-            })
-          },
-          { layout: [8, 4] }
-        ),
-        {
-          label: 'Photos',
-          description: desc(
-            'Доп. фото для блока «фотографий» внизу About. Пустые элементы (без файла) фильтруются — см. components/about photo guard.',
-            'Extra photos for the "photos" block at the bottom of About. Empty entries (no file) are filtered — see the photo guard.'
-          ),
-          itemLabel: (p) => p.fields.credit.value || 'photo'
-        }
-      ),
-      milestones: fields.array(
-        fields.object(
-          {
-            year: fields.integer({
-              label: 'Year',
-              description: desc(
-                'Год вехи. Опционально (для несырых дат можно оставить пустым и описать в label).',
-                'Milestone year. Optional — leave blank and describe in label for fuzzy dates.'
-              ),
-              validation: { isRequired: false }
-            }),
-            label: fields.text({
-              label: 'Label',
-              description: desc(
-                'Описание вехи в той локали, для которой сейчас редактируется About-страница.',
-                'Milestone description in the locale of this About page.'
-              ),
-              multiline: true
-            })
-          },
-          { layout: [3, 9] }
-        ),
-        {
-          label: 'Milestones',
-          description: desc(
-            'Биографическая таймлайн. Год + краткое описание.',
-            'Biographical timeline. Year + short label per entry.'
-          ),
-          itemLabel: (p) =>
-            `${p.fields.year.value ?? '—'} ${p.fields.label.value}`
-        }
-      ),
-      lineage: fields.array(
-        fields.object({
-          key: fields.text({
-            label: 'Key (slug)',
-            description: desc(
-              'Стабильный slug-ключ (например, kudashov, btk). Используется для якорных ссылок.',
-              'Stable slug key (e.g. kudashov, btk). Used for anchor links.'
-            )
-          }),
-          name: fields.text({
-            label: 'Name',
-            description: desc(
-              'Имя учителя / организации в этой локали.',
-              'Teacher / institution name in this locale.'
-            )
-          }),
-          role: fields.text({
-            label: 'Role',
-            description: desc(
-              'Роль / отношение (мастер, ректор и т. п.).',
-              'Role / relationship (master, rector, etc.).'
-            )
-          }),
-          institution: fields.text({
-            label: 'Institution',
-            description: desc(
-              'Название института / театра, если применимо.',
-              'Institution / theatre, if applicable.'
-            )
-          }),
-          note: fields.text({
-            label: 'Note',
-            description: desc(
-              'Опциональная пометка о связи / влиянии.',
-              'Optional note about the connection / influence.'
-            ),
-            multiline: true
-          })
-        }),
-        {
-          label: 'Lineage',
-          description: desc(
-            'Учителя и школы, к которым восходит работа Романа.',
-            "Teachers and schools Roman's work traces back to."
-          ),
-          itemLabel: (p) => p.fields.name.value || 'entry'
-        }
-      ),
-      marginalia: fields.array(
-        fields.text({
-          label: 'Note',
-          description: desc(
-            'Короткая пометка / эпиграф.',
-            'Short marginal note / epigraph.'
-          )
-        }),
-        {
-          label: 'Marginalia',
-          description: desc(
-            'Маленькие текстовые врезки в полях About-страницы.',
-            'Small textual notes in the margin of the About page.'
-          ),
-          itemLabel: (p) => p.value || '—'
-        }
-      )
-    }
-  })
-}

@@ -1,0 +1,122 @@
+portrait:
+  src: /about/portrait/src.webp
+  credit: Лидия Пименова
+photos: []
+milestones:
+  - year: 1993
+    label:
+      ru: Родился в Усть-Каменогорске, Казахстан
+      en: Born in Ust-Kamenogorsk, Kazakhstan
+      de: Geboren in Ust-Kamenogorsk, Kasachstan
+  - year: 2017
+    label:
+      ru: Артист спектакля-лауреата «Золотой маски» («Старый дом», Новосибирск)
+      en: Performer in Golden Mask laureate production (Stary Dom, Novosibirsk)
+      de: >-
+        Darsteller der mit der «Goldenen Maske» ausgezeichneten Aufführung
+        («Altes Haus», Nowosibirsk)
+  - year: 2018
+    label:
+      ru: >-
+        Гран-при международного фестиваля театральных школ Istropolitana
+        Project, Братислава
+      en: >-
+        Grand Prix at the Istropolitana Project international theatre-school
+        festival, Bratislava
+      de: >-
+        Grand Prix des internationalen Festivals der Theaterschulen
+        Istropolitana Project, Bratislava
+  - year: 2020
+    label:
+      ru: Премьера «Похороните меня за плинтусом», БТК (Санкт-Петербург)
+      en: Premiere of Bury Me Behind the Baseboard at BTK (Saint Petersburg)
+      de: >-
+        Premiere von „Begrabt mich hinter der Sockelleiste“, GBT (Sankt
+        Petersburg)
+  - year: 2021
+    label:
+      ru: >-
+        Окончил РГИСИ — режиссёр театра кукол, мастерская Р.Р. Кудашова (курс
+        при БТК)
+      en: >-
+        Graduated RGISI — puppet theatre director, Kudashov studio (course at
+        BTK)
+      de: >-
+        Absolvent des RGISI – Puppentheaterregisseur, Werkstatt von R.R.
+        Kudaschow (Kurs am GBTK)
+  - year: 2022
+    label:
+      ru: Возвращение в Алматы; постановки в Казахстане и Европе
+      en: Returned to Almaty; staging across Kazakhstan and Europe
+      de: Rückkehr nach Almaty; Inszenierungen in Kasachstan und Europa
+marginalia:
+  - ru: Р.Р. Кудашов · РГИСИ · БТК
+    en: Kudashov · RGISI · BTK
+    de: R.R. Kudaschow · RGISI · BTK
+  - ru: ''
+    en: ''
+    de: ''
+  - ru: ''
+    en: ''
+    de: ''
+  - ru: ''
+    en: ''
+    de: ''
+lineage:
+  - key: kudashov
+    name:
+      ru: Руслан Кудашов
+      en: Ruslan Kudashov
+      de: Руслан Кудашов
+    role:
+      ru: Мастер курса
+      en: Studio master
+      de: Meister des Kurses
+    institution:
+      ru: РГИСИ, Санкт-Петербург
+      en: RGISI, Saint Petersburg
+      de: РГИСИ, Санкт-Петербург
+    note:
+      ru: Воспитал поколение петербургских режиссёров театра кукол
+      en: Trained a generation of Saint Petersburg puppet theatre directors
+      de: >-
+        Hat eine Generation von Puppentheaterregisseuren in St. Petersburg
+        ausgebildet
+  - key: btk
+    name:
+      ru: Большой театр кукол
+      en: Grand Puppet Theatre
+      de: Большой театр кукол
+    role:
+      ru: Режиссёр
+      en: Director
+      de: Regie
+    institution:
+      ru: Санкт-Петербург
+      en: Saint Petersburg
+      de: Санкт-Петербург
+    note:
+      ru: Один из главных театров кукол России — здесь формировался профессиональный язык
+      en: >-
+        One of Russia's leading puppet theatres — where the professional voice
+        was formed
+      de: >-
+        Eines der wichtigsten Puppentheater Russlands — hier wurde die
+        Fachsprache geprägt
+  - key: rgisi
+    name:
+      ru: РГИСИ
+      en: RGISI
+      de: РГИСИ
+    role:
+      ru: Режиссёрский факультет
+      en: Directing faculty
+      de: Regiefakultät
+    institution:
+      ru: Российский государственный институт сценических искусств
+      en: Russian State Institute of Performing Arts
+      de: Российский государственный институт сценических искусств
+    note:
+      ru: 'Фундамент: европейская традиция театра кукол, театр объекта, современная режиссура'
+      en: 'Foundation: European puppet-theatre tradition, theatre of objects, contemporary directing'
+      de: 'Fundament: Europäische Tradition des Puppentheaters, Objekttheater, moderne Regie'

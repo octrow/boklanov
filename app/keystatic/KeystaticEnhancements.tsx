@@ -25,10 +25,16 @@ import { useEffect } from 'react'
 const FORM_ID = 'item-edit-form'
 const TAB_STRIP_MARK = 'data-ks-tabs-init'
 
-/** Allowlist of top-level group labels from the productions schema (WS-1).
- *  Acts as a backstop: even if the structural filter below misidentifies
- *  nested groups, the label must match one of these. Update if WS-1 group
- *  labels in keystatic.config.ts change. */
+/** Allowlist of top-level group labels from the productions schema (WS-1)
+ *  AND the unified About singleton. Acts as a backstop: even if the
+ *  structural filter below misidentifies nested groups, the label must
+ *  match one of these. Update if group labels in keystatic.config.ts change.
+ *
+ *  Productions: identity / media / production / taxonomy / team /
+ *               recognition / performance history / settings
+ *  About:       bio / visuals / timeline / margins
+ *  ('media' overlaps but only one schema is rendered at a time, so the
+ *  shared label is harmless.) */
 const TOP_LEVEL_LABELS = new Set([
   'identity',
   'media',
@@ -37,7 +43,11 @@ const TOP_LEVEL_LABELS = new Set([
   'team',
   'recognition',
   'performance history',
-  'settings'
+  'settings',
+  'bio',
+  'visuals',
+  'timeline',
+  'margins'
 ])
 
 // ── Helpers ────────────────────────────────────────────────────────────────
