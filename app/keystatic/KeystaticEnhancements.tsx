@@ -557,9 +557,11 @@ function decorateSidebar(): void {
 
       // Build an <a><div><span/></div></a> tree using harvested classNames so
       // the link inherits Keystatic's NavItem styling (typography, hover,
-      // focus ring, and the active &::before accent bar).
+      // focus ring, and the active &::before accent bar). The extra
+      // ks-sidebar-context__tab-link class lets the shim CSS shrink these
+      // tabs (H4) below the section NavItem (H2) and slug (H3).
       const a = document.createElement('a')
-      a.className = navClasses.anchor
+      a.className = `${navClasses.anchor} ks-sidebar-context__tab-link`
       a.href = `#tab=${encodeURIComponent(id)}`
       if (isActive) a.setAttribute('aria-current', 'page')
 

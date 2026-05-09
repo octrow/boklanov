@@ -166,13 +166,31 @@
 /* ---------------------------------------------------------------------------
  * Sidebar "you are here" decoration
  *
- * Injected by decorateSidebar() in KeystaticEnhancements.tsx as an <li>
- * sibling immediately after the active nav <li>. The tab links use harvested
- * NavItem classNames, so their typography / hover / focus ring / active
- * accent bar all come straight from @keystar/ui and stay in lockstep with
- * the rest of the sidebar across upgrades. These rules only style the wrapper
- * and the slug header.
+ * Injected by decorateSidebar() in KeystaticEnhancements.tsx. Establishes a
+ * three-level hierarchy in the sidebar so the user can see at a glance what
+ * section they are in, what item they are editing, and what tab is active:
+ *
+ *   H2  Productions / About page / Contact   (Keystatic NavItem, upscaled)
+ *   H3      <item-slug>                       (.ks-sidebar-context__slug)
+ *   H4          Identity, Media, Production…  (.ks-sidebar-context__tab-link)
+ *
+ * Tab links use harvested NavItem classNames for hover / focus ring / accent
+ * bar, then opt out of the H2 size bump via .ks-sidebar-context__tab-link.
  * --------------------------------------------------------------------------- */
+
+/* H2 — section NavItems. The :not() filter spares the injected tab links so
+ * they can stay smaller. The sidebar is the only <nav> in /keystatic/*, so
+ * the global selector is safe. */
+nav a:not(.ks-sidebar-context__tab-link) {
+  font-size: var(--kui-typography-text-medium-size, 1.0625rem);
+  font-weight: 500;
+}
+nav
+  a:not(.ks-sidebar-context__tab-link)[aria-current]:not(
+    [aria-current='false']
+  ) {
+  font-weight: 600;
+}
 
 .ks-sidebar-context {
   list-style: none;
@@ -180,17 +198,14 @@
   padding: 0;
 }
 
-/* Slug header (h3): sits below the active section NavItem (h2) and above
- * the tab links (h4). Uses Keystatic's heading-small typography token and
- * the neutralEmphasis foreground so it reads as a sub-section title and
- * matches the brightness of the active NavItem above it. */
+/* H3 — current item slug. Bright, semi-bold, between H2 and H4 in size. */
 .ks-sidebar-context__slug {
   margin: 0;
   color: var(--kui-color-foreground-neutralEmphasis, #ffffff);
-  font-size: var(--kui-typography-heading-small-size, 1rem);
+  font-size: var(--kui-typography-text-regular-size, 0.9375rem);
   font-weight: 600;
-  line-height: var(--kui-typography-heading-small-lineheight, 1.4);
-  padding: var(--kui-size-space-medium, 12px) var(--kui-size-space-medium, 12px);
+  line-height: 1.4;
+  padding: var(--kui-size-space-small, 6px) var(--kui-size-space-medium, 12px);
   padding-inline-start: var(--kui-size-space-large, 16px);
   word-break: break-word;
   overflow-wrap: anywhere;
@@ -200,4 +215,11 @@
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/* H4 — tab links. Forces the inner <span> too because the harvested NavItem
+ * text class doesn't set its own font-size and inherits from this anchor. */
+.ks-sidebar-context__tab-link,
+.ks-sidebar-context__tab-link span {
+  font-size: var(--kui-typography-text-small-size, 0.8125rem);
 }
