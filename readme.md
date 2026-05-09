@@ -1,6 +1,7 @@
 # boklanov.ru / boklanov.com
 
-Director portfolio. Next.js 15 App Router, React 19, Node 22. SSG. Lighthouse 4×100 prod (`100/100/100/100`, 2026-05-04).
+Director portfolio. Next.js 15 App Router, React 19, Node 22. SSG. Lighthouse 4×100 prod (`100/100/100/100`,
+2026-05-04).
 
 Live: `boklanov.vercel.app`. Apex `boklanov.com` cutover deferred.
 
@@ -8,7 +9,8 @@ Live: `boklanov.vercel.app`. Apex `boklanov.com` cutover deferred.
 
 - `next@15` App Router, `react@19`
 - `next-intl@4` — RU default (no prefix), `/en`, `/de`
-- `@keystatic/core` + `@keystatic/next` — admin at `/keystatic`; cloud in prod, local in dev (gated by `NODE_ENV`, never custom env)
+- `@keystatic/core` + `@keystatic/next` — admin at `/keystatic`; cloud in prod, local in dev (gated by `NODE_ENV`, never
+  custom env)
 - `@vercel/og` `satori` — per-production OG `1200x630`
 - `sharp` — LQIP inline in frontmatter
 - `posthog-js`, `@vercel/analytics`, `@vercel/speed-insights`, `fathom-client`
@@ -63,19 +65,25 @@ npm run analyze                             # ANALYZE=true next build
 
 ## Content
 
-Edit `content/productions/<slug>/index.yaml` as plain YAML. Edit `body.{ru,en,de}.md` as plain markdown. Keystatic at `/keystatic` writes the same files. Commit + push → Vercel rebuilds `main`.
+Edit `content/productions/<slug>/index.yaml` as plain YAML. Edit `body.{ru,en,de}.md` as plain markdown. Keystatic at
+`/keystatic` writes the same files. Commit + push → Vercel rebuilds `main`.
 
-New production: copy `content/_PRODUCTION_TEMPLATE.yaml` → `content/productions/<slug>/index.yaml`. Latin slug, dashes. Create `body.ru.md` + `body.en.md` (DE optional).
+New production: copy `content/_PRODUCTION_TEMPLATE.yaml` → `content/productions/<slug>/index.yaml`. Latin slug, dashes.
+Create `body.ru.md` + `body.en.md` (DE optional).
 
-Frontmatter shape, null-field contract for TourRider, R2 deferral: `.design/boklanov-rewrite/CONTENT.md`. Roman walkthrough: `content/AUTHORING.ru.md`.
+Frontmatter shape, null-field contract for TourRider, R2 deferral: `.design/boklanov-rewrite/CONTENT.md`. Roman
+walkthrough: `content/AUTHORING.ru.md`.
 
-Featured strip: set `featured: true`. Cards without poster filtered. Override poster on grid via `productionsPhoto.src`; on home strip via `featuredPhoto.src` (chain: featured → productions → poster → typographic).
+Featured strip: set `featured: true`. Cards without poster filtered. Override poster on grid via `productionsPhoto.src`;
+on home strip via `featuredPhoto.src` (chain: featured → productions → poster → typographic).
 
-Production-card text RU/EN regardless of locale (D4). DE chrome only until ≥5 productions have real DE copy. `hreflang` RU↔EN only; DE in sitemap without alternates.
+Production-card text RU/EN regardless of locale (D4). DE chrome only until ≥5 productions have real DE copy. `hreflang`
+RU↔EN only; DE in sitemap without alternates.
 
 ## Images
 
-`public/productions/<slug>/` = canonical mirror (committed). R2 bucket `boklanov-content` = production CDN. 291 files uploaded 2026-05-02.
+`public/productions/<slug>/` = canonical mirror (committed). R2 bucket `boklanov-content` = production CDN. 291 files
+uploaded 2026-05-02.
 
 ```bash
 npm run upload-images -- --slug <slug>      # S3 upload, skip-unchanged-by-size
@@ -83,15 +91,23 @@ npm run upload-images -- --dry-run
 npm run backup-r2-to-git                    # mirror R2 → public/ (CI on content/** push + daily cron)
 ```
 
-`lib/cdn.ts` `cdnUrl()` resolves via `NEXT_PUBLIC_CDN_BASE`. Unset = serve from `public/` via Vercel. Set to `cdn.boklanov.com` post-DNS-cutover.
+`lib/cdn.ts` `cdnUrl()` resolves via `NEXT_PUBLIC_CDN_BASE`. Unset = serve from `public/` via Vercel. Set to
+`cdn.boklanov.com` post-DNS-cutover.
 
-R2 dev URL (rate-limited): `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev`. `cdn.boklanov.com` blocked until apex DNS moves to Cloudflare.
+R2 dev URL (rate-limited): `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev`. `cdn.boklanov.com` blocked until apex
+DNS moves to Cloudflare.
 
-Keystatic image upload: `/api/keystatic-asset` POST multipart `file` + `directory` writes `public/<directory>/<filename>` (dev only, 403 prod). Path validation rejects traversal, overwrite, non-image, >25 MB. `app/keystatic/ImagePathPreview.tsx` injects 240×180 preview thumbnails + per-row 48×36 thumbs into Keystatic admin via `MutationObserver`.
+Keystatic image upload: `/api/keystatic-asset` POST multipart `file` + `directory` writes
+`public/<directory>/<filename>` (dev only, 403 prod). Path validation rejects traversal, overwrite, non-image, >25 MB.
+`app/keystatic/ImagePathPreview.tsx` injects 240×180 preview thumbnails + per-row 48×36 thumbs into Keystatic admin via
+`MutationObserver`.
 
 ## Translate
 
-Fill missing `en`/`de`/`ru` fields across `content/productions/*/index.yaml`, `body.{ru,en,de}.md`, `content/about/*`. Source priority `ru → en → de`. Fill-only by default — never overwrites existing prose. Translates every `L10nString` field including `awards`, `festivals`, `externalLinks`, `theatre.name`, `runs[]`, `press[].title`. Verbatim-only: scalars, URLs, slugs, ISO codes, enums (`form`, `lineage`, `role`, `ageRating`, `tags`), asset paths, `credits[].name`.
+Fill missing `en`/`de`/`ru` fields across `content/productions/*/index.yaml`, `body.{ru,en,de}.md`, `content/about/*`.
+Source priority `ru → en → de`. Fill-only by default — never overwrites existing prose. Translates every `L10nString`
+field including `awards`, `festivals`, `externalLinks`, `theatre.name`, `runs[]`, `press[].title`. Verbatim-only:
+scalars, URLs, slugs, ISO codes, enums (`form`, `lineage`, `role`, `ageRating`, `tags`), asset paths, `credits[].name`.
 
 ```bash
 set -a && source .env && set +a
@@ -103,11 +119,15 @@ npm run translate-content -- --budget 2 --limit 10
 npm run translate-content -- --force --slug <slug>         # overwrite
 ```
 
-Provider auto-detected by env: `ANTHROPIC_API_KEY` > `CEREBRAS_API_KEY` > `OPENROUTER_API_KEY` > `GEMINI_API_KEY`. Override `--provider <name>`. Cache `.cache/translate/` (gitignored). Spec: `.design/boklanov-rewrite/TRANSLATE_PLAN.md`.
+Provider auto-detected by env: `ANTHROPIC_API_KEY` > `CEREBRAS_API_KEY` > `OPENROUTER_API_KEY` > `GEMINI_API_KEY`.
+Override `--provider <name>`. Cache `.cache/translate/` (gitignored). Spec:
+`.design/boklanov-rewrite/TRANSLATE_PLAN.md`.
 
 ## Theme
 
-Two themes via `[data-theme]` on `<html>`. `gorky` default (dark, near-black `#080706`). `paper` opt-in (warm off-white `#F2F0EA`). Anti-flash inline script in `app/[locale]/layout.tsx`. Legacy `theme=dark` → `gorky`, `theme=light` → `paper`. Storage key `boklanov.theme`.
+Two themes via `[data-theme]` on `<html>`. `gorky` default (dark, near-black `#080706`). `paper` opt-in (warm off-white
+`#F2F0EA`). Anti-flash inline script in `app/[locale]/layout.tsx`. Legacy `theme=dark` → `gorky`, `theme=light` →
+`paper`. Storage key `boklanov.theme`.
 
 Tokens: `app/globals.css`. Source of truth: `DESIGN.md` §3–6.
 
@@ -117,13 +137,18 @@ Vercel project `octrows-projects/boklanov`. `main` auto-deploys.
 
 `git push origin main` blocked by safety hook — ask user to push.
 
-D3/D4 apex cutover (deferred): DNS at Spaceship — A `@ → 76.76.21.21`, CNAME `www → cname.vercel-dns.com`, TTL 300. Vercel → Settings → Domains → add `boklanov.com` + `www.boklanov.com`. R2 CDN activates after apex moves to Cloudflare DNS.
+D3/D4 apex cutover (deferred): DNS at Spaceship — A `@ → 76.76.21.21`, CNAME `www → cname.vercel-dns.com`, TTL 300.
+Vercel → Settings → Domains → add `boklanov.com` + `www.boklanov.com`. R2 CDN activates after apex moves to Cloudflare
+DNS.
 
-Branch `design_v3` (Plakat refresh) lives parallel to `main`. 9 §11 unfreezes, Bauhaus trio palette (vermillion / cobalt / mustard), Unbounded ALL CAPS hero. Acceptance gates pending. Rollback: `git checkout main`.
+Branch `design_v3` (Plakat refresh) lives parallel to `main`. 9 §11 unfreezes, Bauhaus trio palette (vermillion /
+cobalt / mustard), Unbounded ALL CAPS hero. Acceptance gates pending. Rollback: `git checkout main`.
 
 ## Design review
 
-`.design/review/<YYYY-MM-DD>-<slug>/REPORT.md` + screenshots. Calibrated prompt: `.design/review/PROMPT.md`. Sweep covers home, productions, production-detail, about, contact, archive at 1440 + 390. Path A: in-CLI Chrome MCP. Path B: GoFullPage + claude.ai. Workflow: `.design/review/WORKFLOW.md`.
+`.design/review/<YYYY-MM-DD>-<slug>/REPORT.md` + screenshots. Calibrated prompt: `.design/review/PROMPT.md`. Sweep
+covers home, productions, production-detail, about, contact, archive at 1440 + 390. Path A: in-CLI Chrome MCP. Path B:
+GoFullPage + claude.ai. Workflow: `.design/review/WORKFLOW.md`.
 
 ## Constraints (hard)
 
@@ -156,7 +181,8 @@ Cold-read order: `readme.md` → `.design/boklanov-rewrite/MAP.md` → target do
 | `content/AUTHORING.ru.md`                                  | Roman RU day-to-day                                                 |
 | `docs/r2-operations.md`                                    | R2 ops                                                              |
 
-`.design/boklanov-rewrite/archive/` = read-only history. Read `*_compress.md` first; open full only if detail missing. Edit only on `MAP.md` §5 unfreeze events.
+`.design/boklanov-rewrite/archive/` = read-only history. Read `*_compress.md` first; open full only if detail missing.
+Edit only on `MAP.md` §5 unfreeze events.
 
 ## License
 
