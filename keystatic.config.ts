@@ -1061,7 +1061,12 @@ export default config({
   singletons: {
     about: singleton({
       label: 'About page',
-      path: 'content/about',
+      // Trailing slash is load-bearing: Keystatic's getFormatInfo() switches
+      // between "outer file" (content/about.yaml) and "index file inside
+      // directory" (content/about/index.yaml) based on whether path ends
+      // with "/". We need the directory layout because the schema has
+      // multiple fields.mdx (bodyRu/En/De.mdx) sitting next to index.yaml.
+      path: 'content/about/',
       format: { data: 'yaml' },
       // entryLayout: 'content' gives the editor a wider canvas (matches the
       // productions tabbed UX). The KeystaticEnhancements tab strip wraps
@@ -1315,7 +1320,11 @@ export default config({
     // -----------------------------------------------------------------------
     contact: singleton({
       label: 'Contact',
-      path: 'content/contact',
+      // Trailing slash → Keystatic reads content/contact/index.yaml (the
+      // file we wrote on disk). Without it, Keystatic looks for the outer
+      // file content/contact.yaml, finds nothing, and shows empty fields.
+      // See getFormatInfo() in @keystatic/core: dataLocation = path.endsWith('/') ? 'index' : 'outer'.
+      path: 'content/contact/',
       format: { data: 'yaml' },
       schema: {
         // Optional intro paragraph rendered above the Telegram / Instagram

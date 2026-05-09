@@ -46,11 +46,15 @@ interface AboutFrontmatter {
 }
 
 /** Raw shape on disk after the unification (content/about/index.yaml).
- *  milestones[].label, lineage[].{name,role,institution,note}, marginalia[]
- *  are now per-locale objects rather than bare strings. */
-interface AboutRawFrontmatter {
+ *  Top-level keys mirror the schema's group nesting in keystatic.config.ts:
+ *  visuals (portrait + photos), timeline (milestones + lineage), margins
+ *  (marginalia). Per-locale fields are stored as l10n objects. */
+interface AboutVisuals {
   portrait?: { src?: string | null; credit?: string | null } | null
   photos?: AboutPhoto[] | null
+}
+
+interface AboutTimeline {
   milestones?: Array<{
     year?: number | null
     label?: L10nString | string
@@ -62,7 +66,16 @@ interface AboutRawFrontmatter {
     institution?: L10nString | string
     note?: L10nString | string
   }> | null
+}
+
+interface AboutMargins {
   marginalia?: Array<L10nString | string | null> | null
+}
+
+interface AboutRawFrontmatter {
+  visuals?: AboutVisuals | null
+  timeline?: AboutTimeline | null
+  margins?: AboutMargins | null
 }
 
 // ── Loader ───────────────────────────────────────────────────────────────
@@ -88,33 +101,37 @@ function pickL10n(
 }
 
 /** Project the raw on-disk frontmatter (with l10n objects) down to the flat
- *  per-locale shape that the page renderer expects. Same shape as the
- *  pre-unification frontmatter so the JSX below is unchanged. */
+ *  per-locale shape that the page renderer expects. Top-level keys come from
+ *  the schema's group nesting (visuals / timeline / margins) — see comment on
+ *  AboutRawFrontmatter above. */
 function projectFrontmatter(
   raw: AboutRawFrontmatter,
   locale: Locale
 ): AboutFrontmatter {
+  const visuals = raw.visuals ?? {}
+  const timeline = raw.timeline ?? {}
+  const margins = raw.margins ?? {}
   return {
     portrait: {
-      src: raw.portrait?.src ?? null,
-      credit: raw.portrait?.credit ?? null
+      src: visuals.portrait?.src ?? null,
+      credit: visuals.portrait?.credit ?? null
     },
-    photos: (raw.photos ?? []).filter((p): p is AboutPhoto => !!p?.src),
-    milestones: (raw.milestones ?? [])
+    photos: (visuals.photos ?? []).filter((p): p is AboutPhoto => !!p?.src),
+    milestones: (timeline.milestones ?? [])
       .map((m) => ({
         year: typeof m.year === 'number' ? m.year : 0,
         label: pickL10n(m.label ?? '', locale)
       }))
       // Drop entries that have neither a year nor a label after locale projection.
       .filter((m) => m.year || m.label),
-    lineage: (raw.lineage ?? []).map((l) => ({
+    lineage: (timeline.lineage ?? []).map((l) => ({
       key: l.key ?? '',
       name: pickL10n(l.name, locale),
       role: pickL10n(l.role, locale),
       institution: pickL10n(l.institution, locale),
       note: pickL10n(l.note, locale) || undefined
     })),
-    marginalia: (raw.marginalia ?? []).map((m) => {
+    marginalia: (margins.marginalia ?? []).map((m) => {
       const s = pickL10n(m ?? '', locale)
       return s ? s : null
     })
