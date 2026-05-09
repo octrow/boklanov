@@ -34,6 +34,9 @@
     "test:lint": "eslint '**/*.{ts,tsx}'",
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
   },
+  "overrides": {
+    "postcss": "^8.5.14"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
     "@fontsource/inter": "^5.2.8",
