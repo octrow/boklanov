@@ -180,7 +180,7 @@ function buildTabStrip(
   labelEl.className = 'ks-tab-mobile-label'
   const currentLabel = cellsByTab.get(activeId)?.label ?? ''
   const currentIndex = tabIds.indexOf(activeId)
-  labelEl.innerHTML = `<span class="ks-tab-mobile-name">${currentLabel}</span><span class="ks-tab-mobile-count">${currentIndex + 1} / ${tabCount}</span>`
+  labelEl.innerHTML = `<span class="ks-tab-mobile-name">${currentLabel}</span><span class="ks-tab-mobile-count">${currentIndex + 1} / ${tabCount}</span>`
 
   const nextBtn = document.createElement('button')
   nextBtn.type = 'button'
