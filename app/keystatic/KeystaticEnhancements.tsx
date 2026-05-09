@@ -536,7 +536,10 @@ function decorateSidebar(): void {
   deco.replaceChildren()
 
   if (slug) {
-    const slugEl = document.createElement('div')
+    // Use <h3> semantically so the sidebar reads as a section hierarchy:
+    //   <h3>NavGroup title</h3> → active NavItem (h2-equivalent) → slug (h3)
+    //   → tabs (h4-equivalent NavItems).
+    const slugEl = document.createElement('h3')
     slugEl.className = 'ks-sidebar-context__slug'
     slugEl.textContent = slug
     deco.appendChild(slugEl)

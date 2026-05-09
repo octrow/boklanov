@@ -180,18 +180,20 @@
   padding: 0;
 }
 
-/* Slug header: same typography tokens as a NavGroup heading, minus the
- * uppercase transform so slugs stay readable. */
+/* Slug header (h3): sits below the active section NavItem (h2) and above
+ * the tab links (h4). Uses Keystatic's heading-small typography token and
+ * the neutralEmphasis foreground so it reads as a sub-section title and
+ * matches the brightness of the active NavItem above it. */
 .ks-sidebar-context__slug {
-  color: var(--kui-color-foreground-neutralSecondary, #7a8aaa);
-  font-size: var(--kui-typography-text-small-size, 0.8125rem);
-  font-weight: 500;
-  padding: var(--kui-size-space-regular, 8px) var(--kui-size-space-medium, 12px);
-  padding-inline-start: var(
-    --kui-size-space-large,
-    16px
-  ); /* matches NavList textInsetStart */
-  word-break: break-all;
+  margin: 0;
+  color: var(--kui-color-foreground-neutralEmphasis, #ffffff);
+  font-size: var(--kui-typography-heading-small-size, 1rem);
+  font-weight: 600;
+  line-height: var(--kui-typography-heading-small-lineheight, 1.4);
+  padding: var(--kui-size-space-medium, 12px) var(--kui-size-space-medium, 12px);
+  padding-inline-start: var(--kui-size-space-large, 16px);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .ks-sidebar-context__tabs {
