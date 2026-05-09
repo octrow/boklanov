@@ -167,55 +167,35 @@
  * Sidebar "you are here" decoration
  *
  * Injected by decorateSidebar() in KeystaticEnhancements.tsx as an <li>
- * sibling immediately after the active nav <li>. Shows the current item slug
- * (collection items only) and a clickable mirror of the form's tab strip so
- * the editor can see where they are and jump between sections from the
- * sidebar. The tab links delegate clicks to the live tab buttons, so panel
- * visibility, hash, and active state all stay owned by initTabs().
+ * sibling immediately after the active nav <li>. The tab links use harvested
+ * NavItem classNames, so their typography / hover / focus ring / active
+ * accent bar all come straight from @keystar/ui and stay in lockstep with
+ * the rest of the sidebar across upgrades. These rules only style the wrapper
+ * and the slug header.
  * --------------------------------------------------------------------------- */
 
 .ks-sidebar-context {
   list-style: none;
-  margin: 4px 0 8px;
-  padding: 4px 0 4px 20px;
-  border-inline-start: 1px solid var(--kui-color-border-muted);
-  margin-inline-start: 16px;
+  margin: 0;
+  padding: 0;
 }
 
+/* Slug header: same typography tokens as a NavGroup heading, minus the
+ * uppercase transform so slugs stay readable. */
 .ks-sidebar-context__slug {
-  font-size: 0.75rem;
-  font-weight: 500;
   color: var(--kui-color-foreground-neutralSecondary, #7a8aaa);
-  padding: 4px 8px;
+  font-size: var(--kui-typography-text-small-size, 0.8125rem);
+  font-weight: 500;
+  padding: var(--kui-size-space-regular, 8px) var(--kui-size-space-medium, 12px);
+  padding-inline-start: var(
+    --kui-size-space-large,
+    16px
+  ); /* matches NavList textInsetStart */
   word-break: break-all;
-  text-transform: none;
-  letter-spacing: 0;
 }
 
 .ks-sidebar-context__tabs {
   list-style: none;
-  margin: 4px 0 0;
+  margin: 0;
   padding: 0;
-}
-
-.ks-sidebar-context__tab {
-  display: block;
-  padding: 4px 8px;
-  font-size: 0.8125rem;
-  color: var(--kui-color-foreground-neutral);
-  text-decoration: none;
-  border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ks-sidebar-context__tab:hover {
-  background: var(--kui-color-background-surface-secondary, #1e2740);
-  color: var(--kui-color-foreground-neutralEmphasis, #ffffff);
-}
-
-.ks-sidebar-context__tab[aria-current='true'] {
-  background: var(--kui-color-background-accent-emphasis);
-  color: var(--kui-color-foreground-onEmphasis);
 }

@@ -450,6 +450,28 @@ function getCurrentLocation():
   return { type: 'other' }
 }
 
+/** Harvest classNames from a real NavItem in the sidebar so injected tab
+ *  links inherit Keystatic's anchor / content / text styles (font, padding,
+ *  hover, focus ring, and the active accent bar via the &::before pseudo).
+ *  Same trick the tab strip uses for its ActionButtons. */
+function harvestNavItemClasses(): {
+  anchor: string
+  content: string
+  text: string
+} | null {
+  const ref = document.querySelector<HTMLAnchorElement>(
+    'nav a[href*="/keystatic/"]'
+  )
+  if (!ref) return null
+  const contentEl = ref.firstElementChild as HTMLElement | null
+  const textEl = contentEl?.firstElementChild as HTMLElement | null
+  return {
+    anchor: ref.className,
+    content: contentEl?.className ?? '',
+    text: textEl?.className ?? ''
+  }
+}
+
 /**
  * Inject a "you are here" panel under the active sidebar nav item showing
  * the current item slug (when editing a collection entry) and a clickable
@@ -472,6 +494,9 @@ function decorateSidebar(): void {
   )
   const activeLi = activeLink?.closest('li')
   if (!activeLi) return
+
+  const navClasses = harvestNavItemClasses()
+  if (!navClasses) return
 
   // Reuse existing decoration if it sits where we expect, otherwise rebuild.
   let deco: HTMLElement | null = null
@@ -526,11 +551,24 @@ function decorateSidebar(): void {
       const isActive = btn.getAttribute('aria-selected') === 'true'
 
       const li = document.createElement('li')
+
+      // Build an <a><div><span/></div></a> tree using harvested classNames so
+      // the link inherits Keystatic's NavItem styling (typography, hover,
+      // focus ring, and the active &::before accent bar).
       const a = document.createElement('a')
+      a.className = navClasses.anchor
       a.href = `#tab=${encodeURIComponent(id)}`
-      a.className = 'ks-sidebar-context__tab'
-      if (isActive) a.setAttribute('aria-current', 'true')
-      a.textContent = label
+      if (isActive) a.setAttribute('aria-current', 'page')
+
+      const content = document.createElement('div')
+      content.className = navClasses.content
+
+      const text = document.createElement('span')
+      text.className = navClasses.text
+      text.textContent = label
+      content.appendChild(text)
+      a.appendChild(content)
+
       a.addEventListener('click', (e) => {
         e.preventDefault()
         // Delegate to the tab strip's own click handler so the active state,
