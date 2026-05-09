@@ -200,7 +200,10 @@ nav
 
 /* H3 — current item slug. Bright, semi-bold, between H2 and H4 in size.
  * font-family is forced because the browser's default <h3> stylesheet
- * picks a serif on some platforms; we want Keystatic's base font here. */
+ * picks a serif on some platforms; we want Keystatic's base font here.
+ * padding-inline-start mirrors @keystar/ui NavList textInsetStart
+ * (indicator width + gutter + content gutter) so the slug text aligns
+ * exactly with the H2 NavItem labels above and the H4 tab labels below. */
 .ks-sidebar-context__slug {
   margin: 0;
   color: var(--kui-color-foreground-neutralEmphasis, #ffffff);
@@ -208,8 +211,12 @@ nav
   font-size: var(--kui-typography-text-regular-size, 0.9375rem);
   font-weight: 600;
   line-height: 1.4;
-  padding: var(--kui-size-space-small, 6px) var(--kui-size-space-medium, 12px);
-  padding-inline-start: var(--kui-size-space-large, 16px);
+  padding-block: var(--kui-size-space-small, 6px);
+  padding-inline-end: var(--kui-size-space-medium, 12px);
+  padding-inline-start: calc(
+    var(--kui-size-space-small, 6px) + var(--kui-size-space-regular, 8px) +
+      var(--kui-size-space-medium, 12px)
+  );
   word-break: break-word;
   overflow-wrap: anywhere;
 }
