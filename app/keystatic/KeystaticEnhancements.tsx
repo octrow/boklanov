@@ -435,6 +435,118 @@ function observeDirtyState(): MutationObserver | null {
   return obs
 }
 
+// ── Sidebar "you are here" decoration ──────────────────────────────────────
+
+const SIDEBAR_DECO_MARK = 'data-ks-sidebar-deco'
+
+function getCurrentLocation():
+  | { type: 'item'; slug: string }
+  | { type: 'singleton' }
+  | { type: 'other' } {
+  const path = window.location.pathname
+  const item = path.match(/\/keystatic\/collection\/[^/]+\/item\/([^/]+)/)
+  if (item) return { type: 'item', slug: decodeURIComponent(item[1]) }
+  if (/\/keystatic\/singleton\//.test(path)) return { type: 'singleton' }
+  return { type: 'other' }
+}
+
+/**
+ * Inject a "you are here" panel under the active sidebar nav item showing
+ * the current item slug (when editing a collection entry) and a clickable
+ * list of tabs that mirrors the form's tab strip. Tabs are read from the DOM
+ * (the strip built by initTabs) so this stays in sync without state sharing.
+ */
+function decorateSidebar(): void {
+  const loc = getCurrentLocation()
+
+  // Strip stale decorations whenever we leave an item/singleton page.
+  if (loc.type === 'other') {
+    document
+      .querySelectorAll(`[${SIDEBAR_DECO_MARK}]`)
+      .forEach((n) => n.remove())
+    return
+  }
+
+  const activeLink = document.querySelector<HTMLAnchorElement>(
+    'nav a[aria-current]:not([aria-current="false"])'
+  )
+  const activeLi = activeLink?.closest('li')
+  if (!activeLi) return
+
+  // Reuse existing decoration if it sits where we expect, otherwise rebuild.
+  let deco: HTMLElement | null = null
+  const next = activeLi.nextElementSibling
+  if (next instanceof HTMLElement && next.hasAttribute(SIDEBAR_DECO_MARK)) {
+    deco = next
+  } else {
+    // Remove orphan decorations elsewhere (active item changed).
+    document
+      .querySelectorAll(`[${SIDEBAR_DECO_MARK}]`)
+      .forEach((n) => n.remove())
+    deco = document.createElement('li')
+    deco.setAttribute(SIDEBAR_DECO_MARK, '1')
+    deco.className = 'ks-sidebar-context'
+    activeLi.insertAdjacentElement('afterend', deco)
+  }
+
+  const tabButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(
+      `[${TAB_STRIP_MARK}] [data-ks-tab]`
+    )
+  )
+
+  // Snapshot the desired contents, then only rewrite if they changed —
+  // avoids stomping focus/hover on each MutationObserver tick.
+  const slug = loc.type === 'item' ? loc.slug : ''
+  const tabsSig = tabButtons
+    .map(
+      (b) =>
+        `${b.dataset.ksTab}:${b.textContent?.trim() ?? ''}:${b.getAttribute('aria-selected')}`
+    )
+    .join('|')
+  const sig = `${loc.type}:${slug}::${tabsSig}`
+  if (deco.dataset.ksSig === sig) return
+  deco.dataset.ksSig = sig
+
+  deco.replaceChildren()
+
+  if (slug) {
+    const slugEl = document.createElement('div')
+    slugEl.className = 'ks-sidebar-context__slug'
+    slugEl.textContent = slug
+    deco.appendChild(slugEl)
+  }
+
+  if (tabButtons.length > 0) {
+    const list = document.createElement('ul')
+    list.className = 'ks-sidebar-context__tabs'
+    for (const btn of tabButtons) {
+      const id = btn.dataset.ksTab!
+      const label = btn.textContent?.trim() ?? id
+      const isActive = btn.getAttribute('aria-selected') === 'true'
+
+      const li = document.createElement('li')
+      const a = document.createElement('a')
+      a.href = `#tab=${encodeURIComponent(id)}`
+      a.className = 'ks-sidebar-context__tab'
+      if (isActive) a.setAttribute('aria-current', 'true')
+      a.textContent = label
+      a.addEventListener('click', (e) => {
+        e.preventDefault()
+        // Delegate to the tab strip's own click handler so the active state,
+        // panel visibility, and hash all stay in sync.
+        const live = document.querySelector<HTMLButtonElement>(
+          `[${TAB_STRIP_MARK}] [data-ks-tab="${CSS.escape(id)}"]`
+        )
+        live?.click()
+      })
+      li.appendChild(a)
+      list.appendChild(li)
+    }
+    deco.appendChild(list)
+  }
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export function KeystaticEnhancements() {
@@ -453,6 +565,7 @@ export function KeystaticEnhancements() {
           dirtyObs = observeDirtyState()
         }
       }
+      decorateSidebar()
     }
 
     function schedule() {
@@ -465,11 +578,15 @@ export function KeystaticEnhancements() {
 
     const obs = new MutationObserver(schedule)
     obs.observe(document.body, { childList: true, subtree: true })
+    // Hash changes don't mutate the DOM, but the active tab indicator must
+    // follow them — listen explicitly so the sidebar stays in sync.
+    window.addEventListener('hashchange', schedule)
     schedule()
 
     return () => {
       obs.disconnect()
       dirtyObs?.disconnect()
+      window.removeEventListener('hashchange', schedule)
       if (timer != null) clearTimeout(timer)
       // KeystaticEnhancements is mounted in app/keystatic/layout.tsx and lives
       // for the entire admin session — this cleanup only runs if showAdminUI
