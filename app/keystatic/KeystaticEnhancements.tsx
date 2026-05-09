@@ -259,14 +259,38 @@ function initTabs(form: HTMLElement): boolean {
   }
   if (groups.length < 2) return false
 
-  // Each top-level group lives inside a span-N grid cell — that cell IS the
-  // grid item we want to show/hide. Toggling its display preserves Keystatic's
-  // own grid placement (grid-column: span 12), so visible content fills the
-  // canvas exactly the way Keystatic intended. No wrapper, no width fight.
+  // Find the lowest ancestor that contains every top-level group — the grid
+  // that actually holds the group cells. Walking up from groups[0] (instead
+  // of `groups[0].parentElement?.parentElement`) survives DOM-shape
+  // differences between local mode and Keystatic Cloud, where the form
+  // sometimes adds an extra wrapper around the groups' grid AND renders
+  // top-level scalar fields (slug / year / durationMin / status) in a
+  // sibling container above the groups' grid rather than alongside them.
+  let lca: HTMLElement | null = groups[0].parentElement
+  while (lca && lca !== form && !groups.every((g) => lca!.contains(g))) {
+    lca = lca.parentElement
+  }
+  if (!lca) lca = form
+
+  // For each group the "cell" we toggle is its closest ancestor that is a
+  // direct child of the LCA. Hiding that cell preserves Keystatic's own grid
+  // placement (grid-column: span 12), so visible panels fill the canvas the
+  // way Keystatic intended.
+  const cellInContainer = (
+    g: HTMLElement,
+    container: HTMLElement
+  ): HTMLElement => {
+    let el: HTMLElement = g
+    while (el.parentElement && el.parentElement !== container) {
+      el = el.parentElement
+    }
+    return el
+  }
+
   const cellsByTab = new Map<string, { label: string; cells: HTMLElement[] }>()
   const groupCells = new Set<HTMLElement>()
   for (const group of groups) {
-    const cell = (group.parentElement ?? group) as HTMLElement
+    const cell = cellInContainer(group, lca)
     groupCells.add(cell)
     const label = getLabelText(group)
     const id = toTabId(label) || `tab-${cellsByTab.size}`
@@ -285,19 +309,15 @@ function initTabs(form: HTMLElement): boolean {
         // after the heading is hidden, leaving dead space. Zero them out.
         group.style.paddingTop = '0'
         group.style.marginTop = '0'
-        const wrapperCell = group.parentElement as HTMLElement | null
-        if (wrapperCell) {
-          wrapperCell.style.paddingTop = '0'
-          wrapperCell.style.marginTop = '0'
-        }
+        cell.style.paddingTop = '0'
+        cell.style.marginTop = '0'
       }
     }
   }
 
-  // Assign every other top-level grid child (the slug field) to the Settings
-  // tab so it lives alongside the other config fields. Falls back to the first
-  // tab if Settings isn't present for some reason.
-  const gridContainer = groups[0].parentElement?.parentElement ?? form
+  // Assign every non-group top-level cell to the Settings tab so the slug,
+  // year, durationMin, and status scalar fields live alongside the other
+  // config fields. Falls back to the first tab if Settings isn't present.
   const firstTabId = Array.from(cellsByTab.keys())[0]
   const slugTargetTab =
     cellsByTab.get('settings') ?? cellsByTab.get(firstTabId)!
@@ -305,16 +325,46 @@ function initTabs(form: HTMLElement): boolean {
   const isAssigned = (el: HTMLElement) =>
     Array.from(cellsByTab.values()).some(({ cells }) => cells.includes(el))
 
-  for (const child of Array.from(gridContainer.children)) {
+  // (1) Sweep direct children of the LCA — handles local mode where the slug
+  //     and top-level scalars sit alongside the group cells.
+  for (const child of Array.from(lca.children)) {
     if (!(child instanceof HTMLElement)) continue
     if (groupCells.has(child)) continue
     if (!isAssigned(child)) slugTargetTab.cells.unshift(child)
   }
 
-  // Fallback: the slug field can live in a parent container above
-  // gridContainer (Keystatic renders it outside the groups' CSS grid).
-  // Locate it via its Regenerate button — same walk as hideSlugRegenerate().
-  // Chain: regenBtn → regenCol → slugRow → outerCol → slugGridCell
+  // (2) Walk up from the LCA to the form root and sweep siblings at each
+  //     level. In Keystatic Cloud the top-level scalar fields render in a
+  //     SIBLING container above the groups' LCA, not as children of it.
+  //     Without this sweep they stay visible on every tab, and the strip
+  //     ends up below them. Skip siblings that have no form input so
+  //     unrelated chrome (toolbars, branch picker, breadcrumbs) isn't
+  //     pulled into a tab.
+  {
+    let cur: HTMLElement | null = lca
+    while (cur && cur !== form) {
+      const parent: HTMLElement | null = cur.parentElement
+      if (!parent) break
+      for (const sibling of Array.from(parent.children)) {
+        if (!(sibling instanceof HTMLElement)) continue
+        if (sibling === cur) continue
+        if (groupCells.has(sibling)) continue
+        if (isAssigned(sibling)) continue
+        if (
+          sibling.querySelector(
+            'input, textarea, select, [role="group"], [role="combobox"], label'
+          )
+        ) {
+          slugTargetTab.cells.unshift(sibling)
+        }
+      }
+      cur = parent
+    }
+  }
+
+  // (3) Slug fallback: walk up from the Regenerate button to the slug grid
+  //     cell. Useful when the slug field wraps in its own container that
+  //     the input-presence check above happened to skip.
   const regenBtn = form.querySelector<HTMLButtonElement>(
     'button[aria-label="regenerate"]'
   )
@@ -340,9 +390,13 @@ function initTabs(form: HTMLElement): boolean {
   }
 
   const strip = buildTabStrip(cellsByTab, activeId, onSelect)
-  // Strip lives inside the grid container so CSS `grid-column: 1 / -1` makes
-  // it span every column. Inserting at the top means it sits above all cells.
-  gridContainer.insertBefore(strip, gridContainer.firstChild)
+  // Anchor the strip at the form root so it always sits visually above every
+  // field container, regardless of whether top-level scalars live inside the
+  // LCA (local mode) or in a sibling container above it (Cloud mode).
+  // grid-column: 1 / -1 in the shim CSS still spans whatever grid the form
+  // root uses; in non-grid contexts the rule is harmless and the flex strip
+  // lays out as a normal block element.
+  form.insertBefore(strip, form.firstChild)
 
   applyTabVisibility(cellsByTab, activeId)
 
@@ -444,9 +498,15 @@ function getCurrentLocation():
   | { type: 'singleton' }
   | { type: 'other' } {
   const path = window.location.pathname
-  const item = path.match(/\/keystatic\/collection\/[^/]+\/item\/([^/]+)/)
+  // Keystatic Cloud injects /branch/<branch>/ between /keystatic/ and the
+  // collection/singleton segments. Local mode omits this segment. Match both
+  // shapes so the sidebar slug + tab list also render in production.
+  const item = path.match(
+    /\/keystatic\/(?:branch\/[^/]+\/)?collection\/[^/]+\/item\/([^/]+)/
+  )
   if (item) return { type: 'item', slug: decodeURIComponent(item[1]) }
-  if (/\/keystatic\/singleton\//.test(path)) return { type: 'singleton' }
+  if (/\/keystatic\/(?:branch\/[^/]+\/)?singleton\//.test(path))
+    return { type: 'singleton' }
   return { type: 'other' }
 }
 
