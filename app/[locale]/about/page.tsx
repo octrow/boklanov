@@ -162,12 +162,15 @@ function loadAbout(locale: Locale): {
     {}) as AboutRawFrontmatter
   const frontmatter = projectFrontmatter(raw, locale)
 
-  // Body files: bodyRu.mdx / bodyEn.mdx / bodyDe.mdx beside index.yaml.
+  // Body files live under bio/ to match the schema's `bio` group nesting.
+  // Keystatic computes mdx file paths by joining the field's prop path with
+  // '/' (see getPropPathPortion in @keystatic/core), so `bio.bodyRu` resolves
+  // to <singletonPath>/bio/bodyRu.mdx — not the singleton root.
   // DE falls back to EN then RU when its body file is missing or empty.
   const bodyForLocale: Record<Locale, string> = {
-    ru: 'bodyRu.mdx',
-    en: 'bodyEn.mdx',
-    de: 'bodyDe.mdx'
+    ru: 'bio/bodyRu.mdx',
+    en: 'bio/bodyEn.mdx',
+    de: 'bio/bodyDe.mdx'
   } as const
   const candidates: Locale[] =
     locale === 'de' ? ['de', 'en', 'ru'] : [locale, 'en', 'ru']

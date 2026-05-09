@@ -1074,9 +1074,12 @@ export default config({
       // the canvas at full width.
       entryLayout: 'content',
       schema: {
-        // Tab 1 — Bio: three locale-specific MDX bodies, written as
-        // bodyRu.mdx / bodyEn.mdx / bodyDe.mdx beside index.yaml. Same
-        // disk pattern productions use (Discussion #361).
+        // Tab 1 — Bio: three locale-specific MDX bodies. Keystatic stores
+        // each fields.mdx at a path built from the prop path
+        // (getPropPathPortion in @keystatic/core), so these write/read at
+        // content/about/bio/bodyRu.mdx, …/bodyEn.mdx, …/bodyDe.mdx — i.e.
+        // inside a bio/ subdirectory mirroring the group key. The page
+        // loader (app/[locale]/about/page.tsx) reads from the same paths.
         bio: fields.object(
           {
             bodyRu: fields.mdx({
