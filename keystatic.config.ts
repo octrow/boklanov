@@ -136,7 +136,8 @@ export default config({
     brand: { name: 'boklanov.com' },
     navigation: {
       Productions: ['productions'],
-      'About page': ['about']
+      'About page': ['about'],
+      Contact: ['contact']
     }
   },
   collections: {
@@ -1303,6 +1304,69 @@ export default config({
             )
           }
         )
+      }
+    }),
+
+    // -----------------------------------------------------------------------
+    // Contact — three editable channels surfaced on /contact. Labels and
+    // CTA copy stay in messages/*.json (UI chrome, not editorial content);
+    // only the destinations are managed here so Roman can swap a Telegram
+    // handle without a code deploy.
+    // -----------------------------------------------------------------------
+    contact: singleton({
+      label: 'Contact',
+      path: 'content/contact',
+      format: { data: 'yaml' },
+      schema: {
+        // Optional intro paragraph rendered above the Telegram / Instagram
+        // buttons. Per-locale and multiline so each language can have its
+        // own line break / phrasing. Empty values are skipped on render.
+        intro: fields.object(
+          {
+            ru: fields.text({
+              label: 'Intro — RU',
+              multiline: true
+            }),
+            en: fields.text({
+              label: 'Intro — EN',
+              multiline: true
+            }),
+            de: fields.text({
+              label: 'Intro — DE',
+              multiline: true
+            })
+          },
+          {
+            label: 'Intro',
+            description: desc(
+              'Необязательный вступительный абзац над кнопками связи. Если пусто — не отображается.',
+              'Optional intro paragraph above the contact buttons. Hidden when blank.'
+            ),
+            layout: [4, 4, 4]
+          }
+        ),
+        email: fields.text({
+          label: 'Email',
+          description: desc(
+            'Публичный email Романа. Используется в mailto-ссылке и подписи.',
+            "Roman's public email. Used in the mailto link and copy block."
+          ),
+          validation: { isRequired: true, length: { min: 3 } }
+        }),
+        telegramUrl: fields.url({
+          label: 'Telegram URL',
+          description: desc(
+            'Полный URL Telegram-аккаунта. Обязательно с https://. Пример: https://t.me/roman7593',
+            'Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593'
+          )
+        }),
+        instagramUrl: fields.url({
+          label: 'Instagram URL',
+          description: desc(
+            'Полный URL Instagram-аккаунта. Обязательно с https://. Пример: https://instagram.com/boklanovroman',
+            'Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman'
+          )
+        })
       }
     })
   }

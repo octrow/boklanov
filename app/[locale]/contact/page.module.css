@@ -11,11 +11,16 @@
 }
 
 @media (min-width: 768px) {
-  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+  .page {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
 }
 
 @media (min-width: 1024px) {
-  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+  .page {
+    padding: var(--space-9) var(--gutter-desktop) var(--space-10);
+  }
 }
 
 /* ── Page heading ────────────────────────────────────────────────────── */
@@ -30,6 +35,18 @@
   margin: 0 0 var(--space-8);
   padding-bottom: var(--space-6);
   border-bottom: 1px solid var(--rule);
+}
+
+/* ── Optional editor-managed intro paragraph ─────────────────────────── */
+
+.intro {
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-loose);
+  color: var(--ink);
+  max-width: 60ch;
+  margin: 0 0 var(--space-7);
+  white-space: pre-line; /* honor newlines from the multiline editor field */
 }
 
 /* ── Primary: Telegram + Instagram pair ──────────────────────────────── */
@@ -167,4 +184,3 @@
   outline: none;
   box-shadow: var(--shadow-focus);
 }
-
