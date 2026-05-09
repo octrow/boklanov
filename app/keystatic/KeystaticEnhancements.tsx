@@ -158,6 +158,50 @@ function buildTabStrip(
     strip.appendChild(btn)
   }
 
+  // Mobile nav bar: shown below 768 px instead of the button strip.
+  // A native <select> is avoided because iOS Safari overrides its colors with
+  // system UI regardless of CSS, making it look like a broken form field.
+  // This bar is fully CSS-controlled: prev/next arrows + current tab label +
+  // position counter so the editor always knows where they are.
+  const tabIds = Array.from(cellsByTab.keys())
+  const tabCount = tabIds.length
+
+  const mobileNav = document.createElement('div')
+  mobileNav.className = 'ks-tab-mobile-nav'
+  mobileNav.setAttribute('aria-hidden', 'true') // desktop screen readers use the real buttons
+
+  const prevBtn = document.createElement('button')
+  prevBtn.type = 'button'
+  prevBtn.className = 'ks-tab-arrow ks-tab-arrow--prev'
+  prevBtn.setAttribute('aria-label', 'Previous tab')
+  prevBtn.textContent = '‹'
+
+  const labelEl = document.createElement('span')
+  labelEl.className = 'ks-tab-mobile-label'
+  const currentLabel = cellsByTab.get(activeId)?.label ?? ''
+  const currentIndex = tabIds.indexOf(activeId)
+  labelEl.innerHTML = `<span class="ks-tab-mobile-name">${currentLabel}</span><span class="ks-tab-mobile-count">${currentIndex + 1} / ${tabCount}</span>`
+
+  const nextBtn = document.createElement('button')
+  nextBtn.type = 'button'
+  nextBtn.className = 'ks-tab-arrow ks-tab-arrow--next'
+  nextBtn.setAttribute('aria-label', 'Next tab')
+  nextBtn.textContent = '›'
+
+  prevBtn.addEventListener('click', () => {
+    const idx = tabIds.indexOf(getHashTab() ?? tabIds[0])
+    onSelect(tabIds[(idx - 1 + tabCount) % tabCount])
+  })
+  nextBtn.addEventListener('click', () => {
+    const idx = tabIds.indexOf(getHashTab() ?? tabIds[0])
+    onSelect(tabIds[(idx + 1) % tabCount])
+  })
+
+  mobileNav.appendChild(prevBtn)
+  mobileNav.appendChild(labelEl)
+  mobileNav.appendChild(nextBtn)
+  strip.appendChild(mobileNav)
+
   return strip
 }
 
@@ -180,6 +224,17 @@ function applyTabVisibility(
         btn.dataset.ksTab === activeId ? 'true' : 'false'
       )
     })
+  // Keep the mobile label in sync.
+  const mobileLabel = document.querySelector<HTMLElement>(
+    `[${TAB_STRIP_MARK}] .ks-tab-mobile-label`
+  )
+  if (mobileLabel) {
+    const tabIds = Array.from(cellsByTab.keys())
+    const label = cellsByTab.get(activeId)?.label ?? ''
+    const idx = tabIds.indexOf(activeId)
+    const total = tabIds.length
+    mobileLabel.innerHTML = `<span class="ks-tab-mobile-name">${label}</span><span class="ks-tab-mobile-count">${idx + 1} / ${total}</span>`
+  }
 }
 
 function initTabs(form: HTMLElement): boolean {
@@ -214,7 +269,18 @@ function initTabs(form: HTMLElement): boolean {
     const labelledBy = group.getAttribute('aria-labelledby')
     if (labelledBy) {
       const labelEl = document.getElementById(labelledBy)
-      if (labelEl) labelEl.style.display = 'none'
+      if (labelEl) {
+        labelEl.style.display = 'none'
+        // The group and its wrapper cell retain their top padding/margin
+        // after the heading is hidden, leaving dead space. Zero them out.
+        group.style.paddingTop = '0'
+        group.style.marginTop = '0'
+        const wrapperCell = group.parentElement as HTMLElement | null
+        if (wrapperCell) {
+          wrapperCell.style.paddingTop = '0'
+          wrapperCell.style.marginTop = '0'
+        }
+      }
     }
   }
 
@@ -225,10 +291,34 @@ function initTabs(form: HTMLElement): boolean {
   const firstTabId = Array.from(cellsByTab.keys())[0]
   const slugTargetTab =
     cellsByTab.get('settings') ?? cellsByTab.get(firstTabId)!
+
+  const isAssigned = (el: HTMLElement) =>
+    Array.from(cellsByTab.values()).some(({ cells }) => cells.includes(el))
+
   for (const child of Array.from(gridContainer.children)) {
     if (!(child instanceof HTMLElement)) continue
     if (groupCells.has(child)) continue
-    slugTargetTab.cells.unshift(child)
+    if (!isAssigned(child)) slugTargetTab.cells.unshift(child)
+  }
+
+  // Fallback: the slug field can live in a parent container above
+  // gridContainer (Keystatic renders it outside the groups' CSS grid).
+  // Locate it via its Regenerate button — same walk as hideSlugRegenerate().
+  // Chain: regenBtn → regenCol → slugRow → outerCol → slugGridCell
+  const regenBtn = form.querySelector<HTMLButtonElement>(
+    'button[aria-label="regenerate"]'
+  )
+  if (regenBtn) {
+    const slugCell = regenBtn.parentElement?.parentElement?.parentElement
+      ?.parentElement as HTMLElement | null
+    if (
+      slugCell &&
+      slugCell !== form &&
+      !groupCells.has(slugCell) &&
+      !isAssigned(slugCell)
+    ) {
+      slugTargetTab.cells.unshift(slugCell)
+    }
   }
 
   const hashTab = getHashTab()

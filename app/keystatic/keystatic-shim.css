@@ -70,7 +70,9 @@
    * when the parent is flex/block. */
   grid-column: 1 / -1;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
   gap: 4px;
   position: sticky;
   top: 0;
@@ -80,9 +82,82 @@
   border-bottom: 1px solid var(--kui-color-border-muted);
 }
 
+.ks-tabs::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
+
 /* Active tab cue: invert the ActionButton via Keystatic's own accent token.
  * Keeping this inside `[role="tablist"]` scopes it so we don't restyle
  * unrelated ActionButtons elsewhere on the page. */
+/* Mobile: replace button strip with a prev / label / next nav bar.
+ * Native <select> was rejected: iOS Safari overrides its colors with system
+ * UI regardless of CSS, and it reads as a form field rather than navigation.
+ * This bar is fully CSS-controlled and clearly communicates tab position. */
+.ks-tab-mobile-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  [role='tablist'] [data-ks-tab] {
+    display: none;
+  }
+
+  .ks-tab-mobile-nav {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .ks-tab-arrow {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--kui-color-background-surface, #171f33);
+    color: var(--kui-color-foreground-neutral, #c8d0e0);
+    border: 1px solid var(--kui-color-border-neutral, #3a4460);
+    border-radius: 4px;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .ks-tab-arrow:hover {
+    background: var(--kui-color-background-surface-secondary, #1e2740);
+    border-color: var(--kui-color-border-emphasis, #464554);
+  }
+
+  .ks-tab-mobile-label {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding-inline: 4px;
+  }
+
+  .ks-tab-mobile-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ks-tab-mobile-count {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--kui-color-foreground-neutralSecondary, #7a8aaa);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+[role='tablist'] [data-ks-tab] {
+  flex-shrink: 0; /* prevent buttons from squishing on narrow viewports */
+}
+
 [role='tablist'] [data-ks-tab][aria-selected='true'] {
   background: var(--kui-color-background-accent-emphasis);
   color: var(--kui-color-foreground-onEmphasis);
