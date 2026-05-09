@@ -1,0 +1,26 @@
+diff --git a/node_modules/@keystatic/core/dist/index-a8452c26.js b/node_modules/@keystatic/core/dist/index-a8452c26.js
+index 92ea45b..d501eb9 100644
+--- a/node_modules/@keystatic/core/dist/index-a8452c26.js
++++ b/node_modules/@keystatic/core/dist/index-a8452c26.js
+@@ -3906,10 +3906,7 @@ function ObjectFieldInputEntry(t0) {
+   let t2;
+   if ($[0] !== t1) {
+     t2 = css({
+-      gridColumn: t1,
+-      [belowTablet]: {
+-        gridColumn: `span ${FIELD_GRID_COLUMNS}`
+-      }
++      gridColumn: t1
+     });
+     $[0] = t1;
+     $[1] = t2;
+@@ -13532,7 +13529,8 @@ function ImageFieldInput(props) {
+         style: {
+           display: "block",
+           maxHeight: tokenSchema.size.alias.singleLineWidth,
+-          maxWidth: "100%"
++          maxWidth: "100%",
++          width: "100%"
+         }
+       })
+     });

@@ -1,12 +1,135 @@
+<!-- ────────────────────────────────────────────────────────────────────── -->
+<!-- PROJECT-LOCAL PATCHES — applied 2026-05-09                              -->
+<!-- This section is OURS. Everything below it is upstream Keystatic docs    -->
+<!-- mirrored for offline reference. Don't let a doc-sync wipe this header.  -->
+<!-- ────────────────────────────────────────────────────────────────────── -->
+
+# Project-local patches to `@keystatic/core@0.5.50`
+
+We carry a small `patches/@keystatic+core+0.5.50.patch` that's reapplied on every `npm install` via
+`postinstall: patch-package`. These pull in unmerged Thinkmill PRs that fix bugs we hit or improve UX we use heavily. \*
+\*Re-roll these on every `@keystatic/core` upgrade.\*\*
+
+## Applied — 2026-05-09
+
+### PR [#1463](https://github.com/Thinkmill/keystatic/pull/1463) — Object layout ignored when `entryLayout = 'content'`
+
+**Why:** `keystatic.config.ts` sets `entryLayout: 'content'` on the productions collection AND uses `layout: [8, 4]` on
+object fields like `media.poster`. Without this fix, the editor silently ignored the column splits — every grouped field
+stretched full-width on the entry canvas.
+
+**What it does:** Removes a stray `[belowTablet]: { gridColumn: span N }` responsive override inside
+`ObjectFieldInputEntry` that was clobbering the explicit per-field `span`.
+
+**Bundle target:** `node_modules/@keystatic/core/dist/index-a8452c26.js`, function `ObjectFieldInputEntry` (≈line 3895).
+4-line deletion inside one `css({...})` block.
+
+**Risk on upgrade:** low. Single hunk, distinctive identifier (`[belowTablet]`).
+
+### PR [#1503](https://github.com/Thinkmill/keystatic/pull/1503) — Image preview not always rendering correctly (#1502)
+
+**Why:** Editors saw flicker and mis-sized previews when the field input first mounted. Preview width was constrained by
+`maxWidth: '100%'` but had no `width`, so it sometimes collapsed to 0 before the image loaded.
+
+**What it does:** Adds `width: '100%'` to the `<img>` style block inside `ImageFieldInput`.
+
+**Bundle target:** `dist/index-a8452c26.js`, `ImageFieldInput`'s preview img (
+`maxHeight: tokenSchema.size.alias.singleLineWidth` block, ≈line 13530). 1-line addition.
+
+**Note on cloudImage:** The upstream PR also patches `cloudImage/ui.tsx`. We don't use `fields.cloudImage` (we hand off
+to R2 via `app/api/keystatic-asset/`), so that hunk is intentionally omitted. Add it back if `cloudImage` is ever
+adopted.
+
+**Risk on upgrade:** low. Anchored to the `singleLineWidth` token, which is unique to this preview.
+
+## Deferred — won't apply until schema changes
+
+### PR [#1525](https://github.com/Thinkmill/keystatic/pull/1525) — Image thumbnails in collection list views
+
+**Why deferred:** This PR's `Cell` hook is wired only into `fields.image()` and only fires when an image field appears
+as a **top-level** entry in `collection.columns`. The productions collection (currently our only collection) holds all
+image data as `fields.text` paths nested under `media.poster.src`, `media.productionsPhoto.src`, etc. — chosen
+deliberately so editors can paste a path string instead of being forced through the upload-only flow (see comment in
+`keystatic.config.ts:248-259`). Applying #1525 today gives **zero visible thumbs** in the list view, while costing us a
+multi-bundle patch (CollectionTable in `keystatic-core-ui.js` + image factory + a new `ImageCell` injection) that's
+brittle to upstream version bumps.
+
+**What would unlock it:**
+
+1. Add a top-level `listImage: fields.image({...})` (or `listImage: fields.cloudImage`) field to the productions schema.
+2. Set `columns: ['listImage', ...]` on the collection.
+3. Then either re-evaluate #1525 or — if it's still unmerged — port the patch.
+
+If we instead want thumbs from the existing `fields.text` paths-as-image, that's a strictly larger custom patch (custom
+`Cell` on `fields.text` plus path-resolution in `CollectionTable`) — defer until the editor pain is concrete.
+
+**Tracking:** [#1249](https://github.com/Thinkmill/keystatic/pull/1249) (draft, table column definitions) is the natural
+sibling. Watch both.
+
+## Skipped (not relevant)
+
+| PR                                                                                                                   | Why skipped                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [#1534](https://github.com/Thinkmill/keystatic/pull/1534), [#1527](https://github.com/Thinkmill/keystatic/pull/1527) | Astro 6 — we're Next.js                                                                                       |
+| [#1528](https://github.com/Thinkmill/keystatic/pull/1528)                                                            | Custom storage hooks — interesting for the R2 story, but unmerged and unreviewed; track upstream, don't patch |
+| [#1514](https://github.com/Thinkmill/keystatic/pull/1514)                                                            | Git LFS — we're R2-only                                                                                       |
+| [#1453](https://github.com/Thinkmill/keystatic/pull/1453)                                                            | Astro `getSetCookie`                                                                                          |
+| [#1432](https://github.com/Thinkmill/keystatic/pull/1432)                                                            | `pathPrefix` — monorepo-only need                                                                             |
+| [#1401](https://github.com/Thinkmill/keystatic/pull/1401)                                                            | datetime UTC — we don't use `fields.datetime`                                                                 |
+| [#1483](https://github.com/Thinkmill/keystatic/pull/1483)                                                            | GitHub User-Agent — cosmetic                                                                                  |
+| [#1526](https://github.com/Thinkmill/keystatic/pull/1526)                                                            | Workflow/WDK — draft, speculative                                                                             |
+
+## How to re-roll on `@keystatic/core` upgrade
+
+```bash
+# 1. Bump @keystatic/core
+npm i @keystatic/core@<new-version>
+
+# 2. Try reinstalling — postinstall will tell us if patches still apply
+rm -rf node_modules && npm i
+
+# 3a. If patches apply: rename the patch file to match the new version
+mv patches/@keystatic+core+0.5.50.patch patches/@keystatic+core+<new>.patch
+
+# 3b. If patches FAIL to apply: open node_modules/@keystatic/core/dist/index-*.js,
+#     find the same `ObjectFieldInputEntry` (`[belowTablet]` literal) and the
+#     `ImageFieldInput` preview img (`singleLineWidth` literal), reapply the
+#     edits manually (see hunks above), then:
+rm patches/@keystatic+core+0.5.50.patch
+npx patch-package @keystatic/core
+```
+
+Both hunks anchor on distinctive identifiers (`[belowTablet]`, `singleLineWidth`), so even if the bundle filename hash
+changes (e.g. `index-a8452c26.js` → `index-XXXXXXXX.js`), `grep` finds them in seconds.
+
+## How to verify after install
+
+```bash
+# both must hit
+grep -c '\[belowTablet\]: {' node_modules/@keystatic/core/dist/index-*.js   # → 0 (deleted)
+grep -c 'width: "100%"' node_modules/@keystatic/core/dist/index-*.js        # ≥ 1 (added)
+```
+
+In the UI:
+
+- **#1463 verify:** open any production entry, confirm `media.poster` renders as `[8, 4]` split (path field wider than
+  credit field) instead of stacked.
+- **#1503 verify:** open a production with a poster set, confirm the preview thumbnail renders at full container width
+  without flicker on field mount.
+
+---
+
 # Introduction
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/introduction.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/introduction.mdoc
+
 title: Introduction
 summary: >-
 Keystatic is designed to work when you're creating a new site, or to introduce
 content management into your existing codebase.
+
 ---
+
 Keystatic is designed to work when you're creating a new site, or to introduce content management into your existing
 codebase.
 
@@ -69,8 +192,10 @@ More framework guides coming soon!
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/quick-start.mdoc
 
 ---
+
 title: Quick start
 summary: The fastest way to get started with Keystatic.
+
 ---
 
 ## Keystatic CLI
@@ -102,11 +227,14 @@ for [Astro](/docs/installation-astro), [Next.js](/docs/installation-next-js) and
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/cloud.mdoc
 
 ---
+
 title: Keystatic Cloud
 summary: >-
 Keystatic Cloud takes care of GitHub authentication for you, and provides an
 opt-in image storage, optimisation and delivery service.
+
 ---
+
 [Keystatic Cloud](https://keystatic.cloud) simplifies authentication (GitHub) with your projects. No need to deal with
 environment variables and a custom GitHub app.
 
@@ -242,11 +370,13 @@ web-share\" allowfullscreen></iframe>" /%}
 
 # Adding Keystatic to a Next.js project
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/installation-next-js.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/installation-next-js.mdoc
+
 title: Adding Keystatic to a Next.js project
 summary: Integrating Keystatic with an existing Next.js 13 project.
+
 ---
+
 {% aside icon="☝️" %}
 This guide assumes you have an existing Next.js 14 project, and are using the `app` directory.
 {% /aside %}
@@ -275,11 +405,11 @@ storage type (`local`) and a single content collection (`posts`):
 
 ```typescript
 // keystatic.config.ts
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection } from '@keystatic/core'
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'local'
   },
   collections: {
     posts: collection({
@@ -289,11 +419,11 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.markdoc({ label: 'Content' }),
-      },
-    }),
-  },
-});
+        content: fields.markdoc({ label: 'Content' })
+      }
+    })
+  }
+})
 ```
 
 Keystatic is now configured to manage your content based on your schema.
@@ -306,26 +436,23 @@ First, create a `src/app/keystatic/keystatic.ts` file:
 
 ```ts
 // src/app/keystatic/keystatic.ts
-"use client";
+'use client'
 
-import { makePage } from "@keystatic/next/ui/app";
-import config from "../../../keystatic.config";
+import { makePage } from '@keystatic/next/ui/app'
+import config from '../../../keystatic.config'
 
-export default makePage(config);
+export default makePage(config)
 ```
 
 Next, create a layout file called `src/app/keystatic/layout.tsx`:
 
 ```tsx
 // src/app/keystatic/layout.tsx
-import KeystaticApp from "./keystatic";
+import KeystaticApp from './keystatic'
 
 export default function Layout() {
-  return (
-    <KeystaticApp />
-  );
+  return <KeystaticApp />
 }
-
 ```
 
 Next, create a page called `src/app/keystatic/[[...params]]/page.tsx`:
@@ -334,22 +461,20 @@ Next, create a page called `src/app/keystatic/[[...params]]/page.tsx`:
 // src/app/keystatic/[[...params]]/page.tsx
 
 export default function Page() {
-  return null;
+  return null
 }
-
 ```
 
 Finally, create an API route called `src/app/api/keystatic/[...params]/route.ts`
 
 ```tsx
 // src/app/api/keystatic/[...params]/route.ts
-import { makeRouteHandler } from '@keystatic/next/route-handler';
-import config from '../../../../../keystatic.config';
+import { makeRouteHandler } from '@keystatic/next/route-handler'
+import config from '../../../../../keystatic.config'
 
 export const { POST, GET } = makeRouteHandler({
-  config,
-});
-
+  config
+})
 ```
 
 You can now launch the Keystatic Admin UI. Start the Next dev server:
@@ -407,27 +532,26 @@ The following example displays a list of each post title, with a link to an indi
 
 ```tsx
 // src/app/posts/page.tsx
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../../keystatic.config';
+import { createReader } from '@keystatic/core/reader'
+import keystaticConfig from '../../../keystatic.config'
 
-import Link from 'next/link';
+import Link from 'next/link'
 
 // 1. Create a reader
-const reader = createReader(process.cwd(), keystaticConfig);
+const reader = createReader(process.cwd(), keystaticConfig)
 
 export default async function Page() {
-
   // 2. Read the "Posts" collection
-  const posts = await reader.collections.posts.all();
+  const posts = await reader.collections.posts.all()
   return (
     <ul>
-      {posts.map(post => (
+      {posts.map((post) => (
         <li key={post.slug}>
           <Link href={`/posts/${post.slug}`}>{post.entry.title}</Link>
         </li>
       ))}
     </ul>
-  );
+  )
 }
 ```
 
@@ -437,26 +561,26 @@ To display content from an individual post, you can use Markdoc's `transform` an
 
 ```tsx
 // src/app/posts/[slug]/page.tsx
-import { createReader } from "@keystatic/core/reader";
-import React from "react";
-import Markdoc from "@markdoc/markdoc";
+import { createReader } from '@keystatic/core/reader'
+import React from 'react'
+import Markdoc from '@markdoc/markdoc'
 
-import keystaticConfig from "../../../../keystatic.config";
+import keystaticConfig from '../../../../keystatic.config'
 
-const reader = createReader(process.cwd(), keystaticConfig);
+const reader = createReader(process.cwd(), keystaticConfig)
 
 export default async function Post({ params }: { params: { slug: string } }) {
-  const post = await reader.collections.posts.read(params.slug);
+  const post = await reader.collections.posts.read(params.slug)
   if (!post) {
-    return <div>No Post Found</div>;
+    return <div>No Post Found</div>
   }
-  const { node } = await post.content();
-  const errors = Markdoc.validate(node);
+  const { node } = await post.content()
+  const errors = Markdoc.validate(node)
   if (errors.length) {
-    console.error(errors);
-    throw new Error('Invalid content');
+    console.error(errors)
+    throw new Error('Invalid content')
   }
-  const renderable = Markdoc.transform(node);
+  const renderable = Markdoc.transform(node)
   return (
     <>
       <h1>{post.title}</h1>
@@ -464,7 +588,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
       <hr />
       <a href={`/posts`}>Back to Posts</a>
     </>
-  );
+  )
 }
 ```
 
@@ -481,16 +605,18 @@ deployed instance of the project.
 
 # How Keystatic organises your content
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/content-organisation.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/content-organisation.mdoc
+
 title: How Keystatic organises your content
 summary: Control and flexibility with where your content gets generated.
+
 ---
-Keystatic has two&nbsp;*concepts*&nbsp;or structures to organise data:&nbsp;`collections`&nbsp;and&nbsp;`singletons`.
+
+Keystatic has two&nbsp;_concepts_&nbsp;or structures to organise data:&nbsp;`collections`&nbsp;and&nbsp;`singletons`.
 
 Those are defined in the&nbsp;[Keystatic configuration](/docs/configuration).
 
-You get a lot of control and flexibility with *where* your content gets generated, both at the `collection` or
+You get a lot of control and flexibility with _where_ your content gets generated, both at the `collection` or
 `singleton` level, and at the `field` level for certain field types, like images.
 
 ### Path configuration
@@ -504,19 +630,18 @@ export default config({
   collections: {
     posts: collection({
       label: 'Posts',
-      path: 'content/posts/*/',
+      path: 'content/posts/*/'
       // ...
     })
   },
   singletons: {
     settings: singleton({
       label: 'Settings',
-      path: 'content/posts/',
+      path: 'content/posts/'
       // ...
     })
   }
 })
-
 ```
 
 The optional trailing slash `/` on that path has an impact on the content structure - read below for more details on
@@ -607,7 +732,6 @@ the singleton:
 singleton-name
 ├── index.yaml
 └── other.mdoc
-
 ```
 
 ### Singleton paths ending without a trailing slash
@@ -620,7 +744,6 @@ Additional document fields will be stored inside a directory with the same name:
 singleton-name.yaml
 singleton-name
 └── other.mdoc
-
 ```
 
 ---
@@ -663,10 +786,10 @@ export default config({
   collections: {
     posts: collection({
       label: 'Posts',
-      path: 'content/posts/*/',
+      path: 'content/posts/*/'
       // ...
     })
-  },
+  }
 })
 ```
 
@@ -684,10 +807,11 @@ allowfullscreen></iframe>" /%}
 
 # Path wildcard
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/path-wildcard.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/path-wildcard.mdoc
+
 title: Path wildcard
 summary: Granular control over where Keystatic stores content.
+
 ---
 
 The `path` wildcard for Keystatic [collections](/docs/collections) gives you flexibility and control over your where
@@ -757,10 +881,13 @@ like: `en/post-1` and `fr/post-1`.
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/local-mode.mdoc
 
 ---
+
 title: Local mode
 summary: >-
 Store your content on your local file system.
+
 ---
+
 Most projects start their lifecycle with Keystatic in `local` storage mode:
 
 ```ts
@@ -784,13 +911,15 @@ Keystatic also has a [github mode](/docs/github-mode) which unleashes enhanced c
 
 # GitHub mode
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/github-mode.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/github-mode.mdoc
+
 title: GitHub mode
 summary: >-
 Walk-through guide of manually connecting your existing Keystatic project to
 GitHub.
+
 ---
+
 Keystatic's `github` mode unleashes enhanced collaboration capabilities.
 
 To use it, you'll need your project on an existing GitHub repository. Collaborators will need `write` access to this
@@ -843,7 +972,7 @@ fill in those fields.
 
 Otherwise, leave them blank and click on "Create GitHub App".
 
-### Create  a custom GitHub App
+### Create a custom GitHub App
 
 The next step will walk you through creating a GitHub App. Choose a name for your app, and proceed.
 
@@ -960,14 +1089,16 @@ web-share\" allowfullscreen></iframe>" /%}
 
 # Reader API
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/reader-api.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/reader-api.mdoc
+
 title: Reader API
 summary: >-
 The Reader API is a Node.js API that lets you read Keystatic content from a
 storage of your own choice.
+
 ---
-The Reader API is a Node.js API that lets you *read* Keystatic content from a storage of your own choice.
+
+The Reader API is a Node.js API that lets you _read_ Keystatic content from a storage of your own choice.
 The storage can be any local directory / GitHub repository, and does not need to be the same as the one defined in the
 Keystatic config.
 
@@ -982,8 +1113,8 @@ The reader API code is meant to run on the server, and not in the browser. Be su
 To read from local storage, import the `createReader` function, as well as your Keystatic config file:
 
 ```javascript
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from 'relative/path/to/your/keystatic.config';
+import { createReader } from '@keystatic/core/reader'
+import keystaticConfig from 'relative/path/to/your/keystatic.config'
 ```
 
 You can then create a new `reader` by calling `createReader` and passing it two arguments:
@@ -992,7 +1123,7 @@ You can then create a new `reader` by calling `createReader` and passing it two 
 1. The Keystatic config
 
 ```javascript
-const reader = createReader(process.cwd(), keystaticConfig);
+const reader = createReader(process.cwd(), keystaticConfig)
 ```
 
 ### GitHub Repository
@@ -1000,8 +1131,8 @@ const reader = createReader(process.cwd(), keystaticConfig);
 To read from GitHub, import the `createGitHubReader` function, as well as your Keystatic config file:
 
 ```javascript
-import { createGitHubReader } from '@keystatic/core/reader/github';
-import keystaticConfig from 'relative/path/to/your/keystatic.config';
+import { createGitHubReader } from '@keystatic/core/reader/github'
+import keystaticConfig from 'relative/path/to/your/keystatic.config'
 ```
 
 You can then create a new `reader` by calling `createGitHubReader` and passing it the following arguments:
@@ -1018,8 +1149,8 @@ You can then create a new `reader` by calling `createGitHubReader` and passing i
 ```javascript
 const reader = createGitHubReader(keystaticConfig, {
   repo: 'Thinkmill/keystatic-data',
-  token: process.env.GITHUB_PAT,
-});
+  token: process.env.GITHUB_PAT
+})
 ```
 
 ---
@@ -1104,7 +1235,7 @@ that you'll need to call to get the data:
 
 ```ts
 // The `posts` collection has a `document` field named `content`
-const post = await reader.collections.posts.read(slug);
+const post = await reader.collections.posts.read(slug)
 
 // Get the content data
 const content = await post.content()
@@ -1114,7 +1245,7 @@ If you'd rather get the `document` field data immediately, you can pass `resolve
 reading the entry:
 
 ```ts
-await reader.collections.posts.read(slug, { resolveLinkedFiles: true });
+await reader.collections.posts.read(slug, { resolveLinkedFiles: true })
 ```
 
 ---
@@ -1125,10 +1256,10 @@ The Reader API exports an `Entry` type, which is useful when you need to define 
 receive:
 
 ```ts
-import { Entry } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import { Entry } from '@keystatic/core/reader'
+import keystaticConfig from '../../keystatic.config'
 
-type MovieProps = Entry<typeof keystaticConfig['collections']['movies']>
+type MovieProps = Entry<(typeof keystaticConfig)['collections']['movies']>
 
 export function Movie(props: MovieProps) {
   // ...
@@ -1139,10 +1270,12 @@ If your data was read using the `resolvedLinkedFiles` option, you can use the `E
 instead:
 
 ```ts
-import { EntryWithResolvedLinkedFiles } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import { EntryWithResolvedLinkedFiles } from '@keystatic/core/reader'
+import keystaticConfig from '../../keystatic.config'
 
-type MovieProps = EntryWithResolvedLinkedFiles<typeof keystaticConfig['collections']['movies']>
+type MovieProps = EntryWithResolvedLinkedFiles<
+  (typeof keystaticConfig)['collections']['movies']
+>
 ```
 
 ---
@@ -1178,13 +1311,15 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.reader.Reader](https://do
 
 # Format options
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/format-options.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/format-options.mdoc
+
 title: Format options
 summary: >-
 The `format` option lets you configure Keystatic's output files. Choose
 between JSON, YAML or Markdoc.
+
 ---
+
 Keystatic is capable to store your data in multiple formats: YAML, JSON, Markdoc and MDX.
 
 By default, entries will be stored in a YAML file.
@@ -1339,11 +1474,14 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.Format](https://docsmill.
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/entry-layout.mdoc
 
 ---
+
 title: Entry layout
 summary: >-
 The entryLayout option on collections and singletons lets you decide how much
 prominence you give to your long-form WYSIWYG field.
+
 ---
+
 Collections and singletons both have an `entryLayout` option, which can be set to either `"form"` (default) or
 `"content"`.
 
@@ -1365,7 +1503,7 @@ blog: collection({
   path: 'src/content/blog/**',
   entryLayout: 'content',
   format: {
-    contentField: 'body',
+    contentField: 'body'
   },
   schema: {}
 })
@@ -1408,11 +1546,14 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.EntryLayout](https://docs
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/user-interface.mdoc
 
 ---
+
 title: User interface
 summary: >-
 Configure parts of the Admin UI to improve the experience of your content
 editors.
+
 ---
+
 Configure parts of the Admin UI to improve the experience of your content editors. Making the interface familiar to your
 editors will help them get started quickly and feel at home.
 
@@ -1564,11 +1705,12 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.UserInterface](https://do
 
 # Content components
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/content-components.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/content-components.mdoc
+
 title: Content components
 summary: >-
 Content components are a new-generation of rich-text building blocks that can be used with the Markdoc and MDX fields.
+
 ---
 
 Content components are a new-generation of rich-text building blocks that can be used with
@@ -1613,7 +1755,7 @@ Testimonial: wrapper({
   label: 'Testimonial',
   schema: {
     author: fields.text({ label: 'Author' }),
-    role: fields.text({ label: 'Role' }),
+    role: fields.text({ label: 'Role' })
   }
 })
 ```
@@ -1624,7 +1766,7 @@ this (using the MDX field):
 ```mdx
 <Testimonial author="Jina Dawkins" role="Head of Product Design">
 
-  I've been very impressed with the work done by the team in such a short period of time. I'm really proud of everyone's effort and dedication!
+I've been very impressed with the work done by the team in such a short period of time. I'm really proud of everyone's effort and dedication!
 
 </Testimonial>
 ```
@@ -1646,10 +1788,10 @@ Container: wrapper({
         { label: 'narrower', value: 'narrower' },
         { label: 'bleed', value: 'bleed' },
         { label: 'boxed', value: 'boxed' },
-        { label: 'narrow-boxed', value: 'narrow-boxed' },
+        { label: 'narrow-boxed', value: 'narrow-boxed' }
       ],
       defaultValue: 'normal'
-    }),
+    })
   }
 })
 ```
@@ -1683,7 +1825,7 @@ import { block } from '@keystatic/core/content-components'
 Playlist: block({
   label: 'Playlist',
   schema: {
-    id: fields.text({ label: 'Playlist ID' }),
+    id: fields.text({ label: 'Playlist ID' })
   }
 })
 ```
@@ -1691,7 +1833,7 @@ Playlist: block({
 The MDX output for an `PlayList` will look like this:
 
 ```mdx
-<PlayList id="5f8a3b3e3f3e4d001f3e4d00" />
+<PlayList id='5f8a3b3e3f3e4d001f3e4d00' />
 ```
 
 ---
@@ -1714,10 +1856,10 @@ StatusBadge: inline({
         { label: 'To do', value: 'todo' },
         { label: 'In Progress', value: 'in-progress' },
         { label: 'Ready for review', value: 'ready-for-review' },
-        { label: 'Done', value: 'done' },
+        { label: 'Done', value: 'done' }
       ],
       defaultValue: 'todo'
-    }),
+    })
   }
 })
 ```
@@ -1752,10 +1894,10 @@ Highlight: mark({
       options: [
         { label: 'Fluro', value: 'fluro' },
         { label: 'Minimal', value: 'minimal' },
-        { label: 'Brutalist', value: 'brutalist' },
+        { label: 'Brutalist', value: 'brutalist' }
       ],
       defaultValue: 'fluro'
-    }),
+    })
   }
 })
 ```
@@ -1845,19 +1987,21 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/content-components](https:
 
 # Real-time previews with Next.js' draft mode
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/recipes/real-time-previews.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/recipes/real-time-previews.mdoc
+
 title: Real-time previews with Next.js' draft mode
 summary: >-
 This recipe shows you how to create immediate previews of your Keystatic
 content with Next.js' draft mode feature.
+
 ---
+
 One of the downsides of building static sites with content files is the delay occuring between saving changes and seeing
 them on the website.
 
 You typically need to open a PR and wait for deploy previews.
 
-This recipe shows you how to create *immediate* previews of your Keystatic content with
+This recipe shows you how to create _immediate_ previews of your Keystatic content with
 Next.js' [draft mode](https://nextjs.org/docs/app/building-your-application/configuring/draft-mode) feature.
 
 {% aside icon="🎬" %}
@@ -1881,42 +2025,42 @@ This recipe assumes you've got an existing Next.js and Keystatic site, that:
 Create an `app/preview/start/route.tsx` file that will enable draft mode when accessed:
 
 ```tsx
-import { redirect } from 'next/navigation';
-import { draftMode, cookies } from 'next/headers';
+import { redirect } from 'next/navigation'
+import { draftMode, cookies } from 'next/headers'
 
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const params = url.searchParams;
-  const branch = params.get('branch');
-  const to = params.get('to');
+  const url = new URL(req.url)
+  const params = url.searchParams
+  const branch = params.get('branch')
+  const to = params.get('to')
   if (!branch || !to) {
-    return new Response('Missing branch or to params', { status: 400 });
+    return new Response('Missing branch or to params', { status: 400 })
   }
-  draftMode().enable();
-  cookies().set('ks-branch', branch);
-  const toUrl = new URL(to, url.origin);
-  toUrl.protocol = url.protocol;
-  toUrl.host = url.host;
-  redirect(toUrl.toString());
+  draftMode().enable()
+  cookies().set('ks-branch', branch)
+  const toUrl = new URL(to, url.origin)
+  toUrl.protocol = url.protocol
+  toUrl.host = url.host
+  redirect(toUrl.toString())
 }
 ```
 
 Next, create an `app/preview/end/route.tsx` file used to disable draft mode:
 
 ```tsx
-import { cookies, draftMode } from 'next/headers';
+import { cookies, draftMode } from 'next/headers'
 
 export function POST(req: Request) {
   if (req.headers.get('origin') !== new URL(req.url).origin) {
-    return new Response('Invalid origin', { status: 400 });
+    return new Response('Invalid origin', { status: 400 })
   }
-  const referrer = req.headers.get('Referer');
+  const referrer = req.headers.get('Referer')
   if (!referrer) {
-    return new Response('Missing Referer', { status: 400 });
+    return new Response('Missing Referer', { status: 400 })
   }
-  draftMode().disable();
-  cookies().delete('ks-branch');
-  return Response.redirect(referrer, 303);
+  draftMode().disable()
+  cookies().delete('ks-branch')
+  return Response.redirect(referrer, 303)
 }
 ```
 
@@ -1980,7 +2124,7 @@ This prefixes the front-end route for a post entry with the `/preview/start` rou
 The `reader` you're currently using from the Keystatic Reader API needs to be updated. If draft mode is turned on, it
 should read from GitHub directly, using Keystatic's GitHub reader.
 
-Since there is a little bit of setup involved, it makes sense to create reusable *draft-mode-aware* reader.
+Since there is a little bit of setup involved, it makes sense to create reusable _draft-mode-aware_ reader.
 
 {% aside icon="☝️" %}
 Make sure you replace the `repo: 'REPO_ORG/REPO_NAME'` line in the code snippet below with your own repo org and name!
@@ -1996,23 +2140,22 @@ GitHub's rate limit.
 
 ```ts
 // src/utils/reader.ts
-import { createReader } from '@keystatic/core/reader';
-import { createGitHubReader } from '@keystatic/core/reader/github';
-import keystaticConfig from '../../keystatic.config';
+import { createReader } from '@keystatic/core/reader'
+import { createGitHubReader } from '@keystatic/core/reader/github'
+import keystaticConfig from '../../keystatic.config'
 
-import { cache } from 'react';
-import { cookies, draftMode } from 'next/headers';
+import { cache } from 'react'
+import { cookies, draftMode } from 'next/headers'
 
 export const reader = cache(() => {
-  let isDraftModeEnabled = false;
+  let isDraftModeEnabled = false
   // draftMode throws in e.g. generateStaticParams
   try {
-    isDraftModeEnabled = draftMode().isEnabled;
-  } catch {
-  }
+    isDraftModeEnabled = draftMode().isEnabled
+  } catch {}
 
   if (isDraftModeEnabled) {
-    const branch = cookies().get('ks-branch')?.value;
+    const branch = cookies().get('ks-branch')?.value
 
     if (branch) {
       return createGitHubReader(keystaticConfig, {
@@ -2020,13 +2163,13 @@ export const reader = cache(() => {
         repo: 'REPO_ORG/REPO_NAME',
         ref: branch,
         // Assuming an existing GitHub app
-        token: cookies().get('keystatic-gh-access-token')?.value,
-      });
+        token: cookies().get('keystatic-gh-access-token')?.value
+      })
     }
   }
   // If draft mode is off, use the regular reader
-  return createReader(process.cwd(), keystaticConfig);
-});
+  return createReader(process.cwd(), keystaticConfig)
+})
 ```
 
 ## Updating existing uses of the reader
@@ -2071,11 +2214,14 @@ web-share\" allowfullscreen></iframe>" /%}
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/recipes/nextjs-disable-admin-ui-in-production.mdoc
 
 ---
+
 title: 'Next.js: Disable Admin UI Routes in Production'
 summary: >-
 This recipe shows you how to prevent access to `/keystatic`
 routes in production when using the Next.js framework.
+
 ---
+
 {% aside icon="🙏" %}
 This is a community contribution from [Funabab](https://github.com/funabab).
 {% /aside %}
@@ -2182,11 +2328,14 @@ import { makeRouteHandler } from '@keystatic/next/route-handler';
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/configuration.mdoc
 
 ---
+
 title: Configuration
 summary: >-
 The Keystatic's config file, where content structures and storage paths are
 defined.
+
 ---
+
 Every Keystatic project expects an exported `config`. The `config()` function can be imported from the `@keystatic/core`
 package:
 
@@ -2208,11 +2357,11 @@ Each post has a `title` as well as a long-form, WYSIWYG `content` field.
 
 ```typescript
 // keystatic.config.ts
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection } from '@keystatic/core'
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'local'
   },
   collections: {
     posts: collection({
@@ -2222,11 +2371,11 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.markdoc({ label: 'Content' }),
-      },
-    }),
-  },
-});
+        content: fields.markdoc({ label: 'Content' })
+      }
+    })
+  }
+})
 ```
 
 ---
@@ -2304,19 +2453,22 @@ Learn more on the [User Interface](/docs/user-interface) page.
 
 ## Type signature
 
-Find the latest version of the `config` type signature at:&nbsp;[*
-*https://docsmill.dev/npm/@keystatic/core@latest#/.config**](https://docsmill.dev/npm/@keystatic/core@latest#/.config)
+Find the latest version of the `config` type signature at:&nbsp;[\*
+\*https://docsmill.dev/npm/@keystatic/core@latest#/.config\*\*](https://docsmill.dev/npm/@keystatic/core@latest#/.config)
 
 # Collections
 
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/collections.mdoc
 
 ---
+
 title: Collections
 summary: >-
 Think of a collection as anything you'd want multiple instances of. A series
 of blog posts, cooking recipes, or testimonials from happy customers.
+
 ---
+
 Think of a `collection` as anything you'd want multiple instances of. A series of blog posts, cooking recipes, or
 testimonials from happy customers.
 
@@ -2329,7 +2481,7 @@ Here's how you'd define a `testimonial` collection, where each entry has an `aut
 
 ```jsx
 // keystatic.config.ts
-import { config, collection } from '@keystatic/core';
+import { config, collection } from '@keystatic/core'
 
 export default config({
   // ...
@@ -2341,9 +2493,9 @@ export default config({
         author: fields.slug({ name: { label: 'Author' } }),
         quote: fields.text({ label: 'Quote', multiline: true })
       }
-    }),
-  },
-});
+    })
+  }
+})
 ```
 
 ---
@@ -2380,7 +2532,7 @@ Learn more on the [Format Options](/docs/format-options) page.
 
 ### Path
 
-`path` — allows you to you specify *where* to store entries for any given collection:
+`path` — allows you to you specify _where_ to store entries for any given collection:
 
 ```tsx
 path: 'custom/content/path/testimonials/*'
@@ -2437,12 +2589,15 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.Collection](https://docsm
 https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/singletons.mdoc
 
 ---
+
 title: Singletons
 summary: >-
 When you want a “one-of-a-kind” data entry, such as a “Settings” page or maybe
 a very specific set of fields for the “Homepage” of a website, you will want to
 use a singleton.
+
 ---
+
 When you want a “one-of-a-kind” data entry, such as a “Settings” page or maybe a very specific set of fields for the
 “Homepage” of a website, you will want to use a `singleton`.
 
@@ -2452,7 +2607,7 @@ Here's how you'd define a `settings` singleton:
 
 ```jsx
 // keystatic.config.ts
-import { config, singleton } from '@keystatic/core';
+import { config, singleton } from '@keystatic/core'
 
 export default config({
   // ...
@@ -2460,9 +2615,9 @@ export default config({
     settings: singleton({
       label: 'Settings',
       schema: {}
-    }),
-  },
-});
+    })
+  }
+})
 ```
 
 ---
@@ -2487,7 +2642,7 @@ Learn more on the [Format Options](/docs/format-options) page.
 
 ### Path
 
-`path` — allows you to you specify *where* to store the singleton data:
+`path` — allows you to you specify _where_ to store the singleton data:
 
 ```tsx
 path: 'custom/content/path/settings'
@@ -2512,14 +2667,16 @@ at: [https://docsmill.dev/npm/@keystatic/core@latest#/.Singleton](https://docsmi
 
 # Fields API
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/array.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/array.mdoc
+
 title: Array field
 summary: >-
 The array field is used to create "Add one more" scenarios where you need one
 or multiple instances of a specific field schema.
+
 ---
-The `array` field is used to create "Add one more" scenarios where you need *one or multiple* instances of a specific
+
+The `array` field is used to create "Add one more" scenarios where you need _one or multiple_ instances of a specific
 field schema.
 
 You can only pass a single field to the `array` field — but this field can be an [object field](/docs/fields/object) to
@@ -2539,7 +2696,7 @@ tags: fields.array(
   // Labelling options
   {
     label: 'Tag',
-    itemLabel: props => props.value
+    itemLabel: (props) => props.value
   }
 )
 ```
@@ -2619,13 +2776,15 @@ web-share\" allowfullscreen></iframe>" /%}
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.array](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.array)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/blocks.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/blocks.mdoc
+
 title: Blocks field
 summary: >-
 The blocks field is used to create "Add one more" scenarios where you need a
 separate field schema for each instance.
+
 ---
+
 The `blocks` field is similar to the [array field](/docs/fields/array) in that you can create "Add one more" scenarios,
 but with the difference that it lets you define a separate field schema for each instance.
 
@@ -2673,11 +2832,13 @@ web-share\" allowfullscreen></iframe>" /%}
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.blocks](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.blocks)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/checkbox.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/checkbox.mdoc
+
 title: Checkbox field
 summary: The checkbox field is used to store a boolean.
+
 ---
+
 The `checkbox` field is used to store a `boolean`. In the Admin UI, it renders a single checkbox.
 
 ## Example usage
@@ -2694,13 +2855,15 @@ draft: fields.checkbox({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.checkbox](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.checkbox)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/child.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/child.mdoc
+
 title: Child field
 summary: >-
 The child field allows you to embed an editable region inside of a component
 block preview.
+
 ---
+
 The `child` field allows you to embed an editable region inside of a component block preview.
 
 See the [document field](/docs/fields/document) for more information about component blocks.
@@ -2773,11 +2936,13 @@ label: 'Section Container',
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.child](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.child)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/cloud-image.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/cloud-image.mdoc
+
 title: Cloud Image field
 summary: The cloud image field is used to work with Keystatic Cloud Images.
+
 ---
+
 The `cloudImage` field is used to work in conjunction with [Keystatic Cloud](/docs/cloud)'
 s [Image Library](/docs/cloud#cloud-images).
 
@@ -2815,13 +2980,15 @@ avatar: fields.cloudImage({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.cloudImage](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.cloudImage)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/conditional.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/conditional.mdoc
+
 title: Conditional field
 summary: >-
 The conditional field is used when you need to display entirely different
 fields based on a condition.
+
 ---
+
 The `conditional` field is used when you need to display entirely different fields based on a condition.
 
 In the first argument, define the condition by using either a `checkbox` or a `select` field.
@@ -2846,10 +3013,10 @@ seo: fields.conditional(
   {
     true: fields.object({
       title: fields.text({ label: 'Title' }),
-      description: fields.text({ label: 'Description' }),
+      description: fields.text({ label: 'Description' })
     }),
     // Empty fields are useful to show... no fields!
-    false: fields.empty(),
+    false: fields.empty()
   }
 )
 ```
@@ -2913,11 +3080,13 @@ featuredMedia: fields.conditional(
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.conditional](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.conditional)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/date.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/date.mdoc
+
 title: Date field
 summary: The date field stores an ISO 8601 formatted date string.
+
 ---
+
 {% field-demo field="date" /%}
 
 The date field stores an [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) formatted date string i.e. `YYYY-MM-DD`.
@@ -2936,11 +3105,13 @@ date: fields.date({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.date](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.date)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/datetime.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/datetime.mdoc
+
 title: Datetime field
 summary: The datetime field stores a Datetime string.
+
 ---
+
 {% field-demo field="datetime" /%}
 
 The `datetime` field stores a Datetime string, collected from an `<input type="datetime-local" />` form field.
@@ -2959,11 +3130,13 @@ datetime: fields.datetime({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.datetime](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.datetime)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/document.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/document.mdoc
+
 title: Document field
 summary: The document field is a highly customisable rich text editor.
+
 ---
+
 {% aside icon="⚠️" %}
 [`fields.markdoc`](/docs/fields/markdoc) has superseded this field. [`fields.mdx`](/docs/fields/mdx) is also available
 if you prefer MDX.
@@ -3192,13 +3365,15 @@ content: fields.document({
 For the full reference, you can find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.document](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.document)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty-content.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty-content.mdoc
+
 title: Empty Content field
 summary: >-
 The empty content field is used to force a formats for entries without a
 standard content field.
+
 ---
+
 The `emptyContent` is a mechanism to trigger a collection or singleton to output `.mdoc`/`.mdx`/`.md` files even if
 there is no real `markdoc` or `mdx` field in the schema.
 
@@ -3219,11 +3394,13 @@ format: {
 Instead of generating `.yaml` or `.json` files, the collection or singleton will output `.mdoc`/`.mdx`/`.md` files with
 frontmatter data and an empty content body.
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty-document.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty-document.mdoc
+
 title: Empty Document field
 summary: The empty document field is used to force Markdoc formats for entries without a real document field.
+
 ---
+
 The `emptyDocument` is a mechanism to trigger a collection or singleton to output `.mdoc` files even if there is no real
 `document` field in the schema.
 
@@ -3245,13 +3422,15 @@ format: {
 Instead of generating `.yaml` or `.json` files, the collection or singleton will output `.mdoc` files with frontmatter
 data and an empty content body.
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/empty.mdoc
+
 title: Empty field
 summary: The empty field is used to not show any fields at all.
+
 ---
+
 The `empty` field is useful in conjunction with the [conditional field](/docs/fields/conditional), in scenarios where
-you want one *condition* to not show *any* fields at all.
+you want one _condition_ to not show _any_ fields at all.
 
 ## Usage example
 
@@ -3275,11 +3454,13 @@ seo: fields.conditional(
 ),
 ```
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/file.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/file.mdoc
+
 title: File field
 summary: The file field is used to store a file.
+
 ---
+
 {% field-demo field="file" /%}
 
 The `file` field is used to store a file. In the Admin UI it renders a file picker component.
@@ -3312,12 +3493,14 @@ resume: fields.file({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.file](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.file)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/ignored.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/ignored.mdoc
+
 title: Ignored field
 summary: >-
 The ignored field is used to preserve a field written in content without showing or editing it in the UI.
+
 ---
+
 The `ignored` field is used to preserve a field written in content without showing or editing it in the UI.
 
 ## Usage example
@@ -3326,10 +3509,11 @@ The `ignored` field is used to preserve a field written in content without showi
 someField: fields.ignored()
 ```
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/image.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/image.mdoc
+
 title: Image field
 summary: The image field is used to store an image.
+
 ---
 
 The `image` field is used to store an image. In the Admin UI it renders an image picker component:
@@ -3454,11 +3638,13 @@ web-share\" allowfullscreen></iframe>" /%}
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.image](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.image)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/integer.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/integer.mdoc
+
 title: Integer field
 summary: The integer field is used to store an integer.
+
 ---
+
 {% field-demo field="integer" /%}
 
 The `integer` field is used to store a number.
@@ -3483,10 +3669,11 @@ age: fields.integer({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.integer](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.integer)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/markdoc.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/markdoc.mdoc
+
 title: Markdoc field
 summary: WYSIWYG editor for Markdoc
+
 ---
 
 The `markdoc` is an evolution of the `document` field using a new editor. It looks and feels similar to the `document`
@@ -3553,7 +3740,7 @@ By default, `fields.markdoc` will output content in a seperate file to the main 
 
 ```tsx
 someContent: fields.markdoc.inline({
-  label: 'Some content',
+  label: 'Some content'
 })
 ```
 
@@ -3594,10 +3781,11 @@ See the type signature for `MarkdocEditorOptions.image` for the full set of opti
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core#/.fields.markdoc](https://docsmill.dev/npm/@keystatic/core#/.fields.markdoc)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/mdx.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/mdx.mdoc
+
 title: MDX field
 summary: WYSIWYG editor for MDX
+
 ---
 
 The `mdx` field reads and writes content in MDX.
@@ -3682,13 +3870,10 @@ rendering the MDX content:
 ```tsx
 import { Card } from '../components/Card'
 
-<
-MdxRenderer
-components = {
-{
-  Card
-}
-}
+;<MdxRenderer
+  components={{
+    Card
+  }}
 />
 ```
 
@@ -3720,7 +3905,7 @@ By default, `fields.mdx` will output content in a seperate file to the main data
 
 ```tsx
 someContent: fields.mdx.inline({
-  label: 'Some content',
+  label: 'Some content'
 })
 ```
 
@@ -3761,11 +3946,13 @@ See the type signature for `MDXEditorOptions.image` for the full set of options:
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core#/.fields.mdx](https://docsmill.dev/npm/@keystatic/core#/.fields.mdx)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/multiselect.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/multiselect.mdoc
+
 title: Multiselect field
 summary: The multiselect field allows you to select zero, one or multiple options.
+
 ---
+
 {% field-demo field="multiselect" /%}
 
 The `multiselect` field is similar to the [select field](/docs/fields/select) but allows you to select zero, one or
@@ -3795,11 +3982,13 @@ multi: fields.multiselect({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.multiselect](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.multiselect)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/number.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/number.mdoc
+
 title: Number field
 summary: The number field is used to store a number.
+
 ---
+
 {% field-demo field="number" /%}
 
 The `number` field is used to store a number.
@@ -3825,7 +4014,7 @@ the step size.
 ```typescript
 cost: fields.number({
   label: 'Cost',
-  description: "The cost of the item, in steps of 0.02",
+  description: 'The cost of the item, in steps of 0.02',
   step: 0.02,
   hideStepper: false,
   validation: {
@@ -3841,13 +4030,15 @@ cost: fields.number({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.number](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.number)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/object.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/object.mdoc
+
 title: Object field
 summary: >-
 The object field is used to create complex object schemas that can contain any
 other fields.
+
 ---
+
 The `object` field is used to create complex object schemas that can contain any other fields.
 
 It's particularly useful when you need a set of fields for each option in
@@ -3861,7 +4052,7 @@ or [blocks field](/docs/fields/blocks).
 ```typescript
 snapshot: fields.object({
   name: fields.text({ label: 'Name' }),
-  age: fields.integer({ label: 'Age' }),
+  age: fields.integer({ label: 'Age' })
 })
 ```
 
@@ -3878,14 +4069,14 @@ snapshot: fields.object({
       label: 'Projects',
       collection: 'projects',
       validation: {
-        isRequired: true,
-      },
+        isRequired: true
+      }
     }),
     {
       label: 'Projects',
-      itemLabel: (props) => props.value ?? 'Please select a project',
+      itemLabel: (props) => props.value ?? 'Please select a project'
     }
-  ),
+  )
 })
 ```
 
@@ -3897,17 +4088,19 @@ You can group fields together by providing a second "options" argument to `field
 `description`. This is similar to a `<fieldset>` in HTML.
 
 ```typescript
-address: fields.object({
+address: fields.object(
+  {
     street: fields.text({ label: 'Street' }),
     city: fields.text({ label: 'City' }),
     state: fields.text({ label: 'State' }),
     postcode: fields.text({ label: 'Postcode' }),
-    country: fields.text({ label: 'Country' }),
+    country: fields.text({ label: 'Country' })
   },
   {
     label: 'Address',
-    description: 'The address of the user',
-  })
+    description: 'The address of the user'
+  }
+)
 ```
 
 ### Layout
@@ -3916,18 +4109,20 @@ The options argument also accepts a `layout` property, which can be used to defi
 should span. The grid layout supports 12 possible columns.
 
 ```typescript
-address: fields.object({
+address: fields.object(
+  {
     street: fields.text({ label: 'Street' }),
     city: fields.text({ label: 'City' }),
     state: fields.text({ label: 'State' }),
     postcode: fields.text({ label: 'Postcode' }),
-    country: fields.text({ label: 'Country' }),
+    country: fields.text({ label: 'Country' })
   },
   {
     label: 'Address',
     description: 'The address of the user',
-    layout: [12, 6, 3, 3, 12],
-  })
+    layout: [12, 6, 3, 3, 12]
+  }
+)
 ```
 
 ## Type signature
@@ -3935,13 +4130,15 @@ address: fields.object({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.object](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.object)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/path-reference.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/path-reference.mdoc
+
 title: Path Reference field
 summary: >-
 The pathReference field is used to reference an existing file in the file
 system.
+
 ---
+
 The `pathReference` field is used to reference an existing file in the file system. It renders a combobox in the Admin
 UI.
 
@@ -3962,13 +4159,15 @@ videoFile: fields.pathReference({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.pathReference](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.pathReference)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/relationship.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/relationship.mdoc
+
 title: Relationship field
 summary: >-
 The relationship field is a reference to the slug of a specific collection
 entry.
+
 ---
+
 The `relationship` field is a reference to the `slug` of a specific collection entry. It renders a combobox in the Admin
 UI.
 
@@ -4006,9 +4205,10 @@ authors: fields.array(
     label: 'Authors',
     description: 'A list of authors for this post',
     collection: 'posts'
-  }), {
+  }),
+  {
     label: 'Authors',
-    itemLabel: props => props.value
+    itemLabel: (props) => props.value
   }
 )
 ```
@@ -4034,11 +4234,13 @@ web-share\" allowfullscreen></iframe>" /%}
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.relationship](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.relationship)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/select.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/select.mdoc
+
 title: Select field
 summary: The select field is used for single option selection.
+
 ---
+
 {% field-demo field="select" /%}
 
 The `select` field displays a select input for single option selection.
@@ -4054,7 +4256,7 @@ role: fields.select({
   options: [
     { label: 'Designer', value: 'designer' },
     { label: 'Developer', value: 'developer' },
-    { label: 'Product manager', value: 'product-manager' },
+    { label: 'Product manager', value: 'product-manager' }
   ],
   defaultValue: 'designer'
 })
@@ -4065,13 +4267,15 @@ role: fields.select({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.select](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.select)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/slug.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/slug.mdoc
+
 title: Slug field
 summary: >-
 The slug field auto-generates a URL-friendly string alongside another text
 string.
+
 ---
+
 {% field-demo field="slug" /%}
 
 The `slug` field auto-generates a URL-friendly string alongside another text string.
@@ -4089,7 +4293,7 @@ control over the labels for both fields.
 title: fields.slug({
   name: {
     label: 'Title',
-    description: 'The title of the post',
+    description: 'The title of the post'
   },
   // Optional slug label overrides
   slug: {
@@ -4111,11 +4315,13 @@ The following components have a `slugField` option:
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.slug](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.slug)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/text.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/text.mdoc
+
 title: Text field
 summary: The text field is used to store a text string.
+
 ---
+
 {% field-demo field="text" /%}
 
 The `text` field is used to store a text string. It renders a single line `<input type="text">` in the Admin UI by
@@ -4137,11 +4343,13 @@ quote: fields.text({
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.text](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.text)
 
-https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/url.mdoc
----
+## https://github.com/Thinkmill/keystatic/blob/main/docs/src/content/pages/fields/url.mdoc
+
 title: URL field
 summary: The url field stores a string that is a sanitised URL.
+
 ---
+
 {% field-demo field="url" /%}
 
 The `url` field stores a string that is a sanitised URL. It uses `@braintree/sanitize-url` under the hood.
@@ -4159,5 +4367,3 @@ url: fields.url({
 
 Find the latest version of this field's type signature
 at: [https://docsmill.dev/npm/@keystatic/core@latest#/.fields.url](https://docsmill.dev/npm/@keystatic/core@latest#/.fields.url)
-
-

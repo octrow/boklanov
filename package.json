@@ -16,6 +16,7 @@
     "ios_saf >= 15.6"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "next dev",
     "build": "next build",
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
@@ -72,6 +73,7 @@
     "dotenv": "^17.4.2",
     "eslint": "^9.35.0",
     "npm-run-all2": "^8.0.4",
+    "patch-package": "^8.0.1",
     "prettier": "^3.6.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2"
