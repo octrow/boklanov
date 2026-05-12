@@ -1,54 +1,32 @@
 slug: dialogi-po-povodu-dzhaza
-year: null
-durationMin: null
+status: live
 identity:
   title:
     ru: Диалоги по поводу джаза
     en: Discussions on Jazz
     de: Dialoge über Jazz
-  tagline:
-    ru: null
-    en: null
-    de: null
-  synopsis:
+  tagline: {}
+  synopsis: {}
+  directorsNote:
     ru: ''
     en: ''
-    de: null
-  directorsNote:
-    ru: null
-    en: null
-    de: null
+    de: ''
 media:
   poster:
     src: productions/dialogi-po-povodu-dzhaza/poster.webp
-    credit: null
-  productionsPhoto:
-    src: null
-    credit: null
-  featuredPhoto:
-    src: null
-    credit: null
+  productionsPhoto: {}
+  featuredPhoto: {}
   gallery: []
   videos: []
 production:
   theatre:
-    name:
-      ru: null
-      en: null
-      de: null
-    shortName: null
+    name: {}
+    shortName: {}
     city:
-      ru: null
-      en: null
-      de: null
-    country: null
-    url: null
-  premiereDate:
-    ru: null
-    en: null
-    de: null
-  ticketsUrl: null
-  ageRating: null
+      ru: Вена
+      en: Vienne
+      de: Wien
+  premiereDate: {}
 taxonomy:
   role:
     - director
@@ -76,16 +54,6 @@ history:
   runs: []
 settings:
   bookingCta: true
-  bookingCtaLabel:
-    ru: null
-    en: null
-    de: null
-  bookingCtaUrl: null
+  bookingCtaLabel: {}
   featured: false
-  featuredOrder: null
-  listOrder: null
-  techRider: null
-  pressKit: null
-  notionIds:
-    ru: null
-    en: null
+  notionIds: {}
