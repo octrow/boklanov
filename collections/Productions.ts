@@ -1139,6 +1139,8 @@ export const Productions: CollectionConfig = {
           label: { ru: 'Текст кнопки', en: 'CTA label' },
           localized: true,
           admin: {
+            condition: (_, siblingData) =>
+              Boolean((siblingData as { bookingCta?: boolean })?.bookingCta),
             description: {
               ru: 'Текст кнопки бронирования в трёх локалях. Если пусто — используется дефолтная фраза для каждой локали.',
               en: 'Booking-button text per locale. Falls back to the default phrase for each locale when blank.'
@@ -1150,6 +1152,8 @@ export const Productions: CollectionConfig = {
           type: 'text',
           label: { ru: 'URL кнопки', en: 'CTA URL' },
           admin: {
+            condition: (_, siblingData) =>
+              Boolean((siblingData as { bookingCta?: boolean })?.bookingCta),
             description: {
               ru: 'Необязательно. Если пусто — кнопка ведёт на дефолтный mailto-адрес (см. lib/booking.ts).',
               en: 'Optional. Leave blank to fall back to the default mailto link (see lib/booking.ts).'
@@ -1172,6 +1176,8 @@ export const Productions: CollectionConfig = {
           type: 'number',
           label: { ru: 'Порядок на главной', en: 'Featured order' },
           admin: {
+            condition: (_, siblingData) =>
+              Boolean((siblingData as { featured?: boolean })?.featured),
             description: {
               ru: 'Меньшие числа — выше. Используется только если включён чекбокс «На главной».',
               en: 'Lower numbers appear first. Only used when "Featured" is on.'
