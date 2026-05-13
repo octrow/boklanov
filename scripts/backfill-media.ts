@@ -1,36 +1,36 @@
 /**
  * scripts/backfill-media.ts
  *
- * One-shot: populate the Payload `media` collection by re-uploading every
- * image currently referenced by `Productions.media.*.src` + `gallery[].src`
- * + `About.portrait.src` + `About.photos[].src`.
+ * One-shot: populate the Payload `media` collection by **pointing DB rows at
+ * existing R2 keys**. Zero copy, zero upload, zero egress.
  *
  * Run with: npm run payload:backfill-media
  *
- * Honest tradeoff (PAYLOAD_MIGRATION_PLAN §Q2 default was "don't do this"):
+ * How it works (cheap version — the obvious "download + reupload" path was
+ * pure waste):
  *
- *   - Existing R2 keys (`productions/<slug>/poster.jpg`) stay in place and
- *     the live site keeps serving them via NEXT_PUBLIC_CDN_BASE.
- *   - This script downloads each unique image from R2 and re-uploads it
- *     through Payload's s3Storage plugin, which writes a SECOND copy under
- *     a different R2 key (`productions/<filename>`, no slug subdir,
- *     possibly suffixed to avoid collisions).
- *   - The `media` collection then has one row per image. /admin/collections/media
- *     is no longer empty.
- *   - Productions still reference the ORIGINAL R2 paths via their string
- *     `src` fields. Nothing on the public site changes.
+ *   1. Walk every production + the about global for unique R2 keys
+ *      referenced via `media.*.src` / `gallery[].src` / `portrait.src` /
+ *      `photos[].src`.
+ *   2. HeadObject each key → returns size + content-type, no data transfer.
+ *   3. Insert a Payload media row whose `filename` is the key MINUS the
+ *      `productions/` prefix (the s3Storage plugin re-adds the prefix when
+ *      computing URLs). Slashes in filename are preserved — Payload's
+ *      url = `${baseURL}/${prefix}/${filename}` resolves to the existing
+ *      R2 object verbatim.
+ *   4. **No `file:` arg on payload.create.** The s3Storage plugin's
+ *      afterChange hook only uploads when `req.file` exists, so omitting it
+ *      keeps the existing R2 object untouched.
  *
- * So this is a "make the gallery view useful" pass, not a true migration.
- * If you want to also rewire productions to reference media rows via
- * `upload: true` relationships, that requires schema changes + a second
- * migration. Deferred until / if Roman needs it.
+ * Effect on production site: zero. Existing keys are read-only from this
+ * script. Only metadata rows are added to Postgres.
  *
  * Idempotent: skips media rows whose `alt` already matches the source key.
  */
 
 import 'dotenv/config'
 import { getPayload } from 'payload'
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, HeadObjectCommand } from '@aws-sdk/client-s3'
 import config from '../payload.config'
 import path from 'node:path'
 import type { Payload } from 'payload'
@@ -38,6 +38,9 @@ import type { Payload } from 'payload'
 type AnyMap = Record<string, unknown>
 
 const arrayWrap = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
+
+/** s3Storage prefix configured in payload.config.ts — must stay in sync. */
+const STORAGE_PREFIX = 'productions'
 
 const MIME: Record<string, string> = {
   '.jpg': 'image/jpeg',
@@ -91,30 +94,22 @@ function pathToR2Key(src: string | null | undefined): string | null {
   return trimmed
 }
 
-/** Walk a doc and yield every (label, src) tuple worth backfilling. */
-function* collectSrcs(
+/** Walk a doc and yield every (key, credit) tuple worth backfilling. */
+function collectSrcs(
   doc: AnyMap
-): Generator<{ key: string; credit: string | null }> {
+): Array<{ key: string; credit: string | null }> {
   const seen = new Set<string>()
-  const yieldIf = (
-    raw: unknown,
-    credit: unknown
-  ): { key: string; credit: string | null } | null => {
-    if (typeof raw !== 'string') return null
+  const out: Array<{ key: string; credit: string | null }> = []
+  const collect = (raw: unknown, credit: unknown) => {
+    if (typeof raw !== 'string') return
     const key = pathToR2Key(raw)
-    if (!key) return null
-    if (seen.has(key)) return null
+    if (!key || seen.has(key)) return
     seen.add(key)
-    return {
+    out.push({
       key,
       credit: typeof credit === 'string' && credit.length > 0 ? credit : null
-    }
+    })
   }
-  const collect = (raw: unknown, credit: unknown) => {
-    const result = yieldIf(raw, credit)
-    if (result) emit.push(result)
-  }
-  const emit: Array<{ key: string; credit: string | null }> = []
 
   const media = (doc.media as AnyMap) ?? {}
   for (const k of ['poster', 'productionsPhoto', 'featuredPhoto'] as const) {
@@ -124,33 +119,27 @@ function* collectSrcs(
   for (const g of arrayWrap<AnyMap>(media.gallery)) {
     collect(g.src, g.credit)
   }
-  yield* emit
+  return out
 }
 
-async function fetchFromR2(
+/** HEAD an R2 object — metadata only, no download. Returns null if the key
+ *  doesn't exist (common: typo'd src in YAML during legacy editing). */
+async function headFromR2(
   client: S3Client,
   key: string
-): Promise<{ data: Buffer; mimetype: string; size: number } | null> {
+): Promise<{ mimetype: string; size: number } | null> {
   try {
     const res = await client.send(
-      new GetObjectCommand({ Bucket: bucket(), Key: key })
+      new HeadObjectCommand({ Bucket: bucket(), Key: key })
     )
-    if (!res.Body) return null
-    const chunks: Buffer[] = []
-    // Body is a Node Readable in SDK v3; the typing is broad but iterates fine.
-    for await (const c of res.Body as AsyncIterable<Buffer | string>) {
-      chunks.push(typeof c === 'string' ? Buffer.from(c) : Buffer.from(c))
-    }
-    const data = Buffer.concat(chunks)
     const ext = path.extname(key).toLowerCase()
     return {
-      data,
       mimetype: res.ContentType ?? MIME[ext] ?? 'application/octet-stream',
-      size: data.byteLength
+      size: typeof res.ContentLength === 'number' ? res.ContentLength : 0
     }
   } catch (err) {
     console.warn(
-      `  ⚠ R2 fetch failed for ${key}: ${
+      `  ⚠ R2 HEAD failed for ${key}: ${
         err instanceof Error ? err.message : String(err)
       }`
     )
@@ -158,8 +147,46 @@ async function fetchFromR2(
   }
 }
 
+/** Compute the filename that, combined with the storage plugin's prefix,
+ *  reconstructs the original R2 key. */
+function keyToFilename(key: string): string {
+  const prefixWithSlash = `${STORAGE_PREFIX}/`
+  return key.startsWith(prefixWithSlash)
+    ? key.slice(prefixWithSlash.length)
+    : key
+}
+
+/** Insert a media row without uploading anything.
+ *
+ *  Uses `payload.db.create` — the low-level database adapter — instead of
+ *  `payload.create`, which is the high-level API that runs validators
+ *  (including upload-collection's "file is required" check) before any
+ *  plugin hook can opt out. Direct adapter access bypasses validators and
+ *  hooks; the s3Storage upload never triggers because we never enter the
+ *  collection's afterChange pipeline.
+ */
+async function createMediaRow(
+  payload: Payload,
+  key: string,
+  meta: { mimetype: string; size: number },
+  credit: string | null
+): Promise<void> {
+  const filename = keyToFilename(key)
+  await payload.db.create({
+    collection: 'media',
+    data: {
+      filename,
+      mimeType: meta.mimetype,
+      filesize: meta.size,
+      alt: key, // marker for idempotency
+      credit: credit ?? null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  })
+}
+
 async function backfillProductions(payload: Payload, client: S3Client) {
-  // pagination:false + locale:'all' pulls everything.
   const { docs } = await payload.find({
     collection: 'productions',
     locale: 'all',
@@ -170,13 +197,12 @@ async function backfillProductions(payload: Payload, client: S3Client) {
 
   let created = 0
   let skipped = 0
+  let missing = 0
   let failed = 0
 
   for (const doc of docs as unknown as AnyMap[]) {
     const slug = String(doc.slug)
     for (const { key, credit } of collectSrcs(doc)) {
-      // Idempotency: skip if a media row already exists with this exact R2
-      // key remembered in its `alt` field (we abuse alt as a marker).
       const existing = await payload.find({
         collection: 'media',
         where: { alt: { equals: key } },
@@ -188,32 +214,18 @@ async function backfillProductions(payload: Payload, client: S3Client) {
         continue
       }
 
-      const file = await fetchFromR2(client, key)
-      if (!file) {
-        failed++
+      const meta = await headFromR2(client, key)
+      if (!meta) {
+        missing++
         continue
       }
 
-      const filename = path.basename(key)
       try {
-        await payload.create({
-          collection: 'media',
-          file: {
-            data: file.data,
-            mimetype: file.mimetype,
-            name: filename,
-            size: file.size
-          },
-          data: {
-            // Stash the original R2 key in `alt` so the next run knows we've
-            // already processed it. Roman can overwrite alt later via the
-            // admin (it's just a string field, gets localized fallback chain).
-            alt: key,
-            credit: credit ?? null
-          }
-        })
+        await createMediaRow(payload, key, meta, credit)
         created++
-        process.stdout.write(`  ✓ ${slug}/${filename}\n`)
+        process.stdout.write(
+          `  ✓ ${slug}/${path.basename(key)} (${meta.size} B)\n`
+        )
       } catch (err) {
         failed++
         console.warn(
@@ -226,7 +238,7 @@ async function backfillProductions(payload: Payload, client: S3Client) {
   }
 
   console.log(
-    `\nProductions: ${created} created, ${skipped} skipped, ${failed} failed`
+    `\nProductions: ${created} created, ${skipped} already in DB, ${missing} not in R2, ${failed} insert errors`
   )
 }
 
@@ -276,20 +288,11 @@ async function backfillAbout(payload: Payload, client: S3Client) {
     })
     if (existing.docs[0]) continue
 
-    const file = await fetchFromR2(client, key)
-    if (!file) continue
+    const meta = await headFromR2(client, key)
+    if (!meta) continue
 
     try {
-      await payload.create({
-        collection: 'media',
-        file: {
-          data: file.data,
-          mimetype: file.mimetype,
-          name: path.basename(key),
-          size: file.size
-        },
-        data: { alt: key, credit: credit ?? null }
-      })
+      await createMediaRow(payload, key, meta, credit)
       created++
       process.stdout.write(`  ✓ about/${path.basename(key)}\n`)
     } catch (err) {
