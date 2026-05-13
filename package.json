@@ -16,6 +16,7 @@
     "ios_saf >= 15.6"
   ],
   "scripts": {
+    "predev": "npm run payload:generate:importmap",
     "dev": "next dev",
     "build": "next build",
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
