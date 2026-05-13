@@ -24,7 +24,7 @@ export default async function ArchivePage({
   setRequestLocale(locale)
 
   const t = await getTranslations('archive')
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
 
   // Long-tail CV: exclude director role; sort year asc for chronological doc feel.
   const entries = productions

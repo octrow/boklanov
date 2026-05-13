@@ -33,7 +33,7 @@ export async function GET(
     getTranslations({ locale, namespace: 'feed' })
   ])
 
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
   const base = localeBase(locale)
   const feedTitle = `${tMeta('siteName')} — ${tNav('productions')}`
   const feedDesc = tFeed('description')

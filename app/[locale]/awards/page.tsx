@@ -22,7 +22,7 @@ export default async function AwardsPage({
   setRequestLocale(locale)
 
   const t = await getTranslations('awards')
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
 
   const groups = productions
     .filter(

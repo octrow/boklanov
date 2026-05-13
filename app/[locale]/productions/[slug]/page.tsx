@@ -114,7 +114,7 @@ type Props = { params: Promise<{ locale: Locale; slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
-  const production = getProduction(slug, locale)
+  const production = await getProduction(slug, locale)
   if (!production) return {}
 
   const base = (
@@ -126,7 +126,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `${base}/${locale}/productions/${slug}`
   const ogImage = `${base}/api/og/${slug}?locale=${locale}`
 
-  const descriptionParts = [production.title, production.theatre.name, production.year]
+  const descriptionParts = [
+    production.title,
+    production.theatre.name,
+    production.year
+  ]
     .filter(Boolean)
     .join(' · ')
   const description = production.synopsis?.trim() || descriptionParts
@@ -164,9 +168,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
-  const slugs = getAllProductions(routing.defaultLocale).map((p) => p.slug)
+  const slugs = (await getAllProductions(routing.defaultLocale)).map(
+    (p) => p.slug
+  )
   return routing.locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug }))
   )
@@ -180,13 +186,13 @@ export default async function ProductionDetailPage({
   const { locale, slug } = await params
   setRequestLocale(locale)
 
-  const production = getProduction(slug, locale)
+  const production = await getProduction(slug, locale)
   if (!production) notFound()
 
   const t = await getTranslations('productionDetail')
   const tProductions = await getTranslations('productions')
 
-  const allProductions = getAllProductions(locale)
+  const allProductions = await getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
   const productionLabel =
     productionIndex !== -1
@@ -200,7 +206,8 @@ export default async function ProductionDetailPage({
   const chips: string[] = []
   if (production.ageRating) chips.push(production.ageRating)
   if (production.year) chips.push(String(production.year))
-  if (production.durationMin) chips.push(`${production.durationMin} ${t('riderMin')}`)
+  if (production.durationMin)
+    chips.push(`${production.durationMin} ${t('riderMin')}`)
   if (country) chips.push(country)
 
   const roleLabelMap: Record<string, string> = {

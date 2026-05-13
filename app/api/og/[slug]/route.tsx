@@ -80,7 +80,7 @@ export async function GET(
     getTranslations({ locale, namespace: 'footer' })
   ])
 
-  const production = getProduction(slug, 'ru')
+  const production = await getProduction(slug, 'ru')
   if (!production) return new Response('Not found', { status: 404 })
 
   const fonts = await loadFonts()
@@ -137,7 +137,8 @@ export async function GET(
             textTransform: 'uppercase'
           }}
         >
-          {tMeta('siteName').toUpperCase()} · {tProductions('title').toUpperCase()}
+          {tMeta('siteName').toUpperCase()} ·{' '}
+          {tProductions('title').toUpperCase()}
         </span>
       </div>
 

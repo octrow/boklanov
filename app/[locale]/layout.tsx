@@ -100,7 +100,7 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
 
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
   const searchItems = buildSearchIndex(productions)
 
   return (

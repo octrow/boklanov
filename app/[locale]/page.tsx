@@ -23,7 +23,7 @@ export default async function HomePage({
   const tAbout = await getTranslations('about')
   const tProductions = await getTranslations('productions')
 
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
 
   // Featured: curated (featured: true), must have a poster so no typographic
   // fallback lands in the above-the-fold strip (DESIGN §9). Cap at 6.

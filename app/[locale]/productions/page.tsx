@@ -18,7 +18,7 @@ export default async function ProductionsIndexPage({
   setRequestLocale(locale)
   const t = await getTranslations('productions')
   const tA11y = await getTranslations('accessibility')
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
 
   // Sort: productions with explicit `listOrder` float to the top (ascending),
   // the rest follow in the default loadAll() order (year desc, slug).

@@ -62,7 +62,7 @@ export default async function PressPage({
   setRequestLocale(locale)
 
   const t = await getTranslations('press')
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
 
   interface PressItem {
     title: string

@@ -1,0 +1,107 @@
+/**
+ * payload.config.ts — Payload 3 root config for boklanov.com
+ *
+ * Phase P1 install (see .design/boklanov-rewrite/PAYLOAD_MIGRATION_PLAN.md).
+ * Lives at repo root; imported via the `@payload-config` alias added in
+ * tsconfig.json so server entry points can `import config from '@payload-config'`.
+ *
+ * Storage:
+ *   - Postgres (Neon) via @payloadcms/db-postgres
+ *   - R2 via @payloadcms/storage-s3 (S3-compatible)
+ *
+ * Locales:
+ *   - ru (default), en, de — matches existing i18n/routing.ts
+ *
+ * Editor: lexicalEditor() is mounted only for the optional `media.alt`
+ * rich-text field; all production bodies stay as plain markdoc strings in
+ * `textarea` per PAYLOAD_MIGRATION_PLAN §P2.3 Q1 default.
+ */
+
+import { buildConfig } from 'payload'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import sharp from 'sharp'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+import { Productions } from './collections/Productions'
+import { Media } from './collections/Media'
+import { Users } from './collections/Users'
+import { About } from './globals/About'
+import { Contact } from './globals/Contact'
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default buildConfig({
+  secret: process.env.PAYLOAD_SECRET || 'CHANGE_ME_IN_ENV',
+  serverURL:
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''),
+
+  admin: {
+    user: 'users',
+    meta: {
+      titleSuffix: ' · boklanov.com'
+    },
+    livePreview: {
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 }
+      ]
+    }
+  },
+
+  collections: [Productions, Media, Users],
+  globals: [About, Contact],
+
+  localization: {
+    locales: [
+      { label: 'Русский', code: 'ru' },
+      { label: 'English', code: 'en' },
+      { label: 'Deutsch', code: 'de' }
+    ],
+    defaultLocale: 'ru',
+    fallback: true
+  },
+
+  // Lexical is only used by the optional Media.alt field. Production bodies
+  // live in plain textareas (markdoc strings) so @markdoc/markdoc keeps
+  // rendering them unchanged.
+  editor: lexicalEditor(),
+
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL || ''
+    }
+  }),
+
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          // Mirror the existing R2 key prefix so previously-uploaded images
+          // stay accessible via NEXT_PUBLIC_CDN_BASE without any rewrites.
+          prefix: 'productions'
+        }
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION || 'auto',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
+        },
+        forcePathStyle: true
+      }
+    })
+  ],
+
+  sharp,
+
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts')
+  }
+})

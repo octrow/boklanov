@@ -45,8 +45,8 @@ function ruEnAlternates(
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const slugs = getAllProductions('en').map((p) => p.slug)
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const slugs = (await getAllProductions('en')).map((p) => p.slug)
   const now = new Date()
   const entries: MetadataRoute.Sitemap = []
 
