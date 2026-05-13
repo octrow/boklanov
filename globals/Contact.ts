@@ -23,6 +23,7 @@ export const Contact: GlobalConfig = {
     {
       name: 'intro',
       type: 'textarea',
+      label: { ru: 'Вступительный текст', en: 'Intro' },
       localized: true,
       admin: {
         description: {
@@ -34,9 +35,18 @@ export const Contact: GlobalConfig = {
     {
       name: 'email',
       type: 'text',
+      label: { ru: 'Эл. почта', en: 'Email' },
       required: true
     },
-    { name: 'telegramUrl', type: 'text' },
-    { name: 'instagramUrl', type: 'text' }
+    {
+      name: 'telegramUrl',
+      type: 'text',
+      label: { ru: 'Telegram', en: 'Telegram URL' }
+    },
+    {
+      name: 'instagramUrl',
+      type: 'text',
+      label: { ru: 'Instagram', en: 'Instagram URL' }
+    }
   ]
 }

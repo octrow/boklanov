@@ -31,6 +31,7 @@ export const About: GlobalConfig = {
             {
               name: 'body',
               type: 'textarea',
+              label: { ru: 'Текст биографии', en: 'Biography text' },
               localized: true,
               admin: {
                 description: {
@@ -47,17 +48,39 @@ export const About: GlobalConfig = {
             {
               name: 'portrait',
               type: 'group',
+              label: { ru: 'Портрет', en: 'Portrait' },
               fields: [
-                { name: 'src', type: 'text' },
-                { name: 'credit', type: 'text' }
+                {
+                  name: 'src',
+                  type: 'text',
+                  label: { ru: 'Путь к фото', en: 'Image path' }
+                },
+                {
+                  name: 'credit',
+                  type: 'text',
+                  label: { ru: 'Автор фото', en: 'Photo credit' }
+                }
               ]
             },
             {
               name: 'photos',
               type: 'array',
+              label: { ru: 'Фотографии', en: 'Photos' },
+              labels: {
+                singular: { ru: 'Фото', en: 'Photo' },
+                plural: { ru: 'Фотографии', en: 'Photos' }
+              },
               fields: [
-                { name: 'src', type: 'text' },
-                { name: 'credit', type: 'text' }
+                {
+                  name: 'src',
+                  type: 'text',
+                  label: { ru: 'Путь к фото', en: 'Image path' }
+                },
+                {
+                  name: 'credit',
+                  type: 'text',
+                  label: { ru: 'Автор фото', en: 'Photo credit' }
+                }
               ]
             }
           ]
@@ -68,20 +91,59 @@ export const About: GlobalConfig = {
             {
               name: 'milestones',
               type: 'array',
+              label: { ru: 'Таймлайн', en: 'Timeline' },
+              labels: {
+                singular: { ru: 'Веха', en: 'Milestone' },
+                plural: { ru: 'Таймлайн', en: 'Timeline' }
+              },
               fields: [
-                { name: 'year', type: 'number' },
-                { name: 'label', type: 'text', localized: true }
+                {
+                  name: 'year',
+                  type: 'number',
+                  label: { ru: 'Год', en: 'Year' }
+                },
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: { ru: 'Подпись', en: 'Label' },
+                  localized: true
+                }
               ]
             },
             {
               name: 'lineage',
               type: 'array',
+              label: { ru: 'Преемственность', en: 'Lineage' },
+              labels: {
+                singular: { ru: 'Учитель', en: 'Mentor' },
+                plural: { ru: 'Преемственность', en: 'Lineage' }
+              },
               fields: [
-                { name: 'key', type: 'text' },
-                { name: 'name', type: 'text', localized: true },
-                { name: 'role', type: 'text', localized: true },
-                { name: 'institution', type: 'text', localized: true },
-                { name: 'note', type: 'text', localized: true }
+                { name: 'key', type: 'text', label: { ru: 'Ключ', en: 'Key' } },
+                {
+                  name: 'name',
+                  type: 'text',
+                  label: { ru: 'Имя', en: 'Name' },
+                  localized: true
+                },
+                {
+                  name: 'role',
+                  type: 'text',
+                  label: { ru: 'Роль', en: 'Role' },
+                  localized: true
+                },
+                {
+                  name: 'institution',
+                  type: 'text',
+                  label: { ru: 'Учреждение', en: 'Institution' },
+                  localized: true
+                },
+                {
+                  name: 'note',
+                  type: 'text',
+                  label: { ru: 'Заметка', en: 'Note' },
+                  localized: true
+                }
               ]
             }
           ]
@@ -92,7 +154,19 @@ export const About: GlobalConfig = {
             {
               name: 'marginalia',
               type: 'array',
-              fields: [{ name: 'note', type: 'text', localized: true }]
+              label: { ru: 'Маргиналии', en: 'Marginalia' },
+              labels: {
+                singular: { ru: 'Заметка', en: 'Note' },
+                plural: { ru: 'Маргиналии', en: 'Marginalia' }
+              },
+              fields: [
+                {
+                  name: 'note',
+                  type: 'text',
+                  label: { ru: 'Текст', en: 'Note text' },
+                  localized: true
+                }
+              ]
             }
           ]
         }
