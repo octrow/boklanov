@@ -11,6 +11,13 @@ import type { CollectionConfig } from 'payload'
  */
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: { ru: 'Изображение', en: 'Image' },
+    plural: { ru: 'Изображения', en: 'Images' }
+  },
+  admin: {
+    group: { ru: 'Медиатека', en: 'Media library' }
+  },
   access: {
     read: () => true,
     create: ({ req: { user } }) => Boolean(user),

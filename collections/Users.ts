@@ -6,13 +6,18 @@ import type { CollectionConfig } from 'payload'
  */
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: { ru: 'Пользователь', en: 'User' },
+    plural: { ru: 'Пользователи', en: 'Users' }
+  },
   auth: {
     tokenExpiration: 60 * 60 * 24 * 30, // 30 days
     cookies: { sameSite: 'Lax', secure: process.env.NODE_ENV === 'production' }
   },
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['email', 'name']
+    defaultColumns: ['email', 'name'],
+    group: { ru: 'Система', en: 'System' }
   },
   access: {
     read: ({ req: { user } }) => Boolean(user),
