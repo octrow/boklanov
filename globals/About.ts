@@ -27,6 +27,10 @@ export const About: GlobalConfig = {
       tabs: [
         {
           label: { ru: 'Био', en: 'Bio' },
+          description: {
+            ru: 'Биографический текст. Первый абзац — лид (отображается крупным шрифтом).',
+            en: 'Biography body. First paragraph is the lead (rendered prominently).'
+          },
           fields: [
             {
               name: 'body',
@@ -44,21 +48,43 @@ export const About: GlobalConfig = {
         },
         {
           label: { ru: 'Визуал', en: 'Visuals' },
+          description: {
+            ru: 'Общие изображения для всех локалей: портрет и галерея.',
+            en: 'Shared images across all locales: portrait and photo gallery.'
+          },
           fields: [
             {
               name: 'portrait',
               type: 'group',
               label: { ru: 'Портрет', en: 'Portrait' },
+              admin: {
+                description: {
+                  ru: 'Большой портрет в начале страницы «О режиссёре».',
+                  en: 'Large portrait at the top of the About page.'
+                }
+              },
               fields: [
                 {
                   name: 'src',
                   type: 'text',
-                  label: { ru: 'Путь к фото', en: 'Image path' }
+                  label: { ru: 'Путь к фото', en: 'Image path' },
+                  admin: {
+                    description: {
+                      ru: 'Главное портретное фото. Путь в public/about/ или R2.',
+                      en: 'Main portrait photo. Path under public/about/ or R2.'
+                    }
+                  }
                 },
                 {
                   name: 'credit',
                   type: 'text',
-                  label: { ru: 'Автор фото', en: 'Photo credit' }
+                  label: { ru: 'Автор фото', en: 'Photo credit' },
+                  admin: {
+                    description: {
+                      ru: 'Имя фотографа.',
+                      en: 'Photographer name.'
+                    }
+                  }
                 }
               ]
             },
@@ -70,16 +96,34 @@ export const About: GlobalConfig = {
                 singular: { ru: 'Фото', en: 'Photo' },
                 plural: { ru: 'Фотографии', en: 'Photos' }
               },
+              admin: {
+                description: {
+                  ru: 'Доп. фото для блока внизу страницы. Пустые элементы фильтруются на рендере.',
+                  en: 'Extra photos for the bottom block. Empty entries are filtered at render time.'
+                }
+              },
               fields: [
                 {
                   name: 'src',
                   type: 'text',
-                  label: { ru: 'Путь к фото', en: 'Image path' }
+                  label: { ru: 'Путь к фото', en: 'Image path' },
+                  admin: {
+                    description: {
+                      ru: 'Дополнительное фото. Путь в public/about/ или R2.',
+                      en: 'Additional photo. Path under public/about/ or R2.'
+                    }
+                  }
                 },
                 {
                   name: 'credit',
                   type: 'text',
-                  label: { ru: 'Автор фото', en: 'Photo credit' }
+                  label: { ru: 'Автор фото', en: 'Photo credit' },
+                  admin: {
+                    description: {
+                      ru: 'Имя фотографа.',
+                      en: 'Photographer name.'
+                    }
+                  }
                 }
               ]
             }
@@ -87,6 +131,10 @@ export const About: GlobalConfig = {
         },
         {
           label: { ru: 'Таймлайн', en: 'Timeline' },
+          description: {
+            ru: 'Хронология вех и линия преемственности (учителя/школы).',
+            en: 'Milestones timeline and lineage (teachers / schools).'
+          },
           fields: [
             {
               name: 'milestones',
@@ -96,17 +144,35 @@ export const About: GlobalConfig = {
                 singular: { ru: 'Веха', en: 'Milestone' },
                 plural: { ru: 'Таймлайн', en: 'Timeline' }
               },
+              admin: {
+                description: {
+                  ru: 'Биографическая таймлайн. Год + краткое описание на трёх языках.',
+                  en: 'Biographical timeline. Year + short label per locale.'
+                }
+              },
               fields: [
                 {
                   name: 'year',
                   type: 'number',
-                  label: { ru: 'Год', en: 'Year' }
+                  label: { ru: 'Год', en: 'Year' },
+                  admin: {
+                    description: {
+                      ru: 'Год вехи. Опционально (для нечётких дат — пустой год, описание в подписи).',
+                      en: 'Milestone year. Optional — leave blank and describe in label for fuzzy dates.'
+                    }
+                  }
                 },
                 {
                   name: 'label',
                   type: 'text',
                   label: { ru: 'Подпись', en: 'Label' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Описание вехи в трёх локалях.',
+                      en: 'Milestone description in all three locales.'
+                    }
+                  }
                 }
               ]
             },
@@ -118,31 +184,71 @@ export const About: GlobalConfig = {
                 singular: { ru: 'Учитель', en: 'Mentor' },
                 plural: { ru: 'Преемственность', en: 'Lineage' }
               },
+              admin: {
+                description: {
+                  ru: 'Учителя и школы, к которым восходит работа Романа.',
+                  en: "Teachers and schools Roman's work traces back to."
+                }
+              },
               fields: [
-                { name: 'key', type: 'text', label: { ru: 'Ключ', en: 'Key' } },
+                {
+                  name: 'key',
+                  type: 'text',
+                  label: { ru: 'Ключ', en: 'Key' },
+                  admin: {
+                    description: {
+                      ru: 'Стабильный slug-ключ (например, kudashov, btk). Общий для всех локалей.',
+                      en: 'Stable slug key (e.g. kudashov, btk). Shared across locales.'
+                    }
+                  }
+                },
                 {
                   name: 'name',
                   type: 'text',
                   label: { ru: 'Имя', en: 'Name' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Имя учителя / организации в трёх локалях.',
+                      en: 'Teacher / institution name in all three locales.'
+                    }
+                  }
                 },
                 {
                   name: 'role',
                   type: 'text',
                   label: { ru: 'Роль', en: 'Role' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Роль / отношение (мастер, ректор и т. п.).',
+                      en: 'Role / relationship (master, rector, etc.).'
+                    }
+                  }
                 },
                 {
                   name: 'institution',
                   type: 'text',
                   label: { ru: 'Учреждение', en: 'Institution' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Название института / театра, если применимо.',
+                      en: 'Institution / theatre, if applicable.'
+                    }
+                  }
                 },
                 {
                   name: 'note',
                   type: 'text',
                   label: { ru: 'Заметка', en: 'Note' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Опциональная пометка о связи / влиянии.',
+                      en: 'Optional note about the connection / influence.'
+                    }
+                  }
                 }
               ]
             }
@@ -150,6 +256,10 @@ export const About: GlobalConfig = {
         },
         {
           label: { ru: 'Маргиналии', en: 'Margins' },
+          description: {
+            ru: 'Маргиналии — короткие пометки рядом с абзацами.',
+            en: 'Marginalia — short notes alongside body paragraphs.'
+          },
           fields: [
             {
               name: 'marginalia',
@@ -159,12 +269,24 @@ export const About: GlobalConfig = {
                 singular: { ru: 'Заметка', en: 'Note' },
                 plural: { ru: 'Маргиналии', en: 'Marginalia' }
               },
+              admin: {
+                description: {
+                  ru: 'Маленькие текстовые врезки в полях страницы «О режиссёре».',
+                  en: 'Small textual notes in the margin of the About page.'
+                }
+              },
               fields: [
                 {
                   name: 'note',
                   type: 'text',
                   label: { ru: 'Текст', en: 'Note text' },
-                  localized: true
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Короткая пометка в трёх локалях.',
+                      en: 'Short marginal note across three locales.'
+                    }
+                  }
                 }
               ]
             }
