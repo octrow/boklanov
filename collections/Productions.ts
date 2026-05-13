@@ -53,73 +53,15 @@ export const Productions: CollectionConfig = {
     afterDelete: [revalidateProductionDelete]
   },
   fields: [
-    // ── Top-level list-view columns ──────────────────────────────────────
-    {
-      name: 'slug',
-      type: 'text',
-      label: { ru: 'URL-слаг', en: 'URL slug' },
-      required: true,
-      unique: true,
-      index: true,
-      admin: {
-        description: {
-          ru: 'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',
-          en: "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
-        }
-      }
-    },
-    {
-      name: 'year',
-      type: 'number',
-      label: { ru: 'Год премьеры', en: 'Premiere year' },
-      min: 1900,
-      max: 2100,
-      index: true,
-      admin: {
-        description: {
-          ru: 'Числовой год премьеры — используется для сортировки и в карточках. Отдельно от свободного текста даты в блоке «Продакшен».',
-          en: 'Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.'
-        }
-      }
-    },
-    {
-      name: 'durationMin',
-      type: 'number',
-      label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
-      admin: {
-        description: {
-          ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
-          en: 'Performance length in minutes including intermission. Optional.'
-        }
-      }
-    },
-    {
-      name: 'status',
-      type: 'select',
-      label: { ru: 'Статус', en: 'Status' },
-      defaultValue: 'live',
-      admin: {
-        description: {
-          ru: 'Жизненный цикл продакшена. По умолчанию — «Идёт» (играется сейчас).',
-          en: 'Lifecycle of this production. Default is "Live" (currently running).'
-        }
-      },
-      options: [
-        { label: { ru: 'Идёт', en: 'Live' }, value: 'live' },
-        {
-          label: { ru: 'В работе', en: 'In development' },
-          value: 'in-development'
-        },
-        { label: { ru: 'В архиве', en: 'Archived' }, value: 'archived' },
-        { label: { ru: 'На гастролях', en: 'On tour' }, value: 'on-tour' }
-      ]
-    },
-
     // ── Tabs ─────────────────────────────────────────────────────────────
-    // Layout-only `type: 'tabs'` (unnamed) wraps the eight original groups
-    // so the form reads as a tab strip, not a 10 000-px scroll. Inner
-    // groups keep their `name` keys → Postgres column shape is unchanged
-    // and lib/content.ts reads the same doc shape. See
+    // Layout-only `type: 'tabs'` (unnamed) wraps everything below so the
+    // form reads as a tab strip, not a 10 000-px scroll. Inner groups keep
+    // their `name` keys → Postgres column shape is unchanged and
+    // lib/content.ts reads the same doc shape. The four list-view scalars
+    // (slug, year, durationMin, status) live INSIDE the tab they
+    // semantically belong to but stay top-level keys at storage time
+    // because unnamed tabs don't reshape data. defaultColumns +
+    // useAsTitle continue to resolve them by their flat names. See
     // PAYLOAD_POLISH_PLAN.md §2.1 + risk note.
     {
       type: 'tabs',
@@ -131,6 +73,20 @@ export const Productions: CollectionConfig = {
             en: "Title, tagline, synopsis, director's note, and full body."
           },
           fields: [
+            {
+              name: 'slug',
+              type: 'text',
+              label: { ru: 'URL-слаг', en: 'URL slug' },
+              required: true,
+              unique: true,
+              index: true,
+              admin: {
+                description: {
+                  ru: 'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',
+                  en: "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
+                }
+              }
+            },
             {
               name: 'identity',
               type: 'group',
@@ -446,10 +402,35 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Продакшен', en: 'Production' },
           description: {
-            ru: 'Театр-производитель, даты премьеры, возрастной рейтинг и билеты. Год, длительность и статус — наверху страницы.',
-            en: 'Producing theatre, premiere dates, age rating, and tickets. Year, duration, and status live at the top of the page.'
+            ru: 'Театр-производитель, даты премьеры, год, длительность, возрастной рейтинг и билеты.',
+            en: 'Producing theatre, premiere dates, year, duration, age rating, and tickets.'
           },
           fields: [
+            {
+              name: 'year',
+              type: 'number',
+              label: { ru: 'Год премьеры', en: 'Premiere year' },
+              min: 1900,
+              max: 2100,
+              index: true,
+              admin: {
+                description: {
+                  ru: 'Числовой год премьеры — используется для сортировки и в карточках. Отдельно от свободного текста даты в блоке «Продакшен».',
+                  en: 'Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.'
+                }
+              }
+            },
+            {
+              name: 'durationMin',
+              type: 'number',
+              label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
+              admin: {
+                description: {
+                  ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
+                  en: 'Performance length in minutes including intermission. Optional.'
+                }
+              }
+            },
             {
               name: 'production',
               type: 'group',
@@ -1172,10 +1153,37 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Настройки', en: 'Settings' },
           description: {
-            ru: 'Бронирование, размещение на главной, тех-райдер, пресс-кит, Notion IDs.',
-            en: 'Booking CTA, home placement, tech rider, press kit, and Notion IDs.'
+            ru: 'Статус, бронирование, размещение на главной, тех-райдер, пресс-кит, Notion IDs.',
+            en: 'Status, booking CTA, home placement, tech rider, press kit, and Notion IDs.'
           },
           fields: [
+            {
+              name: 'status',
+              type: 'select',
+              label: { ru: 'Статус', en: 'Status' },
+              defaultValue: 'live',
+              admin: {
+                description: {
+                  ru: 'Жизненный цикл продакшена. По умолчанию — «Идёт» (играется сейчас).',
+                  en: 'Lifecycle of this production. Default is "Live" (currently running).'
+                }
+              },
+              options: [
+                { label: { ru: 'Идёт', en: 'Live' }, value: 'live' },
+                {
+                  label: { ru: 'В работе', en: 'In development' },
+                  value: 'in-development'
+                },
+                {
+                  label: { ru: 'В архиве', en: 'Archived' },
+                  value: 'archived'
+                },
+                {
+                  label: { ru: 'На гастролях', en: 'On tour' },
+                  value: 'on-tour'
+                }
+              ]
+            },
             {
               name: 'settings',
               type: 'group',
