@@ -47,10 +47,13 @@ export default buildConfig({
       titleSuffix: ' · boklanov.com'
     },
     livePreview: {
+      // Matches DESIGN.md §6 public-site breakpoints — iPhone-15-class
+      // 390 width, iPad portrait 768, desktop 1440. Inherited by both
+      // Productions and About livePreview URLs.
       breakpoints: [
-        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
-        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
-        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 }
+        { label: 'Mobile', name: 'm', width: 390, height: 800 },
+        { label: 'Tablet', name: 't', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'd', width: 1440, height: 900 }
       ]
     }
   },
