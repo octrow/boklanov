@@ -18,6 +18,7 @@
   "scripts": {
     "predev": "npm run payload:generate:importmap",
     "dev": "next dev",
+    "prebuild": "npm run payload:generate:types && npm run payload:generate:importmap",
     "build": "next build",
     "sync": "echo 'sync retired - edit content in Obsidian (see content/AUTHORING.ru.md)'",
     "upload-images": "tsx scripts/upload-images.ts",
