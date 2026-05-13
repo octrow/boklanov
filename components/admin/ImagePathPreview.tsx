@@ -1,8 +1,8 @@
 'use client'
 
+import React, { useRef, useState } from 'react'
 import { useField, useFormFields } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
-import { useRef, useState } from 'react'
 
 /**
  * Thumbnail + Upload + Remove controls under any `src` text input that holds
@@ -208,7 +208,6 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
             background: 'var(--theme-elevation-50, #fafafa)'
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={url}
             alt='preview'
