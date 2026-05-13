@@ -1,3 +1,16 @@
-/* Custom admin SCSS — empty for now. Add overrides here later if Roman
-   asks for a gorky-themed admin chrome (out of scope per
-   PAYLOAD_MIGRATION_PLAN §10). */
+/* Custom admin SCSS.
+   Wider scope (gorky-themed chrome) is out of scope per
+   PAYLOAD_MIGRATION_PLAN §10; this file only tightens vertical density
+   for editor ergonomics.
+
+   §2.3 PAYLOAD_POLISH_PLAN — kill dead band under each tab strip so the
+   form reads dense but not crowded. Same target as the Keystatic
+   `KeystaticEnhancements.tsx` §2 fix. */
+
+.tabs-field__tabs {
+  margin-bottom: 0;
+}
+
+.tabs-field__tab-content > .render-fields {
+  padding-top: 12px;
+}
