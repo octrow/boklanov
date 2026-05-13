@@ -22,8 +22,19 @@ export const Productions: CollectionConfig = {
     plural: { ru: 'Спектакли', en: 'Productions' }
   },
   admin: {
-    useAsTitle: 'slug',
-    defaultColumns: ['slug', 'year', 'durationMin', 'status'],
+    // Dotted-path useAsTitle is supported on Payload 3.x and returns the
+    // current locale's value when the target field is `localized: true`.
+    // If a future Payload version stops accepting dotted paths here, the
+    // fallback is to project a top-level `displayTitle` via a beforeChange
+    // hook — see PAYLOAD_POLISH_PLAN.md §1.4 fallback notes.
+    useAsTitle: 'identity.title',
+    defaultColumns: [
+      'identity.title',
+      'year',
+      'durationMin',
+      'status',
+      'settings.featured'
+    ],
     group: { ru: 'Контент', en: 'Content' },
     livePreview: {
       url: ({ data, locale }) => {
