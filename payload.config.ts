@@ -21,6 +21,8 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { en } from '@payloadcms/translations/languages/en'
+import { ru } from '@payloadcms/translations/languages/ru'
 import sharp from 'sharp'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -51,6 +53,14 @@ export default buildConfig({
         { label: 'Desktop', name: 'desktop', width: 1440, height: 900 }
       ]
     }
+  },
+
+  // RU is the primary editor locale (Roman). The community-maintained pack
+  // from @payloadcms/translations covers most chrome strings; missing keys
+  // fall through to EN per Payload's standard merge behavior.
+  i18n: {
+    supportedLanguages: { ru, en },
+    fallbackLanguage: 'en'
   },
 
   collections: [Productions, Media, Users],
