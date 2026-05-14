@@ -1,6 +1,6 @@
 # Image upload standard — Pipeline A is canonical
 
-Status: **implemented 2026-05-14**. `lib/image-variants.ts` is the single source of truth for the variant matrix, naming, encode, and bake/delete operations. The bulk script and the `/api/r2-asset` route both call it. Endpoint was renamed from `/api/r2-asset` once Payload became the canonical CMS in this branch.
+Status: **implemented 2026-05-14**. `lib/image-variants.ts` is the single source of truth for the variant matrix, naming, encode, and bake/delete operations. The bulk script and the `/api/r2-asset` route both call it. Endpoint was renamed from `/api/keystatic-asset` once Payload became the canonical CMS in this branch.
 
 Pairs with [`PAYLOAD_IMAGE_VARIANTS_PLAN.md`](./PAYLOAD_IMAGE_VARIANTS_PLAN.md) (the underlying variant scheme) and [`KEYSTATIC_IMAGE_UPLOAD.md`](./KEYSTATIC_IMAGE_UPLOAD.md) (the existing R2 upload endpoint inherited from the Keystatic era and now reused by the Payload admin).
 
@@ -18,7 +18,7 @@ Pairs with [`PAYLOAD_IMAGE_VARIANTS_PLAN.md`](./PAYLOAD_IMAGE_VARIANTS_PLAN.md) 
 - Editorial workflow today is "type a path" or "click Upload in `ImagePathPreview`". 100% of existing productions reference R2 paths this way. Migrating ~50 productions × N images to Media relations is pure churn with no user-facing benefit.
 - Path strings are CMS-agnostic. If Payload is ever swapped, the site still works as long as R2 stays at `cdn.boklanov.com/productions/<slug>/...`.
 - No DB row per image, no Payload-generated UUIDs in filenames, no opaque Media IDs in page params. Stable URLs forever.
-- The `/api/r2-asset` endpoint (`app/api/r2-asset/route.ts`, formerly `/api/r2-asset`) already implements raw R2 PUT with content-type detection, path sanitisation, ALLOWED_EXT validation, and 25 MB limit. It's battle-tested.
+- The `/api/r2-asset` endpoint (`app/api/r2-asset/route.ts`, formerly `/api/keystatic-asset`) already implements raw R2 PUT with content-type detection, path sanitisation, ALLOWED_EXT validation, and 25 MB limit. It's battle-tested.
 
 ## Why Pipeline B stays in place (as a safety net)
 
