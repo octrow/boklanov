@@ -144,15 +144,29 @@ export interface UserAuthOperations {
  */
 export interface Production {
   id: number
-  /**
-   * Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL.
-   */
-  slug: string
   identity: {
     /**
      * Production title in all three locales. Shown on cards, page, and SEO title.
      */
     title: string
+    /**
+     * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
+     */
+    body?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
     /**
      * Short hook line (≤80 chars) under the title. Bold, italic, and links supported.
      */
@@ -207,25 +221,11 @@ export interface Production {
       }
       [k: string]: unknown
     } | null
-    /**
-     * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
-     */
-    body?: {
-      root: {
-        type: string
-        children: {
-          type: any
-          version: number
-          [k: string]: unknown
-        }[]
-        direction: ('ltr' | 'rtl') | null
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-        indent: number
-        version: number
-      }
-      [k: string]: unknown
-    } | null
   }
+  /**
+   * Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL.
+   */
+  slug: string
   media?: {
     /**
      * Primary image — used on cards, the production page, and the OG preview.
@@ -302,14 +302,6 @@ export interface Production {
         }[]
       | null
   }
-  /**
-   * Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.
-   */
-  year?: number | null
-  /**
-   * Performance length in minutes including intermission. Optional.
-   */
-  durationMin?: number | null
   production?: {
     /**
      * Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).
@@ -750,16 +742,16 @@ export interface PayloadMigration {
  * via the `definition` "productions_select".
  */
 export interface ProductionsSelect<T extends boolean = true> {
-  slug?: T
   identity?:
     | T
     | {
         title?: T
+        body?: T
         tagline?: T
         synopsis?: T
         directorsNote?: T
-        body?: T
       }
+  slug?: T
   media?:
     | T
     | {
@@ -796,8 +788,6 @@ export interface ProductionsSelect<T extends boolean = true> {
               id?: T
             }
       }
-  year?: T
-  durationMin?: T
   production?:
     | T
     | {

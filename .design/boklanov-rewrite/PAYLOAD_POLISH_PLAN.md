@@ -27,6 +27,8 @@ after P1–P3 + media UX shipped.
 | 5.2       | `5ee93ff`             | `prebuild` regenerates types + importMap                                                                                               |
 | extra A   | `be20c4e`             | Lexical richText editor for `identity.directorsNote` + `identity.body` (replaces textarea/markdoc)                                     |
 | extra B   | `0cd5e47`             | Lexical richText editor for `identity.tagline` + `identity.synopsis`; one-shot SQL migration script for all four columns               |
+| extra C   | operator-run          | `scripts/migrate-richtext-data.ts` applied against Neon → varchar→jsonb auto-cast clean; `npm run dev` boots                           |
+| 5.3       | (this PR)             | `scripts/backfill-nulls.ts` — derives `theatre.country` from city; ageRating deliberately skipped (per Q8 default)                     |
 
 Not shipped this round (intentional):
 
@@ -36,34 +38,14 @@ Not shipped this round (intentional):
 - **Tier 4 wordmark** — admin top-left logo not yet swapped to a custom `boklanov.com` Unbounded mark; Roman hasn't asked.
 - **Tier 6** — runs together with the Keystatic deletion PR, not before.
 
-## Outstanding work blocked on prod-DB writes
+## Lexical migration — DONE 2026-05-14
 
 The extra A / B commits flipped four `productions.identity.*` columns from
-`character varying` to `jsonb` (Lexical) but the existing seeded rows in
-Neon still hold plain strings — Postgres can't auto-cast varchar→jsonb when
-the contents aren't valid JSON, so `npm run dev` / `pushDevSchema` aborts
-until a one-shot data migration rewrites those values:
-
-```bash
-# 1. Backup
-mkdir -p .backups && node --input-type=module -e "
-import 'dotenv/config'; import pg from 'pg'; import fs from 'node:fs/promises';
-const c=new pg.Client({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false}}); await c.connect();
-const r=await c.query(\\\`SELECT id, _parent_id, _locale, identity_tagline, identity_synopsis, identity_directors_note, identity_body FROM productions_locales WHERE identity_tagline IS NOT NULL OR identity_synopsis IS NOT NULL OR identity_directors_note IS NOT NULL OR identity_body IS NOT NULL ORDER BY id, _locale\\\`);
-const f='.backups/productions_locales-richtext-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
-await fs.writeFile(f, JSON.stringify(r.rows, null, 2)); console.log('Wrote',f,'rows:',r.rows.length); await c.end();
-"
-# 2. Dry-run, then apply
-npx tsx scripts/migrate-richtext-data.ts --dry-run
-npx tsx scripts/migrate-richtext-data.ts
-# 3. Restart dev, regenerate types
-npm run dev   # let pushDevSchema convert columns
-npm run payload:generate:types
-```
-
-The Neon write step needs an operator at the keyboard — the safety
-classifier on this machine refuses to issue the UPDATE without explicit
-per-action approval.
+`character varying` to `jsonb` (Lexical). The one-shot
+`scripts/migrate-richtext-data.ts` rewrote every seeded varchar value as
+a `SerializedEditorState` before Payload's `pushDevSchema` re-applied the
+column types. `.backups/productions_locales-richtext-2026-05-14T00-28-53-936Z.json`
+holds the pre-migration snapshot. `npm run dev` now boots cleanly.
 
 What's already live (do not redo):
 
@@ -401,39 +383,32 @@ These touch Postgres column shapes; require running
 `npm run payload:generate:types` and re-seeding or running a manual
 update. Skip until Tier 1+2 are live and stable.
 
-### 3.1 Promote `ageRating` and `theatre.country` to selects
+### 3.1 Country → select — **prep complete, field flip pending**
 
-`KEYSTATIC_IMPROVEMENT_PLAN.md` 2026-05-06 decision row documents that
-both fields have null entries needing backfill. Pre-Payload: 16 null
-ageRatings + 8 null theatre.countries (3 explicit, 5 missing).
-
-Audit again in Postgres before promoting (the seed may have normalised
-some). Then:
+Backfill (5.3) is the prerequisite — once every row has a non-null
+`production.theatre.country`, flip the field from `type: 'text'` to
+`type: 'select'`:
 
 ```ts
 {
-  name: 'ageRating',
+  name: 'country',
   type: 'select',
-  defaultValue: '6+',
+  label: { ru: 'Страна', en: 'Country' },
   options: [
-    { label: '0+', value: '0+' },
-    { label: '6+', value: '6+' },
-    { label: '12+', value: '12+' },
-    { label: '16+', value: '16+' },
-    { label: '18+', value: '18+' }
+    { value: 'RU', label: { ru: 'Россия', en: 'Russia' } },
+    { value: 'KZ', label: { ru: 'Казахстан', en: 'Kazakhstan' } },
+    { value: 'DE', label: { ru: 'Германия', en: 'Germany' } },
+    { value: 'AT', label: { ru: 'Австрия', en: 'Austria' } },
+    { value: 'ES', label: { ru: 'Испания', en: 'Spain' } }
+    // extend on demand: BE, PL, FR, CH, CZ, IT, NL, SE, FI, EE, LV, LT, UA
   ]
 }
 ```
 
-`fields.select` with `defaultValue` will silent-fill missing rows on
-first edit. To avoid that, audit + backfill nulls in Postgres first via
-a one-off script (`scripts/backfill-age-rating.ts`).
-
-### 3.2 `role` promotion review
-
-Currently `taxonomy.role` is `select hasMany`. Keystatic shipped it as
-`multiselect` after a flip-flop (decision log entry 2026-05-06 user).
-Confirm Payload behaves the same way. No schema change expected.
+Drizzle keeps the column as text in Postgres — `select` is admin-only
+metadata. No migration; safe to ship as soon as backfill is applied. Do
+not flip until backfill is verified (any orphan row with NULL or an
+out-of-list ISO-2 will render the input blank in /admin).
 
 ### 3.3 Tour cities + form/lineage/tags — **shipped in `1d9f511`, extended in `86aa673` + `017422c`**
 
@@ -517,20 +492,34 @@ surface during code review:
 "prebuild": "npm run payload:generate:types && npm run payload:generate:importmap"
 ```
 
-### 5.3 Migration script for null backfills
+### 5.3 Migration script for null backfills — **shipped 2026-05-14**
 
-Before Tier 3.1 can ship, write `scripts/backfill-nulls.ts`:
+`scripts/backfill-nulls.ts` ships in this PR. Scope tightened per Q8
+(default = don't auto-default ageRating; let Roman fill it in /admin):
 
-- Find all productions with `production.ageRating === null` → set to
-  `'6+'` (the most common value across the dataset; lets a select
-  default win).
-- Find all with `production.theatre.country === null` → set to derived
-  from `theatre.city` via a lookup table (Moscow→RU, Berlin→DE, Astana→KZ
-  …).
+- **theatre.country** — derived from `production.theatre.city` (any
+  locale) via a hard-coded lookup built from the canonical pairs already
+  present in the dataset: RU (Moscow, Saint Petersburg, Arkhangelsk,
+  Barnaul, Kaliningrad, Nizhny Tagil, Novosibirsk, Nyagan,
+  Khanty-Mansiysk), KZ (Almaty, Aktobe), DE (Berlin, Bremen,
+  Geestenseth), AT (Vienna), ES (Alicante, Torrevieja).
+- **ageRating** — deliberately untouched. Roman backfills in /admin.
 
-Same idempotency rule as the seed: pre-check current value, only set if
-null. Verify with `npm run payload:seed --dry-run` (after adding that
-flag).
+Idempotent: only touches rows where `production_theatre_country IS NULL`.
+Reports unresolved rows (no derivable city) for manual admin backfill.
+Eight prod rows currently have `country = NULL`; two are derivable
+(`dialogi-po-povodu-dzhaza` → AT, `flea-circus` → RU), the other six lack
+city values entirely and surface in the unresolved list.
+
+Run:
+
+```bash
+npx tsx scripts/backfill-nulls.ts --dry-run
+npx tsx scripts/backfill-nulls.ts
+```
+
+The Neon write needs an operator at the keyboard — the safety classifier
+on this machine refuses to issue UPDATE without per-action approval.
 
 ### 5.4 Admin access log
 
@@ -624,10 +613,11 @@ Per `PAYLOAD_MIGRATION_PLAN §C`:
 2. ~~**Tier 2**~~ — **shipped 2026-05-14**. Tabs + live-preview breakpoints + dead-space cleanup. (2.2/2.4 verified as no-ops.)
 3. ~~**Tier 3.3**~~ — **shipped 2026-05-14**. RowLabels across every array on Productions + About.
 4. ~~**Tier 4 theme**~~ — **shipped 2026-05-14**. Light/dark switcher kept available (dark-lock tried and reverted).
-5. ~~**Tier 5.1 + 5.2**~~ — **shipped 2026-05-14**. predev + prebuild hooks. (5.3 still pending — only needed before Tier 3.1. 5.4 deferred.)
-6. **Lexical migration follow-up** — operator must run `scripts/migrate-richtext-data.ts` against Neon before `npm run dev` boots cleanly; types regen + commit afterwards.
-7. **Tier 3.1** — Promote `ageRating` + `country` to selects. Requires the 5.3 backfill script first. **Pending dogfood feedback from Roman on the shipped Tier 1+2.**
-8. **Tier 6** — Cutover prep + Keystatic deletion. Final PR before retiring `/keystatic`.
+5. ~~**Tier 5.1 + 5.2**~~ — **shipped 2026-05-14**. predev + prebuild hooks. (5.4 deferred.)
+6. ~~**Lexical migration follow-up**~~ — **shipped 2026-05-14**. `scripts/migrate-richtext-data.ts` applied; types regenerated.
+7. ~~**Tier 5.3 backfill (theatre.country)**~~ — **script shipped 2026-05-14**, awaiting operator run against Neon. Six rows surface as unresolved → manual /admin backfill.
+8. **Tier 3.1** — Promote `country` to select (options scaffolded in §3.1). Flip the field once 5.3 backfill is verified on prod.
+9. **Tier 6** — Cutover prep + Keystatic deletion. Final PR before retiring `/keystatic`.
 
 Tier 4 wordmark logo is deferred indefinitely unless Roman asks; Tier 3.5
 drafts/versions still deferred (single editor, low risk).
