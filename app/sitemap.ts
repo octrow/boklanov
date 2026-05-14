@@ -1,11 +1,7 @@
 import type { MetadataRoute } from 'next'
 
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
-
-// Canonical base - override at build time with NEXT_PUBLIC_BASE_URL.
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 const STATIC_PATHS = [
   '/',

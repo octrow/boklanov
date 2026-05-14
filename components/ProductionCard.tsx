@@ -54,7 +54,8 @@ export function ProductionCard({
   ]
     .filter(Boolean)
     .join(', ')
-  const effectiveCover = (coverPhoto?.src ? coverPhoto : null) ?? production.poster
+  const effectiveCover =
+    (coverPhoto?.src ? coverPhoto : null) ?? production.poster
   const alt = effectiveCover.credit
     ? `${altBase} (${effectiveCover.credit})`
     : altBase
@@ -80,6 +81,10 @@ export function ProductionCard({
             alt={alt}
             fill
             sizes={sizes}
+            // Posters are duotone-blended on top of a CSS layer — q=70 with
+            // AVIF/WebP is visually indistinguishable from q=75 and saves
+            // ~10–20 KiB per card on the LCP path.
+            quality={70}
             style={{ objectFit: 'cover' }}
             priority={priority}
             fetchPriority={priority ? 'high' : undefined}

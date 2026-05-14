@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
@@ -108,10 +109,6 @@ function projectAbout(
     deForthcoming: locale === 'de' && resolvedLocale !== 'de'
   }
 }
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 export async function generateMetadata({
   params

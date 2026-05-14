@@ -1,12 +1,9 @@
 import { getTranslations } from 'next-intl/server'
 import type { NextRequest } from 'next/server'
 
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 function localeBase(locale: Locale): string {
   return locale === 'en' ? BASE : `${BASE}/${locale}`

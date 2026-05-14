@@ -15,6 +15,7 @@ import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import {
   getAllProductions,
@@ -22,10 +23,6 @@ import {
   type ProductionView
 } from '@/lib/content'
 import styles from './page.module.css'
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 // Map theatre country code to a BCP 47 language tag for inLanguage.
 function productionLanguage(country: string | undefined): string {
@@ -115,9 +112,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const production = await getProduction(slug, locale)
   if (!production) return {}
 
-  const base = (
-    process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-  ).replace(/\/$/, '')
+  const base = BASE
   const url =
     locale === 'en'
       ? `${base}/productions/${slug}`

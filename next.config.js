@@ -34,6 +34,14 @@ export default withPayload(
       serverExternalPackages: ['gray-matter'],
       images: {
         formats: ['image/avif', 'image/webp'],
+        // Intermediate widths so 320px/420px poster cards aren't served from
+        // the 640px deviceSize — was wasting ~50–70 KiB per LCP image.
+        imageSizes: [16, 32, 48, 64, 96, 128, 256, 320, 384, 420, 480],
+        // Drop the 2048w/3840w slots — posters are display-cropped, those
+        // tiers only inflate srcset payload without ever being picked.
+        deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+        // Allow lower-q variants for ProductionCard cover images.
+        qualities: [60, 70, 75, 90],
         remotePatterns: [
           { protocol: 'https', hostname: 'cdn.boklanov.com' },
           { protocol: 'https', hostname: '*.r2.dev' }

@@ -15,6 +15,7 @@ import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 import { buildSearchIndex } from '@/lib/search'
 
@@ -40,10 +41,6 @@ try {
   document.documentElement.dataset.theme = 'gorky';
 }
 `
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
