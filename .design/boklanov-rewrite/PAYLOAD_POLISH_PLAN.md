@@ -28,7 +28,8 @@ after P1–P3 + media UX shipped.
 | extra A   | `be20c4e`             | Lexical richText editor for `identity.directorsNote` + `identity.body` (replaces textarea/markdoc)                                     |
 | extra B   | `0cd5e47`             | Lexical richText editor for `identity.tagline` + `identity.synopsis`; one-shot SQL migration script for all four columns               |
 | extra C   | operator-run          | `scripts/migrate-richtext-data.ts` applied against Neon → varchar→jsonb auto-cast clean; `npm run dev` boots                           |
-| 5.3       | (this PR)             | `scripts/backfill-nulls.ts` — derives `theatre.country` from city; ageRating deliberately skipped (per Q8 default)                     |
+| 5.3       | (this PR)             | `scripts/backfill-nulls.ts` — derives `theatre.country` from city + theatre-name fallback; ageRating deliberately skipped              |
+| 3.1       | (this PR)             | `production.theatre.country` flipped from `type: 'text'` → `type: 'select'` (RU/KZ/DE/AT/ES); types regenerated                        |
 
 Not shipped this round (intentional):
 
@@ -383,32 +384,21 @@ These touch Postgres column shapes; require running
 `npm run payload:generate:types` and re-seeding or running a manual
 update. Skip until Tier 1+2 are live and stable.
 
-### 3.1 Country → select — **prep complete, field flip pending**
+### 3.1 Country → select — **shipped 2026-05-14 (this PR)**
 
-Backfill (5.3) is the prerequisite — once every row has a non-null
-`production.theatre.country`, flip the field from `type: 'text'` to
-`type: 'select'`:
+`production.theatre.country` is now a `type: 'select'` covering 22 ISO-2
+codes (sorted by RU label): AT, BY, GB, DE, ES, IT, KZ, KG, LV, LT, LU,
+NL, PL, PT, RU, UZ, UA, FI, FR, CZ, CH, EE. Types narrowed to a union in
+`payload-types.ts`. Three DB rows still hold NULL after the 5.3 backfill
+— the select renders them blank, no breakage. Roman fills them in /admin
+on the next dogfood pass. Extend `options[]` when a new country shows up
+(the script's `CITY_TO_COUNTRY` already knows capitals for the new set).
 
-```ts
-{
-  name: 'country',
-  type: 'select',
-  label: { ru: 'Страна', en: 'Country' },
-  options: [
-    { value: 'RU', label: { ru: 'Россия', en: 'Russia' } },
-    { value: 'KZ', label: { ru: 'Казахстан', en: 'Kazakhstan' } },
-    { value: 'DE', label: { ru: 'Германия', en: 'Germany' } },
-    { value: 'AT', label: { ru: 'Австрия', en: 'Austria' } },
-    { value: 'ES', label: { ru: 'Испания', en: 'Spain' } }
-    // extend on demand: BE, PL, FR, CH, CZ, IT, NL, SE, FI, EE, LV, LT, UA
-  ]
-}
-```
+Source of truth: `collections/Productions.ts` → `production.theatre.country.options`.
 
 Drizzle keeps the column as text in Postgres — `select` is admin-only
-metadata. No migration; safe to ship as soon as backfill is applied. Do
-not flip until backfill is verified (any orphan row with NULL or an
-out-of-list ISO-2 will render the input blank in /admin).
+metadata. No migration. Any orphan row holding a NULL or an out-of-list
+ISO-2 renders blank in /admin; backfill manually.
 
 ### 3.3 Tour cities + form/lineage/tags — **shipped in `1d9f511`, extended in `86aa673` + `017422c`**
 
@@ -615,8 +605,8 @@ Per `PAYLOAD_MIGRATION_PLAN §C`:
 4. ~~**Tier 4 theme**~~ — **shipped 2026-05-14**. Light/dark switcher kept available (dark-lock tried and reverted).
 5. ~~**Tier 5.1 + 5.2**~~ — **shipped 2026-05-14**. predev + prebuild hooks. (5.4 deferred.)
 6. ~~**Lexical migration follow-up**~~ — **shipped 2026-05-14**. `scripts/migrate-richtext-data.ts` applied; types regenerated.
-7. ~~**Tier 5.3 backfill (theatre.country)**~~ — **script shipped 2026-05-14**, awaiting operator run against Neon. Six rows surface as unresolved → manual /admin backfill.
-8. **Tier 3.1** — Promote `country` to select (options scaffolded in §3.1). Flip the field once 5.3 backfill is verified on prod.
+7. ~~**Tier 5.3 backfill (theatre.country)**~~ — **shipped 2026-05-14**. Two rows derived from city, three from theatre-name fallback (ARTiSHOK→KZ, Театр 8+→AT, Балтийский дом→RU), three remain unresolved → manual /admin backfill.
+8. ~~**Tier 3.1**~~ — **shipped 2026-05-14**. `country` is now a select; types narrowed to `'RU' | 'KZ' | 'DE' | 'AT' | 'ES'`.
 9. **Tier 6** — Cutover prep + Keystatic deletion. Final PR before retiring `/keystatic`.
 
 Tier 4 wordmark logo is deferred indefinitely unless Roman asks; Tier 3.5

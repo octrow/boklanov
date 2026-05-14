@@ -498,12 +498,78 @@ export const Productions: CollectionConfig = {
                     },
                     {
                       name: 'country',
-                      type: 'text',
-                      label: { ru: 'Страна (ISO-2)', en: 'Country (ISO-2)' },
+                      type: 'select',
+                      label: { ru: 'Страна', en: 'Country' },
+                      options: [
+                        {
+                          value: 'AT',
+                          label: { ru: 'Австрия', en: 'Austria' }
+                        },
+                        {
+                          value: 'BY',
+                          label: { ru: 'Беларусь', en: 'Belarus' }
+                        },
+                        {
+                          value: 'GB',
+                          label: { ru: 'Великобритания', en: 'United Kingdom' }
+                        },
+                        {
+                          value: 'DE',
+                          label: { ru: 'Германия', en: 'Germany' }
+                        },
+                        { value: 'ES', label: { ru: 'Испания', en: 'Spain' } },
+                        { value: 'IT', label: { ru: 'Италия', en: 'Italy' } },
+                        {
+                          value: 'KZ',
+                          label: { ru: 'Казахстан', en: 'Kazakhstan' }
+                        },
+                        {
+                          value: 'KG',
+                          label: { ru: 'Киргизия', en: 'Kyrgyzstan' }
+                        },
+                        { value: 'LV', label: { ru: 'Латвия', en: 'Latvia' } },
+                        {
+                          value: 'LT',
+                          label: { ru: 'Литва', en: 'Lithuania' }
+                        },
+                        {
+                          value: 'LU',
+                          label: { ru: 'Люксембург', en: 'Luxembourg' }
+                        },
+                        {
+                          value: 'NL',
+                          label: { ru: 'Нидерланды', en: 'Netherlands' }
+                        },
+                        { value: 'PL', label: { ru: 'Польша', en: 'Poland' } },
+                        {
+                          value: 'PT',
+                          label: { ru: 'Португалия', en: 'Portugal' }
+                        },
+                        { value: 'RU', label: { ru: 'Россия', en: 'Russia' } },
+                        {
+                          value: 'UZ',
+                          label: { ru: 'Узбекистан', en: 'Uzbekistan' }
+                        },
+                        {
+                          value: 'UA',
+                          label: { ru: 'Украина', en: 'Ukraine' }
+                        },
+                        {
+                          value: 'FI',
+                          label: { ru: 'Финляндия', en: 'Finland' }
+                        },
+                        { value: 'FR', label: { ru: 'Франция', en: 'France' } },
+                        { value: 'CZ', label: { ru: 'Чехия', en: 'Czechia' } },
+                        {
+                          value: 'CH',
+                          label: { ru: 'Швейцария', en: 'Switzerland' }
+                        },
+                        { value: 'EE', label: { ru: 'Эстония', en: 'Estonia' } }
+                      ],
                       admin: {
                         description: {
-                          ru: 'Двухбуквенный ISO-код страны: RU / KZ / DE / AT / ES…',
-                          en: 'ISO-2 country code: RU / KZ / DE / AT / ES…'
+                          ru: 'Страна театра-производителя. Добавь новые значения в options, если нужна страна вне списка.',
+                          en: 'Country of the producing theatre. Extend options[] when a new country is needed.'
                         }
                       }
                     },

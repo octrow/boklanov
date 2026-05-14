@@ -320,9 +320,34 @@ export interface Production {
        */
       city?: string | null
       /**
-       * ISO-2 country code: RU / KZ / DE / AT / ES…
+       * Country of the producing theatre. Extend options[] when a new country is needed.
        */
-      country?: string | null
+      country?:
+        | (
+            | 'AT'
+            | 'BY'
+            | 'GB'
+            | 'DE'
+            | 'ES'
+            | 'IT'
+            | 'KZ'
+            | 'KG'
+            | 'LV'
+            | 'LT'
+            | 'LU'
+            | 'NL'
+            | 'PL'
+            | 'PT'
+            | 'RU'
+            | 'UZ'
+            | 'UA'
+            | 'FI'
+            | 'FR'
+            | 'CZ'
+            | 'CH'
+            | 'EE'
+          )
+        | null
       /**
        * Public website of the theatre. Must include https://
        */
@@ -337,14 +362,22 @@ export interface Production {
      */
     premiereDate?: string | null
     /**
-     * Public ticketing page if one exists. Must include https://
-     */
-    ticketsUrl?: string | null
-    /**
      * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
      */
     ageRating?: string | null
+    /**
+     * Public ticketing page if one exists. Must include https://
+     */
+    ticketsUrl?: string | null
   }
+  /**
+   * Numeric year used for sort and display on cards.
+   */
+  year?: number | null
+  /**
+   * Performance length in minutes including intermission. Optional.
+   */
+  durationMin?: number | null
   taxonomy?: {
     /**
      * Roman's roles in this production. Multi-select from a closed list.
@@ -802,9 +835,11 @@ export interface ProductionsSelect<T extends boolean = true> {
               year?: T
             }
         premiereDate?: T
-        ticketsUrl?: T
         ageRating?: T
+        ticketsUrl?: T
       }
+  year?: T
+  durationMin?: T
   taxonomy?:
     | T
     | {
