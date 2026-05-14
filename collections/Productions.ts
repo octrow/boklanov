@@ -622,6 +622,9 @@ export const Productions: CollectionConfig = {
                     }
                   ],
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/ValueRowLabel#default'
+                    },
                     description: {
                       ru: 'Жанр / форма спектакля. Свободный текст — можно вводить любой тег. Устоявшиеся: solo, puppet, theater, family, festival, reading.',
                       en: 'Theatrical form / genre. Free-form — type any tag. Established values: solo, puppet, theater, family, festival, reading.'
@@ -644,6 +647,9 @@ export const Productions: CollectionConfig = {
                     }
                   ],
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/ValueRowLabel#default'
+                    },
                     description: {
                       ru: 'Традиция или школа, к которой восходит спектакль. Свободный текст. Устоявшиеся: btk, kudashov, rgisi.',
                       en: 'Tradition or school the production traces back to. Free-form. Established values: btk, kudashov, rgisi.'
@@ -666,6 +672,9 @@ export const Productions: CollectionConfig = {
                     }
                   ],
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/ValueRowLabel#default'
+                    },
                     description: {
                       ru: 'Произвольные ключевые слова для поиска и фильтрации. Отличается от формы (жанр) и школы (традиция).',
                       en: 'Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).'
@@ -1051,6 +1060,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Гастроли', en: 'Tour' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/CityRowLabel#default'
+                    },
                     description: {
                       ru: 'Города, где спектакль был на гастролях. Не путать с городом премьеры (см. «Театр» выше).',
                       en: 'Cities where this production has toured. Not the premiere venue (see Theatre above).'
