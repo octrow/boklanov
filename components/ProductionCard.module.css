@@ -61,19 +61,32 @@
   letter-spacing: var(--letter-spacing-tight);
   color: var(--ink);
   margin: 0;
-  /* Underline sits below the baseline; oxblood reveal on card hover. */
-  display: inline;
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0 1px;
-  transition: background-size var(--duration-fast) var(--easing-default);
+  /* Underline reveal on card hover. Use a composited transform on a pseudo
+     element instead of animating background-size — Lighthouse flags the
+     latter as a non-composited animation (paint on every frame). */
+  position: relative;
+  display: inline-block;
   padding-bottom: 2px;
 }
 
-.card:hover .titleRu,
-.card:focus-visible .titleRu {
-  background-size: 100% 1px;
+.titleRu::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--duration-fast) var(--easing-default);
+  /* Hint the compositor — keeps the underline on its own layer. */
+  will-change: transform;
+}
+
+.card:hover .titleRu::after,
+.card:focus-visible .titleRu::after {
+  transform: scaleX(1);
 }
 
 .titleEn {

@@ -38,12 +38,16 @@ export interface Variant {
 }
 
 /** Width / quality matrix matches FeaturedStrip.tsx sizes + detail-page
- *  `(min-width:1024px) 640px, 100vw`. See PAYLOAD_IMAGE_VARIANTS_PLAN.md. */
+ *  `(min-width:1024px) 640px, 100vw`. See PAYLOAD_IMAGE_VARIANTS_PLAN.md.
+ *  Quality lowered (2026-05-14) after Lighthouse flagged ~100 KiB
+ *  per-image savings on the 420/600 widths — posters render under a
+ *  duotone CSS blend so the visual cost is minimal. Re-bake with
+ *  `npm run bake-variants -- --force` after editing. */
 export const VARIANTS: ReadonlyArray<Variant> = [
-  { width: 420, quality: 65 },
-  { width: 600, quality: 65 },
-  { width: 828, quality: 62 },
-  { width: 1080, quality: 60 }
+  { width: 420, quality: 55 },
+  { width: 600, quality: 58 },
+  { width: 828, quality: 55 },
+  { width: 1080, quality: 52 }
 ]
 
 /** Source extensions we bake from. AVIF / GIF / SVG sources are skipped —
