@@ -58,7 +58,7 @@
     "fathom-client": "^3.4.1",
     "graphql": "^16.14.0",
     "lqip-modern": "^2.2.1",
-    "next": "^15.5.15",
+    "next": "15.4.11",
     "next-intl": "^4.11.0",
     "next-mdx-remote": "^6.0.0",
     "openai": "^6.35.0",
