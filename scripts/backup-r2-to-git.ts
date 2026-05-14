@@ -60,7 +60,7 @@ const dryRun = process.argv.includes('--dry-run')
 // must be added here when they appear in keystatic.config.ts.
 const ALLOWED_PREFIXES = ['productions/', 'about/', 'uploads/']
 
-// Defensive second filter — the keystatic-asset route only accepts these
+// Defensive second filter — the r2-asset route only accepts these
 // extensions, so anything else in R2 under an allowed prefix is suspicious
 // and we skip it rather than commit it.
 const ALLOWED_EXT = new Set([
@@ -178,9 +178,10 @@ async function main() {
 
   // ── Orphan deletion ──────────────────────────────────────────────────────
   // Walk public/ under each allowed prefix. Any image file there that is
-  // NOT present in R2 was either (a) edited out via the Keystatic Remove
-  // button [DELETE /api/keystatic-asset], or (b) a stale upload from before
-  // an out-of-band R2 cleanup. Either way, we mirror R2 by removing it.
+  // NOT present in R2 was either (a) edited out via the Remove button in
+  // the Payload admin [DELETE /api/r2-asset], or (b) a stale upload from
+  // before an out-of-band R2 cleanup. Either way, we mirror R2 by
+  // removing it.
   const remoteKeys = new Set(remote.map((o) => o.Key))
   const orphans: string[] = []
 

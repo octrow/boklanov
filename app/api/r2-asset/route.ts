@@ -1,21 +1,25 @@
 /**
- * Asset uploader + remover for the Keystatic admin UI.
+ * R2 asset uploader + remover for the Payload admin UI.
  *
- * POST   — upload an image to R2 (and disk in dev).
- * DELETE — remove an image from R2 (and disk in dev).
+ * Pipeline A endpoint per `.design/boklanov-rewrite/IMAGE_UPLOAD_STANDARD.md`.
+ * Called by `components/admin/ImagePathPreview` whenever an editor clicks
+ * Upload / Remove next to a production media path-string field.
  *
- * Goal (both dev and prod):
- *   1. Upload the file to Cloudflare R2 at <directory>/<filename> so the
- *      Keystatic preview thumbnail and the live page can render it via
- *      cdnUrl() immediately.
- *   2. (YAML linking is done by the editor saving in Keystatic — separate
- *      bot commit, single commit per save.)
+ * Inherited from the Keystatic era and renamed once Payload became the
+ * canonical CMS (this branch). Route used to live at /api/keystatic-asset.
+ *
+ * POST   — upload an image to R2 (and disk in dev), then bake the AVIF
+ *          variant matrix inline so consumers see srcset hits the moment
+ *          this request returns.
+ * DELETE — remove an image from R2 (and disk in dev), then delete the
+ *          four orphan AVIF variants so they don't accumulate.
  *
  * Dev (localhost): writes to public/ on disk AND uploads to R2.
  *   - Disk write makes the file available on the dev server even if R2
  *     credentials aren't configured locally.
  *   - R2 upload is best-effort: if creds are absent it's silently skipped
- *     and the response includes an `r2Warning`.
+ *     and the response includes an `r2Warning`. Variant bake is also
+ *     skipped in that case (it requires R2 PUT access).
  *   - Overwrites are allowed (dev experiments are ephemeral).
  *
  * Prod (Vercel): R2 upload only.
@@ -34,6 +38,14 @@
 import { NextResponse } from 'next/server'
 import { writeFile, mkdir, unlink } from 'node:fs/promises'
 import path from 'node:path'
+
+import {
+  BAKEABLE_EXTS,
+  bakeVariantsFromBuffer,
+  deleteVariants,
+  makeR2Client,
+  r2Bucket
+} from '@/lib/image-variants'
 
 const ALLOWED_EXT = new Set([
   '.jpg',
@@ -229,7 +241,12 @@ export async function POST(req: Request) {
       const message = err instanceof Error ? err.message : String(err)
       return NextResponse.json({ error: message }, { status: 500 })
     }
-    return NextResponse.json({ src, bytes: buffer.byteLength })
+    const variantsBuilt = await bakeVariantsInline(buffer, r2Key, ext)
+    return NextResponse.json({
+      src,
+      bytes: buffer.byteLength,
+      ...(variantsBuilt !== null ? { variantsBuilt } : {})
+    })
   }
 
   // ── Development ───────────────────────────────────────────────────────────
@@ -253,11 +270,70 @@ export async function POST(req: Request) {
     r2Warning = err instanceof Error ? err.message : String(err)
   }
 
+  // 3. Bake AVIF variants only if the source actually reached R2 — variants
+  //    are useless without a source there. Failures here log + swallow so
+  //    the upload doesn't fail; bulk `npm run bake-variants` can backfill.
+  const variantsBuilt = r2Warning
+    ? null
+    : await bakeVariantsInline(buffer, r2Key, ext)
+
   return NextResponse.json({
     src,
     bytes: buffer.byteLength,
+    ...(variantsBuilt !== null ? { variantsBuilt } : {}),
     ...(r2Warning ? { r2Warning } : {})
   })
+}
+
+/** Bake the four AVIF widths for a freshly-uploaded source. Returns the count
+ *  of variants written, or null when the source extension isn't bakeable
+ *  (e.g. .svg, .gif). Errors are swallowed with a warn — the source upload
+ *  has already succeeded, and the bulk script can fill any gaps later. */
+async function bakeVariantsInline(
+  buffer: Buffer,
+  r2Key: string,
+  ext: string
+): Promise<number | null> {
+  if (!BAKEABLE_EXTS.has(ext)) return null
+  try {
+    const client = makeR2Client()
+    const result = await bakeVariantsFromBuffer(
+      buffer,
+      r2Key,
+      client,
+      r2Bucket()
+    )
+    return result.built
+  } catch (err) {
+    console.warn(
+      `[r2-asset] variant bake failed for ${r2Key}: ${
+        err instanceof Error ? err.message : String(err)
+      }`
+    )
+    return null
+  }
+}
+
+/** Remove the four AVIF variant keys for a deleted source. Returns the count
+ *  of variants attempted, or null when the source extension isn't bakeable
+ *  (no variants would have existed). R2 DELETE is idempotent so absent keys
+ *  don't error; failures here log + swallow so the source delete succeeds
+ *  even if R2 momentarily rejects the variant deletes. */
+async function deleteVariantsInline(r2Key: string): Promise<number | null> {
+  const ext = path.extname(r2Key).toLowerCase()
+  if (!BAKEABLE_EXTS.has(ext)) return null
+  try {
+    const client = makeR2Client()
+    const result = await deleteVariants(r2Key, client, r2Bucket())
+    return result.removed
+  } catch (err) {
+    console.warn(
+      `[r2-asset] variant cleanup failed for ${r2Key}: ${
+        err instanceof Error ? err.message : String(err)
+      }`
+    )
+    return null
+  }
 }
 
 export async function DELETE(req: Request) {
@@ -294,7 +370,12 @@ export async function DELETE(req: Request) {
       const message = err instanceof Error ? err.message : String(err)
       return NextResponse.json({ error: message }, { status: 500 })
     }
-    return NextResponse.json({ src, removed: true })
+    const variantsRemoved = await deleteVariantsInline(r2Key)
+    return NextResponse.json({
+      src,
+      removed: true,
+      ...(variantsRemoved !== null ? { variantsRemoved } : {})
+    })
   }
 
   // ── Development ───────────────────────────────────────────────────────────
@@ -319,9 +400,12 @@ export async function DELETE(req: Request) {
     }
   }
 
+  const variantsRemoved = r2Warning ? null : await deleteVariantsInline(r2Key)
+
   return NextResponse.json({
     src,
     removed: true,
+    ...(variantsRemoved !== null ? { variantsRemoved } : {}),
     ...(r2Warning ? { r2Warning } : {})
   })
 }

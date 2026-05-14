@@ -9,11 +9,11 @@ import type { TextFieldClientComponent } from 'payload'
  * an image path. Slotted via `admin.components.afterInput` on
  * Productions.media.*.src and gallery[].src.
  *
- * Upload   POSTs multipart {file, directory} to /api/keystatic-asset.
+ * Upload   POSTs multipart {file, directory} to /api/r2-asset.
  *          Directory is derived from the production slug:
  *            productions/<slug>/
  *          (the slug field lives at the top level of the productions doc).
- * Remove   DELETEs {src} to /api/keystatic-asset, then clears the field.
+ * Remove   DELETEs {src} to /api/r2-asset, then clears the field.
  *
  * Reuses the existing R2-only upload endpoint (shipped 2026-05-06 per
  * STATUS.md §8.6) so we don't fork a parallel uploader. Path encoding
@@ -32,7 +32,7 @@ const resolveUrl = (path: string | null | undefined): string | null => {
 /** Decide where to put a newly-uploaded file based on (in priority order):
  *  1. The directory of the existing field value (overwriting in place).
  *  2. `productions/<slug>/` if the form has a top-level `slug` field.
- *  3. `uploads/` fallback (matches keystatic-asset ALLOWED_DELETE_PREFIXES).
+ *  3. `uploads/` fallback (matches r2-asset ALLOWED_DELETE_PREFIXES).
  */
 const deriveDirectory = (
   currentValue: string | undefined,
@@ -86,7 +86,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
       const fd = new FormData()
       fd.append('file', file)
       fd.append('directory', deriveDirectory(value, slug))
-      const res = await fetch('/api/keystatic-asset', {
+      const res = await fetch('/api/r2-asset', {
         method: 'POST',
         body: fd
       })
@@ -112,7 +112,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
     setBusy(true)
     setStatus('Removing…')
     try {
-      const res = await fetch('/api/keystatic-asset', {
+      const res = await fetch('/api/r2-asset', {
         method: 'DELETE',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ src: value })
