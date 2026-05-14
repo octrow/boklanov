@@ -214,6 +214,25 @@ export async function encodeVariant(
 // Public API — bake + delete
 // -----------------------------------------------------------------------------
 
+export type BakePhase = 'head' | 'get' | 'encode' | 'put'
+
+/** Structured per-variant failure. Carries enough context to diagnose the
+ *  root cause without re-running: pipeline phase, source + variant keys,
+ *  source size, AWS metadata when present, plus the stack. */
+export interface VariantFailure {
+  sourceKey: string
+  variantKey: string
+  width: number
+  phase: BakePhase
+  message: string
+  errorName?: string
+  awsCode?: string
+  awsStatusCode?: number
+  awsRequestId?: string
+  sourceBytes?: number
+  stack?: string
+}
+
 export interface BakeOpts {
   /** Re-encode even if all four variants already exist. */
   force?: boolean
@@ -221,16 +240,56 @@ export interface BakeOpts {
   dryRun?: boolean
   /** Per-variant write callback for progress reporting. */
   onWrite?: (key: string, bytes: number) => void
+  /** Per-variant failure callback. Fires alongside the failure being added
+   *  to the result so callers can stream errors to a log file or counter. */
+  onFailure?: (failure: VariantFailure) => void
 }
 
 export interface BakeResult {
   built: number
   skipped: number
+  failures: VariantFailure[]
+}
+
+interface AwsLikeError {
+  name?: string
+  message?: string
+  stack?: string
+  Code?: string
+  $metadata?: {
+    httpStatusCode?: number
+    requestId?: string
+  }
+}
+
+function describeFailure(
+  err: unknown,
+  ctx: {
+    sourceKey: string
+    variantKey: string
+    width: number
+    phase: BakePhase
+    sourceBytes?: number
+  }
+): VariantFailure {
+  const e = (err ?? {}) as AwsLikeError
+  return {
+    ...ctx,
+    message: e.message ?? String(err),
+    errorName: e.name,
+    awsCode: e.Code,
+    awsStatusCode: e.$metadata?.httpStatusCode,
+    awsRequestId: e.$metadata?.requestId,
+    stack: e.stack
+  }
 }
 
 /** Encode + PUT all four widths from an in-memory source buffer. Idempotent
  *  via HEAD-skip on each target key. Variants are encoded + uploaded in
- *  parallel (one sharp pipeline per width). */
+ *  parallel (one sharp pipeline per width). Failures on one width do NOT
+ *  abort the others — switched from Promise.all to Promise.allSettled so
+ *  we surface a structured per-variant failure list instead of throwing on
+ *  the first error and masking which specific widths went wrong. */
 export async function bakeVariantsFromBuffer(
   srcBytes: Buffer,
   sourceKey: string,
@@ -244,31 +303,95 @@ export async function bakeVariantsFromBuffer(
     key: variantKey(sourceKey, v.width)
   }))
 
-  const existence = await Promise.all(
+  // HEAD probes — track failures separately so a flaky HEAD doesn't get
+  // counted as a successful skip.
+  const headResults = await Promise.allSettled(
     targets.map(async (t) =>
       opts.force ? false : r2HeadExists(client, bucket, t.key)
     )
   )
-  const missing = targets.filter((_, i) => !existence[i])
-  const skipped = targets.length - missing.length
-  if (missing.length === 0) return { built: 0, skipped }
+  const failures: VariantFailure[] = []
+  const missing: typeof targets = []
+  let skipped = 0
+  headResults.forEach((res, i) => {
+    const t = targets[i]
+    if (res.status === 'rejected') {
+      const failure = describeFailure(res.reason, {
+        sourceKey,
+        variantKey: t.key,
+        width: t.width,
+        phase: 'head',
+        sourceBytes: srcBytes.length
+      })
+      failures.push(failure)
+      opts.onFailure?.(failure)
+      return
+    }
+    if (res.value) {
+      skipped += 1
+    } else {
+      missing.push(t)
+    }
+  })
+
+  if (missing.length === 0) {
+    return { built: 0, skipped, failures }
+  }
 
   if (opts.dryRun) {
     for (const t of missing) {
       opts.onWrite?.(t.key, 0)
     }
-    return { built: missing.length, skipped }
+    return { built: missing.length, skipped, failures }
   }
 
-  await Promise.all(
+  const writeResults = await Promise.allSettled(
     missing.map(async (t) => {
-      const buf = await encodeVariant(srcBytes, t.width, t.quality)
-      await r2PutAvif(client, bucket, t.key, buf)
+      // Encode phase — sharp throws here on corrupt sources, OOM, etc.
+      let buf: Buffer
+      try {
+        buf = await encodeVariant(srcBytes, t.width, t.quality)
+      } catch (encodeErr) {
+        const failure = describeFailure(encodeErr, {
+          sourceKey,
+          variantKey: t.key,
+          width: t.width,
+          phase: 'encode',
+          sourceBytes: srcBytes.length
+        })
+        throw failure
+      }
+      // PUT phase — AWS SDK throws here on throttling, auth, etc.
+      try {
+        await r2PutAvif(client, bucket, t.key, buf)
+      } catch (putErr) {
+        const failure = describeFailure(putErr, {
+          sourceKey,
+          variantKey: t.key,
+          width: t.width,
+          phase: 'put',
+          sourceBytes: srcBytes.length
+        })
+        throw failure
+      }
       opts.onWrite?.(t.key, buf.length)
+      return { key: t.key, bytes: buf.length }
     })
   )
 
-  return { built: missing.length, skipped }
+  let built = 0
+  writeResults.forEach((res) => {
+    if (res.status === 'fulfilled') {
+      built += 1
+    } else {
+      // Already-described failure from the inner try/catch.
+      const failure = res.reason as VariantFailure
+      failures.push(failure)
+      opts.onFailure?.(failure)
+    }
+  })
+
+  return { built, skipped, failures }
 }
 
 /** Variant-baking wrapper that fetches the source from R2 first. Used by
@@ -292,10 +415,15 @@ export async function bakeVariantsFromR2(
   )
   const allPresent = existence.every(Boolean)
   if (allPresent)
-    return { built: 0, skipped: targets.length, missingSource: false }
+    return {
+      built: 0,
+      skipped: targets.length,
+      failures: [],
+      missingSource: false
+    }
 
   if (!(await r2HeadExists(client, bucket, sourceKey))) {
-    return { built: 0, skipped: 0, missingSource: true }
+    return { built: 0, skipped: 0, failures: [], missingSource: true }
   }
 
   if (opts.dryRun) {
@@ -310,7 +438,25 @@ export async function bakeVariantsFromR2(
     return { ...result, missingSource: false }
   }
 
-  const srcBytes = await r2GetBytes(client, bucket, sourceKey)
+  // GET phase — convert failures into one VariantFailure per width so the
+  // caller sees structured errors even when the source download is what
+  // actually broke.
+  let srcBytes: Buffer
+  try {
+    srcBytes = await r2GetBytes(client, bucket, sourceKey)
+  } catch (getErr) {
+    const failures = targets.map((t) =>
+      describeFailure(getErr, {
+        sourceKey,
+        variantKey: t.key,
+        width: t.width,
+        phase: 'get'
+      })
+    )
+    failures.forEach((f) => opts.onFailure?.(f))
+    return { built: 0, skipped: 0, failures, missingSource: false }
+  }
+
   const result = await bakeVariantsFromBuffer(
     srcBytes,
     sourceKey,

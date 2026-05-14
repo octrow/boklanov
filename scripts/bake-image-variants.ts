@@ -18,6 +18,7 @@
 
 import 'dotenv/config'
 import os from 'node:os'
+import { appendFileSync } from 'node:fs'
 
 import pMap from 'p-map'
 import { getPayload } from 'payload'
@@ -29,8 +30,34 @@ import {
   bakeVariantsFromR2,
   makeR2Client,
   r2Bucket,
-  srcToR2Key
+  srcToR2Key,
+  type VariantFailure
 } from '../lib/image-variants'
+
+// Structured per-variant failure log. One JSON object per line so it's
+// easy to grep / jq / sort by phase, awsCode, etc.
+const ERROR_LOG = '/tmp/bake-errors.log'
+
+function logFailure(f: VariantFailure): void {
+  // Console: human-readable single line with the most diagnostic fields.
+  const awsBits = [
+    f.errorName,
+    f.awsCode,
+    f.awsStatusCode != null ? `HTTP ${f.awsStatusCode}` : undefined,
+    f.awsRequestId ? `req=${f.awsRequestId}` : undefined
+  ]
+    .filter(Boolean)
+    .join(' / ')
+  const size =
+    f.sourceBytes != null ? ` src=${(f.sourceBytes / 1024).toFixed(0)}KB` : ''
+  console.warn(
+    `  ⚠ [${f.phase}] ${f.variantKey}${size}  ${
+      awsBits ? `[${awsBits}]  ` : ''
+    }${f.message}`
+  )
+  // File: structured JSON for post-run analysis.
+  appendFileSync(ERROR_LOG, JSON.stringify(f) + '\n')
+}
 
 // -----------------------------------------------------------------------------
 // Source walk — Payload Local API
@@ -102,12 +129,21 @@ async function main() {
   const onlySlug = slugIdx !== -1 ? (args[slugIdx + 1] ?? null) : null
   const concurrency = parseConcurrency(args)
 
+  // Reset the error log on each run so old failures don't bleed into a
+  // fresh diagnosis.
+  try {
+    require('node:fs').writeFileSync(ERROR_LOG, '')
+  } catch {
+    // best-effort — log file is diagnostic, not load-bearing
+  }
+
   const bucket = r2Bucket()
   console.log(
     `R2 bucket: "${bucket}"${dryRun ? '  [DRY RUN]' : ''}${
       force ? '  [FORCE]' : ''
     }${onlySlug ? `  (slug=${onlySlug})` : ''}  concurrency=${concurrency}`
   )
+  console.log(`Errors will be appended to ${ERROR_LOG}`)
 
   const client = makeR2Client()
   const payload = await getPayload({ config })
@@ -123,7 +159,10 @@ async function main() {
   let built = 0
   let skipped = 0
   let missing = 0
-  let errors = 0
+  let failureCount = 0
+  // Track failure causes for the final summary.
+  const phaseTally: Record<string, number> = {}
+  const codeTally: Record<string, number> = {}
 
   await pMap(
     allKeys,
@@ -139,6 +178,14 @@ async function main() {
               const kb = (bytes / 1024).toFixed(0)
               console.log(`  ✓ ${variantKey}  (${kb} KB)`)
             }
+          },
+          onFailure: (f) => {
+            failureCount += 1
+            phaseTally[f.phase] = (phaseTally[f.phase] ?? 0) + 1
+            const codeKey =
+              f.awsCode ?? f.errorName ?? `http-${f.awsStatusCode ?? 'unknown'}`
+            codeTally[codeKey] = (codeTally[codeKey] ?? 0) + 1
+            logFailure(f)
           }
         })
         built += res.built
@@ -148,11 +195,13 @@ async function main() {
           console.warn(`  ⚠ source missing in R2: ${key}`)
         }
       } catch (err) {
-        errors += 1
+        // Unexpected throw (the per-variant try/catch in lib/image-variants
+        // should normally route everything through onFailure; this catches
+        // anything that escaped — e.g. payload-collection iteration errors).
+        failureCount += 1
+        const e = err as Error
         console.warn(
-          `  ⚠ bake failed for ${key}: ${
-            err instanceof Error ? err.message : String(err)
-          }`
+          `  ⚠ UNEXPECTED for ${key}: ${e.name ?? ''} ${e.message ?? String(err)}\n${e.stack ?? ''}`
         )
       }
     },
@@ -162,12 +211,29 @@ async function main() {
   console.log(
     `\nDone. ${built} variant${built === 1 ? '' : 's'} ${
       dryRun ? 'planned' : 'written'
-    }, ${skipped} already present, ${missing} sources missing, ${errors} errors.`
+    }, ${skipped} already present, ${missing} sources missing, ${failureCount} variant failures.`
   )
+
+  if (failureCount > 0) {
+    const phaseSummary = Object.entries(phaseTally)
+      .sort((a, b) => b[1] - a[1])
+      .map(([phase, n]) => `${phase}=${n}`)
+      .join(' ')
+    const codeSummary = Object.entries(codeTally)
+      .sort((a, b) => b[1] - a[1])
+      .map(([code, n]) => `${code}=${n}`)
+      .join(' ')
+    console.log(`Failures by phase: ${phaseSummary}`)
+    console.log(`Failures by code:  ${codeSummary}`)
+    console.log(
+      `Full structured log: ${ERROR_LOG}\n` +
+        `Investigate with e.g.  jq -s '.[] | .message' < ${ERROR_LOG} | sort -u`
+    )
+  }
 
   // Payload Local API leaves the pg pool open; explicitly exit so the script
   // terminates instead of hanging.
-  process.exit(errors === 0 ? 0 : 1)
+  process.exit(failureCount === 0 ? 0 : 1)
 }
 
 main().catch((err) => {
