@@ -18,7 +18,7 @@
 
 import 'dotenv/config'
 import os from 'node:os'
-import { appendFileSync } from 'node:fs'
+import { appendFileSync, writeFileSync } from 'node:fs'
 
 import pMap from 'p-map'
 import { getPayload } from 'payload'
@@ -132,7 +132,7 @@ async function main() {
   // Reset the error log on each run so old failures don't bleed into a
   // fresh diagnosis.
   try {
-    require('node:fs').writeFileSync(ERROR_LOG, '')
+    writeFileSync(ERROR_LOG, '')
   } catch {
     // best-effort — log file is diagnostic, not load-bearing
   }
