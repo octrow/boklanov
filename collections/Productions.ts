@@ -31,8 +31,8 @@ export const Productions: CollectionConfig = {
     useAsTitle: 'slug',
     defaultColumns: [
       'identity.title',
-      'year',
-      'durationMin',
+      'production.year',
+      'production.durationMin',
       'status',
       'settings.featured'
     ],
@@ -450,6 +450,65 @@ export const Productions: CollectionConfig = {
               label: { ru: 'Постановка', en: 'Production details' },
               fields: [
                 {
+                  name: 'premiereDate',
+                  type: 'text',
+                  label: { ru: 'Дата премьеры', en: 'Premiere date' },
+                  localized: true,
+                  admin: {
+                    description: {
+                      ru: 'Дата премьеры свободным текстом — допускаются «весна 2021», «Spring 2021», «март 2021».',
+                      en: 'Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.'
+                    }
+                  }
+                },
+                {
+                  name: 'ageRating',
+                  type: 'text',
+                  label: { ru: 'Возраст', en: 'Age rating' },
+                  admin: {
+                    description: {
+                      ru: 'Возрастное ограничение по российскому стандарту: 0+, 6+, 12+, 16+, 18+.',
+                      en: 'Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.'
+                    }
+                  }
+                },
+                {
+                  name: 'ticketsUrl',
+                  type: 'text',
+                  label: { ru: 'Билеты', en: 'Tickets URL' },
+                  admin: {
+                    description: {
+                      ru: 'Публичная страница покупки билетов (если есть). Обязательно с https://',
+                      en: 'Public ticketing page if one exists. Must include https://'
+                    }
+                  }
+                },
+                {
+                  name: 'year',
+                  type: 'number',
+                  label: { ru: 'Год премьеры', en: 'Premiere year' },
+                  min: 1900,
+                  max: 2100,
+                  index: true,
+                  admin: {
+                    description: {
+                      ru: 'Числовой год — используется для сортировки и в карточках.',
+                      en: 'Numeric year used for sort and display on cards.'
+                    }
+                  }
+                },
+                {
+                  name: 'durationMin',
+                  type: 'number',
+                  label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
+                  admin: {
+                    description: {
+                      ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
+                      en: 'Performance length in minutes including intermission. Optional.'
+                    }
+                  }
+                },
+                {
                   name: 'theatre',
                   type: 'group',
                   label: { ru: 'Театр', en: 'Theatre' },
@@ -596,67 +655,8 @@ export const Productions: CollectionConfig = {
                       }
                     }
                   ]
-                },
-                {
-                  name: 'premiereDate',
-                  type: 'text',
-                  label: { ru: 'Дата премьеры', en: 'Premiere date' },
-                  localized: true,
-                  admin: {
-                    description: {
-                      ru: 'Дата премьеры свободным текстом — допускаются «весна 2021», «Spring 2021», «март 2021».',
-                      en: 'Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.'
-                    }
-                  }
-                },
-                {
-                  name: 'ageRating',
-                  type: 'text',
-                  label: { ru: 'Возраст', en: 'Age rating' },
-                  admin: {
-                    description: {
-                      ru: 'Возрастное ограничение по российскому стандарту: 0+, 6+, 12+, 16+, 18+.',
-                      en: 'Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.'
-                    }
-                  }
-                },
-                {
-                  name: 'ticketsUrl',
-                  type: 'text',
-                  label: { ru: 'Билеты', en: 'Tickets URL' },
-                  admin: {
-                    description: {
-                      ru: 'Публичная страница покупки билетов (если есть). Обязательно с https://',
-                      en: 'Public ticketing page if one exists. Must include https://'
-                    }
-                  }
                 }
               ]
-            },
-            {
-              name: 'year',
-              type: 'number',
-              label: { ru: 'Год премьеры', en: 'Premiere year' },
-              min: 1900,
-              max: 2100,
-              index: true,
-              admin: {
-                description: {
-                  ru: 'Числовой год — используется для сортировки и в карточках.',
-                  en: 'Numeric year used for sort and display on cards.'
-                }
-              }
-            },
-            {
-              name: 'durationMin',
-              type: 'number',
-              label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
-              admin: {
-                description: {
-                  ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
-                  en: 'Performance length in minutes including intermission. Optional.'
-                }
-              }
             }
           ]
         },

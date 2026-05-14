@@ -304,6 +304,26 @@ export interface Production {
   }
   production?: {
     /**
+     * Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.
+     */
+    premiereDate?: string | null
+    /**
+     * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
+     */
+    ageRating?: string | null
+    /**
+     * Public ticketing page if one exists. Must include https://
+     */
+    ticketsUrl?: string | null
+    /**
+     * Numeric year used for sort and display on cards.
+     */
+    year?: number | null
+    /**
+     * Performance length in minutes including intermission. Optional.
+     */
+    durationMin?: number | null
+    /**
      * Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).
      */
     theatre?: {
@@ -357,27 +377,7 @@ export interface Production {
        */
       year?: number | null
     }
-    /**
-     * Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.
-     */
-    premiereDate?: string | null
-    /**
-     * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
-     */
-    ageRating?: string | null
-    /**
-     * Public ticketing page if one exists. Must include https://
-     */
-    ticketsUrl?: string | null
   }
-  /**
-   * Numeric year used for sort and display on cards.
-   */
-  year?: number | null
-  /**
-   * Performance length in minutes including intermission. Optional.
-   */
-  durationMin?: number | null
   taxonomy?: {
     /**
      * Roman's roles in this production. Multi-select from a closed list.
@@ -824,6 +824,11 @@ export interface ProductionsSelect<T extends boolean = true> {
   production?:
     | T
     | {
+        premiereDate?: T
+        ageRating?: T
+        ticketsUrl?: T
+        year?: T
+        durationMin?: T
         theatre?:
           | T
           | {
@@ -834,12 +839,7 @@ export interface ProductionsSelect<T extends boolean = true> {
               url?: T
               year?: T
             }
-        premiereDate?: T
-        ageRating?: T
-        ticketsUrl?: T
       }
-  year?: T
-  durationMin?: T
   taxonomy?:
     | T
     | {
