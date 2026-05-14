@@ -113,25 +113,37 @@ export const Productions: CollectionConfig = {
                 },
                 {
                   name: 'tagline',
-                  type: 'text',
+                  type: 'richText',
                   label: { ru: 'Подзаголовок', en: 'Tagline' },
                   localized: true,
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      InlineToolbarFeature()
+                    ]
+                  }),
                   admin: {
                     description: {
-                      ru: 'Короткая строка-крючок (≤80 символов) под заголовком. Опционально.',
-                      en: 'Short hook line (≤80 chars) under the title. Optional.'
+                      ru: 'Короткая строка-крючок (≤80 символов) под заголовком. Поддерживается жирный, курсив, ссылки.',
+                      en: 'Short hook line (≤80 chars) under the title. Bold, italic, and links supported.'
                     }
                   }
                 },
                 {
                   name: 'synopsis',
-                  type: 'textarea',
+                  type: 'richText',
                   label: { ru: 'Синопсис', en: 'Synopsis' },
                   localized: true,
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      InlineToolbarFeature()
+                    ]
+                  }),
                   admin: {
                     description: {
-                      ru: 'Одно-два предложения, показываются на карточках продакшенов и в результатах поиска. 50–200 знаков — комфортно для SEO.',
-                      en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars is the SEO sweet spot.'
+                      ru: 'Одно-два предложения, показываются на карточках продакшенов и в результатах поиска. 50–200 знаков. Поддерживается жирный, курсив, ссылки.',
+                      en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.'
                     }
                   }
                 },
