@@ -104,6 +104,17 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* LCP poster ships from R2 via `<img srcset>` (no next/image), so the
+            browser can't infer the origin until it parses the preload `<link>`
+            emitted by the home page. Preconnect here so the TLS handshake
+            overlaps HTML parsing and shaves the load-delay phase of LCP. */}
+        {process.env.NEXT_PUBLIC_CDN_BASE && (
+          <link
+            rel='preconnect'
+            href={process.env.NEXT_PUBLIC_CDN_BASE}
+            crossOrigin='anonymous'
+          />
+        )}
         {/* Preload above-the-fold fonts. Phase 9.2: Lora is one VF file
             (Latin+Cyrillic combined) regardless of locale; Inter still subset-split. */}
         <link
