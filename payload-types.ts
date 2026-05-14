@@ -154,13 +154,41 @@ export interface Production {
      */
     title: string
     /**
-     * Short hook line (≤80 chars) under the title. Optional.
+     * Short hook line (≤80 chars) under the title. Bold, italic, and links supported.
      */
-    tagline?: string | null
+    tagline?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
     /**
-     * One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars is the SEO sweet spot.
+     * One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.
      */
-    synopsis?: string | null
+    synopsis?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
     /**
      * Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.
      */
@@ -180,9 +208,23 @@ export interface Production {
       [k: string]: unknown
     } | null
     /**
-     * Full editorial body. Markdown / markdoc — headings, lists, quotes, emphasis.
+     * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
      */
-    body?: string | null
+    body?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
   }
   media?: {
     /**
