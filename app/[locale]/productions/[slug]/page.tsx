@@ -302,11 +302,13 @@ export default async function ProductionDetailPage({
                     }}
                   />
                 ) : (
-                  <img
+                  <Image
                     src={posterSrc}
                     alt={posterAlt}
-                    loading='eager'
-                    decoding='async'
+                    priority
+                    width={0}
+                    height={0}
+                    sizes='(min-width: 1024px) 60vw, 100vw'
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',

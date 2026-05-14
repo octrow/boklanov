@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
@@ -93,7 +94,10 @@ export function GalleryLightbox({ items }: Props) {
           className={styles.overlay}
           role='dialog'
           aria-modal='true'
-          aria-label={t('photoDialogOf', { index: (activeIndex ?? 0) + 1, total })}
+          aria-label={t('photoDialogOf', {
+            index: (activeIndex ?? 0) + 1,
+            total
+          })}
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
@@ -108,7 +112,15 @@ export function GalleryLightbox({ items }: Props) {
             </button>
 
             <div className={styles.imgWrap}>
-              <img src={current.src} alt={current.alt} className={styles.img} />
+              <Image
+                src={current.src}
+                alt={current.alt}
+                width={0}
+                height={0}
+                sizes='min(90vw, 1000px)'
+                className={styles.img}
+                style={{ width: 'auto', height: 'auto' }}
+              />
 
               {total > 1 && (
                 <>

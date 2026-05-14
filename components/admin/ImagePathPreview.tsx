@@ -208,6 +208,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
             background: 'var(--theme-elevation-50, #fafafa)'
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={url}
             alt='preview'

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
@@ -196,11 +197,15 @@ export default async function AboutPage({
 
       {portraitUrl && (
         <figure className={styles.portrait}>
-          <img
+          <Image
             className={styles.portraitImg}
             src={portraitUrl}
             alt={portrait.credit ?? 'Roman Boklanov'}
-            loading='eager'
+            priority
+            width={0}
+            height={0}
+            sizes='(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 100vw'
+            style={{ width: '100%', height: 'auto' }}
           />
           {portrait.credit && (
             <figcaption className={styles.portraitCredit}>

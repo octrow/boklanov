@@ -279,6 +279,7 @@ export async function GET(
       >
         {/* Left: poster or oxblood fallback */}
         {posterUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={posterUrl}
             alt=''

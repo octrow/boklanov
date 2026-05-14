@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
@@ -61,7 +62,15 @@ export function PosterLightbox({ src, alt, children }: Props) {
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
-            <img src={src} alt={alt} className={styles.img} />
+            <Image
+              src={src}
+              alt={alt}
+              width={0}
+              height={0}
+              sizes='min(90vw, 1000px)'
+              className={styles.img}
+              style={{ width: 'auto', height: 'auto' }}
+            />
             <button
               ref={closeRef}
               type='button'

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import * as React from 'react'
 
 import styles from './SpecimenPlate.module.css'
@@ -10,7 +11,6 @@ interface SpecimenPlateProps {
   plateNumber: number
   total: number
   loading?: 'lazy' | 'eager'
-  decoding?: 'async' | 'sync' | 'auto'
 }
 
 /**
@@ -27,15 +27,22 @@ export function SpecimenPlate({
   credit,
   plateNumber,
   total,
-  loading = 'lazy',
-  decoding = 'async'
+  loading = 'lazy'
 }: SpecimenPlateProps) {
   const indexLabel = `${String(plateNumber).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 
   return (
     <figure className={styles.plate}>
       <div className={styles.frame}>
-        <img src={src} alt={alt} loading={loading} decoding={decoding} />
+        <Image
+          src={src}
+          alt={alt}
+          width={0}
+          height={0}
+          sizes='(min-width: 768px) 50vw, 100vw'
+          loading={loading}
+          style={{ width: '100%', height: 'auto' }}
+        />
       </div>
       <figcaption className={styles.caption}>
         <span className={styles.index}>{indexLabel}</span>
