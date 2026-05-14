@@ -53,7 +53,13 @@ const VARIANTS: Variant[] = [
 
 const SOURCE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp'])
 
-const CONCURRENCY = 4
+const CONCURRENCY = 6
+
+// AVIF encoder effort. 6 produces ~10–15 % smaller files than 4 but is
+// 5–10× slower per encode; on the 379-source catalog that ballooned to
+// hours. Effort 4 is the sweet spot — still beats WebP/JPEG by a wide
+// margin while keeping the full bake under ~15 min on a laptop.
+const AVIF_EFFORT = 4
 
 // -----------------------------------------------------------------------------
 // R2 client
@@ -164,10 +170,10 @@ async function encodeVariant(
   width: number,
   quality: number
 ): Promise<Buffer> {
-  return sharp(src)
+  return sharp(src, { failOn: 'none' })
     .rotate() // honor EXIF orientation
     .resize({ width, withoutEnlargement: true })
-    .avif({ quality, effort: 6 })
+    .avif({ quality, effort: AVIF_EFFORT })
     .toBuffer()
 }
 
@@ -241,12 +247,17 @@ async function bakeOne(
 
   const srcBytes = await r2GetBytes(client, sourceKey)
 
-  for (const t of missing) {
-    const buf = await encodeVariant(srcBytes, t.width, t.quality)
-    await r2Put(client, t.key, buf)
-    const kb = (buf.length / 1024).toFixed(0)
-    console.log(`  ✓ ${t.key}  (${kb} KB)`)
-  }
+  // Encode + PUT all missing widths from this source in parallel. The source
+  // is decoded once per worker; sharp re-uses the buffer internally across
+  // the 4 pipelines so we pay the decode cost only once per source.
+  await Promise.all(
+    missing.map(async (t) => {
+      const buf = await encodeVariant(srcBytes, t.width, t.quality)
+      await r2Put(client, t.key, buf)
+      const kb = (buf.length / 1024).toFixed(0)
+      console.log(`  ✓ ${t.key}  (${kb} KB)`)
+    })
+  )
 
   return {
     source: sourceKey,
