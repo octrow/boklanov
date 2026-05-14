@@ -449,6 +449,122 @@ const fetchAllProductions = unstable_cache(
 )
 
 // ---------------------------------------------------------------------------
+// About + Contact globals (Tier 5.5 — replaces fs reads of content/{about,contact})
+// ---------------------------------------------------------------------------
+
+/** Localized text shape returned by Payload's `locale: 'all'` mode after
+ *  passing through `asL10n` — empty locales drop out as `undefined`. Mirrors
+ *  L10nObj used by the productions mapper. */
+export type AboutL10n = L10nObj
+
+export interface AboutData {
+  body: AboutL10n
+  portrait: { src: string | null; credit: string | null }
+  photos: Array<{ src: string; credit: string | null }>
+  milestones: Array<{ year: number | null; label: AboutL10n }>
+  lineage: Array<{
+    key: string
+    name: AboutL10n
+    role: AboutL10n
+    institution: AboutL10n
+    note: AboutL10n
+  }>
+  marginalia: Array<{ note: AboutL10n }>
+}
+
+export interface ContactData {
+  intro: AboutL10n
+  email: string
+  telegramUrl: string | null
+  instagramUrl: string | null
+}
+
+const fetchAboutGlobal = unstable_cache(
+  async (): Promise<AboutData> => {
+    const payload = await getPayload({ config })
+    const doc = (await payload.findGlobal({
+      slug: 'about',
+      locale: 'all',
+      depth: 0
+    })) as unknown as AnyMap
+
+    const portrait = (doc.portrait as AnyMap | undefined) ?? {}
+    const rawPhotos = Array.isArray(doc.photos) ? (doc.photos as AnyMap[]) : []
+    const rawMilestones = Array.isArray(doc.milestones)
+      ? (doc.milestones as AnyMap[])
+      : []
+    const rawLineage = Array.isArray(doc.lineage)
+      ? (doc.lineage as AnyMap[])
+      : []
+    const rawMarginalia = Array.isArray(doc.marginalia)
+      ? (doc.marginalia as AnyMap[])
+      : []
+
+    return {
+      body: asL10n(doc.body),
+      portrait: {
+        src: typeof portrait.src === 'string' ? portrait.src : null,
+        credit: typeof portrait.credit === 'string' ? portrait.credit : null
+      },
+      photos: rawPhotos
+        .filter((p) => typeof p.src === 'string' && p.src.length > 0)
+        .map((p) => ({
+          src: p.src as string,
+          credit: typeof p.credit === 'string' ? p.credit : null
+        })),
+      milestones: rawMilestones.map((m) => ({
+        year: typeof m.year === 'number' ? m.year : null,
+        label: asL10n(m.label)
+      })),
+      lineage: rawLineage.map((l) => ({
+        key: typeof l.key === 'string' ? l.key : '',
+        name: asL10n(l.name),
+        role: asL10n(l.role),
+        institution: asL10n(l.institution),
+        note: asL10n(l.note)
+      })),
+      marginalia: rawMarginalia.map((m) => ({ note: asL10n(m.note) }))
+    }
+  },
+  ['about:global'],
+  { tags: ['about'] }
+)
+
+const fetchContactGlobal = unstable_cache(
+  async (): Promise<ContactData> => {
+    const payload = await getPayload({ config })
+    const doc = (await payload.findGlobal({
+      slug: 'contact',
+      locale: 'all',
+      depth: 0
+    })) as unknown as AnyMap
+
+    return {
+      intro: asL10n(doc.intro),
+      email: typeof doc.email === 'string' ? doc.email : '',
+      telegramUrl:
+        typeof doc.telegramUrl === 'string' && doc.telegramUrl.length > 0
+          ? doc.telegramUrl
+          : null,
+      instagramUrl:
+        typeof doc.instagramUrl === 'string' && doc.instagramUrl.length > 0
+          ? doc.instagramUrl
+          : null
+    }
+  },
+  ['contact:global'],
+  { tags: ['contact'] }
+)
+
+export async function getAbout(): Promise<AboutData> {
+  return fetchAboutGlobal()
+}
+
+export async function getContact(): Promise<ContactData> {
+  return fetchContactGlobal()
+}
+
+// ---------------------------------------------------------------------------
 // Locale projection (unchanged from pre-migration)
 // ---------------------------------------------------------------------------
 

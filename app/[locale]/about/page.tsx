@@ -1,23 +1,14 @@
-import * as fs from 'node:fs'
-import * as path from 'node:path'
-
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { parse as parseYaml } from 'yaml'
 import * as React from 'react'
 
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
+import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
 
 import styles from './page.module.css'
-
-// ── About content types ──────────────────────────────────────────────────
-
-/** Always-object L10n string written by Keystatic's `l10n()` helper. Each
- *  locale is optional; treat missing/empty as "no value for this locale". */
-type L10nString = { ru?: string | null; en?: string | null; de?: string | null }
 
 interface Milestone {
   year: number
@@ -39,56 +30,13 @@ interface AboutPhoto {
 
 interface AboutFrontmatter {
   portrait: { src: string | null; credit: string | null }
-  photos?: AboutPhoto[]
+  photos: AboutPhoto[]
   milestones: Milestone[]
   lineage: LineageItem[]
-  marginalia?: Array<string | null>
+  marginalia: Array<string | null>
 }
 
-/** Raw shape on disk after the unification (content/about/index.yaml).
- *  Top-level keys mirror the schema's group nesting in keystatic.config.ts:
- *  visuals (portrait + photos), timeline (milestones + lineage), margins
- *  (marginalia). Per-locale fields are stored as l10n objects. */
-interface AboutVisuals {
-  portrait?: { src?: string | null; credit?: string | null } | null
-  photos?: AboutPhoto[] | null
-}
-
-interface AboutTimeline {
-  milestones?: Array<{
-    year?: number | null
-    label?: L10nString | string
-  }> | null
-  lineage?: Array<{
-    key?: string
-    name?: L10nString | string
-    role?: L10nString | string
-    institution?: L10nString | string
-    note?: L10nString | string
-  }> | null
-}
-
-interface AboutMargins {
-  marginalia?: Array<L10nString | string | null> | null
-}
-
-interface AboutRawFrontmatter {
-  visuals?: AboutVisuals | null
-  timeline?: AboutTimeline | null
-  margins?: AboutMargins | null
-}
-
-// ── Loader ───────────────────────────────────────────────────────────────
-
-/** Pick the locale's value out of an l10n object, with EN→RU fallback for DE
- *  and EN, mirroring the previous bare-string locale-fallback in this loader.
- *  Bare-string legacy values pass through unchanged. */
-function pickL10n(
-  v: L10nString | string | null | undefined,
-  locale: Locale
-): string {
-  if (!v) return ''
-  if (typeof v === 'string') return v
+function pickL10n(v: AboutL10n, locale: Locale): string {
   const order =
     locale === 'de'
       ? (['de', 'en', 'ru'] as const)
@@ -100,104 +48,62 @@ function pickL10n(
   return ''
 }
 
-/** Project the raw on-disk frontmatter (with l10n objects) down to the flat
- *  per-locale shape that the page renderer expects. Top-level keys come from
- *  the schema's group nesting (visuals / timeline / margins) — see comment on
- *  AboutRawFrontmatter above. */
-function projectFrontmatter(
-  raw: AboutRawFrontmatter,
+/** Resolve the bio body string for a locale with DE→EN→RU fallback,
+ *  returning both the text and which locale actually supplied it (used to
+ *  trigger the "DE forthcoming" Marginalia cue). */
+function pickBody(
+  body: AboutL10n,
   locale: Locale
-): AboutFrontmatter {
-  const visuals = raw.visuals ?? {}
-  const timeline = raw.timeline ?? {}
-  const margins = raw.margins ?? {}
-  return {
-    portrait: {
-      src: visuals.portrait?.src ?? null,
-      credit: visuals.portrait?.credit ?? null
-    },
-    photos: (visuals.photos ?? []).filter((p): p is AboutPhoto => !!p?.src),
-    milestones: (timeline.milestones ?? [])
-      .map((m) => ({
-        year: typeof m.year === 'number' ? m.year : 0,
-        label: pickL10n(m.label ?? '', locale)
-      }))
-      // Drop entries that have neither a year nor a label after locale projection.
-      .filter((m) => m.year || m.label),
-    lineage: (timeline.lineage ?? []).map((l) => ({
-      key: l.key ?? '',
-      name: pickL10n(l.name, locale),
-      role: pickL10n(l.role, locale),
-      institution: pickL10n(l.institution, locale),
-      note: pickL10n(l.note, locale) || undefined
-    })),
-    marginalia: (margins.marginalia ?? []).map((m) => {
-      const s = pickL10n(m ?? '', locale)
-      return s ? s : null
-    })
+): { text: string; resolvedLocale: Locale | null } {
+  const order =
+    locale === 'de'
+      ? (['de', 'en', 'ru'] as const)
+      : ([locale, 'en', 'ru'] as const)
+  for (const l of order) {
+    const s = body[l]
+    if (typeof s === 'string' && s.trim()) {
+      return { text: s.trim(), resolvedLocale: l }
+    }
   }
+  return { text: '', resolvedLocale: null }
 }
 
-function loadAbout(locale: Locale): {
+function projectAbout(
+  data: AboutData,
+  locale: Locale
+): {
   frontmatter: AboutFrontmatter
   paragraphs: string[]
   deForthcoming: boolean
 } {
-  const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
-  const indexPath = path.join(ABOUT_DIR, 'index.yaml')
-
-  if (!fs.existsSync(indexPath)) {
-    return {
-      frontmatter: {
-        portrait: { src: null, credit: null },
-        milestones: [],
-        lineage: []
-      },
-      paragraphs: [],
-      deForthcoming: false
-    }
-  }
-
-  const raw = (parseYaml(fs.readFileSync(indexPath, 'utf8')) ??
-    {}) as AboutRawFrontmatter
-  const frontmatter = projectFrontmatter(raw, locale)
-
-  // Body files live under bio/ to match the schema's `bio` group nesting.
-  // Keystatic computes mdx file paths by joining the field's prop path with
-  // '/' (see getPropPathPortion in @keystatic/core), so `bio.bodyRu` resolves
-  // to <singletonPath>/bio/bodyRu.mdx — not the singleton root.
-  // DE falls back to EN then RU when its body file is missing or empty.
-  const bodyForLocale: Record<Locale, string> = {
-    ru: 'bio/bodyRu.mdx',
-    en: 'bio/bodyEn.mdx',
-    de: 'bio/bodyDe.mdx'
-  } as const
-  const candidates: Locale[] =
-    locale === 'de' ? ['de', 'en', 'ru'] : [locale, 'en', 'ru']
-
-  let body = ''
-  let resolvedLocale: Locale | null = null
-  for (const l of candidates) {
-    const p = path.join(ABOUT_DIR, bodyForLocale[l])
-    if (fs.existsSync(p)) {
-      const text = fs.readFileSync(p, 'utf8').trim()
-      if (text) {
-        body = text
-        resolvedLocale = l
-        break
-      }
-    }
-  }
-
+  const { text: body, resolvedLocale } = pickBody(data.body, locale)
   const paragraphs = body
     .split(/\n{2,}/)
     .map((s) => s.trim())
     .filter(Boolean)
 
   return {
-    frontmatter,
+    frontmatter: {
+      portrait: data.portrait,
+      photos: data.photos
+        .filter((p) => p.src)
+        .map((p) => ({ src: p.src, credit: p.credit })),
+      milestones: data.milestones
+        .map((m) => ({
+          year: typeof m.year === 'number' ? m.year : 0,
+          label: pickL10n(m.label, locale)
+        }))
+        .filter((m) => m.year || m.label),
+      lineage: data.lineage.map((l) => ({
+        key: l.key,
+        name: pickL10n(l.name, locale),
+        role: pickL10n(l.role, locale),
+        institution: pickL10n(l.institution, locale),
+        note: pickL10n(l.note, locale) || undefined
+      })),
+      marginalia: data.marginalia.map((m) => pickL10n(m.note, locale) || null)
+    },
     paragraphs,
-    // "DE forthcoming" cue: requested DE but we fell back to a non-DE body.
     deForthcoming: locale === 'de' && resolvedLocale !== 'de'
   }
 }
@@ -212,7 +118,8 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const { paragraphs } = loadAbout(locale)
+  const about = await getAbout()
+  const { paragraphs } = projectAbout(about, locale)
   const description = paragraphs[0] ?? undefined
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
@@ -258,8 +165,6 @@ function personSchema(locale: Locale, description: string) {
   }
 }
 
-// ── Page ────────────────────────────────────────────────────────────────
-
 export default async function AboutPage({
   params
 }: {
@@ -271,14 +176,12 @@ export default async function AboutPage({
   const tAbout = await getTranslations('about')
   const tHome = await getTranslations('home')
 
-  const { frontmatter, paragraphs, deForthcoming } = loadAbout(locale)
+  const about = await getAbout()
+  const { frontmatter, paragraphs, deForthcoming } = projectAbout(about, locale)
   const { portrait, milestones, lineage, marginalia, photos } = frontmatter
-  // Keystatic allows saving a photo item without selecting a file, which
-  // writes `- {}` to the YAML. Filter these out so no invisible img renders.
-  const validPhotos = photos?.filter((p) => p.src) ?? []
-  const portraitUrl = cdnUrl(portrait?.src)
+  const validPhotos = photos.filter((p) => p.src)
+  const portraitUrl = cdnUrl(portrait.src)
 
-  // First paragraph is the lead (displayed in Lora); the rest are body.
   const [leadParagraph, ...bodyParagraphs] = paragraphs
 
   const schema = personSchema(locale, leadParagraph ?? '')
@@ -296,10 +199,10 @@ export default async function AboutPage({
           <img
             className={styles.portraitImg}
             src={portraitUrl}
-            alt={portrait?.credit ?? 'Roman Boklanov'}
+            alt={portrait.credit ?? 'Roman Boklanov'}
             loading='eager'
           />
-          {portrait?.credit && (
+          {portrait.credit && (
             <figcaption className={styles.portraitCredit}>
               {portrait.credit}
             </figcaption>
@@ -315,7 +218,7 @@ export default async function AboutPage({
             note={
               deForthcoming
                 ? tAbout('deForthcoming')
-                : (marginalia?.[0] ?? undefined)
+                : (marginalia[0] ?? undefined)
             }
           >
             <p className={styles.bioLead}>{leadParagraph}</p>
@@ -324,9 +227,7 @@ export default async function AboutPage({
         {bodyParagraphs.map((para, i) => (
           <Marginalia
             key={i}
-            note={
-              deForthcoming ? undefined : (marginalia?.[i + 1] ?? undefined)
-            }
+            note={deForthcoming ? undefined : (marginalia[i + 1] ?? undefined)}
           >
             <p className={styles.bioParagraph}>{para}</p>
           </Marginalia>
