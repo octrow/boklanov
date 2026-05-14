@@ -17,6 +17,7 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 
 import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
@@ -24,6 +25,25 @@ import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical
 import type { Locale } from '@/i18n/routing'
 
 const LQIP_DIR = path.resolve(process.cwd(), 'public', 'productions')
+
+// ---------------------------------------------------------------------------
+// Process-level in-memory cache — stored on globalThis so it survives Next.js
+// HMR module reloads. Acts as a safety net when unstable_cache is bypassed by
+// browser "Disable cache" / cache-control:no-cache (common in DevTools).
+// In production the TTL is 0 so this block is never entered; unstable_cache
+// with tag-based revalidation owns the production caching lifecycle.
+// ---------------------------------------------------------------------------
+type MemEntry<T> = { data: T; at: number }
+const g = globalThis as typeof globalThis & {
+  _bk?: {
+    all: MemEntry<Production[]> | null
+    about: MemEntry<AboutData> | null
+    contact: MemEntry<ContactData> | null
+  }
+}
+if (!g._bk) g._bk = { all: null, about: null, contact: null }
+const _mem = g._bk
+const MEM_TTL = process.env.NODE_ENV === 'development' ? 60_000 : 0
 
 // ---------------------------------------------------------------------------
 // Types - public shape consumed by page routes (unchanged from pre-migration)
@@ -282,11 +302,14 @@ function payloadDocToProduction(doc: AnyMap): Production {
       country: asString(theatre.country) || undefined,
       url: asString(theatre.url) || undefined
     },
-    year: typeof doc.year === 'number' ? doc.year : undefined,
+    year: typeof production.year === 'number' ? production.year : undefined,
     premiereDate: asL10n(production.premiereDate),
     ticketsUrl: asString(production.ticketsUrl) || null,
     ageRating: asString(production.ageRating) || null,
-    durationMin: typeof doc.durationMin === 'number' ? doc.durationMin : null,
+    durationMin:
+      typeof production.durationMin === 'number'
+        ? production.durationMin
+        : null,
     role: asArray<string>(taxonomy.role),
     form: flatStringArr(taxonomy.form),
     lineage: flatStringArr(taxonomy.lineage),
@@ -418,6 +441,10 @@ function readLqip(slug: string): {
 
 const fetchAllProductions = unstable_cache(
   async (): Promise<Production[]> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.all && now - _mem.all.at < MEM_TTL)
+      return _mem.all.data
+
     const payload = await getPayload({ config })
     const { docs } = await payload.find({
       collection: 'productions',
@@ -442,6 +469,7 @@ const fetchAllProductions = unstable_cache(
       if (ay !== by) return by - ay
       return a.slug.localeCompare(b.slug)
     })
+    _mem.all = { data: out, at: now }
     return out
   },
   ['productions:all'],
@@ -481,6 +509,10 @@ export interface ContactData {
 
 const fetchAboutGlobal = unstable_cache(
   async (): Promise<AboutData> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.about && now - _mem.about.at < MEM_TTL)
+      return _mem.about.data
+
     const payload = await getPayload({ config })
     const doc = (await payload.findGlobal({
       slug: 'about',
@@ -500,7 +532,7 @@ const fetchAboutGlobal = unstable_cache(
       ? (doc.marginalia as AnyMap[])
       : []
 
-    return {
+    const result: AboutData = {
       body: asL10n(doc.body),
       portrait: {
         src: typeof portrait.src === 'string' ? portrait.src : null,
@@ -525,6 +557,8 @@ const fetchAboutGlobal = unstable_cache(
       })),
       marginalia: rawMarginalia.map((m) => ({ note: asL10n(m.note) }))
     }
+    _mem.about = { data: result, at: now }
+    return result
   },
   ['about:global'],
   { tags: ['about'] }
@@ -532,6 +566,10 @@ const fetchAboutGlobal = unstable_cache(
 
 const fetchContactGlobal = unstable_cache(
   async (): Promise<ContactData> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.contact && now - _mem.contact.at < MEM_TTL)
+      return _mem.contact.data
+
     const payload = await getPayload({ config })
     const doc = (await payload.findGlobal({
       slug: 'contact',
@@ -539,7 +577,7 @@ const fetchContactGlobal = unstable_cache(
       depth: 0
     })) as unknown as AnyMap
 
-    return {
+    const result: ContactData = {
       intro: asL10n(doc.intro),
       email: typeof doc.email === 'string' ? doc.email : '',
       telegramUrl:
@@ -551,18 +589,17 @@ const fetchContactGlobal = unstable_cache(
           ? doc.instagramUrl
           : null
     }
+    _mem.contact = { data: result, at: now }
+    return result
   },
   ['contact:global'],
   { tags: ['contact'] }
 )
 
-export async function getAbout(): Promise<AboutData> {
-  return fetchAboutGlobal()
-}
-
-export async function getContact(): Promise<ContactData> {
-  return fetchContactGlobal()
-}
+export const getAbout = cache((): Promise<AboutData> => fetchAboutGlobal())
+export const getContact = cache(
+  (): Promise<ContactData> => fetchContactGlobal()
+)
 
 // ---------------------------------------------------------------------------
 // Locale projection (unchanged from pre-migration)
@@ -702,21 +739,20 @@ function project(p: Production, locale: Locale): ProductionView {
 // Public API — now async. Every caller in app/ and components/ awaits these.
 // ---------------------------------------------------------------------------
 
-export async function getAllProductions(
-  locale: Locale
-): Promise<ProductionView[]> {
-  const all = await fetchAllProductions()
-  return all.map((p) => project(p, locale))
-}
+export const getAllProductions = cache(
+  async (locale: Locale): Promise<ProductionView[]> => {
+    const all = await fetchAllProductions()
+    return all.map((p) => project(p, locale))
+  }
+)
 
-export async function getProduction(
-  slug: string,
-  locale: Locale
-): Promise<ProductionView | null> {
-  const all = await fetchAllProductions()
-  const hit = all.find((p) => p.slug === slug)
-  return hit ? project(hit, locale) : null
-}
+export const getProduction = cache(
+  async (slug: string, locale: Locale): Promise<ProductionView | null> => {
+    const all = await fetchAllProductions()
+    const hit = all.find((p) => p.slug === slug)
+    return hit ? project(hit, locale) : null
+  }
+)
 
 export async function getRelatedProductions(
   production: ProductionView | Production,
@@ -766,7 +802,6 @@ function ageBucket(rating: string | null): string | null {
   return 'adults'
 }
 
-/** No-op kept so legacy test imports compile. unstable_cache owns the cache now. */
 export function _resetCache() {
-  /* noop */
+  if (g._bk) g._bk = { all: null, about: null, contact: null }
 }
