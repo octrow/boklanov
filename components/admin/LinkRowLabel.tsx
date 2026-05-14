@@ -12,11 +12,13 @@ export default function LinkRowLabel() {
   const label = data?.label?.trim()
   if (label) return <span>{label}</span>
   if (data?.url) {
+    let display = data.url
     try {
-      return <span>{new URL(data.url).hostname}</span>
+      display = new URL(data.url).hostname
     } catch {
-      return <span>{data.url}</span>
+      // fall back to raw URL
     }
+    return <span>{display}</span>
   }
   return <span>{fallback}</span>
 }
