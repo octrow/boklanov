@@ -92,7 +92,7 @@ export function ProductionCard({
           <img
             className={styles.coverImg}
             src={cdnUrl(variants.w600)!}
-            srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+            srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
             sizes={sizes}
             alt={alt}
             decoding='async'

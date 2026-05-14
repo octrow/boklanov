@@ -20,6 +20,7 @@ interface SpecimenPlateProps {
   variants?: {
     w420: string
     w600: string
+    w720: string
     w828: string
     w1080: string
   } | null
@@ -53,7 +54,7 @@ export function SpecimenPlate({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={variants.w600}
-            srcSet={`${variants.w420} 420w, ${variants.w600} 600w, ${variants.w828} 828w, ${variants.w1080} 1080w`}
+            srcSet={`${variants.w420} 420w, ${variants.w600} 600w, ${variants.w720} 720w, ${variants.w828} 828w, ${variants.w1080} 1080w`}
             sizes={sizes}
             alt={alt}
             decoding='async'

@@ -269,7 +269,7 @@ export default async function ProductionDetailPage({
         <link
           rel='preload'
           as='image'
-          imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
+          imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w720)} 720w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
           imageSizes='(min-width: 1024px) 640px, 100vw'
           fetchPriority='high'
         />
@@ -301,7 +301,7 @@ export default async function ProductionDetailPage({
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={cdnUrl(variants.w600)!}
-                    srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+                    srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
                     sizes={posterSizes}
                     alt={posterAlt}
                     decoding='async'
@@ -471,6 +471,7 @@ export default async function ProductionDetailPage({
                       ? {
                           w420: cdnUrl(g.variants.w420)!,
                           w600: cdnUrl(g.variants.w600)!,
+                          w720: cdnUrl(g.variants.w720)!,
                           w828: cdnUrl(g.variants.w828)!,
                           w1080: cdnUrl(g.variants.w1080)!
                         }
@@ -791,6 +792,7 @@ export default async function ProductionDetailPage({
                       ? {
                           w420: cdnUrl(g.variants.w420)!,
                           w600: cdnUrl(g.variants.w600)!,
+                          w720: cdnUrl(g.variants.w720)!,
                           w828: cdnUrl(g.variants.w828)!,
                           w1080: cdnUrl(g.variants.w1080)!
                         }

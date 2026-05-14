@@ -78,7 +78,7 @@ export default async function HomePage({
         <link
           rel='preload'
           as='image'
-          imageSrcSet={`${cdnUrl(lcpVariants.w420)} 420w, ${cdnUrl(lcpVariants.w600)} 600w, ${cdnUrl(lcpVariants.w828)} 828w, ${cdnUrl(lcpVariants.w1080)} 1080w`}
+          imageSrcSet={`${cdnUrl(lcpVariants.w420)} 420w, ${cdnUrl(lcpVariants.w600)} 600w, ${cdnUrl(lcpVariants.w720)} 720w, ${cdnUrl(lcpVariants.w828)} 828w, ${cdnUrl(lcpVariants.w1080)} 1080w`}
           imageSizes='(min-width: 1024px) 600px, (min-width: 768px) 50vw, 100vw'
           fetchPriority='high'
         />

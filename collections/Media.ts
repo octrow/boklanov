@@ -36,25 +36,31 @@ export const Media: CollectionConfig = {
         name: 'w420',
         width: 420,
         position: 'centre',
-        formatOptions: { format: 'avif', options: { quality: 65 } }
+        formatOptions: { format: 'avif', options: { quality: 55 } }
       },
       {
         name: 'w600',
         width: 600,
         position: 'centre',
-        formatOptions: { format: 'avif', options: { quality: 65 } }
+        formatOptions: { format: 'avif', options: { quality: 58 } }
+      },
+      {
+        name: 'w720',
+        width: 720,
+        position: 'centre',
+        formatOptions: { format: 'avif', options: { quality: 55 } }
       },
       {
         name: 'w828',
         width: 828,
         position: 'centre',
-        formatOptions: { format: 'avif', options: { quality: 62 } }
+        formatOptions: { format: 'avif', options: { quality: 55 } }
       },
       {
         name: 'w1080',
         width: 1080,
         position: 'centre',
-        formatOptions: { format: 'avif', options: { quality: 60 } }
+        formatOptions: { format: 'avif', options: { quality: 52 } }
       }
     ],
     adminThumbnail: 'w420'

@@ -16,6 +16,7 @@ export interface GalleryItem {
   variants?: {
     w420: string
     w600: string
+    w720: string
     w828: string
     w1080: string
   } | null
@@ -136,7 +137,7 @@ export function GalleryLightbox({ items }: Props) {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={current.variants.w1080}
-                  srcSet={`${current.variants.w600} 600w, ${current.variants.w828} 828w, ${current.variants.w1080} 1080w`}
+                  srcSet={`${current.variants.w600} 600w, ${current.variants.w720} 720w, ${current.variants.w828} 828w, ${current.variants.w1080} 1080w`}
                   sizes='min(90vw, 1000px)'
                   className={styles.img}
                   alt={current.alt}

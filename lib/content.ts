@@ -59,6 +59,7 @@ export type L10nString = string | { ru?: string; en?: string; de?: string }
 export interface ImageVariants {
   w420: string
   w600: string
+  w720: string
   w828: string
   w1080: string
 }
@@ -289,7 +290,7 @@ const flatStringArr = (v: unknown): string[] =>
  *  Vercel envs (Preview + Production) once the script has run. */
 const VARIANTS_ENABLED = process.env.NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED === '1'
 
-const VARIANT_WIDTHS = [420, 600, 828, 1080] as const
+const VARIANT_WIDTHS = [420, 600, 720, 828, 1080] as const
 
 /** Derive variant URLs from a source path by suffixing `.<W>.avif` to the
  *  basename. Returns `null` when variants are disabled, the source is null,
@@ -304,8 +305,9 @@ function buildVariants(src: string | null | undefined): ImageVariants | null {
   return {
     w420: `${stem}.${VARIANT_WIDTHS[0]}.avif`,
     w600: `${stem}.${VARIANT_WIDTHS[1]}.avif`,
-    w828: `${stem}.${VARIANT_WIDTHS[2]}.avif`,
-    w1080: `${stem}.${VARIANT_WIDTHS[3]}.avif`
+    w720: `${stem}.${VARIANT_WIDTHS[2]}.avif`,
+    w828: `${stem}.${VARIANT_WIDTHS[3]}.avif`,
+    w1080: `${stem}.${VARIANT_WIDTHS[4]}.avif`
   }
 }
 

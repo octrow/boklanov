@@ -46,6 +46,12 @@ export interface Variant {
 export const VARIANTS: ReadonlyArray<Variant> = [
   { width: 420, quality: 55 },
   { width: 600, quality: 58 },
+  // 720w was added (2026-05-14) after Lighthouse mobile flagged that the
+  // 828w variant was being picked on Moto G Power (412 viewport × DPR 1.75
+  // = ~720 physical px ideal). Without 720, the browser fell up to 828w
+  // and Lighthouse counted ~25 % of bytes as "wasted". 720w fits the
+  // DPR-1.75 case exactly; iPhones at DPR 2.0+ still jump to 1080w.
+  { width: 720, quality: 55 },
   { width: 828, quality: 55 },
   { width: 1080, quality: 52 }
 ]
