@@ -1,7 +1,34 @@
 # PAYLOAD_POLISH_PLAN
 
-Status: **proposed**. Created 2026-05-14. Owner: Daniil. Follow-up to
-`PAYLOAD_MIGRATION_PLAN.md` after P1–P3 + media UX shipped.
+Status: **Tiers 1 + 2 + 5 shipped 2026-05-14**. Tier 3 + 6 deferred. Tier 4
+parked indefinitely. Owner: Daniil. Follow-up to `PAYLOAD_MIGRATION_PLAN.md`
+after P1–P3 + media UX shipped.
+
+## What shipped 2026-05-14
+
+| #       | Commit            | Scope                                                                                                           |
+| ------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| 1.1     | `49790b3` (prior) | RU/EN `label` on every leaf field in Productions, About, Contact                                                |
+| 1.2     | `9c9a745`         | RU/EN `admin.description` ported verbatim from `keystatic.config.ts`                                            |
+| 1.3     | `4a55e7c`         | Sidebar groups Контент / Медиатека / Система; RU plurals on Users + Media                                       |
+| 1.4     | `d4b0d19`         | `defaultColumns`: `identity.title`, `year`, `durationMin`, `status`, `settings.featured`                        |
+| 1.4-fix | `87b64b6`         | `useAsTitle` reverted to `slug` (kept dotted-path `defaultColumns`)                                             |
+| 1.5     | `2481c7e`         | `admin.condition` hides `bookingCtaLabel`/`bookingCtaUrl` and `featuredOrder` until their toggles are on        |
+| 1.6     | `ad74687`         | `i18n.supportedLanguages: { ru, en }` via `@payloadcms/translations`; fallback `en`                             |
+| 2.1     | `fc16c51`         | 8 unnamed tabs wrap the original `type: 'group'` fields — Postgres shape unchanged                              |
+| 2.1-fix | `1fc6de2`         | `slug` → Идентичность, `year` + `durationMin` → Продакшен, `status` → Настройки. Tab strip is the first element |
+| 2.3     | `3565e1f`         | `custom.scss` tightens the dead band below the tab strip                                                        |
+| 2.5     | `f1abef8`         | Live-preview breakpoints aligned with DESIGN.md (390 / 768 / 1440)                                              |
+| 5.1     | `c83e336`         | `predev` regenerates importMap                                                                                  |
+| 5.2     | `5ee93ff`         | `prebuild` regenerates types + importMap                                                                        |
+
+Not shipped this round (intentional):
+
+- **2.2 locale-switcher banner** — Payload already shows the switcher in the header; custom banner deemed redundant.
+- **2.4 visible save state** — Payload's Save button already greys/colours by dirty state out of the box; nothing to wire.
+- **Tier 3** — deferred until Tier 1+2 dogfood time on the real schema.
+- **Tier 4** — parked per the bury-me review's editorial-fit warning.
+- **Tier 6** — runs together with the Keystatic deletion PR, not before.
 
 What's already live (do not redo):
 
@@ -45,12 +72,12 @@ Each tier below is one PR. Items inside a tier ship together.
 
 ---
 
-## Tier 1 — Zero schema-shape change (1 PR, ~3 h)
+## Tier 1 — Zero schema-shape change (1 PR, ~3 h) — **SHIPPED 2026-05-14**
 
 Pure cosmetics + descriptions. No Postgres migration; no risk to seeded
 content; `npm run payload:generate:types` after merge.
 
-### 1.1 RU labels on every field
+### 1.1 RU labels on every field — **shipped in `49790b3`**
 
 Today `slug`, `year`, `durationMin` etc. show their English schema names
 because we only set `label: { ru, en }` on group containers, not leaf
@@ -104,7 +131,7 @@ below covers the productions schema (most frequent edits):
 | `settings.pressKit`            | Пресс-кит            |
 | `settings.notionIds`           | Notion IDs (legacy)  |
 
-### 1.2 RU descriptions — port from `keystatic.config.ts`
+### 1.2 RU descriptions — port from `keystatic.config.ts` — **shipped in `9c9a745`**
 
 Today only some groups have descriptions. Port every `desc(ru, en)` call
 from `keystatic.config.ts` to `admin.description: { ru, en }` on the
@@ -113,7 +140,7 @@ matching Payload field. Mechanical sweep — no judgement calls.
 Reference: `keystatic.config.ts` lines 165–1054 contain every existing
 description. Mirror verbatim; the editor is the same person.
 
-### 1.3 Sidebar grouping (`admin.group`)
+### 1.3 Sidebar grouping (`admin.group`) — **shipped in `4a55e7c`**
 
 Already partial — both `Productions` and `About` carry
 `group: { ru: 'Контент' }`. Confirm and finalise:
@@ -135,7 +162,12 @@ Three groups → mirror's Keystatic's `ui.navigation` from the keystatic
 review §3 / shipped Tier-1 PR 1. Add `group` to `Users` + `Media`
 collections; rename plurals to RU where the label appears.
 
-### 1.4 List-view columns
+### 1.4 List-view columns — **shipped in `d4b0d19` (+ `87b64b6` rollback of dotted-path useAsTitle)**
+
+`useAsTitle` stays at `slug` after a same-day rollback — Payload 3.84 did
+not surface the localized title cleanly enough to justify the switch.
+`defaultColumns` keeps the dotted paths and renders the Russian title in
+the list view as intended.
 
 Mirror the shipped Keystatic columns (`year`, `durationMin`, `status`)
 but add `identity.title` so the editor reads a real Russian title in the
@@ -159,7 +191,7 @@ fall back to a virtual top-level `displayTitle` field with a
 `beforeChange` hook that copies `identity.title.ru` up. (Same fallback
 pattern Keystatic used per `keystatic.config.ts:163` comment.)
 
-### 1.5 Conditional fields
+### 1.5 Conditional fields — **shipped in `2481c7e`**
 
 Hide pointless inputs:
 
@@ -171,7 +203,10 @@ Payload's `admin.condition` is a function `({ siblingData }) => bool`. No
 storage-shape change — empty values stay in Postgres but the form hides
 them.
 
-### 1.6 Russian admin chrome (optional)
+### 1.6 Russian admin chrome — **shipped in `ad74687`**
+
+Live: `i18n.supportedLanguages: { ru, en }` with `fallbackLanguage: 'en'`.
+Roman picks RU at top-right; missing keys fall through to EN.
 
 Payload supports `i18n.supportedLanguages` to add a locale to the admin
 chrome itself ("Save" → "Сохранить", etc.). Russian isn't ship-built
@@ -192,11 +227,18 @@ keep the field-level RU labels from 1.1. Don't block the PR on this.
 
 ---
 
-## Tier 2 — Form layout polish (1 PR, ~2 h)
+## Tier 2 — Form layout polish (1 PR, ~2 h) — **SHIPPED 2026-05-14**
 
 No schema shape change; same Postgres rows. Layout density only.
 
-### 2.1 Tab strip per top-level group
+### 2.1 Tab strip per top-level group — **shipped in `fc16c51` + `1fc6de2`**
+
+Final shape: eight unnamed tabs wrap the original groups, and the four
+list-view scalars (`slug`, `year`, `durationMin`, `status`) live inside
+the tab they semantically belong to (Идентичность / Продакшен / Настройки)
+rather than floating above the strip. Unnamed tabs are layout-only so
+data shape stays flat — `defaultColumns` + `useAsTitle` still resolve by
+top-level name.
 
 Today every group renders inline, stacked: Identity → Media → Production
 → Taxonomy → Team → Recognition → History → Settings. ~8 sections
@@ -236,7 +278,10 @@ migration. `lib/content.ts` reads identical doc shape.
 viewports. Payload's tab strip behaves better here (it's a flex row with
 overflow-x: auto by default) but verify on 390 px before shipping.
 
-### 2.2 Side-by-side l10n display
+### 2.2 Side-by-side l10n display — **not shipped (path 1 accepted)**
+
+No code change — Payload's built-in locale switcher in the header is the
+shipped UX. Optional banner was deemed redundant.
 
 Localized fields in Payload show a locale-switcher dropdown at the top of
 the form (one locale visible at a time). Keystatic showed RU / EN / DE
@@ -257,7 +302,7 @@ locale switcher is global to the doc. Two paths:
 **Decision: ship path 1.** Add a banner under the page title showing the
 current locale and a CTA "Switch to EN / DE" for clarity.
 
-### 2.3 Dead-space cleanup
+### 2.3 Dead-space cleanup — **shipped in `3565e1f`**
 
 The keystatic-tabs review §2 documents extra padding after switching
 tabs. Payload's tabs don't have the same DOM structure (no
@@ -276,7 +321,10 @@ under each tab strip. If so, add CSS overrides via
 
 Same target as the keystatic shim (`KeystaticEnhancements.tsx` §2 fix).
 
-### 2.4 Visible save state
+### 2.4 Visible save state — **not shipped (verified out-of-box)**
+
+Payload's Save button already greys/colours by dirty state — confirmed
+in dev, nothing to wire.
 
 Bury-me review §Visibility of system status: editors can't tell whether
 the form is dirty.
@@ -286,7 +334,11 @@ dirty (greys when clean, colors when dirty). Verify this works for us out
 of the box; if not, add custom `admin.components.actions` button. Most
 likely a no-op — just confirm before shipping.
 
-### 2.5 Live-preview side pane
+### 2.5 Live-preview side pane — **shipped in `f1abef8`**
+
+Breakpoints (390 / 768 / 1440, short names `m`/`t`/`d`) configured on
+the root `admin.livePreview`. Productions + About inherit; Contact
+omitted (four fields — not worth a preview pane).
 
 Already wired in `collections/Productions.ts` via `admin.livePreview.url`
 and in `globals/About.ts`. Verify it opens. Add to `globals/Contact.ts`
@@ -399,9 +451,9 @@ in payload.config; can be a 50-line component. Not Tier 1–3 priority.
 
 ---
 
-## Tier 5 — Operational quality (1 PR, ~1 h)
+## Tier 5 — Operational quality (1 PR, ~1 h) — **SHIPPED 2026-05-14 (5.1 + 5.2)**
 
-### 5.1 Auto-regenerate importMap on dev startup
+### 5.1 Auto-regenerate importMap on dev startup — **shipped in `c83e336`**
 
 Every time we add a custom admin component (like `ImagePathPreview` or a
 future RowLabel) we have to remember `npm run payload:generate:importmap`
@@ -413,7 +465,7 @@ before reloading. Easy to forget. Add a `predev` hook:
 
 Trade-off: adds ~3 s to `npm run dev`. Worth it.
 
-### 5.2 Type-gen in CI
+### 5.2 Type-gen in CI — **shipped in `5ee93ff`**
 
 `npm run payload:generate:types` writes `payload-types.ts`. Currently
 manual. Add to a `prebuild` hook or a `pretest` so missed regenerations
@@ -526,10 +578,10 @@ Per `PAYLOAD_MIGRATION_PLAN §C`:
 
 ## Recommended order
 
-1. **Tier 1** — RU labels + descriptions + sidebar + columns + conditionals. One PR, ~3 h. Low risk, big editor UX win.
-2. **Tier 2** — Tabs + live-preview breakpoints + save-state confirm. One PR, ~2 h. Zero schema risk.
-3. **Tier 5** — Operational scripts (importmap hook, prebuild type-gen). One PR, ~1 h. Can ship parallel to Tier 1.
-4. **Tier 3** — Schema shape (selects, RowLabel). One PR, ~3 h. **Only after Tier 1 dogfooded.**
+1. ~~**Tier 1**~~ — **shipped 2026-05-14**. RU labels + descriptions + sidebar + columns + conditionals + RU chrome.
+2. ~~**Tier 2**~~ — **shipped 2026-05-14**. Tabs + live-preview breakpoints + dead-space cleanup. (2.2/2.4 verified as no-ops.)
+3. ~~**Tier 5.1 + 5.2**~~ — **shipped 2026-05-14**. predev + prebuild hooks. (5.3 still pending — only needed before Tier 3.1. 5.4 deferred.)
+4. **Tier 3** — Schema shape (selects, RowLabel). One PR, ~3 h. **Pending dogfood feedback from Roman on the shipped Tier 1+2.**
 5. **Tier 6** — Cutover prep + Keystatic deletion. Final PR before retiring `/keystatic`.
 
 Tier 4 is deferred indefinitely unless Roman asks for the wordmark.
