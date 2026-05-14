@@ -97,6 +97,9 @@ export const About: GlobalConfig = {
                 plural: { ru: 'Фотографии', en: 'Photos' }
               },
               admin: {
+                components: {
+                  RowLabel: '/components/admin/GalleryRowLabel#default'
+                },
                 description: {
                   ru: 'Доп. фото для блока внизу страницы. Пустые элементы фильтруются на рендере.',
                   en: 'Extra photos for the bottom block. Empty entries are filtered at render time.'
@@ -145,6 +148,9 @@ export const About: GlobalConfig = {
                 plural: { ru: 'Таймлайн', en: 'Timeline' }
               },
               admin: {
+                components: {
+                  RowLabel: '/components/admin/MilestoneRowLabel#default'
+                },
                 description: {
                   ru: 'Биографическая таймлайн. Год + краткое описание на трёх языках.',
                   en: 'Biographical timeline. Year + short label per locale.'
@@ -185,6 +191,9 @@ export const About: GlobalConfig = {
                 plural: { ru: 'Преемственность', en: 'Lineage' }
               },
               admin: {
+                components: {
+                  RowLabel: '/components/admin/LineageRowLabel#default'
+                },
                 description: {
                   ru: 'Учителя и школы, к которым восходит работа Романа.',
                   en: "Teachers and schools Roman's work traces back to."
@@ -270,6 +279,9 @@ export const About: GlobalConfig = {
                 plural: { ru: 'Маргиналии', en: 'Marginalia' }
               },
               admin: {
+                components: {
+                  RowLabel: '/components/admin/NoteRowLabel#default'
+                },
                 description: {
                   ru: 'Маленькие текстовые врезки в полях страницы «О режиссёре».',
                   en: 'Small textual notes in the margin of the About page.'
