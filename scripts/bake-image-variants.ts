@@ -20,6 +20,7 @@
 
 import 'dotenv/config'
 import path from 'node:path'
+import os from 'node:os'
 import { Buffer } from 'node:buffer'
 
 import {
@@ -53,13 +54,23 @@ const VARIANTS: Variant[] = [
 
 const SOURCE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp'])
 
-const CONCURRENCY = 6
+// Pin each sharp call to one libvips thread. Default is `os.cpus().length`
+// per call — with N pipelines in flight that's N² threads competing for the
+// same cores, and each call ends up slower. One thread per call + many
+// concurrent pipelines is the proven batch pattern; total throughput tracks
+// physical cores almost linearly.
+sharp.concurrency(1)
+
+// Default source-level concurrency = physical cores. Each source then
+// encodes all 4 widths in parallel inside that slot. Override with
+// `--concurrency=N` if you want to push your laptop harder (or back off).
+const DEFAULT_CONCURRENCY = Math.max(2, os.cpus().length)
 
 // AVIF encoder effort. 6 produces ~10–15 % smaller files than 4 but is
 // 5–10× slower per encode; on the 379-source catalog that ballooned to
 // hours. Effort 4 is the sweet spot — still beats WebP/JPEG by a wide
 // margin while keeping the full bake under ~15 min on a laptop.
-const AVIF_EFFORT = 4
+const AVIF_EFFORT = 6
 
 // -----------------------------------------------------------------------------
 // R2 client
@@ -311,17 +322,33 @@ async function collectAllSources(
 // Main
 // -----------------------------------------------------------------------------
 
+function parseConcurrency(args: string[]): number {
+  // Accept both `--concurrency=N` and `--concurrency N` forms.
+  const eqMatch = args.find((a) => a.startsWith('--concurrency='))
+  if (eqMatch) {
+    const n = Number(eqMatch.split('=')[1])
+    if (Number.isFinite(n) && n > 0) return Math.floor(n)
+  }
+  const idx = args.indexOf('--concurrency')
+  if (idx !== -1) {
+    const n = Number(args[idx + 1])
+    if (Number.isFinite(n) && n > 0) return Math.floor(n)
+  }
+  return DEFAULT_CONCURRENCY
+}
+
 async function main() {
   const args = process.argv.slice(2)
   const dryRun = args.includes('--dry-run') || args.includes('--dry')
   const force = args.includes('--force')
   const slugIdx = args.indexOf('--slug')
   const onlySlug = slugIdx !== -1 ? (args[slugIdx + 1] ?? null) : null
+  const concurrency = parseConcurrency(args)
 
   console.log(
     `R2 bucket: "${BUCKET}"${dryRun ? '  [DRY RUN]' : ''}${
       force ? '  [FORCE]' : ''
-    }${onlySlug ? `  (slug=${onlySlug})` : ''}`
+    }${onlySlug ? `  (slug=${onlySlug})` : ''}  concurrency=${concurrency}`
   )
 
   const client = r2Client()
@@ -360,7 +387,7 @@ async function main() {
         )
       }
     },
-    { concurrency: CONCURRENCY }
+    { concurrency }
   )
 
   console.log(
