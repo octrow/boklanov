@@ -59,82 +59,71 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji'
+  | 'Pacific/Fiji';
 
 export interface Config {
   auth: {
-    users: UserAuthOperations
-  }
-  blocks: {}
+    users: UserAuthOperations;
+  };
+  blocks: {};
   collections: {
-    productions: Production
-    media: Media
-    users: User
-    'payload-kv': PayloadKv
-    'payload-locked-documents': PayloadLockedDocument
-    'payload-preferences': PayloadPreference
-    'payload-migrations': PayloadMigration
-  }
-  collectionsJoins: {}
+    productions: Production;
+    media: Media;
+    users: User;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {};
   collectionsSelect: {
-    productions: ProductionsSelect<false> | ProductionsSelect<true>
-    media: MediaSelect<false> | MediaSelect<true>
-    users: UsersSelect<false> | UsersSelect<true>
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>
-    'payload-preferences':
-      | PayloadPreferencesSelect<false>
-      | PayloadPreferencesSelect<true>
-    'payload-migrations':
-      | PayloadMigrationsSelect<false>
-      | PayloadMigrationsSelect<true>
-  }
+    productions: ProductionsSelect<false> | ProductionsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
   db: {
-    defaultIDType: number
-  }
-  fallbackLocale:
-    | ('false' | 'none' | 'null')
-    | false
-    | null
-    | ('ru' | 'en' | 'de')
-    | ('ru' | 'en' | 'de')[]
+    defaultIDType: number;
+  };
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'en' | 'de') | ('ru' | 'en' | 'de')[];
   globals: {
-    about: About
-    contact: Contact
-  }
+    about: About;
+    contact: Contact;
+  };
   globalsSelect: {
-    about: AboutSelect<false> | AboutSelect<true>
-    contact: ContactSelect<false> | ContactSelect<true>
-  }
-  locale: 'ru' | 'en' | 'de'
+    about: AboutSelect<false> | AboutSelect<true>;
+    contact: ContactSelect<false> | ContactSelect<true>;
+  };
+  locale: 'ru' | 'en' | 'de';
   widgets: {
-    collections: CollectionsWidget
-  }
-  user: User
+    collections: CollectionsWidget;
+  };
+  user: User;
   jobs: {
-    tasks: unknown
-    workflows: unknown
-  }
+    tasks: unknown;
+    workflows: unknown;
+  };
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   login: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   registerFirstUser: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   unlock: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
 }
 /**
  * Roman's productions. Slug is the public URL segment.
@@ -143,89 +132,89 @@ export interface UserAuthOperations {
  * via the `definition` "productions".
  */
 export interface Production {
-  id: number
+  id: number;
   identity: {
     /**
      * Production title in all three locales. Shown on cards, page, and SEO title.
      */
-    title: string
+    title: string;
     /**
      * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
      */
     body?: {
       root: {
-        type: string
+        type: string;
         children: {
-          type: any
-          version: number
-          [k: string]: unknown
-        }[]
-        direction: ('ltr' | 'rtl') | null
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-        indent: number
-        version: number
-      }
-      [k: string]: unknown
-    } | null
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     /**
      * Short hook line (≤80 chars) under the title. Bold, italic, and links supported.
      */
     tagline?: {
       root: {
-        type: string
+        type: string;
         children: {
-          type: any
-          version: number
-          [k: string]: unknown
-        }[]
-        direction: ('ltr' | 'rtl') | null
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-        indent: number
-        version: number
-      }
-      [k: string]: unknown
-    } | null
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     /**
      * One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.
      */
     synopsis?: {
       root: {
-        type: string
+        type: string;
         children: {
-          type: any
-          version: number
-          [k: string]: unknown
-        }[]
-        direction: ('ltr' | 'rtl') | null
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-        indent: number
-        version: number
-      }
-      [k: string]: unknown
-    } | null
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     /**
      * Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.
      */
     directorsNote?: {
       root: {
-        type: string
+        type: string;
         children: {
-          type: any
-          version: number
-          [k: string]: unknown
-        }[]
-        direction: ('ltr' | 'rtl') | null
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-        indent: number
-        version: number
-      }
-      [k: string]: unknown
-    } | null
-  }
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
   /**
    * Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL.
    */
-  slug: string
+  slug: string;
   media?: {
     /**
      * Primary image — used on cards, the production page, and the OG preview.
@@ -234,12 +223,12 @@ export interface Production {
       /**
        * Path to the poster. Type manually or click "Upload" in the preview below. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
        */
-      src?: string | null
+      src?: string | null;
       /**
        * Photographer name. Rendered in small print under the image.
        */
-      credit?: string | null
-    }
+      credit?: string | null;
+    };
     /**
      * Optional override for the /productions card only. Falls back to the poster when blank.
      */
@@ -247,12 +236,12 @@ export interface Production {
       /**
        * Path that overrides the poster on the /productions card. Type manually or use Upload below. e.g. /productions/{slug}/cover.webp
        */
-      src?: string | null
+      src?: string | null;
       /**
        * Photographer credit for this cover.
        */
-      credit?: string | null
-    }
+      credit?: string | null;
+    };
     /**
      * Optional override on the home featured strip. Cascade: featuredPhoto → productionsPhoto → poster.
      */
@@ -260,12 +249,12 @@ export interface Production {
       /**
        * Path that overrides productionsPhoto on the home featured strip.
        */
-      src?: string | null
+      src?: string | null;
       /**
        * Photographer credit for this cover.
        */
-      credit?: string | null
-    }
+      credit?: string | null;
+    };
     /**
      * Extra production photos. Order here = order on the page.
      */
@@ -274,18 +263,18 @@ export interface Production {
           /**
            * Path to the image. Type manually or use Upload below. e.g. /productions/{slug}/01.jpg
            */
-          src?: string | null
+          src?: string | null;
           /**
            * Photographer name.
            */
-          credit?: string | null
+          credit?: string | null;
           /**
            * Per-locale caption. Doubles as alt text for screen readers.
            */
-          caption?: string | null
-          id?: string | null
+          caption?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Embedded videos on the production page.
      */
@@ -294,35 +283,35 @@ export interface Production {
           /**
            * Video platform.
            */
-          provider?: ('youtube' | 'vimeo') | null
+          provider?: ('youtube' | 'vimeo') | null;
           /**
            * Just the ID, not the full URL. e.g. 1GWFJ0jfPq4 (not https://youtube.com/watch?v=1GWFJ0jfPq4).
            */
-          id?: string | null
+          id?: string | null;
         }[]
-      | null
-  }
+      | null;
+  };
   production?: {
     /**
      * Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.
      */
-    premiereDate?: string | null
+    premiereDate?: string | null;
     /**
      * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
      */
-    ageRating?: string | null
+    ageRating?: string | null;
     /**
      * Public ticketing page if one exists. Must include https://
      */
-    ticketsUrl?: string | null
+    ticketsUrl?: string | null;
     /**
      * Numeric year used for sort and display on cards.
      */
-    year?: number | null
+    year?: number | null;
     /**
      * Performance length in minutes including intermission. Optional.
      */
-    durationMin?: number | null
+    durationMin?: number | null;
     /**
      * Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).
      */
@@ -330,15 +319,15 @@ export interface Production {
       /**
        * Full theatre name in all three locales.
        */
-      name?: string | null
+      name?: string | null;
       /**
        * Shortened name (if any). Used in dense lists.
        */
-      shortName?: string | null
+      shortName?: string | null;
       /**
        * City where the producing theatre is based.
        */
-      city?: string | null
+      city?: string | null;
       /**
        * Country of the producing theatre. Extend options[] when a new country is needed.
        */
@@ -367,85 +356,76 @@ export interface Production {
             | 'CH'
             | 'EE'
           )
-        | null
+        | null;
       /**
        * Public website of the theatre. Must include https://
        */
-      url?: string | null
+      url?: string | null;
       /**
        * Year the theatre was founded. Optional.
        */
-      year?: number | null
-    }
-  }
+      year?: number | null;
+    };
+  };
   taxonomy?: {
     /**
      * Roman's roles in this production. Multi-select from a closed list.
      */
-    role?:
-      | (
-          | 'director'
-          | 'co-director'
-          | 'performer'
-          | 'art-director'
-          | 'playwright'
-          | 'producer'
-        )[]
-      | null
+    role?: ('director' | 'co-director' | 'performer' | 'art-director' | 'playwright' | 'producer')[] | null;
     /**
      * Theatrical form / genre. Free-form — type any tag. Established values: solo, puppet, theater, family, festival, reading.
      */
     form?:
       | {
-          value?: string | null
-          id?: string | null
+          value?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Tradition or school the production traces back to. Free-form. Established values: btk, kudashov, rgisi.
      */
     lineage?:
       | {
-          value?: string | null
-          id?: string | null
+          value?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).
      */
     tags?:
       | {
-          value?: string | null
-          id?: string | null
+          value?: string | null;
+          id?: string | null;
         }[]
-      | null
-  }
+      | null;
+  };
   team?: {
     creditsRu?:
       | {
-          role?: string | null
-          name?: string | null
-          url?: string | null
-          id?: string | null
+          role?: string | null;
+          name?: string | null;
+          url?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     creditsEn?:
       | {
-          role?: string | null
-          name?: string | null
-          url?: string | null
-          id?: string | null
+          role?: string | null;
+          name?: string | null;
+          url?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     creditsDe?:
       | {
-          role?: string | null
-          name?: string | null
-          url?: string | null
-          id?: string | null
+          role?: string | null;
+          name?: string | null;
+          url?: string | null;
+          id?: string | null;
         }[]
-      | null
-  }
+      | null;
+  };
   recognition?: {
     /**
      * Wins or nominations. Use Festivals for participation without an award.
@@ -455,26 +435,26 @@ export interface Production {
           /**
            * Name of the award or nomination.
            */
-          name?: string | null
+          name?: string | null;
           /**
            * Year the award was received. Optional.
            */
-          year?: number | null
+          year?: number | null;
           /**
            * Award category. If a specific person — phrase as "Best male performance — Maksim Morozov".
            */
-          category?: string | null
+          category?: string | null;
           /**
            * City where the award was given.
            */
-          city?: string | null
+          city?: string | null;
           /**
            * Link to the award page or announcement.
            */
-          url?: string | null
-          id?: string | null
+          url?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Festival selections / programmes without an award. Awards belong above.
      */
@@ -483,22 +463,22 @@ export interface Production {
           /**
            * Name of the festival.
            */
-          name?: string | null
+          name?: string | null;
           /**
            * Year of participation. Optional.
            */
-          year?: number | null
+          year?: number | null;
           /**
            * Festival programme or section.
            */
-          category?: string | null
+          category?: string | null;
           /**
            * Festival city.
            */
-          city?: string | null
-          id?: string | null
+          city?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Reviews and interviews. Each item is one publication — outlet name + headline + link.
      */
@@ -507,22 +487,22 @@ export interface Production {
           /**
            * Article headline in all three locales.
            */
-          title?: string | null
+          title?: string | null;
           /**
            * Direct link to the article. Must include https://
            */
-          url?: string | null
+          url?: string | null;
           /**
            * Outlet name (e.g. sobaka.ru, Süddeutsche Zeitung).
            */
-          outlet?: string | null
+          outlet?: string | null;
           /**
            * Article language code: ru / en / de.
            */
-          language?: string | null
-          id?: string | null
+          language?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Anything that doesn't fit Press / Awards / Festivals — partner pages, behind-the-scenes posts, etc.
      */
@@ -531,15 +511,15 @@ export interface Production {
           /**
            * What the link represents — anchor text in all three locales.
            */
-          label?: string | null
+          label?: string | null;
           /**
            * Target URL. Must include https://
            */
-          url?: string | null
-          id?: string | null
+          url?: string | null;
+          id?: string | null;
         }[]
-      | null
-  }
+      | null;
+  };
   history?: {
     /**
      * Cities where this production has toured. Not the premiere venue (see Theatre above).
@@ -549,10 +529,10 @@ export interface Production {
           /**
            * Tour city.
            */
-          city?: string | null
-          id?: string | null
+          city?: string | null;
+          id?: string | null;
         }[]
-      | null
+      | null;
     /**
      * Venue history — where the production has been performed and roughly how many times.
      */
@@ -561,64 +541,64 @@ export interface Production {
           /**
            * Name of the venue or theatre where the production ran.
            */
-          venue?: string | null
+          venue?: string | null;
           /**
            * City of this venue.
            */
-          city?: string | null
+          city?: string | null;
           /**
            * First year of performances at this venue.
            */
-          yearFrom?: number | null
+          yearFrom?: number | null;
           /**
            * Last year of performances (or current, if still running).
            */
-          yearTo?: number | null
+          yearTo?: number | null;
           /**
            * Approximate count. Free-form — "60+", "more than 100", etc.
            */
-          count?: string | null
-          id?: string | null
+          count?: string | null;
+          id?: string | null;
         }[]
-      | null
-  }
+      | null;
+  };
   /**
    * Lifecycle of this production. Default is "Live" (currently running).
    */
-  status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null
+  status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null;
   settings?: {
     /**
      * When off, the production page hides the booking call-to-action — label/URL below are ignored.
      */
-    bookingCta?: boolean | null
+    bookingCta?: boolean | null;
     /**
      * Booking-button text per locale. Falls back to the default phrase for each locale when blank.
      */
-    bookingCtaLabel?: string | null
+    bookingCtaLabel?: string | null;
     /**
      * Optional. Leave blank to fall back to the default mailto link (see lib/booking.ts).
      */
-    bookingCtaUrl?: string | null
+    bookingCtaUrl?: string | null;
     /**
      * Surfaces this production on the home featured strip.
      */
-    featured?: boolean | null
+    featured?: boolean | null;
     /**
      * Lower numbers appear first. Only used when "Featured" is on.
      */
-    featuredOrder?: number | null
+    featuredOrder?: number | null;
     /**
      * Lower numbers appear first. Leave blank to fall back to premiere year (newest first).
      */
-    listOrder?: number | null
+    listOrder?: number | null;
     /**
      * External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the TourRider sheet on the page.
      */
-    techRider?: string | null
+    techRider?: string | null;
     /**
      * External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the TourRider sheet on the page.
      */
-    pressKit?: string | null
+    pressKit?: string | null;
     /**
      * From the original Notion-based CMS. Read-only in spirit — leave as-is unless re-migrating.
      */
@@ -626,149 +606,149 @@ export interface Production {
       /**
        * ID from the legacy Russian Notion DB. Do not edit — needed for migration cross-reference.
        */
-      ru?: string | null
+      ru?: string | null;
       /**
        * ID from the legacy English Notion DB. Do not edit.
        */
-      en?: string | null
-    }
-  }
-  updatedAt: string
-  createdAt: string
+      en?: string | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number
+  id: number;
   /**
    * Accessibility / SEO alt text, per locale.
    */
-  alt?: string | null
+  alt?: string | null;
   /**
    * Photographer credit.
    */
-  credit?: string | null
-  prefix?: string | null
-  updatedAt: string
-  createdAt: string
-  url?: string | null
-  thumbnailURL?: string | null
-  filename?: string | null
-  mimeType?: string | null
-  filesize?: number | null
-  width?: number | null
-  height?: number | null
-  focalX?: number | null
-  focalY?: number | null
+  credit?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number
+  id: number;
   /**
    * Display name shown in the admin header.
    */
-  name?: string | null
-  updatedAt: string
-  createdAt: string
-  email: string
-  resetPasswordToken?: string | null
-  resetPasswordExpiration?: string | null
-  salt?: string | null
-  hash?: string | null
-  loginAttempts?: number | null
-  lockUntil?: string | null
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
   sessions?:
     | {
-        id: string
-        createdAt?: string | null
-        expiresAt: string
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
       }[]
-    | null
-  password?: string | null
-  collection: 'users'
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number
-  key: string
+  id: number;
+  key: string;
   data:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number
+  id: number;
   document?:
     | ({
-        relationTo: 'productions'
-        value: number | Production
+        relationTo: 'productions';
+        value: number | Production;
       } | null)
     | ({
-        relationTo: 'media'
-        value: number | Media
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
-        relationTo: 'users'
-        value: number | User
-      } | null)
-  globalSlug?: string | null
+        relationTo: 'users';
+        value: number | User;
+      } | null);
+  globalSlug?: string | null;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  updatedAt: string
-  createdAt: string
+    relationTo: 'users';
+    value: number | User;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number
+  id: number;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  key?: string | null
+    relationTo: 'users';
+    value: number | User;
+  };
+  key?: string | null;
   value?:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number
-  name?: string | null
-  batch?: number | null
-  updatedAt: string
-  createdAt: string
+  id: number;
+  name?: string | null;
+  batch?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -778,293 +758,293 @@ export interface ProductionsSelect<T extends boolean = true> {
   identity?:
     | T
     | {
-        title?: T
-        body?: T
-        tagline?: T
-        synopsis?: T
-        directorsNote?: T
-      }
-  slug?: T
+        title?: T;
+        body?: T;
+        tagline?: T;
+        synopsis?: T;
+        directorsNote?: T;
+      };
+  slug?: T;
   media?:
     | T
     | {
         poster?:
           | T
           | {
-              src?: T
-              credit?: T
-            }
+              src?: T;
+              credit?: T;
+            };
         productionsPhoto?:
           | T
           | {
-              src?: T
-              credit?: T
-            }
+              src?: T;
+              credit?: T;
+            };
         featuredPhoto?:
           | T
           | {
-              src?: T
-              credit?: T
-            }
+              src?: T;
+              credit?: T;
+            };
         gallery?:
           | T
           | {
-              src?: T
-              credit?: T
-              caption?: T
-              id?: T
-            }
+              src?: T;
+              credit?: T;
+              caption?: T;
+              id?: T;
+            };
         videos?:
           | T
           | {
-              provider?: T
-              id?: T
-            }
-      }
+              provider?: T;
+              id?: T;
+            };
+      };
   production?:
     | T
     | {
-        premiereDate?: T
-        ageRating?: T
-        ticketsUrl?: T
-        year?: T
-        durationMin?: T
+        premiereDate?: T;
+        ageRating?: T;
+        ticketsUrl?: T;
+        year?: T;
+        durationMin?: T;
         theatre?:
           | T
           | {
-              name?: T
-              shortName?: T
-              city?: T
-              country?: T
-              url?: T
-              year?: T
-            }
-      }
+              name?: T;
+              shortName?: T;
+              city?: T;
+              country?: T;
+              url?: T;
+              year?: T;
+            };
+      };
   taxonomy?:
     | T
     | {
-        role?: T
+        role?: T;
         form?:
           | T
           | {
-              value?: T
-              id?: T
-            }
+              value?: T;
+              id?: T;
+            };
         lineage?:
           | T
           | {
-              value?: T
-              id?: T
-            }
+              value?: T;
+              id?: T;
+            };
         tags?:
           | T
           | {
-              value?: T
-              id?: T
-            }
-      }
+              value?: T;
+              id?: T;
+            };
+      };
   team?:
     | T
     | {
         creditsRu?:
           | T
           | {
-              role?: T
-              name?: T
-              url?: T
-              id?: T
-            }
+              role?: T;
+              name?: T;
+              url?: T;
+              id?: T;
+            };
         creditsEn?:
           | T
           | {
-              role?: T
-              name?: T
-              url?: T
-              id?: T
-            }
+              role?: T;
+              name?: T;
+              url?: T;
+              id?: T;
+            };
         creditsDe?:
           | T
           | {
-              role?: T
-              name?: T
-              url?: T
-              id?: T
-            }
-      }
+              role?: T;
+              name?: T;
+              url?: T;
+              id?: T;
+            };
+      };
   recognition?:
     | T
     | {
         awards?:
           | T
           | {
-              name?: T
-              year?: T
-              category?: T
-              city?: T
-              url?: T
-              id?: T
-            }
+              name?: T;
+              year?: T;
+              category?: T;
+              city?: T;
+              url?: T;
+              id?: T;
+            };
         festivals?:
           | T
           | {
-              name?: T
-              year?: T
-              category?: T
-              city?: T
-              id?: T
-            }
+              name?: T;
+              year?: T;
+              category?: T;
+              city?: T;
+              id?: T;
+            };
         press?:
           | T
           | {
-              title?: T
-              url?: T
-              outlet?: T
-              language?: T
-              id?: T
-            }
+              title?: T;
+              url?: T;
+              outlet?: T;
+              language?: T;
+              id?: T;
+            };
         externalLinks?:
           | T
           | {
-              label?: T
-              url?: T
-              id?: T
-            }
-      }
+              label?: T;
+              url?: T;
+              id?: T;
+            };
+      };
   history?:
     | T
     | {
         tour?:
           | T
           | {
-              city?: T
-              id?: T
-            }
+              city?: T;
+              id?: T;
+            };
         runs?:
           | T
           | {
-              venue?: T
-              city?: T
-              yearFrom?: T
-              yearTo?: T
-              count?: T
-              id?: T
-            }
-      }
-  status?: T
+              venue?: T;
+              city?: T;
+              yearFrom?: T;
+              yearTo?: T;
+              count?: T;
+              id?: T;
+            };
+      };
+  status?: T;
   settings?:
     | T
     | {
-        bookingCta?: T
-        bookingCtaLabel?: T
-        bookingCtaUrl?: T
-        featured?: T
-        featuredOrder?: T
-        listOrder?: T
-        techRider?: T
-        pressKit?: T
+        bookingCta?: T;
+        bookingCtaLabel?: T;
+        bookingCtaUrl?: T;
+        featured?: T;
+        featuredOrder?: T;
+        listOrder?: T;
+        techRider?: T;
+        pressKit?: T;
         notionIds?:
           | T
           | {
-              ru?: T
-              en?: T
-            }
-      }
-  updatedAt?: T
-  createdAt?: T
+              ru?: T;
+              en?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T
-  credit?: T
-  prefix?: T
-  updatedAt?: T
-  createdAt?: T
-  url?: T
-  thumbnailURL?: T
-  filename?: T
-  mimeType?: T
-  filesize?: T
-  width?: T
-  height?: T
-  focalX?: T
-  focalY?: T
+  alt?: T;
+  credit?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  name?: T
-  updatedAt?: T
-  createdAt?: T
-  email?: T
-  resetPasswordToken?: T
-  resetPasswordExpiration?: T
-  salt?: T
-  hash?: T
-  loginAttempts?: T
-  lockUntil?: T
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
   sessions?:
     | T
     | {
-        id?: T
-        createdAt?: T
-        expiresAt?: T
-      }
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T
-  data?: T
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T
-  globalSlug?: T
-  user?: T
-  updatedAt?: T
-  createdAt?: T
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T
-  key?: T
-  value?: T
-  updatedAt?: T
-  createdAt?: T
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T
-  batch?: T
-  updatedAt?: T
-  createdAt?: T
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "about".
  */
 export interface About {
-  id: number
+  id: number;
   /**
    * Biography. Markdown / markdoc. First paragraph is the lead.
    */
-  body?: string | null
+  body?: string | null;
   /**
    * Large portrait at the top of the About page.
    */
@@ -1072,12 +1052,12 @@ export interface About {
     /**
      * Main portrait photo. Path under public/about/ or R2.
      */
-    src?: string | null
+    src?: string | null;
     /**
      * Photographer name.
      */
-    credit?: string | null
-  }
+    credit?: string | null;
+  };
   /**
    * Extra photos for the bottom block. Empty entries are filtered at render time.
    */
@@ -1086,14 +1066,14 @@ export interface About {
         /**
          * Additional photo. Path under public/about/ or R2.
          */
-        src?: string | null
+        src?: string | null;
         /**
          * Photographer name.
          */
-        credit?: string | null
-        id?: string | null
+        credit?: string | null;
+        id?: string | null;
       }[]
-    | null
+    | null;
   /**
    * Biographical timeline. Year + short label per locale.
    */
@@ -1102,14 +1082,14 @@ export interface About {
         /**
          * Milestone year. Optional — leave blank and describe in label for fuzzy dates.
          */
-        year?: number | null
+        year?: number | null;
         /**
          * Milestone description in all three locales.
          */
-        label?: string | null
-        id?: string | null
+        label?: string | null;
+        id?: string | null;
       }[]
-    | null
+    | null;
   /**
    * Teachers and schools Roman's work traces back to.
    */
@@ -1118,26 +1098,26 @@ export interface About {
         /**
          * Stable slug key (e.g. kudashov, btk). Shared across locales.
          */
-        key?: string | null
+        key?: string | null;
         /**
          * Teacher / institution name in all three locales.
          */
-        name?: string | null
+        name?: string | null;
         /**
          * Role / relationship (master, rector, etc.).
          */
-        role?: string | null
+        role?: string | null;
         /**
          * Institution / theatre, if applicable.
          */
-        institution?: string | null
+        institution?: string | null;
         /**
          * Optional note about the connection / influence.
          */
-        note?: string | null
-        id?: string | null
+        note?: string | null;
+        id?: string | null;
       }[]
-    | null
+    | null;
   /**
    * Small textual notes in the margin of the About page.
    */
@@ -1146,96 +1126,96 @@ export interface About {
         /**
          * Short marginal note across three locales.
          */
-        note?: string | null
-        id?: string | null
+        note?: string | null;
+        id?: string | null;
       }[]
-    | null
-  updatedAt?: string | null
-  createdAt?: string | null
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact".
  */
 export interface Contact {
-  id: number
+  id: number;
   /**
    * Optional intro paragraph above the contact buttons.
    */
-  intro?: string | null
+  intro?: string | null;
   /**
    * Roman's public email. Used in the mailto link and copy block.
    */
-  email: string
+  email: string;
   /**
    * Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593
    */
-  telegramUrl?: string | null
+  telegramUrl?: string | null;
   /**
    * Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman
    */
-  instagramUrl?: string | null
-  updatedAt?: string | null
-  createdAt?: string | null
+  instagramUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "about_select".
  */
 export interface AboutSelect<T extends boolean = true> {
-  body?: T
+  body?: T;
   portrait?:
     | T
     | {
-        src?: T
-        credit?: T
-      }
+        src?: T;
+        credit?: T;
+      };
   photos?:
     | T
     | {
-        src?: T
-        credit?: T
-        id?: T
-      }
+        src?: T;
+        credit?: T;
+        id?: T;
+      };
   milestones?:
     | T
     | {
-        year?: T
-        label?: T
-        id?: T
-      }
+        year?: T;
+        label?: T;
+        id?: T;
+      };
   lineage?:
     | T
     | {
-        key?: T
-        name?: T
-        role?: T
-        institution?: T
-        note?: T
-        id?: T
-      }
+        key?: T;
+        name?: T;
+        role?: T;
+        institution?: T;
+        note?: T;
+        id?: T;
+      };
   marginalia?:
     | T
     | {
-        note?: T
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  globalType?: T
+        note?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
-  intro?: T
-  email?: T
-  telegramUrl?: T
-  instagramUrl?: T
-  updatedAt?: T
-  createdAt?: T
-  globalType?: T
+  intro?: T;
+  email?: T;
+  telegramUrl?: T;
+  instagramUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1243,17 +1223,18 @@ export interface ContactSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown
-  }
-  width: 'full'
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown
+  [k: string]: unknown;
 }
+
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

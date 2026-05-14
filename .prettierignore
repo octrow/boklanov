@@ -7,3 +7,7 @@ node_modules/
 
 .demo/
 .renderer/
+
+# Payload-generated files — formatted by Payload, not Prettier
+app/(payload)/admin/importMap.js
+payload-types.ts
