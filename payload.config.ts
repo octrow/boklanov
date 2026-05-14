@@ -43,12 +43,10 @@ export default buildConfig({
 
   admin: {
     user: 'users',
-    // Force dark chrome for the admin. Default (`'all'`) lets each user
-    // flip light/dark from their profile; we lock to `'dark'` because
-    // (a) Roman + Daniil both prefer it and (b) it matches the existing
-    // dark-default editorial tone of /admin (see STATUS.md notes on the
-    // 2026-05-04 paper-contrast pass).
-    theme: 'dark',
+    // `theme: 'all'` (default) keeps the light/dark switcher visible in
+    // the admin header. Roman + Daniil both pick dark in practice, but
+    // the toggle stays available for daylight editing or visual review.
+    theme: 'all',
     meta: {
       titleSuffix: ' · boklanov.com'
     },
