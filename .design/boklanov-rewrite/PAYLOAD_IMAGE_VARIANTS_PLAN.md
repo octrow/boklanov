@@ -1,6 +1,22 @@
 # Plan B — Pre-baked AVIF variants in R2, bypass `/_next/image`
 
-Status: **drafted 2026-05-14**, not started.
+Status: **code shipped 2026-05-14; bake complete; awaiting env-flag flip + Lighthouse verification.**
+
+Code: `lib/image-variants.ts` (shared module), `scripts/bake-image-variants.ts` (bulk), `app/api/r2-asset/route.ts` (inline-bake on admin upload), consumer dual-paths in `ProductionCard.tsx` / `app/[locale]/productions/[slug]/page.tsx` / `GalleryLightbox.tsx` / `SpecimenPlate.tsx`, head preloads in `app/[locale]/page.tsx` + detail page. Track 1 (`collections/Media.ts` `imageSizes`) also landed. Pairs with [`IMAGE_UPLOAD_STANDARD.md`](./IMAGE_UPLOAD_STANDARD.md) for the editorial workflow.
+
+R2 state after the bake (run 2026-05-14 21:00 ALA):
+
+- **1244 variants** in R2 across 54 productions covering poster + productionsPhoto + featuredPhoto + gallery (cross-checked: 87 written + 1157 already present from interrupted prior runs = 1244, matching the dry-run plan).
+- **0 variant failures** (the 73 errors from the user's prior run were transient; idempotent re-run picked them up cleanly).
+- **68 dangling DB refs** to gallery photos that don't exist in R2 (`aiaccio/photo_NNNN_result.webp` set, the `nikita-looking-for-the-sea` and `lika-and-beam` sets). Not bake-related — these are upstream content-ingest gaps; either re-upload the missing source files or scrub the gallery entries from Payload. Tracked separately, doesn't block this plan.
+- Spot-check: `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev/productions/aibolit/poster.600.avif` returns `200 / image/avif / 22 KB / cache-control: public, max-age=31536000, immutable`. Cloudflare ALA PoP serves edge-cached.
+
+Rollout left:
+
+1. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` → value `1` → redeploy preview.
+2. Mobile + desktop Lighthouse vs preview per `LIGHTHOUSE_RUNBOOK.md`.
+3. If mobile Perf ≥ 95, `vercel env add … production` → value `1` → promote.
+4. Post-verification: drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`. Separate PR.
 
 Pairs with [`LIGHTHOUSE_IMPROVEMENT_PLAN.md`](./LIGHTHOUSE_IMPROVEMENT_PLAN.md) (Pattern A = tuning `next/image`) and the mobile re-test in `archive/lighthouse_14052026_1901.json`. Pattern A is the prerequisite quick win; Pattern B is the architectural follow-up.
 
@@ -185,16 +201,20 @@ Once variants serve from R2 and `/_next/image` is no longer used for posters:
 
 ## Sequencing
 
-| Step                                                                | Owner  | Blocker for next | Verifies                                                                      |
-| ------------------------------------------------------------------- | ------ | ---------------- | ----------------------------------------------------------------------------- |
-| 1. Land Plan A (`formats`, `minimumCacheTTL`, `quality=62` on LCP)  | one PR | —                | Mobile 87 → 91-93 (no Payload changes yet)                                    |
-| 2. Write `scripts/bake-image-variants.ts`, dry-run on 3 productions | —      | step 3           | Variants land in R2 with right Content-Type + CacheControl                    |
-| 3. Extend `lib/content.ts` with `variants` + fallback               | —      | step 4           | TS compiles; existing pages unchanged                                         |
-| 4. Switch `ProductionCard` + detail page to variant path            | —      | step 5           | Manual smoke: hero card visually identical, no /\_next/image in network panel |
-| 5. Run Lighthouse mobile + desktop, archive JSON                    | —      | step 6           | Mobile Perf ≥95, LCP ≤2.0 s, $0 image-opt usage                               |
-| 6. Update `collections/Media.ts` with `imageSizes` (Track 1)        | —      | —                | New admin uploads auto-bake; admin thumbnails work                            |
-
-Steps 2-4 can land in one PR (they're co-dependent and useless apart). Step 1 should land separately so we have a clean before/after benchmark.
+| Step                                                                                                               | Status        | Verifies                                                                       |
+| ------------------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------ |
+| 1. Land Plan A (`formats`, `minimumCacheTTL`, `quality=62` on LCP)                                                 | ✅ shipped    | Mobile 87 → 91-93 baseline before any Plan B code                              |
+| 2. Write `scripts/bake-image-variants.ts`, dry-run on 3 productions                                                | ✅ shipped    | Dry-run output matched expected matrix                                         |
+| 3. Extend `lib/content.ts` with `variants` + fallback                                                              | ✅ shipped    | TS compiles; legacy pages unchanged when flag is off                           |
+| 4. Switch `ProductionCard` + detail page to variant path (+ gallery + head preloads)                               | ✅ shipped    | Dual-path rendering keyed on `variants` presence                               |
+| 5. Update `collections/Media.ts` with `imageSizes` (Track 1)                                                       | ✅ shipped    | `payload-types.ts` carries `media.sizes.wXXX.url`; new admin uploads auto-bake |
+| 6. Extract `lib/image-variants.ts` shared module + inline-bake on `/api/r2-asset` POST + delete-variants on DELETE | ✅ shipped    | One module owns the variant contract for bulk + admin paths                    |
+| 7. Run bulk `npm run bake-variants`                                                                                | ✅ done       | 1244 variants in R2, 0 failures, 68 dangling DB refs noted                     |
+| 8. Spot-check variant URLs on `pub-…r2.dev`                                                                        | ✅ done       | All 8 sampled URLs return `200 image/avif` with immutable cache                |
+| 9. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` (value `1`) + redeploy                              | ⏳ next       | Preview deploys serve `<img srcset>` AVIFs, no `/_next/image` for posters      |
+| 10. Lighthouse mobile + desktop vs preview, archive JSON                                                           | ⏳ blocks #11 | Mobile Perf ≥95, LCP ≤2.0 s, zero `/_next/image?` URLs in network panel        |
+| 11. Flip `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1` in Production env, redeploy                                        | ⏳ final      | Live site serves variants from R2 edge                                         |
+| 12. Cleanup PR — drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`            | ⏳ follow-up  | Residual Image-component usage (admin thumbs) goes single-format AVIF          |
 
 ## Risks & mitigations
 
@@ -205,11 +225,11 @@ Steps 2-4 can land in one PR (they're co-dependent and useless apart). Step 1 sh
 - **Storage cost in R2** — four AVIFs per source ≈ 4× small storage hits, but R2 is $0.015/GB/mo and AVIFs are smaller than the source JPEG combined. Net storage delta < 30 %, negligible.
 - **Variants drift from `sizes`** — if FeaturedStrip breakpoints change, regenerate. Document the contract in `lib/content.ts` next to `PosterRef`.
 
-## Open questions (resolve before step 2)
+## Resolved questions
 
-1. **Do we keep gallery stills (`01.jpg`…`11.jpg`) on the detail page going through `next/image`, or also bake variants?** Detail page on prod main currently ships them raw (12× full-size). Branch already switched to `<Image>`. Baking variants would save ~600 KB on that page. Recommend: bake.
-2. **Do we drop `lqip` blur-up once AVIF q=65 + preload is in?** lqip costs ~30 lines of CSS + a base64 string per poster. AVIF decodes fast enough that blur-up is mostly aesthetic now. Recommend: keep for the hero card only.
-3. **Migrate legacy raw-path posters into the Payload `Media` collection?** Would unify the data model (Track 1 covers both) but breaks every `Productions.media.*.src` reference. Recommend: defer — bake-script approach delivers Plan B benefits without the migration cost.
+1. **Bake gallery stills too?** ✅ Yes. `lib/content.ts#buildVariants()` stamps `variants` onto every `GalleryItem`; `GalleryLightbox` + `SpecimenPlate` thread them through and render `<img srcset>` when present, with `next/image` fallback otherwise.
+2. **Drop `lqip` blur-up?** Deferred. Hero cards still emit the lqip background on the cover `<div>`; cheap enough to keep, useful while AVIF decodes on slow networks.
+3. **Migrate legacy raw-path posters into Payload Media?** ✅ No — see [`IMAGE_UPLOAD_STANDARD.md`](./IMAGE_UPLOAD_STANDARD.md). Path strings stay Pipeline A; Payload Media is reserved for `about.visuals.portrait` and future ancillary uploads. The two pipelines use distinct variant-naming conventions and never mix.
 
 ## Re-test protocol
 
