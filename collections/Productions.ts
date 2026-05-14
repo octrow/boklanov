@@ -1,5 +1,11 @@
 import type { CollectionConfig } from 'payload'
 import {
+  lexicalEditor,
+  HeadingFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature
+} from '@payloadcms/richtext-lexical'
+import {
   revalidateProduction,
   revalidateProductionDelete
 } from '../hooks/revalidate'
@@ -131,25 +137,39 @@ export const Productions: CollectionConfig = {
                 },
                 {
                   name: 'directorsNote',
-                  type: 'textarea',
+                  type: 'richText',
                   label: { ru: 'Записка режиссёра', en: "Director's note" },
                   localized: true,
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      InlineToolbarFeature()
+                    ]
+                  }),
                   admin: {
                     description: {
-                      ru: 'Цитата от Романа — рендерится как blockquote на странице. Поддерживается markdoc (курсив / жирный / ссылки).',
-                      en: 'Quote from Roman — rendered as a blockquote on the page. Supports markdoc (italic / bold / links).'
+                      ru: 'Цитата от Романа — рендерится как blockquote на странице. Поддерживается жирный, курсив, ссылки.',
+                      en: 'Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.'
                     }
                   }
                 },
                 {
                   name: 'body',
-                  type: 'textarea',
+                  type: 'richText',
                   label: { ru: 'Полный текст', en: 'Body text' },
                   localized: true,
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+                      FixedToolbarFeature(),
+                      InlineToolbarFeature()
+                    ]
+                  }),
                   admin: {
                     description: {
-                      ru: 'Полный редакторский текст. Markdown / markdoc — заголовки, списки, цитаты, выделение.',
-                      en: 'Full editorial body. Markdown / markdoc — headings, lists, quotes, emphasis.'
+                      ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
+                      en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
                     }
                   }
                 }

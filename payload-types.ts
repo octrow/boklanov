@@ -145,78 +145,166 @@ export interface UserAuthOperations {
 export interface Production {
   id: number
   /**
-   * Folder name in content/productions/ (lowercase, dashes). Don't change after publish — it's the live URL.
+   * Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL.
    */
   slug: string
-  /**
-   * Premiere year. Used for sort and display.
-   */
-  year?: number | null
-  /**
-   * Performance length in minutes, incl. intermission.
-   */
-  durationMin?: number | null
-  status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null
-  /**
-   * Title, tagline, synopsis, director's note, and full body.
-   */
   identity: {
     /**
-     * Production title. Localized.
+     * Production title in all three locales. Shown on cards, page, and SEO title.
      */
     title: string
+    /**
+     * Short hook line (≤80 chars) under the title. Optional.
+     */
     tagline?: string | null
+    /**
+     * One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars is the SEO sweet spot.
+     */
     synopsis?: string | null
     /**
-     * Quote from Roman, rendered italic. Supports markdoc (italic, links).
+     * Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.
      */
-    directorsNote?: string | null
+    directorsNote?: {
+      root: {
+        type: string
+        children: {
+          type: any
+          version: number
+          [k: string]: unknown
+        }[]
+        direction: ('ltr' | 'rtl') | null
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+        indent: number
+        version: number
+      }
+      [k: string]: unknown
+    } | null
     /**
-     * Full editorial body. Markdown / markdoc.
+     * Full editorial body. Markdown / markdoc — headings, lists, quotes, emphasis.
      */
     body?: string | null
   }
   media?: {
+    /**
+     * Primary image — used on cards, the production page, and the OG preview.
+     */
     poster?: {
+      /**
+       * Path to the poster. Type manually or click "Upload" in the preview below. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
+       */
       src?: string | null
+      /**
+       * Photographer name. Rendered in small print under the image.
+       */
       credit?: string | null
     }
+    /**
+     * Optional override for the /productions card only. Falls back to the poster when blank.
+     */
     productionsPhoto?: {
+      /**
+       * Path that overrides the poster on the /productions card. Type manually or use Upload below. e.g. /productions/{slug}/cover.webp
+       */
       src?: string | null
+      /**
+       * Photographer credit for this cover.
+       */
       credit?: string | null
     }
+    /**
+     * Optional override on the home featured strip. Cascade: featuredPhoto → productionsPhoto → poster.
+     */
     featuredPhoto?: {
+      /**
+       * Path that overrides productionsPhoto on the home featured strip.
+       */
       src?: string | null
+      /**
+       * Photographer credit for this cover.
+       */
       credit?: string | null
     }
+    /**
+     * Extra production photos. Order here = order on the page.
+     */
     gallery?:
       | {
+          /**
+           * Path to the image. Type manually or use Upload below. e.g. /productions/{slug}/01.jpg
+           */
           src?: string | null
+          /**
+           * Photographer name.
+           */
           credit?: string | null
+          /**
+           * Per-locale caption. Doubles as alt text for screen readers.
+           */
           caption?: string | null
           id?: string | null
         }[]
       | null
+    /**
+     * Embedded videos on the production page.
+     */
     videos?:
       | {
+          /**
+           * Video platform.
+           */
           provider?: ('youtube' | 'vimeo') | null
+          /**
+           * Just the ID, not the full URL. e.g. 1GWFJ0jfPq4 (not https://youtube.com/watch?v=1GWFJ0jfPq4).
+           */
           id?: string | null
         }[]
       | null
   }
+  /**
+   * Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.
+   */
+  year?: number | null
+  /**
+   * Performance length in minutes including intermission. Optional.
+   */
+  durationMin?: number | null
   production?: {
+    /**
+     * Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).
+     */
     theatre?: {
+      /**
+       * Full theatre name in all three locales.
+       */
       name?: string | null
+      /**
+       * Shortened name (if any). Used in dense lists.
+       */
       shortName?: string | null
+      /**
+       * City where the producing theatre is based.
+       */
       city?: string | null
       /**
-       * ISO-2 code: RU / KZ / DE / AT / ES.
+       * ISO-2 country code: RU / KZ / DE / AT / ES…
        */
       country?: string | null
+      /**
+       * Public website of the theatre. Must include https://
+       */
       url?: string | null
+      /**
+       * Year the theatre was founded. Optional.
+       */
       year?: number | null
     }
+    /**
+     * Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.
+     */
     premiereDate?: string | null
+    /**
+     * Public ticketing page if one exists. Must include https://
+     */
     ticketsUrl?: string | null
     /**
      * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
@@ -224,6 +312,9 @@ export interface Production {
     ageRating?: string | null
   }
   taxonomy?: {
+    /**
+     * Roman's roles in this production. Multi-select from a closed list.
+     */
     role?:
       | (
           | 'director'
@@ -235,7 +326,7 @@ export interface Production {
         )[]
       | null
     /**
-     * Genre / form. Free-form: solo, puppet, family, festival.
+     * Theatrical form / genre. Free-form — type any tag. Established values: solo, puppet, theater, family, festival, reading.
      */
     form?:
       | {
@@ -244,7 +335,7 @@ export interface Production {
         }[]
       | null
     /**
-     * School / tradition. Free-form: btk, kudashov, rgisi.
+     * Tradition or school the production traces back to. Free-form. Established values: btk, kudashov, rgisi.
      */
     lineage?:
       | {
@@ -252,6 +343,9 @@ export interface Production {
           id?: string | null
         }[]
       | null
+    /**
+     * Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).
+     */
     tags?:
       | {
           value?: string | null
@@ -286,83 +380,189 @@ export interface Production {
       | null
   }
   recognition?: {
+    /**
+     * Wins or nominations. Use Festivals for participation without an award.
+     */
     awards?:
       | {
+          /**
+           * Name of the award or nomination.
+           */
           name?: string | null
+          /**
+           * Year the award was received. Optional.
+           */
           year?: number | null
+          /**
+           * Award category. If a specific person — phrase as "Best male performance — Maksim Morozov".
+           */
           category?: string | null
+          /**
+           * City where the award was given.
+           */
           city?: string | null
+          /**
+           * Link to the award page or announcement.
+           */
           url?: string | null
           id?: string | null
         }[]
       | null
+    /**
+     * Festival selections / programmes without an award. Awards belong above.
+     */
     festivals?:
       | {
+          /**
+           * Name of the festival.
+           */
           name?: string | null
+          /**
+           * Year of participation. Optional.
+           */
           year?: number | null
+          /**
+           * Festival programme or section.
+           */
           category?: string | null
+          /**
+           * Festival city.
+           */
           city?: string | null
           id?: string | null
         }[]
       | null
+    /**
+     * Reviews and interviews. Each item is one publication — outlet name + headline + link.
+     */
     press?:
       | {
+          /**
+           * Article headline in all three locales.
+           */
           title?: string | null
+          /**
+           * Direct link to the article. Must include https://
+           */
           url?: string | null
+          /**
+           * Outlet name (e.g. sobaka.ru, Süddeutsche Zeitung).
+           */
           outlet?: string | null
           /**
-           * Language code: ru / en / de.
+           * Article language code: ru / en / de.
            */
           language?: string | null
           id?: string | null
         }[]
       | null
+    /**
+     * Anything that doesn't fit Press / Awards / Festivals — partner pages, behind-the-scenes posts, etc.
+     */
     externalLinks?:
       | {
+          /**
+           * What the link represents — anchor text in all three locales.
+           */
           label?: string | null
+          /**
+           * Target URL. Must include https://
+           */
           url?: string | null
           id?: string | null
         }[]
       | null
   }
   history?: {
+    /**
+     * Cities where this production has toured. Not the premiere venue (see Theatre above).
+     */
     tour?:
       | {
+          /**
+           * Tour city.
+           */
           city?: string | null
           id?: string | null
         }[]
       | null
+    /**
+     * Venue history — where the production has been performed and roughly how many times.
+     */
     runs?:
       | {
+          /**
+           * Name of the venue or theatre where the production ran.
+           */
           venue?: string | null
+          /**
+           * City of this venue.
+           */
           city?: string | null
+          /**
+           * First year of performances at this venue.
+           */
           yearFrom?: number | null
+          /**
+           * Last year of performances (or current, if still running).
+           */
           yearTo?: number | null
+          /**
+           * Approximate count. Free-form — "60+", "more than 100", etc.
+           */
           count?: string | null
           id?: string | null
         }[]
       | null
   }
+  /**
+   * Lifecycle of this production. Default is "Live" (currently running).
+   */
+  status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null
   settings?: {
     /**
-     * When off, the production page hides the booking CTA.
+     * When off, the production page hides the booking call-to-action — label/URL below are ignored.
      */
     bookingCta?: boolean | null
+    /**
+     * Booking-button text per locale. Falls back to the default phrase for each locale when blank.
+     */
     bookingCtaLabel?: string | null
+    /**
+     * Optional. Leave blank to fall back to the default mailto link (see lib/booking.ts).
+     */
     bookingCtaUrl?: string | null
     /**
-     * Surface this production on the home featured strip.
+     * Surfaces this production on the home featured strip.
      */
     featured?: boolean | null
+    /**
+     * Lower numbers appear first. Only used when "Featured" is on.
+     */
     featuredOrder?: number | null
+    /**
+     * Lower numbers appear first. Leave blank to fall back to premiere year (newest first).
+     */
     listOrder?: number | null
+    /**
+     * External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the TourRider sheet on the page.
+     */
     techRider?: string | null
+    /**
+     * External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the TourRider sheet on the page.
+     */
     pressKit?: string | null
     /**
-     * Legacy Notion CMS IDs. Read-only in spirit.
+     * From the original Notion-based CMS. Read-only in spirit — leave as-is unless re-migrating.
      */
     notionIds?: {
+      /**
+       * ID from the legacy Russian Notion DB. Do not edit — needed for migration cross-reference.
+       */
       ru?: string | null
+      /**
+       * ID from the legacy English Notion DB. Do not edit.
+       */
       en?: string | null
     }
   }
@@ -509,9 +709,6 @@ export interface PayloadMigration {
  */
 export interface ProductionsSelect<T extends boolean = true> {
   slug?: T
-  year?: T
-  durationMin?: T
-  status?: T
   identity?:
     | T
     | {
@@ -557,6 +754,8 @@ export interface ProductionsSelect<T extends boolean = true> {
               id?: T
             }
       }
+  year?: T
+  durationMin?: T
   production?:
     | T
     | {
@@ -684,6 +883,7 @@ export interface ProductionsSelect<T extends boolean = true> {
               id?: T
             }
       }
+  status?: T
   settings?:
     | T
     | {
@@ -798,36 +998,87 @@ export interface About {
    * Biography. Markdown / markdoc. First paragraph is the lead.
    */
   body?: string | null
+  /**
+   * Large portrait at the top of the About page.
+   */
   portrait?: {
+    /**
+     * Main portrait photo. Path under public/about/ or R2.
+     */
     src?: string | null
+    /**
+     * Photographer name.
+     */
     credit?: string | null
   }
+  /**
+   * Extra photos for the bottom block. Empty entries are filtered at render time.
+   */
   photos?:
     | {
+        /**
+         * Additional photo. Path under public/about/ or R2.
+         */
         src?: string | null
+        /**
+         * Photographer name.
+         */
         credit?: string | null
         id?: string | null
       }[]
     | null
+  /**
+   * Biographical timeline. Year + short label per locale.
+   */
   milestones?:
     | {
+        /**
+         * Milestone year. Optional — leave blank and describe in label for fuzzy dates.
+         */
         year?: number | null
+        /**
+         * Milestone description in all three locales.
+         */
         label?: string | null
         id?: string | null
       }[]
     | null
+  /**
+   * Teachers and schools Roman's work traces back to.
+   */
   lineage?:
     | {
+        /**
+         * Stable slug key (e.g. kudashov, btk). Shared across locales.
+         */
         key?: string | null
+        /**
+         * Teacher / institution name in all three locales.
+         */
         name?: string | null
+        /**
+         * Role / relationship (master, rector, etc.).
+         */
         role?: string | null
+        /**
+         * Institution / theatre, if applicable.
+         */
         institution?: string | null
+        /**
+         * Optional note about the connection / influence.
+         */
         note?: string | null
         id?: string | null
       }[]
     | null
+  /**
+   * Small textual notes in the margin of the About page.
+   */
   marginalia?:
     | {
+        /**
+         * Short marginal note across three locales.
+         */
         note?: string | null
         id?: string | null
       }[]
@@ -845,8 +1096,17 @@ export interface Contact {
    * Optional intro paragraph above the contact buttons.
    */
   intro?: string | null
+  /**
+   * Roman's public email. Used in the mailto link and copy block.
+   */
   email: string
+  /**
+   * Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593
+   */
   telegramUrl?: string | null
+  /**
+   * Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman
+   */
   instagramUrl?: string | null
   updatedAt?: string | null
   createdAt?: string | null

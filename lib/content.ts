@@ -19,6 +19,7 @@ import * as path from 'node:path'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 import type { Locale } from '@/i18n/routing'
 
@@ -47,7 +48,11 @@ export interface Production {
   notionIds: { ru?: string; en?: string }
   title: { ru?: string; en?: string; de?: string | null }
   synopsis: { ru?: string; en?: string; de?: string | null }
-  body: { ru: string; en: string; de?: string }
+  body: {
+    ru: SerializedEditorState | null
+    en: SerializedEditorState | null
+    de?: SerializedEditorState | null
+  }
   theatre: {
     name?: L10nString
     shortName?: L10nString
@@ -105,7 +110,11 @@ export interface Production {
   tags: string[]
   tour: L10nString[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
-  directorsNote: { ru?: string; en?: string; de?: string | null } | null
+  directorsNote: {
+    ru?: SerializedEditorState | null
+    en?: SerializedEditorState | null
+    de?: SerializedEditorState | null
+  } | null
   runs: Array<{
     venue?: L10nString
     city?: L10nString
@@ -136,11 +145,11 @@ export interface ProductionView
   > {
   title: string
   synopsis: string
-  body: string
+  body: SerializedEditorState | null
   credits: CreditEntry[]
   premiereDate: string | null
   tagline: string | null
-  directorsNote: string | null
+  directorsNote: SerializedEditorState | null
   bookingCtaLabel: string | null
   press: Array<{
     title: string
@@ -205,6 +214,27 @@ const asString = (v: unknown): string => (typeof v === 'string' ? v : '')
 
 const asArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
 
+const isEditorState = (v: unknown): v is SerializedEditorState =>
+  typeof v === 'object' && v !== null && 'root' in v
+
+/** Extract per-locale Lexical SerializedEditorState objects from a Payload
+ *  `locale: 'all'` response for a localized richText field. */
+const asLexical = (
+  v: unknown
+): {
+  ru?: SerializedEditorState | null
+  en?: SerializedEditorState | null
+  de?: SerializedEditorState | null
+} => {
+  if (v == null || typeof v !== 'object') return {}
+  const o = v as Record<string, unknown>
+  return {
+    ru: isEditorState(o.ru) ? o.ru : null,
+    en: isEditorState(o.en) ? o.en : null,
+    de: isEditorState(o.de) ? o.de : null
+  }
+}
+
 /** Unwrap `{value: 'tag'}` entries from Payload array-of-text-with-named-field
  *  back to plain string arrays expected by the legacy Production interface. */
 const flatStringArr = (v: unknown): string[] =>
@@ -225,15 +255,12 @@ function payloadDocToProduction(doc: AnyMap): Production {
   const history = (doc.history as AnyMap) ?? {}
   const settings = (doc.settings as AnyMap) ?? {}
 
-  // Body lives in identity.body as a localized textarea; legacy interface
-  // expects it at the top level as { ru, en, de }.
-  const bodyL10n = asL10n(identity.body)
+  const bodyL10n = asLexical(identity.body)
   const body: Production['body'] = {
-    ru: asString(bodyL10n.ru).trim(),
-    en: asString(bodyL10n.en).trim()
+    ru: bodyL10n.ru ?? null,
+    en: bodyL10n.en ?? null,
+    ...(bodyL10n.de !== undefined ? { de: bodyL10n.de } : {})
   }
-  const deBody = asString(bodyL10n.de).trim()
-  if (deBody) body.de = deBody
 
   const poster = (media.poster as AnyMap) ?? {}
   const productionsPhoto = (media.productionsPhoto as AnyMap) ?? {}
@@ -346,7 +373,9 @@ function payloadDocToProduction(doc: AnyMap): Production {
     // an array of L10nString. Flatten the wrapping field.
     tour: asArray<AnyMap>(history.tour).map((t) => asL10n(t.city)),
     tagline: asL10n(identity.tagline),
-    directorsNote: asL10n(identity.directorsNote),
+    directorsNote: asLexical(
+      identity.directorsNote
+    ) as Production['directorsNote'],
     runs: asArray<AnyMap>(history.runs).map((r) => ({
       venue: asL10n(r.venue),
       city: asL10n(r.city),
@@ -443,7 +472,8 @@ function resolveL10nOpt(
 function project(p: Production, locale: Locale): ProductionView {
   const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
   const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
-  const b = p.body[locale as 'ru' | 'en' | 'de'] || p.body.ru || p.body.en || ''
+  const b =
+    p.body[locale as 'ru' | 'en' | 'de'] ?? p.body.ru ?? p.body.en ?? null
   const credits =
     (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
     (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??

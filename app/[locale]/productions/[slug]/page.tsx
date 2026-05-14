@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { compileMDX } from 'next-mdx-remote/rsc'
 import * as React from 'react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { Marginalia } from '@/components/Marginalia'
@@ -21,8 +21,6 @@ import {
   getProduction,
   type ProductionView
 } from '@/lib/content'
-import { InlineMarkdoc } from '@/lib/markdoc'
-
 import styles from './page.module.css'
 
 const BASE = (
@@ -258,19 +256,6 @@ export default async function ProductionDetailPage({
 
   const schema = creativeWorkSchema(production, slug, locale)
 
-  const compiledBody = production.body
-    ? await compileMDX({
-        source: production.body,
-        options: { mdxOptions: {} },
-        components: {
-          // suppress any lingering broken images
-          img: () => null
-        }
-      })
-        .then((r) => r.content)
-        .catch(() => null)
-    : null
-
   return (
     <main className={styles.page}>
       <script
@@ -463,25 +448,23 @@ export default async function ProductionDetailPage({
             <p className={styles.tagline}>{production.tagline}</p>
           )}
 
-          {/* DA-7.6.C — Director's note, gated by directorsNote field.
-              Stored as fields.markdoc.inline since 2026-05-06; renderer
-              parses + transforms + renders to a <p className=...>. Plain
-              prose round-trips unchanged through Markdoc. */}
+          {/* DA-7.6.C — Director's note (Lexical richText, rendered via RichText). */}
           {production.directorsNote && (
             <blockquote className={styles.directorsNote}>
-              <InlineMarkdoc
-                value={production.directorsNote}
-                className={styles.directorsNoteText}
-              />
+              <div className={styles.directorsNoteText}>
+                <RichText data={production.directorsNote} />
+              </div>
               <footer className={styles.directorsNoteAttr}>
                 {t('directorsNoteAttr')}
               </footer>
             </blockquote>
           )}
 
-          {/* 4c. Compiled MDX body */}
-          {compiledBody && (
-            <div className={styles.bodyProse}>{compiledBody}</div>
+          {/* 4c. Body prose */}
+          {production.body && (
+            <div className={styles.bodyProse}>
+              <RichText data={production.body} />
+            </div>
           )}
 
           {/* 5. Credits — DA-2.A: leader-dot <dl> table, collapsed by default

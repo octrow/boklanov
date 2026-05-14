@@ -83,9 +83,6 @@ export default buildConfig({
     fallback: true
   },
 
-  // Lexical is only used by the optional Media.alt field. Production bodies
-  // live in plain textareas (markdoc strings) so @markdoc/markdoc keeps
-  // rendering them unchanged.
   editor: lexicalEditor(),
 
   db: postgresAdapter({
