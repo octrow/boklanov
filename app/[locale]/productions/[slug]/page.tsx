@@ -167,13 +167,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
-  const slugs = (await getAllProductions(routing.defaultLocale)).map(
-    (p) => p.slug
-  )
-  return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
-  )
+  try {
+    // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
+    const slugs = (await getAllProductions(routing.defaultLocale)).map(
+      (p) => p.slug
+    )
+    return routing.locales.flatMap((locale) =>
+      slugs.map((slug) => ({ locale, slug }))
+    )
+  } catch {
+    // DB unreachable at build time (e.g. Vercel build without DATABASE_URL).
+    // Return [] so pages are rendered on-demand instead of failing the build.
+    return []
+  }
 }
 
 export default async function ProductionDetailPage({
