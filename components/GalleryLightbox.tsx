@@ -11,6 +11,14 @@ export interface GalleryItem {
   src: string
   alt: string
   credit?: string | null
+  /** Pre-baked AVIF variants per PAYLOAD_IMAGE_VARIANTS_PLAN.md. Each URL
+   *  already includes the CDN base (callers pre-resolve via `cdnUrl`). */
+  variants?: {
+    w420: string
+    w600: string
+    w828: string
+    w1080: string
+  } | null
 }
 
 interface Props {
@@ -86,6 +94,7 @@ export function GalleryLightbox({ items }: Props) {
             >
               <SpecimenPlate
                 src={item.src}
+                variants={item.variants ?? null}
                 alt={item.alt}
                 credit={item.credit}
                 plateNumber={i + 1}
@@ -121,15 +130,30 @@ export function GalleryLightbox({ items }: Props) {
             </button>
 
             <div className={styles.imgWrap}>
-              <Image
-                src={current.src}
-                alt={current.alt}
-                width={0}
-                height={0}
-                sizes='min(90vw, 1000px)'
-                className={styles.img}
-                style={{ width: 'auto', height: 'auto' }}
-              />
+              {current.variants ? (
+                // Lightbox view at most ~1000 CSS-px wide — w1080 is the
+                // ceiling, w828 covers tablet, w600 mobile.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={current.variants.w1080}
+                  srcSet={`${current.variants.w600} 600w, ${current.variants.w828} 828w, ${current.variants.w1080} 1080w`}
+                  sizes='min(90vw, 1000px)'
+                  className={styles.img}
+                  alt={current.alt}
+                  decoding='async'
+                  style={{ width: 'auto', height: 'auto' }}
+                />
+              ) : (
+                <Image
+                  src={current.src}
+                  alt={current.alt}
+                  width={0}
+                  height={0}
+                  sizes='min(90vw, 1000px)'
+                  className={styles.img}
+                  style={{ width: 'auto', height: 'auto' }}
+                />
+              )}
 
               {total > 1 && (
                 <>

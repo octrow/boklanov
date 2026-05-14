@@ -28,6 +28,7 @@
     "payload:generate:importmap": "PAYLOAD_CONFIG_PATH=payload.config.ts payload generate:importmap",
     "payload:seed": "tsx scripts/seed-payload.ts",
     "payload:backfill-media": "tsx scripts/backfill-media.ts",
+    "bake-variants": "tsx scripts/bake-image-variants.ts",
     "lint-tokens": "tsx scripts/lint-tokens.ts",
     "start": "next start",
     "deploy": "vercel deploy",

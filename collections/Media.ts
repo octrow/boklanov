@@ -25,7 +25,39 @@ export const Media: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user)
   },
   upload: {
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
+    focalPoint: true,
+    crop: true,
+    // Pre-bake AVIF variants on upload so new admin uploads serve the same
+    // breakpoints as the legacy R2 backfill (PAYLOAD_IMAGE_VARIANTS_PLAN.md
+    // Track 1). Widths match the FeaturedStrip + detail-page `sizes`.
+    imageSizes: [
+      {
+        name: 'w420',
+        width: 420,
+        position: 'centre',
+        formatOptions: { format: 'avif', options: { quality: 65 } }
+      },
+      {
+        name: 'w600',
+        width: 600,
+        position: 'centre',
+        formatOptions: { format: 'avif', options: { quality: 65 } }
+      },
+      {
+        name: 'w828',
+        width: 828,
+        position: 'centre',
+        formatOptions: { format: 'avif', options: { quality: 62 } }
+      },
+      {
+        name: 'w1080',
+        width: 1080,
+        position: 'centre',
+        formatOptions: { format: 'avif', options: { quality: 60 } }
+      }
+    ],
+    adminThumbnail: 'w420'
   },
   fields: [
     {

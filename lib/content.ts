@@ -51,10 +51,23 @@ const MEM_TTL = process.env.NODE_ENV === 'development' ? 60_000 : 0
 
 export type L10nString = string | { ru?: string; en?: string; de?: string }
 
+/** Pre-baked AVIF widths per PAYLOAD_IMAGE_VARIANTS_PLAN.md. URLs match
+ *  `<src.dirname>/<basename>.<W>.avif` (period-separated suffix). Computed
+ *  by `buildVariants()`; null until the bake script has run AND
+ *  `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1` is set, so consumers fall back to
+ *  the legacy `next/image` path during rollout. */
+export interface ImageVariants {
+  w420: string
+  w600: string
+  w828: string
+  w1080: string
+}
+
 export interface GalleryItem {
   src: string
   credit: string | null
   caption: { ru: string | null; en: string | null; de?: string | null }
+  variants: ImageVariants | null
 }
 
 export interface CreditEntry {
@@ -95,9 +108,18 @@ export interface Production {
     lqip: string | null
     width: number | null
     height: number | null
+    variants: ImageVariants | null
   }
-  productionsPhoto: { src: string | null; credit: string | null } | null
-  featuredPhoto: { src: string | null; credit: string | null } | null
+  productionsPhoto: {
+    src: string | null
+    credit: string | null
+    variants: ImageVariants | null
+  } | null
+  featuredPhoto: {
+    src: string | null
+    credit: string | null
+    variants: ImageVariants | null
+  } | null
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{
@@ -262,6 +284,31 @@ const flatStringArr = (v: unknown): string[] =>
     .map((it) => (typeof it.value === 'string' ? it.value : ''))
     .filter(Boolean)
 
+/** Variant emission is gated on this flag so we can roll out per-environment
+ *  after the bake-image-variants script lands the AVIFs in R2. Set to '1' in
+ *  Vercel envs (Preview + Production) once the script has run. */
+const VARIANTS_ENABLED = process.env.NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED === '1'
+
+const VARIANT_WIDTHS = [420, 600, 828, 1080] as const
+
+/** Derive variant URLs from a source path by suffixing `.<W>.avif` to the
+ *  basename. Returns `null` when variants are disabled, the source is null,
+ *  the source is an external URL, or the extension is unrecognised. */
+function buildVariants(src: string | null | undefined): ImageVariants | null {
+  if (!VARIANTS_ENABLED) return null
+  if (typeof src !== 'string' || src.length === 0) return null
+  if (/^https?:/i.test(src)) return null
+  const ext = src.match(/\.(jpe?g|png|webp)$/i)
+  if (!ext) return null
+  const stem = src.slice(0, -ext[0].length)
+  return {
+    w420: `${stem}.${VARIANT_WIDTHS[0]}.avif`,
+    w600: `${stem}.${VARIANT_WIDTHS[1]}.avif`,
+    w828: `${stem}.${VARIANT_WIDTHS[2]}.avif`,
+    w1080: `${stem}.${VARIANT_WIDTHS[3]}.avif`
+  }
+}
+
 /** Convert one Payload `productions` document (fetched with `locale: 'all'`)
  *  to the legacy Production shape consumed by every page route. */
 function payloadDocToProduction(doc: AnyMap): Production {
@@ -323,32 +370,37 @@ function payloadDocToProduction(doc: AnyMap): Production {
       credit: asString(poster.credit) || null,
       lqip: null,
       width: null,
-      height: null
+      height: null,
+      variants: buildVariants(asString(poster.src) || null)
     },
     productionsPhoto: productionsPhoto.src
       ? {
           src: asString(productionsPhoto.src),
-          credit: asString(productionsPhoto.credit) || null
+          credit: asString(productionsPhoto.credit) || null,
+          variants: buildVariants(asString(productionsPhoto.src))
         }
       : null,
     featuredPhoto: featuredPhoto.src
       ? {
           src: asString(featuredPhoto.src),
-          credit: asString(featuredPhoto.credit) || null
+          credit: asString(featuredPhoto.credit) || null,
+          variants: buildVariants(asString(featuredPhoto.src))
         }
       : null,
     gallery: asArray<AnyMap>(media.gallery)
       .filter((g) => typeof g.src === 'string' && (g.src as string).length > 0)
       .map((g) => {
         const cap = asL10n(g.caption)
+        const src = g.src as string
         return {
-          src: g.src as string,
+          src,
           credit: asString(g.credit) || null,
           caption: {
             ru: cap.ru ?? null,
             en: cap.en ?? null,
             de: cap.de ?? null
-          }
+          },
+          variants: buildVariants(src)
         }
       }),
     videos: asArray<AnyMap>(media.videos).map((v) => ({

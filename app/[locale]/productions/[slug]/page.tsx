@@ -265,6 +265,15 @@ export default async function ProductionDetailPage({
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      {production.poster.variants && (
+        <link
+          rel='preload'
+          as='image'
+          imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
+          imageSizes='(min-width: 1024px) 640px, 100vw'
+          fetchPriority='high'
+        />
+      )}
       {/* 1. Cover — natural aspect, capped at 65vh. Click to view full poster. */}
       {production.poster.src &&
         (() => {
@@ -279,10 +288,34 @@ export default async function ProductionDetailPage({
               .join(', ') +
             (production.poster.credit ? ` (${production.poster.credit})` : '')
           const posterSrc = cdnUrl(production.poster.src)!
+          const posterSizes = '(min-width: 1024px) 640px, 100vw'
+          const variants = production.poster.variants
           return (
             <PosterLightbox src={posterSrc} alt={posterAlt}>
               <figure className={styles.cover}>
-                {production.poster.width && production.poster.height ? (
+                {variants ? (
+                  // Pre-baked AVIF variants — bypass `/_next/image`. The
+                  // detail-page poster is the LCP element on production
+                  // pages; head preload happens in generateMetadata via the
+                  // `other.preload-image` JSON.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={cdnUrl(variants.w600)!}
+                    srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+                    sizes={posterSizes}
+                    alt={posterAlt}
+                    decoding='async'
+                    loading='eager'
+                    fetchPriority='high'
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '65vh',
+                      width: 'auto',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                ) : production.poster.width && production.poster.height ? (
                   <Image
                     src={posterSrc}
                     alt={posterAlt}
@@ -290,7 +323,7 @@ export default async function ProductionDetailPage({
                     height={production.poster.height}
                     priority
                     fetchPriority='high'
-                    sizes='(min-width: 1024px) 640px, 100vw'
+                    sizes={posterSizes}
                     quality={75}
                     style={{
                       maxWidth: '100%',
@@ -308,7 +341,7 @@ export default async function ProductionDetailPage({
                     fetchPriority='high'
                     width={0}
                     height={0}
-                    sizes='(min-width: 1024px) 640px, 100vw'
+                    sizes={posterSizes}
                     quality={75}
                     style={{
                       maxWidth: '100%',
@@ -433,7 +466,15 @@ export default async function ProductionDetailPage({
                       g.caption?.ru ??
                       g.caption?.en ??
                       '',
-                    credit: g.credit
+                    credit: g.credit,
+                    variants: g.variants
+                      ? {
+                          w420: cdnUrl(g.variants.w420)!,
+                          w600: cdnUrl(g.variants.w600)!,
+                          w828: cdnUrl(g.variants.w828)!,
+                          w1080: cdnUrl(g.variants.w1080)!
+                        }
+                      : null
                   }))}
                 />
               </section>
@@ -745,7 +786,15 @@ export default async function ProductionDetailPage({
                       g.caption?.ru ??
                       g.caption?.en ??
                       '',
-                    credit: g.credit
+                    credit: g.credit,
+                    variants: g.variants
+                      ? {
+                          w420: cdnUrl(g.variants.w420)!,
+                          w600: cdnUrl(g.variants.w600)!,
+                          w828: cdnUrl(g.variants.w828)!,
+                          w1080: cdnUrl(g.variants.w1080)!
+                        }
+                      : null
                   }))}
                 />
               </section>

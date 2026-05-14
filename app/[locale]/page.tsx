@@ -8,6 +8,7 @@ import { SiteHero } from '@/components/SiteHero'
 import { TourTicker } from '@/components/TourTicker'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { cdnUrl } from '@/lib/cdn'
 import { getAllProductions } from '@/lib/content'
 
 import styles from './home.module.css'
@@ -55,8 +56,33 @@ export default async function HomePage({
     )
     .sort((a, b) => (a.listOrder ?? 0) - (b.listOrder ?? 0))
 
+  // LCP preload — the first card's cover image is the LCP element on the
+  // homepage. When variants are baked, the card renders a plain `<img>` that
+  // would otherwise miss Next's auto-injected preload from `priority`. The
+  // sizes string mirrors the first slot in FeaturedStrip's FEATURED_SIZES.
+  const lcpCover =
+    featured[0]?.featuredPhoto ??
+    featured[0]?.productionsPhoto ??
+    featured[0]?.poster ??
+    null
+  const lcpVariants =
+    (
+      lcpCover as {
+        variants?: import('@/lib/content').ImageVariants | null
+      } | null
+    )?.variants ?? null
+
   return (
     <main className={styles.page}>
+      {lcpVariants && (
+        <link
+          rel='preload'
+          as='image'
+          imageSrcSet={`${cdnUrl(lcpVariants.w420)} 420w, ${cdnUrl(lcpVariants.w600)} 600w, ${cdnUrl(lcpVariants.w828)} 828w, ${cdnUrl(lcpVariants.w1080)} 1080w`}
+          imageSizes='(min-width: 1024px) 600px, (min-width: 768px) 50vw, 100vw'
+          fetchPriority='high'
+        />
+      )}
       {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
       <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')} />
 

@@ -59,6 +59,16 @@ export function ProductionCard({
   const alt = effectiveCover.credit
     ? `${altBase} (${effectiveCover.credit})`
     : altBase
+  // `coverPhoto` may be a productionsPhoto/featuredPhoto (which carries
+  // variants per content.ts), or a raw `{src, credit}` literal supplied by
+  // callers that don't know about variants. The cast keeps that flexibility
+  // without forcing every caller upstream.
+  const variants =
+    (
+      effectiveCover as {
+        variants?: import('@/lib/content').ImageVariants | null
+      }
+    ).variants ?? null
 
   // Only use lqip blur-up when showing the poster (lqip is only computed for poster)
   const coverStyle =
@@ -74,7 +84,23 @@ export function ProductionCard({
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
         {sticker}
-        {effectiveCover.src ? (
+        {effectiveCover.src && variants ? (
+          // Pre-baked AVIF variants live alongside the source in R2 — serve
+          // them directly via `<img srcset>` so we bypass `/_next/image`
+          // entirely. See PAYLOAD_IMAGE_VARIANTS_PLAN.md.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className={styles.coverImg}
+            src={cdnUrl(variants.w600)!}
+            srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+            sizes={sizes}
+            alt={alt}
+            decoding='async'
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            style={{ objectFit: 'cover' }}
+          />
+        ) : effectiveCover.src ? (
           <Image
             className={styles.coverImg}
             src={cdnUrl(effectiveCover.src)!}
