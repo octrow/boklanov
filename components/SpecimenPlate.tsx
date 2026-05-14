@@ -11,6 +11,10 @@ interface SpecimenPlateProps {
   plateNumber: number
   total: number
   loading?: 'lazy' | 'eager'
+  /** next/image sizes hint. Default suits the about-page 2-up. Gallery thumbs
+   *  override with something much smaller — they render as ~226px columns. */
+  sizes?: string
+  quality?: number
 }
 
 /**
@@ -27,7 +31,9 @@ export function SpecimenPlate({
   credit,
   plateNumber,
   total,
-  loading = 'lazy'
+  loading = 'lazy',
+  sizes = '(min-width: 768px) 50vw, 100vw',
+  quality
 }: SpecimenPlateProps) {
   const indexLabel = `${String(plateNumber).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 
@@ -39,7 +45,8 @@ export function SpecimenPlate({
           alt={alt}
           width={0}
           height={0}
-          sizes='(min-width: 768px) 50vw, 100vw'
+          sizes={sizes}
+          quality={quality}
           loading={loading}
           style={{ width: '100%', height: 'auto' }}
         />

@@ -63,30 +63,39 @@ export function GalleryLightbox({ items }: Props) {
   return (
     <>
       <div className={styles.grid}>
-        {items.map((item, i) => (
-          <div
-            key={`${item.src}-${i}`}
-            ref={(el) => {
-              triggerRefs.current[i] = el
-            }}
-            className={styles.trigger}
-            role='button'
-            tabIndex={0}
-            aria-label={t('viewPhotoOf', { index: i + 1, total })}
-            onClick={() => setActiveIndex(i)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
-            }}
-          >
-            <SpecimenPlate
-              src={item.src}
-              alt={item.alt}
-              credit={item.credit}
-              plateNumber={i + 1}
-              total={total}
-            />
-          </div>
-        ))}
+        {items.map((item, i) => {
+          // SpecimenPlate renders a visible "07 / 24" caption — the WCAG
+          // label-content-name-mismatch rule wants the accessible name to
+          // include that exact visible text, otherwise voice-control users
+          // can't activate the trigger by reading what they see.
+          const indexLabel = `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
+          return (
+            <div
+              key={`${item.src}-${i}`}
+              ref={(el) => {
+                triggerRefs.current[i] = el
+              }}
+              className={styles.trigger}
+              role='button'
+              tabIndex={0}
+              aria-label={`${indexLabel} — ${t('viewPhotoOf', { index: i + 1, total })}`}
+              onClick={() => setActiveIndex(i)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
+              }}
+            >
+              <SpecimenPlate
+                src={item.src}
+                alt={item.alt}
+                credit={item.credit}
+                plateNumber={i + 1}
+                total={total}
+                sizes='(min-width: 1024px) 240px, (min-width: 768px) 25vw, 50vw'
+                quality={70}
+              />
+            </div>
+          )
+        })}
       </div>
 
       {isOpen && current && (

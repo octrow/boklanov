@@ -169,7 +169,8 @@
     "viewPhotoOf": "Просмотреть фото {index} из {total}",
     "photoDialogOf": "Фото {index} из {total}",
     "prevPhoto": "Предыдущее фото",
-    "nextPhoto": "Следующее фото"
+    "nextPhoto": "Следующее фото",
+    "playTrailer": "Воспроизвести трейлер"
   },
   "common": {
     "photo": "Фото"

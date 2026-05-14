@@ -10,6 +10,7 @@ import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { Sticker } from '@/components/Sticker'
 import { TourTicker } from '@/components/TourTicker'
+import { YouTubeFacade } from '@/components/YouTubeFacade'
 import { countryCode } from '@/lib/countryCode'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
@@ -190,6 +191,7 @@ export default async function ProductionDetailPage({
 
   const t = await getTranslations('productionDetail')
   const tProductions = await getTranslations('productions')
+  const tAccess = await getTranslations('accessibility')
 
   const allProductions = await getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
@@ -287,7 +289,9 @@ export default async function ProductionDetailPage({
                     width={production.poster.width}
                     height={production.poster.height}
                     priority
-                    sizes='(min-width: 1024px) 60vw, 100vw'
+                    fetchPriority='high'
+                    sizes='(min-width: 1024px) 640px, 100vw'
+                    quality={75}
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',
@@ -301,9 +305,11 @@ export default async function ProductionDetailPage({
                     src={posterSrc}
                     alt={posterAlt}
                     priority
+                    fetchPriority='high'
                     width={0}
                     height={0}
-                    sizes='(min-width: 1024px) 60vw, 100vw'
+                    sizes='(min-width: 1024px) 640px, 100vw'
+                    quality={75}
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',
@@ -394,7 +400,16 @@ export default async function ProductionDetailPage({
 
           {/* Mobile-only media block — desktop renders the same trailer + photos inside the rail (see below). */}
           <div className={styles.inlineMedia}>
-            {trailerEmbedUrl && (
+            {trailerEmbedUrl && primaryVideo?.provider === 'youtube' && (
+              <div className={styles.trailer}>
+                <YouTubeFacade
+                  videoId={primaryVideo.id}
+                  title={`${production.title} — ${t('trailer')}`}
+                  playLabel={tAccess('playTrailer')}
+                />
+              </div>
+            )}
+            {trailerEmbedUrl && primaryVideo?.provider !== 'youtube' && (
               <div className={styles.trailer}>
                 <iframe
                   className={styles.trailerFrame}
@@ -697,7 +712,16 @@ export default async function ProductionDetailPage({
           {/* Desktop-only media block — mobile renders the same trailer + photos
               inline right after the title (see .inlineMedia above). */}
           <div className={styles.railMedia}>
-            {trailerEmbedUrl && (
+            {trailerEmbedUrl && primaryVideo?.provider === 'youtube' && (
+              <div className={styles.trailer}>
+                <YouTubeFacade
+                  videoId={primaryVideo.id}
+                  title={`${production.title} — ${t('trailer')}`}
+                  playLabel={tAccess('playTrailer')}
+                />
+              </div>
+            )}
+            {trailerEmbedUrl && primaryVideo?.provider !== 'youtube' && (
               <div className={styles.trailer}>
                 <iframe
                   className={styles.trailerFrame}
