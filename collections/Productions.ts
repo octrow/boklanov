@@ -304,6 +304,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Галерея', en: 'Gallery' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/GalleryRowLabel#default'
+                    },
                     description: {
                       ru: 'Доп. фотографии продакшена. Порядок здесь = порядок на странице.',
                       en: 'Extra production photos. Order here = order on the page.'
@@ -360,6 +363,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Видео', en: 'Videos' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/VideoRowLabel#default'
+                    },
                     description: {
                       ru: 'Видеовставки на странице продакшена.',
                       en: 'Embedded videos on the production page.'
@@ -707,6 +713,11 @@ export const Productions: CollectionConfig = {
                     singular: { ru: 'Строка', en: 'Row' },
                     plural: { ru: 'Команда (RU)', en: 'Team (RU)' }
                   },
+                  admin: {
+                    components: {
+                      RowLabel: '/components/admin/CreditRowLabel#default'
+                    }
+                  },
                   fields: [
                     {
                       name: 'role',
@@ -733,6 +744,11 @@ export const Productions: CollectionConfig = {
                     singular: { ru: 'Строка', en: 'Row' },
                     plural: { ru: 'Команда (EN)', en: 'Team (EN)' }
                   },
+                  admin: {
+                    components: {
+                      RowLabel: '/components/admin/CreditRowLabel#default'
+                    }
+                  },
                   fields: [
                     {
                       name: 'role',
@@ -758,6 +774,11 @@ export const Productions: CollectionConfig = {
                   labels: {
                     singular: { ru: 'Строка', en: 'Row' },
                     plural: { ru: 'Команда (DE)', en: 'Team (DE)' }
+                  },
+                  admin: {
+                    components: {
+                      RowLabel: '/components/admin/CreditRowLabel#default'
+                    }
                   },
                   fields: [
                     {
@@ -802,6 +823,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Награды', en: 'Awards' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/NameYearRowLabel#default'
+                    },
                     description: {
                       ru: 'Победы и номинации. Для участия без награды — раздел «Фестивали» ниже.',
                       en: 'Wins or nominations. Use Festivals for participation without an award.'
@@ -877,6 +901,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Фестивали', en: 'Festivals' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/NameYearRowLabel#default'
+                    },
                     description: {
                       ru: 'Участия в фестивалях без награды. Награды — в разделе «Награды» выше.',
                       en: 'Festival selections / programmes without an award. Awards belong above.'
@@ -941,6 +968,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Пресса', en: 'Press' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/PressRowLabel#default'
+                    },
                     description: {
                       ru: 'Рецензии и интервью. Один элемент — одна публикация: издание + заголовок + ссылка.',
                       en: 'Reviews and interviews. Each item is one publication — outlet name + headline + link.'
@@ -1003,6 +1033,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Внешние ссылки', en: 'External links' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/LinkRowLabel#default'
+                    },
                     description: {
                       ru: 'Всё, что не подходит под «Прессу» / «Награды» / «Фестивали» — страницы партнёров, бэкстейдж, превью и т. п.',
                       en: "Anything that doesn't fit Press / Awards / Festivals — partner pages, behind-the-scenes posts, etc."
@@ -1092,6 +1125,9 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'История площадок', en: 'Venue history' }
                   },
                   admin: {
+                    components: {
+                      RowLabel: '/components/admin/RunRowLabel#default'
+                    },
                     description: {
                       ru: 'История площадок — где шёл спектакль и сколько примерно раз.',
                       en: 'Venue history — where the production has been performed and roughly how many times.'
