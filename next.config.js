@@ -46,6 +46,20 @@ export default withPayload(
           { protocol: 'https', hostname: 'cdn.boklanov.com' },
           { protocol: 'https', hostname: '*.r2.dev' }
         ]
+      },
+      // Vercel's preview deploys (`*.vercel.app`) ship with an automatic
+      // `x-robots-tag: noindex` header — set only when the upstream response
+      // doesn't already carry one. This branch's preview URL is the active
+      // staging host for boklanov-rewrite, so we emit our own header to
+      // override that default. Production (boklanov.com) doesn't get the
+      // automatic noindex in the first place, so this is a no-op there.
+      async headers() {
+        return [
+          {
+            source: '/:path*',
+            headers: [{ key: 'x-robots-tag', value: 'index, follow' }]
+          }
+        ]
       }
     })
   ),
