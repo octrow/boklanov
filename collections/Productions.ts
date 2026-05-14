@@ -73,26 +73,12 @@ export const Productions: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: { ru: 'Идентичность', en: 'Identity' },
+          label: { ru: 'Основное', en: 'Main' },
           description: {
-            ru: 'Название, слоган, синопсис, режиссёрская заметка и полный текст.',
-            en: "Title, tagline, synopsis, director's note, and full body."
+            ru: 'Название, полный текст, слоган, синопсис и режиссёрская заметка.',
+            en: "Title, body, tagline, synopsis, and director's note."
           },
           fields: [
-            {
-              name: 'slug',
-              type: 'text',
-              label: { ru: 'URL-слаг', en: 'URL slug' },
-              required: true,
-              unique: true,
-              index: true,
-              admin: {
-                description: {
-                  ru: 'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',
-                  en: "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
-                }
-              }
-            },
             {
               name: 'identity',
               type: 'group',
@@ -108,6 +94,26 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Название спектакля во всех трёх локалях. Показывается в карточке, на странице и в SEO-заголовке.',
                       en: 'Production title in all three locales. Shown on cards, page, and SEO title.'
+                    }
+                  }
+                },
+                {
+                  name: 'body',
+                  type: 'richText',
+                  label: { ru: 'Полный текст', en: 'Body text' },
+                  localized: true,
+                  editor: lexicalEditor({
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures,
+                      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+                      FixedToolbarFeature(),
+                      InlineToolbarFeature()
+                    ]
+                  }),
+                  admin: {
+                    description: {
+                      ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
+                      en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
                     }
                   }
                 },
@@ -164,28 +170,22 @@ export const Productions: CollectionConfig = {
                       en: 'Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.'
                     }
                   }
-                },
-                {
-                  name: 'body',
-                  type: 'richText',
-                  label: { ru: 'Полный текст', en: 'Body text' },
-                  localized: true,
-                  editor: lexicalEditor({
-                    features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
-                      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
-                      FixedToolbarFeature(),
-                      InlineToolbarFeature()
-                    ]
-                  }),
-                  admin: {
-                    description: {
-                      ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
-                      en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
-                    }
-                  }
                 }
               ]
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              label: { ru: 'URL-слаг', en: 'URL slug' },
+              required: true,
+              unique: true,
+              index: true,
+              admin: {
+                description: {
+                  ru: 'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',
+                  en: "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
+                }
+              }
             }
           ]
         },
@@ -438,37 +438,12 @@ export const Productions: CollectionConfig = {
           ]
         },
         {
-          label: { ru: 'Продакшен', en: 'Production' },
+          label: { ru: 'О постановке', en: 'About' },
           description: {
-            ru: 'Театр-производитель, даты премьеры, год, длительность, возрастной рейтинг и билеты.',
-            en: 'Producing theatre, premiere dates, year, duration, age rating, and tickets.'
+            ru: 'Театр-производитель, дата и год премьеры, длительность, возрастной рейтинг и билеты.',
+            en: 'Producing theatre, premiere date, year, duration, age rating, and tickets.'
           },
           fields: [
-            {
-              name: 'year',
-              type: 'number',
-              label: { ru: 'Год премьеры', en: 'Premiere year' },
-              min: 1900,
-              max: 2100,
-              index: true,
-              admin: {
-                description: {
-                  ru: 'Числовой год премьеры — используется для сортировки и в карточках. Отдельно от свободного текста даты в блоке «Продакшен».',
-                  en: 'Numeric year used for sort and display. Distinct from the per-locale free-text date in the Production group.'
-                }
-              }
-            },
-            {
-              name: 'durationMin',
-              type: 'number',
-              label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
-              admin: {
-                description: {
-                  ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
-                  en: 'Performance length in minutes including intermission. Optional.'
-                }
-              }
-            },
             {
               name: 'production',
               type: 'group',
@@ -569,17 +544,6 @@ export const Productions: CollectionConfig = {
                   }
                 },
                 {
-                  name: 'ticketsUrl',
-                  type: 'text',
-                  label: { ru: 'Билеты', en: 'Tickets URL' },
-                  admin: {
-                    description: {
-                      ru: 'Публичная страница покупки билетов (если есть). Обязательно с https://',
-                      en: 'Public ticketing page if one exists. Must include https://'
-                    }
-                  }
-                },
-                {
                   name: 'ageRating',
                   type: 'text',
                   label: { ru: 'Возраст', en: 'Age rating' },
@@ -589,22 +553,58 @@ export const Productions: CollectionConfig = {
                       en: 'Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.'
                     }
                   }
+                },
+                {
+                  name: 'ticketsUrl',
+                  type: 'text',
+                  label: { ru: 'Билеты', en: 'Tickets URL' },
+                  admin: {
+                    description: {
+                      ru: 'Публичная страница покупки билетов (если есть). Обязательно с https://',
+                      en: 'Public ticketing page if one exists. Must include https://'
+                    }
+                  }
                 }
               ]
+            },
+            {
+              name: 'year',
+              type: 'number',
+              label: { ru: 'Год премьеры', en: 'Premiere year' },
+              min: 1900,
+              max: 2100,
+              index: true,
+              admin: {
+                description: {
+                  ru: 'Числовой год — используется для сортировки и в карточках.',
+                  en: 'Numeric year used for sort and display on cards.'
+                }
+              }
+            },
+            {
+              name: 'durationMin',
+              type: 'number',
+              label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
+              admin: {
+                description: {
+                  ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
+                  en: 'Performance length in minutes including intermission. Optional.'
+                }
+              }
             }
           ]
         },
         {
-          label: { ru: 'Таксономия', en: 'Taxonomy' },
+          label: { ru: 'Жанр и теги', en: 'Genre & tags' },
           description: {
-            ru: 'Роли Романа, жанр/форма, школа и теги.',
-            en: "Roman's roles, theatrical form, lineage, and free-form tags."
+            ru: 'Роли Романа, жанр, традиция и свободные теги.',
+            en: "Roman's roles, form/genre, lineage, and free-form tags."
           },
           fields: [
             {
               name: 'taxonomy',
               type: 'group',
-              label: { ru: 'Таксономия', en: 'Taxonomy' },
+              label: { ru: 'Жанр и теги', en: 'Genre & tags' },
               fields: [
                 {
                   name: 'role',
@@ -835,16 +835,16 @@ export const Productions: CollectionConfig = {
           ]
         },
         {
-          label: { ru: 'Признание', en: 'Recognition' },
+          label: { ru: 'Награды и пресса', en: 'Awards & press' },
           description: {
-            ru: 'Премии, фестивали, пресса и внешние ссылки.',
+            ru: 'Награды, фестивали, рецензии и внешние ссылки.',
             en: 'Awards, festivals, press coverage, and external links.'
           },
           fields: [
             {
               name: 'recognition',
               type: 'group',
-              label: { ru: 'Признание', en: 'Recognition' },
+              label: { ru: 'Награды и пресса', en: 'Awards & press' },
               fields: [
                 {
                   name: 'awards',
@@ -1104,7 +1104,7 @@ export const Productions: CollectionConfig = {
           ]
         },
         {
-          label: { ru: 'История показов', en: 'Performance History' },
+          label: { ru: 'Показы', en: 'Shows' },
           description: {
             ru: 'Города гастролей и история площадок.',
             en: 'Tour cities and venue run history.'
@@ -1113,7 +1113,7 @@ export const Productions: CollectionConfig = {
             {
               name: 'history',
               type: 'group',
-              label: { ru: 'История показов', en: 'Performance History' },
+              label: { ru: 'Показы', en: 'Shows' },
               fields: [
                 {
                   // Tour cities — l10n strings. Same as keystatic's array of l10n.
