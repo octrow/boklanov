@@ -39,6 +39,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates).                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 9 of 10 phases shipped (9v3.0–9v3.8) + fix-pass `2388511`. 9v3.9 acceptance sweep in progress.                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 11 CMS swap — Payload           | done         | Replaces Keystatic on `feature/payloadcms`. See `PAYLOAD_MIGRATION_PLAN.md` (P1–P5 shipped) + `PAYLOAD_POLISH_PLAN.md` (Tiers 1+2+3.1+3.3+4+5.1+5.2+5.3+5.5+6 shipped 2026-05-14). Postgres source-of-truth at Neon; `/admin` is the authoring UI; `content/{productions,about,contact}` and all `@keystatic/*` deps retired in `eaf5a37` + `a3535b0`. 51/54 productions have non-null `theatre.country` after the 5.3 backfill; three rows surface blank in /admin for manual completion.                                                                                                                                 |
 
 ## D3/D4 cutover (deferred)
 
@@ -52,13 +53,16 @@ When ready:
 
 R2 CDN note: 291 images uploaded to `boklanov-content` bucket 2026-05-02. Dev URL `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev` active (rate-limited, no Cloudflare cache). `cdn.boklanov.com` custom domain blocked until boklanov.com DNS moves to Cloudflare. To activate: set `NEXT_PUBLIC_CDN_BASE` in Vercel.
 
-## Open content tasks (Roman, via Obsidian)
+## Open content tasks (Roman, via /admin)
 
-- Photographer credits per gallery image -> `gallery[].credit` in `index.yaml`
+Post Phase 11 (Payload swap): all authoring now happens at `/admin/collections/productions`. The bullets below describe the same gaps as before, now expressed against Postgres fields:
+
+- Photographer credits per gallery image → `media.gallery[].credit`
 - Two festival-in-prose awards need overlay: `cinderella`, `sugar-kid`
-- Confirm RGISI / first-BTK milestone years
-- 18 productions show no theatre line (MD source has no `[Name](url)`). Roman adds `theatre:` in `index.yaml`
-- New productions: copy `_PRODUCTION_TEMPLATE.yaml` → `<slug>/index.yaml`, write `body.{ru,en,de}.md`
+- Confirm RGISI / first-BTK milestone years (About → Хронология)
+- 18 productions show no theatre line. Roman fills `production.theatre.{name,city,country,url}`
+- Three productions have NULL `theatre.country` after the 5.3 backfill — Roman picks a value from the country select: `lestnica-v-nebesa`, `lika-and-beam`, `total-fest-3`
+- New productions: hit «Создать» in `/admin/collections/productions` (no template file to copy — Payload renders empty defaults)
 
 ### Orphan-title audit (Phase 8.5)
 

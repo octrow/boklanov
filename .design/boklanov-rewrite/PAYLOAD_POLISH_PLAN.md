@@ -1,8 +1,8 @@
 # PAYLOAD_POLISH_PLAN
 
-Status: **Tiers 1 + 2 + 3.3 + 4 (partial) + 5 shipped 2026-05-14**. Tier 3.1
-and Tier 6 deferred. Owner: Daniil. Follow-up to `PAYLOAD_MIGRATION_PLAN.md`
-after P1–P3 + media UX shipped.
+Status: **All tiers shipped 2026-05-14**. Phase 11 (Payload swap) done.
+Owner: Daniil. Follow-up to `PAYLOAD_MIGRATION_PLAN.md` after
+P1–P3 + media UX shipped.
 
 ## What shipped 2026-05-14
 
@@ -31,6 +31,9 @@ after P1–P3 + media UX shipped.
 | 5.3       | (this PR)             | `scripts/backfill-nulls.ts` — derives `theatre.country` from city + theatre-name fallback; ageRating deliberately skipped              |
 | 3.1       | (this PR)             | `production.theatre.country` flipped from `type: 'text'` → `type: 'select'` (22 ISO-2); types regenerated                              |
 | 5.5       | (this PR)             | About + Contact page renderers cut over from `fs.readFileSync(content/...)` to `getAbout()`/`getContact()` via Payload Local API       |
+| 6.2A      | `a3535b0`             | Keystatic admin/API/deps/audit script + R2-mirror workflow removed; `middleware.ts` matcher cleaned                                    |
+| 6.2B      | `eaf5a37`             | `content/{productions,about,contact}` + `productions-index.json` retired; template moved to archive                                    |
+| 6.3       | (this PR)             | Docs aligned (STATUS, MAP, CONTENT, content/AUTHORING.ru.md, content/README.md, readme.md) — Phase 11 fully documented                 |
 
 Not shipped this round (intentional):
 
@@ -608,8 +611,8 @@ Per `PAYLOAD_MIGRATION_PLAN §C`:
 6. ~~**Lexical migration follow-up**~~ — **shipped 2026-05-14**. `scripts/migrate-richtext-data.ts` applied; types regenerated.
 7. ~~**Tier 5.3 backfill (theatre.country)**~~ — **shipped 2026-05-14**. Two rows derived from city, three from theatre-name fallback (ARTiSHOK→KZ, Театр 8+→AT, Балтийский дом→RU), three remain unresolved → manual /admin backfill.
 8. ~~**Tier 3.1**~~ — **shipped 2026-05-14**. `country` is now a select with 22 ISO-2 options; types narrowed to the union.
-9. ~~**Tier 5.5 (About + Contact readers)**~~ — **shipped 2026-05-14**. `app/[locale]/{about,contact}/page.tsx` now read from Payload via `getAbout()`/`getContact()` (cached + tagged); unblocks `rm -rf content/` in Tier 6.
-10. **Tier 6** — Cutover prep + Keystatic deletion. Final PR before retiring `/keystatic`.
+9. ~~**Tier 5.5 (About + Contact readers)**~~ — **shipped 2026-05-14**. `app/[locale]/{about,contact}/page.tsx` now read from Payload via `getAbout()`/`getContact()` (cached + tagged); unblocked `rm -rf content/` in Tier 6.
+10. ~~**Tier 6**~~ — **shipped 2026-05-14** in `a3535b0` (6.2A admin/deps), `eaf5a37` (6.2B content YAML), and this PR (6.3 docs). Birthday-surprise gate respected — code-only refactor, no reveal to Roman.
 
 Tier 4 wordmark logo is deferred indefinitely unless Roman asks; Tier 3.5
 drafts/versions still deferred (single editor, low risk).

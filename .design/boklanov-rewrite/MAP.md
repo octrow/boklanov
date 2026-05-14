@@ -1,23 +1,22 @@
 # MAP
 
-Index of every doc. Updated: 2026-05-06. Update on add/rename/archive.
+Index of every doc. Updated: 2026-05-14. Update on add/rename/archive.
 
 Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 
-## 1. Active (10)
+## 1. Active (9)
 
-| #   | Path                                                       | Role                                                                                                                                                                                                                                                                                    | Lines |
-| --- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----: |
-| 1   | `.design/boklanov-rewrite/STATUS.md`                       | Phase status, open tasks, next actions, constraints                                                                                                                                                                                                                                     |   ~80 |
-| 2   | `.design/boklanov-rewrite/CONTENT.md`                      | Authoring workflow + frontmatter shape                                                                                                                                                                                                                                                  |   ~80 |
-| 3   | `DESIGN.md`                                                | Visual identity + IA + tokens + anti-patterns                                                                                                                                                                                                                                           |  ~220 |
-| 4   | `readme.md`                                                | Stack, dev, deploy, doc map                                                                                                                                                                                                                                                             |   ~75 |
-| 5   | `.design/boklanov-rewrite/DESIGN_v2_PROPOSAL.md`           | Vitrine direction — 3 §11 unfreeze commits + 8 code phases, 6 components, decisions taken                                                                                                                                                                                               |  ~290 |
-| 6   | `.design/boklanov-rewrite/DESIGN_v3_PROPOSAL.md`           | Plakat direction (branch `design_v3`) — 9 §11 unfreezes, 10 phases, Bauhaus trio palette, Unbounded display, ALL CAPS wordmark, full DE                                                                                                                                                 |  ~340 |
-| 7   | `.design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md` | Broken-grid root-cause + ranked options + subgrid / container-queries layers + implementation log for `<FeaturedStrip>` §2.4 re-attempt                                                                                                                                                 |  ~570 |
-| 8   | `.design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md`       | **Shipped 2026-05-06.** One-commit-per-save migration — `/api/keystatic-asset` is R2-only in prod; `backup-r2-to-git.yml` mirrors R2 → `public/` on `content/**` push + daily cron; `sync-r2.yml` retired. Cross-link from `KEYSTATIC_IMAGE_UPLOAD.md`                                  |  ~210 |
-| 9   | `.design/boklanov-rewrite/PAYLOAD_MIGRATION_PLAN.md`       | **Proposed 2026-05-14.** Replace Keystatic Cloud + GitHub Actions + Vercel rebuild loop with Payload 3 in-process. Neon Postgres free + existing R2 via `@payloadcms/storage-s3`. 5 phases + cutover. Schema mapping, seed script, revalidation hooks, rollback. Q1-Q6 open.            |  ~360 |
-| 10  | `.design/boklanov-rewrite/PAYLOAD_POLISH_PLAN.md`          | **Proposed 2026-05-14.** Gap between today's `/admin` (P1-P3 shipped) and the editor UX Keystatic ended at. 6 tiers: RU labels + descriptions + sidebar (T1), tabs + live preview (T2), schema selects (T3), chrome theming (T4 deferred), ops scripts (T5), cutover (T6). Q7-Q12 open. |  ~420 |
+| #   | Path                                                       | Role                                                                                                                                                                                                                                                   | Lines |
+| --- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----: |
+| 1   | `.design/boklanov-rewrite/STATUS.md`                       | Phase status, open tasks, next actions, constraints                                                                                                                                                                                                    |   ~80 |
+| 2   | `.design/boklanov-rewrite/CONTENT.md`                      | Authoring workflow + frontmatter shape                                                                                                                                                                                                                 |   ~80 |
+| 3   | `DESIGN.md`                                                | Visual identity + IA + tokens + anti-patterns                                                                                                                                                                                                          |  ~220 |
+| 4   | `readme.md`                                                | Stack, dev, deploy, doc map                                                                                                                                                                                                                            |   ~75 |
+| 5   | `.design/boklanov-rewrite/DESIGN_v2_PROPOSAL.md`           | Vitrine direction — 3 §11 unfreeze commits + 8 code phases, 6 components, decisions taken                                                                                                                                                              |  ~290 |
+| 6   | `.design/boklanov-rewrite/DESIGN_v3_PROPOSAL.md`           | Plakat direction (branch `design_v3`) — 9 §11 unfreezes, 10 phases, Bauhaus trio palette, Unbounded display, ALL CAPS wordmark, full DE                                                                                                                |  ~340 |
+| 7   | `.design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md` | Broken-grid root-cause + ranked options + subgrid / container-queries layers + implementation log for `<FeaturedStrip>` §2.4 re-attempt                                                                                                                |  ~570 |
+| 8   | `.design/boklanov-rewrite/PAYLOAD_MIGRATION_PLAN.md`       | **Shipped 2026-05-14.** Replaced Keystatic with Payload 3 in-process. Neon Postgres + R2 via `@payloadcms/storage-s3`. P1–P5 + cutover done. Schema mapping, seed script, revalidation hooks, rollback recorded.                                       |  ~360 |
+| 9   | `.design/boklanov-rewrite/PAYLOAD_POLISH_PLAN.md`          | **Shipped 2026-05-14.** Tiers 1+2+3.1+3.3+4+5.1+5.2+5.3+5.5+6. RU labels + descriptions + sidebar, tabs + live preview, country select (22 ISO-2), RowLabels everywhere, theatre.country backfill, About+Contact readers cut over, Keystatic deletion. |  ~640 |
 
 Plus `.design/boklanov-rewrite/MAP.md` (this file) and `content/AUTHORING.ru.md` (Roman's RU day-to-day, owned by
 Roman).
@@ -61,6 +60,10 @@ Verbatim historical record. Cite by section, never edit. Source for non-derivabl
 - `contributing.md` — boilerplate from `nextjs-notion-starter-kit`. Refs `react-notion-x`, `yarn link`, `pages/`. Did
   not apply post-Phase 4.
 - `.design/boklanov-rewrite/tokens.css` — Phase 4 seed. Live source = `app/globals.css`. Values still match.
+- `keystatic.config.ts`, `app/keystatic/**`, `app/api/keystatic/**` — Keystatic admin. Replaced by Payload 3 in `eaf5a37`+`a3535b0` (2026-05-14). `app/api/keystatic-asset/` kept (R2 proxy reused by `components/admin/ImagePathPreview`).
+- `content/productions/`, `content/about/`, `content/contact/`, `content/productions-index.json` — YAML/MDX fixtures. Source of truth is Postgres (Neon) since Phase 11. Template moved to `archive/_PRODUCTION_TEMPLATE.yaml`.
+- `scripts/audit-keystatic-schema.ts`, `.github/workflows/backup-r2-to-git.yml` — Keystatic-era ops tooling.
+- `.design/boklanov-rewrite/KEYSTATIC_*.md`, `keystatic.md` — Keystatic planning docs. Folded into history; the Payload work supersedes them (see active rows 8–9).
 
 ## 4. Cascade (active docs only)
 
@@ -76,17 +79,17 @@ STATUS owns commit hashes. No downstream writers.
 
 If you edit X, touch Y:
 
-| Edit                                    | Update                                                                   |
-| --------------------------------------- | ------------------------------------------------------------------------ |
-| Tokens (palette, type, motion, spacing) | `DESIGN.md` §3-6 + `app/globals.css`                                     |
-| Routes / URLs / IA                      | `DESIGN.md` §8-9 + `app/[locale]/...` + `messages/*.json` + `sitemap.ts` |
-| Anti-patterns (§11)                     | `DESIGN.md` §11                                                          |
-| Component grammar                       | `DESIGN.md` §7 + the component files                                     |
-| Frontmatter shape                       | `CONTENT.md` + `lib/content.ts` + `content/AUTHORING.ru.md`              |
-| Authoring flow                          | `CONTENT.md` + `content/AUTHORING.ru.md`                                 |
-| Phase status / shipped commit           | `STATUS.md`                                                              |
-| Roman closes an orphan-title row        | Delete row from `STATUS.md` table                                        |
-| Add/rename/archive/delete doc           | This file §1, §2, or §3                                                  |
+| Edit                                    | Update                                                                                                                 |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Tokens (palette, type, motion, spacing) | `DESIGN.md` §3-6 + `app/globals.css`                                                                                   |
+| Routes / URLs / IA                      | `DESIGN.md` §8-9 + `app/[locale]/...` + `messages/*.json` + `sitemap.ts`                                               |
+| Anti-patterns (§11)                     | `DESIGN.md` §11                                                                                                        |
+| Component grammar                       | `DESIGN.md` §7 + the component files                                                                                   |
+| Schema shape (Payload field)            | `collections/Productions.ts` or `globals/{About,Contact}.ts` + `lib/content.ts` + run `npm run payload:generate:types` |
+| Authoring flow                          | `CONTENT.md` + `content/AUTHORING.ru.md` (both describe the `/admin` UI)                                               |
+| Phase status / shipped commit           | `STATUS.md`                                                                                                            |
+| Roman closes an orphan-title row        | Delete row from `STATUS.md` table                                                                                      |
+| Add/rename/archive/delete doc           | This file §1, §2, or §3                                                                                                |
 
 ## 5. Unfreeze events (rare)
 
@@ -173,10 +176,9 @@ After shipping: run the MAP.md §7 update prompt.
 Override docs on conflict.
 
 - `app/globals.css` — runtime tokens
-- `content/productions/<slug>/index.yaml` — production data fields
-- `content/productions/<slug>/body.{ru,en,de}.md` — production long-form prose (per locale)
-- `content/about/{ru,en,de}.yaml` + `.md` — about page data + prose (per locale)
-- `content/AUTHORING.ru.md` — Roman's RU day-to-day
+- Neon Postgres (`productions` table + `about` + `contact` globals) — production / about / contact data fields. Queried via Payload Local API in `lib/content.ts`.
+- R2 bucket `boklanov-content` — uploaded images (productions/, about/, uploads/). Served via `app/api/keystatic-asset/` proxy.
+- `content/AUTHORING.ru.md` — Roman's RU day-to-day (covers `/admin` flow post-Phase 11)
 - `messages/{ru,en,de}.json` — UI chrome strings
-- `.obsidian/{app,community-plugins}.json` — Obsidian config
-- `scripts/lint-content.ts` — wikilink CI guard
+- `collections/Productions.ts` + `globals/{About,Contact}.ts` — Payload schema (also the source of `/admin` form layout)
+- `scripts/lint-content.ts` — wikilink CI guard (still runs on the few `.md` left under `content/`)
