@@ -133,7 +133,7 @@ export const About: GlobalConfig = {
           ]
         },
         {
-          label: { ru: 'Таймлайн', en: 'Timeline' },
+          label: { ru: 'Хронология', en: 'Timeline' },
           description: {
             ru: 'Хронология вех и линия преемственности (учителя/школы).',
             en: 'Milestones timeline and lineage (teachers / schools).'
@@ -142,10 +142,10 @@ export const About: GlobalConfig = {
             {
               name: 'milestones',
               type: 'array',
-              label: { ru: 'Таймлайн', en: 'Timeline' },
+              label: { ru: 'Хронология', en: 'Timeline' },
               labels: {
                 singular: { ru: 'Веха', en: 'Milestone' },
-                plural: { ru: 'Таймлайн', en: 'Timeline' }
+                plural: { ru: 'Хронология', en: 'Timeline' }
               },
               admin: {
                 components: {
@@ -264,19 +264,19 @@ export const About: GlobalConfig = {
           ]
         },
         {
-          label: { ru: 'Маргиналии', en: 'Margins' },
+          label: { ru: 'Заметки', en: 'Notes' },
           description: {
-            ru: 'Маргиналии — короткие пометки рядом с абзацами.',
-            en: 'Marginalia — short notes alongside body paragraphs.'
+            ru: 'Короткие пометки на полях рядом с абзацами биографии.',
+            en: 'Short notes alongside body paragraphs.'
           },
           fields: [
             {
               name: 'marginalia',
               type: 'array',
-              label: { ru: 'Маргиналии', en: 'Marginalia' },
+              label: { ru: 'Заметки', en: 'Notes' },
               labels: {
                 singular: { ru: 'Заметка', en: 'Note' },
-                plural: { ru: 'Маргиналии', en: 'Marginalia' }
+                plural: { ru: 'Заметки', en: 'Notes' }
               },
               admin: {
                 components: {

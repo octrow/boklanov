@@ -82,7 +82,7 @@ export const Productions: CollectionConfig = {
             {
               name: 'identity',
               type: 'group',
-              label: { ru: 'Идентичность', en: 'Identity' },
+              label: { ru: 'Текст', en: 'Content' },
               fields: [
                 {
                   name: 'title',
@@ -447,7 +447,7 @@ export const Productions: CollectionConfig = {
             {
               name: 'production',
               type: 'group',
-              label: { ru: 'Продакшен', en: 'Production' },
+              label: { ru: 'Постановка', en: 'Production details' },
               fields: [
                 {
                   name: 'theatre',
