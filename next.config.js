@@ -18,6 +18,17 @@ export default withPayload(
   withNextIntl(
     withBundleAnalyzer({
       outputFileTracingRoot: __dirname,
+      // `lib/content.ts` does fs.readFileSync(path.join('public/productions',
+      // slug, 'lqip.json')) — the dynamic path makes Next's tracer drag the
+      // entire public/productions/ tree (~210 MB of stills) into every
+      // serverless function, blowing past Vercel's 250 MB limit. Public
+      // assets are served by the CDN, not the function, so exclude media
+      // while keeping lqip.json reachable for the SSR read.
+      outputFileTracingExcludes: {
+        '*': [
+          'public/productions/**/*.{jpg,jpeg,png,webp,avif,gif,svg,mp4,mov,pdf}'
+        ]
+      },
       staticPageGenerationTimeout: 300,
       // gray-matter is CommonJS; let Node load it as-is on the server.
       serverExternalPackages: ['gray-matter'],

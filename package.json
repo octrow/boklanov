@@ -82,6 +82,7 @@
     "csv-parse": "^6.2.1",
     "dotenv": "^17.4.2",
     "eslint": "^9.35.0",
+    "eslint-config-next": "^15.4.11",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
     "tsx": "^4.21.0",

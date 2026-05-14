@@ -35,6 +35,26 @@ import { Contact } from './globals/Contact'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// pg-connection-string@^2 emits a security warning whenever it sees sslmode
+// `require`, `prefer`, or `verify-ca` because v3 will adopt libpq semantics
+// (weaker than the current verify-full alias). Neon's standard connection
+// string is `?sslmode=require`. We're already getting verify-full behavior,
+// so promote the mode in the URL to silence the warning and pin the
+// stronger semantics across future pg-connection-string releases.
+function pinSslMode(url: string): string {
+  if (!url) return url
+  try {
+    const u = new URL(url)
+    const mode = u.searchParams.get('sslmode')
+    if (mode === 'require' || mode === 'prefer' || mode === 'verify-ca') {
+      u.searchParams.set('sslmode', 'verify-full')
+    }
+    return u.toString()
+  } catch {
+    return url
+  }
+}
+
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'CHANGE_ME_IN_ENV',
   serverURL:
@@ -87,7 +107,7 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || '',
+      connectionString: pinSslMode(process.env.DATABASE_URL || ''),
       max: 5,
       idleTimeoutMillis: 20000,
       connectionTimeoutMillis: 10000
