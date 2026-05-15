@@ -1,6 +1,6 @@
 # Plan B — Pre-baked AVIF variants in R2, bypass `/_next/image`
 
-Status: **code shipped 2026-05-14; bake complete; awaiting env-flag flip + Lighthouse verification.**
+Status: **code shipped 2026-05-14; first bake complete; quality re-tune queued for re-bake (commit `3d9a392`).**
 
 Code: `lib/image-variants.ts` (shared module), `scripts/bake-image-variants.ts` (bulk), `app/api/r2-asset/route.ts` (inline-bake on admin upload), consumer dual-paths in `ProductionCard.tsx` / `app/[locale]/productions/[slug]/page.tsx` / `GalleryLightbox.tsx` / `SpecimenPlate.tsx`, head preloads in `app/[locale]/page.tsx` + detail page. Track 1 (`collections/Media.ts` `imageSizes`) also landed. Pairs with [`IMAGE_UPLOAD_STANDARD.md`](./IMAGE_UPLOAD_STANDARD.md) for the editorial workflow.
 
@@ -11,12 +11,20 @@ R2 state after the bake (run 2026-05-14 21:00 ALA):
 - **68 dangling DB refs** to gallery photos that don't exist in R2 (`aiaccio/photo_NNNN_result.webp` set, the `nikita-looking-for-the-sea` and `lika-and-beam` sets). Not bake-related — these are upstream content-ingest gaps; either re-upload the missing source files or scrub the gallery entries from Payload. Tracked separately, doesn't block this plan.
 - Spot-check: `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev/productions/aibolit/poster.600.avif` returns `200 / image/avif / 22 KB / cache-control: public, max-age=31536000, immutable`. Cloudflare ALA PoP serves edge-cached.
 
+Desktop Lighthouse against `…vercel.app/ru` (run 2026-05-14, `archive/lighthouse_14052125_1947_descktop.report.json`) — **97 / 100 / 100 / 100** with FCP 0.6 s, LCP 1.1 s, TBT 10 ms, CLS 0, SI 0.9 s. Two perf items remained actionable on our side and are addressed in commit `3d9a392`:
+
+- `image-delivery-insight` (–252 KiB potential) flagged ~100 KiB of compression-only waste on the 420/600 widths. AVIF quality lowered (420: 65→55, 600: 65→58, 828: 62→55, 1080: 60→52) in `lib/image-variants.ts`. **Requires `npm run bake-variants -- --force` to re-encode the 1244 existing variants** — the new quality only applies to fresh bakes.
+- `non-composited-animations` (2 elements) traced to `.titleRu` underline transitioning `background-size` (paint per frame). Converted to a composited `transform: scaleX` on a `::after` pseudo in `components/ProductionCard.module.css`.
+
+The remaining flagged items (`cache-insight` 23 KiB → `vercel.live/feedback.js`, `legacy-javascript-insight` 20 KiB → polyfills in a vendored chunk despite tight browserslist, `unused-javascript` 46 KiB → chunk `9da6db1e`) are either third-party preview-only artefacts or need bundle analysis; not blocking the headline number.
+
 Rollout left:
 
-1. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` → value `1` → redeploy preview.
-2. Mobile + desktop Lighthouse vs preview per `LIGHTHOUSE_RUNBOOK.md`.
-3. If mobile Perf ≥ 95, `vercel env add … production` → value `1` → promote.
-4. Post-verification: drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`. Separate PR.
+1. **`npm run bake-variants -- --force`** against R2 (10–15 min, ~1244 PUTs) to pick up the new quality matrix.
+2. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` → value `1` → redeploy preview (if not yet flipped).
+3. Re-run mobile + desktop Lighthouse vs preview per `LIGHTHOUSE_RUNBOOK.md`; expect perf 99–100.
+4. If mobile Perf ≥ 95, `vercel env add … production` → value `1` → promote.
+5. Post-verification: drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`. Separate PR.
 
 Pairs with [`LIGHTHOUSE_IMPROVEMENT_PLAN.md`](./LIGHTHOUSE_IMPROVEMENT_PLAN.md) (Pattern A = tuning `next/image`) and the mobile re-test in `archive/lighthouse_14052026_1901.json`. Pattern A is the prerequisite quick win; Pattern B is the architectural follow-up.
 
@@ -48,10 +56,12 @@ Source posters are ≥1500w (1526×2160 measured on `bury-me-…/poster.jpg`). B
 
 | Variant suffix | Width | Quality | Used by                                      |
 | -------------- | ----- | ------- | -------------------------------------------- |
-| `.420.avif`    | 420   | 65      | small grid cells (cols 4/12 cells, sm cards) |
-| `.600.avif`    | 600   | 65      | hero cell + 50vw tablet                      |
-| `.828.avif`    | 828   | 62      | larger mobile retina + tablet 50vw retina    |
-| `.1080.avif`   | 1080  | 60      | desktop hero + retina detail page            |
+| `.420.avif`    | 420   | 55      | small grid cells (cols 4/12 cells, sm cards) |
+| `.600.avif`    | 600   | 58      | hero cell + 50vw tablet                      |
+| `.828.avif`    | 828   | 55      | larger mobile retina + tablet 50vw retina    |
+| `.1080.avif`   | 1080  | 52      | desktop hero + retina detail page            |
+
+Quality lowered 2026-05-14 (commit `3d9a392`) after Lighthouse `image-delivery-insight` flagged ~100 KiB of compression-only waste per LCP image. Posters render under a CSS duotone blend on the homepage, so the visual cost of dropping q from 65→55 on the 420 width is minimal; gallery stills (full-bleed in the lightbox) use the 1080 variant where q=52 still holds detail. Re-bake required after editing.
 
 Naming: `productions/<slug>/poster.420.avif`, `…/poster.600.avif`, etc. (period-separated suffix keeps the source extension parseable). Same scheme for gallery stills (`01.420.avif`, `01.600.avif`, …).
 
@@ -68,13 +78,13 @@ upload: {
   crop: true,
   imageSizes: [
     { name: 'w420',  width: 420,  height: undefined, position: 'centre',
-      formatOptions: { format: 'avif', options: { quality: 65 } } },
+      formatOptions: { format: 'avif', options: { quality: 55 } } },
     { name: 'w600',  width: 600,  height: undefined, position: 'centre',
-      formatOptions: { format: 'avif', options: { quality: 65 } } },
+      formatOptions: { format: 'avif', options: { quality: 58 } } },
     { name: 'w828',  width: 828,  height: undefined, position: 'centre',
-      formatOptions: { format: 'avif', options: { quality: 62 } } },
+      formatOptions: { format: 'avif', options: { quality: 55 } } },
     { name: 'w1080', width: 1080, height: undefined, position: 'centre',
-      formatOptions: { format: 'avif', options: { quality: 60 } } }
+      formatOptions: { format: 'avif', options: { quality: 52 } } }
   ],
   adminThumbnail: 'w420'
 }
