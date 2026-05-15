@@ -20,6 +20,7 @@ import 'dotenv/config'
 import os from 'node:os'
 import { appendFileSync, writeFileSync } from 'node:fs'
 
+import cliProgress from 'cli-progress'
 import pMap from 'p-map'
 import { getPayload } from 'payload'
 import type { Payload } from 'payload'
@@ -38,23 +39,27 @@ import {
 // easy to grep / jq / sort by phase, awsCode, etc.
 const ERROR_LOG = '/tmp/bake-errors.log'
 
-function logFailure(f: VariantFailure): void {
+function logFailure(f: VariantFailure, quiet: boolean): void {
   // Console: human-readable single line with the most diagnostic fields.
-  const awsBits = [
-    f.errorName,
-    f.awsCode,
-    f.awsStatusCode != null ? `HTTP ${f.awsStatusCode}` : undefined,
-    f.awsRequestId ? `req=${f.awsRequestId}` : undefined
-  ]
-    .filter(Boolean)
-    .join(' / ')
-  const size =
-    f.sourceBytes != null ? ` src=${(f.sourceBytes / 1024).toFixed(0)}KB` : ''
-  console.warn(
-    `  ⚠ [${f.phase}] ${f.variantKey}${size}  ${
-      awsBits ? `[${awsBits}]  ` : ''
-    }${f.message}`
-  )
+  // Suppressed while the progress bar owns the TTY; full detail stays in
+  // ERROR_LOG and is summarized at end-of-run.
+  if (!quiet) {
+    const awsBits = [
+      f.errorName,
+      f.awsCode,
+      f.awsStatusCode != null ? `HTTP ${f.awsStatusCode}` : undefined,
+      f.awsRequestId ? `req=${f.awsRequestId}` : undefined
+    ]
+      .filter(Boolean)
+      .join(' / ')
+    const size =
+      f.sourceBytes != null ? ` src=${(f.sourceBytes / 1024).toFixed(0)}KB` : ''
+    console.warn(
+      `  ⚠ [${f.phase}] ${f.variantKey}${size}  ${
+        awsBits ? `[${awsBits}]  ` : ''
+      }${f.message}`
+    )
+  }
   // File: structured JSON for post-run analysis.
   appendFileSync(ERROR_LOG, JSON.stringify(f) + '\n')
 }
@@ -128,6 +133,13 @@ async function main() {
   const slugIdx = args.indexOf('--slug')
   const onlySlug = slugIdx !== -1 ? (args[slugIdx + 1] ?? null) : null
   const concurrency = parseConcurrency(args)
+  // Progress bar is the default for interactive TTY runs; `--no-progress`
+  // (or `--verbose`) falls back to per-variant streaming, and dry-run keeps
+  // its planning lines verbose so users can eyeball the PUTs.
+  const noProgressFlag =
+    args.includes('--no-progress') || args.includes('--verbose')
+  const useProgress =
+    !dryRun && !noProgressFlag && process.stdout.isTTY === true
 
   // Reset the error log on each run so old failures don't bleed into a
   // fresh diagnosis.
@@ -164,6 +176,40 @@ async function main() {
   const phaseTally: Record<string, number> = {}
   const codeTally: Record<string, number> = {}
 
+  // Live progress bar — source-images as the unit, variants/sec as the
+  // throughput readout (more meaningful than sources/sec since each source
+  // fans out to multiple AVIF widths).
+  const startedAt = Date.now()
+  const bar = useProgress
+    ? new cliProgress.SingleBar(
+        {
+          format:
+            ' {bar} {percentage}% │ {value}/{total} sources │ {rate} variants/s │ ETA {eta_formatted} │ built={built} skip={skipped} miss={missing} fail={failed}',
+          barCompleteChar: '█',
+          barIncompleteChar: '░',
+          hideCursor: true,
+          clearOnComplete: false,
+          stopOnComplete: false,
+          etaBuffer: 64,
+          fps: 10
+        },
+        cliProgress.Presets.shades_classic
+      )
+    : null
+
+  const renderState = (): Record<string, string | number> => {
+    const elapsedSec = Math.max(0.001, (Date.now() - startedAt) / 1000)
+    return {
+      built,
+      skipped,
+      missing,
+      failed: failureCount,
+      rate: (built / elapsedSec).toFixed(1)
+    }
+  }
+
+  if (bar) bar.start(allKeys.length, 0, renderState())
+
   await pMap(
     allKeys,
     async (key) => {
@@ -172,6 +218,7 @@ async function main() {
           dryRun,
           force,
           onWrite: (variantKey, bytes) => {
+            if (bar) return // Per-variant lines would shred the bar; tallies update on completion.
             if (dryRun) {
               console.log(`[dry] PUT ${variantKey}`)
             } else {
@@ -185,14 +232,14 @@ async function main() {
             const codeKey =
               f.awsCode ?? f.errorName ?? `http-${f.awsStatusCode ?? 'unknown'}`
             codeTally[codeKey] = (codeTally[codeKey] ?? 0) + 1
-            logFailure(f)
+            logFailure(f, /*quiet*/ bar !== null)
           }
         })
         built += res.built
         skipped += res.skipped
         if (res.missingSource) {
           missing += 1
-          console.warn(`  ⚠ source missing in R2: ${key}`)
+          if (!bar) console.warn(`  ⚠ source missing in R2: ${key}`)
         }
       } catch (err) {
         // Unexpected throw (the per-variant try/catch in lib/image-variants
@@ -200,13 +247,30 @@ async function main() {
         // anything that escaped — e.g. payload-collection iteration errors).
         failureCount += 1
         const e = err as Error
-        console.warn(
-          `  ⚠ UNEXPECTED for ${key}: ${e.name ?? ''} ${e.message ?? String(err)}\n${e.stack ?? ''}`
-        )
+        if (!bar) {
+          console.warn(
+            `  ⚠ UNEXPECTED for ${key}: ${e.name ?? ''} ${e.message ?? String(err)}\n${e.stack ?? ''}`
+          )
+        } else {
+          appendFileSync(
+            ERROR_LOG,
+            JSON.stringify({
+              phase: 'unexpected',
+              sourceKey: key,
+              errorName: e.name,
+              message: e.message,
+              stack: e.stack
+            }) + '\n'
+          )
+        }
+      } finally {
+        if (bar) bar.increment(1, renderState())
       }
     },
     { concurrency }
   )
+
+  if (bar) bar.stop()
 
   console.log(
     `\nDone. ${built} variant${built === 1 ? '' : 's'} ${
