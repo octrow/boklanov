@@ -18,6 +18,10 @@ Desktop Lighthouse against `…vercel.app/ru` (run 2026-05-14, `archive/lighthou
 
 The remaining flagged items (`cache-insight` 23 KiB → `vercel.live/feedback.js`, `legacy-javascript-insight` 20 KiB → polyfills in a vendored chunk despite tight browserslist, `unused-javascript` 46 KiB → chunk `9da6db1e`) are either third-party preview-only artefacts or need bundle analysis; not blocking the headline number.
 
+LCP load-delay also addressed in `c521e6e` — `app/[locale]/layout.tsx` now emits `<link rel="preconnect">` to `NEXT_PUBLIC_CDN_BASE` so the TLS handshake to R2 overlaps HTML parse instead of waiting for the LCP `<link rel="preload">` to be discovered. Saves ~50–200 ms of LCP load-delay on the mobile run. Local dev (no CDN configured) is unaffected by the env gate.
+
+Mobile follow-up in `e8049cd`: the first mobile run hit perf=80 with 695 KiB of "oversized image" savings. Added a **720w variant** between the existing 600 and 828 widths — Moto G Power's 412 viewport × DPR 1.75 = 721 ideal physical px, so the browser had been falling up to 828w (~27 % over budget). 720w hits exactly. Desktop and DPR-2.0+ retina still land on 1080w. The new slot needs the re-bake too.
+
 Rollout left:
 
 1. **`npm run bake-variants -- --force`** against R2 (10–15 min, ~1244 PUTs) to pick up the new quality matrix.
@@ -58,10 +62,11 @@ Source posters are ≥1500w (1526×2160 measured on `bury-me-…/poster.jpg`). B
 | -------------- | ----- | ------- | -------------------------------------------- |
 | `.420.avif`    | 420   | 55      | small grid cells (cols 4/12 cells, sm cards) |
 | `.600.avif`    | 600   | 58      | hero cell + 50vw tablet                      |
+| `.720.avif`    | 720   | 55      | mobile DPR-1.75 (412 vw × 1.75 ≈ 721 px)     |
 | `.828.avif`    | 828   | 55      | larger mobile retina + tablet 50vw retina    |
 | `.1080.avif`   | 1080  | 52      | desktop hero + retina detail page            |
 
-Quality lowered 2026-05-14 (commit `3d9a392`) after Lighthouse `image-delivery-insight` flagged ~100 KiB of compression-only waste per LCP image. Posters render under a CSS duotone blend on the homepage, so the visual cost of dropping q from 65→55 on the 420 width is minimal; gallery stills (full-bleed in the lightbox) use the 1080 variant where q=52 still holds detail. Re-bake required after editing.
+Quality lowered 2026-05-14 (commit `3d9a392`) after Lighthouse `image-delivery-insight` flagged ~100 KiB of compression-only waste per LCP image; the 720w slot was added in `e8049cd` after mobile Lighthouse on the preview hit perf=80 with 695 KiB of "oversized image" savings — Moto G Power's 412 vw × DPR 1.75 = 721 ideal physical px, so the browser was falling up to 828w (~27 % too big). 720w fits DPR-1.75 exactly; desktop and DPR-2.0+ mobiles still land on 1080w, so no retina regression. Posters render under a CSS duotone blend on the homepage so the visual cost of q=55 on the small widths is minimal; gallery stills (full-bleed in the lightbox) use the 1080 variant where q=52 still holds detail. Re-bake required after editing.
 
 Naming: `productions/<slug>/poster.420.avif`, `…/poster.600.avif`, etc. (period-separated suffix keeps the source extension parseable). Same scheme for gallery stills (`01.420.avif`, `01.600.avif`, …).
 
@@ -81,6 +86,8 @@ upload: {
       formatOptions: { format: 'avif', options: { quality: 55 } } },
     { name: 'w600',  width: 600,  height: undefined, position: 'centre',
       formatOptions: { format: 'avif', options: { quality: 58 } } },
+    { name: 'w720',  width: 720,  height: undefined, position: 'centre',
+      formatOptions: { format: 'avif', options: { quality: 55 } } },
     { name: 'w828',  width: 828,  height: undefined, position: 'centre',
       formatOptions: { format: 'avif', options: { quality: 55 } } },
     { name: 'w1080', width: 1080, height: undefined, position: 'centre',
