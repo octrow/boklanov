@@ -7,11 +7,7 @@ export const routing = defineRouting({
   locales: ['en', 'de', 'ru'] as const,
   defaultLocale: 'en',
   // EN renders at `/` with no prefix. DE/RU always carry a prefix.
-  localePrefix: 'as-needed',
-  // URL is the source of truth — do not Accept-Language-redirect fresh
-  // visitors. Avoids a ~1.2 s set-cookie 307 on cold paths where Vercel's
-  // cache (keyed by RSC headers) misses and middleware runs.
-  localeDetection: false
+  localePrefix: 'as-needed'
 })
 
 export type Locale = (typeof routing.locales)[number]
