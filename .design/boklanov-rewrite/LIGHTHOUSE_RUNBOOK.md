@@ -11,20 +11,27 @@ Prod `boklanov.com` runs `main`, which is the Keystatic CMS build.
 data pipeline. Auditing prod tells you nothing about whether this branch
 got faster or slower — you're measuring two different sites.
 
-Two valid test surfaces for `feature/payloadcms`:
+Two valid test surfaces for `feature/payloadcms`, each good for
+different things:
 
-| Surface        | URL                                                               | Use it for                                                |
-| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------- |
-| Local prod     | `http://localhost:3000` (after `pnpm build && pnpm start`)        | Dev loop. Fast, deterministic, same Next bundle as Vercel |
-| Vercel preview | `boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app` | Pre-merge gate. Real edge, ISR, R2, Image Optimization    |
+| Surface        | URL                                                               | Trust it for                                                                                   | Don't trust it for                                                                                                                      |
+| -------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Local prod     | `http://localhost:3000` (after `pnpm build && pnpm start`)        | TBT/CLS/JS bundle size; "did my deps bloat?" diffs                                             | **LCP and image opportunities** — `next/image` runs cold-sharp at request time against R2, inflating LCP by 5+ s vs what real users see |
+| Vercel preview | `boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app` | LCP, TTFB, real-user-equivalent perf score; image pipeline serves baked AVIFs from R2 directly | First-cold TTFB is noisier (Fluid Compute cold start, 400-700 ms); always warm the URL with 2 `curl`s before the audit                  |
 
 Do **not** use `pnpm dev` (= `next dev`) for perf — unminified, HMR
 overhead, dev React warnings; scores run 20–40 points worse than prod.
 The opportunities it reports are not real.
 
+**LCP regressions are only diagnosable on the preview, never locally.**
+A local-only LCP delta (e.g. 5.2 s → 8.9 s) almost always means a
+warm-vs-cold sharp/transcode difference in `/_next/image`, not a real
+regression. Confirm on the preview before acting on it.
+
 The right "did this branch regress?" comparison is `main` (local prod)
-vs `feature/payloadcms` (local prod), same machine, same network. See
-`scripts/lh-diff.sh` (below, "Branch-vs-branch diff").
+vs `feature/payloadcms` (local prod), same machine, same network — but
+**only for non-LCP metrics**. See `scripts/lh-diff.sh` (below,
+"Branch-vs-branch diff").
 
 ## First response to a suspected regression
 
@@ -73,8 +80,9 @@ https://pagespeed.web.dev/analysis?url=<URL>&form_factor=mobile
 
 ## Standard run — `npx lighthouse@latest`, headless
 
-Pick a target by exporting `BASE_URL` first. The two recipes below are
-identical regardless of target — the URL is the only thing that changes:
+Pick a target. Local prod uses one `BASE_URL`; preview uses a `HOST + path`
+split because a bypass query string can't live on `BASE_URL` (it would
+collide with `$BASE_URL/ru`):
 
 ```bash
 # A) Local prod build (default — fast dev loop)
@@ -82,11 +90,22 @@ pnpm build && pnpm start &
 SERVER_PID=$!
 # Wait until http://localhost:3000/ru returns 200, then:
 export BASE_URL="http://localhost:3000"
+LH_TARGET="$BASE_URL/ru"
 
-# B) Vercel preview (pre-merge sanity check; one-time bypass setup below)
-export BASE_URL="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app?x-vercel-protection-bypass=$VERCEL_BYPASS&x-vercel-set-bypass-cookie=samesitenone"
-# (Bypass query string survives navigation to sub-resources because of the
-#  set-bypass-cookie redirect — see "Vercel preview — one-time bypass setup".)
+# B) Vercel preview, Deployment Protection ON (use header-based bypass)
+PREVIEW_HOST="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app"
+LH_TARGET="$PREVIEW_HOST/ru"
+LH_EXTRA_HEADERS="--extra-headers={\"x-vercel-protection-bypass\":\"$VERCEL_BYPASS\"}"
+# Do NOT include x-vercel-set-bypass-cookie: it triggers a 307→200 dance that
+# costs ~1 s on LCP. Header-only bypass works because Lighthouse re-sends the
+# header on every sub-resource request. See "Vercel preview gotchas" below.
+
+# C) Vercel preview, Deployment Protection OFF (most representative)
+PREVIEW_HOST="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app"
+LH_TARGET="$PREVIEW_HOST/ru"
+LH_EXTRA_HEADERS=""
+# Warm the deployment first (Fluid Compute cold start = 400-700 ms TTFB):
+curl -s -o /dev/null "$PREVIEW_HOST/ru" && curl -s -o /dev/null "$PREVIEW_HOST/ru"
 ```
 
 Two parameter sets cover everything we care about: **mobile** (the
@@ -95,7 +114,8 @@ default scoring target) and **desktop** (regression sanity check).
 ```bash
 # Mobile — emulates Moto G Power (412×823, DPR 1.75, Slow 4G simulation)
 npx -y lighthouse@latest \
-  "$BASE_URL/ru" \
+  "$LH_TARGET" \
+  $LH_EXTRA_HEADERS \
   --quiet \
   --chrome-flags="--headless=new --no-sandbox --disable-extensions" \
   --form-factor=mobile \
@@ -112,7 +132,8 @@ npx -y lighthouse@latest \
 ```bash
 # Desktop — emulates 1350×940, DPR 1, no throttling
 npx -y lighthouse@latest \
-  "$BASE_URL/ru" \
+  "$LH_TARGET" \
+  $LH_EXTRA_HEADERS \
   --quiet \
   --chrome-flags="--headless=new --no-sandbox --disable-extensions" \
   --preset=desktop \
@@ -120,6 +141,10 @@ npx -y lighthouse@latest \
   --output=json --output=html \
   --output-path=".design/boklanov-rewrite/archive/lighthouse_$(date +%d%m%Y_%H%M)_desktop"
 ```
+
+For local prod, leave `LH_EXTRA_HEADERS=""` (unset is fine — bash will
+expand the unquoted `$LH_EXTRA_HEADERS` to nothing). The `$LH_TARGET`
+already carries the path, so no `/ru` suffix on the command line.
 
 Outputs:
 
@@ -197,15 +222,45 @@ Chrome does not, so it needs a token instead.
    curl -sI -H "x-vercel-protection-bypass: $VERCEL_BYPASS" "$PREVIEW" | head -3
    ```
 
-After that, the `BASE_URL` line in the standard-run recipe (Option B)
-works as-is. The trick is `x-vercel-set-bypass-cookie=samesitenone`: it
-makes Vercel issue a `Set-Cookie` on the first redirect, so every
-sub-resource Lighthouse fetches (JS chunks, fonts, images) is also
-authorized. Without it the HTML loads but every asset 401s.
+After that, Option B in the standard-run recipe works as-is.
 
-**Alternative: disable Deployment Protection temporarily** — fastest
-for a one-off manual run, but exposes every preview URL on the project
-until re-enabled. Don't use for routine audits.
+## Vercel preview gotchas — which bypass costs what
+
+Three bypass modes, in order of LCP-tax:
+
+| Mode                                                                                          | Network-panel result                           | LCP overhead | When to use                                                |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------ | ---------------------------------------------------------- |
+| `?x-vercel-protection-bypass=…&x-vercel-set-bypass-cookie=samesitenone` (query string)        | 307 → 200 (cookie-set redirect)                | **~1.2 s**   | Avoid for perf audits. Fine for sanity checks              |
+| `--extra-headers '{"x-vercel-set-bypass-cookie":"samesitenone", ...}'` (header w/ set-cookie) | 307 → 200 (same dance)                         | **~1.2 s**   | Same problem — `set-bypass-cookie` is what triggers it     |
+| `--extra-headers '{"x-vercel-protection-bypass":"…"}'` (header only, no set-cookie)           | 307 → 200 (Vercel auth handshake on cold path) | **~1.0 s**   | Best with protection ON. Cleaner than the cookie redirects |
+| **Deployment Protection disabled** (toggle in dashboard)                                      | 200 direct                                     | **0 s**      | Most representative numbers. Re-enable after the audit     |
+
+**The unintuitive part:** even header-only bypass still costs ~1 s. The
+edge cache is keyed by `vary: RSC, Next-Router-State-Tree, …` headers,
+so `curl` (no RSC headers) hits a cached 200 while Lighthouse (real
+RSC navigation) misses cache, runs middleware + protection
+handshake, and eats a 307. **The bypass tax is structural**, not
+something we can flag-tune away.
+
+**Recommended workflow for representative numbers:** flip Deployment
+Protection off, run the audit, flip it back on. The exposure window is
+~2 min and the preview URL hash is non-guessable; risk is minimal for a
+non-production project. Don't leave it off.
+
+## Reading a preview report — what the redirect numbers actually mean
+
+The `redirects` audit on a protected preview almost always reports
+500-1500 ms wasted. Subtract that from LCP to get a real-user-equivalent
+number. Cross-check by looking at the first two `network-requests`
+items — if they're `/ru` → 307, `/ru` → 200 (same URL), it's the bypass
+handshake, not an application redirect. Only worry if the redirect is
+between _different_ URLs (e.g. `/` → `/ru`, or `/ru` → `/ru/` trailing-
+slash) — that's application-level and fixable.
+
+`document-latency-insight` rolls up redirect + TTFB + compression; on a
+protected preview it inherits the bypass-handshake ms and inflates
+accordingly. Trust `server-response-time` (raw TTFB) over
+`document-latency-insight` when protection is on.
 
 ## Whole-site audits — `unlighthouse`
 
@@ -342,14 +397,17 @@ scores stop oscillating.
 
 ## Troubleshooting
 
-| Symptom                                  | Cause                               | Fix                                                                              |
-| ---------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------- |
-| `runWarnings` mentions Chrome extensions | Headless flag missing               | Add `--chrome-flags="--headless=new --disable-extensions"`                       |
-| `finalDisplayedUrl` is a Vercel login    | Deployment Protection on preview    | Use bypass token (see above)                                                     |
-| LCP wildly different across runs         | Cold ISR cache + Slow-4G simulation | Pre-warm with a `curl <URL>` once, then re-run                                   |
-| `npx lighthouse@latest` install slow     | `npx` cache miss                    | First run installs to `~/.npm/_npx`; subsequent runs reuse                       |
-| "Unable to launch Chrome"                | No Chromium on host                 | Install `google-chrome` system package, or use `npx puppeteer-chromium-resolver` |
-| Score swings 5+ points run-to-run        | Simulated throttling variance       | Run 3× and take the median by hand, or use the median-run snippet below          |
+| Symptom                                          | Cause                                                                                                                                                        | Fix                                                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `runWarnings` mentions Chrome extensions         | Headless flag missing                                                                                                                                        | Add `--chrome-flags="--headless=new --disable-extensions"`                                                                |
+| `finalDisplayedUrl` is a Vercel login            | Deployment Protection on preview                                                                                                                             | Use bypass token (see above)                                                                                              |
+| LCP wildly different across runs                 | Cold ISR cache + Slow-4G simulation                                                                                                                          | Pre-warm with a `curl <URL>` once, then re-run                                                                            |
+| `npx lighthouse@latest` install slow             | `npx` cache miss                                                                                                                                             | First run installs to `~/.npm/_npx`; subsequent runs reuse                                                                |
+| "Unable to launch Chrome"                        | No Chromium on host                                                                                                                                          | Install `google-chrome` system package, or use `npx puppeteer-chromium-resolver`                                          |
+| Score swings 5+ points run-to-run                | Simulated throttling variance                                                                                                                                | Run 3× and take the median by hand, or use the median-run snippet below                                                   |
+| `redirects` audit flags `/ru` → `/ru` (same URL) | next-intl `localeDetection: true` sets `NEXT_LOCALE` via a Set-Cookie 307 on cold paths (Vercel cache is RSC-keyed → headless Chrome misses where curl hits) | Set `localeDetection: false` in `i18n/routing.ts`. URL becomes source of truth; Accept-Language auto-redirect is given up |
+| Local LCP 5+ s worse than preview LCP            | `<Image>` cold-sharp transcodes through `/_next/image` on each request; preview serves baked AVIF variants direct from R2                                    | Don't diagnose LCP locally. Trust the preview number. See `PAYLOAD_IMAGE_VARIANTS_PLAN.md`                                |
+| `LCP element: ?` (unclassified)                  | Hero element shifts between paints (hydration swap, late-arriving image, or redirect-induced reflow)                                                         | Mark the first hero `<Image>` `priority` so the LCP picker locks onto it. Often resolves once redirects are fixed         |
 
 ## Tools index
 
