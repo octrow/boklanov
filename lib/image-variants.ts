@@ -147,9 +147,12 @@ export function makeR2Client(): S3Client {
     // socket — observed as a tail-latency stall where the last few sources
     // never finish. 5s TLS handshake / 60s request budget lets the SDK's
     // standard retry strategy actually fire on stuck connections.
+    // `throwOnRequestTimeout` is required in newer @smithy/node-http-handler;
+    // without it the timeout only logs a WARN and the request keeps running.
     requestHandler: new NodeHttpHandler({
       connectionTimeout: 5_000,
-      requestTimeout: 60_000
+      requestTimeout: 60_000,
+      throwOnRequestTimeout: true
     })
   })
 }
