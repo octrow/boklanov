@@ -105,7 +105,7 @@ Re-run `npm run payload:generate:types` to surface the new size keys on `media.s
 Add `scripts/bake-image-variants.ts` (model after `scripts/upload-images.ts`). For every `Production`, for every `media.*.src` that exists in R2:
 
 ```text
-1. HEAD the source on R2 → if all four variants already exist, skip.
+1. HEAD the source on R2 → if all five variants already exist, skip.
 2. GET the source bytes.
 3. sharp(bytes)
      .resize({ width: W, withoutEnlargement: true })
@@ -248,7 +248,7 @@ Once variants serve from R2 and `/_next/image` is no longer used for posters:
 - **AVIF artifacts on high-entropy posters** (`beware-of-the-dog` is the canonical example: 263 KB at q=75, ~165 KB "wasted"). Mitigation: per-slug quality override via a small JSON allowlist (`scripts/variant-overrides.json`: `{ "beware-of-the-dog": { quality: 70 } }`). Spot-check in browser at each ramp.
 - **Image-set sizing mismatch** — `<img srcset>` picks variants strictly by `sizes` + DPR. Verify on a real mid-DPR device (iPad 2× picks `w828`, Pixel 8 ~2.6× picks `w1080`). The 420 variant only fires for narrow ≤412 CSS-px viewports at DPR 1.0 (rare); keep it for low-bandwidth fallback.
 - **Manual head-preload bookkeeping** — moving from `next/image priority` to raw `<img>` means we lose the automatic `<link rel=preload>` injection. Add the preload in `layout.tsx` from server-side data; cover with a Playwright snapshot test if the front page LCP slug shifts.
-- **Storage cost in R2** — four AVIFs per source ≈ 4× small storage hits, but R2 is $0.015/GB/mo and AVIFs are smaller than the source JPEG combined. Net storage delta < 30 %, negligible.
+- **Storage cost in R2** — five AVIFs per source ≈ 5× small storage hits, but R2 is $0.015/GB/mo and AVIFs are smaller than the source JPEG combined. Net storage delta < 40 %, negligible.
 - **Variants drift from `sizes`** — if FeaturedStrip breakpoints change, regenerate. Document the contract in `lib/content.ts` next to `PosterRef`.
 
 ## Resolved questions
