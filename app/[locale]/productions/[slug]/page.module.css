@@ -28,12 +28,11 @@
   max-height: 65vh;
   width: auto;
   height: auto;
-  /* Reserve space before the poster loads — kills the 0.5+ CLS that headless
-     Lighthouse saw on /ru/productions/<slug> mobile. width/height attrs on the
-     <img> override this when actual dims are known (LQIP-derived). 5/7 is the
-     typical theatrical-poster portrait aspect; off-aspect posters cause a
-     small post-load adjustment instead of a full-height push. */
-  aspect-ratio: var(--cover-aspect, 5 / 7);
+  /* Space is reserved pre-load by width/height attributes on the <img>
+     (page.tsx). Browser uses those as an aspect hint until the real image
+     loads, then defers to the natural aspect — no CSS aspect-ratio override,
+     which would distort off-aspect posters and fail the `image-aspect-ratio`
+     Best-Practices audit. */
   cursor: zoom-in;
 }
 

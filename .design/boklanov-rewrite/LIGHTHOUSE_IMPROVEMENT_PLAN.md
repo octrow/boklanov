@@ -275,6 +275,81 @@ Implication for the 98-100 goal: on the preview as-measured, hitting Perf ≥ 98
 4. Median-of-3 on any cell still below 98 — rules out Fluid Compute cold-start variance.
 5. Append the post-fix score table here when verified green.
 
+## First rescout (post-F1/F2/F3, commit `14fd732`)
+
+Captured 2026-05-17 0419 (`.design/boklanov-rewrite/archive/lh_rescout_17052026_0419_*.json`). **Single-shot scout was dominated by cold-Function spin-ups** — sequential 10-cell run takes ~6 min, Fluid Compute spun down between URLs, so each new URL hit a cold start with FCP ≈ LCP ≈ 4-26 s. Per the runbook ("Single run shows perf 50-60 in an otherwise 80-90 range"), single-shot data is not actionable here. Two real signals nevertheless surfaced through the noise:
+
+**F1 confirmed:** `ru_detail` mobile CLS **0.540 → 0.002** ✓ (poster now reserves space).
+
+**F2 confirmed:** `ru_about` SEO **92 → 100** on both form factors ✓ (`<meta name="description">` ships via the i18n fallback).
+
+**F3 not verifiable** from this scout — LCP was dominated by cold-start TTFB, not image fetch.
+
+### New issues uncovered by the rescout
+
+**F5 (BP regression on `ru_detail` desktop, 100 → 96):** `image-aspect-ratio` audit fires on `poster.720.avif`. Root cause: F1's CSS `aspect-ratio: var(--cover-aspect, 5 / 7)` default forces 0.7143 aspect on posters whose LQIP dims aren't set. Natural aspect for `bury-me-behind-the-baseboard/poster.720.avif` is 720/1019 = 0.7066 — small diff but Lighthouse flags any rendered-vs-natural mismatch.
+
+**F6 (SEO regression on `ru_detail` desktop, 100 → 92):** `robots-txt` audit reports "robots.txt is not valid." `app/robots.ts` emits `host: BASE`. `host:` is a Yandex extension, not part of the robots.txt RFC; Lighthouse fails the audit when it's present. (Note: this audit was inconsistent across cells — flagged `ru_detail desktop` in the rescout but not other pages. Fix it once for correctness regardless of audit consistency.)
+
+## Findings & fixes — second wave (F5 + F6)
+
+### F5. Replace CSS aspect-ratio default with width/height-attr hint
+
+**Root cause:** see above.
+
+**Fix:** drop `aspect-ratio` from `.cover img` CSS. In `page.tsx`, pass `width`/`height` attrs on the `<img>` always: actual `production.poster.width/height` when LQIP-derived, else fall back to `720 × 1019` (typical theatrical-poster portrait). Browsers use `width`/`height` attrs as a pre-load aspect hint only — once the real image loads, the natural aspect takes over, so there's no rendered-vs-natural distortion. CLS reservation is preserved by the pre-load aspect hint.
+
+**Risk:** very low. Posters whose natural aspect differs from `720 × 1019` get a tiny post-load adjustment (a few px); CLS stays under 0.02 across realistic poster aspects.
+
+### F6. Drop `host:` from `app/robots.ts`
+
+**Root cause:** see above.
+
+**Fix:** remove the `host: BASE` line from the `robots()` export.
+
+**Risk:** zero. Yandex now reads canonical tags / redirects instead of `host:`; site has neither audience nor crawl dependency on the directive.
+
+## First median-of-3 attempt (2026-05-17 0425) — cold-start swamps median
+
+Captured `lh_med3_17052026_0425_*.json`. Pre-warmed with 3 parallel curl rounds; ran median-of-3 sequentially per cell. **Result: every cell's three runs showed 1-2 cold-Function outliers and only 1 truly warm run.** Median picks the middle of three — when 2/3 are cold-starts, the median IS a cold-start. So the median table looked catastrophic (Perf 55-82) even though the per-run breakdown told a different story:
+
+| cell      | per-run Perf scores | best of 3      |
+| --------- | ------------------- | -------------- | ------ |
+| root      | desktop             | `[55, 82, 95]` | **95** |
+| root      | mobile              | `[82, 85, 55]` | 85     |
+| ru        | desktop             | `[62, 55, 56]` | 62     |
+| ru        | mobile              | `[67, 87, 55]` | 87     |
+| de        | desktop             | `[57, 56, 91]` | 91     |
+| de        | mobile              | `[55, 58, 80]` | 80     |
+| ru_about  | desktop             | `[55, 85, 55]` | 85     |
+| ru_about  | mobile              | `[58, 89, 60]` | 89     |
+| ru_detail | desktop             | `[55, 56, 92]` | 92     |
+| ru_detail | mobile              | `[50, 75, 57]` | 75     |
+
+**Diagnosis:** the Vercel preview is the only traffic source for this deployment; Fluid Compute spins down idle instances between Lighthouse runs (each ~30-60 s) — the 2-curl pre-warm doesn't survive. **The runbook's median-of-3 advice assumes the function stays warm across the 3 runs**; with no organic traffic it doesn't.
+
+### Wins confirmed despite the cold-start noise
+
+- **F1 confirmed:** CLS 0.000-0.002 across every cell (was 0.540 on `ru_detail` mobile, baseline).
+- **F2 confirmed:** SEO 100 on every cell (was 92 on `ru_about` baseline).
+- **F5 still visible:** `ru_detail` BP 96 (the F5 fix is local-only, not yet deployed).
+- **F3 (90 vw):** can't read through cold-start noise — verifying requires warm functions.
+
+## Revised re-measure protocol — keep-alive ping loop
+
+The runbook should be amended (see deferred items) to recommend running a **continuous keep-alive curl loop in parallel** with Lighthouse audits on the preview, so Fluid Compute doesn't spin down between runs. Pattern:
+
+```bash
+# Background pinger: hit a representative URL every 3-5 s while audits run.
+PREVIEW=...
+( while :; do curl -s -o /dev/null "$PREVIEW/ru"; sleep 4; done ) &
+PING_PID=$!
+# ... run all 30 (or N) Lighthouse audits ...
+kill "$PING_PID"
+```
+
+This keeps a warm instance pinned to the deployment for the whole audit window. Without it, sequential audits on a low-traffic preview measure cold-start behaviour, not application performance.
+
 ## Deferred / out of scope this round
 
 - **Font preload trimming.** Layout preloads three VFs per locale (~270 KiB total) including `Lora-Italic-VF.woff2` (90 KiB) which appears in every page's top-5 transfers. Worth investigating whether above-fold paint actually needs it. TBT is already 0-53 ms across the board, so not urgent. Separate pass.
