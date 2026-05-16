@@ -376,6 +376,62 @@ For multi-URL CI-style aggregation, switch to **Lighthouse CI**
 (`@lhci/cli`) — its `numberOfRuns` config key plus assertions are the
 right tool. We haven't adopted it yet (see "CI integration" below).
 
+### When median-of-3 lies — the zero-traffic preview trap
+
+Median-of-3 only works when the system under test stays in the **same
+state** across all 3 runs. On a Vercel preview with zero organic traffic,
+that assumption breaks: Fluid Compute spins idle instances down between
+runs (~30-60 s of inactivity is enough), so each Lighthouse run cold-starts
+unless it happens fast enough to ride the previous run's warm window.
+
+Symptom: per-run Perf scores cluster bimodally, e.g. `[55, 56, 91]` —
+two cold-starts and one warm run. **Median picks `56`** — the middle of
+the cold-starts. The data looks catastrophic when the application is
+actually fine. We hit this on 2026-05-17 0425 across all 10 cells (see
+`LIGHTHOUSE_IMPROVEMENT_PLAN.md` Round 2 "First median-of-3 attempt").
+
+**Fix: parallel keep-alive ping during the audit window.** A background
+loop hitting one representative URL every 4 s is enough to keep an
+instance warm for the whole audit batch:
+
+```bash
+PREVIEW="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app"
+( while :; do curl -s -o /dev/null "$PREVIEW/ru"; sleep 4; done ) &
+PING_PID=$!
+trap 'kill "$PING_PID" 2>/dev/null' EXIT
+
+# ... your sequential Lighthouse runs here ...
+
+kill "$PING_PID"
+```
+
+Notes:
+
+- Use a **single** URL the pinger hits. Cross-URL pings don't share a
+  warm instance under Fluid Compute (different route handlers).
+- 4 s is conservative; 8 s also works in practice. Cold-start threshold
+  on this project is somewhere around 15-30 s of inactivity.
+- The pings DON'T affect Lighthouse's own measurements — Lighthouse uses
+  its own Chrome instance with its own connection pool; the preview just
+  has a hot Function instance ready when Chrome navigates.
+- Running this against `boklanov.com` (real production) is unnecessary —
+  organic traffic keeps it warm.
+- If you DO get bimodal results despite the pinger, your sleep is too
+  long or the cells you're testing route through different handlers
+  (e.g. `/api/og/...` vs `/ru/...`). Extend the ping to cover them all,
+  staggered.
+
+### Median vs best — when each is right
+
+| You're measuring …                                      | Use …                                   | Why                                                                                                   |
+| ------------------------------------------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Variance from simulated-throttling on a warm Function   | **median-of-3**                         | Filters the natural simulation jitter (±3-5 Perf points) without overweighting any single noisy run.  |
+| Cold-start bimodal distribution on zero-traffic preview | **best-of-N** (with pinger if possible) | Median is contaminated by cold-starts; best-of-N approximates the warm-Function state real users see. |
+| Production with real traffic                            | **median-of-3** (any N actually)        | Functions stay warm — pure jitter only.                                                               |
+
+Default to median-of-3 with a parallel pinger. Switch to best-of-N only
+when you can confirm 1-2 cold-start outliers per cell after the fact.
+
 ## Archive convention
 
 - Path: `.design/boklanov-rewrite/archive/lighthouse_<DDMMYYYY>_<HHMM>[_<label>].json`
@@ -409,7 +465,8 @@ scores stop oscillating.
 | Local LCP 5+ s worse than preview LCP                                | `<Image>` cold-sharp transcodes through `/_next/image` on each request; preview serves baked AVIF variants direct from R2                                                                                                   | Don't diagnose LCP locally. Trust the preview number. See `PAYLOAD_IMAGE_VARIANTS_PLAN.md`                                                                                                                                                                            |
 | CLS spikes 0.3+ in a single audit, then disappears on rerun          | Cold LCP-image fetch from R2: warm-up curls fetch HTML, not the image. Late-arriving image pushes layout down measurably on that one run                                                                                    | Either warm the LCP image URL explicitly (`curl -o /dev/null https://<r2>/.../poster.720.avif`) before the audit, or always median-of-3 and drop any single outlier run                                                                                               |
 | `LCP element: ?` in extractor output                                 | `largest-contentful-paint-element` audit was removed in Lighthouse 13; replaced by `lcp-breakdown-insight` + `lcp-discovery-insight` (both score 1 = pass)                                                                  | Read the insight audits instead. The LCP element is properly classified — your extractor is looking for a key that no longer exists                                                                                                                                   |
-| Single run shows perf 50-60 in an otherwise 80-90 range              | Vercel Fluid Compute cold function start (FCP 6+ s, TTI 11+ s) — the function instance was idle, took 5+ s to spin up                                                                                                       | Always median-of-3 (see "Median of N runs" above). Treat any single run as a data point, never as the truth                                                                                                                                                           |
+| Single run shows perf 50-60 in an otherwise 80-90 range              | Vercel Fluid Compute cold function start (FCP 6+ s, TTI 11+ s) — the function instance was idle, took 5+ s to spin up                                                                                                       | Always median-of-3 with a **parallel keep-alive pinger** (see "When median-of-3 lies" below). Without the pinger on a zero-traffic preview, 2/3 runs cold-start and the median picks one of them — looks catastrophic when the app is fine.                           |
+| Median-of-3 returns Perf 50-60 across every cell, baseline was 80-90 | Sequential audits on a zero-traffic preview — Fluid Compute spins down between runs; 2/3 are cold-starts; median picks a cold-start                                                                                         | Re-run with a background keep-alive pinger (`while :; do curl -s -o /dev/null "$URL"; sleep 4; done &`). For one-off reads, take best-of-3 instead of median.                                                                                                         |
 
 ## Tools index
 
