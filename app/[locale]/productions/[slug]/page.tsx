@@ -270,7 +270,7 @@ export default async function ProductionDetailPage({
           rel='preload'
           as='image'
           imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w720)} 720w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
-          imageSizes='(min-width: 1024px) 640px, 100vw'
+          imageSizes='(min-width: 1024px) 640px, 90vw'
           fetchPriority='high'
         />
       )}
@@ -288,7 +288,11 @@ export default async function ProductionDetailPage({
               .join(', ') +
             (production.poster.credit ? ` (${production.poster.credit})` : '')
           const posterSrc = cdnUrl(production.poster.src)!
-          const posterSizes = '(min-width: 1024px) 640px, 100vw'
+          // 90vw (not 100vw) reflects the actual rendered width on mobile:
+          // .cover is flex-centered with max-height: 65vh, so a typical
+          // ~0.71-aspect portrait poster lands at ~92% of viewport width.
+          // 100vw made the variant picker round up to 828w when 720w fits.
+          const posterSizes = '(min-width: 1024px) 640px, 90vw'
           const variants = production.poster.variants
           return (
             <PosterLightbox src={posterSrc} alt={posterAlt}>
