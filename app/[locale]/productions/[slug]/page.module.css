@@ -28,6 +28,12 @@
   max-height: 65vh;
   width: auto;
   height: auto;
+  /* Reserve space before the poster loads — kills the 0.5+ CLS that headless
+     Lighthouse saw on /ru/productions/<slug> mobile. width/height attrs on the
+     <img> override this when actual dims are known (LQIP-derived). 5/7 is the
+     typical theatrical-poster portrait aspect; off-aspect posters cause a
+     small post-load adjustment instead of a full-height push. */
+  aspect-ratio: var(--cover-aspect, 5 / 7);
   cursor: zoom-in;
 }
 
@@ -50,7 +56,10 @@
     display: grid;
     grid-template-columns: minmax(0, 720px) 1fr;
     align-items: start;
-    margin-left: max(var(--gutter-desktop), calc((100% - var(--max-width-content)) / 2));
+    margin-left: max(
+      var(--gutter-desktop),
+      calc((100% - var(--max-width-content)) / 2)
+    );
   }
 }
 
@@ -241,8 +250,9 @@ dd.creditsName {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
-  transition: background var(--duration-fast) var(--easing-default),
-  color var(--duration-fast) var(--easing-default);
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
 }
 
 .btnPrimary {
@@ -574,7 +584,9 @@ dd.creditsName {
 }
 
 @media print {
-  .stickerRow { display: none; }
+  .stickerRow {
+    display: none;
+  }
 }
 
 /* DA-7.6.C — Director's note block */

@@ -294,9 +294,20 @@ export default async function ProductionDetailPage({
           // 100vw made the variant picker round up to 828w when 720w fits.
           const posterSizes = '(min-width: 1024px) 640px, 90vw'
           const variants = production.poster.variants
+          const posterW = production.poster.width
+          const posterH = production.poster.height
+          // CSS var override only when both dims are known (LQIP-derived).
+          // When dims are missing, `.cover img` falls back to its default
+          // 5/7 aspect — see page.module.css.
+          const coverFigureStyle =
+            posterW && posterH
+              ? ({
+                  '--cover-aspect': `${posterW} / ${posterH}`
+                } as React.CSSProperties)
+              : undefined
           return (
             <PosterLightbox src={posterSrc} alt={posterAlt}>
-              <figure className={styles.cover}>
+              <figure className={styles.cover} style={coverFigureStyle}>
                 {variants ? (
                   // Pre-baked AVIF variants — bypass `/_next/image`. The
                   // detail-page poster is the LCP element on production
@@ -311,6 +322,8 @@ export default async function ProductionDetailPage({
                     decoding='async'
                     loading='eager'
                     fetchPriority='high'
+                    width={posterW ?? undefined}
+                    height={posterH ?? undefined}
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',

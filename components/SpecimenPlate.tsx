@@ -41,7 +41,7 @@ export function SpecimenPlate({
   plateNumber,
   total,
   loading = 'lazy',
-  sizes = '(min-width: 768px) 50vw, 100vw',
+  sizes = '(min-width: 768px) 50vw, 90vw',
   quality,
   variants
 }: SpecimenPlateProps) {

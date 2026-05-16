@@ -23,8 +23,10 @@ export interface ProductionCardProps {
   coverPhoto?: { src: string | null; credit: string | null } | null
 }
 
-const DEFAULT_SIZES =
-  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw'
+// Mobile renders at 90vw (not 100vw): the page wrapper has 20 px gutters, so
+// a 412-px viewport gives 372 px ≈ 90.3 vw. 100vw inflates srcset selection
+// to the next bucket (828w over 720w) for no visible benefit. See FeaturedStrip.
+const DEFAULT_SIZES = '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 90vw'
 
 export function ProductionCard({
   production,

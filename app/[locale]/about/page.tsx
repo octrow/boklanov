@@ -118,7 +118,11 @@ export async function generateMetadata({
   const { locale } = await params
   const about = await getAbout()
   const { paragraphs } = projectAbout(about, locale)
-  const description = paragraphs[0] ?? undefined
+  // Lead paragraph is the preferred description; fall back to the localized
+  // home meta blurb so `<meta name="description">` is always emitted (else the
+  // SEO category drops to 92).
+  const t = await getTranslations({ locale, namespace: 'meta' })
+  const description = paragraphs[0]?.trim() || t('homeDescription')
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
   const name =
@@ -201,7 +205,7 @@ export default async function AboutPage({
             priority
             width={0}
             height={0}
-            sizes='(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 100vw'
+            sizes='(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw'
             style={{ width: '100%', height: 'auto' }}
           />
           {portrait.credit && (
