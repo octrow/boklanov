@@ -135,6 +135,22 @@ Slow (3-5 min for our route count), but produces a sortable per-route
 dashboard at `<output-path>/client/`. Run before milestone gates, not on
 every iteration.
 
+## Re-baking AVIF variants before a run
+
+Default `npm run bake-variants` uses `AVIF_EFFORT=4` — ~2× faster than effort 6
+at a ~10–15 % size penalty. That's the right trade for catalog work, but for
+a **Lighthouse capture that gates a quality decision**, re-bake at effort 6
+first so byte savings show up in the report:
+
+```bash
+AVIF_EFFORT=6 npm run bake-variants -- --force   # ~5 min, saturates ~11 cores
+```
+
+The script's progress bar reports `built / skip / miss / fail` live; investigate
+any non-zero `fail` count (full structured log at `/tmp/bake-errors.log`)
+before trusting the post-bake Lighthouse numbers. `miss=68` is a known
+catalog-side data issue (Payload references with no R2 source), not a bake bug.
+
 ## Reading a report — what to check first
 
 In the JSON (or via the script below):

@@ -109,22 +109,35 @@ Add `scripts/bake-image-variants.ts` (model after `scripts/upload-images.ts`). F
 2. GET the source bytes.
 3. sharp(bytes)
      .resize({ width: W, withoutEnlargement: true })
-     .avif({ quality: Q, effort: 6 })
+     .avif({ quality: Q, effort: AVIF_EFFORT })   // default 4, override via env
      .toBuffer()
 4. S3 PutObject → productions/<slug>/<basename>.<W>.avif
      CacheControl: 'public, max-age=31536000, immutable'
      ContentType: 'image/avif'
 ```
 
-Concurrency: use `p-map` with `concurrency: 4` (it's already a dep).
+Concurrency: `p-map` defaults to `os.cpus().length` (16 on dev box). Override
+with `--concurrency=N`. The real ceiling is `UV_THREADPOOL_SIZE` — see the
+script wrapper below.
 Idempotent: HEAD-check skip path means re-running is free.
 Dry-run flag: `--dry` prints planned PUTs, no writes.
 
 Wire it into `package.json`:
 
 ```json
-"bake-variants": "tsx scripts/bake-image-variants.ts"
+"bake-variants": "UV_THREADPOOL_SIZE=32 MALLOC_ARENA_MAX=2 tsx scripts/bake-image-variants.ts"
 ```
+
+`UV_THREADPOOL_SIZE=32` is load-bearing: without it, libuv caps sharp at 4
+concurrent encodes regardless of `pMap` concurrency, and the run stalls at
+~289 % CPU instead of saturating. `MALLOC_ARENA_MAX=2` caps glibc fragmentation
+on long-running Linux bakes (sharp's standing recommendation).
+
+S3Client is configured with `connectionTimeout: 5_000`, `requestTimeout: 60_000`,
+`throwOnRequestTimeout: true` so half-open R2 sockets fail-fast and the SDK's
+standard retry strategy actually fires. The script also wraps each source in a
+5-min watchdog — any escape (sharp deadlock, runaway retry) fails that source
+and the run finishes.
 
 Run after the script is reviewed and the bucket policy is confirmed writable from the script's IAM identity.
 
@@ -214,20 +227,20 @@ Once variants serve from R2 and `/_next/image` is no longer used for posters:
 
 ## Sequencing
 
-| Step                                                                                                               | Status        | Verifies                                                                       |
-| ------------------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------ |
-| 1. Land Plan A (`formats`, `minimumCacheTTL`, `quality=62` on LCP)                                                 | ✅ shipped    | Mobile 87 → 91-93 baseline before any Plan B code                              |
-| 2. Write `scripts/bake-image-variants.ts`, dry-run on 3 productions                                                | ✅ shipped    | Dry-run output matched expected matrix                                         |
-| 3. Extend `lib/content.ts` with `variants` + fallback                                                              | ✅ shipped    | TS compiles; legacy pages unchanged when flag is off                           |
-| 4. Switch `ProductionCard` + detail page to variant path (+ gallery + head preloads)                               | ✅ shipped    | Dual-path rendering keyed on `variants` presence                               |
-| 5. Update `collections/Media.ts` with `imageSizes` (Track 1)                                                       | ✅ shipped    | `payload-types.ts` carries `media.sizes.wXXX.url`; new admin uploads auto-bake |
-| 6. Extract `lib/image-variants.ts` shared module + inline-bake on `/api/r2-asset` POST + delete-variants on DELETE | ✅ shipped    | One module owns the variant contract for bulk + admin paths                    |
-| 7. Run bulk `npm run bake-variants`                                                                                | ✅ done       | 1244 variants in R2, 0 failures, 68 dangling DB refs noted                     |
-| 8. Spot-check variant URLs on `pub-…r2.dev`                                                                        | ✅ done       | All 8 sampled URLs return `200 image/avif` with immutable cache                |
-| 9. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` (value `1`) + redeploy                              | ⏳ next       | Preview deploys serve `<img srcset>` AVIFs, no `/_next/image` for posters      |
-| 10. Lighthouse mobile + desktop vs preview, archive JSON                                                           | ⏳ blocks #11 | Mobile Perf ≥95, LCP ≤2.0 s, zero `/_next/image?` URLs in network panel        |
-| 11. Flip `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1` in Production env, redeploy                                        | ⏳ final      | Live site serves variants from R2 edge                                         |
-| 12. Cleanup PR — drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`            | ⏳ follow-up  | Residual Image-component usage (admin thumbs) goes single-format AVIF          |
+| Step                                                                                                               | Status        | Verifies                                                                               |
+| ------------------------------------------------------------------------------------------------------------------ | ------------- | -------------------------------------------------------------------------------------- |
+| 1. Land Plan A (`formats`, `minimumCacheTTL`, `quality=62` on LCP)                                                 | ✅ shipped    | Mobile 87 → 91-93 baseline before any Plan B code                                      |
+| 2. Write `scripts/bake-image-variants.ts`, dry-run on 3 productions                                                | ✅ shipped    | Dry-run output matched expected matrix                                                 |
+| 3. Extend `lib/content.ts` with `variants` + fallback                                                              | ✅ shipped    | TS compiles; legacy pages unchanged when flag is off                                   |
+| 4. Switch `ProductionCard` + detail page to variant path (+ gallery + head preloads)                               | ✅ shipped    | Dual-path rendering keyed on `variants` presence                                       |
+| 5. Update `collections/Media.ts` with `imageSizes` (Track 1)                                                       | ✅ shipped    | `payload-types.ts` carries `media.sizes.wXXX.url`; new admin uploads auto-bake         |
+| 6. Extract `lib/image-variants.ts` shared module + inline-bake on `/api/r2-asset` POST + delete-variants on DELETE | ✅ shipped    | One module owns the variant contract for bulk + admin paths                            |
+| 7. Run bulk `npm run bake-variants`                                                                                | ✅ done       | 1555 variants in R2 (after 720w + perf re-bake), 0 failures, 68 dangling DB refs noted |
+| 8. Spot-check variant URLs on `pub-…r2.dev`                                                                        | ✅ done       | All 8 sampled URLs return `200 image/avif` with immutable cache                        |
+| 9. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` (value `1`) + redeploy                              | ⏳ next       | Preview deploys serve `<img srcset>` AVIFs, no `/_next/image` for posters              |
+| 10. Lighthouse mobile + desktop vs preview, archive JSON                                                           | ⏳ blocks #11 | Mobile Perf ≥95, LCP ≤2.0 s, zero `/_next/image?` URLs in network panel                |
+| 11. Flip `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1` in Production env, redeploy                                        | ⏳ final      | Live site serves variants from R2 edge                                                 |
+| 12. Cleanup PR — drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`            | ⏳ follow-up  | Residual Image-component usage (admin thumbs) goes single-format AVIF                  |
 
 ## Risks & mitigations
 

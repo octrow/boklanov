@@ -116,7 +116,7 @@ Bake inline in the same request that uploads the source. Run sharp on the buffer
 
 ### Cost / benefit
 
-- **Cost**: ~3–5 s of added latency on each admin image upload (sharp encoding 4 widths at effort 6 in parallel, on Vercel Fluid Compute). Editors already wait several seconds for uploads of ≥1 MB files; this is in the same envelope.
+- **Cost**: ~2–3 s of added latency on each admin image upload (sharp encoding 4 widths at effort 4 in parallel, on Vercel Fluid Compute — was 3–5 s at effort 6 before the 2026-05-15 perf pass). Editors already wait several seconds for uploads of ≥1 MB files; this is in the same envelope. Bulk re-bakes can opt into the tighter setting with `AVIF_EFFORT=6 npm run bake-variants -- --force`.
 - **Cost**: small memory bump in the route — the source buffer stays resident while sharp encodes. Bounded by the existing 25 MB upload limit, so worst case ~25 MB × 4 pipelines = ~100 MB peak. Vercel default Fluid Compute memory (1024 MB) handles this comfortably.
 - **Benefit**: no manual step between upload and "site is ready". Editor's mental model becomes "upload → save → done". Removes the fragile race where variants lag the source.
 - **Benefit**: the bulk script becomes a backfill / re-encode tool, not a routine operation. Used only after quality tweaks (`--force`), after env-flag flips on legacy data, or for one-off catalog repairs.
