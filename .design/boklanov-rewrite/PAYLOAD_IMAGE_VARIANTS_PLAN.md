@@ -1,34 +1,30 @@
 # Plan B — Pre-baked AVIF variants in R2, bypass `/_next/image`
 
-Status: **code shipped 2026-05-14; first bake complete; quality re-tune queued for re-bake (commit `3d9a392`).**
+Status: **code shipped; bake + force re-bake complete; awaiting final Lighthouse pass + prod env flip.**
 
-Code: `lib/image-variants.ts` (shared module), `scripts/bake-image-variants.ts` (bulk), `app/api/r2-asset/route.ts` (inline-bake on admin upload), consumer dual-paths in `ProductionCard.tsx` / `app/[locale]/productions/[slug]/page.tsx` / `GalleryLightbox.tsx` / `SpecimenPlate.tsx`, head preloads in `app/[locale]/page.tsx` + detail page. Track 1 (`collections/Media.ts` `imageSizes`) also landed. Pairs with [`IMAGE_UPLOAD_STANDARD.md`](./IMAGE_UPLOAD_STANDARD.md) for the editorial workflow.
+Code: `lib/image-variants.ts` (shared module, 5-width matrix), `scripts/bake-image-variants.ts` (bulk, with progress bar + watchdog + R2 timeout enforcement), `app/api/r2-asset/route.ts` (inline-bake on admin upload), consumer dual-paths in `ProductionCard.tsx` / `app/[locale]/productions/[slug]/page.tsx` / `GalleryLightbox.tsx` / `SpecimenPlate.tsx`, head preloads in `app/[locale]/page.tsx` + detail page, `preconnect` to `NEXT_PUBLIC_CDN_BASE` in `app/[locale]/layout.tsx`. Track 1 (`collections/Media.ts` `imageSizes`) also landed. Pairs with [`IMAGE_UPLOAD_STANDARD.md`](./IMAGE_UPLOAD_STANDARD.md) for the editorial workflow.
 
-R2 state after the bake (run 2026-05-14 21:00 ALA):
+R2 state after the **force re-bake** (run 2026-05-16 ~01:15 ALA, commits `e8049cd` + bake-script polish in `d8a8e7d` / `7b5569a` / `910c3ec`):
 
-- **1244 variants** in R2 across 54 productions covering poster + productionsPhoto + featuredPhoto + gallery (cross-checked: 87 written + 1157 already present from interrupted prior runs = 1244, matching the dry-run plan).
-- **0 variant failures** (the 73 errors from the user's prior run were transient; idempotent re-run picked them up cleanly).
-- **68 dangling DB refs** to gallery photos that don't exist in R2 (`aiaccio/photo_NNNN_result.webp` set, the `nikita-looking-for-the-sea` and `lika-and-beam` sets). Not bake-related — these are upstream content-ingest gaps; either re-upload the missing source files or scrub the gallery entries from Payload. Tracked separately, doesn't block this plan.
-- Spot-check: `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev/productions/aibolit/poster.600.avif` returns `200 / image/avif / 22 KB / cache-control: public, max-age=31536000, immutable`. Cloudflare ALA PoP serves edge-cached.
+- **1555 variants** in R2 — 311 valid sources × 5 widths (420 / 600 / 720 / 828 / 1080). The 720w slot was added in `e8049cd` to fix the Moto G Power DPR-1.75 mismatch (412 vw × 1.75 = 721 px ideal, browser was falling up to 828w and Lighthouse counted ~25 % of bytes as "wasted"). 720w hits exactly; desktop + DPR-2.0+ still land on 1080w.
+- **0 variant failures** in the force re-bake. 5.5–5.9 variants/sec sustained · 1140 % CPU · 4:57 wall-clock. Two transient `@smithy/node-http-handler` 60 s timeout warnings were absorbed by the watchdog + retry layer.
+- **68 dangling DB refs** (`aiaccio/photo_NNNN_result.webp` set, `nikita-looking-for-the-sea`, `lika-and-beam`) still un-resolvable; upstream content-ingest gap, not bake-related.
+- Spot-check after re-bake: `aibolit/poster.720.avif` → `200 / image/avif / 18 KB`; `aibolit/poster.600.avif` 22 KB → 19.6 KB (−10 %); `beware-of-the-dog/poster.828.avif` 367 KB → 307 KB (−16 %; still the catalog's chonkiest poster, high-entropy as the Risks section called out).
 
-Desktop Lighthouse against `…vercel.app/ru` (run 2026-05-14, `archive/lighthouse_14052125_1947_descktop.report.json`) — **97 / 100 / 100 / 100** with FCP 0.6 s, LCP 1.1 s, TBT 10 ms, CLS 0, SI 0.9 s. Two perf items remained actionable on our side and are addressed in commit `3d9a392`:
+Desktop Lighthouse vs `…vercel.app/ru` (pre-re-bake, `archive/lighthouse_14052125_1947_descktop.report.json`) — **97 / 100 / 100 / 100** with FCP 0.6 s, LCP 1.1 s, TBT 10 ms, CLS 0, SI 0.9 s. The four perf opportunities flagged in that run are now addressed:
 
-- `image-delivery-insight` (–252 KiB potential) flagged ~100 KiB of compression-only waste on the 420/600 widths. AVIF quality lowered (420: 65→55, 600: 65→58, 828: 62→55, 1080: 60→52) in `lib/image-variants.ts`. **Requires `npm run bake-variants -- --force` to re-encode the 1244 existing variants** — the new quality only applies to fresh bakes.
-- `non-composited-animations` (2 elements) traced to `.titleRu` underline transitioning `background-size` (paint per frame). Converted to a composited `transform: scaleX` on a `::after` pseudo in `components/ProductionCard.module.css`.
+- `image-delivery-insight` (−252 KiB compression + −695 KiB oversized) → AVIF qualities lowered (420: 65→55, 600: 65→58, 828: 62→55, 1080: 60→52) in `3d9a392`, 720w slot added in `e8049cd`, all applied by the force re-bake.
+- `non-composited-animations` (2 elements) → `.titleRu` underline converted from `background-size` transition to a composited `transform: scaleX` on a `::after` pseudo (`3d9a392`).
+- LCP `resource load delay` 206 ms → `<link rel="preconnect">` to R2 origin in `layout.tsx` (`c521e6e`) parallelises the TLS handshake with HTML parse.
 
-The remaining flagged items (`cache-insight` 23 KiB → `vercel.live/feedback.js`, `legacy-javascript-insight` 20 KiB → polyfills in a vendored chunk despite tight browserslist, `unused-javascript` 46 KiB → chunk `9da6db1e`) are either third-party preview-only artefacts or need bundle analysis; not blocking the headline number.
-
-LCP load-delay also addressed in `c521e6e` — `app/[locale]/layout.tsx` now emits `<link rel="preconnect">` to `NEXT_PUBLIC_CDN_BASE` so the TLS handshake to R2 overlaps HTML parse instead of waiting for the LCP `<link rel="preload">` to be discovered. Saves ~50–200 ms of LCP load-delay on the mobile run. Local dev (no CDN configured) is unaffected by the env gate.
-
-Mobile follow-up in `e8049cd`: the first mobile run hit perf=80 with 695 KiB of "oversized image" savings. Added a **720w variant** between the existing 600 and 828 widths — Moto G Power's 412 viewport × DPR 1.75 = 721 ideal physical px, so the browser had been falling up to 828w (~27 % over budget). 720w hits exactly. Desktop and DPR-2.0+ retina still land on 1080w. The new slot needs the re-bake too.
+Mobile Lighthouse pre-re-bake (`archive/lighthouse_14052128_mobile.report.json`) was 80 / LCP 3.3 s / TBT 490 ms — the 80 was the trigger for the 720w + quality work above. Re-test after the force re-bake is the gate item below.
 
 Rollout left:
 
-1. **`npm run bake-variants -- --force`** against R2 (10–15 min, ~1244 PUTs) to pick up the new quality matrix.
-2. `vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED preview` → value `1` → redeploy preview (if not yet flipped).
-3. Re-run mobile + desktop Lighthouse vs preview per `LIGHTHOUSE_RUNBOOK.md`; expect perf 99–100.
-4. If mobile Perf ≥ 95, `vercel env add … production` → value `1` → promote.
-5. Post-verification: drop `image/webp` from `next.config.js#images.formats`, set `minimumCacheTTL: 2678400`. Separate PR.
+1. **Mobile + desktop Lighthouse vs preview** per [`LIGHTHOUSE_RUNBOOK.md`](./LIGHTHOUSE_RUNBOOK.md). Expected: mobile 93–97 (image-delivery savings + smaller LCP poster + R2 preconnect), desktop ≥ 97. If mobile lands < 93, the gap is JS-execution-time (2.5 s / TBT 490 ms in the prior mobile run) — that's structural and outside Plan B's scope; queue a JS-bundle audit before promoting.
+2. **`vercel env add NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED production`** → value `1` → promote once mobile gate passes.
+3. **Cleanup PR (separate)**: drop `image/webp` from `next.config.js#images.formats`, set `images.minimumCacheTTL: 2678400`. Both reduce residual `/_next/image` activity on the few remaining `<Image>` consumers (admin thumbs, etc.).
+4. **Content-ingest cleanup (separate)**: re-upload or remove the 68 dangling gallery refs in `aiaccio` / `nikita-looking-for-the-sea` / `lika-and-beam`. Not Plan B's problem but visible in bake-run output.
 
 Pairs with [`LIGHTHOUSE_IMPROVEMENT_PLAN.md`](./LIGHTHOUSE_IMPROVEMENT_PLAN.md) (Pattern A = tuning `next/image`) and the mobile re-test in `archive/lighthouse_14052026_1901.json`. Pattern A is the prerequisite quick win; Pattern B is the architectural follow-up.
 
