@@ -186,7 +186,7 @@ Chrome does not, so it needs a token instead.
 4. Persist it in your shell:
 
    ```bash
-   echo 'export VERCEL_BYPASS="<paste-secret-here>"' >> ~/.zshrc
+   echo 'export VERCEL_BYPASS="LjBbISWksfEhAqV47bBudsNIBY7EGdpu"' >> ~/.zshrc
    source ~/.zshrc
    ```
 
