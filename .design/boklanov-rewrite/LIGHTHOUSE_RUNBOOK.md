@@ -4,6 +4,47 @@ How to run a clean, reproducible Lighthouse audit for this project.
 Pairs with [`LIGHTHOUSE_IMPROVEMENT_PLAN.md`](./LIGHTHOUSE_IMPROVEMENT_PLAN.md)
 and [`PAYLOAD_IMAGE_VARIANTS_PLAN.md`](./PAYLOAD_IMAGE_VARIANTS_PLAN.md).
 
+## ⚠ Why `boklanov.com` is not your baseline on this branch
+
+Prod `boklanov.com` runs `main`, which is the Keystatic CMS build.
+`feature/payloadcms` is a different CMS (Payload) on top of a different
+data pipeline. Auditing prod tells you nothing about whether this branch
+got faster or slower — you're measuring two different sites.
+
+Two valid test surfaces for `feature/payloadcms`:
+
+| Surface        | URL                                                               | Use it for                                                |
+| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------- |
+| Local prod     | `http://localhost:3000` (after `pnpm build && pnpm start`)        | Dev loop. Fast, deterministic, same Next bundle as Vercel |
+| Vercel preview | `boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app` | Pre-merge gate. Real edge, ISR, R2, Image Optimization    |
+
+Do **not** use `pnpm dev` (= `next dev`) for perf — unminified, HMR
+overhead, dev React warnings; scores run 20–40 points worse than prod.
+The opportunities it reports are not real.
+
+The right "did this branch regress?" comparison is `main` (local prod)
+vs `feature/payloadcms` (local prod), same machine, same network. See
+`scripts/lh-diff.sh` (below, "Branch-vs-branch diff").
+
+## First response to a suspected regression
+
+Before reaching for Lighthouse, look at the bundle. Most regressions on
+this branch will be Payload admin deps leaking into the public bundle —
+that shows up here instantly without needing a network round-trip:
+
+```bash
+pnpm analyze   # alias for `cross-env ANALYZE=true next build`
+# Then open .next/analyze/client.html in a browser.
+```
+
+Sort by size; flag anything `payload/*`, `@payloadcms/*`, `lexical`, or
+`slate-*` in the **client** bundle (server bundle is fine — those should
+only ship to the admin route).
+
+If the bundle is clean, move on to `scripts/lh-diff.sh` for an
+end-to-end perf delta, then to a targeted Lighthouse run on whichever
+URL the diff points at.
+
 ## Why not the browser Lighthouse panel
 
 The DevTools panel runs Lighthouse inside your real Chrome profile.
@@ -32,13 +73,29 @@ https://pagespeed.web.dev/analysis?url=<URL>&form_factor=mobile
 
 ## Standard run — `npx lighthouse@latest`, headless
 
+Pick a target by exporting `BASE_URL` first. The two recipes below are
+identical regardless of target — the URL is the only thing that changes:
+
+```bash
+# A) Local prod build (default — fast dev loop)
+pnpm build && pnpm start &
+SERVER_PID=$!
+# Wait until http://localhost:3000/ru returns 200, then:
+export BASE_URL="http://localhost:3000"
+
+# B) Vercel preview (pre-merge sanity check; one-time bypass setup below)
+export BASE_URL="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app?x-vercel-protection-bypass=$VERCEL_BYPASS&x-vercel-set-bypass-cookie=samesitenone"
+# (Bypass query string survives navigation to sub-resources because of the
+#  set-bypass-cookie redirect — see "Vercel preview — one-time bypass setup".)
+```
+
 Two parameter sets cover everything we care about: **mobile** (the
 default scoring target) and **desktop** (regression sanity check).
 
 ```bash
 # Mobile — emulates Moto G Power (412×823, DPR 1.75, Slow 4G simulation)
 npx -y lighthouse@latest \
-  "https://boklanov.com/ru" \
+  "$BASE_URL/ru" \
   --quiet \
   --chrome-flags="--headless=new --no-sandbox --disable-extensions" \
   --form-factor=mobile \
@@ -55,7 +112,7 @@ npx -y lighthouse@latest \
 ```bash
 # Desktop — emulates 1350×940, DPR 1, no throttling
 npx -y lighthouse@latest \
-  "https://boklanov.com/ru" \
+  "$BASE_URL/ru" \
   --quiet \
   --chrome-flags="--headless=new --no-sandbox --disable-extensions" \
   --preset=desktop \
@@ -71,49 +128,84 @@ Outputs:
 
 Run takes ~30-60 s on mobile, ~15-30 s on desktop.
 
+When the local server is finished: `kill $SERVER_PID`.
+
 ## URLs to test
 
-Required matrix per re-test (script this if it gets repetitive):
+Required matrix per re-test (script this if it gets repetitive). All
+paths are appended to `$BASE_URL`:
 
-| URL                                          | Why                                                       |
-| -------------------------------------------- | --------------------------------------------------------- |
-| `https://boklanov.com/`                      | English root / default locale                             |
-| `https://boklanov.com/ru`                    | Russian home — biggest production gallery, real-world LCP |
-| `https://boklanov.com/de`                    | German home — smallest Latin font payload                 |
-| `https://boklanov.com/ru/productions/<slug>` | Production detail — heaviest page, gallery + poster       |
-| `https://boklanov.com/ru/about`              | About — different image layout, sanity check              |
+| Path                     | Why                                                       |
+| ------------------------ | --------------------------------------------------------- |
+| `/`                      | English root / default locale                             |
+| `/ru`                    | Russian home — biggest production gallery, real-world LCP |
+| `/de`                    | German home — smallest Latin font payload                 |
+| `/ru/productions/<slug>` | Production detail — heaviest page, gallery + poster       |
+| `/ru/about`              | About — different image layout, sanity check              |
 
-For the **feature branch preview** (`*-boklanovs-projects.vercel.app`),
-Vercel Deployment Protection blocks Lighthouse — the audit lands on the
-SSO login page (LCP 9.9 s, useless data). See "Branch previews" below.
+If `BASE_URL` is the Vercel preview and the audit lands on a Vercel SSO
+login page (`finalDisplayedUrl` contains `vercel.com`, LCP ~9-10 s), the
+bypass cookie didn't stick — re-export `BASE_URL` with both
+`x-vercel-protection-bypass=$VERCEL_BYPASS` **and**
+`x-vercel-set-bypass-cookie=samesitenone` in the query string.
 
-## Branch previews (Vercel Deployment Protection)
+## Branch-vs-branch diff — `scripts/lh-diff.sh`
 
-Preview URLs are gated by default. Three ways to test them:
-
-**1. Protection Bypass for Automation** (recommended for CI)
-
-- Vercel dashboard → Project → Settings → Deployment Protection →
-  Protection Bypass for Automation → generate token.
-- Append to URL: `?x-vercel-protection-bypass=<token>&x-vercel-set-bypass-cookie=samesitenone`
-  or send header `x-vercel-protection-bypass: <token>`.
-
-**2. Disable Deployment Protection temporarily** — fastest for a one-off
-manual run, but exposes every preview URL until re-enabled.
-
-**3. Test locally instead**:
+The right comparison for "did this branch regress vs `main`?" is two
+local prod builds on the same machine. The helper script does the
+checkout dance for you, builds + serves + Lighthouses each branch, then
+prints a side-by-side metrics table:
 
 ```bash
-npm run build && npm run start &
-# Wait for "Ready on http://localhost:3000"
-npx -y lighthouse@latest "http://localhost:3000/ru" \
-  --chrome-flags="--headless=new --no-sandbox --disable-extensions" \
-  --form-factor=mobile --screenEmulation.mobile=true \
-  --output=html --output-path=/tmp/lh_local
+scripts/lh-diff.sh                                  # main vs HEAD, /ru
+scripts/lh-diff.sh main feature/payloadcms /ru
+scripts/lh-diff.sh main HEAD /ru/productions/iliad
 ```
 
-Caveat: local doesn't simulate Vercel edge latency. Use only for code
-changes whose impact is JS- or image-side (most of ours).
+Requires a clean working tree (will refuse otherwise). Reports land in
+`.design/boklanov-rewrite/archive/lh-diff_<stamp>/` (`base.report.html`,
+`head.report.html`, build + server logs alongside). Takes ~3-5 min total
+for the four-step build × 2 sequence.
+
+## Vercel preview — one-time bypass setup
+
+Preview URLs (`*-boklanovs-projects.vercel.app`) are auth-gated by
+Deployment Protection. Without bypass, headless Lighthouse audits land
+on the Vercel SSO login page (LCP 9.9 s, useless data). The browser
+works because your Chrome session carries the SSO cookie — headless
+Chrome does not, so it needs a token instead.
+
+**Setup (~2 min, one time per developer):**
+
+1. Vercel dashboard → `boklanovv2` project → Settings → **Deployment
+   Protection** → scroll to **Protection Bypass for Automation** →
+   **Add Secret** (label: e.g. `lighthouse-audits`).
+2. Copy the generated secret.
+3. **Redeploy the feature branch** — Vercel only injects the secret
+   into builds made _after_ the secret was created.
+4. Persist it in your shell:
+
+   ```bash
+   echo 'export VERCEL_BYPASS="<paste-secret-here>"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+5. Sanity check (expect HTTP 200, not 401):
+
+   ```bash
+   PREVIEW="https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app"
+   curl -sI -H "x-vercel-protection-bypass: $VERCEL_BYPASS" "$PREVIEW" | head -3
+   ```
+
+After that, the `BASE_URL` line in the standard-run recipe (Option B)
+works as-is. The trick is `x-vercel-set-bypass-cookie=samesitenone`: it
+makes Vercel issue a `Set-Cookie` on the first redirect, so every
+sub-resource Lighthouse fetches (JS chunks, fonts, images) is also
+authorized. Without it the HTML loads but every asset 401s.
+
+**Alternative: disable Deployment Protection temporarily** — fastest
+for a one-off manual run, but exposes every preview URL on the project
+until re-enabled. Don't use for routine audits.
 
 ## Whole-site audits — `unlighthouse`
 
@@ -124,10 +216,12 @@ the bare `unlighthouse` command opens the interactive UI and `--build-static`
 is a CI-binary flag:
 
 ```bash
+# Use the same $BASE_URL idiom as the standard run (omit the path segment).
+# For the Vercel preview, include the bypass query string.
 npx -y @unlighthouse/cli@latest \
-  --site https://boklanov.com \
+  --site "$BASE_URL" \
   --build-static \
-  --output-path .design/boklanov-rewrite/archive/unlighthouse_$(date +%d%m%Y_%H%M)
+  --output-path ".design/boklanov-rewrite/archive/unlighthouse_$(date +%d%m%Y_%H%M)"
 ```
 
 (Invoke as `unlighthouse-ci` if installed globally: `npm i -g @unlighthouse/cli`.)
@@ -209,7 +303,7 @@ const {spawnSync} = require('child_process');
 const cli = require.resolve('lighthouse/cli');
 const {computeMedianRun} = require('lighthouse/core/lib/median-run.js');
 
-const url = 'https://boklanov.com/ru';
+const url = process.env.BASE_URL ? `${process.env.BASE_URL}/ru` : 'http://localhost:3000/ru';
 const runs = [];
 for (let i = 0; i < 3; i++) {
   const {status, stdout} = spawnSync('node', [cli, url,
@@ -259,6 +353,8 @@ scores stop oscillating.
 
 ## Tools index
 
+- `pnpm analyze` (`ANALYZE=true next build`) — bundle treemap at `.next/analyze/client.html`; **first stop** for a suspected regression
+- `scripts/lh-diff.sh` — `main` vs branch local prod-build diff, side-by-side metrics
 - `npx lighthouse@latest` — single-URL audit, mobile/desktop presets, our default
 - `lighthouse/core/lib/median-run.js` — median-of-N helper for stable scoring
 - `npx @unlighthouse/cli@latest` (binary: `unlighthouse-ci`) — whole-site crawler, dashboard view
