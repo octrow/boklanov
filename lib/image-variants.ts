@@ -26,6 +26,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand
 } from '@aws-sdk/client-s3'
+import { NodeHttpHandler } from '@smithy/node-http-handler'
 import sharp from 'sharp'
 
 // -----------------------------------------------------------------------------
@@ -141,7 +142,15 @@ export function makeR2Client(): S3Client {
     region: 'auto',
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: keyId, secretAccessKey: keySecret },
-    forcePathStyle: true
+    forcePathStyle: true,
+    // Without explicit timeouts, AWS SDK v3 waits forever on a half-open
+    // socket — observed as a tail-latency stall where the last few sources
+    // never finish. 5s TLS handshake / 60s request budget lets the SDK's
+    // standard retry strategy actually fire on stuck connections.
+    requestHandler: new NodeHttpHandler({
+      connectionTimeout: 5_000,
+      requestTimeout: 60_000
+    })
   })
 }
 

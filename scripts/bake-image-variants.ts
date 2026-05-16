@@ -210,31 +210,63 @@ async function main() {
 
   if (bar) bar.start(allKeys.length, 0, renderState())
 
+  // Per-source watchdog. R2 + sharp + libuv can collectively stall on a
+  // half-open socket or a pathological encode; without this, one stuck
+  // source blocks the entire run (observed: 374/379 then a 15-min freeze).
+  // 4 widths × 60s request budget × retries ≈ comfortable upper bound.
+  const SOURCE_TIMEOUT_MS = 5 * 60_000
+  function withTimeout<T>(p: Promise<T>, key: string): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const t = setTimeout(() => {
+        reject(
+          Object.assign(new Error(`source watchdog timeout: ${key}`), {
+            name: 'SourceWatchdogTimeout'
+          })
+        )
+      }, SOURCE_TIMEOUT_MS)
+      p.then(
+        (v) => {
+          clearTimeout(t)
+          resolve(v)
+        },
+        (e) => {
+          clearTimeout(t)
+          reject(e)
+        }
+      )
+    })
+  }
+
   await pMap(
     allKeys,
     async (key) => {
       try {
-        const res = await bakeVariantsFromR2(key, client, bucket, {
-          dryRun,
-          force,
-          onWrite: (variantKey, bytes) => {
-            if (bar) return // Per-variant lines would shred the bar; tallies update on completion.
-            if (dryRun) {
-              console.log(`[dry] PUT ${variantKey}`)
-            } else {
-              const kb = (bytes / 1024).toFixed(0)
-              console.log(`  ✓ ${variantKey}  (${kb} KB)`)
+        const res = await withTimeout(
+          bakeVariantsFromR2(key, client, bucket, {
+            dryRun,
+            force,
+            onWrite: (variantKey, bytes) => {
+              if (bar) return // Per-variant lines would shred the bar; tallies update on completion.
+              if (dryRun) {
+                console.log(`[dry] PUT ${variantKey}`)
+              } else {
+                const kb = (bytes / 1024).toFixed(0)
+                console.log(`  ✓ ${variantKey}  (${kb} KB)`)
+              }
+            },
+            onFailure: (f) => {
+              failureCount += 1
+              phaseTally[f.phase] = (phaseTally[f.phase] ?? 0) + 1
+              const codeKey =
+                f.awsCode ??
+                f.errorName ??
+                `http-${f.awsStatusCode ?? 'unknown'}`
+              codeTally[codeKey] = (codeTally[codeKey] ?? 0) + 1
+              logFailure(f, /*quiet*/ bar !== null)
             }
-          },
-          onFailure: (f) => {
-            failureCount += 1
-            phaseTally[f.phase] = (phaseTally[f.phase] ?? 0) + 1
-            const codeKey =
-              f.awsCode ?? f.errorName ?? `http-${f.awsStatusCode ?? 'unknown'}`
-            codeTally[codeKey] = (codeTally[codeKey] ?? 0) + 1
-            logFailure(f, /*quiet*/ bar !== null)
-          }
-        })
+          }),
+          key
+        )
         built += res.built
         skipped += res.skipped
         if (res.missingSource) {
