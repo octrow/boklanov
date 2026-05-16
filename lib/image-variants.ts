@@ -65,10 +65,18 @@ export const BAKEABLE_EXTS: ReadonlySet<string> = new Set([
   '.webp'
 ])
 
-/** AVIF encoder effort. 6 = slow-but-tight; produces ~10–15 % smaller files
- *  than 4 at 5–10× the encode cost. The bulk catalog bake (1244 variants)
- *  lands in ~10–15 min at concurrency = cores, which is acceptable. */
-export const AVIF_EFFORT = 6
+/** AVIF encoder effort. 4 = fast bake with ~10–15 % size penalty vs effort 6
+ *  — the right trade for bulk re-encodes when libuv's threadpool is the bottleneck.
+ *  Override per-run with `AVIF_EFFORT=6 npm run bake-variants -- --force` if you
+ *  want a one-off "tight" pass before a Lighthouse capture. */
+export const AVIF_EFFORT = (() => {
+  const raw = process.env.AVIF_EFFORT
+  if (raw) {
+    const n = Number(raw)
+    if (Number.isFinite(n) && n >= 0 && n <= 9) return Math.floor(n)
+  }
+  return 4
+})()
 
 // Pin libvips to one thread per call. Module-level side effect — runs once
 // at first import. Safe to import this module multiple times; sharp.concurrency()
