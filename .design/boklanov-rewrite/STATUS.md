@@ -148,6 +148,72 @@ Why setTimeout (not rAF) for the scan debounce: rAF callbacks are paused on back
 
 ---
 
+## Lighthouse verification — `feature/payloadcms` preview (2026-05-17)
+
+Branch perf is shippable. Measured against the Vercel preview with
+Deployment Protection off (canonical-domain-equivalent path), mobile
+LH 13.3.0, simulated Slow-4G.
+
+| URL                                          | Perf (median of 3) | A11y / BP / SEO | LCP   | TBT      | CLS   |
+| -------------------------------------------- | ------------------ | --------------- | ----- | -------- | ----- |
+| `/ru` (home)                                 | 81 (range 80–90)   | 100 / 100 / 100 | 4.2 s | 20-90 ms | 0     |
+| `/ru/productions/beware-of-the-dog` (detail) | 82                 | 100 / 100 / 100 | 4.4 s | 20-30 ms | 0.002 |
+
+Real-user-equivalent LCP is ~1 s lower than reported. The dominant LCP
+audit is `redirects` (1,000-1,200 ms wasted) caused by Vercel's
+rewrite-caching layer (`x-vercel-enable-rewrite-caching: 1`) issuing a
+one-time 307 on cold headless navigations. Curl with edge-cache HIT
+returns 200 directly. This is a Lighthouse-vs-real-user measurement
+artifact, not a code fix.
+
+Code fixes shipped tonight:
+
+- `408904c` perf(detail): drop poster `sizes` `100vw` → `90vw` so the
+  variant picker selects 720w over 828w on DPR-1.75 mobile. LCP image
+  300 KB → 249 KB, detail page perf 79 → 82.
+- `d7b30be` Revert "perf(i18n): disable locale detection" (`380f0f0`) —
+  the hypothesis was that next-intl's locale-detection redirect caused
+  the 307; the 307 persisted after the change, confirming Vercel
+  rewrite-caching is the source. Reverted to keep the
+  Accept-Language UX default.
+
+Tooling shipped tonight (commits `9241d32`, `7ef0e57`, `b87938c`,
+`522f0ff`):
+
+- `scripts/lh-diff.sh` — local prod-build branch-vs-branch diff with
+  side-by-side metrics. Dirty-tree-safe, restores starting branch.
+- `LIGHTHOUSE_RUNBOOK.md` rewrite — adds "trust which target for which
+  metric" table (local is unreliable for LCP on this branch because of
+  `/_next/image` cold-sharp), `BASE_URL` recipe + `LH_EXTRA_HEADERS`
+  composition, Vercel preview bypass gotchas (cookie redirect costs
+  ~1.2 s, recommend disabling protection for representative numbers),
+  troubleshooting rows for the cold-image-CLS trap and the
+  local-vs-preview LCP divergence.
+
+Notable observations:
+
+- Run-to-run variance on simulated throttling is ±5 points perf and
+  up to ±1 s LCP. Outliers (one run at perf 57 due to cold function
+  start) are expected; median-of-3 is the canonical number.
+- Vercel preview deployments cold-start at ~400-700 ms TTFB. Warm with
+  2-3 curls before any audit; for variant changes also warm the LCP
+  image URL explicitly (HTML warm-up doesn't trigger image fetches).
+- `priorityFirst` propagation through `FeaturedStrip` → `ProductionCard`
+  - the `<link rel="preload" imageSrcSet imageSizes fetchPriority>`
+    injection on home / detail pages is verified working: both
+    `lcp-discovery-insight` and `lcp-breakdown-insight` score 1.
+
+Residual work (deferred — not blocking ship):
+
+- Detail page `image-delivery-insight` still flags ~150 KB savings
+  available from tighter AVIF compression; already aggressively tuned
+  in `e8049cd` + `3d9a392`, further reduction risks visible artifacts.
+- Home page hero `LCP element render delay` is 78 ms (clean); detail
+  page is 454 ms in some runs — driven by the surrounding gallery
+  layout cost. Investigate if detail LCP drifts > 4.5 s consistently.
+
+---
+
 ## Lighthouse pass — prod 4×100 (session 17, 2026-05-04)
 
 Baseline: `archive/lighthouse_050426.json` (paper, mobile, LH 13.0.2) → home `99 / 90 / 100 / 83`. Post-fix prod re-test: `archive/lighthouse_050426_3.josn` → **`100 / 100 / 100 / 100`**. CWV: FCP 0.4 s, LCP 0.6 s, TBT 0 ms, CLS 0, SI 0.7 s. Plan + per-fix detail: `LIGHTHOUSE_IMPROVEMENT_PLAN.md`.
