@@ -229,11 +229,22 @@ After all six sweeps, append a single `## Roll-up` block:
 ## 7. Verification gates (run after every sweep commit)
 
 ```sh
-npm run build           # next build clean (only allowed warning: outputFileTracingRoot)
-npx tsc --noEmit        # zero errors
-npm run lint-tokens     # zero violations
-npm run test            # lint + prettier green
+# CRITICAL: redirect to a file, THEN read `$?`. Piping to head/tail/grep
+# replaces the gate's exit code with the pipe-tail's exit (always 0 for
+# tail/head with non-empty input), silently masking real failures.
+# Sweeps 1–5 used the broken `cmd | tail -5; echo $?` form — corrected
+# from Sweep 6 onward; see Sweep 6 OOS:retro-check.
+
+rm -f tsconfig.tsbuildinfo
+npx tsc --noEmit > /tmp/tsc.log 2>&1     ; echo "TSC=$?"
+npm run lint-tokens > /tmp/lt.log 2>&1   ; echo "LINT=$?"
+rm -rf .next
+npm run build > /tmp/build.log 2>&1      ; echo "BUILD=$?"
+npm run test > /tmp/test.log 2>&1        ; echo "TEST=$?"  # ESLint 9 baseline
 ```
+
+All four exit codes must be `0` (with ESLint 9 migration deferred — `TEST` is allowed nonzero
+until Sweep 5's standalone-ESLint follow-up lands).
 
 Manual gate after Sweep 4 (deletions): boot `npm run dev`, visit `/`, `/ru/productions`, one
 production detail, `/about`, `/admin`. No console errors, no 404 on assets. Captures regressions
@@ -641,18 +652,67 @@ Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` cle
      `navigation-types/compat/navigation` reference line on next build. If so, recommit the
      one-line diff alone.
 
+### Sweep 6 — Readability pass
+
+Run on 2026-05-17 after Sweep 5, on `feature/payloadcms` HEAD `48cfbb4`.
+
+1. **Goal fit: met (4 micro-commits + 1 bug carry-back).** Four small readability wins shipped
+   one-rename-per-file per the plan §5 hard cap, plus one carry-back fix surfaced when Sweep 6's
+   honest gate-rerun caught a pre-existing build failure the broken-pipe gates of Sweeps 1–5 had
+   been silently masking.
+
+2. **Findings + actions:**
+   - **Shipped** (`d65ef73`) — `components/FilteredProductionsPanel.tsx:6` imported `countryCode`
+     via `@/components/ProductionCard`'s re-export at `:15`. Replaced with direct import from
+     `@/lib/countryCode`; dropped the re-export. One indirection gone.
+   - **Shipped** (`4444910`) — `app/(payload)/custom.scss:7-8` referenced
+     `KeystaticEnhancements.tsx §2 fix`, a file removed when Keystatic was retired. Replaced the
+     header comment with what this SCSS does today (`PAYLOAD_POLISH_PLAN.md §2.3` density tweak).
+   - **Shipped** (`a4763d5`) — `components/admin/GalleryRowLabel.tsx:8` pointed at
+     `keystatic.config.ts line ~413`, a dead file path. Dropped the pointer; the RowLabel reads
+     self-evident.
+   - **Shipped** (`3aed7ff`) — `app/api/og/[slug]/route.tsx:88` reads `production.titles.ru`
+     directly even after Sweep 1's locale fix (the OG title block is a bilingual masthead by
+     design). Added a three-line comment so the asymmetry with the locale-resolved metaLine
+     below doesn't read as a bug.
+   - **Shipped** (`3a5e0e1`) — `scripts/seed-payload.ts:304, 345` carry-back from sidework
+     commit `dba9e9c` (About body → Lexical migration). Seed script still passed plain string
+     bodies to a field that now demands `SerializedEditorState`. Added a local
+     `bodyToLexical()` helper mirroring `scripts/migrate-about-body-to-lexical.ts` and wrapped
+     both call sites. **This was the first test of the Sweep 6 gates with correct exit-code
+     capture; the error pre-existed earlier sweeps but was masked.**
+
+3. **BAD → GOOD naming:** none — no Sweep 6 commits did renames; all five were comment
+   tightenings, an import-path swap, and a one-helper bug fix.
+
+4. **Follow-ups (out-of-scope for Sweep 6):**
+   - OOS:retro-check — **Verification gate bug.** Across Sweeps 1–5 I ran
+     `npx tsc --noEmit 2>&1 | tail -5 ; echo "TSC=$?"` which captured `tail`'s exit code, not
+     `tsc`'s. Same shape for `npm run build`. The "BUILD=0 / TSC=0" reports in every prior
+     ledger row should be downgraded to "build/tsc output looked OK, exit not actually checked."
+     The actual end-state of `feature/payloadcms` at HEAD `3a5e0e1` is now verified clean by
+     `> /tmp/log 2>&1 ; echo "EXIT=$?"` discipline. Earlier sweeps did NOT regress anything that
+     this run caught; the only failure was in `seed-payload.ts` from the parallel sidework, not
+     from any sweep commit. Worth a one-line update to the plan's §7 verification template:
+     never pipe gate output before reading `$?`.
+   - OOS:Sweep-5-carryover — Five comments mentioning Keystatic still live in
+     `components/admin/{CreditRowLabel,VideoRowLabel}.tsx`, `globals/{About,Contact}.ts`,
+     `collections/Productions.ts`. Each uses the word "legacy" honestly (not pretending
+     Keystatic is current) and the hard cap "one rename per file per commit" makes a sweep that
+     touches five separate files marginal-value. Defer.
+
 ## 12. Ledger
 
 Filled in as sweeps land.
 
-| Sweep | Status  | Commit                                        | Notes                                                                                                                                                                                                                                                                                                                                    |
-| ----- | ------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | shipped | `3458619` + `8b84fc6`                         | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                                                     |
-| 2     | shipped | `7febc7b` + `44c5644`                         | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.                                     |
-| 3     | no-ship | —                                             | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped.                                    |
-| 4     | shipped | `f039324` + `b0cef5b` + `9361aa3` + `13e8d26` | Deleted `lib/markdoc.tsx` + `pages/` stub (App-Router-only now); archived 7 one-shot scripts to `_legacy/`; dropped 7 dead deps + `@markdoc/markdoc`; trimmed `COUNTRY_TO_CODE` map. Net ≈ −1900 lines (mostly lockfile). Gates: tsc 0, lint-tokens OK, build clean. Manual dev-server walk pending Daniil.                              |
-| 5     | no-ship | —                                             | Scanned 9 style/safety categories. Live runtime code passes all bars (0 `process.env.X!`, 0 `console.log`, 0 `as any`, all `==` are `== null` idiom, etc.). One admin string flagged (`ImagePathPreview.tsx` `alt='preview'`) — folded into the broader admin-DE-localization follow-up. ESLint 9 migration deferred as standalone work. |
-| 6     | pending |                                               |                                                                                                                                                                                                                                                                                                                                          |
+| Sweep | Status  | Commit                                                    | Notes                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----- | ------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | shipped | `3458619` + `8b84fc6`                                     | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                                                                                                            |
+| 2     | shipped | `7febc7b` + `44c5644`                                     | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.                                                                                            |
+| 3     | no-ship | —                                                         | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped.                                                                                           |
+| 4     | shipped | `f039324` + `b0cef5b` + `9361aa3` + `13e8d26`             | Deleted `lib/markdoc.tsx` + `pages/` stub (App-Router-only now); archived 7 one-shot scripts to `_legacy/`; dropped 7 dead deps + `@markdoc/markdoc`; trimmed `COUNTRY_TO_CODE` map. Net ≈ −1900 lines (mostly lockfile). Gates: tsc 0, lint-tokens OK, build clean. Manual dev-server walk pending Daniil.                                                                                     |
+| 5     | no-ship | —                                                         | Scanned 9 style/safety categories. Live runtime code passes all bars (0 `process.env.X!`, 0 `console.log`, 0 `as any`, all `==` are `== null` idiom, etc.). One admin string flagged (`ImagePathPreview.tsx` `alt='preview'`) — folded into the broader admin-DE-localization follow-up. ESLint 9 migration deferred as standalone work.                                                        |
+| 6     | shipped | `d65ef73` + `4444910` + `a4763d5` + `3aed7ff` + `3a5e0e1` | Direct `countryCode` import; 3 dead-reference comment tightenings (custom.scss / GalleryRowLabel / OG title block); 1 bug carry-back (`scripts/seed-payload.ts` body→Lexical wrap, missed by sidework `dba9e9c`). Gates verified with proper exit-code capture: tsc 0, lint-tokens 0, build 0. Discovered pipe-eats-exit-code flaw in earlier sweeps' gate scripts — corrected in §7 follow-up. |
 
 ## 13. After all sweeps land
 
