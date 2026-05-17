@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
@@ -5,12 +6,39 @@ import { EmptyState } from '@/components/EmptyState'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 
 import styles from './page.module.css'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'awards' })
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+
+  const url = locale === 'en' ? `${BASE}/awards` : `${BASE}/${locale}/awards`
+  const title = `${tMeta('siteName')} — ${t('title')}`
+
+  return {
+    title,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${BASE}/awards`,
+        de: `${BASE}/de/awards`,
+        ru: `${BASE}/ru/awards`
+      }
+    },
+    openGraph: { title, url, type: 'website' }
+  }
 }
 
 export default async function AwardsPage({

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 import { Suspense } from 'react'
@@ -5,9 +6,37 @@ import { Suspense } from 'react'
 import { FilteredProductionsPanel } from '@/components/FilteredProductionsPanel'
 import { ProductionGrid } from '@/components/ProductionGrid'
 import type { Locale } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 
 import styles from './page.module.css'
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'productions' })
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+
+  const url =
+    locale === 'en' ? `${BASE}/productions` : `${BASE}/${locale}/productions`
+  const title = `${tMeta('siteName')} — ${t('title')}`
+
+  return {
+    title,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${BASE}/productions`,
+        de: `${BASE}/de/productions`,
+        ru: `${BASE}/ru/productions`
+      }
+    },
+    openGraph: { title, url, type: 'website' }
+  }
+}
 
 export default async function ProductionsIndexPage({
   params

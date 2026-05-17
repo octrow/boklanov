@@ -1,15 +1,43 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
 import { getContact } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 
 import { CopyEmailButton } from './CopyEmailButton'
 import styles from './page.module.css'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'contact' })
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+
+  const url = locale === 'en' ? `${BASE}/contact` : `${BASE}/${locale}/contact`
+  const title = `${tMeta('siteName')} — ${t('title')}`
+
+  return {
+    title,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${BASE}/contact`,
+        de: `${BASE}/de/contact`,
+        ru: `${BASE}/ru/contact`
+      }
+    },
+    openGraph: { title, url, type: 'website' }
+  }
 }
 
 const FALLBACK = {
