@@ -53,11 +53,24 @@ export default withPayload(
       // staging host for boklanov-rewrite, so we emit our own header to
       // override that default. Production (boklanov.com) doesn't get the
       // automatic noindex in the first place, so this is a no-op there.
+      //
+      // `/admin/*` is excluded via path-to-regexp negative lookahead — Payload
+      // emits `<meta name="robots" content="noindex, nofollow">` in its admin
+      // HTML, and we don't want the blanket override to contradict it. The
+      // pattern below matches everything that doesn't start with `admin`.
       async headers() {
         return [
           {
-            source: '/:path*',
+            source: '/((?!admin(?:/|$)).*)',
             headers: [{ key: 'x-robots-tag', value: 'index, follow' }]
+          },
+          {
+            source: '/admin/:path*',
+            headers: [{ key: 'x-robots-tag', value: 'noindex, nofollow' }]
+          },
+          {
+            source: '/admin',
+            headers: [{ key: 'x-robots-tag', value: 'noindex, nofollow' }]
           }
         ]
       }
