@@ -415,18 +415,86 @@ Baseline gates before audit:
      Verified by stash-and-rerun against HEAD `2913cb8` — failure pre-dates Sweep 1. Migration is
      a self-contained config job (eslint v9 flat-config). Track as Sweep 5 follow-up.
 
+### Sweep 2 — Duplication removal
+
+Run on 2026-05-17 after Sweep 1, on `feature/payloadcms` HEAD `8b84fc6`.
+
+Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` clean.
+
+Mid-sweep clarification from Daniil: locale fallback order is **EN → DE → RU** (matches
+`routing.locales`, not the older RU-canonical convention). Saved as project memory
+`project_locale_fallback_order.md` and applied during this sweep.
+
+1. **Goal fit: met.** Two structural duplicates promoted to shared helpers / hoists. The five
+   smaller categories surfaced (image-extension allowlists, RowLabel `fallback` one-liner, label
+   objects, country-code split, DE-graceful-empty pair) all failed the ≥ 2-call-sites-of-≥-5-lines
+   bar for different reasons documented as follow-ups.
+
+2. **Findings + actions:**
+   - **Promoted:** `pickL10n<V, T>(field, locale, fallback)` helper added to `lib/content.ts:683`.
+     Replaces 7 inlined `field[locale] ?? field.ru ?? field.en ?? fallback`-shaped chains:
+     5 in `lib/content.ts:project()` (`title`, `synopsis`, `body`, `premiereDate`,
+     `bookingCtaLabel`) and 2 in `app/[locale]/productions/[slug]/page.tsx` (gallery alt × 2).
+     Helper encodes the EN → DE → RU order from the project rule.
+   - **Promoted:** `resolveL10n` (`lib/content.ts:668`) fallback order flipped from EN→RU→DE to
+     EN→DE→RU. Consumers: `item.title`, awards/festivals `name`/`category`/`city`,
+     `externalLinks.label`, tour `city` — all now agree on the order with `pickL10n`.
+   - **Promoted:** `credits` outer-fallback tail in `project()` flipped from RU→EN to EN→DE→RU
+     (current-locale `.length`-matching clauses kept so an empty-but-present array can't
+     short-circuit).
+   - **Hoisted:** `galleryItems` in `app/[locale]/productions/[slug]/page.tsx`. The detail page
+     ran `production.gallery.map(...)` twice — once in the mobile column (`.inlineMedia`, hidden
+     ≥ 1024px) and once in the desktop rail (`.railMedia`, hidden < 1024px). Both blocks were
+     byte-identical 22-line mappings. Hoisted to one `const` before the JSX; both
+     `<GalleryLightbox>` consume the same array reference.
+
+3. **BAD → GOOD naming:** none — Sweep 6 territory.
+
+4. **Follow-ups (out-of-scope for Sweep 2):**
+   - OOS:Sweep-3 — `app/[locale]/productions/[slug]/page.tsx` still renders two
+     `<GalleryLightbox>` JSX instances (under different `.inlineMedia` / `.railMedia` parents).
+     Both go to the DOM simultaneously; only one is visible per viewport. Collapsing to a single
+     mount requires CSS-only repositioning (the rail's `display:none` toggle is the current
+     mechanism, replicated in JSX). Complexity-reduction, not structural duplication.
+   - OOS:no-ship — Image-extension allowlists: `ALLOWED_EXT` (`app/api/r2-asset/route.ts:50`),
+     `MIME` map (`:66`), `BAKEABLE_EXTS` (`lib/image-variants.ts:62`), `IMAGE_EXT`
+     (`scripts/photo-audit.mjs:28`), `accept` attr on `ImagePathPreview.tsx:187`,
+     `Media.mimeTypes` (`collections/Media.ts:28`). Six lists, all intentionally different scopes
+     (bakeable subset, upload accept, MIME map, audit scan, browser file-picker, Payload Media
+     whitelist). Documented intent stands; no promotion.
+   - OOS:no-ship — RowLabel `fallback = ${(rowNumber ?? 0) + 1}.padStart(2, '0')` duplicated
+     across 12 files in `components/admin/*RowLabel.tsx`. Real shared concept but only one line
+     per file; promotion adds 12 imports for marginal code-volume gain. Skipped per the plan's
+     "5+ lines" threshold (§5 Sweep 2).
+   - OOS:Sweep-5 — Payload field labels in `globals/About.ts`, `globals/Contact.ts`, and most of
+     `collections/Productions.ts` use a `{ ru, en }` two-key shape, but `PAYLOAD_POLISH_PLAN.md`
+     Tier 3 established RU/EN/DE as the convention. No DE keys = admin chrome falls through to
+     RU/EN on the DE admin locale. Content-fill job (~150 strings), not structural.
+   - OOS:Sweep-4 — `COUNTRY_TO_CODE` map in `lib/countryCode.ts` (6 entries: RU/KZ/DE/ES/AT/BY
+     free-text → ISO-2) is likely dead after Tier 5.3 backfill — `theatre.country` is now ISO
+     codes in DB, and the function's `/^[A-Z]{2}$/` passthrough already handles those. Verify no
+     remaining free-text values, then delete the map.
+   - OOS:Sweep-6 — `components/FilteredProductionsPanel.tsx:6` imports `countryCode` from
+     `@/components/ProductionCard` (which re-exports from `@/lib/countryCode` at `:15`). Direct
+     import from `@/lib/countryCode` would drop the indirection.
+   - OOS:no-ship — `directorsNote` and `tagline` chains in `project()` share the DE-graceful-
+     empty pattern but with subtly different non-DE tails (tagline lacks an EN fallback).
+     Documented inline (`lib/content.ts:709-711`) with a comment pointing at
+     DESIGN_v3_PROPOSAL.md §9v3.7. Don't collapse into `pickL10n` — its EN→DE→RU chain would
+     break the DE-explicit-null guarantee.
+
 ## 12. Ledger
 
 Filled in as sweeps land.
 
-| Sweep | Status  | Commit                | Notes                                                                                                                                                                                                |
-| ----- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | shipped | `3458619` + `8b84fc6` | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up. |
-| 2     | pending |                       |                                                                                                                                                                                                      |
-| 3     | pending |                       |                                                                                                                                                                                                      |
-| 4     | pending |                       |                                                                                                                                                                                                      |
-| 5     | pending |                       |                                                                                                                                                                                                      |
-| 6     | pending |                       |                                                                                                                                                                                                      |
+| Sweep | Status  | Commit                | Notes                                                                                                                                                                                                                                                                                                |
+| ----- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | shipped | `3458619` + `8b84fc6` | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                 |
+| 2     | shipped | `7febc7b` + `44c5644` | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. |
+| 3     | pending |                       |                                                                                                                                                                                                                                                                                                      |
+| 4     | pending |                       |                                                                                                                                                                                                                                                                                                      |
+| 5     | pending |                       |                                                                                                                                                                                                                                                                                                      |
+| 6     | pending |                       |                                                                                                                                                                                                                                                                                                      |
 
 ## 13. After all sweeps land
 
