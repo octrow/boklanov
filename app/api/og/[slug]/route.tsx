@@ -85,6 +85,9 @@ export async function GET(
 
   const fonts = await loadFonts()
 
+  // Bilingual title block by design: always show RU top, EN beneath when
+  // distinct. Pulls both from `production.titles` (raw multilingual map
+  // preserved through projection) regardless of the share locale.
   const titleRu = production.titles.ru ?? production.title
   const titleEn = production.titles.en ?? null
   const showTitleEn = !!titleEn && titleEn !== titleRu
