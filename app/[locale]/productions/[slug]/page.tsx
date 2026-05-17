@@ -21,6 +21,7 @@ import { cdnUrl } from '@/lib/cdn'
 import {
   getAllProductions,
   getProduction,
+  pickL10n,
   type ProductionView
 } from '@/lib/content'
 import styles from './page.module.css'
@@ -259,6 +260,24 @@ export default async function ProductionDetailPage({
 
   const schema = creativeWorkSchema(production, slug, locale)
 
+  // Gallery items are rendered twice — once in the mobile/tablet column
+  // (`.inlineMedia`, hidden ≥1024px) and once in the desktop rail
+  // (`.railMedia`, hidden <1024px). Same data both times — compute once.
+  const galleryItems = production.gallery.map((g) => ({
+    src: cdnUrl(g.src)!,
+    alt: pickL10n(g.caption, locale, ''),
+    credit: g.credit,
+    variants: g.variants
+      ? {
+          w420: cdnUrl(g.variants.w420)!,
+          w600: cdnUrl(g.variants.w600)!,
+          w720: cdnUrl(g.variants.w720)!,
+          w828: cdnUrl(g.variants.w828)!,
+          w1080: cdnUrl(g.variants.w1080)!
+        }
+      : null
+  }))
+
   return (
     <main className={styles.page}>
       <script
@@ -469,29 +488,10 @@ export default async function ProductionDetailPage({
                 />
               </div>
             )}
-            {production.gallery.length > 0 && (
+            {galleryItems.length > 0 && (
               <section className={styles.section}>
                 <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-                <GalleryLightbox
-                  items={production.gallery.map((g) => ({
-                    src: cdnUrl(g.src)!,
-                    alt:
-                      g.caption?.[locale] ??
-                      g.caption?.ru ??
-                      g.caption?.en ??
-                      '',
-                    credit: g.credit,
-                    variants: g.variants
-                      ? {
-                          w420: cdnUrl(g.variants.w420)!,
-                          w600: cdnUrl(g.variants.w600)!,
-                          w720: cdnUrl(g.variants.w720)!,
-                          w828: cdnUrl(g.variants.w828)!,
-                          w1080: cdnUrl(g.variants.w1080)!
-                        }
-                      : null
-                  }))}
-                />
+                <GalleryLightbox items={galleryItems} />
               </section>
             )}
           </div>
@@ -790,29 +790,10 @@ export default async function ProductionDetailPage({
                 />
               </div>
             )}
-            {production.gallery.length > 0 && (
+            {galleryItems.length > 0 && (
               <section className={styles.section}>
                 <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-                <GalleryLightbox
-                  items={production.gallery.map((g) => ({
-                    src: cdnUrl(g.src)!,
-                    alt:
-                      g.caption?.[locale] ??
-                      g.caption?.ru ??
-                      g.caption?.en ??
-                      '',
-                    credit: g.credit,
-                    variants: g.variants
-                      ? {
-                          w420: cdnUrl(g.variants.w420)!,
-                          w600: cdnUrl(g.variants.w600)!,
-                          w720: cdnUrl(g.variants.w720)!,
-                          w828: cdnUrl(g.variants.w828)!,
-                          w1080: cdnUrl(g.variants.w1080)!
-                        }
-                      : null
-                  }))}
-                />
+                <GalleryLightbox items={galleryItems} />
               </section>
             )}
           </div>
