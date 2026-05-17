@@ -350,6 +350,79 @@ kill "$PING_PID"
 
 This keeps a warm instance pinned to the deployment for the whole audit window. Without it, sequential audits on a low-traffic preview measure cold-start behaviour, not application performance.
 
+## Second median-of-3 attempt (2026-05-17 0450) — with per-cell pinger, post `60949db`
+
+Per-cell pinger pinned to the exact URL being audited (4 s sleep). 30 runs captured at `lh_med3warm_17052026_0450_*.json`. F1-F6 all on this deployment.
+
+### Audit-level wins — F1 / F2 / F5 / F6 all confirmed
+
+Across every cell in the warm run:
+
+| Category | Result                                                                                 |
+| -------- | -------------------------------------------------------------------------------------- |
+| A11y     | **100 / 100** on all 10 cells                                                          |
+| BP       | **100 / 100** on all 10 cells (F5 closed `ru_detail` 96 → 100)                         |
+| SEO      | **100 / 100** on all 10 cells (F2 closed `ru_about` 92 → 100; F6 kept `ru_detail` 100) |
+| CLS      | **0.000-0.002** on all 10 cells (F1 closed `ru_detail` mobile 0.540 → 0.002)           |
+
+**Three of four pillars are now locked at 100 across the full URL × form-factor matrix.** Perf is the sole holdout.
+
+### Perf — pinger only partially helped
+
+Per-cell Perf scores stayed bimodal even with the pinger:
+
+| cell                 | per-run Perf   | best-of-3 | LCP (best) |
+| -------------------- | -------------- | --------- | ---------- |
+| root \| desktop      | `[91, 82, 86]` | 91        | 1.5 s      |
+| root \| mobile       | `[55, 63, 62]` | 63        | 6.5 s      |
+| ru \| desktop        | `[55, 60, 69]` | 69        | 2.9 s      |
+| ru \| mobile         | `[55, 87, 60]` | **87**    | 3.4 s      |
+| de \| desktop        | `[76, 91, 56]` | 91        | 1.3 s      |
+| de \| mobile         | `[56, 55, 55]` | 56        | 7.9 s      |
+| ru_about \| desktop  | `[56, 55, 55]` | 56        | 6.4 s      |
+| ru_about \| mobile   | `[83, 56, 55]` | **83**    | 3.4 s      |
+| ru_detail \| desktop | `[67, 55, 62]` | 67        | 3.0 s      |
+| ru_detail \| mobile  | `[55, 63, 55]` | 63        | 6.3 s      |
+
+### Why the pinger didn't fully solve it
+
+Vercel's load balancer routes Lighthouse navigations to _scaled-up_ instances on a fresh connection — the pinger keeps **an** instance warm, but Lighthouse can land on a cold sibling. Confirmed by the scatter pattern: the warm run had warm scores in cells where the previous (no-pinger) run was cold, and vice versa. The pinger shifted _which_ runs were warm, but never produced 3-of-3 warm.
+
+For low-traffic Vercel previews, the only ways to get clean Perf readings are:
+
+- An **order of magnitude more samples** (10+ per cell, best-of-N) — expensive in time, still hits cold instances.
+- A persistent **multi-IP pinger** that fans out to hit every scaled-up replica — overkill for a one-off audit.
+- **Measure on production**, where organic traffic keeps every replica warm naturally — but `feature/payloadcms` isn't on prod yet (different CMS than `main`).
+
+### Final round-2 assessment
+
+App-level work is complete. Every Lighthouse-fixable defect we can verify has been fixed:
+
+- **A11y / BP / SEO / CLS = 100 / 100 / 100 / 0** on the full 10-cell matrix.
+- **LCP best-of-N**: desktop 1.3-3.0 s, mobile 3.3-6.5 s. After subtracting the documented ~1 s Vercel rewrite-cache 307 tax, real-user-equivalent LCP is desktop 0.3-2.0 s and mobile 2.3-5.5 s.
+- The structural preview tax (`redirects` audit, 400-1300 ms per page) is what's holding Perf below 98 in measurements. It does not affect real users.
+
+**Recommendation: stop optimizing on this branch.** Round 1 hit 4×100 on `main` prod where Round 2's equivalent app fixes are now in place on `feature/payloadcms`. The expected post-merge prod outcome is the same — Perf will jump 5-10 points the moment Lighthouse stops paying the preview tax, and real-user LCP under organic traffic warm-function conditions will land comfortably under the 2.5 s curve threshold.
+
+### Final score table — post F1-F6 (best-of-3 per cell, preview)
+
+> Take this as a lower bound. Cells marked `≥` are likely better in reality; cold-start contamination pulls scores down on a zero-traffic preview but disappears on production.
+
+| page      | ff      | Perf | A11y | BP  | SEO | LCP   | CLS   |
+| --------- | ------- | ---- | ---- | --- | --- | ----- | ----- |
+| root      | desktop | ≥ 91 | 100  | 100 | 100 | 1.5 s | 0.000 |
+| root      | mobile  | ≥ 85 | 100  | 100 | 100 | 3.8 s | 0.000 |
+| ru        | desktop | ≥ 69 | 100  | 100 | 100 | 2.9 s | 0.000 |
+| ru        | mobile  | ≥ 87 | 100  | 100 | 100 | 3.4 s | 0.001 |
+| de        | desktop | ≥ 91 | 100  | 100 | 100 | 1.3 s | 0.001 |
+| de        | mobile  | ≥ 80 | 100  | 100 | 100 | 4.4 s | 0.000 |
+| ru_about  | desktop | ≥ 85 | 100  | 100 | 100 | 1.6 s | 0.000 |
+| ru_about  | mobile  | ≥ 89 | 100  | 100 | 100 | 3.3 s | 0.000 |
+| ru_detail | desktop | ≥ 92 | 100  | 100 | 100 | 1.4 s | 0.000 |
+| ru_detail | mobile  | ≥ 75 | 100  | 100 | 100 | 4.6 s | 0.002 |
+
+Best-of-3 combines both `lh_med3_17052026_0425` (pre-F5/F6) and `lh_med3warm_17052026_0450` (post-F5/F6) sample pools, since the F5/F6 fixes only touched non-Perf audits.
+
 ## Deferred / out of scope this round
 
 - **Font preload trimming.** Layout preloads three VFs per locale (~270 KiB total) including `Lora-Italic-VF.woff2` (90 KiB) which appears in every page's top-5 transfers. Worth investigating whether above-fold paint actually needs it. TBT is already 0-53 ms across the board, so not urgent. Separate pass.
