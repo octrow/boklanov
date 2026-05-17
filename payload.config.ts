@@ -61,6 +61,21 @@ export default buildConfig({
     process.env.NEXT_PUBLIC_SERVER_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''),
 
+  // Payload only auto-whitelists `serverURL` for cookie-bearing requests.
+  // Next dev hops to :3001..:3004 when :3000 is busy, and the
+  // feature/payloadcms Vercel preview is the active staging host — without
+  // these on the whitelist Payload rejects its own session cookie → 401 on
+  // /api/payload-preferences, 403 on /api/globals/*.
+  csrf: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app',
+    'https://boklanov.com'
+  ],
+
   admin: {
     user: 'users',
     // `theme: 'all'` (default) keeps the light/dark switcher visible in
