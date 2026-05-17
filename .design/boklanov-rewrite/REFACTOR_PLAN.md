@@ -531,18 +531,70 @@ Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` cle
      awards filter, or a /press search) appears. The shape is well-understood today;
      re-evaluate when call sites ≥ 2.
 
+### Sweep 4 — Unused code cleanup
+
+Run on 2026-05-17 after Sweep 3, on `feature/payloadcms` HEAD `2b49df9`.
+
+Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` clean.
+
+1. **Goal fit: met.** Every pre-identified candidate verified by grep before deletion. Four
+   atomic commits, each gates-green; net code-volume drop ~1900 lines (most of that the
+   `package-lock.json` churn from 7 dep removals).
+
+2. **Findings + actions:**
+   - **Deleted** `lib/markdoc.tsx` (zero importers re-verified across `app/`, `components/`,
+     `lib/`, `collections/`, `globals/`, `hooks/`, `scripts/` (non-legacy), `middleware.ts`,
+     `payload.config.ts`). Sole consumer of `@markdoc/markdoc`, dropped in same commit.
+   - **Deleted** `pages/api/social-image.tsx` (explicit 501 stub from Phase F8) and the now-empty
+     `pages/` and `pages/api/` directories. The project is App Router only.
+   - **Archived** 7 one-shot scripts to `scripts/_legacy/` (`tsconfig.json` already excludes that
+     dir, so they don't count as live importers anywhere):
+     `migrate-to-keystatic.ts`, `migrate-about-to-keystatic.ts`, `migrate-productions-schema.ts`,
+     `migrate-richtext-data.ts`, `migrate_mdx_to_yaml.py`, `backfill-nulls.ts`,
+     `photo-audit.mjs`. None wired into `package.json`. The `.gitignore`'s stale
+     `sync-from-notion.ts` block was replaced with a `notion-data/` archaeology note.
+   - **Dropped 7 dead npm deps** (zero importers each): `next-mdx-remote`, `lqip-modern`,
+     `fathom-client`, `critters` (orphan at top of `npm ls`), `csv-parse`, `@vercel/og` (the OG
+     route uses `next/og`), `@fontsource/inter`. `graphql` kept — Payload's transitive packages
+     (`@payloadcms/graphql`, `graphql-http`, `graphql-scalars`) all depend on it, and commit
+     `ad6849b` added it as a direct dep specifically to unblock prod build.
+   - **Trimmed** `lib/countryCode.ts` — removed the 6-entry `COUNTRY_TO_CODE` free-text → ISO map
+     and its lookup branch. `theatre.country` is ISO 3166-1 alpha-2 since `PAYLOAD_POLISH_PLAN.md`
+     §5.3 backfill (51/54 rows have ISO; 3 NULL pending `/admin` completion). The Payload select
+     enforces ISO for new rows. Function now: `null|undefined → null`; 2-letter uppercase →
+     passthrough; anything else → `null`. -19 / +13 lines, behavior unchanged for the three live
+     call sites.
+
+3. **BAD → GOOD naming:** none.
+
+4. **Follow-ups (out-of-scope for Sweep 4):**
+   - OOS:user-action — `notion-data/` (253 MB, untracked, pre-F8 export) still on disk. The
+     only script that read from it (`photo-audit.mjs`) is now in `_legacy/`. Safe to
+     `rm -rf notion-data/` whenever Daniil wants the disk space; `.gitignore` already lists it.
+   - OOS:manual-gate — Per plan §7, Sweep 4 deletions warrant a manual `npm run dev` walk of
+     `/`, `/ru/productions`, one production detail page, `/about`, and `/admin`. The build gate
+     already prerendered all 159 production detail routes cleanly, so this catches only visual
+     regressions that build can't see (e.g., a hidden `<Image>` whose `src` resolved through a
+     deleted helper). Owner: Daniil. None expected.
+   - OOS:Sweep-5 — `next-env.d.ts` regenerated during build (`navigation-types/compat/navigation`
+     reference dropped). Auto-generated; committed as the current state in `f039324`. Re-runs
+     of `next build` may flap this line one more time; if so, recommit as a one-line cleanup.
+   - OOS:no-ship — `seed-payload.ts` (`@typescript-eslint/no-explicit-any` disables) and
+     `backfill-media.ts` are both wired into `package.json` and kept active. Re-evaluate after
+     the Lexical-migration cycle stabilizes.
+
 ## 12. Ledger
 
 Filled in as sweeps land.
 
-| Sweep | Status  | Commit                | Notes                                                                                                                                                                                                                                                                                                 |
-| ----- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | shipped | `3458619` + `8b84fc6` | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                  |
-| 2     | shipped | `7febc7b` + `44c5644` | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.  |
-| 3     | no-ship | —                     | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped. |
-| 4     | pending |                       |                                                                                                                                                                                                                                                                                                       |
-| 5     | pending |                       |                                                                                                                                                                                                                                                                                                       |
-| 6     | pending |                       |                                                                                                                                                                                                                                                                                                       |
+| Sweep | Status  | Commit                                        | Notes                                                                                                                                                                                                                                                                                                       |
+| ----- | ------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | shipped | `3458619` + `8b84fc6`                         | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                        |
+| 2     | shipped | `7febc7b` + `44c5644`                         | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.        |
+| 3     | no-ship | —                                             | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped.       |
+| 4     | shipped | `f039324` + `b0cef5b` + `9361aa3` + `13e8d26` | Deleted `lib/markdoc.tsx` + `pages/` stub (App-Router-only now); archived 7 one-shot scripts to `_legacy/`; dropped 7 dead deps + `@markdoc/markdoc`; trimmed `COUNTRY_TO_CODE` map. Net ≈ −1900 lines (mostly lockfile). Gates: tsc 0, lint-tokens OK, build clean. Manual dev-server walk pending Daniil. |
+| 5     | pending |                                               |                                                                                                                                                                                                                                                                                                             |
+| 6     | pending |                                               |                                                                                                                                                                                                                                                                                                             |
 
 ## 13. After all sweeps land
 
