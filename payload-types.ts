@@ -1138,9 +1138,23 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface About {
   id: number;
   /**
-   * Biography. Markdown / markdoc. First paragraph is the lead.
+   * Biography. H2/H3 headings, lists, blockquotes, links, and emphasis are supported. First paragraph is the lead (rendered prominently).
    */
-  body?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Large portrait at the top of the About page.
    */
