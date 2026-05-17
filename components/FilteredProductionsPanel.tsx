@@ -3,9 +3,9 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
-import { countryCode } from '@/components/ProductionCard'
 import { ProductionGrid } from '@/components/ProductionGrid'
 import type { ProductionView } from '@/lib/content'
+import { countryCode } from '@/lib/countryCode'
 
 import styles from './FilteredProductionsPanel.module.css'
 
@@ -189,7 +189,11 @@ export function FilteredProductionsPanel({
     <div className={styles.panel}>
       {/* Filter strip — wraps on overflow. Country group is a disclosure popover
           to keep the bar narrow even when many countries appear in the data. */}
-      <div className={styles.filterBar} role='toolbar' aria-label={labels.filtersAria}>
+      <div
+        className={styles.filterBar}
+        role='toolbar'
+        aria-label={labels.filtersAria}
+      >
         {/* Role — radio group (single selection) */}
         <div
           className={styles.group}

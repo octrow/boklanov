@@ -12,8 +12,6 @@ import type { ProductionView } from '@/lib/content'
 import styles from './ProductionCard.module.css'
 import { TypographicCover } from './TypographicCover'
 
-export { countryCode }
-
 export interface ProductionCardProps {
   production: ProductionView
   priority?: boolean
