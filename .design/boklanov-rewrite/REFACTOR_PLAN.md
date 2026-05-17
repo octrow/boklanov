@@ -739,12 +739,12 @@ Sweep range: `2913cb8` (pre-Sweep-1) → `45335d9` (HEAD). 22 sweep commits tota
 
 **Final gate status (honest, post-§7 fix):**
 
-| Gate                  | Exit | Notes                                                               |
-| --------------------- | ---: | ------------------------------------------------------------------- |
-| `npx tsc --noEmit`    |    0 | Zero diagnostics.                                                   |
-| `npm run lint-tokens` |    0 | All scoped tokens stay inside their owning modules.                 |
-| `npm run build`       |    0 | All 159 production detail pages prerender; OG + admin compile.      |
-| `npm run test`        |   ≠0 | Pre-existing ESLint 9 baseline failure; tracked as standalone work. |
+| Gate                  | Exit | Notes                                                                                                                                                                                                                                          |
+| --------------------- | ---: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npx tsc --noEmit`    |    0 | Zero diagnostics.                                                                                                                                                                                                                              |
+| `npm run lint-tokens` |    0 | All scoped tokens stay inside their owning modules.                                                                                                                                                                                            |
+| `npm run build`       |    0 | All 159 production detail pages prerender; OG + admin compile.                                                                                                                                                                                 |
+| `npm run test`        |   ≠0 | ESLint 9 flat-config migration shipped post-Sweep 6 (see §13a); `test:prettier` still fails on 3 pre-existing dirty files (`components/SiteHeader.tsx`, `scripts/upload-images.ts`, `scripts/translate-content.ts`) untouched by the refactor. |
 
 Pipe-eats-exit-code bug in Sweeps 1–5 gate scripts disclosed in Sweep 6 ledger row + §7 template
 correction. No sweep commit introduced a regression that the honest gates of Sweep 6 caught.
@@ -759,8 +759,8 @@ correction. No sweep commit introduced a regression that the honest gates of Swe
 
 **Open follow-ups by sweep:**
 
-- Sweep 1: pre-existing ESLint 9 baseline failure — own focused PR (`.eslintrc.json` →
-  `eslint.config.js`, new flat-config dep set, one pass on whatever the new ruleset surfaces).
+- Sweep 1: ESLint 9 baseline failure — **closed.** Flat-config migration shipped post-Sweep 6
+  (see §13a). `npm run test:lint` now exits 0.
 - Sweep 2: eight micro-items — gallery-mount restructure (Sweep 3 carryover), Payload field
   labels missing DE keys (≈150 strings), `COUNTRY_TO_CODE` follow-on questions all resolved,
   `FilteredProductionsPanel` re-export indirection shipped in Sweep 6.
@@ -768,10 +768,35 @@ correction. No sweep commit introduced a regression that the honest gates of Swe
   blocked on design/UX-led refactor, not refactor-sweep work.
 - Sweep 4: `notion-data/` 253 MB local-only directory (untracked, gitignored, safe to
   `rm -rf` whenever Daniil wants the disk back); manual `npm run dev` walk pending Daniil.
-- Sweep 5: ESLint 9 migration (same as Sweep 1 carry-back); admin DE labels (≈150 strings) ;
-  `next-env.d.ts` may flap one more line on next build.
+- Sweep 5: ESLint 9 migration — **closed** (see §13a). Admin DE labels (≈150 strings) and
+  `next-env.d.ts` flap follow-ups remain.
 - Sweep 6: five comments mentioning Keystatic still live (each uses "legacy" honestly; deferred
   per hard-cap "one rename per file per commit" trade-off).
+
+## 13a. Post-sweep follow-up — ESLint 9 flat-config migration
+
+Run on 2026-05-17 after §13 roll-up shipped. Closes the Sweep 1 + Sweep 5 carryover.
+
+**Shipped:**
+
+- `.eslintrc.json` removed; `eslint.config.mjs` created. Mirrors the same 9 rule set
+  (`@typescript-eslint`, `react`, `next/core-web-vitals`, `prettier`) via `@eslint/eslintrc`
+  `FlatCompat` — no new top-level deps (all transitive deps were already in `node_modules`).
+- `linterOptions.reportUnusedDisableDirectives` set to `off` so the file-level
+  `/* eslint-disable */` on Payload-generated route handlers (per §10b "never hand-edit") and
+  the inline disables in `scripts/seed-payload.ts` stay silent without producing warning noise.
+- Two real errors fixed: `scripts/translate-content.ts:583,592` — empty `catch {}` blocks given
+  a `/* best-effort cleanup */` body comment so `no-empty` is satisfied without changing
+  runtime behavior.
+
+**Gate change:** `npm run test:lint` 0 (was the Sweep 1 baseline failure). `npm run test`
+remaining red is now `test:prettier` on three pre-existing dirty files untouched by the
+refactor — separate follow-up.
+
+**Out-of-scope here:** prettier fixes on `components/SiteHeader.tsx`,
+`scripts/upload-images.ts`, `scripts/translate-content.ts`. Each was last edited on
+pre-refactor mainline commits; `prettier --write` would be a >500-line drive-by in unrelated
+files. Track as its own one-commit cleanup when desired.
 
 ## 14. After all sweeps land
 
