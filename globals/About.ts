@@ -70,8 +70,13 @@ export const About: GlobalConfig = {
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
                     description: {
-                      ru: 'Главное портретное фото. Путь в public/about/ или R2.',
-                      en: 'Main portrait photo. Path under public/about/ or R2.'
+                      ru: 'Главное портретное фото. Можно вписать вручную или нажать «Upload» в превью ниже. Путь в public/about/ или R2.',
+                      en: 'Main portrait photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.'
+                    },
+                    components: {
+                      afterInput: [
+                        '/components/admin/ImagePathPreview#ImagePathPreview'
+                      ]
                     }
                   }
                 },
@@ -112,8 +117,13 @@ export const About: GlobalConfig = {
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
                     description: {
-                      ru: 'Дополнительное фото. Путь в public/about/ или R2.',
-                      en: 'Additional photo. Path under public/about/ or R2.'
+                      ru: 'Дополнительное фото. Можно вписать вручную или нажать «Upload» в превью ниже. Путь в public/about/ или R2.',
+                      en: 'Additional photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.'
+                    },
+                    components: {
+                      afterInput: [
+                        '/components/admin/ImagePathPreview#ImagePathPreview'
+                      ]
                     }
                   }
                 },

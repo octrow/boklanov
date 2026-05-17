@@ -1146,7 +1146,7 @@ export interface About {
    */
   portrait?: {
     /**
-     * Main portrait photo. Path under public/about/ or R2.
+     * Main portrait photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.
      */
     src?: string | null;
     /**
@@ -1160,7 +1160,7 @@ export interface About {
   photos?:
     | {
         /**
-         * Additional photo. Path under public/about/ or R2.
+         * Additional photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.
          */
         src?: string | null;
         /**

@@ -32,7 +32,8 @@ const resolveUrl = (path: string | null | undefined): string | null => {
 /** Decide where to put a newly-uploaded file based on (in priority order):
  *  1. The directory of the existing field value (overwriting in place).
  *  2. `productions/<slug>/` if the form has a top-level `slug` field.
- *  3. `uploads/` fallback (matches r2-asset ALLOWED_DELETE_PREFIXES).
+ *  3. `about/` when the admin route is the About global (no slug exists there).
+ *  4. `uploads/` fallback (matches r2-asset ALLOWED_DELETE_PREFIXES).
  */
 const deriveDirectory = (
   currentValue: string | undefined,
@@ -44,6 +45,12 @@ const deriveDirectory = (
     if (dir) return dir
   }
   if (slug) return `productions/${slug}`
+  if (
+    typeof window !== 'undefined' &&
+    window.location.pathname.includes('/globals/about')
+  ) {
+    return 'about'
+  }
   return 'uploads'
 }
 
