@@ -739,12 +739,12 @@ Sweep range: `2913cb8` (pre-Sweep-1) → `45335d9` (HEAD). 22 sweep commits tota
 
 **Final gate status (honest, post-§7 fix):**
 
-| Gate                  | Exit | Notes                                                                                                                                                                                                                                          |
-| --------------------- | ---: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npx tsc --noEmit`    |    0 | Zero diagnostics.                                                                                                                                                                                                                              |
-| `npm run lint-tokens` |    0 | All scoped tokens stay inside their owning modules.                                                                                                                                                                                            |
-| `npm run build`       |    0 | All 159 production detail pages prerender; OG + admin compile.                                                                                                                                                                                 |
-| `npm run test`        |   ≠0 | ESLint 9 flat-config migration shipped post-Sweep 6 (see §13a); `test:prettier` still fails on 3 pre-existing dirty files (`components/SiteHeader.tsx`, `scripts/upload-images.ts`, `scripts/translate-content.ts`) untouched by the refactor. |
+| Gate                  | Exit | Notes                                                                                                                         |
+| --------------------- | ---: | ----------------------------------------------------------------------------------------------------------------------------- |
+| `npx tsc --noEmit`    |    0 | Zero diagnostics.                                                                                                             |
+| `npm run lint-tokens` |    0 | All scoped tokens stay inside their owning modules.                                                                           |
+| `npm run build`       |    0 | All 159 production detail pages prerender; OG + admin compile.                                                                |
+| `npm run test`        |    0 | ESLint 9 flat-config migration + pre-existing prettier cleanup shipped post-Sweep 6 (see §13a). All four §7 gates now exit 0. |
 
 Pipe-eats-exit-code bug in Sweeps 1–5 gate scripts disclosed in Sweep 6 ledger row + §7 template
 correction. No sweep commit introduced a regression that the honest gates of Sweep 6 caught.
@@ -789,14 +789,14 @@ Run on 2026-05-17 after §13 roll-up shipped. Closes the Sweep 1 + Sweep 5 carry
   a `/* best-effort cleanup */` body comment so `no-empty` is satisfied without changing
   runtime behavior.
 
-**Gate change:** `npm run test:lint` 0 (was the Sweep 1 baseline failure). `npm run test`
-remaining red is now `test:prettier` on three pre-existing dirty files untouched by the
-refactor — separate follow-up.
+**Gate change:** `npm run test:lint` 0 (was the Sweep 1 baseline failure).
 
-**Out-of-scope here:** prettier fixes on `components/SiteHeader.tsx`,
-`scripts/upload-images.ts`, `scripts/translate-content.ts`. Each was last edited on
-pre-refactor mainline commits; `prettier --write` would be a >500-line drive-by in unrelated
-files. Track as its own one-commit cleanup when desired.
+**Follow-on cleanup commit** (`9eb101a`): the pre-commit prettier hook auto-formatted
+`scripts/translate-content.ts` as part of the ESLint commit. The two remaining
+prettier-dirty files (`components/SiteHeader.tsx`, `scripts/upload-images.ts`, dirty since
+their pre-refactor mainline commits) were committed as pure line-wrapping cleanup — 18
+added / 6 removed, no semantic change. With that, `test:prettier` exits 0 and **all four
+§7 gates are green for the first time since the ESLint 9 bump**.
 
 ## 14. After all sweeps land
 
