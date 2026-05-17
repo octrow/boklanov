@@ -146,7 +146,11 @@ function processYaml(file: string): { changed: boolean; notes: string[] } {
     if (tour && Array.isArray(tour.items)) {
       let n = 0
       tour.items = tour.items.map((it) => {
-        if (isScalar(it) && typeof it.value === 'string' && it.value.length > 0) {
+        if (
+          isScalar(it) &&
+          typeof it.value === 'string' &&
+          it.value.length > 0
+        ) {
           n++
           return wrapStringAsL10n(it as Scalar)
         }

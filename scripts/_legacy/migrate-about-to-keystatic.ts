@@ -19,7 +19,11 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-import { parseDocument, parse as parseYaml, stringify as stringifyYaml } from 'yaml'
+import {
+  parseDocument,
+  parse as parseYaml,
+  stringify as stringifyYaml
+} from 'yaml'
 
 const ABOUT_DIR = path.resolve(process.cwd(), 'content', 'about')
 
@@ -100,7 +104,9 @@ function main() {
     console.error(`No about dir at ${ABOUT_DIR}`)
     process.exit(1)
   }
-  console.log('Migrating content/about/<locale>.{yaml,mdx} → single .mdx with frontmatter\n')
+  console.log(
+    'Migrating content/about/<locale>.{yaml,mdx} → single .mdx with frontmatter\n'
+  )
   let n = 0
   for (const loc of ['ru', 'en', 'de'] as const) {
     if (processLocale(loc)) n++
