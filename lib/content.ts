@@ -539,8 +539,16 @@ const fetchAllProductions = unstable_cache(
  *  L10nObj used by the productions mapper. */
 export type AboutL10n = L10nObj
 
+/** Per-locale Lexical bio body. Same shape as `Production.body` — DE is
+ *  optional because legacy rows may omit a DE column entirely. */
+export interface AboutBody {
+  ru: SerializedEditorState | null
+  en: SerializedEditorState | null
+  de?: SerializedEditorState | null
+}
+
 export interface AboutData {
-  body: AboutL10n
+  body: AboutBody
   portrait: { src: string | null; credit: string | null }
   photos: Array<{ src: string; credit: string | null }>
   milestones: Array<{ year: number | null; label: AboutL10n }>
@@ -586,8 +594,13 @@ const fetchAboutGlobal = unstable_cache(
       ? (doc.marginalia as AnyMap[])
       : []
 
+    const bodyL10n = asLexical(doc.body)
     const result: AboutData = {
-      body: asL10n(doc.body),
+      body: {
+        ru: bodyL10n.ru ?? null,
+        en: bodyL10n.en ?? null,
+        ...(bodyL10n.de !== undefined ? { de: bodyL10n.de } : {})
+      },
       portrait: {
         src: typeof portrait.src === 'string' ? portrait.src : null,
         credit: typeof portrait.credit === 'string' ? portrait.credit : null

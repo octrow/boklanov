@@ -2,6 +2,11 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import type {
+  SerializedEditorState,
+  SerializedLexicalNode
+} from '@payloadcms/richtext-lexical/lexical'
 
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
@@ -50,24 +55,62 @@ function pickL10n(v: AboutL10n, locale: Locale): string {
   return ''
 }
 
-/** Resolve the bio body string for a locale with DE→EN→RU fallback,
- *  returning both the text and which locale actually supplied it (used to
- *  trigger the "DE forthcoming" Marginalia cue). */
+/** Resolve the bio body Lexical state for a locale with DE→EN→RU fallback,
+ *  returning the editor state and which locale actually supplied it (used
+ *  to trigger the "DE forthcoming" Marginalia cue). A state counts as
+ *  "supplied" only when its root has at least one child node — empty
+ *  Lexical states (the default Payload writes for blank fields) fall
+ *  through to the next locale in the chain. */
 function pickBody(
-  body: AboutL10n,
+  body: AboutData['body'],
   locale: Locale
-): { text: string; resolvedLocale: Locale | null } {
+): {
+  state: SerializedEditorState | null
+  resolvedLocale: Locale | null
+} {
   const order =
     locale === 'de'
       ? (['de', 'en', 'ru'] as const)
       : ([locale, 'en', 'ru'] as const)
   for (const l of order) {
     const s = body[l]
-    if (typeof s === 'string' && s.trim()) {
-      return { text: s.trim(), resolvedLocale: l }
+    if (s && Array.isArray(s.root?.children) && s.root.children.length > 0) {
+      return { state: s, resolvedLocale: l }
     }
   }
-  return { text: '', resolvedLocale: null }
+  return { state: null, resolvedLocale: null }
+}
+
+/** Recursively collect text from a Lexical node tree — used to derive the
+ *  plain-text lead paragraph for `<meta name="description">` and the
+ *  Person JSON-LD `description` field. */
+function collectText(node: unknown): string {
+  if (!node || typeof node !== 'object') return ''
+  const n = node as { text?: unknown; children?: unknown }
+  if (typeof n.text === 'string') return n.text
+  if (Array.isArray(n.children)) return n.children.map(collectText).join('')
+  return ''
+}
+
+/** Plain-text content of the first root-level child (the lead paragraph). */
+function leadText(state: SerializedEditorState | null): string {
+  if (!state) return ''
+  const first = state.root?.children?.[0]
+  return first ? collectText(first).trim() : ''
+}
+
+/** Wrap a single root-level child as its own one-node SerializedEditorState
+ *  so `<RichText>` can render it as a standalone paragraph. Lets us slot
+ *  each paragraph into its own `<Marginalia>` (preserves the per-paragraph
+ *  marginalia[i] mapping). */
+function singleNodeState(
+  state: SerializedEditorState,
+  node: SerializedLexicalNode
+): SerializedEditorState {
+  return {
+    ...state,
+    root: { ...state.root, children: [node] }
+  } as SerializedEditorState
 }
 
 function projectAbout(
@@ -75,14 +118,11 @@ function projectAbout(
   locale: Locale
 ): {
   frontmatter: AboutFrontmatter
-  paragraphs: string[]
+  bodyState: SerializedEditorState | null
+  leadParagraphText: string
   deForthcoming: boolean
 } {
-  const { text: body, resolvedLocale } = pickBody(data.body, locale)
-  const paragraphs = body
-    .split(/\n{2,}/)
-    .map((s) => s.trim())
-    .filter(Boolean)
+  const { state: bodyState, resolvedLocale } = pickBody(data.body, locale)
 
   return {
     frontmatter: {
@@ -105,7 +145,8 @@ function projectAbout(
       })),
       marginalia: data.marginalia.map((m) => pickL10n(m.note, locale) || null)
     },
-    paragraphs,
+    bodyState,
+    leadParagraphText: leadText(bodyState),
     deForthcoming: locale === 'de' && resolvedLocale !== 'de'
   }
 }
@@ -117,12 +158,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const about = await getAbout()
-  const { paragraphs } = projectAbout(about, locale)
+  const { leadParagraphText } = projectAbout(about, locale)
   // Lead paragraph is the preferred description; fall back to the localized
   // home meta blurb so `<meta name="description">` is always emitted (else the
   // SEO category drops to 92).
   const t = await getTranslations({ locale, namespace: 'meta' })
-  const description = paragraphs[0]?.trim() || t('homeDescription')
+  const description = leadParagraphText || t('homeDescription')
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
   const name =
@@ -179,14 +220,19 @@ export default async function AboutPage({
   const tHome = await getTranslations('home')
 
   const about = await getAbout()
-  const { frontmatter, paragraphs, deForthcoming } = projectAbout(about, locale)
+  const { frontmatter, bodyState, leadParagraphText, deForthcoming } =
+    projectAbout(about, locale)
   const { portrait, milestones, lineage, marginalia, photos } = frontmatter
   const validPhotos = photos.filter((p) => p.src)
   const portraitUrl = cdnUrl(portrait.src)
 
-  const [leadParagraph, ...bodyParagraphs] = paragraphs
+  // Slice Lexical root.children into [lead, ...rest] so each paragraph can
+  // be wrapped in its own <Marginalia> — preserves the per-paragraph
+  // marginalia[i] mapping that the prior plain-text version used.
+  const bodyNodes = (bodyState?.root?.children ?? []) as SerializedLexicalNode[]
+  const [leadNode, ...restNodes] = bodyNodes
 
-  const schema = personSchema(locale, leadParagraph ?? '')
+  const schema = personSchema(locale, leadParagraphText)
 
   return (
     <main className={styles.page}>
@@ -217,9 +263,12 @@ export default async function AboutPage({
       )}
 
       {/* Bio prose — DA-7.6.A: Marginalia grid at ≥1024px.
-          DE forthcoming: annotate lead paragraph; suppress RU margin notes. */}
-      <section className={styles.bio}>
-        {leadParagraph && (
+          DE forthcoming: annotate lead paragraph; suppress RU margin notes.
+          Each Lexical root child is rendered as its own <RichText> so we
+          can slot one paragraph per <Marginalia>; the lead gets the
+          display-typography lead style, the rest get the body style. */}
+      {bodyState && leadNode && (
+        <section className={styles.bio}>
           <Marginalia
             note={
               deForthcoming
@@ -227,18 +276,24 @@ export default async function AboutPage({
                 : (marginalia[0] ?? undefined)
             }
           >
-            <p className={styles.bioLead}>{leadParagraph}</p>
+            <div className={styles.bioLead}>
+              <RichText data={singleNodeState(bodyState, leadNode)} />
+            </div>
           </Marginalia>
-        )}
-        {bodyParagraphs.map((para, i) => (
-          <Marginalia
-            key={i}
-            note={deForthcoming ? undefined : (marginalia[i + 1] ?? undefined)}
-          >
-            <p className={styles.bioParagraph}>{para}</p>
-          </Marginalia>
-        ))}
-      </section>
+          {restNodes.map((node, i) => (
+            <Marginalia
+              key={i}
+              note={
+                deForthcoming ? undefined : (marginalia[i + 1] ?? undefined)
+              }
+            >
+              <div className={styles.bioParagraph}>
+                <RichText data={singleNodeState(bodyState, node)} />
+              </div>
+            </Marginalia>
+          ))}
+        </section>
+      )}
 
       {/* Staging geography — DA-2.C (§3.G.1) */}
       <section className={styles.geographySection}>

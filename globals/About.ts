@@ -1,4 +1,10 @@
 import type { GlobalConfig } from 'payload'
+import {
+  lexicalEditor,
+  HeadingFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature
+} from '@payloadcms/richtext-lexical'
 import { revalidateAbout } from '../hooks/revalidate'
 
 /**
@@ -34,13 +40,21 @@ export const About: GlobalConfig = {
           fields: [
             {
               name: 'body',
-              type: 'textarea',
+              type: 'richText',
               label: { ru: 'Текст биографии', en: 'Biography text' },
               localized: true,
+              editor: lexicalEditor({
+                features: ({ defaultFeatures }) => [
+                  ...defaultFeatures,
+                  HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+                  FixedToolbarFeature(),
+                  InlineToolbarFeature()
+                ]
+              }),
               admin: {
                 description: {
-                  ru: 'Биография. Markdown / markdoc. Первый абзац — лид.',
-                  en: 'Biography. Markdown / markdoc. First paragraph is the lead.'
+                  ru: 'Биография. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение. Первый абзац — лид (отображается крупным шрифтом).',
+                  en: 'Biography. H2/H3 headings, lists, blockquotes, links, and emphasis are supported. First paragraph is the lead (rendered prominently).'
                 }
               }
             }
