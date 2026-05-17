@@ -423,6 +423,58 @@ App-level work is complete. Every Lighthouse-fixable defect we can verify has be
 
 Best-of-3 combines both `lh_med3_17052026_0425` (pre-F5/F6) and `lh_med3warm_17052026_0450` (post-F5/F6) sample pools, since the F5/F6 fixes only touched non-Perf audits.
 
+## Default-locale sweep (2026-05-17 0531) — canonical-only SEO regression, fixed in `dbdcf22`
+
+Round 2 was scoped to the `/ru` × `ru_about` × `ru_detail` × `de` × root matrix. Default-locale routes (`/productions`, `/about`, `/awards`, `/press`, `/contact`, `/archive`) had never been audited on this branch. Did the full 7-route sweep against the preview, mobile + desktop, 3 runs each, parallel pinger active. 42 audits, 20 min wall clock, 4 transient `NO_FCP` failures (Chrome headless paint glitch — none are real perf failures), stamp `lh_med3_17052026_0531_*`.
+
+### Finding — only canonical is missing
+
+Across all 3 valid runs on each route, **`canonical` was the sole failing SEO audit** on 4 of 7 routes. Same fingerprint on every run: not flaky, real regression.
+
+| route          | SEO | failing audit                                         |
+| -------------- | --- | ----------------------------------------------------- |
+| `/`            | 100 | —                                                     |
+| `/productions` | 92  | `canonical` — points at `https://boklanov.com` (root) |
+| `/about`       | 100 | — (has `generateMetadata`)                            |
+| `/awards`      | 92  | same as `/productions`                                |
+| `/press`       | 100 | — (has `generateMetadata`)                            |
+| `/contact`     | 92  | same as `/productions`                                |
+| `/archive`     | 92  | same as `/productions`                                |
+
+Root cause: the 4 broken pages had no `generateMetadata` export, so they inherited the layout-level canonical (which correctly points at `/` for the root). For inner pages, that's "canonical points at a different URL" → Lighthouse scores 0 on the `canonical` audit → SEO cat = 92.
+
+### Fix — F7, commit `dbdcf22`
+
+Added `generateMetadata` to all 4 broken pages, matching the existing `press/page.tsx` and `about/page.tsx` pattern:
+
+- `alternates.canonical`: `${BASE}/<route>` for `en`, `${BASE}/${locale}/<route>` for non-default
+- `alternates.languages`: hreflang map for en / de / ru
+- `openGraph.url`, `title` derived from `meta.siteName` + the route's existing translation namespace
+
+113 lines added across 4 page files. tsc clean. Pattern is mechanical; no decisions to revisit on a re-audit.
+
+### Best-of-N scores (pre-F7, default-locale matrix)
+
+Cold-start bimodality still present despite the pinger (9 of 14 cells spread ≥ 15 Perf points run-to-run) — same root cause documented in the 0450 attempt above. Best-of-3 is the warm-Function approximation.
+
+| route          | mob Perf | mob LCP | desk Perf | desk LCP | A11y | BP  | SEO (post-F7) |
+| -------------- | -------- | ------- | --------- | -------- | ---- | --- | ------------- |
+| `/`            | 86       | 4.0 s   | 96        | 1.2 s    | 100  | 100 | 100           |
+| `/productions` | 85       | 4.0 s   | 91        | 1.6 s    | 100  | 100 | 100 (was 92)  |
+| `/about`       | 92       | 2.9 s   | 93        | 1.3 s    | 100  | 100 | 100           |
+| `/awards`      | 89       | 3.4 s   | 88        | 1.7 s    | 100  | 100 | 100 (was 92)  |
+| `/press`       | 95       | 2.3 s   | 69 ⚠     | 2.8 s    | 100  | 100 | 100           |
+| `/contact`     | 84 ⚠    | 3.6 s   | 97        | 1.1 s    | 100  | 100 | 100 (was 92)  |
+| `/archive`     | 91       | 2.7 s   | 83        | 1.8 s    | 100  | 100 | 100 (was 92)  |
+
+⚠ low-N: `/press desktop` 2 valid runs (1 NO_FCP + 1 desktop run hit the bypass-cache 307 tax — 990 ms LCP savings reported by `redirects` audit, structural per `LIGHTHOUSE_RUNBOOK.md`). `/contact mobile` had 2 NO_FCP failures, so the 84 is best-of-1.
+
+### Carry-over lessons
+
+1. **Audit matrix lesson** — runbook's test matrix lists `/ru`, `/ru/about`, `/ru/productions/<slug>`, `/de` (Latin-only payload), and root. It does not cover the English default-locale routes. Default locale should be added — Round 2's "SEO = 100 on the 10-cell `/ru` matrix" was true but didn't generalize, and the regression sat unobserved until this sweep. Worth a runbook patch.
+2. **Tooling reused** — `scripts/lh-sweep-default-locale.sh` is generic enough to retarget any path set; can fold into the runbook's helper-scripts index alongside `lh-diff.sh` once the script is tracked.
+3. **F7 is the last app-level SEO defect on this branch.** Post-merge re-audit on prod should now show 100 SEO across the full URL matrix without conditional caveats.
+
 ## Deferred / out of scope this round
 
 - **Font preload trimming.** Layout preloads three VFs per locale (~270 KiB total) including `Lora-Italic-VF.woff2` (90 KiB) which appears in every page's top-5 transfers. Worth investigating whether above-fold paint actually needs it. TBT is already 0-53 ms across the board, so not urgent. Separate pass.
