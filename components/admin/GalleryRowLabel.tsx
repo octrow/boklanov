@@ -4,8 +4,7 @@ import { useRowLabel } from '@payloadcms/ui'
 
 /**
  * RowLabel for `media.gallery` — surface the image filename (or caption
- * fallback) so collapsed rows are scannable. Pattern matches the legacy
- * Keystatic `itemLabel` (keystatic.config.ts line ~413).
+ * fallback) so collapsed rows are scannable.
  */
 export default function GalleryRowLabel() {
   const { data, rowNumber } = useRowLabel<{
