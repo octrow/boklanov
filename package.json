@@ -31,10 +31,7 @@
     "bake-variants": "UV_THREADPOOL_SIZE=32 MALLOC_ARENA_MAX=2 tsx scripts/bake-image-variants.ts",
     "lint-tokens": "tsx scripts/lint-tokens.ts",
     "start": "next start",
-    "deploy": "vercel deploy",
     "analyze": "cross-env ANALYZE=true next build",
-    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
     "test": "run-p test:*",
     "test:lint": "eslint '**/*.{ts,tsx}'",
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
