@@ -80,7 +80,7 @@ export async function GET(
     getTranslations({ locale, namespace: 'footer' })
   ])
 
-  const production = await getProduction(slug, 'ru')
+  const production = await getProduction(slug, locale)
   if (!production) return new Response('Not found', { status: 404 })
 
   const fonts = await loadFonts()
