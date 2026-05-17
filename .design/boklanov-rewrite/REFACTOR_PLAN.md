@@ -583,18 +583,76 @@ Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` cle
      `backfill-media.ts` are both wired into `package.json` and kept active. Re-evaluate after
      the Lexical-migration cycle stabilizes.
 
+### Sweep 5 — Minor style / safety
+
+Run on 2026-05-17 after Sweep 4, on `feature/payloadcms` HEAD `0fa89c5`.
+
+Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` clean ·
+`npm run test` ESLint failure pre-existing (Sweep 1 baseline carry-over).
+
+1. **Goal fit: met (intentional no-ship for code).** Every plan §5 Sweep 5 category was scanned
+   against live runtime code (`app/`, `components/`, `lib/`, `hooks/`, `i18n/`, `middleware.ts`,
+   `payload.config.ts`, `collections/`, `globals/`). The codebase passes each bar by itself. The
+   two real items needing action are scoped as standalone work, not Sweep 5 quick-wins.
+
+2. **Findings:**
+
+   **All-clean scan results** (live runtime code only):
+
+   | Category                                 | Result                                                                   |
+   | ---------------------------------------- | ------------------------------------------------------------------------ |
+   | `process.env.X!` non-null assertions     | 0 hits — seed claim retracted; env access uses safe patterns.            |
+   | `console.log` / `console.debug`          | 0 hits — no debug leftovers.                                             |
+   | `==` / `!=` non-strict                   | 13 hits, **all** `== null` / `!= null` (matches null + undefined idiom). |
+   | `new Date()`                             | 2 hits — `sitemap.ts` lastmod, `SiteFooter.tsx` copyright year. OK.      |
+   | Module-level `let` where `const` works   | 0 hits.                                                                  |
+   | `as any` / `: any` / `<any>`             | 0 hits in live code.                                                     |
+   | `@ts-ignore` / `@ts-expect-error`        | 0 hits.                                                                  |
+   | Hardcoded `aria-label` / `title` / `alt` | 1 hit — see below.                                                       |
+   | `throw new Error('user msg')`            | 0 hits in live code.                                                     |
+
+   **One live hardcoded admin string** (deferred, not blocking):
+   - `components/admin/ImagePathPreview.tsx:221` — `alt='preview'` on the upload-thumbnail
+     `<img>`. Same component carries hardcoded `title="Image not reachable: ..."` at `:231` and
+     inline-style numeric / hex fallbacks at `:208-216`. Per plan §2 these are violations of
+     "No hardcoded user-visible text" and "One source of truth for design tokens." Fixing in
+     isolation would require introducing the codebase's first `useTranslation`-from-`@payloadcms/ui`
+     pattern just for two strings; better to roll into the broader admin-DE-localization
+     follow-up (~150 strings) tracked from Sweep 2.
+
+3. **BAD → GOOD naming:** none.
+
+4. **Follow-ups (out-of-scope for Sweep 5):**
+   - OOS:standalone — **ESLint 9 flat-config migration**. `.eslintrc.json` predates ESLint
+     9.39.1's flat-config requirement; `npm run test` fails the lint step. The migration needs:
+     1. New deps (`@next/eslint-plugin-next`, `typescript-eslint`, `eslint-plugin-react`,
+        keep `eslint-config-prettier`).
+     2. A new `eslint.config.js` mirroring the existing 9-rule shape.
+     3. A single pass to address whatever latent issues the fresh ruleset surfaces.
+        This is one focused PR, not a Sweep-5 quick-win. Tracked: own ticket recommended.
+   - OOS:content-fill — **Admin DE labels (~150 strings)** across `globals/About.ts`,
+     `globals/Contact.ts`, `collections/Productions.ts`. Two-key `{ ru, en }` shape today;
+     `PAYLOAD_POLISH_PLAN.md` Tier 3 set the convention as RU/EN/DE. Fold the
+     `ImagePathPreview` admin strings into this pass when it runs.
+   - OOS:Sweep-6 — `components/FilteredProductionsPanel.tsx:6` re-exports `countryCode` via
+     `@/components/ProductionCard` (carryover from Sweep 2). Now that `lib/countryCode.ts`
+     surface is minimal (Sweep 4 trim), redirect imports to `@/lib/countryCode` direct.
+   - OOS:trivial — `next-env.d.ts` flap during builds may re-add the
+     `navigation-types/compat/navigation` reference line on next build. If so, recommit the
+     one-line diff alone.
+
 ## 12. Ledger
 
 Filled in as sweeps land.
 
-| Sweep | Status  | Commit                                        | Notes                                                                                                                                                                                                                                                                                                       |
-| ----- | ------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | shipped | `3458619` + `8b84fc6`                         | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                        |
-| 2     | shipped | `7febc7b` + `44c5644`                         | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.        |
-| 3     | no-ship | —                                             | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped.       |
-| 4     | shipped | `f039324` + `b0cef5b` + `9361aa3` + `13e8d26` | Deleted `lib/markdoc.tsx` + `pages/` stub (App-Router-only now); archived 7 one-shot scripts to `_legacy/`; dropped 7 dead deps + `@markdoc/markdoc`; trimmed `COUNTRY_TO_CODE` map. Net ≈ −1900 lines (mostly lockfile). Gates: tsc 0, lint-tokens OK, build clean. Manual dev-server walk pending Daniil. |
-| 5     | pending |                                               |                                                                                                                                                                                                                                                                                                             |
-| 6     | pending |                                               |                                                                                                                                                                                                                                                                                                             |
+| Sweep | Status  | Commit                                        | Notes                                                                                                                                                                                                                                                                                                                                    |
+| ----- | ------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | shipped | `3458619` + `8b84fc6`                         | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                                                     |
+| 2     | shipped | `7febc7b` + `44c5644`                         | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.                                     |
+| 3     | no-ship | —                                             | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped.                                    |
+| 4     | shipped | `f039324` + `b0cef5b` + `9361aa3` + `13e8d26` | Deleted `lib/markdoc.tsx` + `pages/` stub (App-Router-only now); archived 7 one-shot scripts to `_legacy/`; dropped 7 dead deps + `@markdoc/markdoc`; trimmed `COUNTRY_TO_CODE` map. Net ≈ −1900 lines (mostly lockfile). Gates: tsc 0, lint-tokens OK, build clean. Manual dev-server walk pending Daniil.                              |
+| 5     | no-ship | —                                             | Scanned 9 style/safety categories. Live runtime code passes all bars (0 `process.env.X!`, 0 `console.log`, 0 `as any`, all `==` are `== null` idiom, etc.). One admin string flagged (`ImagePathPreview.tsx` `alt='preview'`) — folded into the broader admin-DE-localization follow-up. ESLint 9 migration deferred as standalone work. |
+| 6     | pending |                                               |                                                                                                                                                                                                                                                                                                                                          |
 
 ## 13. After all sweeps land
 
