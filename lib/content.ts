@@ -665,7 +665,7 @@ function resolveL10n(
 ): string {
   if (val == null) return ''
   if (typeof val === 'string') return val
-  return val[locale] ?? val.en ?? val.ru ?? val.de ?? ''
+  return val[locale] ?? val.en ?? val.de ?? val.ru ?? ''
 }
 
 function resolveL10nOpt(
@@ -676,21 +676,45 @@ function resolveL10nOpt(
   return resolveL10n(val, locale)
 }
 
+/** Pick a localized value from a multilingual map, falling back
+ *  current-locale → en → de → ru → caller-supplied default.
+ *
+ *  Fallback order mirrors `routing.locales = ['en', 'de', 'ru']` (i18n/
+ *  routing.ts), so a missing value in the active locale prefers the
+ *  default-locale (EN), then DE, then RU before the caller's fallback.
+ *
+ *  Centralises the chain previously inlined across `project()` and gallery
+ *  alt callers. DE-graceful-empty fields (`directorsNote`, `tagline`) must
+ *  NOT use this helper — they intentionally stop at the DE slot rather than
+ *  falling back to EN/RU. See `DESIGN_v3_PROPOSAL.md` §9v3.7. */
+export function pickL10n<V, T>(
+  field: Partial<Record<Locale, V | null>> | null | undefined,
+  locale: Locale,
+  fallback: T
+): V | T {
+  if (!field) return fallback
+  return field[locale] ?? field.en ?? field.de ?? field.ru ?? fallback
+}
+
 function project(p: Production, locale: Locale): ProductionView {
-  const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
-  const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
-  const b =
-    p.body[locale as 'ru' | 'en' | 'de'] ?? p.body.ru ?? p.body.en ?? null
+  const t = pickL10n(p.title, locale, p.slug)
+  const s = pickL10n(p.synopsis, locale, '')
+  const b = pickL10n(p.body, locale, null)
+  // Array fallback chain — same EN→DE→RU order as `pickL10n`, but with a
+  // `.length` check so an empty-but-present array doesn't short-circuit.
   const credits =
     (locale === 'de' && p.credits.de?.length ? p.credits.de : null) ??
     (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
     (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??
-    (p.credits.ru?.length ? p.credits.ru : (p.credits.en ?? []))
-  const premiereDate =
-    p.premiereDate?.[locale as 'ru' | 'en'] ??
-    p.premiereDate?.ru ??
-    p.premiereDate?.en ??
-    null
+    (p.credits.en?.length
+      ? p.credits.en
+      : p.credits.de?.length
+        ? p.credits.de
+        : (p.credits.ru ?? []))
+  const premiereDate = pickL10n(p.premiereDate, locale, null)
+  // directorsNote and tagline use DE-graceful-empty: DE pages with a null
+  // DE value show "forthcoming" rather than the RU/EN fallback. Per
+  // DESIGN_v3_PROPOSAL.md §9v3.7 — explicit, do not collapse into pickL10n.
   const directorsNote =
     locale === 'de'
       ? (p.directorsNote?.de ?? null)
@@ -702,12 +726,7 @@ function project(p: Production, locale: Locale): ProductionView {
     locale === 'de'
       ? (p.tagline?.de ?? null)
       : (p.tagline?.[locale as 'ru' | 'en'] ?? p.tagline?.ru ?? null)
-  const bookingCtaLabel = p.bookingCtaLabel
-    ? (p.bookingCtaLabel[locale] ??
-      p.bookingCtaLabel.ru ??
-      p.bookingCtaLabel.en ??
-      null)
-    : null
+  const bookingCtaLabel = pickL10n(p.bookingCtaLabel, locale, null)
 
   const resolvedPress = p.press.map((item) => ({
     ...item,
