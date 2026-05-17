@@ -682,6 +682,7 @@ function project(p: Production, locale: Locale): ProductionView {
   const b =
     p.body[locale as 'ru' | 'en' | 'de'] ?? p.body.ru ?? p.body.en ?? null
   const credits =
+    (locale === 'de' && p.credits.de?.length ? p.credits.de : null) ??
     (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
     (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??
     (p.credits.ru?.length ? p.credits.ru : (p.credits.en ?? []))
