@@ -483,18 +483,66 @@ Mid-sweep clarification from Daniil: locale fallback order is **EN → DE → RU
      DESIGN_v3_PROPOSAL.md §9v3.7. Don't collapse into `pickL10n` — its EN→DE→RU chain would
      break the DE-explicit-null guarantee.
 
+### Sweep 3 — Targeted complexity reduction
+
+Run on 2026-05-17 after Sweep 2, on `feature/payloadcms` HEAD `3db67fb`.
+
+Baseline gates before audit: `tsc --noEmit` 0 · `lint-tokens` OK · `build` clean.
+
+1. **Goal fit: not met (intentional no-ship).** Scan covered the four largest source files
+   (`collections/Productions.ts` 1489 lines · `lib/content.ts` 881 · `app/[locale]/productions/[slug]/page.tsx` 805 · `lib/image-variants.ts` 512) and the top-5 longest functions
+   (`payloadDocToProduction` 149 lines · `project` 112 · `FilteredProductionsPanel` body 299 ·
+   `GalleryLightbox` body 190 · `SiteHeader` body 176). None met the Sweep 3 criteria after the
+   plan's own "length is not complexity" filter. The two carryover candidates from earlier
+   sweeps were re-examined and triaged below.
+
+2. **Findings + actions:** none shipped. Detailed triage:
+   - **`payloadDocToProduction` (149 lines, `lib/content.ts:316`)** — tall but linear field
+     mapping (≈30 paths, no nested concerns). Splitting by `media`/`recognition`/`history`
+     blocks would produce single-call-site helpers with no clarification gain. Skip.
+   - **`project` (112 lines, `lib/content.ts:699`)** — already simplified in Sweep 2 via
+     `pickL10n`. Remaining inline chains (`credits` length-check, `directorsNote`/`tagline`
+     DE-graceful) are intentionally distinct shapes. Skip.
+   - **`FilteredProductionsPanel` body (299 lines, `:63`)** — three distinguishable concerns
+     (URL state, filter predicate, render). Extractable as `useFilterURLState()`,
+     `matchesFilters()`, and `useClickOutside()` — each would be a single-call-site extraction
+     (the plan §2 speculative-abstraction line). Extracting them would clarify the component
+     body but at the cost of three new files / one wide module for ≈40-50 lines of one-use
+     logic. Skip until a second call site appears or a UI redesign forces a rewrite.
+   - **Dual `<GalleryLightbox>` on detail page (`app/[locale]/productions/[slug]/page.tsx`
+     ≈ lines 491-496 and 779-784)** — confirmed: both mount in DOM at all times, CSS hides one
+     per viewport via `.inlineMedia` / `.railMedia` toggles. After Sweep 2's `galleryItems`
+     hoist, each call site is 5 lines of identical JSX. Collapsing to a single mount requires
+     either (a) CSS-only repositioning of `.rail` to flow inline at mobile (significant CSS
+     restructure with risk to sticky-CTA behavior), or (b) JS-conditional render with
+     `useMediaQuery` (introduces SSR/hydration mismatch where currently there is none). The
+     `loading="lazy"` semantics mean hidden images don't fetch, so the real cost is DOM size
+     - duplicate lightbox state — both small. Skip in this sweep; revisit during the next UX
+       pass on the detail page layout.
+
+3. **BAD → GOOD naming:** none — Sweep 6 territory.
+
+4. **Follow-ups (out-of-scope for Sweep 3):**
+   - OOS:future-UX — Single-mount media block (`<DetailMedia>` housing trailer + gallery) on
+     the production detail page. Requires layout restructure of `.rail` ↔ `.inlineMedia` to
+     unify mount points. Defer to a design-led layout pass; do not pursue as a refactor.
+   - OOS:future-reuse — Extract `useFilterURLState`, `useClickOutside`, and `matchesFilters`
+     from `FilteredProductionsPanel.tsx` once a second filter consumer (e.g. archive page,
+     awards filter, or a /press search) appears. The shape is well-understood today;
+     re-evaluate when call sites ≥ 2.
+
 ## 12. Ledger
 
 Filled in as sweeps land.
 
-| Sweep | Status  | Commit                | Notes                                                                                                                                                                                                                                                                                                |
-| ----- | ------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1     | shipped | `3458619` + `8b84fc6` | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                 |
-| 2     | shipped | `7febc7b` + `44c5644` | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. |
-| 3     | pending |                       |                                                                                                                                                                                                                                                                                                      |
-| 4     | pending |                       |                                                                                                                                                                                                                                                                                                      |
-| 5     | pending |                       |                                                                                                                                                                                                                                                                                                      |
-| 6     | pending |                       |                                                                                                                                                                                                                                                                                                      |
+| Sweep | Status  | Commit                | Notes                                                                                                                                                                                                                                                                                                 |
+| ----- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | shipped | `3458619` + `8b84fc6` | 2 bugs fixed: OG locale hardcode + DE credits fallback. Gates: tsc 0, lint-tokens OK, prettier OK, build clean. Pre-existing `npm run test` ESLint 9 baseline failure recorded as Sweep 5 follow-up.                                                                                                  |
+| 2     | shipped | `7febc7b` + `44c5644` | `pickL10n` helper + EN→DE→RU fallback order applied (7 inlined ladders dedupe + resolveL10n + credits tail). Gallery items hoisted on detail page. Behavior change: DE/RU pages with empty active-locale value but non-empty EN now show EN. Gates: tsc 0, lint-tokens OK, prettier OK, build clean.  |
+| 3     | no-ship | —                     | Triaged 5 hotspots + 2 carryover candidates. Two real concerns identified (dual `<GalleryLightbox>` mount; `FilteredProductionsPanel` mixed concerns) — both deferred. Dual-gallery needs layout restructure; panel split is speculative single-call-site. Findings written; no code changes shipped. |
+| 4     | pending |                       |                                                                                                                                                                                                                                                                                                       |
+| 5     | pending |                       |                                                                                                                                                                                                                                                                                                       |
+| 6     | pending |                       |                                                                                                                                                                                                                                                                                                       |
 
 ## 13. After all sweeps land
 
