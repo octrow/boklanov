@@ -214,6 +214,51 @@ Residual work (deferred — not blocking ship):
 
 ---
 
+## Refactor pass post-Payload (2026-05-17)
+
+Codebase hygiene sweep across `feature/payloadcms` before the merge to `main`. Six-phase
+priority pass (bugs → duplication → complexity → unused → style → readability) per
+`REFACTOR_PLAN.md`. 22 commits, range `3458619`…`45335d9`. Honest final gates: tsc 0,
+lint-tokens 0, build clean (159 production routes prerender). `npm run test` still red on a
+pre-existing ESLint 9 flat-config baseline failure tracked as standalone work.
+
+| Sweep | Outcome | Highlight                                                                                                                                                    |
+| ----- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1     | shipped | 2 must-fix bugs: OG locale hardcode (`3458619`) + DE credits fallback (`8b84fc6`).                                                                           |
+| 2     | shipped | `pickL10n` helper + project-wide EN→DE→RU fallback order (`7febc7b`); gallery items hoisted (`44c5644`).                                                     |
+| 3     | no-ship | Two real complexity items deferred (dual `<GalleryLightbox>` mount, panel concern split).                                                                    |
+| 4     | shipped | Deleted `lib/markdoc.tsx` + `pages/` stub; archived 7 one-shot scripts; dropped 8 dead deps; trimmed `COUNTRY_TO_CODE`. Net ≈ −1900 lines (mostly lockfile). |
+| 5     | no-ship | Live runtime code passes every style/safety bar. ESLint 9 migration + admin DE labels (~150 strings) deferred as own work.                                   |
+| 6     | shipped | `countryCode` direct import; 3 dead-reference comment tightenings; bug carry-back: `seed-payload.ts` body→Lexical wrap that sidework `dba9e9c` had missed.   |
+
+**Behavior changes shipped (visible, intentional):**
+
+1. OG cards from `/en/*` and `/de/*` now render theatre/city in the share locale.
+2. DE production pages now display `credits.de` when populated.
+3. Locale fallback ladder is now **EN → DE → RU** project-wide. On a DE page where `field.de` is
+   empty and both `field.en` + `field.ru` exist, the user sees EN. Convention saved as project
+   memory `project_locale_fallback_order.md` and applied to `pickL10n` + `resolveL10n` + credits
+   tail in `lib/content.ts`.
+
+**Sweep 6 disclosure:** Sweeps 1–5 used `cmd | tail ; echo $?` for gates, which captures
+`tail`'s exit code (always 0) instead of the gate's. The "all green" claims in those rows should
+read as "output looked clean, exit not actually verified." No sweep commit introduced any
+regression that Sweep 6's honest gates caught — the one type error surfaced
+(`scripts/seed-payload.ts:304, 345`) came from the parallel sidework `dba9e9c` (About body →
+Lexical) and was fixed in `3a5e0e1`. Verification template corrected in `REFACTOR_PLAN.md` §7.
+
+Standalone follow-ups not in scope of this pass:
+
+- **ESLint 9 flat-config migration** — `.eslintrc.json` → `eslint.config.js`. Unblocks
+  `npm run test`. New deps + one pass on whatever the new ruleset surfaces.
+- **Admin DE labels** (~150 strings across `globals/About.ts`, `globals/Contact.ts`,
+  `collections/Productions.ts`). Convention is RU/EN/DE per `PAYLOAD_POLISH_PLAN.md` Tier 3.
+- **`<GalleryLightbox>` single-mount + `<DetailMedia>` layout** — needs design/UX-led pass.
+- **`notion-data/`** — 253 MB local-only directory (untracked, gitignored). Safe to `rm -rf`
+  on demand. The only consumer (`photo-audit.mjs`) was archived to `_legacy/`.
+
+---
+
 ## Lighthouse pass — prod 4×100 (session 17, 2026-05-04)
 
 Baseline: `archive/lighthouse_050426.json` (paper, mobile, LH 13.0.2) → home `99 / 90 / 100 / 83`. Post-fix prod re-test: `archive/lighthouse_050426_3.josn` → **`100 / 100 / 100 / 100`**. CWV: FCP 0.4 s, LCP 0.6 s, TBT 0 ms, CLS 0, SI 0.7 s. Plan + per-fix detail: `LIGHTHOUSE_IMPROVEMENT_PLAN.md`.

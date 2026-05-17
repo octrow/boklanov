@@ -714,10 +714,69 @@ Filled in as sweeps land.
 | 5     | no-ship | —                                                         | Scanned 9 style/safety categories. Live runtime code passes all bars (0 `process.env.X!`, 0 `console.log`, 0 `as any`, all `==` are `== null` idiom, etc.). One admin string flagged (`ImagePathPreview.tsx` `alt='preview'`) — folded into the broader admin-DE-localization follow-up. ESLint 9 migration deferred as standalone work.                                                        |
 | 6     | shipped | `d65ef73` + `4444910` + `a4763d5` + `3aed7ff` + `3a5e0e1` | Direct `countryCode` import; 3 dead-reference comment tightenings (custom.scss / GalleryRowLabel / OG title block); 1 bug carry-back (`scripts/seed-payload.ts` body→Lexical wrap, missed by sidework `dba9e9c`). Gates verified with proper exit-code capture: tsc 0, lint-tokens 0, build 0. Discovered pipe-eats-exit-code flaw in earlier sweeps' gate scripts — corrected in §7 follow-up. |
 
-## 13. After all sweeps land
+## 13. Roll-up
+
+Sweep range: `2913cb8` (pre-Sweep-1) → `45335d9` (HEAD). 22 sweep commits total.
+
+**Diff size (sweep commits only, excluding the parallel sidework `dba9e9c`):**
+
+| Scope                                  | Files | Added | Removed |
+| -------------------------------------- | ----: | ----: | ------: |
+| Whole branch                           |    28 | 1,275 |   2,008 |
+| Non-doc (excl. `.design/`, `lockfile`) |    26 |   448 |     239 |
+| Source-only (also excl. types regen)   |    24 |   432 |     236 |
+
+**Deps removed (8):** `@markdoc/markdoc`, `next-mdx-remote`, `lqip-modern`, `fathom-client`,
+`critters`, `csv-parse`, `@vercel/og`, `@fontsource/inter`. `graphql` retained (Payload-transitive).
+
+**Files deleted / moved:**
+
+- Deleted: `lib/markdoc.tsx`, `pages/api/social-image.tsx`, the whole `pages/` router surface.
+- Moved to `scripts/_legacy/`: `migrate-to-keystatic.ts`, `migrate-about-to-keystatic.ts`,
+  `migrate-productions-schema.ts`, `migrate-richtext-data.ts`, `migrate_mdx_to_yaml.py`,
+  `backfill-nulls.ts`, `photo-audit.mjs`. (Sidework added `migrate-about-body-to-lexical.ts` as
+  a new active migration; not part of these sweeps.)
+
+**Final gate status (honest, post-§7 fix):**
+
+| Gate                  | Exit | Notes                                                               |
+| --------------------- | ---: | ------------------------------------------------------------------- |
+| `npx tsc --noEmit`    |    0 | Zero diagnostics.                                                   |
+| `npm run lint-tokens` |    0 | All scoped tokens stay inside their owning modules.                 |
+| `npm run build`       |    0 | All 159 production detail pages prerender; OG + admin compile.      |
+| `npm run test`        |   ≠0 | Pre-existing ESLint 9 baseline failure; tracked as standalone work. |
+
+Pipe-eats-exit-code bug in Sweeps 1–5 gate scripts disclosed in Sweep 6 ledger row + §7 template
+correction. No sweep commit introduced a regression that the honest gates of Sweep 6 caught.
+
+**Behavior changes shipped (visible, intentional):**
+
+1. OG cards from `/en/*` and `/de/*` now render theatre/city in the share locale (Sweep 1).
+2. DE production pages now display `credits.de` when populated (Sweep 1).
+3. Locale fallback ladder is now EN → DE → RU project-wide (Sweep 2). On a DE page with empty
+   `field.de` and populated `field.en` + `field.ru`, the user sees `field.en` (was `field.ru`).
+   Saved as project memory `project_locale_fallback_order.md`.
+
+**Open follow-ups by sweep:**
+
+- Sweep 1: pre-existing ESLint 9 baseline failure — own focused PR (`.eslintrc.json` →
+  `eslint.config.js`, new flat-config dep set, one pass on whatever the new ruleset surfaces).
+- Sweep 2: eight micro-items — gallery-mount restructure (Sweep 3 carryover), Payload field
+  labels missing DE keys (≈150 strings), `COUNTRY_TO_CODE` follow-on questions all resolved,
+  `FilteredProductionsPanel` re-export indirection shipped in Sweep 6.
+- Sweep 3: `<GalleryLightbox>` single-mount + `FilteredProductionsPanel` concern split — both
+  blocked on design/UX-led refactor, not refactor-sweep work.
+- Sweep 4: `notion-data/` 253 MB local-only directory (untracked, gitignored, safe to
+  `rm -rf` whenever Daniil wants the disk back); manual `npm run dev` walk pending Daniil.
+- Sweep 5: ESLint 9 migration (same as Sweep 1 carry-back); admin DE labels (≈150 strings) ;
+  `next-env.d.ts` may flap one more line on next build.
+- Sweep 6: five comments mentioning Keystatic still live (each uses "legacy" honestly; deferred
+  per hard-cap "one rename per file per commit" trade-off).
+
+## 14. After all sweeps land
 
 - Update `STATUS.md`: add a "Refactor pass post-Payload (2026-05-17 → …)" section under the
-  Lighthouse block with the final roll-up.
-- Update `MAP.md` §1 / §3 if any active doc was moved or any file was deleted.
+  Lighthouse block with the final roll-up. ✓ Shipped — see `STATUS.md`.
+- Update `MAP.md` §3 with the files this pass deleted / moved. ✓ Shipped — see `MAP.md`.
 - Open PR `feature/payloadcms` → `main` only after the merge of carryover `GalleryLightbox` work
   is decided (see `STATUS.md` § Carryover).
