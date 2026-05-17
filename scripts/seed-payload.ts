@@ -53,6 +53,60 @@ const arrayWrap = <T>(v: T | T[] | undefined | null): T[] => {
   return Array.isArray(v) ? v : [v]
 }
 
+/** Wrap plain text as a Lexical SerializedEditorState root so Payload's
+ *  jsonb-typed body fields accept the seed. Mirrors the runtime shape produced
+ *  by scripts/migrate-about-body-to-lexical.ts §stringToLexical — kept inline
+ *  rather than imported because both scripts are one-shot operational tools
+ *  and cross-imports between them are not worth the coupling.
+ *  Returns `any` deliberately — see toPayloadProduction's note. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function bodyToLexical(text: string | null | undefined): any {
+  if (!text) return null
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((p) => p.replace(/\n/g, ' ').trim())
+    .filter((p) => p.length > 0)
+  const children =
+    paragraphs.length === 0
+      ? [paragraphNode('')]
+      : paragraphs.map(paragraphNode)
+  return {
+    root: {
+      type: 'root',
+      version: 1,
+      format: '',
+      indent: 0,
+      direction: 'ltr',
+      children
+    }
+  }
+}
+
+function paragraphNode(text: string) {
+  return {
+    type: 'paragraph',
+    version: 1,
+    format: '',
+    indent: 0,
+    direction: 'ltr',
+    textFormat: 0,
+    textStyle: '',
+    children: text
+      ? [
+          {
+            type: 'text',
+            version: 1,
+            detail: 0,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            text
+          }
+        ]
+      : []
+  }
+}
+
 /** Convert Keystatic YAML shape to Payload `productions` data for ONE locale.
  *  Localized fields are filled with the per-locale value; non-localized fields
  *  are filled identically on every pass (Payload writes the row scalars on the
@@ -301,7 +355,7 @@ async function seedAbout(payload: Payload) {
     locale: 'ru',
     context: ctx,
     data: {
-      body: ruBody,
+      body: bodyToLexical(ruBody),
       portrait: (ru.visuals as AnyMap)?.portrait ?? { src: null, credit: null },
       photos: arrayWrap((ru.visuals as AnyMap)?.photos as unknown[]).map(
         (p) => p as { src?: string; credit?: string }
@@ -342,7 +396,7 @@ async function seedAbout(payload: Payload) {
       locale: code,
       context: ctx,
       data: {
-        body: bodyText,
+        body: bodyToLexical(bodyText),
         milestones: arrayWrap(
           (src.timeline as AnyMap)?.milestones as unknown[]
         ).map((m) => {
