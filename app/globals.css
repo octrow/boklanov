@@ -565,7 +565,7 @@ body {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   line-height: var(--line-height-normal);
   font-feature-settings:
     'kern' 1,
