@@ -46,9 +46,12 @@ dogfooded the shipped admin for ~4 days.
   `router.replace('?locale=X', { scroll: false })`. **In-place editing
   of inactive locales for richText is not in v1** (see Risk R1 +
   Remaining work below).
-- Wiring done by `/tmp/wire-localized.py` — comment-aware brace matcher
-  walks each config and injects `admin.components.{Field,Description}`
-  refs. 31/31 localized fields covered:
+- Wiring done by
+  [`scripts/wire-localized-fields.py`](./scripts/wire-localized-fields.py)
+  — comment-aware brace matcher walks each config and injects
+  `admin.components.{Field,Description}` refs. Idempotent; safe to
+  re-run when new localized fields are added. 31/31 localized fields
+  covered on the first clean run:
   - Productions: 23 (text + richText, top-level + array-nested:
     gallery, awards, festivals, press, tour, runs, externalLinks)
   - About: 7 (body richText + timeline/marginalia text rows)
