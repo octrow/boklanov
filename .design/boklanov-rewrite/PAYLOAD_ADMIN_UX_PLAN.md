@@ -10,16 +10,16 @@ new requirements landed. See **§Round-2 requirements** below — they
 modify the next-session scope and override the original A.0 / A.4 +
 Team-tab assumptions.
 
-**Closed bug 2026-05-18 (Round-4 + Round-5):** Roman first reported
-the active-locale Lexical editor showed empty even when Postgres had
-content. Round-4 removed the CSS hide rule that was masking the
-editor in ALL mode. Round-5 then uncovered the real DB-level cause —
-every richText cell on Productions was NULL in Postgres because the
-original seed never wrapped strings as Lexical state. Fix bundle:
-seed corrected, one-shot restore script reads from `main` branch
-YAML/MDX, plus a chrome polish that moves label/pills/hint OUTSIDE
-the editor border and disables Lexical's gutter `+` + slash menu +
-placeholder. Trail preserved in
+**Closed bug 2026-05-18 (Round-4 + Round-5 + Round-5b):** Roman first
+reported the active-locale Lexical editor showed empty even when
+Postgres had content. Round-4 removed the CSS hide rule that was
+masking the editor in ALL mode. Round-5 uncovered the real DB-level
+cause — every richText cell on Productions was NULL in Postgres
+because the original seed never wrapped strings as Lexical state.
+Round-5b extended the audit to remaining richText fields and restored
+About body's missing RU + DE rows; a long-tail of non-richText
+localized arrays still has data gaps recorded in §Round-5b for a
+future pass. Trail preserved in
 [`PAYLOAD_RICHTEXT_LOCALE_DEBUG.md`](./PAYLOAD_RICHTEXT_LOCALE_DEBUG.md)
 (closed).
 
@@ -491,6 +491,58 @@ list it would write — see committed log for the full breakdown.
 4. Type in the active-locale Lexical and the inactive-locale
    textareas (ALL mode); Save commits the active locale, debounced
    PATCH commits the others.
+
+### 2026-05-18 — Round-5b: About body restore + non-richText audit
+
+After Round-5 landed (productions restored, chrome polished) Roman
+asked for an audit of "other singular fields". Surveying all
+`<table>_locales` tables turned up exactly one outstanding richText
+gap and a long tail of non-richText holes.
+
+#### About body — restored (ru + de inserts)
+
+`SELECT _locale FROM about_locales` returned only `en`. RU and DE
+rows were never written by the original About migration: it converted
+existing varchar→jsonb in-place but didn't create per-locale rows for
+locales that hadn't been saved through the admin yet. Result — admin
+showed About body empty when the URL was `?locale=ru` or `?locale=de`.
+
+Shipped `scripts/restore-about-body.ts` — reads
+`content/about/bio/body{Ru,En,De}.mdx` from `main` via `git show`,
+wraps as Lexical state, INSERTs the two missing rows (or UPDATEs an
+existing NULL-body row). Idempotent. Live run:
+`converted=2 skipped-existing=1`.
+
+#### Non-richText data holes flagged (not richText, deferred)
+
+Out of scope for this Round but recorded here so future-me can find
+them. Same root cause pattern as productions: original seed/migration
+finished only one locale pass per array table.
+
+| Table                                         | Symptom                                        |
+| --------------------------------------------- | ---------------------------------------------- |
+| `contact_locales.intro` (localized textarea)  | ru/en/de rows exist; `intro` NULL in all three |
+| `productions_history_tour_locales.city`       | only `de` rows (9); no ru/en                   |
+| `productions_media_gallery_locales.caption`   | 337 rows, all `de`; every caption NULL         |
+| `productions_recognition_awards_locales.*`    | only `de` rows (26)                            |
+| `productions_recognition_press_locales.title` | only `de` rows (41)                            |
+| `about_lineage_locales`                       | 0 rows                                         |
+| `about_marginalia_locales`                    | 0 rows                                         |
+| `about_milestones_locales`                    | 0 rows                                         |
+
+Fix pattern when next picked up: extend the `restore-*-richtext.ts`
+approach (read main YAML/MDX via `git show`, INSERT/UPDATE missing
+locale rows). The array tables (`productions_*_*_locales`) need an
+extra step — they're keyed on the parent array-row id, not the
+production id, so the script has to reconstruct array ordering from
+the source YAML and join to existing parent rows. Probably ~50 lines
+per table.
+
+#### Verified clean
+
+`npx tsc --noEmit` (exit 0), `npx eslint scripts/restore-about-body.ts`
+(exit 0). About admin in RU/DE now renders the bio body with the
+Round-5 chrome (label/pills/hint outside the box).
 
 ## Remaining work (next session)
 
