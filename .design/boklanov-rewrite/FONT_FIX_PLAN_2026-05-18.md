@@ -1,19 +1,22 @@
 # Font & typography — fix plan
 
+> **Status: ALL 5 WAVES SHIPPED 2026-05-18.** See "Shipped" section at the bottom
+> for commit SHAs, final state, and remaining visual gates.
+
 Companion to `FONT_AUDIT_2026-05-18.md`. Brings the system inside the editorial
 ideal (2–3 families + 1 scoped, 6–8 sizes, 3–4 weights, 3 line-heights, 2–3
 tracking) and resolves the drift from the audit. Sized in waves so each one
 lands as its own atomic commit / PR.
 
-Editorial ideal vs current state:
+Editorial ideal — pre-fix vs post-fix:
 
-|              | Ideal           | Current                     | Verdict                                                   |
-| ------------ | --------------- | --------------------------- | --------------------------------------------------------- |
-| Families     | 2–3 (+1 scoped) | 4 (Unbounded scoped)        | ✅ At ceiling, properly bounded                           |
-| **Sizes**    | **6–8**         | **14 declared / 13 in use** | ❌ Overgrown                                              |
-| Weights      | 3–4             | 4                           | ✅                                                        |
-| Line-heights | 3               | 4                           | ✅ Long-form (`/about`) justifies the 4th                 |
-| Tracking     | 2–3             | 4                           | ⚠ One token (`--letter-spacing-normal`) likely removable |
+|              | Ideal           | Pre-fix                     | Post-fix                  | Verdict                                                            |
+| ------------ | --------------- | --------------------------- | ------------------------- | ------------------------------------------------------------------ |
+| Families     | 2–3 (+1 scoped) | 4 (Unbounded scoped)        | 4 (Unbounded scoped)      | ✅ At ceiling, properly bounded                                    |
+| **Sizes**    | **6–8**         | **14 declared / 13 in use** | **10** (6 brief + 4 role) | ✅ Within budget                                                   |
+| Weights      | 3–4             | 4                           | 4                         | ✅                                                                 |
+| Line-heights | 3               | 4                           | 4                         | ✅ Long-form (`/about`) justifies the 4th                          |
+| Tracking     | 2–3             | 4                           | **3**                     | ✅ Dropped `--letter-spacing-normal` (was unused + default-valued) |
 
 ### Important correction to the audit's "vestigial intermediates" claim
 
@@ -37,6 +40,12 @@ Plan handles each at its actual cost — not as a single "delete five tokens" sw
 
 These three decisions shape Wave 2 and 3. Answer in this doc or inline before
 starting work; everything else follows mechanically.
+
+**Decided** (2026-05-18):
+
+- **D1 → A** (keep fluid `clamp()`). No role demanded the split.
+- **D2 → B** (brand-match Payload admin). Implemented in Wave 4 via shared `app/typography.css`.
+- **D3 → (a)** (annotate VF deviation in DESIGN.md §4). Done in Wave 3.
 
 ### D1. Fluid `clamp()` or split mobile-set / desktop-set?
 
@@ -71,7 +80,7 @@ Recommended: **(a)** — the VF swap was already a shipped, reviewed decision.
 
 ---
 
-## Wave 1 — pure bugfix, zero design change
+## Wave 1 — pure bugfix, zero design change ✅ shipped `7fe86cd`
 
 **Scope**: 6 bugs from the audit. No tokens added or removed. No visual diff
 expected. One PR, ~10 lines changed.
@@ -92,7 +101,7 @@ replacements need a 60-second eyeball check at the affected components.
 
 ---
 
-## Wave 2 — collapse the size scale toward 6–8 semantic tokens
+## Wave 2 — collapse the size scale toward 6–8 semantic tokens ✅ shipped `f5dd65e` + `91d274d` + `c3e2ba9`
 
 **Scope**: get from 14 declared sizes to a documented "8-or-fewer brief-locked
 
@@ -160,7 +169,7 @@ callsites in chunks.
 
 ---
 
-## Wave 3 — doc reconciliation (no code change)
+## Wave 3 — doc reconciliation (no code change) ✅ shipped `4258709`
 
 Pure doc edits. One PR.
 
@@ -174,7 +183,7 @@ Pure doc edits. One PR.
 
 ---
 
-## Wave 4 — Payload admin typography
+## Wave 4 — Payload admin typography ✅ shipped `f4f823f`
 
 Only runs if D2 = **Option B** (brand-match admin). Otherwise: Wave 4 = "no-op,
 doc edit already made in Wave 3".
@@ -235,7 +244,7 @@ Key points:
 
 ---
 
-## Wave 5 — tracking / line-height tidy (optional, low value)
+## Wave 5 — tracking / line-height tidy (optional, low value) ✅ shipped `846f24c`
 
 Only if pursuing the editorial-ideal ceiling rigorously.
 
@@ -266,3 +275,63 @@ audit's clear callsite counts may shift opinions.
 - Tailwind adoption — not in this project.
 - Adding new families beyond Unbounded — would re-open D13 lock.
 - Variable-axis exposure (e.g., `font-variation-settings` per component) — current VF use via plain `font-weight` is sufficient.
+
+---
+
+## Shipped — 2026-05-18
+
+All 5 waves landed in a single session. 9 commits on `feature/payloadcms`:
+
+| Commit    | Wave   | Scope                                                                        |
+| --------- | ------ | ---------------------------------------------------------------------------- |
+| `7fe86cd` | 1      | 4 undefined vars defined; 2 hardcoded sizes tokenized                        |
+| `f5dd65e` | 2 PR 1 | Semantic names introduced (`-h1/-h2/-h3/-body`); t-shirts demoted to aliases |
+| `91d274d` | 2 PR 2 | Drained `xl` (1 callsite) + `md` (6 callsites) onto semantic tokens          |
+| `c3e2ba9` | 2 PR 3 | Final collapse: 14 → 10 tokens; brief deviations documented in code          |
+| `4258709` | 3      | DESIGN.md §4 mirrors final scale; brief weight + scale deviations annotated  |
+| `f4f823f` | 4      | `app/typography.css` extracted; site + Payload admin share one source        |
+| `f68a740` | docs   | This file + `FONT_AUDIT_2026-05-18.md` committed                             |
+| `846f24c` | 5      | `--letter-spacing-normal` removed (zero callsites, was default-valued)       |
+
+### Final token inventory (`app/typography.css`)
+
+| Bucket         | Count                  | Tokens                                                             |
+| -------------- | ---------------------- | ------------------------------------------------------------------ |
+| Families       | 4 (3 brief + 1 scoped) | display / body / mono / plakat (+ serif/sans aliases)              |
+| Sizes          | 10 (6 brief + 4 role)  | chip / meta / body / h3 / h2 / h1 / caption / nav / hero / sticker |
+| Weights        | 4                      | normal / medium / semibold / bold                                  |
+| Line-heights   | 4                      | tight / snug / normal / relaxed (+ body alias)                     |
+| Letter spacing | 3                      | tight / wide / meta                                                |
+
+Every bucket within the editorial-ideal budget.
+
+### Architecture
+
+```
+app/
+  typography.css          ← ONE source for fonts (@font-face + --font-* tokens)
+  globals.css             ← site-only: colors, spacing, body/heading defaults
+  [locale]/layout.tsx     ← imports typography.css + globals.css
+  (payload)/
+    layout.tsx            ← imports typography.css after Payload's CSS bundle
+    custom.scss           ← bridges Payload's --font-body/-mono/-serif to ours
+```
+
+Edit `app/typography.css` once; both surfaces update.
+
+### Visual gates still pending eyeball
+
+1. **Wave 2 PR 2** — italic Lora prose +2-4px on `/productions/[slug]` (synopsis,
+   pressLink, directorsNoteText), `/press` (pull-quote), `/about` (lineageName);
+   awards production title +4-8px.
+2. **Wave 2 PR 3** — CommandPalette `.groupLabel` mono caps now 13px (was 12, originally 10).
+3. **Wave 4 admin font swap** — `/admin` renders in Inter / JetBrains Mono / Lora
+   instead of system fonts. Open `/admin` + any production edit form to confirm.
+   Easy rollback: remove the `:root { --font-body: ... }` bridge block in
+   `app/(payload)/custom.scss`.
+
+### Brief deviations (documented, not regressions)
+
+- `--font-size-h1` is 36→60, not the brief's 44→88 (which was never implemented).
+  Actual display ceiling is `--font-size-hero` (Unbounded wordmark on `/` only).
+- Lora is VF axis 400–700, not the brief's discrete 400/500/600 (Phase 9.2 swap).
