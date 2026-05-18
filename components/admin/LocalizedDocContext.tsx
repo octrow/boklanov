@@ -59,8 +59,12 @@ type LocalizedDocCtx = {
    * Write a locale's value into the shadow doc and schedule a PATCH.
    * Should ONLY be called for inactive locales — the active locale
    * goes through Payload's standard form state.
+   *
+   * `value` is typed `unknown` because richText fields write
+   * SerializedEditorState JSON, not flat strings. The internal pending
+   * map + projectToLocale walk handle both shapes.
    */
-  setValue: (path: string, locale: LocaleCode, value: string) => void
+  setValue: (path: string, locale: LocaleCode, value: unknown) => void
   /** Force-flush all pending writes immediately (e.g. on tab switch). */
   flush: () => Promise<void>
 }
@@ -350,7 +354,7 @@ const LocalizedDocProvider: React.FC<{ children?: React.ReactNode }> = ({
   )
 
   const setValue = useCallback(
-    (path: string, locale: LocaleCode, value: string) => {
+    (path: string, locale: LocaleCode, value: unknown) => {
       // Optimistic update — the in-memory doc reflects the typed value
       // immediately so consumers see it on the next render.
       setState((prev) => {

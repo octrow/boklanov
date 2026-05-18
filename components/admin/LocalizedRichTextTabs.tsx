@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useLocale } from '@payloadcms/ui'
+import { useField, useLocale } from '@payloadcms/ui'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocaleMode } from './LocaleModeProvider'
 import {
@@ -11,24 +11,39 @@ import {
 } from './LocalizedDocContext'
 
 /**
- * 4-pill control rendered ABOVE every localized richText field via
- * admin.components.beforeInput. Plus, in `all` mode, an additional row
- * of 3 plain-text previews so the editor can see every locale at once
- * without the cost of mounting three Lexical instances.
+ * 4-pill control + per-locale editable textareas, rendered ABOVE every
+ * localized richText field via admin.components.beforeInput.
  *
- * Behaviour (PAYLOAD_ADMIN_UX_PLAN.md §Round-2 + Round-3):
- * - RU/EN/DE pill → setMode('switch') + router.replace('?locale=X').
- *   The full Lexical editor below re-mounts with that locale's
- *   content. This is the slow path (server-side doc refetch) but
- *   it's the only way to bind Payload's form-state to a new locale.
- * - ALL pill → setMode('all'). The standard Lexical editor stays
- *   mounted for the URL's locale; this component adds a preview row
- *   so the other two locales are visible too. No URL nav.
+ * Two modes (PAYLOAD_ADMIN_UX_PLAN.md §Round-3 R3-5):
  *
- * Trade-off accepted: in `all` mode the user sees all three locales
- * but can only edit the URL's locale. To edit a different locale the
- * user clicks its pill, paying the ~5 s router round-trip once.
- * Full triple-Lexical editing remains deferred per Risk R1.
+ * - SWITCH: only the pills render here. Payload's standard Lexical
+ *   editor renders below as usual, bound to the URL's `?locale=`.
+ *   Full rich-text formatting available.
+ *
+ * - ALL: pills + a 3-column row of editable plain-text textareas.
+ *   The standard Lexical editor below is CSS-hidden (see
+ *   `app/(payload)/custom.scss` — sibling-of-`.localized-rt-pillstrip`
+ *   selector). Each textarea reads the locale's content as plain text
+ *   (recursive walk of SerializedEditorState) and writes back as a
+ *   minimal `{root:{children:[paragraph...]}}` doc.
+ *
+ * Routing:
+ * - Active (URL) locale's textarea routes through `useField` → form
+ *   state → Save button. Save still commits this locale normally.
+ * - Other locales' textareas route through `LocalizedDocContext` →
+ *   debounced REST PATCH. Save button does NOT light up for these,
+ *   but the PATCH commits them autonomously.
+ *
+ * Trade-off accepted: edits in ALL mode lose any pre-existing rich
+ * formatting on the touched locale (plain text re-serialized as a
+ * single paragraph stack). To keep formatting, click a locale pill —
+ * switch mode preserves the full Lexical editor for that locale.
+ *
+ * Trade-off accepted: the standard hidden Lexical editor does NOT
+ * pick up textarea-side edits until the next URL nav re-mounts it.
+ * Data IS saved correctly via form state or shadow PATCH; only the
+ * editor's in-memory state is stale. Switching pill (URL nav) forces
+ * a fresh mount which reads the saved value.
  */
 
 type Props = {
@@ -65,22 +80,23 @@ const tabActiveStyle: React.CSSProperties = {
   cursor: 'default'
 }
 
-const previewColumnStyle: React.CSSProperties = {
-  border: '1px solid var(--theme-elevation-250)',
+const textareaStyle: React.CSSProperties = {
+  width: '100%',
+  minHeight: 120,
+  padding: '8px 12px',
+  borderWidth: 1,
+  borderStyle: 'solid',
+  borderColor: 'var(--theme-elevation-250)',
   borderRadius: 4,
-  background: 'var(--theme-elevation-50)',
-  padding: '8px 10px',
-  minHeight: 64,
-  fontSize: 13,
-  lineHeight: 1.4,
+  background: 'var(--theme-input-bg)',
   color: 'var(--theme-text)',
-  whiteSpace: 'pre-wrap',
-  overflowWrap: 'anywhere',
-  maxHeight: 220,
-  overflowY: 'auto'
+  fontSize: 14,
+  lineHeight: 1.5,
+  fontFamily: 'inherit',
+  resize: 'vertical'
 }
 
-const previewLabelStyle: React.CSSProperties = {
+const localeChipStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   gap: 6,
@@ -100,37 +116,113 @@ const activeDotStyle: React.CSSProperties = {
 
 /**
  * Recursive plain-text extraction from a SerializedEditorState. Walks
- * the tree, concatenates every `text` leaf with paragraph-level
- * newlines so the result is readable in a previews column. Tolerates
- * any shape — string, null, unknown JSON — and returns '' on miss.
+ * the tree, joining `text` leaves with paragraph-level newlines.
+ * Tolerates string / null / unknown JSON; returns '' on miss.
  */
 const extractLexicalText = (value: unknown): string => {
   if (!value) return ''
   if (typeof value === 'string') return value
   if (typeof value !== 'object') return ''
 
-  const collect = (node: unknown): string[] => {
-    if (!node || typeof node !== 'object') return []
+  const blocks: string[] = []
+
+  const walkInline = (node: unknown): string => {
+    if (!node || typeof node !== 'object') return ''
     const n = node as Record<string, unknown>
-    if (typeof n.text === 'string') return [n.text]
-    const children = Array.isArray(n.children) ? n.children : []
-    const parts: string[] = []
-    for (const child of children) {
-      parts.push(...collect(child))
+    if (typeof n.text === 'string') return n.text
+    if (Array.isArray(n.children)) {
+      return (n.children as unknown[]).map(walkInline).join('')
     }
-    // Add a newline after block-level nodes so paragraphs/headings
-    // don't collapse into a single line.
-    if (typeof n.type === 'string' && n.type !== 'text' && parts.length > 0) {
-      parts.push('\n')
+    return ''
+  }
+
+  const walkBlock = (node: unknown): void => {
+    if (!node || typeof node !== 'object') return
+    const n = node as Record<string, unknown>
+    if (typeof n.type === 'string' && typeof n.text === 'string') {
+      // Leaf text directly under root (rare). Append as its own line.
+      blocks.push(n.text)
+      return
     }
-    return parts
+    // Block-level node — extract concatenated inline text from children.
+    const inline = walkInline(node)
+    if (inline.length > 0) {
+      blocks.push(inline)
+    } else if (Array.isArray(n.children)) {
+      for (const c of n.children as unknown[]) walkBlock(c)
+    }
   }
 
   const root =
     (value as { root?: unknown }).root ??
     (value as { children?: unknown }).children ??
     value
-  return collect(root).join('').trim()
+
+  if (root && typeof root === 'object') {
+    const r = root as Record<string, unknown>
+    if (Array.isArray(r.children)) {
+      for (const child of r.children as unknown[]) walkBlock(child)
+    } else {
+      walkBlock(root)
+    }
+  }
+
+  return blocks.join('\n\n')
+}
+
+/**
+ * Convert a plain-text string into a minimal SerializedEditorState.
+ * Splits paragraphs on blank lines. Used to round-trip textarea
+ * edits back into the JSONB column Payload expects for richText.
+ *
+ * Loses any prior rich formatting — accepted trade-off for ALL mode
+ * (Roman uses ALL for translation; rich formatting happens in SWITCH).
+ */
+const stringToLexicalState = (text: string): Record<string, unknown> => {
+  const paragraphs = text.split(/\n\n+/).filter((p) => p.length > 0)
+  const emptyParagraph = {
+    type: 'paragraph',
+    children: [] as unknown[],
+    direction: null,
+    format: '',
+    indent: 0,
+    version: 1,
+    textFormat: 0,
+    textStyle: ''
+  }
+  const buildParagraph = (p: string) => ({
+    type: 'paragraph',
+    children: [
+      {
+        type: 'text',
+        text: p,
+        detail: 0,
+        format: 0,
+        mode: 'normal',
+        style: '',
+        version: 1
+      }
+    ],
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    version: 1,
+    textFormat: 0,
+    textStyle: ''
+  })
+  return {
+    root: {
+      type: 'root',
+      children:
+        paragraphs.length > 0
+          ? paragraphs.map(buildParagraph)
+          : [emptyParagraph],
+      direction: paragraphs.length > 0 ? 'ltr' : null,
+      format: '',
+      indent: 0,
+      version: 1
+    }
+  }
 }
 
 const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
@@ -142,6 +234,10 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
   const activeLocale: LocaleCode = isLocaleCode(activeLocaleRaw)
     ? activeLocaleRaw
     : 'ru'
+
+  const { value: activeValue, setValue: setActiveValue } = useField<unknown>({
+    path
+  })
 
   const doc = useLocalizedDoc()
   const shadow = doc?.getRawValue(path) ?? {
@@ -167,8 +263,22 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
 
   const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
 
+  const valueForLocale = (locale: LocaleCode): string => {
+    if (locale === activeLocale) return extractLexicalText(activeValue)
+    return extractLexicalText(shadow[locale])
+  }
+
+  const onLocaleChange = (locale: LocaleCode, nextText: string) => {
+    const lexical = stringToLexicalState(nextText)
+    if (locale === activeLocale) {
+      setActiveValue(lexical)
+    } else if (doc) {
+      doc.setValue(path, locale, lexical)
+    }
+  }
+
   return (
-    <div style={{ marginBottom: 6 }}>
+    <div className='localized-rt-pillstrip' style={{ marginBottom: 6 }}>
       <div style={{ display: 'flex', gap: 0, marginBottom: 6 }}>
         {pills.map((pill) => (
           <button
@@ -198,26 +308,22 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
             marginBottom: 8
           }}
         >
-          {LOCALES.map((loc) => {
-            const text = extractLexicalText(shadow[loc])
-            return (
-              <div key={loc}>
-                <div style={previewLabelStyle}>
-                  <span>{loc}</span>
-                  {loc === activeLocale && (
-                    <span style={activeDotStyle} title='Редактируется ниже' />
-                  )}
-                </div>
-                <div style={previewColumnStyle}>
-                  {text || (
-                    <span style={{ color: 'var(--theme-elevation-500)' }}>
-                      —
-                    </span>
-                  )}
-                </div>
+          {LOCALES.map((loc) => (
+            <div key={loc}>
+              <div style={localeChipStyle}>
+                <span>{loc}</span>
+                {loc === activeLocale && (
+                  <span style={activeDotStyle} title='Активная локаль' />
+                )}
               </div>
-            )
-          })}
+              <textarea
+                style={textareaStyle}
+                value={valueForLocale(loc)}
+                onChange={(e) => onLocaleChange(loc, e.target.value)}
+                placeholder='—'
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>

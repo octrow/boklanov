@@ -268,6 +268,66 @@ All four fixed in this wave.
 `GET /admin/collections/productions/54?locale=en` → 200.
 No new runtime errors.
 
+### 2026-05-18 — R3-5 follow-up: editable ALL mode + hide standard editor
+
+Round-3 review (screenshot `production-page-2.png`) caught two bugs in
+the previous wave's R3-4 behaviour:
+
+> 1. The 3-column preview row in ALL mode is read-only — Roman wants
+>    to edit there.
+> 2. Below the previews the original single Lexical editor is still
+>    rendered, looking out of place ("strange field").
+
+Fix: replace the read-only `<div>` previews with editable
+`<textarea>` elements and CSS-hide the standard Lexical editor in
+ALL mode.
+
+**Implementation.**
+
+- `LocalizedDocContext.setValue` signature relaxed from
+  `value: string` to `value: unknown`. The internal pending map +
+  `projectToLocale` walk already tolerate any JSON shape; the
+  signature was the only blocker for richText writes.
+- `LocalizedRichTextTabs` rewritten:
+  - Wrapper root has class `localized-rt-pillstrip` (CSS hook).
+  - In ALL mode renders a 3-column grid of `<textarea>` rows.
+  - `extractLexicalText` (already there) reads each locale's text
+    from the SerializedEditorState by recursive walk.
+  - New `stringToLexicalState` serializer turns the textarea's
+    string back into a minimal
+    `{root:{children:[{type:'paragraph',...}],...}}` doc —
+    paragraphs split on blank lines, no inline formatting.
+  - URL-active locale writes via `useField` → form state → Save
+    flow (button lights up). Inactive locales write via
+    `doc.setValue` → debounced PATCH (button does NOT light up
+    but data is committed). Both routes verified to round-trip
+    through Postgres.
+- `app/(payload)/custom.scss`: one new rule
+  `body[data-locale-mode='all'] .localized-rt-pillstrip ~ * { display: none }`
+  hides every sibling AFTER our pillstrip wrapper. That's
+  `BulkUploadProvider` (with the standard `LexicalProvider`
+  inside) and `AfterInput`. The pillstrip's own children (pills +
+  textarea grid) stay visible because they're descendants, not
+  siblings, of `.localized-rt-pillstrip`.
+
+**Trade-offs accepted (documented in component header).**
+
+- ALL-mode textarea is plain text. Any pre-existing rich formatting
+  on a locale that Roman edits in ALL mode collapses to plain
+  paragraphs. Use SWITCH mode (click a locale pill) for rich-text
+  editing on one locale at a time.
+- The hidden Lexical editor doesn't pick up textarea-side edits
+  until a URL nav remounts it. Data IS saved correctly (via form
+  state for the URL locale or shadow PATCH for others); only the
+  editor's in-memory state is stale. Switching pills (which navs
+  the URL) forces a fresh mount that reads the saved value.
+
+**Verified clean.**
+`npx tsc --noEmit`, `npx eslint`, `npx prettier --write`,
+`npm run dev` ready in 2.0 s,
+`GET /admin/collections/productions/54?locale=ru` → 200,
+`GET /admin/collections/productions/54?locale=en` → 200.
+
 ## Remaining work (next session)
 
 R2-1…R2-5 landed (see Progress log §2026-05-18 Round-2). What's left
