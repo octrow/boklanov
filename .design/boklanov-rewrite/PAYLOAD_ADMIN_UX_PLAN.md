@@ -177,6 +177,97 @@ All four Round-2 requirements shipped in a single follow-up session.
 No runtime errors in the log (pre-existing "no email adapter" warning
 only).
 
+### 2026-05-18 — Round-3 wave R3-1…R3-4 landed
+
+Roman dogfooded the Round-2 admin and flagged four bugs on
+`bury-me-behind-the-baseboard`
+(`.design/review/2026-05-18/production-page.png`):
+
+> 1. Borders are there but the inside still looks the same → ugly.
+> 2. Switching a field's language takes ~5 s; pressing `ALL` is <1 s.
+> 3. `Полный текст` etc. don't show all three languages in `ALL`.
+> 4. The pills are at the BOTTOM of richText fields, must be on TOP.
+
+All four fixed in this wave.
+
+**R3-1 — Pills above the editor (slot move).**
+
+- `LocalizedRichTextTabs` was mounted via `admin.components.Description`,
+  which `@payloadcms/richtext-lexical/dist/field/Field.js:178` renders
+  AFTER `BeforeInput` + `LexicalProvider` + `AfterInput`. Moved to
+  `admin.components.beforeInput[]`, which renders **above** the
+  Lexical editor (verified in Field.js:162).
+- Wiring updated in 4 Productions richText fields
+  (`body`, `tagline`, `synopsis`, `directorsNote`) + 1 About richText
+  field (`body`).
+- Component rewritten as a plain `React.FC<{ path: string }>` instead
+  of `RichTextFieldDescriptionClientComponent` — beforeInput slot
+  passes `path` via `clientProps` (per
+  `@payloadcms/ui/dist/forms/fieldSchemasToFormState/renderField.js:243`).
+  Description text now renders in Payload's default slot below,
+  unchanged.
+
+**R3-2 — Instant text/textarea pill switching.**
+
+- Root cause: `LocalizedTextLike` previously did
+  `router.replace('?locale=X', { scroll: false })` on every locale
+  pill click, which triggers Payload's full server-side doc refetch
+  (~5 s on the boklanov dataset). The ALL pill was fast because it
+  only flipped a React context — no nav.
+- Fix: introduce a local `selectedTab` state. Pill clicks now only
+  call `setSelectedTab(pill)`; no router call. The visible input is
+  bound to `selectedTab`; writes to the URL's locale (`activeLocale`)
+  go through Payload's `useField` → Save; writes to other locales
+  go through `LocalizedDocContext` debounced PATCH. Both paths land
+  in Postgres correctly.
+- A `useEffect([activeLocale])` keeps `selectedTab` in sync if the
+  URL locale changes externally (e.g. via a richText pill click —
+  richText still needs the URL nav to remount Lexical with new
+  content).
+- Trade-off: when typing on an inactive locale, Payload's "Save"
+  button doesn't light up (it tracks only form-state). The shadow
+  PATCH fires on debounce + `beforeunload`, so data is safe; the UI
+  signal is just absent. Acceptable for now.
+
+**R3-3 — Visible border + inner shell.**
+
+- Bumped border from `var(--theme-elevation-150)` → `--250` in
+  `app/(payload)/custom.scss`. Roman's screenshot showed 150 = same
+  RGB as the page background in dark mode → invisible. 250 is clearly
+  distinct in both themes.
+- Extended the inner-padding selector to also cover `.editor-shell`
+  and `[contenteditable='true']` so the bordered shell sits flush
+  around the typed text rather than hugging the cursor on the first
+  character.
+
+**R3-4 — RichText `all`-mode 3-column previews.**
+
+- Added `getRawValue(path)` to `LocalizedDocContext` —
+  returns the un-coerced `{ru, en, de}` snapshot, so richText
+  consumers see the `SerializedEditorState` JSON rather than the
+  empty-string fallback `getValue` returns for non-string fields.
+- `LocalizedRichTextTabs` in `all` mode now renders 3 plain-text
+  preview columns below the pill strip. Text comes from
+  `extractLexicalText(shadow[locale])` — a recursive walk over
+  the SerializedEditorState tree that concatenates every `text` leaf
+  with paragraph-level newlines. Tolerates string, JSON, or
+  undefined.
+- The standard Lexical editor stays mounted below the previews for
+  the URL's active locale. Editing inactive locales still requires
+  a pill click → URL nav → re-mount (the slow path Roman saw).
+  Triple-Lexical editing remains deferred per Risk R1, but Roman now
+  **sees** all three locales' content at once, which was his
+  explicit ask.
+
+**Verified clean.**
+`npx tsc --noEmit`, `npx eslint`, `npx prettier --write`,
+`npm run payload:generate:importmap`,
+`npm run dev` ready in 2.3 s,
+`GET /admin/collections/productions` → 200,
+`GET /admin/collections/productions/54?locale=ru` → 200,
+`GET /admin/collections/productions/54?locale=en` → 200.
+No new runtime errors.
+
 ## Remaining work (next session)
 
 R2-1…R2-5 landed (see Progress log §2026-05-18 Round-2). What's left

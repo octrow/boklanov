@@ -49,6 +49,13 @@ type LocalizedDocCtx = {
   /** Read the value for a path + locale out of the shadow doc. */
   getValue: (path: string) => Record<LocaleCode, string | undefined> | null
   /**
+   * Like getValue but doesn't coerce to string — returns whatever the
+   * shadow has at that path. Used by richText preview rendering
+   * where the value is a SerializedEditorState JSON object rather
+   * than a flat string.
+   */
+  getRawValue: (path: string) => Record<LocaleCode, unknown> | null
+  /**
    * Write a locale's value into the shadow doc and schedule a PATCH.
    * Should ONLY be called for inactive locales — the active locale
    * goes through Payload's standard form state.
@@ -325,6 +332,23 @@ const LocalizedDocProvider: React.FC<{ children?: React.ReactNode }> = ({
     [doc]
   )
 
+  const getRawValue = useCallback(
+    (path: string): Record<LocaleCode, unknown> | null => {
+      if (!doc) return null
+      const raw = getPath(doc, path)
+      if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+        const r = raw as Record<string, unknown>
+        return {
+          ru: r.ru,
+          en: r.en,
+          de: r.de
+        }
+      }
+      return { ru: undefined, en: undefined, de: undefined }
+    },
+    [doc]
+  )
+
   const setValue = useCallback(
     (path: string, locale: LocaleCode, value: string) => {
       // Optimistic update — the in-memory doc reflects the typed value
@@ -354,8 +378,8 @@ const LocalizedDocProvider: React.FC<{ children?: React.ReactNode }> = ({
   )
 
   const value = useMemo<LocalizedDocCtx>(
-    () => ({ loaded, getValue, setValue, flush }),
-    [loaded, getValue, setValue, flush]
+    () => ({ loaded, getValue, getRawValue, setValue, flush }),
+    [loaded, getValue, getRawValue, setValue, flush]
   )
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

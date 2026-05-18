@@ -1,8 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useField, useLocale } from '@payloadcms/ui'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocaleMode } from './LocaleModeProvider'
 import {
   useLocalizedDoc,
@@ -103,27 +102,38 @@ type Props = {
 
 export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
   const { mode, setMode } = useLocaleMode()
-  const router = useRouter()
-  const pathname = usePathname() ?? ''
-  const searchParams = useSearchParams()
   const activeLocaleRaw = useLocale().code
   const activeLocale: LocaleCode = isLocaleCode(activeLocaleRaw)
     ? activeLocaleRaw
     : 'ru'
 
-  // Pill click handler: RU/EN/DE → page-global switch + URL locale flip;
-  // ALL → page-global show-all. Spec §Round-2 R1 in
-  // PAYLOAD_ADMIN_UX_PLAN.md.
+  // Visible-locale state. In switch mode the field shows ONE input,
+  // bound to `selectedTab` rather than the URL locale. This makes
+  // RU/EN/DE pill clicks instant — no `router.replace('?locale=X')`
+  // round-trip — at the cost of decoupling the displayed locale from
+  // Payload's form-state binding.
+  //
+  // Form-state always tracks the URL's locale (`activeLocale`). When
+  // selectedTab === activeLocale, the input writes through `useField`
+  // → normal Save flow. Otherwise the input writes through the shadow
+  // context's debounced PATCH. Both paths land in Postgres correctly.
+  //
+  // PAYLOAD_ADMIN_UX_PLAN.md §Round-3 R2.
+  const [selectedTab, setSelectedTab] = useState<LocaleCode>(activeLocale)
+  useEffect(() => {
+    // If the URL locale changes externally (e.g. richText's pill click
+    // on the same page) keep selectedTab in sync so the visible input
+    // matches what Payload would show.
+    setSelectedTab(activeLocale)
+  }, [activeLocale])
+
   const onPillClick = (pill: LocaleCode | 'all') => {
     if (pill === 'all') {
       if (mode !== 'all') setMode('all')
       return
     }
     if (mode !== 'switch') setMode('switch')
-    if (pill === activeLocale) return
-    const next = new URLSearchParams(searchParams?.toString() ?? '')
-    next.set('locale', pill)
-    router.replace(`${pathname}?${next.toString()}`, { scroll: false })
+    setSelectedTab(pill)
   }
 
   const { value: activeValue, setValue: setActiveValue } = useField<string>({
@@ -167,7 +177,7 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
 
   const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
   const isPillActive = (pill: LocaleCode | 'all') =>
-    pill === 'all' ? mode === 'all' : mode === 'switch' && pill === activeLocale
+    pill === 'all' ? mode === 'all' : mode === 'switch' && pill === selectedTab
 
   const pillStrip = (
     <div
@@ -235,7 +245,7 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
         {label}
       </label>
       {pillStrip}
-      <div style={{ paddingTop: 8 }}>{renderInput(activeLocale)}</div>
+      <div style={{ paddingTop: 8 }}>{renderInput(selectedTab)}</div>
     </div>
   )
 }

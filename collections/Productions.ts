@@ -137,8 +137,9 @@ export const Productions: CollectionConfig = {
                       en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
                     },
                     components: {
-                      Description:
+                      beforeInput: [
                         '/components/admin/LocalizedRichTextTabs#default'
+                      ]
                     }
                   }
                 },
@@ -165,8 +166,9 @@ export const Productions: CollectionConfig = {
                       en: 'Short hook line (≤80 chars) under the title. Bold, italic, and links supported.'
                     },
                     components: {
-                      Description:
+                      beforeInput: [
                         '/components/admin/LocalizedRichTextTabs#default'
+                      ]
                     }
                   }
                 },
@@ -187,8 +189,9 @@ export const Productions: CollectionConfig = {
                       en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.'
                     },
                     components: {
-                      Description:
+                      beforeInput: [
                         '/components/admin/LocalizedRichTextTabs#default'
+                      ]
                     }
                   }
                 },
@@ -209,8 +212,9 @@ export const Productions: CollectionConfig = {
                       en: 'Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.'
                     },
                     components: {
-                      Description:
+                      beforeInput: [
                         '/components/admin/LocalizedRichTextTabs#default'
+                      ]
                     }
                   }
                 }

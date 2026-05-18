@@ -57,7 +57,9 @@ export const About: GlobalConfig = {
                   en: 'Biography. H2/H3 headings, lists, blockquotes, links, and emphasis are supported. First paragraph is the lead (rendered prominently).'
                 },
                 components: {
-                  Description: '/components/admin/LocalizedRichTextTabs#default'
+                  beforeInput: [
+                    '/components/admin/LocalizedRichTextTabs#default'
+                  ]
                 }
               }
             }

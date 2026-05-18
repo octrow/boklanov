@@ -38,9 +38,11 @@
    --------------------------------------------------------------------*/
 
 /* Visible bordered shell so richText fields read like first-class form
-   inputs in light + dark. `--theme-elevation-*` covers both themes. */
+   inputs in light + dark. `--theme-elevation-150` was invisible in
+   dark mode (Round-2 review by Roman) — bumped to 250 for contrast
+   and 400 on focus-within. `--theme-elevation-*` covers both themes. */
 .rich-text-lexical {
-  border: 1px solid var(--theme-elevation-150);
+  border: 1px solid var(--theme-elevation-250);
   border-radius: 4px;
   background: var(--theme-input-bg);
   transition: border-color 120ms ease;
@@ -53,10 +55,12 @@
 /* Inline-only fields (tagline / synopsis / directorsNote) drop every
    block feature in Productions.ts, so Lexical doesn't render the
    `--show-gutter` modifier on them — no `+` gutter glyph appears.
-   Belt + braces: force-hide the gutter affordance even if some
-   future block feature sneaks back in via defaultFeatures. */
+   Pad the inner editor body so the bordered shell sits flush around
+   the typed text rather than hugging the cursor. */
 .rich-text-lexical:not(.rich-text-lexical--show-gutter) {
-  .editor-container {
+  .editor-container,
+  .editor-shell,
+  [contenteditable='true'] {
     padding: 8px 12px;
   }
 }

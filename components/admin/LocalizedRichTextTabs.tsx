@@ -3,33 +3,37 @@
 import React from 'react'
 import { useLocale } from '@payloadcms/ui'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import type { RichTextFieldDescriptionClientComponent } from 'payload'
 import { useLocaleMode } from './LocaleModeProvider'
-import { LOCALES, type LocaleCode } from './LocalizedDocContext'
+import {
+  useLocalizedDoc,
+  LOCALES,
+  type LocaleCode
+} from './LocalizedDocContext'
 
 /**
- * Tiny tab strip rendered ABOVE every localized richText field via
- * admin.components.Description. Lets the editor jump between RU/EN/DE
- * without going to the top-right global selector.
+ * 4-pill control rendered ABOVE every localized richText field via
+ * admin.components.beforeInput. Plus, in `all` mode, an additional row
+ * of 3 plain-text previews so the editor can see every locale at once
+ * without the cost of mounting three Lexical instances.
  *
- * Why URL navigation rather than in-place editing? Mounting Lexical
- * once per locale × 5 richText fields is a perf cliff; rebuilding a
- * full Lexical instance against a shadow-state value is a non-trivial
- * project on its own (the Lexical state shape, feature plumbing, save
- * hooks, drafts integration all have to be reproduced).
+ * Behaviour (PAYLOAD_ADMIN_UX_PLAN.md §Round-2 + Round-3):
+ * - RU/EN/DE pill → setMode('switch') + router.replace('?locale=X').
+ *   The full Lexical editor below re-mounts with that locale's
+ *   content. This is the slow path (server-side doc refetch) but
+ *   it's the only way to bind Payload's form-state to a new locale.
+ * - ALL pill → setMode('all'). The standard Lexical editor stays
+ *   mounted for the URL's locale; this component adds a preview row
+ *   so the other two locales are visible too. No URL nav.
  *
- * Trade-off: a tab click does refresh the whole edit form, but with
- * `scroll: false` the editor stays anchored to where they were. This
- * already removes the user's primary pain ("must change Локаль:
- * Deutsch on top right corner — extremely uncomfortable") on a
- * per-field basis.
- *
- * NOTE: this component is mounted in the Description slot rather than
- * Field, so Lexical itself keeps rendering through Payload's default
- * pipeline (toolbar features, draft state, save flow — all
- * unchanged). The original description text is still rendered below
- * the tabs from props.description.
+ * Trade-off accepted: in `all` mode the user sees all three locales
+ * but can only edit the URL's locale. To edit a different locale the
+ * user clicks its pill, paying the ~5 s router round-trip once.
+ * Full triple-Lexical editing remains deferred per Risk R1.
  */
+
+type Props = {
+  path: string
+}
 
 const isLocaleCode = (s: string): s is LocaleCode =>
   (LOCALES as readonly string[]).includes(s)
@@ -40,10 +44,10 @@ const tabBaseStyle: React.CSSProperties = {
   borderBottomWidth: 1,
   borderLeftWidth: 1,
   borderStyle: 'solid',
-  borderTopColor: 'var(--theme-elevation-150)',
-  borderRightColor: 'var(--theme-elevation-150)',
-  borderBottomColor: 'var(--theme-elevation-150)',
-  borderLeftColor: 'var(--theme-elevation-150)',
+  borderTopColor: 'var(--theme-elevation-250)',
+  borderRightColor: 'var(--theme-elevation-250)',
+  borderBottomColor: 'var(--theme-elevation-250)',
+  borderLeftColor: 'var(--theme-elevation-250)',
   borderRadius: 4,
   background: 'var(--theme-elevation-50)',
   color: 'var(--theme-elevation-600)',
@@ -56,14 +60,80 @@ const tabBaseStyle: React.CSSProperties = {
 
 const tabActiveStyle: React.CSSProperties = {
   ...tabBaseStyle,
-  background: 'var(--theme-elevation-150)',
+  background: 'var(--theme-elevation-250)',
   color: 'var(--theme-text)',
   cursor: 'default'
 }
 
-const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
-  description
-}) => {
+const previewColumnStyle: React.CSSProperties = {
+  border: '1px solid var(--theme-elevation-250)',
+  borderRadius: 4,
+  background: 'var(--theme-elevation-50)',
+  padding: '8px 10px',
+  minHeight: 64,
+  fontSize: 13,
+  lineHeight: 1.4,
+  color: 'var(--theme-text)',
+  whiteSpace: 'pre-wrap',
+  overflowWrap: 'anywhere',
+  maxHeight: 220,
+  overflowY: 'auto'
+}
+
+const previewLabelStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  marginBottom: 4,
+  fontSize: 11,
+  textTransform: 'uppercase',
+  letterSpacing: 0.4,
+  color: 'var(--theme-elevation-600)'
+}
+
+const activeDotStyle: React.CSSProperties = {
+  width: 6,
+  height: 6,
+  borderRadius: 3,
+  background: 'var(--theme-success-500, #16a34a)'
+}
+
+/**
+ * Recursive plain-text extraction from a SerializedEditorState. Walks
+ * the tree, concatenates every `text` leaf with paragraph-level
+ * newlines so the result is readable in a previews column. Tolerates
+ * any shape — string, null, unknown JSON — and returns '' on miss.
+ */
+const extractLexicalText = (value: unknown): string => {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value !== 'object') return ''
+
+  const collect = (node: unknown): string[] => {
+    if (!node || typeof node !== 'object') return []
+    const n = node as Record<string, unknown>
+    if (typeof n.text === 'string') return [n.text]
+    const children = Array.isArray(n.children) ? n.children : []
+    const parts: string[] = []
+    for (const child of children) {
+      parts.push(...collect(child))
+    }
+    // Add a newline after block-level nodes so paragraphs/headings
+    // don't collapse into a single line.
+    if (typeof n.type === 'string' && n.type !== 'text' && parts.length > 0) {
+      parts.push('\n')
+    }
+    return parts
+  }
+
+  const root =
+    (value as { root?: unknown }).root ??
+    (value as { children?: unknown }).children ??
+    value
+  return collect(root).join('').trim()
+}
+
+const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
   const router = useRouter()
   const pathname = usePathname() ?? ''
   const searchParams = useSearchParams()
@@ -73,11 +143,13 @@ const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
     ? activeLocaleRaw
     : 'ru'
 
-  // Spec §Round-2 R1: pill click sets global mode + (for locale pills)
-  // navigates the URL. ALL pill flips to show-all; richText still
-  // shows a single Lexical instance per field in v1 — the
-  // multi-locale Lexical wrapper is carry-over work, see
-  // PAYLOAD_ADMIN_UX_PLAN.md §Remaining-work.5.
+  const doc = useLocalizedDoc()
+  const shadow = doc?.getRawValue(path) ?? {
+    ru: undefined,
+    en: undefined,
+    de: undefined
+  }
+
   const onPillClick = (pill: LocaleCode | 'all') => {
     if (pill === 'all') {
       if (mode !== 'all') setMode('all')
@@ -95,19 +167,9 @@ const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
 
   const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
 
-  // description from field config: string | object | falsey
-  const descText =
-    typeof description === 'string'
-      ? description
-      : description && typeof description === 'object'
-        ? ((description as Record<string, string>).ru ??
-          (description as Record<string, string>).en ??
-          '')
-        : ''
-
   return (
-    <div style={{ marginTop: 4, marginBottom: 6 }}>
-      <div style={{ display: 'flex', gap: 0, marginBottom: descText ? 4 : 0 }}>
+    <div style={{ marginBottom: 6 }}>
+      <div style={{ display: 'flex', gap: 0, marginBottom: 6 }}>
         {pills.map((pill) => (
           <button
             key={pill}
@@ -127,12 +189,35 @@ const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
           </button>
         ))}
       </div>
-      {descText && (
+      {mode === 'all' && (
         <div
-          className='field-description'
-          style={{ color: 'var(--theme-elevation-600)', fontSize: 12 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gap: 12,
+            marginBottom: 8
+          }}
         >
-          {descText}
+          {LOCALES.map((loc) => {
+            const text = extractLexicalText(shadow[loc])
+            return (
+              <div key={loc}>
+                <div style={previewLabelStyle}>
+                  <span>{loc}</span>
+                  {loc === activeLocale && (
+                    <span style={activeDotStyle} title='Редактируется ниже' />
+                  )}
+                </div>
+                <div style={previewColumnStyle}>
+                  {text || (
+                    <span style={{ color: 'var(--theme-elevation-500)' }}>
+                      —
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
