@@ -10,6 +10,15 @@ new requirements landed. See **§Round-2 requirements** below — they
 modify the next-session scope and override the original A.0 / A.4 +
 Team-tab assumptions.
 
+**Open bug 2026-05-18 (post-Round-3):** Roman reports the active-locale
+Lexical editor sometimes appears empty even when Postgres has content
+for that locale. Deep-dive ticket lives in
+[`PAYLOAD_RICHTEXT_LOCALE_DEBUG.md`](./PAYLOAD_RICHTEXT_LOCALE_DEBUG.md)
+— read THAT before re-attempting the richText UX, since it carries
+the chronological history of what's been tried, hypotheses for the
+current bug, and pointers into Payload 3 source. This file is the
+plan; that file is the bug ticket.
+
 ## Progress log
 
 ### 2026-05-18 — Steps 1 + 2 landed
