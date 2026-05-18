@@ -43,21 +43,23 @@ interface AboutFrontmatter {
   marginalia: Array<string | null>
 }
 
+// Project locale fallback: current → EN → DE → RU (matches `lib/content.ts`
+// `pickL10n` and the routing locales). DE is included for non-DE locales so
+// a DE-only About field still renders on EN/RU instead of falling through
+// empty.
+const FALLBACK_ORDER = (locale: Locale) => [locale, 'en', 'de', 'ru'] as const
+
 function pickL10n(v: AboutL10n, locale: Locale): string {
-  const order =
-    locale === 'de'
-      ? (['de', 'en', 'ru'] as const)
-      : ([locale, 'en', 'ru'] as const)
-  for (const l of order) {
+  for (const l of FALLBACK_ORDER(locale)) {
     const s = v[l]
     if (typeof s === 'string' && s.trim()) return s
   }
   return ''
 }
 
-/** Resolve the bio body Lexical state for a locale with DE→EN→RU fallback,
- *  returning the editor state and which locale actually supplied it (used
- *  to trigger the "DE forthcoming" Marginalia cue). A state counts as
+/** Resolve the bio body Lexical state for a locale with the project fallback
+ *  order, returning the editor state and which locale actually supplied it
+ *  (used to trigger the "DE forthcoming" Marginalia cue). A state counts as
  *  "supplied" only when its root has at least one child node — empty
  *  Lexical states (the default Payload writes for blank fields) fall
  *  through to the next locale in the chain. */
@@ -68,10 +70,7 @@ function pickBody(
   state: SerializedEditorState | null
   resolvedLocale: Locale | null
 } {
-  const order =
-    locale === 'de'
-      ? (['de', 'en', 'ru'] as const)
-      : ([locale, 'en', 'ru'] as const)
+  const order = FALLBACK_ORDER(locale)
   for (const l of order) {
     const s = body[l]
     if (s && Array.isArray(s.root?.children) && s.root.children.length > 0) {
