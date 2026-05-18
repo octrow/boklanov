@@ -10,14 +10,15 @@ new requirements landed. See **§Round-2 requirements** below — they
 modify the next-session scope and override the original A.0 / A.4 +
 Team-tab assumptions.
 
-**Open bug 2026-05-18 (post-Round-3):** Roman reports the active-locale
-Lexical editor sometimes appears empty even when Postgres has content
-for that locale. Deep-dive ticket lives in
+**Closed bug 2026-05-18 (Round-4):** Roman reported the active-locale
+Lexical editor sometimes appeared empty even when Postgres had content
+for that locale. Root cause: the R3-5 CSS hide rule
+`body[data-locale-mode='all'] .localized-rt-pillstrip ~ *` kept the
+standard Lexical editor hidden whenever `localStorage` persisted
+`localeMode='all'` across sessions. Fix landed in Round-4 below.
+Trail preserved in
 [`PAYLOAD_RICHTEXT_LOCALE_DEBUG.md`](./PAYLOAD_RICHTEXT_LOCALE_DEBUG.md)
-— read THAT before re-attempting the richText UX, since it carries
-the chronological history of what's been tried, hypotheses for the
-current bug, and pointers into Payload 3 source. This file is the
-plan; that file is the bug ticket.
+(closed).
 
 ## Progress log
 
@@ -336,6 +337,54 @@ ALL mode.
 `npm run dev` ready in 2.0 s,
 `GET /admin/collections/productions/54?locale=ru` → 200,
 `GET /admin/collections/productions/54?locale=en` → 200.
+
+### 2026-05-18 — Round-4: unhide Lexical, drop active-locale textarea
+
+Roman reported on the Vercel preview that the active-locale Lexical
+editor showed empty even when Postgres had content for that locale
+(see closed ticket PAYLOAD_RICHTEXT_LOCALE_DEBUG.md). Root cause was
+hypothesis **H1** in that ticket: the R3-5 CSS rule
+`body[data-locale-mode='all'] .localized-rt-pillstrip ~ * { display: none }`
+hid the standard Lexical editor whenever `localStorage` persisted
+`localeMode='all'` across sessions — Roman would land on the doc
+with mode='all' still set, the Lexical hidden by CSS, and the
+plain-text textareas above showing empty briefly while the
+`?locale=all` shadow fetch was still in flight.
+
+Fix shape:
+
+- **`app/(payload)/custom.scss`** — delete the hide-Lexical rule.
+  The standard Lexical now stays visible in both modes and always
+  edits the URL's `?locale=` locale through Payload's normal
+  form-state path.
+- **`components/admin/LocalizedRichTextTabs.tsx`** — in ALL mode
+  render textareas only for the **inactive** locales (2-column
+  grid, was 3). The active locale is exclusively edited in the
+  Lexical below, with a small chip above it that reads
+  `RU · редактируется в полном редакторе ниже` so the relationship
+  between the pillstrip and the editor below is explicit. Drops
+  the active-locale `useField` read+write that R3-5 had layered on
+  top of Lexical — no more "type in textarea, Lexical doesn't
+  update" surprise, no more duplicate display.
+
+Trade-offs accepted:
+
+- ALL mode no longer offers a plain-text view of the active locale.
+  To see/edit a locale as plain text, click its pill (URL nav)
+  first — that locale becomes active, the other two surface as
+  textareas. This matches Roman's actual workflow (rich edit one
+  locale, translation drafts side-by-side for the other two).
+- Inactive-locale textareas still collapse rich formatting on
+  edit. To preserve formatting on a locale, edit it via the
+  Lexical (switch the URL to that locale).
+
+Verified clean.
+`npx tsc --noEmit` ok; `npx eslint components/admin/LocalizedRichTextTabs.tsx` ok.
+Manual reproduction TODO: open
+`/admin/collections/productions/5?locale=ru` with localStorage
+`boklanov.admin.localeMode='all'` pre-set; expected — pillstrip on
+top, EN+DE textareas in a 2-col grid, then a small `ru · …` chip,
+then the standard Lexical for RU with the doc's content visible.
 
 ## Remaining work (next session)
 

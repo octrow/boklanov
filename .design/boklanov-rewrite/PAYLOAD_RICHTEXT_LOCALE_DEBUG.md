@@ -1,12 +1,24 @@
 # PAYLOAD_RICHTEXT_LOCALE_DEBUG
 
-Status: **Open 2026-05-18** — working brief for the per-locale richText
-editing UX in the Payload admin. Sibling of
+Status: **Closed 2026-05-18** — Round-4 wave landed; root cause was
+H1 (the R3-5 hide-CSS rule kept the standard Lexical editor hidden
+when `localStorage.localeMode` persisted as `'all'`, surfacing as
+"main field empty BUT we have data"). Fix: drop the hide rule and
+only render the two INACTIVE-locale textareas in ALL mode — the
+active locale stays in the standard Lexical editor below the
+pillstrip, always visible, always reading from form state.
+See PAYLOAD_ADMIN_UX_PLAN.md §Round-4 entry for the shipped log.
+
+---
+
+## Original brief (preserved for archaeology)
+
+Sibling of
 [`PAYLOAD_ADMIN_UX_PLAN.md`](./PAYLOAD_ADMIN_UX_PLAN.md), which holds
-the high-level plan + the Round-2/Round-3 shipped log. This file is
-the **deep-dive ticket** for the remaining bug Roman is hitting:
-fields look empty when there IS data, and the multi-locale UX still
-misbehaves in subtle ways.
+the high-level plan + the Round-2/Round-3 shipped log. This file
+was the **deep-dive ticket** for the bug Roman hit:
+fields looked empty when there WAS data, and the multi-locale UX
+still misbehaved in subtle ways.
 
 The reason for splitting: `PAYLOAD_ADMIN_UX_PLAN.md` is now 700+ lines
 of plan + progress log. Future-me reading that doc cold can't tell

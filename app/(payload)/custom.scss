@@ -78,18 +78,6 @@
   height: 28px;
 }
 
-/* In ALL mode, the LocalizedRichTextTabs beforeInput component renders
-   its own 3-column editable textarea grid and the standard single
-   Lexical editor would just confuse the layout. Hide every sibling
-   that comes AFTER the pillstrip wrapper — that's the
-   BulkUploadProvider + AfterInput. The pillstrip's own children
-   (pills + grid) stay visible because they're inside the pillstrip,
-   not siblings of it.
-   See PAYLOAD_ADMIN_UX_PLAN.md §Round-3 R3-5. */
-body[data-locale-mode='all'] .localized-rt-pillstrip ~ * {
-  display: none;
-}
-
 /* ----------------------------------------------------------------------
    Команда tab — Option B from PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R4.
 

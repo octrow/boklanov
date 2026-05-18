@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useField, useLocale } from '@payloadcms/ui'
+import { useLocale } from '@payloadcms/ui'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocaleMode } from './LocaleModeProvider'
 import {
@@ -14,36 +14,37 @@ import {
  * 4-pill control + per-locale editable textareas, rendered ABOVE every
  * localized richText field via admin.components.beforeInput.
  *
- * Two modes (PAYLOAD_ADMIN_UX_PLAN.md §Round-3 R3-5):
+ * Two modes (PAYLOAD_ADMIN_UX_PLAN.md §Round-4):
  *
  * - SWITCH: only the pills render here. Payload's standard Lexical
  *   editor renders below as usual, bound to the URL's `?locale=`.
  *   Full rich-text formatting available.
  *
- * - ALL: pills + a 3-column row of editable plain-text textareas.
- *   The standard Lexical editor below is CSS-hidden (see
- *   `app/(payload)/custom.scss` — sibling-of-`.localized-rt-pillstrip`
- *   selector). Each textarea reads the locale's content as plain text
- *   (recursive walk of SerializedEditorState) and writes back as a
- *   minimal `{root:{children:[paragraph...]}}` doc.
+ * - ALL: pills + a 2-column row of plain-text textareas for the
+ *   INACTIVE locales only. The standard Lexical editor below stays
+ *   visible and continues to edit the ACTIVE (URL) locale with full
+ *   formatting. Conceptually: "rich edit one locale, plain-text
+ *   translation drafts for the other two side-by-side above it".
+ *
+ * Round-4 rationale: R3-5 hid the Lexical via CSS in ALL mode, which
+ * surfaced as "main field is empty BUT we have data" when localStorage
+ * persisted ALL mode across sessions. Keeping the Lexical visible —
+ * and only showing inactive-locale textareas — removes the hidden-
+ * editor confusion while preserving the side-by-side translation UX.
+ * See PAYLOAD_RICHTEXT_LOCALE_DEBUG.md (closed) for the trail.
  *
  * Routing:
- * - Active (URL) locale's textarea routes through `useField` → form
- *   state → Save button. Save still commits this locale normally.
- * - Other locales' textareas route through `LocalizedDocContext` →
+ * - Inactive locales' textareas route through `LocalizedDocContext` →
  *   debounced REST PATCH. Save button does NOT light up for these,
  *   but the PATCH commits them autonomously.
+ * - The active locale is edited exclusively in the standard Lexical
+ *   editor below, which already plumbs through `useField` → form
+ *   state → Save button.
  *
- * Trade-off accepted: edits in ALL mode lose any pre-existing rich
- * formatting on the touched locale (plain text re-serialized as a
- * single paragraph stack). To keep formatting, click a locale pill —
- * switch mode preserves the full Lexical editor for that locale.
- *
- * Trade-off accepted: the standard hidden Lexical editor does NOT
- * pick up textarea-side edits until the next URL nav re-mounts it.
- * Data IS saved correctly via form state or shadow PATCH; only the
- * editor's in-memory state is stale. Switching pill (URL nav) forces
- * a fresh mount which reads the saved value.
+ * Trade-off accepted: typing in an inactive-locale textarea collapses
+ * any pre-existing rich formatting on that locale to plain paragraphs.
+ * To keep formatting on a given locale, click its pill (URL nav) and
+ * edit it in the standard Lexical.
  */
 
 type Props = {
@@ -235,10 +236,6 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
     ? activeLocaleRaw
     : 'ru'
 
-  const { value: activeValue, setValue: setActiveValue } = useField<unknown>({
-    path
-  })
-
   const doc = useLocalizedDoc()
   const shadow = doc?.getRawValue(path) ?? {
     ru: undefined,
@@ -263,18 +260,15 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
 
   const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
 
-  const valueForLocale = (locale: LocaleCode): string => {
-    if (locale === activeLocale) return extractLexicalText(activeValue)
-    return extractLexicalText(shadow[locale])
-  }
+  // ALL-mode textareas only render for the INACTIVE locales — the active
+  // locale is edited in the standard Lexical editor below this strip so
+  // it keeps its full rich-text formatting (Round-4: was 3 textareas +
+  // hidden Lexical, which caused "main field is empty" complaints).
+  const inactiveLocales = LOCALES.filter((l) => l !== activeLocale)
 
   const onLocaleChange = (locale: LocaleCode, nextText: string) => {
-    const lexical = stringToLexicalState(nextText)
-    if (locale === activeLocale) {
-      setActiveValue(lexical)
-    } else if (doc) {
-      doc.setValue(path, locale, lexical)
-    }
+    if (!doc || locale === activeLocale) return
+    doc.setValue(path, locale, stringToLexicalState(nextText))
   }
 
   return (
@@ -303,27 +297,39 @@ const LocalizedRichTextTabs: React.FC<Props> = ({ path }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
             gap: 12,
             marginBottom: 8
           }}
         >
-          {LOCALES.map((loc) => (
+          {inactiveLocales.map((loc) => (
             <div key={loc}>
               <div style={localeChipStyle}>
                 <span>{loc}</span>
-                {loc === activeLocale && (
-                  <span style={activeDotStyle} title='Активная локаль' />
-                )}
               </div>
               <textarea
                 style={textareaStyle}
-                value={valueForLocale(loc)}
+                value={extractLexicalText(shadow[loc])}
                 onChange={(e) => onLocaleChange(loc, e.target.value)}
                 placeholder='—'
               />
             </div>
           ))}
+        </div>
+      )}
+      {mode === 'all' && (
+        <div
+          style={{
+            ...localeChipStyle,
+            marginTop: 4,
+            marginBottom: 4
+          }}
+        >
+          <span>{activeLocale}</span>
+          <span style={activeDotStyle} title='Активная локаль' />
+          <span style={{ textTransform: 'none', letterSpacing: 0 }}>
+            — редактируется в полном редакторе ниже
+          </span>
         </div>
       )}
     </div>
