@@ -100,8 +100,6 @@ dogfooded the shipped admin for ~4 days.
 
 ## Architecture note (2026-05-18, post-Step-2 investigation)
 
-## Architecture note (2026-05-18, post-Step-2 investigation)
-
 Step 2 investigation found that **Payload's form state is single-locale**
 — `@payloadcms/ui/dist/forms/fieldSchemasToFormState/index.js:39` keys
 all fields by their flat path (`identity.title`) using the current
