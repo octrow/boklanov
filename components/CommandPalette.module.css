@@ -100,7 +100,7 @@
 
 .groupLabel {
   font-family: var(--font-family-mono);
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-mute);
