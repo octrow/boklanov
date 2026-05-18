@@ -126,7 +126,7 @@
 .synopsis {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-snug);
   color: var(--ink);
   margin: 0 0 var(--space-7);
@@ -321,7 +321,7 @@ dd.creditsName {
 .pressLink {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-snug);
   color: var(--ink);
   text-decoration-color: transparent;
@@ -598,7 +598,7 @@ dd.creditsName {
 .directorsNoteText {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-relaxed);
   color: var(--ink);
   margin: 0 0 var(--space-3);

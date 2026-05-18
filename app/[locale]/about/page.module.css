@@ -215,7 +215,7 @@
 
 .lineageName {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   color: var(--ink);

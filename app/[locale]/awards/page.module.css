@@ -8,11 +8,16 @@
 }
 
 @media (min-width: 768px) {
-  .page { padding-left: var(--gutter-tablet); padding-right: var(--gutter-tablet); }
+  .page {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
 }
 
 @media (min-width: 1024px) {
-  .page { padding: var(--space-9) var(--gutter-desktop) var(--space-10); }
+  .page {
+    padding: var(--space-9) var(--gutter-desktop) var(--space-10);
+  }
 }
 
 /* ── Page heading ────────────────────────────────────────────────────── */
@@ -57,7 +62,7 @@
 
 .productionTitle {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-h2);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
@@ -112,8 +117,8 @@
   display: grid;
   grid-template-columns: 4ch 1fr;
   grid-template-areas:
-    "meta name"
-    ".    detail";
+    'meta name'
+    '.    detail';
   column-gap: var(--space-5);
   align-items: baseline;
   padding: var(--space-3) 0;
@@ -127,7 +132,7 @@
 @media (min-width: 768px) {
   .awardRow {
     grid-template-columns: 4ch 1fr auto;
-    grid-template-areas: "meta name detail";
+    grid-template-areas: 'meta name detail';
   }
 }
 

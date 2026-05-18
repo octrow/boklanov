@@ -23,7 +23,7 @@
 
 .titleEn {
   font-family: var(--font-family-body);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-body);
   color: var(--ink-mute);
   margin: var(--space-2) 0 0;
 }
