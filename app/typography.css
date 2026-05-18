@@ -322,7 +322,6 @@
 
   /* ---------- Letter spacing ---------- */
   --letter-spacing-tight: -0.015em; /* Lora display */
-  --letter-spacing-normal: 0;
   --letter-spacing-wide: 0.06em; /* mono caps, chips */
   --letter-spacing-meta: 0.01em; /* JetBrains Mono captions */
 }
