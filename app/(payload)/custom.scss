@@ -1,7 +1,21 @@
 /* Custom admin SCSS.
-   Tightens vertical density under each tab strip so the form reads
-   dense but not crowded (PAYLOAD_POLISH_PLAN §2.3). Wider admin theming
-   is out of scope per PAYLOAD_MIGRATION_PLAN §10. */
+   - Bridges Payload's font CSS vars to our site tokens so the admin
+     consumes the same fonts as the site (Wave 4 of
+     FONT_FIX_PLAN_2026-05-18). @font-face + tokens load via
+     `app/typography.css`, imported in `app/(payload)/layout.tsx`.
+   - Tightens vertical density under each tab strip so the form reads
+     dense but not crowded (PAYLOAD_POLISH_PLAN §2.3). */
+
+/* Font bridge — overrides Payload's defaults (system fonts) with our
+   self-hosted Inter / Lora / JetBrains Mono. Every Payload component
+   that internally references var(--font-body|mono|serif) picks these up
+   without per-selector overrides. Baseline 13px (Payload SCSS $baseline-body-size)
+   is preserved — changing it would break Payload's base() spacing calc. */
+:root {
+  --font-body: var(--font-family-body);
+  --font-mono: var(--font-family-mono);
+  --font-serif: var(--font-family-display);
+}
 
 .tabs-field__tabs {
   margin-bottom: 0;

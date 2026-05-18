@@ -1,3 +1,4 @@
+import '../typography.css'
 import '../globals.css'
 
 import { hasLocale, NextIntlClientProvider } from 'next-intl'

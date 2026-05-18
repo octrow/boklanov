@@ -14,6 +14,7 @@ import { importMap } from './admin/importMap'
 import React from 'react'
 
 import '@payloadcms/next/css'
+import '../typography.css'
 import './custom.scss'
 
 const serverFunction: ServerFunctionClient = async function (args) {

@@ -1,0 +1,328 @@
+/* ============================================================
+ * boklanov.com / boklanov.ru — typography (fonts + type tokens)
+ *
+ * Single source for fonts. Shared by the site (loaded via
+ * app/globals.css in app/[locale]/layout.tsx) AND the Payload admin
+ * (loaded directly in app/(payload)/layout.tsx). One edit propagates
+ * to both surfaces.
+ *
+ * Spec: DESIGN.md §4. Refactor history: FONT_FIX_PLAN_2026-05-18.
+ *
+ * What lives here:
+ *   - @font-face for Lora, Unbounded, Inter, JetBrains Mono
+ *   - :root tokens: --font-family-*, --font-size-*, --font-weight-*,
+ *     --line-height-*, --letter-spacing-*
+ *
+ * What does NOT live here (it's in app/globals.css):
+ *   - body/html resets, h1-h6 default styles, link/focus/selection
+ *   - colors, spacing, layout, motion, z-index tokens
+ * ========================================================== */
+
+/* ============================================================
+ * Self-hosted fonts (OFL).
+ *   Lora           VF wght 400-700 + italic VF wght 400-700  (display, italic body)
+ *   Unbounded      VF wght 200-900                            (v3: hero wordmark, Sticker only)
+ *   Inter          400 / 500 / 600                            (body, UI)
+ *   JetBrains Mono 400 / 500                                  (meta, captions, chips)
+ *
+ * Subsets: latin, latin-ext (DE diacritics), cyrillic (RU). woff2 only.
+ * unicode-range on Inter / JetBrains Mono / Unbounded mirrors Google Fonts
+ * canonical splits - keeps the Cyrillic file off the wire on /en and /de routes.
+ *
+ * Lora VF files (cyrealtype/Lora-Cyrillic) ship Latin+Cyrillic in one file
+ * per axis - no subset splitting on the wire. Phase 9.2 swap replaced 11
+ * static @font-face decls with 2 VF decls.
+ * ========================================================== */
+
+/* ---------- Lora (variable wght axis 400-700, display + italic body) ---------- */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/Lora-VF.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/Lora-Italic-VF.woff2') format('woff2');
+}
+
+/* ---------- Unbounded VF (v3 — display, ALL CAPS wordmark, sticker badges) ----------
+   ArrowType, OFL. wght axis 200-900. Cyrillic + Latin + Latin-ext subsets via
+   unicode-range so /en + /de don't pull the Cyrillic file (31kb).
+   Reference: DESIGN_v3_PROPOSAL.md §4.1. */
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/unbounded-cyrillic-vf.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/unbounded-latin-ext-vf.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url('/fonts/unbounded-latin-vf.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- Inter (body, UI) ---------- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-cyrillic-400.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext-400.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-latin-400.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-cyrillic-500.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext-500.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-latin-500.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-cyrillic-600.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext-600.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin-600.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- JetBrains Mono (meta, chips, captions) ---------- */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-cyrillic-400.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-ext-400.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-400.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-cyrillic-500.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-ext-500.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-500.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* ============================================================
+ * Typography tokens [BRIEF §5.3 / §5.4 + DESIGN.md §4]
+ *
+ * 10-token scale: 6 brief-locked semantic + 4 role-named.
+ * Deviation: --font-size-h1 is 36-60 (de-facto page H1), not the brief's
+ * 44-88 display ceiling (never implemented). Actual ceiling is now
+ * --font-size-hero (Unbounded wordmark on / only).
+ * ========================================================== */
+
+:root {
+  /* ---------- Families ---------- */
+  --font-family-display: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-family-body:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono:
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  --font-family-plakat:
+    'Unbounded', 'Lora', Georgia, serif; /* v3: ALL CAPS wordmark, sticker badges, hero only */
+  --font-family-serif: var(
+    --font-family-display
+  ); /* alias — italic body, editorial prose */
+  --font-family-sans: var(--font-family-body); /* alias */
+
+  /* ---------- Fluid type scale ---------- */
+  /* (a) Brief-locked semantic core */
+  --font-size-chip: 11px; /* fixed — chips, age rating, country code */
+  --font-size-meta: 13px; /* fixed — mono captions, dates */
+  --font-size-body: clamp(17px, 16.5px + 0.13vw, 18px); /* reading prose */
+  --font-size-h3: clamp(20px, 18.7px + 0.44vw, 24px); /* card titles, h3 */
+  --font-size-h2: clamp(28px, 23.6px + 1.32vw, 40px); /* section titles, h2 */
+  --font-size-h1: clamp(36px, 28.5px + 2.18vw, 60px); /* page H1 */
+
+  /* (b) Role-named extensions */
+  --font-size-caption: 14px; /* sans secondary text — between body and meta, not mono */
+  --font-size-nav: clamp(
+    13px,
+    11.5px + 0.16vw,
+    16px
+  ); /* header nav links — desktop scale-up */
+  --font-size-hero: clamp(
+    36px,
+    23px + 4vw,
+    80px
+  ); /* v3: Unbounded hero wordmark on / only */
+  --font-size-sticker: clamp(
+    11px,
+    10.5px + 0.13vw,
+    13px
+  ); /* v3: Unbounded sticker badge text */
+
+  /* ---------- Weights ---------- */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ---------- Line heights ---------- */
+  --line-height-tight: 1.15; /* display, h1/h2 */
+  --line-height-snug: 1.3; /* h3, card titles */
+  --line-height-normal: 1.55; /* body */
+  --line-height-body: var(--line-height-normal); /* alias */
+  --line-height-relaxed: 1.7; /* long-form prose, /about */
+
+  /* ---------- Letter spacing ---------- */
+  --letter-spacing-tight: -0.015em; /* Lora display */
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.06em; /* mono caps, chips */
+  --letter-spacing-meta: 0.01em; /* JetBrains Mono captions */
+}
