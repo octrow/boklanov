@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useField, useLocale } from '@payloadcms/ui'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useLocaleMode } from './LocaleModeProvider'
 import {
   useLocalizedDoc,
@@ -101,11 +102,29 @@ type Props = {
 }
 
 export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
-  const { mode } = useLocaleMode()
+  const { mode, setMode } = useLocaleMode()
+  const router = useRouter()
+  const pathname = usePathname() ?? ''
+  const searchParams = useSearchParams()
   const activeLocaleRaw = useLocale().code
   const activeLocale: LocaleCode = isLocaleCode(activeLocaleRaw)
     ? activeLocaleRaw
     : 'ru'
+
+  // Pill click handler: RU/EN/DE → page-global switch + URL locale flip;
+  // ALL → page-global show-all. Spec §Round-2 R1 in
+  // PAYLOAD_ADMIN_UX_PLAN.md.
+  const onPillClick = (pill: LocaleCode | 'all') => {
+    if (pill === 'all') {
+      if (mode !== 'all') setMode('all')
+      return
+    }
+    if (mode !== 'switch') setMode('switch')
+    if (pill === activeLocale) return
+    const next = new URLSearchParams(searchParams?.toString() ?? '')
+    next.set('locale', pill)
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false })
+  }
 
   const { value: activeValue, setValue: setActiveValue } = useField<string>({
     path
@@ -133,8 +152,6 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
     }
   }
 
-  const [activeTab, setActiveTab] = useState<LocaleCode>(activeLocale)
-
   const renderInput = (locale: LocaleCode) => {
     const sharedProps = {
       value: valueFor(locale),
@@ -148,17 +165,51 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
     return <input type='text' {...sharedProps} style={inputStyle} />
   }
 
+  const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
+  const isPillActive = (pill: LocaleCode | 'all') =>
+    pill === 'all' ? mode === 'all' : mode === 'switch' && pill === activeLocale
+
+  const pillStrip = (
+    <div
+      style={{
+        display: 'flex',
+        borderBottomWidth: 1,
+        borderBottomStyle: 'solid',
+        borderBottomColor: 'var(--theme-elevation-150)'
+      }}
+    >
+      {pills.map((pill) => (
+        <button
+          key={pill}
+          type='button'
+          onClick={() => onPillClick(pill)}
+          style={isPillActive(pill) ? tabActiveStyle : tabBaseStyle}
+          aria-pressed={isPillActive(pill)}
+          title={
+            pill === 'all'
+              ? 'Показать все языки сразу'
+              : `Переключиться на ${pill.toUpperCase()}`
+          }
+        >
+          {pill === 'all' ? 'ALL' : pill.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  )
+
   if (mode === 'all') {
     return (
       <div className='field-type' style={{ marginBottom: 16 }}>
         <label style={{ display: 'block', marginBottom: 6, fontWeight: 500 }}>
           {label}
         </label>
+        {pillStrip}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: 12
+            gap: 12,
+            paddingTop: 8
           }}
         >
           {LOCALES.map((loc) => (
@@ -183,41 +234,8 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
       <label style={{ display: 'block', marginBottom: 6, fontWeight: 500 }}>
         {label}
       </label>
-      <div
-        style={{
-          display: 'flex',
-          borderBottomWidth: 1,
-          borderBottomStyle: 'solid',
-          borderBottomColor: 'var(--theme-elevation-150)'
-        }}
-      >
-        {LOCALES.map((loc) => (
-          <button
-            key={loc}
-            type='button'
-            onClick={() => setActiveTab(loc)}
-            style={loc === activeTab ? tabActiveStyle : tabBaseStyle}
-            aria-pressed={loc === activeTab}
-          >
-            {loc.toUpperCase()}
-            {loc === activeLocale && (
-              <span
-                style={{
-                  display: 'inline-block',
-                  marginLeft: 6,
-                  width: 5,
-                  height: 5,
-                  borderRadius: 3,
-                  background: 'var(--theme-success-500, #16a34a)',
-                  verticalAlign: 'middle'
-                }}
-                title='Active locale'
-              />
-            )}
-          </button>
-        ))}
-      </div>
-      <div style={{ paddingTop: 8 }}>{renderInput(activeTab)}</div>
+      {pillStrip}
+      <div style={{ paddingTop: 8 }}>{renderInput(activeLocale)}</div>
     </div>
   )
 }

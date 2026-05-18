@@ -4,6 +4,7 @@ import React from 'react'
 import { useLocale } from '@payloadcms/ui'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import type { RichTextFieldDescriptionClientComponent } from 'payload'
+import { useLocaleMode } from './LocaleModeProvider'
 import { LOCALES, type LocaleCode } from './LocalizedDocContext'
 
 /**
@@ -66,17 +67,33 @@ const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
   const router = useRouter()
   const pathname = usePathname() ?? ''
   const searchParams = useSearchParams()
+  const { mode, setMode } = useLocaleMode()
   const activeLocaleRaw = useLocale().code
   const activeLocale: LocaleCode = isLocaleCode(activeLocaleRaw)
     ? activeLocaleRaw
     : 'ru'
 
-  const navigateTo = (locale: LocaleCode) => {
-    if (locale === activeLocale) return
+  // Spec §Round-2 R1: pill click sets global mode + (for locale pills)
+  // navigates the URL. ALL pill flips to show-all; richText still
+  // shows a single Lexical instance per field in v1 — the
+  // multi-locale Lexical wrapper is carry-over work, see
+  // PAYLOAD_ADMIN_UX_PLAN.md §Remaining-work.5.
+  const onPillClick = (pill: LocaleCode | 'all') => {
+    if (pill === 'all') {
+      if (mode !== 'all') setMode('all')
+      return
+    }
+    if (mode !== 'switch') setMode('switch')
+    if (pill === activeLocale) return
     const next = new URLSearchParams(searchParams?.toString() ?? '')
-    next.set('locale', locale)
+    next.set('locale', pill)
     router.replace(`${pathname}?${next.toString()}`, { scroll: false })
   }
+
+  const isPillActive = (pill: LocaleCode | 'all') =>
+    pill === 'all' ? mode === 'all' : mode === 'switch' && pill === activeLocale
+
+  const pills: Array<LocaleCode | 'all'> = [...LOCALES, 'all']
 
   // description from field config: string | object | falsey
   const descText =
@@ -91,20 +108,22 @@ const LocalizedRichTextTabs: RichTextFieldDescriptionClientComponent = ({
   return (
     <div style={{ marginTop: 4, marginBottom: 6 }}>
       <div style={{ display: 'flex', gap: 0, marginBottom: descText ? 4 : 0 }}>
-        {LOCALES.map((loc) => (
+        {pills.map((pill) => (
           <button
-            key={loc}
+            key={pill}
             type='button'
-            onClick={() => navigateTo(loc)}
-            style={loc === activeLocale ? tabActiveStyle : tabBaseStyle}
-            aria-pressed={loc === activeLocale}
+            onClick={() => onPillClick(pill)}
+            style={isPillActive(pill) ? tabActiveStyle : tabBaseStyle}
+            aria-pressed={isPillActive(pill)}
             title={
-              loc === activeLocale
-                ? 'Сейчас редактируется'
-                : `Переключиться на ${loc.toUpperCase()}`
+              pill === 'all'
+                ? 'Показать все языки сразу'
+                : pill === activeLocale && mode === 'switch'
+                  ? 'Сейчас редактируется'
+                  : `Переключиться на ${pill.toUpperCase()}`
             }
           >
-            {loc.toUpperCase()}
+            {pill === 'all' ? 'ALL' : pill.toUpperCase()}
           </button>
         ))}
       </div>

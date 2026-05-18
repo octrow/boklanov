@@ -20,9 +20,10 @@ import React, {
  *
  * Mounted from payload.config.ts → admin.components.providers so it sits
  * above the Payload form tree. Choice persists per browser via
- * localStorage; the toggle that mutates it lives in
- * components/admin/LocaleModeToggle.tsx and is wired through
- * admin.components.actions.
+ * localStorage. As of Round-2 (PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R1) the
+ * mutating control is the per-field RU·EN·DE·ALL pill strip rendered by
+ * LocalizedTextLike / LocalizedRichTextTabs — the standalone header
+ * toggle was removed.
  *
  * State source-of-truth is localStorage, read via useSyncExternalStore so
  * the value is always synchronously consistent across the tree (no
@@ -126,10 +127,11 @@ export default LocaleModeProvider
 export const useLocaleMode = (): LocaleModeContextValue => {
   const ctx = useContext(LocaleModeContext)
   if (ctx) return ctx
-  // The toggle is mounted via admin.components.actions, which may render
-  // in a slot Payload positions outside the providers tree depending on
-  // route. Treat a missing provider as a thin shim that still reads the
-  // canonical localStorage state — clicks continue to work end-to-end.
+  // Some Payload slots (notably field-level Description components) can
+  // render in trees that don't sit underneath the providers root on
+  // certain routes. Treat a missing provider as a thin shim that still
+  // reads the canonical localStorage state — clicks continue to
+  // work end-to-end.
   return {
     mode: DEFAULT_MODE,
     setMode: writeMode,

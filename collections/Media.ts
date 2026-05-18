@@ -74,6 +74,9 @@ export const Media: CollectionConfig = {
         description: {
           ru: 'Alt-текст для доступности и SEO. По локалям.',
           en: 'Accessibility / SEO alt text, per locale.'
+        },
+        components: {
+          Field: '/components/admin/LocalizedText#default'
         }
       }
     },

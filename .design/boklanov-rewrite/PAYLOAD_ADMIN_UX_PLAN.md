@@ -5,6 +5,11 @@ Status: **Draft 2026-05-18** — Steps 1 + 2 shipped (text/textarea on all
 Owner: Daniil. Follow-up to `PAYLOAD_POLISH_PLAN.md` after Roman
 dogfooded the shipped admin for ~4 days.
 
+**Round-2 feedback (2026-05-18, after Steps 1 + 2 reached Roman):** four
+new requirements landed. See **§Round-2 requirements** below — they
+modify the next-session scope and override the original A.0 / A.4 +
+Team-tab assumptions.
+
 ## Progress log
 
 ### 2026-05-18 — Steps 1 + 2 landed
@@ -72,21 +77,116 @@ dogfooded the shipped admin for ~4 days.
 `npm run dev` boot, `GET /admin/login` → 200,
 `GET /admin/collections/productions/54` → 200.
 
+### 2026-05-18 — Round-2 wave R2-1…R2-5 landed
+
+All four Round-2 requirements shipped in a single follow-up session.
+
+**R2-1 — 4-pill tab strip (`RU · EN · DE · ALL`).**
+
+- `components/admin/LocalizedTextLike.tsx` — local `activeTab`
+  `useState` removed. Active tab now binds directly to URL `?locale=`
+  via `useLocale().code`. New `onPillClick`: locale pills set mode to
+  `switch` + `router.replace('?locale=X', { scroll: false })`; `ALL`
+  sets mode to `all`. Same `pillStrip` renders in both modes.
+- `components/admin/LocalizedRichTextTabs.tsx` — same 4-pill control
+  in the richText description slot; richText still single-Lexical
+  per field in `all` mode (see Carry-overs §5 below for the
+  triple-Lexical work).
+- `components/admin/LocaleModeToggle.tsx` — **deleted**.
+- `payload.config.ts` — `admin.components.actions` dropped; comment
+  block updated.
+- Decision on global-vs-per-field state (open question in R1):
+  shipped as **page-global**. State still lives in
+  `LocaleModeContext` + URL, so flipping any field's `ALL` flips
+  every field and clicking `EN` on one field activates EN
+  page-wide. Single-locale-per-field is not blocked from being
+  added later, but day-one data says editors think in
+  "I'm working in EN now," not per-field-mixed.
+
+**R2-2 — Wiring audit closed one gap.**
+
+- Coverage was actually 32 localized fields (the previous 31/31
+  claim missed a comment-string false positive). Real gap:
+  `collections/Media.ts:alt`. Added the
+  `admin.components.Field: '/components/admin/LocalizedText#default'`
+  ref. New total: 32/32.
+- `production.premiereDate` already had the ref. Roman's "Год
+  премьеры feels missing" reads as visual-prominence — R2-1's
+  unmistakable 4-pill strip directly above the input fixes it
+  without any wiring change.
+
+**R2-3 — Inline-richText feature trim.**
+
+- New module-local `INLINE_ONLY_DROP_FEATURES` constant in
+  `collections/Productions.ts` listing the ten block-shaped feature
+  keys to strip: `heading`, `align`, `indent`, `unorderedList`,
+  `orderedList`, `checklist`, `relationship`, `blockquote`, `upload`,
+  `horizontalRule`.
+- Applied to `tagline`, `synopsis`, `directorsNote`. `identity.body`
+  untouched (keeps `+` + fixed toolbar).
+- Feature keys captured by reading
+  `node_modules/@payloadcms/richtext-lexical/dist/lexical/config/server/default.js`
+  rather than the dev-console approach noted in §B.1 — same result,
+  no dev round-trip needed.
+
+**R2-4 — Visible borders + toolbar density CSS.**
+
+- `app/(payload)/custom.scss` gained a Lexical-polish block:
+  - `.rich-text-lexical` gets a 1 px border, 4 px radius, and
+    `--theme-input-bg` background; focus-within bumps the border
+    to `--theme-elevation-400`. Light + dark covered via theme
+    elevation vars.
+  - `.rich-text-lexical:not(.rich-text-lexical--show-gutter)` adds
+    inner padding so the bordered shell sits flush around the
+    text (belt-and-braces — the inline-only fields already lack the
+    gutter modifier after R2-3, this rule just keeps the visual
+    correct even if some future default brings the gutter back).
+  - `.fixed-toolbar` density tightened to 4/6 px padding and 28 px
+    buttons on `identity.body`.
+- Class hooks (`rich-text-lexical`,
+  `rich-text-lexical--show-gutter`, `fixed-toolbar`) confirmed
+  against `@payloadcms/richtext-lexical/dist/field/bundled.css` —
+  if a future Payload upgrade renames them, that file is the
+  reference (Risk R4).
+
+**R2-5 — Команда tab via Option B (conditional show/hide).**
+
+- New `components/admin/ActiveLocaleBodyAttr.tsx` provider
+  reads `?locale=` from `useSearchParams()` and mirrors it to
+  `document.body.dataset.activeLocale` via `useEffect`. Mounted in
+  `admin.components.providers` after `LocalizedDocContext`.
+- `creditsRu / creditsEn / creditsDe` arrays got
+  `admin.className: 'team-credits-locale team-credits-locale--{ru|en|de}'`.
+- `custom.scss` rules:
+  `body[data-locale-mode='switch'][data-active-locale='X'] .team-credits-locale--Y { display: none }`
+  for the two non-matching arrays per locale. `all` mode shows all
+  three (the default — no rules hide anything).
+- Tab description rewritten in RU + EN to explain the visibility
+  model.
+- Option A (unify into one localized array) parked as a future
+  migration if Roman confirms credit sets are always parallel
+  across locales. Not blocking — Option B is zero-migration and
+  fully reversible.
+
+**Verified clean.**
+`npx tsc --noEmit`, `npx eslint`, `npx prettier --write`,
+`npm run payload:generate:importmap`,
+`npm run dev` ready in 1.8 s, `GET /admin/login` → 200,
+`GET /admin/collections/productions` → 200,
+`GET /admin/collections/productions/54?locale=en` → 200.
+No runtime errors in the log (pre-existing "no email adapter" warning
+only).
+
 ## Remaining work (next session)
 
-1. **RichText visual treatment.** Fields like `Подзаголовок`, `Синопсис`,
-   `Записка режиссёра`, `Полный текст` still render without a clear
-   field shell and with orphan `+` glyphs on left margin / bottom for
-   inline-only fields. This is **Part B** in this doc (B.1 inline
-   feature trim, B.2 visible borders, B.3 toolbar density). Not yet
-   started.
-2. **RichText `Языки: все сразу` (show-all) mode.** Right now the
-   global toggle's `all` mode only changes text/textarea rendering —
-   richText fields still show the URL-nav tab pills. The user wants:
-   when `Языки: все сразу` is on, richText fields should render
-   **three editable locale columns** simultaneously. This is the
-   deferred work flagged by Risk R1: mounting Lexical 3× per richText
-   field × 5 richText fields = perf cost. Plan of attack:
+R2-1…R2-5 landed (see Progress log §2026-05-18 Round-2). What's left
+from the original Remaining-work list:
+
+1. **RichText `Языки: все сразу` (show-all) mode.** When the `ALL`
+   pill is active, richText fields should render **three editable
+   locale columns** simultaneously. Risk R1 still applies (15
+   Lexical instances on a loaded Production). Plan of attack
+   unchanged:
    - Build a minimal Lexical wrapper that reads/writes the shadow
      `LocalizedDocContext` for inactive locales, mirroring the feature
      set declared in each field's `editor: lexicalEditor({...})`.
@@ -97,9 +197,14 @@ dogfooded the shipped admin for ~4 days.
      correctly through the PATCH path that currently only handles
      plain strings — `LocalizedTextLike` writes strings; richText
      writes JSON objects.
-3. **Part A.4 — hide global `.localizer`.** Deferred until after
+2. **Part A.4 — hide global `.localizer`.** Deferred until after
    richText show-all lands, since right now the global selector is
    still the only way to edit inactive-locale richText.
+3. **Команда — Option A migration (optional).** If Roman confirms
+   credit sets are always parallel across locales, convert
+   `team.creditsRu/En/De` to a single `team.credits` array with
+   `localized: true` on `role` + `name`. Otherwise Option B (R2-5)
+   is the steady state.
 
 ## Architecture note (2026-05-18, post-Step-2 investigation)
 
@@ -137,6 +242,188 @@ restore configs, or reintroduce Keystatic UX patterns 1:1. The
 side-by-side 3-locale layout idea, in particular, is borrowed as a
 visual reference for **show-all mode** (§A.0 / §A.1), not as a code
 port.
+
+## Round-2 requirements (2026-05-18)
+
+After Steps 1 + 2 reached Roman, four issues landed. Treat these as the
+**authoritative scope for the next session**; they override matching
+parts of §A.0, §A.4, and the original Execution-order table.
+
+### R1. Move the locale toggle into the field tab strip
+
+**Today.** A single `LocaleModeToggle` pill sits in the admin header
+(`admin.components.actions`) and flips a global context between
+`switch` and `all`. Field tab strips show `RU · EN · DE`.
+
+**Wanted.** No header pill. Every field's tab strip becomes a
+**4-state segmented control**: `RU · EN · DE · ALL`. `ALL` is the
+4th pill; clicking it expands the field into the 3-column grid mode.
+
+**Behaviour.**
+
+- `RU` / `EN` / `DE` → field renders only that locale's input
+  (`switch` mode, that locale active).
+- `ALL` → field renders all three locales side-by-side
+  (`all` mode).
+- The control is **per-field-visible but page-global in state**:
+  state still lives in `LocaleModeContext` + active-locale URL, so
+  flipping one field's tab strip to `ALL` flips every field on the
+  page to `ALL`, and clicking `EN` on one field also makes `EN` the
+  active locale for every other field (and the URL's `?locale=`).
+  Rationale: editors think in "I'm working in EN now" not "I'm
+  working in EN on this one field but RU on the next" — and the
+  shadow context already PATCHes inactive locales transparently, so
+  there's no productivity loss from page-global state.
+- **Open question** (defer to implementation): should `ALL` be
+  per-field instead? Trade-off documented inline with the
+  implementer's first-draft prototype; default ships as page-global
+  unless the prototype shows it's clearly worse.
+
+**Removal.** Delete `components/admin/LocaleModeToggle.tsx` and its
+entry in `admin.components.actions`. The component code that lives in
+the tab strip moves into `LocalizedTextLike` (or a sibling shared
+file) since text/textarea/richText all need the same 4-state strip.
+
+**Visual contract.** Pills sit on a single row directly above the
+input. Active pill uses the same active style today's `RU`/`EN`/`DE`
+pills use; `ALL` is visually a peer (no separator, no different
+weight). `ALL` shows the same dirty-dot affordance as the locale
+pills (dot if **any** locale on this field is dirty).
+
+### R2. Every localized field must show the tab strip
+
+Step 2 claimed 31/31 coverage via `scripts/wire-localized-fields.py`.
+Roman flagged at least one field where the switcher feels missing.
+He cited "Год премьеры", which is actually two adjacent fields:
+
+- `production.premiereDate` — `type: 'text'`, `localized: true`
+  (label "Дата премьеры"). **Should** have the tab strip.
+- `production.premiereYear` — `type: 'number'`, **not** localized
+  (label "Год премьеры"). Should **not** have a tab strip — the year
+  is shared across locales.
+
+Two possibilities for the bug:
+
+1. `premiereDate` did get the `admin.components.Field` ref but the
+   visual is so adjacent to the unlocalized `premiereYear` row that
+   Roman read "the switcher is missing on this group". Fix is layout
+   polish, not wiring.
+2. The wiring script's brace-matcher missed `premiereDate` (or
+   another field) on first run. Fix is to re-run the audit and patch
+   the gap.
+
+**Action for next session.**
+
+- Diff `grep -nE 'localized:\s*true' collections/Productions.ts
+globals/About.ts globals/Contact.ts collections/Media.ts` against
+  the set of fields that today resolve to a `LocalizedText` /
+  `LocalizedTextarea` / `LocalizedRichTextTabs` ref. Any localized
+  field without a ref is a wiring bug — fix the script or hand-patch.
+- For `premiereDate` specifically: confirm `admin.components.Field`
+  is set; if yes, the issue is visual prominence — verify the new
+  4-pill tab strip is unmistakably present above the input.
+
+### R3. Field chrome for inline-only richText
+
+Three richText fields use `InlineToolbarFeature` only — they're
+not block editors. They must look like normal bordered text fields.
+
+- `identity.tagline` ("Подзаголовок")
+- `identity.synopsis` ("Синопсис")
+- `identity.directorsNote` ("Записка режиссёра")
+
+**Required visual after this wave.**
+
+- Visible 1 px border around the editor (light + dark theme).
+- **No** `+` block-insert glyph on the left gutter.
+- **No** `+` row / floating actions at the bottom.
+- The fixed inline toolbar (bold / italic / link / strike) is fine;
+  keep it.
+
+`identity.body` ("Полный текст") is **exempt** — it's the long-form
+editorial body and keeps `+` + block insert + horizontal rules etc.
+
+**Implementation** = Part B.1 + B.2 already drafted in this doc.
+Two refinements:
+
+- Before committing the `f.key` filter list, do the one-time
+  `console.log(defaultFeatures.map(f => f.key))` capture noted in
+  §B.1 so we drop the right defaults rather than guessing.
+- B.2 selectors are best-guess against Payload 3.x; verify in
+  DevTools on first dev boot (Risk R4) and pin under one
+  Payload-class block in `app/(payload)/custom.scss`.
+
+### R4. Reconcile the `Команда` (Team) tab
+
+`collections/Productions.ts:826–936` models team credits as **three
+parallel arrays**:
+
+```text
+team: {
+  creditsRu: [{ role, name, url }, …],
+  creditsEn: [{ role, name, url }, …],
+  creditsDe: [{ role, name, url }, …],
+}
+```
+
+None of these are `localized: true`. The pattern predates the
+per-field locale UX and now violates the principle stated in
+§Goals.1: "Editing any localized field across RU / EN / DE must be
+possible from inside the field itself." Team rows can't be — they
+live in different arrays. Switching the active locale doesn't hide
+the wrong-language array, and the new `ALL` mode has nothing to
+expand because there's no locale axis on the array.
+
+Three possible exits (pick one in next-session prep):
+
+**Option A — Unify into one localized array.** Convert to a single
+`team.credits` array with `role` + `name` `localized: true`. Pros:
+matches the rest of the admin; the `RU · EN · DE · ALL` strip works
+out of the box on `role` and `name`; row count is constant across
+locales (a "Director" row is the same person in every language).
+Cons: requires a one-time data migration that interleaves the three
+arrays into a single ordered list. Order-matching across locales is
+manual (which RU row is the EN translation of which?). Editors lose
+the ability to have a different **set** of credits per locale (if
+that's ever wanted, which Roman has not asked for).
+
+**Option B — Keep three arrays but conditionally hide two.** Show
+only `creditsRu` when active locale is RU, only `creditsEn` when EN,
+etc. Use the same `LocaleModeContext` to drive `admin.condition` on
+each array. `ALL` mode shows all three side-by-side in a 3-column
+grid (which is roughly what the tab already does — but now governed
+by the field-level pills instead of being always-visible).
+Pros: zero data migration. Cons: still three independent arrays
+under the hood; adding a credit in RU doesn't auto-add a row in EN.
+
+**Option C — Leave it as-is and document the exception.** Keep the
+3-array model; add a banner at the top of the Команда tab
+explaining "Команда — три параллельных списка, не локализованное
+поле; переключатель языков сверху работает на остальных вкладках".
+Pros: zero work. Cons: leaks implementation, contradicts §Goals.1.
+
+**Recommendation: Option A** if Roman confirms row sets are always
+parallel across locales (i.e., the credits list doesn't differ in
+membership across languages, only in spelling). Confirm with Roman
+before writing the migration. If Roman wants the freedom to add a
+credit in one locale that doesn't exist in others, fall back to
+Option B.
+
+### Execution order — Round-2
+
+Replaces the original §Execution-order table for the next session.
+
+| Step | What                                                                                                                                          | Est. time |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| R2-1 | Refactor `LocalizedTextLike` tab strip into a 4-pill segmented control (`RU · EN · DE · ALL`). Delete `LocaleModeToggle`.                     | 1 h       |
+| R2-2 | Re-run wiring audit; diff localized-field inventory against `admin.components.Field` refs; fix any gap (incl. `premiereDate`).                | 30 m      |
+| R2-3 | B.1 inline-richText feature trim — capture `defaultFeatures.map(f => f.key)` once, commit filter list for tagline + synopsis + directorsNote. | 45 m      |
+| R2-4 | B.2 visible borders + B.3 toolbar density in `app/(payload)/custom.scss`; verify selectors against DevTools first.                            | 45 m      |
+| R2-5 | Decision: Option A / B / C on `Команда`. If A: write migration `scripts/migrate-team-to-localized.ts`. If B: condition flips.                 | 1.5 – 3 h |
+| R2-6 | Smoke test all four waves on a live Production; record before/after screenshots in `.design/review/`.                                         | 45 m      |
+
+**Total estimate: 5 – 7 h.** Carry-over items (richText show-all,
+hide `.localizer`) follow in a subsequent session.
 
 ## Why this plan exists
 

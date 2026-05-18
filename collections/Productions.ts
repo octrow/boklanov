@@ -10,6 +10,24 @@ import {
   revalidateProductionDelete
 } from '../hooks/revalidate'
 
+// Block-shaped Lexical features stripped from inline-only richText
+// fields (tagline / synopsis / directorsNote). Removing all of these
+// also removes the `+` block-insert gutter glyph and the bottom
+// toolbar, giving the fields a clean text-input look.
+// See PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R3 + §B.1.
+const INLINE_ONLY_DROP_FEATURES = new Set([
+  'heading',
+  'align',
+  'indent',
+  'unorderedList',
+  'orderedList',
+  'checklist',
+  'relationship',
+  'blockquote',
+  'upload',
+  'horizontalRule'
+])
+
 /**
  * Productions — direct port of keystatic.config.ts collection `productions`.
  *
@@ -130,10 +148,16 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Подзаголовок', en: 'Tagline' },
                   localized: true,
                   editor: lexicalEditor({
-                    features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
-                      InlineToolbarFeature()
-                    ]
+                    // Inline-only: strip every block-shaped feature so
+                    // Lexical's BlockInsert plugin has nothing to offer
+                    // and the `+` gutter glyph / bottom toolbar
+                    // disappear. PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R3 +
+                    // §B.1. Feature keys captured from
+                    // node_modules/@payloadcms/richtext-lexical default.js.
+                    features: ({ defaultFeatures }) =>
+                      defaultFeatures.filter(
+                        (f) => !INLINE_ONLY_DROP_FEATURES.has(f.key)
+                      )
                   }),
                   admin: {
                     description: {
@@ -152,10 +176,10 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Синопсис', en: 'Synopsis' },
                   localized: true,
                   editor: lexicalEditor({
-                    features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
-                      InlineToolbarFeature()
-                    ]
+                    features: ({ defaultFeatures }) =>
+                      defaultFeatures.filter(
+                        (f) => !INLINE_ONLY_DROP_FEATURES.has(f.key)
+                      )
                   }),
                   admin: {
                     description: {
@@ -174,10 +198,10 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Записка режиссёра', en: "Director's note" },
                   localized: true,
                   editor: lexicalEditor({
-                    features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
-                      InlineToolbarFeature()
-                    ]
+                    features: ({ defaultFeatures }) =>
+                      defaultFeatures.filter(
+                        (f) => !INLINE_ONLY_DROP_FEATURES.has(f.key)
+                      )
                   }),
                   admin: {
                     description: {
@@ -826,8 +850,8 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Команда', en: 'Team' },
           description: {
-            ru: 'Команда и состав по локалям. Локали независимы — переводи роль и имя на месте.',
-            en: 'Cast & crew per locale. Each locale is independent — translate role + name in place.'
+            ru: 'Команда и состав. Видимый список зависит от языка вверху страницы: RU/EN/DE показывает свой список, ALL — все три сразу.',
+            en: 'Cast & crew. Visible list follows the locale pill at the top: RU/EN/DE shows that locale only; ALL shows all three side-by-side.'
           },
           fields: [
             {
@@ -838,6 +862,11 @@ export const Productions: CollectionConfig = {
                 {
                   // Three parallel arrays — see keystatic.config.ts §Credits comment
                   // for why we don't unify them: role labels here are free RU phrases.
+                  // The `team-credits-locale--*` className + body-level
+                  // `data-active-locale` attribute let `app/(payload)/custom.scss`
+                  // hide the non-matching arrays in switch mode while still
+                  // showing all three in `all` mode. See
+                  // PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R4 (Option B).
                   name: 'creditsRu',
                   type: 'array',
                   label: { ru: 'Команда (RU)', en: 'Team (RU)' },
@@ -846,6 +875,7 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Команда (RU)', en: 'Team (RU)' }
                   },
                   admin: {
+                    className: 'team-credits-locale team-credits-locale--ru',
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }
@@ -877,6 +907,7 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Команда (EN)', en: 'Team (EN)' }
                   },
                   admin: {
+                    className: 'team-credits-locale team-credits-locale--en',
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }
@@ -908,6 +939,7 @@ export const Productions: CollectionConfig = {
                     plural: { ru: 'Команда (DE)', en: 'Team (DE)' }
                   },
                   admin: {
+                    className: 'team-credits-locale team-credits-locale--de',
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }

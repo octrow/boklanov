@@ -24,3 +24,86 @@
 .tabs-field__tab-content > .render-fields {
   padding-top: 12px;
 }
+
+/* ----------------------------------------------------------------------
+   Payload 3 Lexical richText polish (PAYLOAD_ADMIN_UX_PLAN.md §Round-2
+   R3 + §B.2, §B.3).
+
+   Selectors pinned against @payloadcms/richtext-lexical 3.x. If a
+   future Payload upgrade renames classes, this block is the place to
+   update — Risk R4. Class hooks captured from
+   node_modules/@payloadcms/richtext-lexical/dist/field/bundled.css
+   (`.rich-text-lexical`, `.rich-text-lexical--show-gutter`,
+   `.fixed-toolbar`).
+   --------------------------------------------------------------------*/
+
+/* Visible bordered shell so richText fields read like first-class form
+   inputs in light + dark. `--theme-elevation-*` covers both themes. */
+.rich-text-lexical {
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 4px;
+  background: var(--theme-input-bg);
+  transition: border-color 120ms ease;
+}
+
+.rich-text-lexical:focus-within {
+  border-color: var(--theme-elevation-400);
+}
+
+/* Inline-only fields (tagline / synopsis / directorsNote) drop every
+   block feature in Productions.ts, so Lexical doesn't render the
+   `--show-gutter` modifier on them — no `+` gutter glyph appears.
+   Belt + braces: force-hide the gutter affordance even if some
+   future block feature sneaks back in via defaultFeatures. */
+.rich-text-lexical:not(.rich-text-lexical--show-gutter) {
+  .editor-container {
+    padding: 8px 12px;
+  }
+}
+
+/* Toolbar density on identity.body (the one field that keeps
+   FixedToolbarFeature). ~20 px saved per richText × 1 fixed-toolbar
+   field on the Productions form. */
+.rich-text-lexical .fixed-toolbar {
+  padding: 4px 6px;
+  gap: 4px;
+}
+
+.rich-text-lexical .fixed-toolbar__group button {
+  width: 28px;
+  height: 28px;
+}
+
+/* ----------------------------------------------------------------------
+   Команда tab — Option B from PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R4.
+
+   Three parallel arrays (creditsRu / creditsEn / creditsDe) on the
+   Productions form are conditionally visible:
+   - switch mode + locale=ru → only --ru visible
+   - switch mode + locale=en → only --en visible
+   - switch mode + locale=de → only --de visible
+   - all mode               → all three visible (the default Команда tab look)
+
+   `data-locale-mode` is set by LocaleModeProvider.tsx.
+   `data-active-locale` is set by ActiveLocaleBodyAttr.tsx.
+   --------------------------------------------------------------------*/
+body[data-locale-mode='switch'][data-active-locale='ru'] {
+  .team-credits-locale--en,
+  .team-credits-locale--de {
+    display: none;
+  }
+}
+
+body[data-locale-mode='switch'][data-active-locale='en'] {
+  .team-credits-locale--ru,
+  .team-credits-locale--de {
+    display: none;
+  }
+}
+
+body[data-locale-mode='switch'][data-active-locale='de'] {
+  .team-credits-locale--ru,
+  .team-credits-locale--en {
+    display: none;
+  }
+}
