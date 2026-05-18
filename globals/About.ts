@@ -44,6 +44,17 @@ export const About: GlobalConfig = {
               label: { ru: 'Текст биографии', en: 'Biography text' },
               localized: true,
               editor: lexicalEditor({
+                // Mirrors Productions §RICHTEXT_ADMIN_CHROME — hides
+                // Lexical's `+` gutter, drag handle, slash menu and
+                // built-in placeholder so the field reads as a clean
+                // text box. See PAYLOAD_ADMIN_UX_PLAN.md §Round-5.
+                admin: {
+                  hideGutter: true,
+                  hideAddBlockButton: true,
+                  hideDraggableBlockElement: true,
+                  hideInsertParagraphAtEnd: true,
+                  placeholder: ''
+                },
                 features: ({ defaultFeatures }) => [
                   ...defaultFeatures,
                   HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),

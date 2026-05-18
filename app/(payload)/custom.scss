@@ -37,32 +37,31 @@
    `.fixed-toolbar`).
    --------------------------------------------------------------------*/
 
-/* Visible bordered shell so richText fields read like first-class form
-   inputs in light + dark. `--theme-elevation-150` was invisible in
-   dark mode (Round-2 review by Roman) — bumped to 250 for contrast
-   and 400 on focus-within. `--theme-elevation-*` covers both themes. */
-.rich-text-lexical {
+/* Round-5: the bordered shell wraps ONLY the editor body. Label,
+   beforeInput pillstrip, and description sit OUTSIDE the box so the
+   field reads visually like a plain text input with a frame around
+   just the typeable area. Previously the border was on
+   `.rich-text-lexical` (outermost wrapper) which swallowed label +
+   pills + hint, giving Roman's "everything inside the field box"
+   feedback. Targets `.editor-container` — the deepest Lexical
+   wrapper that still includes the FixedToolbar bar at the top.
+   See PAYLOAD_ADMIN_UX_PLAN.md §Round-5 + bundled.css class hooks
+   (`.editor-container`, `.editor-shell`, `.editor-scroller`). */
+.rich-text-lexical .editor-container {
   border: 1px solid var(--theme-elevation-250);
   border-radius: 4px;
   background: var(--theme-input-bg);
   transition: border-color 120ms ease;
 }
 
-.rich-text-lexical:focus-within {
+.rich-text-lexical .editor-container:focus-within {
   border-color: var(--theme-elevation-400);
 }
 
-/* Inline-only fields (tagline / synopsis / directorsNote) drop every
-   block feature in Productions.ts, so Lexical doesn't render the
-   `--show-gutter` modifier on them — no `+` gutter glyph appears.
-   Pad the inner editor body so the bordered shell sits flush around
-   the typed text rather than hugging the cursor. */
-.rich-text-lexical:not(.rich-text-lexical--show-gutter) {
-  .editor-container,
-  .editor-shell,
-  [contenteditable='true'] {
-    padding: 8px 12px;
-  }
+/* Inner padding so the cursor never sits flush against the border. */
+.rich-text-lexical .editor-container [contenteditable='true'],
+.rich-text-lexical .editor-scroller > [contenteditable='true'] {
+  padding: 8px 12px;
 }
 
 /* Toolbar density on identity.body (the one field that keeps
@@ -76,6 +75,29 @@
 .rich-text-lexical .fixed-toolbar__group button {
   width: 28px;
   height: 28px;
+}
+
+/* Round-5: belt-and-suspenders — `lexicalEditor.admin.hideGutter`
+   etc. is set in Productions.ts / About.ts to remove the `+` block-
+   insert gutter, drag handle, slash-menu placeholder and "insert
+   paragraph at end" affordance. The CSS below is a fallback in case
+   a default feature reintroduces one of those nodes; selectors come
+   from node_modules/@payloadcms/richtext-lexical/dist/field/bundled.css. */
+.rich-text-lexical .draggable-block-menu,
+.rich-text-lexical .add-block-menu,
+.rich-text-lexical .LexicalEditorTheme__placeholder {
+  display: none;
+}
+
+/* Label-row + description sit OUTSIDE the border (they're siblings
+   of `.rich-text-lexical__wrap`). Give them a touch of bottom-margin
+   so the box below floats clearly under the label. */
+.rich-text-lexical__label-row {
+  margin-bottom: 6px;
+}
+
+.rich-text-lexical .field-description {
+  margin-top: 6px;
 }
 
 /* ----------------------------------------------------------------------

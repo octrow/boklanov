@@ -28,6 +28,20 @@ const INLINE_ONLY_DROP_FEATURES = new Set([
   'horizontalRule'
 ])
 
+// Shared admin block applied to every richText field on this collection
+// — hides Payload Lexical's gutter `+`, drag handle, slash command UI
+// and the "Начните печатать…" placeholder. Pillstrip + label + hint
+// chrome lives outside the editor body (see Round-5 in
+// PAYLOAD_ADMIN_UX_PLAN.md + app/(payload)/custom.scss). Documented
+// in node_modules/@payloadcms/richtext-lexical/dist/types.d.ts §LexicalFieldAdminProps.
+const RICHTEXT_ADMIN_CHROME = {
+  hideGutter: true,
+  hideAddBlockButton: true,
+  hideDraggableBlockElement: true,
+  hideInsertParagraphAtEnd: true,
+  placeholder: ''
+} as const
+
 /**
  * Productions — direct port of keystatic.config.ts collection `productions`.
  *
@@ -124,6 +138,7 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Полный текст', en: 'Body text' },
                   localized: true,
                   editor: lexicalEditor({
+                    admin: RICHTEXT_ADMIN_CHROME,
                     features: ({ defaultFeatures }) => [
                       ...defaultFeatures,
                       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
@@ -178,6 +193,7 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Синопсис', en: 'Synopsis' },
                   localized: true,
                   editor: lexicalEditor({
+                    admin: RICHTEXT_ADMIN_CHROME,
                     features: ({ defaultFeatures }) =>
                       defaultFeatures.filter(
                         (f) => !INLINE_ONLY_DROP_FEATURES.has(f.key)
@@ -201,6 +217,7 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Записка режиссёра', en: "Director's note" },
                   localized: true,
                   editor: lexicalEditor({
+                    admin: RICHTEXT_ADMIN_CHROME,
                     features: ({ defaultFeatures }) =>
                       defaultFeatures.filter(
                         (f) => !INLINE_ONLY_DROP_FEATURES.has(f.key)

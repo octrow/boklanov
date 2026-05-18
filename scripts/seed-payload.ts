@@ -154,10 +154,18 @@ function toPayloadProduction(
 
     identity: {
       title: pickLocale((id as AnyMap).title, locale),
-      tagline: pickLocale((id as AnyMap).tagline, locale),
-      synopsis: pickLocale((id as AnyMap).synopsis, locale),
-      directorsNote: pickLocale((id as AnyMap).directorsNote, locale),
-      body
+      // tagline / synopsis / directorsNote / body are all `type: 'richText'`
+      // in collections/Productions.ts → Payload expects a Lexical
+      // SerializedEditorState (jsonb), NOT a flat string. Skipping this
+      // wrap is what left the columns NULL across all 54 productions ×
+      // 3 locales — see scripts/restore-production-richtext.ts +
+      // PAYLOAD_ADMIN_UX_PLAN.md §Round-5 for the historic context.
+      tagline: bodyToLexical(pickLocale((id as AnyMap).tagline, locale)),
+      synopsis: bodyToLexical(pickLocale((id as AnyMap).synopsis, locale)),
+      directorsNote: bodyToLexical(
+        pickLocale((id as AnyMap).directorsNote, locale)
+      ),
+      body: bodyToLexical(body)
     },
 
     media: {

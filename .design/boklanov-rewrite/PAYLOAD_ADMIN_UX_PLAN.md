@@ -10,13 +10,16 @@ new requirements landed. See **§Round-2 requirements** below — they
 modify the next-session scope and override the original A.0 / A.4 +
 Team-tab assumptions.
 
-**Closed bug 2026-05-18 (Round-4):** Roman reported the active-locale
-Lexical editor sometimes appeared empty even when Postgres had content
-for that locale. Root cause: the R3-5 CSS hide rule
-`body[data-locale-mode='all'] .localized-rt-pillstrip ~ *` kept the
-standard Lexical editor hidden whenever `localStorage` persisted
-`localeMode='all'` across sessions. Fix landed in Round-4 below.
-Trail preserved in
+**Closed bug 2026-05-18 (Round-4 + Round-5):** Roman first reported
+the active-locale Lexical editor showed empty even when Postgres had
+content. Round-4 removed the CSS hide rule that was masking the
+editor in ALL mode. Round-5 then uncovered the real DB-level cause —
+every richText cell on Productions was NULL in Postgres because the
+original seed never wrapped strings as Lexical state. Fix bundle:
+seed corrected, one-shot restore script reads from `main` branch
+YAML/MDX, plus a chrome polish that moves label/pills/hint OUTSIDE
+the editor border and disables Lexical's gutter `+` + slash menu +
+placeholder. Trail preserved in
 [`PAYLOAD_RICHTEXT_LOCALE_DEBUG.md`](./PAYLOAD_RICHTEXT_LOCALE_DEBUG.md)
 (closed).
 
@@ -385,6 +388,109 @@ Manual reproduction TODO: open
 `boklanov.admin.localeMode='all'` pre-set; expected — pillstrip on
 top, EN+DE textareas in a 2-col grid, then a small `ru · …` chip,
 then the standard Lexical for RU with the doc's content visible.
+
+### 2026-05-18 — Round-5: data restore + chrome polish on richText
+
+Roman opened `/admin/collections/productions/11` post-Round-4 and
+reported two surviving issues:
+
+1. **Полный текст / Подзаголовок / Синопсис / Записка режиссёра**
+   were empty in the editor on production 11 (and every other
+   production) even though the source content exists.
+2. The field chrome was wrong: the label `Полный текст — English`,
+   the RU·EN·DE·ALL pillstrip, the hint, the Lexical `+` gutter
+   button, the hover `+`, and the `Начните печатать или нажмите '/'
+для команд` placeholder were ALL sitting inside the bordered
+   field box. Roman wanted the field to read like the simple
+   `Название` text input (label above, optional hint, one rectangular
+   editable area).
+
+#### Issue 1 — root cause + fix
+
+Audit query: `SELECT _locale, COUNT(identity_body), COUNT(identity_tagline), COUNT(identity_synopsis), COUNT(identity_directors_note) FROM productions_locales GROUP BY _locale` returned **0 non-null cells across all 54 productions × 3 locales × 4 fields**. Every richText column on Productions was NULL.
+
+The companion seed-fix commit (3a5e0e1, "fix(seed): wrap About body strings as Lexical states") added a `bodyToLexical()` helper and wired it into the About global, but missed Productions. `toPayloadProduction()` passed plain strings for `tagline / synopsis / directorsNote / body`; Payload's richText field expects a Lexical `SerializedEditorState` (jsonb) and silently dropped the writes, leaving every cell NULL.
+
+Fixes shipped:
+
+- `scripts/seed-payload.ts §toPayloadProduction` — wrap all four
+  identity-tab richText fields with the existing `bodyToLexical()`
+  helper so a future re-seed (after a wipe) produces valid jsonb.
+- `scripts/restore-production-richtext.ts` — one-shot **data**
+  restore. Reads `content/productions/<slug>/index.yaml` and
+  `bodyRu.mdx`/`bodyEn.mdx`/`bodyDe.mdx` from the `main` branch
+  via `git show main:<path>` (the working tree on
+  feature/payloadcms keeps `content/` retired). For every NULL cell
+  in `productions_locales` whose source has data, writes a minimal
+  `{root:{children:[paragraph...]}}` Lexical state. Idempotent —
+  rows that already have content are left alone. Dry-run output:
+  292 cells convertible from the available source; 356 cells truly
+  have no source data (those productions just don't have a
+  body/tagline/etc. in YAML).
+
+Run with:
+
+```
+npx tsx scripts/restore-production-richtext.ts --dry-run   # preview
+npx tsx scripts/restore-production-richtext.ts             # commit
+```
+
+#### Issue 2 — root cause + fix
+
+The single-line CSS rule `r3-3` placed the border on the outermost
+`.rich-text-lexical` div. That div in Payload 3's Lexical Field
+contains, in DOM order: `<Error>`, the `__label-row` (Label +
+ViewSelector), and the `__wrap` (BeforeInput → BulkUploadProvider →
+AfterInput → Description). Everything ended up inside the box.
+
+Fixes shipped:
+
+- `app/(payload)/custom.scss` — move the border one level down,
+  onto `.editor-container` (the Lexical wrapper that holds toolbar
+  - editable area, but not the label or description). Label-row,
+    beforeInput pillstrip and field description now sit OUTSIDE the
+    box. Class hooks captured from
+    `node_modules/@payloadcms/richtext-lexical/dist/field/bundled.css`
+    (`.editor-container`, `.editor-shell`, `.editor-scroller`,
+    `.draggable-block-menu`, `.add-block-menu`,
+    `.LexicalEditorTheme__placeholder`).
+- `collections/Productions.ts` — introduce a shared
+  `RICHTEXT_ADMIN_CHROME` block applied to all four lexicalEditor
+  calls. Sets `hideGutter / hideAddBlockButton /
+hideDraggableBlockElement / hideInsertParagraphAtEnd: true` so
+  the `+` gutter glyph, drag-handle dots, hover `+` and "insert
+  paragraph at end" affordance all stop rendering. Empties the
+  built-in placeholder via `placeholder: ''`. Option shape
+  documented in
+  `node_modules/@payloadcms/richtext-lexical/dist/types.d.ts §LexicalFieldAdminProps`.
+- `globals/About.ts` — same admin block inlined on the About
+  body's lexicalEditor.
+- Belt-and-suspenders CSS — even with the admin options above the
+  default features can occasionally re-mount one of those nodes
+  during slash-menu interactions; an explicit
+  `display: none` on `.draggable-block-menu`, `.add-block-menu`,
+  `.LexicalEditorTheme__placeholder` guarantees they stay gone.
+
+#### Verified clean
+
+`npx tsc --noEmit` (exit 0), `npx eslint <touched files>` (exit 0).
+Dry-run of `scripts/restore-production-richtext.ts` reads from the
+`main` branch's content and reports the per-slug/per-locale field
+list it would write — see committed log for the full breakdown.
+
+#### Manual reproduction checklist (post-restore)
+
+1. Run `npx tsx scripts/restore-production-richtext.ts` against the
+   target Neon DB (the dry-run is already verified).
+2. Open `/admin/collections/productions/11?locale=ru` — production
+   `dogs-dont-dance-ballet` has no source body so its fields stay
+   empty; pick `productions/2` (Aibolit) or any other slug from the
+   dry-run output for a populated example.
+3. Confirm: label sits above the box, pillstrip above the box,
+   hint below the box, no `+` glyph anywhere, no slash placeholder.
+4. Type in the active-locale Lexical and the inactive-locale
+   textareas (ALL mode); Save commits the active locale, debounced
+   PATCH commits the others.
 
 ## Remaining work (next session)
 
