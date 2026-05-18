@@ -24,7 +24,7 @@
 
 .heading {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-h1);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
@@ -148,7 +148,7 @@
 .awardName {
   grid-area: name;
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink);
 }

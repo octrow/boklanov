@@ -282,7 +282,7 @@
 
 .mobileNavLink {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
   text-decoration: none;

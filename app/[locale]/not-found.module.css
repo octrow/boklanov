@@ -31,7 +31,7 @@
 
 .heading {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-h1);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
@@ -42,7 +42,7 @@
 
 .body {
   font-family: var(--font-family-body);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   color: var(--ink-mute);
   margin: 0 0 var(--space-8);
   max-width: 50ch;

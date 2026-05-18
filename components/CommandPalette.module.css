@@ -48,7 +48,7 @@
   border: none;
   outline: none;
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink);
   caret-color: var(--accent);
@@ -83,7 +83,7 @@
 .noResultsBody {
   font-family: var(--font-family-serif);
   font-style: italic;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   color: var(--ink-mute);
   margin: 0;
 }
@@ -100,7 +100,7 @@
 
 .groupLabel {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-mute);
@@ -131,7 +131,7 @@
 
 .resultLabel {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink);
 }

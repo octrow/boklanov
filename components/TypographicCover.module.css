@@ -25,29 +25,48 @@
   grid-template-rows: 1fr auto auto auto;
   align-items: end;
 }
-.bottom .title    { grid-row: 2; align-self: end; }
-.bottom .synopsis { grid-row: 3; }
-.bottom .meta     { grid-row: 4; }
+.bottom .title {
+  grid-row: 2;
+  align-self: end;
+}
+.bottom .synopsis {
+  grid-row: 3;
+}
+.bottom .meta {
+  grid-row: 4;
+}
 
 .top {
   grid-template-rows: auto auto auto 1fr;
 }
-.top .title    { grid-row: 1; }
-.top .synopsis { grid-row: 2; }
-.top .meta     { grid-row: 3; }
+.top .title {
+  grid-row: 1;
+}
+.top .synopsis {
+  grid-row: 2;
+}
+.top .meta {
+  grid-row: 3;
+}
 
 .centre {
   grid-template-rows: 1fr auto auto auto 1fr;
   align-items: center;
 }
-.centre .title    { grid-row: 2; }
-.centre .synopsis { grid-row: 3; }
-.centre .meta     { grid-row: 4; }
+.centre .title {
+  grid-row: 2;
+}
+.centre .synopsis {
+  grid-row: 3;
+}
+.centre .meta {
+  grid-row: 4;
+}
 
 /* v3 §7.7: Unbounded 600 ALL CAPS replaces Lora 600. Phase 9v3.6. */
 .title {
   font-family: var(--font-family-plakat);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-h2);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   letter-spacing: 0.03em;

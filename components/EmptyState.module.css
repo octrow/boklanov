@@ -16,7 +16,7 @@
 .body {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   line-height: var(--line-height-snug);
   color: var(--ink-marginalia);
   margin: 0;

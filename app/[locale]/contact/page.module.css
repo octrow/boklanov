@@ -27,7 +27,7 @@
 
 .heading {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-h1);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
@@ -41,7 +41,7 @@
 
 .intro {
   font-family: var(--font-family-body);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-loose);
   color: var(--ink);
   max-width: 60ch;
@@ -72,7 +72,7 @@
   background: var(--accent);
   color: var(--paper);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   letter-spacing: 0.01em;
@@ -109,7 +109,7 @@
   display: inline-block;
   padding: var(--space-3) var(--space-5);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   color: var(--ink);
   background: transparent;
   border: 1px solid var(--rule-strong);
@@ -149,7 +149,7 @@
 
 .emailAddress {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink);
   user-select: all;

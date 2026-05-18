@@ -13,7 +13,7 @@
 /* Heading element receives .title regardless of h1/h2. */
 .title {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-h1);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-tight);
@@ -30,7 +30,7 @@
 
 .titleDe {
   font-family: var(--font-family-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   color: var(--ink-faint);
   margin: var(--space-1) 0 0;
 }

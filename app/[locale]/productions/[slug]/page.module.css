@@ -246,7 +246,7 @@ dd.creditsName {
   padding: var(--space-3) var(--space-5);
   border-radius: var(--border-radius-sm);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   transition:
@@ -460,7 +460,7 @@ dd.creditsName {
   background: var(--accent);
   color: var(--paper);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   text-align: center;
