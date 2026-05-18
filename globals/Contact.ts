@@ -29,6 +29,9 @@ export const Contact: GlobalConfig = {
         description: {
           ru: 'Необязательный вступительный абзац над кнопками связи.',
           en: 'Optional intro paragraph above the contact buttons.'
+        },
+        components: {
+          Field: '/components/admin/LocalizedTextarea#default'
         }
       }
     },

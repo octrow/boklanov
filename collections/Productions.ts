@@ -94,6 +94,9 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Название спектакля во всех трёх локалях. Показывается в карточке, на странице и в SEO-заголовке.',
                       en: 'Production title in all three locales. Shown on cards, page, and SEO title.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },
@@ -114,6 +117,10 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
                       en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
+                    },
+                    components: {
+                      Description:
+                        '/components/admin/LocalizedRichTextTabs#default'
                     }
                   }
                 },
@@ -132,6 +139,10 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Короткая строка-крючок (≤80 символов) под заголовком. Поддерживается жирный, курсив, ссылки.',
                       en: 'Short hook line (≤80 chars) under the title. Bold, italic, and links supported.'
+                    },
+                    components: {
+                      Description:
+                        '/components/admin/LocalizedRichTextTabs#default'
                     }
                   }
                 },
@@ -150,6 +161,10 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Одно-два предложения, показываются на карточках продакшенов и в результатах поиска. 50–200 знаков. Поддерживается жирный, курсив, ссылки.',
                       en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.'
+                    },
+                    components: {
+                      Description:
+                        '/components/admin/LocalizedRichTextTabs#default'
                     }
                   }
                 },
@@ -168,6 +183,10 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Цитата от Романа — рендерится как blockquote на странице. Поддерживается жирный, курсив, ссылки.',
                       en: 'Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.'
+                    },
+                    components: {
+                      Description:
+                        '/components/admin/LocalizedRichTextTabs#default'
                     }
                   }
                 }
@@ -381,6 +400,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Подпись к изображению. Доступна как alt-текст для скринридеров.',
                           en: 'Per-locale caption. Doubles as alt text for screen readers.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     }
@@ -458,6 +480,9 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Дата премьеры свободным текстом — допускаются «весна 2021», «Spring 2021», «март 2021».',
                       en: 'Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },
@@ -528,6 +553,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Полное название театра во всех трёх локалях.',
                           en: 'Full theatre name in all three locales.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -540,6 +568,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Сокращённое название (если есть). Используется в плотных списках.',
                           en: 'Shortened name (if any). Used in dense lists.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -552,6 +583,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Город, где находится театр-производитель премьеры.',
                           en: 'City where the producing theatre is based.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -939,6 +973,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Название премии или номинации.',
                           en: 'Name of the award or nomination.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -962,6 +999,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Номинация / категория. Если конкретный человек — пиши «За лучшую мужскую роль — Максим Морозов».',
                           en: 'Award category. If a specific person — phrase as "Best male performance — Maksim Morozov".'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -974,6 +1014,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Город вручения.',
                           en: 'City where the award was given.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1017,6 +1060,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Название фестиваля.',
                           en: 'Name of the festival.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1040,6 +1086,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Программа / секция фестиваля.',
                           en: 'Festival programme or section.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1052,6 +1101,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Город фестиваля.',
                           en: 'Festival city.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     }
@@ -1084,6 +1136,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Заголовок публикации в трёх локалях.',
                           en: 'Article headline in all three locales.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1149,6 +1204,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Что это за ссылка — текст для кнопки/ссылки в трёх локалях.',
                           en: 'What the link represents — anchor text in all three locales.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1209,6 +1267,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Город гастролей.',
                           en: 'Tour city.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     }
@@ -1241,6 +1302,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Название площадки или театра, где шёл спектакль.',
                           en: 'Name of the venue or theatre where the production ran.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1253,6 +1317,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Город этой площадки.',
                           en: 'City of this venue.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     },
@@ -1287,6 +1354,9 @@ export const Productions: CollectionConfig = {
                         description: {
                           ru: 'Примерное число показов. Можно «60+», «более 100», «more than 30».',
                           en: 'Approximate count. Free-form — "60+", "more than 100", etc.'
+                        },
+                        components: {
+                          Field: '/components/admin/LocalizedText#default'
                         }
                       }
                     }
@@ -1360,6 +1430,9 @@ export const Productions: CollectionConfig = {
                     description: {
                       ru: 'Текст кнопки бронирования в трёх локалях. Если пусто — используется дефолтная фраза для каждой локали.',
                       en: 'Booking-button text per locale. Falls back to the default phrase for each locale when blank.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },

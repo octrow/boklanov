@@ -55,6 +55,9 @@ export const About: GlobalConfig = {
                 description: {
                   ru: 'Биография. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение. Первый абзац — лид (отображается крупным шрифтом).',
                   en: 'Biography. H2/H3 headings, lists, blockquotes, links, and emphasis are supported. First paragraph is the lead (rendered prominently).'
+                },
+                components: {
+                  Description: '/components/admin/LocalizedRichTextTabs#default'
                 }
               }
             }
@@ -201,6 +204,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Описание вехи в трёх локалях.',
                       en: 'Milestone description in all three locales.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 }
@@ -244,6 +250,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Имя учителя / организации в трёх локалях.',
                       en: 'Teacher / institution name in all three locales.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },
@@ -256,6 +265,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Роль / отношение (мастер, ректор и т. п.).',
                       en: 'Role / relationship (master, rector, etc.).'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },
@@ -268,6 +280,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Название института / театра, если применимо.',
                       en: 'Institution / theatre, if applicable.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 },
@@ -280,6 +295,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Опциональная пометка о связи / влиянии.',
                       en: 'Optional note about the connection / influence.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 }
@@ -321,6 +339,9 @@ export const About: GlobalConfig = {
                     description: {
                       ru: 'Короткая пометка в трёх локалях.',
                       en: 'Short marginal note across three locales.'
+                    },
+                    components: {
+                      Field: '/components/admin/LocalizedText#default'
                     }
                   }
                 }

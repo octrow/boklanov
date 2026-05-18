@@ -85,6 +85,20 @@ export default buildConfig({
     meta: {
       titleSuffix: ' · boklanov.com'
     },
+    // Per-field locale UX (PAYLOAD_ADMIN_UX_PLAN.md §A.0–A.1).
+    // - `providers`: LocaleModeProvider wraps the admin tree, exposing
+    //   `useLocaleMode()` to every <LocalizedField>. Seeds itself from
+    //   localStorage and persists changes.
+    // - `actions`: LocaleModeToggle sits top-right next to Save / theme
+    //   switcher and flips the global mode between 'switch' (tabs) and
+    //   'all' (side-by-side).
+    components: {
+      providers: [
+        '/components/admin/LocaleModeProvider#default',
+        '/components/admin/LocalizedDocContext#default'
+      ],
+      actions: ['/components/admin/LocaleModeToggle#default']
+    },
     livePreview: {
       // Matches DESIGN.md §6 public-site breakpoints — iPhone-15-class
       // 390 width, iPad portrait 768, desktop 1440. Inherited by both
