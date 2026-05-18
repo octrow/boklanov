@@ -6,8 +6,8 @@
  *   with `locale: 'all'` so we get every localized field as { ru, en, de }.
  *
  * Public interface (`Production`, `ProductionView`, `getAllProductions`,
- * `getProduction`, `getRelatedProductions`) is preserved verbatim. The three
- * getters became async — every caller awaits them.
+ * `getProduction`) is preserved verbatim. The getters became async — every
+ * caller awaits them.
  *
  * LQIP data still lives in `public/productions/<slug>/lqip.json` (built by
  * the sharp LQIP pipeline; not migrated to Payload per plan §Q2 default).
@@ -840,55 +840,3 @@ export const getProduction = cache(
     return hit ? project(hit, locale) : null
   }
 )
-
-export async function getRelatedProductions(
-  production: ProductionView | Production,
-  n: number = 3
-): Promise<Production[]> {
-  const all = await fetchAllProductions()
-  const targetAge = ageBucket(production.ageRating ?? null)
-
-  type Scored = { prod: Production; score: number }
-  const scored: Scored[] = []
-
-  for (const cand of all) {
-    if (cand.slug === production.slug) continue
-    let score = 0
-    if (ageBucket(cand.ageRating ?? null) === targetAge && targetAge !== null) {
-      score += 3
-    }
-    const formOverlap = cand.form.filter((f) =>
-      production.form.includes(f)
-    ).length
-    score += formOverlap * 2
-    const lineageOverlap = cand.lineage.filter((l) =>
-      production.lineage.includes(l)
-    ).length
-    score += lineageOverlap * 4
-    if (score > 0) scored.push({ prod: cand, score })
-  }
-
-  scored.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score
-    const aRoleEq = a.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
-    const bRoleEq = b.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
-    if (aRoleEq !== bRoleEq) return bRoleEq - aRoleEq
-    return (b.prod.year ?? 0) - (a.prod.year ?? 0)
-  })
-
-  return scored.slice(0, n).map((s) => s.prod)
-}
-
-function ageBucket(rating: string | null): string | null {
-  if (!rating) return null
-  const m = rating.match(/(\d+)/)
-  if (!m) return null
-  const n = Number(m[1])
-  if (n <= 6) return 'kids'
-  if (n <= 12) return 'teens'
-  return 'adults'
-}
-
-export function _resetCache() {
-  if (g._bk) g._bk = { all: null, about: null, contact: null }
-}
