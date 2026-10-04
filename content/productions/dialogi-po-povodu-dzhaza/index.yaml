@@ -26,6 +26,7 @@ production:
       ru: Вена
       en: Vienne
       de: Wien
+    country: AT
   premiereDate: {}
 taxonomy:
   role:
