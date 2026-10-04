@@ -1,6 +1,7 @@
 slug: aiaccio
 year: 2021
 durationMin: 70
+status: live
 identity:
   title:
     ru: 'Айяччо: история одного клоуна'
@@ -8,158 +9,78 @@ identity:
     de: 'Aiaccio: Die Geschichte eines Clowns'
   tagline: {}
   synopsis:
-    ru:
-      Однажды в дружную цирковую семью приходит большая любовь, а вместе с ней и страх ее потери. Эта нежная история
-      проникнет в самое сердце. И кто знает, возможно, она останется там навсегда!
-    en:
-      One day a big love comes to a friendly circus family, and with it the fear of losing it. This tender story will
-      penetrate to the heart. And who knows, perhaps it will stay there forever!
-    de:
-      Eines Tages kommt große Liebe in eine freundliche Zirkusfamilie, und mit ihr die Angst, sie zu verlieren. Diese
-      zarte Geschichte wird bis ins Herz dringen. Und wer weiß, vielleicht bleibt sie für immer dort!
+    ru: >-
+      Однажды в дружную цирковую семью приходит большая любовь, а вместе с ней и
+      страх ее потери. Эта нежная история проникнет в самое сердце. И кто знает,
+      возможно, она останется там навсегда!
+    en: >-
+      One day a big love comes to a friendly circus family, and with it the fear
+      of losing it. This tender story will penetrate to the heart. And who
+      knows, perhaps it will stay there forever!
+    de: >-
+      Eines Tages kommt große Liebe in eine freundliche Zirkusfamilie, und mit
+      ihr die Angst, sie zu verlieren. Diese zarte Geschichte wird bis ins Herz
+      dringen. Und wer weiß, vielleicht bleibt sie für immer dort!
   directorsNote:
-    ru:
-      Кто-то сомневался в существовании Джипси и Айяччо. А кто-то уверяет, что в тот вечер по морщинистой морде слонихи
-      скатилась слеза — слеза счастья
-    en:
-      Some doubted the existence of Gypsy and Aiaccio. And some assure that on that evening a tear rolled down the
-      wrinkled face of the elephant—a tear of happiness
-    de:
-      Einige zweifelten an der Existenz von Gypsy und Aiaccio. Und einige versichern, dass an jenem Abend eine Träne über
-      das fältige Gesicht der Elefantenkuh rollte – eine Träne des Glücks
+    ru: >
+      Кто-то сомневался в существовании Джипси и Айяччо. А кто-то уверяет, что в
+      тот вечер по морщинистой морде слонихи скатилась слеза — слеза счастья
+    en: >
+      Some doubted the existence of Gypsy and Aiaccio. And some assure that on
+      that evening a tear rolled down the wrinkled face of the elephant—a tear
+      of happiness
+    de: >
+      Einige zweifelten an der Existenz von Gypsy und Aiaccio. Und einige
+      versichern, dass an jenem Abend eine Träne über das fältige Gesicht der
+      Elefantenkuh rollte – eine Träne des Glücks
 media:
   poster:
     src: /productions/aiaccio/poster.jpg
-    credit: null
   productionsPhoto: {}
   featuredPhoto: {}
   gallery:
     - src: /productions/aiaccio/photo_0029_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0059_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0068_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0075_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0082_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0119_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0127_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0137_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0154_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0171_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0040_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0061_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0071_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0093_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0118_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0122_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0132_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0146_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0158_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_0172_result.webp
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
     - src: /productions/aiaccio/photo_2022-10-27_14-40-46.jpg
-      credit: null
-      caption:
-        ru: null
-        en: null
-        de: null
+      caption: {}
   videos:
     - provider: youtube
       id: dmqRNwipzmw
@@ -179,6 +100,7 @@ production:
       de: Sankt Petersburg
     country: RU
     url: https://puppets.ru/spec/142
+    year: 2021
   premiereDate:
     ru: 10 октября 2021 г.
     en: October 10, 2021
