@@ -1,0 +1,127 @@
+slug: ''
+year: 2026
+durationMin: 80
+status: live
+identity:
+  title:
+    ru: Vaikenemisen kielioppi (Грамматика молчания)
+    en: 'Vaikenemisen kielioppi (The Grammar of Silence) '
+    de: 'Vaikenemisen kielioppi (Die Grammatik des Schweigens) '
+  tagline:
+    ru: Тишина стала их родным языком
+    en: Silence became their native language.
+    de: Die Stille wurde ihre Muttersprache
+  synopsis: {}
+  directorsNote:
+    ru: ''
+    en: ''
+    de: ''
+media:
+  poster:
+    src: /uploads/------------.webp
+    credit: Павел Семченко
+  productionsPhoto: {}
+  featuredPhoto: {}
+  gallery: []
+  videos: []
+production:
+  theatre:
+    name:
+      ru: Helsinki 98
+      en: Helsinki 98
+      de: Helsinki 98
+    shortName: {}
+    city:
+      ru: Helsinki
+      en: Helsinki
+      de: Helsinki
+    country: FI
+    url: https://fienta.com/fi/vaikenemisen-kielioppi-197720
+    year: 2026
+  premiereDate:
+    ru: 29 сентября 2026 г.
+    en: September 29, 2026
+    de: 29. September 2026
+  ticketsUrl: https://fienta.com/fi/s/vaikenemisen-kielioppi
+  ageRating: 18+
+taxonomy:
+  role:
+    - director
+  form:
+    - коллаж
+  lineage: []
+  tags: []
+team:
+  credits:
+    ru:
+      - role: Режиссер
+        name: Роман Бокланов
+      - role: Сценография, видеодизайн, свет, афиша
+        name: Павел Семченко
+      - role: Драматург-консультант
+        name: Михаил Дурненков
+      - role: Перевод текстов
+        name: Таисия Костюк
+      - role: Костюмы, реквизит
+        name: Анис Кронидова
+      - role: Актеры
+        name: Таисия Костюк, Фанни Вихерсаари, Каспер Корпела, Тони Никка
+      - role: Продюсер
+        name: Таисия Костюк, Фанни Вихерсаари
+    en:
+      - role: Director
+        name: Roman Boklanov
+      - role: Set design, video design, lighting, poster
+        name: Pavel Semchenko
+      - role: Dramaturgical consulting
+        name: Mikhail Durnenkov
+      - role: Translation of texts
+        name: Taisiya Kostyuk
+      - role: Costumes, props
+        name: Anis Kronidova
+      - role: Cast
+        name: Taisiya Kostyuk, Fanni Vihersaari, Kasper Korpela, Toni Nikka
+      - role: Production
+        name: Taisiya Kostyuk, Fanni Vihersaari
+    de:
+      - role: Regie
+        name: Roman Boklanov
+      - role: Bühnenbild, Videodesign, Licht, Plakat
+        name: Pavel Semchenko
+      - role: Dramaturgische Beratung
+        name: Mikhail Durnenkov
+      - role: Textübersetzung
+        name: Taisiya Kostyuk
+      - role: Kostüme, Requisite
+        name: Anis Kronidova
+      - role: Schauspieler
+        name: Taisiya Kostyuk, Fanni Vihersaari, Kasper Korpela, Toni Nikka
+      - role: Produktion
+        name: Taisiya Kostyuk, Fanni Vihersaari
+recognition:
+  awards: []
+  festivals: []
+  press:
+    - title:
+        ru: >-
+          Vaikenemisen kielioppi: esitys ihmisistä, jotka valtio pakotti
+          vaikenemaan
+        en: >-
+          Vaikenemisen kielioppi: esitys ihmisistä, jotka valtio pakotti
+          vaikenemaan
+        de: >-
+          Vaikenemisen kielioppi: esitys ihmisistä, jotka valtio pakotti
+          vaikenemaan
+      url: >-
+        https://vuosaarilehti.fi/2026/09/16/vaikenemisen-kielioppi-esitys-ihmisista-jotka-valtio-pakotti-vaikenemaan/
+      outlet: Vuosaari
+      language: fi
+  externalLinks: []
+history:
+  tour: []
+  runs: []
+settings:
+  bookingCta: true
+  bookingCtaLabel: {}
+  featured: false
+  notionIds: {}
