@@ -213,7 +213,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'file too large' }, { status: 413 })
   }
 
-  const filename = sanitizeSegment(file.name) || `upload${ext}`
+  // Non-Latin names collapse to dashes ("Афиша.webp" → "-----.webp"), and
+  // R2 objects are cached `immutable` — a timestamp suffix keeps two uploads
+  // from silently overwriting each other's key.
+  const base =
+    sanitizeSegment(path.basename(file.name, path.extname(file.name)))
+      .replace(/-{2,}/g, '-')
+      .replace(/^-|-$/g, '') || 'upload'
+  const filename = `${base}-${Date.now().toString(36)}${ext}`
   const src = `/${directory}/${filename}`
   const r2Key = `${directory}/${filename}`
   const contentType = MIME[ext] ?? 'application/octet-stream'
