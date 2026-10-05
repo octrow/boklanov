@@ -41,8 +41,8 @@ import { default as default_47c8541c115d8eb533bfb3e8e9c65ae8 } from '../../../co
 import { default as default_418fb747dc0d4d79c3b08e6c3209577d } from '../../../components/admin/LocaleModeProvider'
 import { default as default_e81464b80559c0d57859bf3e31f16962 } from '../../../components/admin/LocalizedDocContext'
 import { default as default_0126073f560a4e4177348cbfbdc28a66 } from '../../../components/admin/ActiveLocaleBodyAttr'
-import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -89,6 +89,6 @@ export const importMap = {
   "/components/admin/LocaleModeProvider#default": default_418fb747dc0d4d79c3b08e6c3209577d,
   "/components/admin/LocalizedDocContext#default": default_e81464b80559c0d57859bf3e31f16962,
   "/components/admin/ActiveLocaleBodyAttr#default": default_0126073f560a4e4177348cbfbdc28a66,
-  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }
