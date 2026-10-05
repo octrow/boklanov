@@ -101,9 +101,10 @@
   border: 1px solid var(--accent);
   color: var(--accent);
   background: transparent;
-  transition: color var(--duration-fast) var(--easing-default),
-  border-color var(--duration-fast) var(--easing-default),
-  background var(--duration-fast) var(--easing-default);
+  transition:
+    color var(--duration-fast) var(--easing-default),
+    border-color var(--duration-fast) var(--easing-default),
+    background var(--duration-fast) var(--easing-default);
 }
 
 .allProductionsBtn:hover {
@@ -121,5 +122,96 @@
     border-color: var(--ink-mute);
     color: var(--ink);
     background: transparent;
+  }
+}
+
+/* ── Invitation (curator path, PRODUCT.md) ─────────────────────────────── */
+
+/* Hero line: quiet mono link under the statement, hairline accent underline. */
+.inviteHero {
+  /* inline-block, not flex: on wrap the arrow stays after the last word */
+  display: inline-block;
+  padding-block: var(--space-3); /* ≥44px tap height */
+  margin-top: var(--space-2);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+
+.inviteHero:hover {
+  color: var(--ink);
+}
+
+.inviteHero svg {
+  display: inline;
+  margin-left: var(--space-2);
+  vertical-align: -0.1em;
+}
+
+/* Band between featured and grid: Lora statement + the booking CTA. */
+.invite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-7) 0;
+}
+
+.inviteTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h2);
+  font-weight: 400;
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+  max-width: 22ch;
+  margin: 0;
+  color: var(--ink);
+}
+
+.inviteCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  transition:
+    color var(--duration-fast) var(--easing-default),
+    background var(--duration-fast) var(--easing-default);
+}
+
+.inviteCta:hover {
+  background: var(--accent);
+  color: var(--ink-on-accent);
+}
+
+@media (min-width: 768px) {
+  .invite {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-7);
+  }
+
+  .inviteCta {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .invite {
+    padding: var(--space-8) 0;
   }
 }

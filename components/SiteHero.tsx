@@ -6,9 +6,10 @@ import styles from './SiteHero.module.css'
 interface SiteHeroProps {
   heroWordmark: string
   statement: string
+  children?: React.ReactNode
 }
 
-export function SiteHero({ heroWordmark, statement }: SiteHeroProps) {
+export function SiteHero({ heroWordmark, statement, children }: SiteHeroProps) {
   return (
     <section className={styles.hero}>
       {/* SR reads plain text; visible wordmark is aria-hidden gradient */}
@@ -17,6 +18,7 @@ export function SiteHero({ heroWordmark, statement }: SiteHeroProps) {
         <SiteWordmark variant='hero' text={heroWordmark} />
       </p>
       <p className={styles.statement}>{statement}</p>
+      {children}
     </section>
   )
 }

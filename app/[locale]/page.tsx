@@ -84,7 +84,13 @@ export default async function HomePage({
         />
       )}
       {/* Hero — v3 §7.2: gradient Unbounded wordmark + Lora statement */}
-      <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')} />
+      <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')}>
+        {/* Curator path (PRODUCT.md): a route to contact above the fold */}
+        <Link href='/contact' className={styles.inviteHero}>
+          <span>{t('inviteHero')}</span>
+          <IconArrowRight size={12} />
+        </Link>
+      </SiteHero>
 
       {/* Tour ticker — §2.9: past-tense staging cities, between hero and featured */}
       <TourTicker
@@ -103,6 +109,16 @@ export default async function HomePage({
           <hr />
         </>
       )}
+
+      {/* Invitation — closes the curated block, where a curator has just seen the work */}
+      <section className={styles.invite}>
+        <h2 className={styles.inviteTitle}>{t('inviteTitle')}</h2>
+        <Link href='/contact' className={styles.inviteCta}>
+          <span>{t('inviteCta')}</span>
+          <IconArrowRight size={14} />
+        </Link>
+      </section>
+      <hr />
 
       {/* Director productions grid — filterable in C4, defaulted here */}
       <section className={styles.section} aria-label={t('allLabel')}>
