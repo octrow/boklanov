@@ -57,7 +57,7 @@ export default async function ArchivePage({
   // Long-tail CV: exclude director role; sort year asc for chronological doc feel.
   const entries = productions
     .filter((p) => !p.role.some((r) => DIRECTOR_ROLES.has(r)))
-    .sort((a, b) => (a.year ?? 0) - (b.year ?? 0))
+    .sort((a, b) => (a.year ?? Infinity) - (b.year ?? Infinity)) // undated last
 
   return (
     <main className={styles.page}>

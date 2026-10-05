@@ -238,6 +238,11 @@ export default async function ProductionDetailPage({
     subject
   )}&body=${encodeURIComponent(body)}`
 
+  // Roman left Russia in 2022: RU work is past, never sold as current
+  // repertoire (PRODUCT.md), even when the theatre still lists it.
+  const ticketsUrl =
+    production.theatre.country === 'RU' ? null : production.ticketsUrl
+
   const primaryVideo = production.videos[0]
   const videoUrl =
     primaryVideo?.provider === 'youtube'
@@ -576,7 +581,7 @@ export default async function ProductionDetailPage({
 
           {/* 6. Action bar — hide buttons whose assets are missing. */}
           {(videoUrl ||
-            production.ticketsUrl ||
+            ticketsUrl ||
             production.techRider ||
             production.pressKit) && (
             <div className={styles.actionBar}>
@@ -590,10 +595,10 @@ export default async function ProductionDetailPage({
                   {t('watchListen')}
                 </a>
               )}
-              {production.ticketsUrl && (
+              {ticketsUrl && (
                 <a
                   className={`${styles.btn} ${styles.btnSecondary}`}
-                  href={production.ticketsUrl}
+                  href={ticketsUrl}
                   target='_blank'
                   rel='noreferrer noopener'
                 >
