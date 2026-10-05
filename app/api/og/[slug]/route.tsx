@@ -80,11 +80,14 @@ export async function GET(
     getTranslations({ locale, namespace: 'footer' })
   ])
 
-  const production = getProduction(slug, 'ru')
+  const production = await getProduction(slug, locale)
   if (!production) return new Response('Not found', { status: 404 })
 
   const fonts = await loadFonts()
 
+  // Bilingual title block by design: always show RU top, EN beneath when
+  // distinct. Pulls both from `production.titles` (raw multilingual map
+  // preserved through projection) regardless of the share locale.
   const titleRu = production.titles.ru ?? production.title
   const titleEn = production.titles.en ?? null
   const showTitleEn = !!titleEn && titleEn !== titleRu
@@ -137,7 +140,8 @@ export async function GET(
             textTransform: 'uppercase'
           }}
         >
-          {tMeta('siteName').toUpperCase()} · {tProductions('title').toUpperCase()}
+          {tMeta('siteName').toUpperCase()} ·{' '}
+          {tProductions('title').toUpperCase()}
         </span>
       </div>
 
@@ -278,6 +282,7 @@ export async function GET(
       >
         {/* Left: poster or oxblood fallback */}
         {posterUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={posterUrl}
             alt=''

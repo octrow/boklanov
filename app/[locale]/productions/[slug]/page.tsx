@@ -2,32 +2,29 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { compileMDX } from 'next-mdx-remote/rsc'
 import * as React from 'react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { Sticker } from '@/components/Sticker'
 import { TourTicker } from '@/components/TourTicker'
+import { YouTubeFacade } from '@/components/YouTubeFacade'
 import { countryCode } from '@/lib/countryCode'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import {
   getAllProductions,
   getProduction,
+  pickL10n,
   type ProductionView
 } from '@/lib/content'
-import { InlineMarkdoc } from '@/lib/markdoc'
-
 import styles from './page.module.css'
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 // Map theatre country code to a BCP 47 language tag for inLanguage.
 function productionLanguage(country: string | undefined): string {
@@ -114,12 +111,10 @@ type Props = { params: Promise<{ locale: Locale; slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
-  const production = getProduction(slug, locale)
+  const production = await getProduction(slug, locale)
   if (!production) return {}
 
-  const base = (
-    process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-  ).replace(/\/$/, '')
+  const base = BASE
   const url =
     locale === 'en'
       ? `${base}/productions/${slug}`
@@ -168,12 +163,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export function generateStaticParams() {
-  // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
-  const slugs = getAllProductions(routing.defaultLocale).map((p) => p.slug)
-  return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
-  )
+export async function generateStaticParams() {
+  try {
+    // Cartesian product of locales × slugs so every (locale, slug) pair is SSG.
+    const slugs = (await getAllProductions(routing.defaultLocale)).map(
+      (p) => p.slug
+    )
+    return routing.locales.flatMap((locale) =>
+      slugs.map((slug) => ({ locale, slug }))
+    )
+  } catch {
+    // DB unreachable at build time (e.g. Vercel build without DATABASE_URL).
+    // Return [] so pages are rendered on-demand instead of failing the build.
+    return []
+  }
 }
 
 export default async function ProductionDetailPage({
@@ -184,13 +187,14 @@ export default async function ProductionDetailPage({
   const { locale, slug } = await params
   setRequestLocale(locale)
 
-  const production = getProduction(slug, locale)
+  const production = await getProduction(slug, locale)
   if (!production) notFound()
 
   const t = await getTranslations('productionDetail')
   const tProductions = await getTranslations('productions')
+  const tAccess = await getTranslations('accessibility')
 
-  const allProductions = getAllProductions(locale)
+  const allProductions = await getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
   const productionLabel =
     productionIndex !== -1
@@ -256,18 +260,23 @@ export default async function ProductionDetailPage({
 
   const schema = creativeWorkSchema(production, slug, locale)
 
-  const compiledBody = production.body
-    ? await compileMDX({
-        source: production.body,
-        options: { mdxOptions: {} },
-        components: {
-          // suppress any lingering broken images
-          img: () => null
+  // Gallery items are rendered twice — once in the mobile/tablet column
+  // (`.inlineMedia`, hidden ≥1024px) and once in the desktop rail
+  // (`.railMedia`, hidden <1024px). Same data both times — compute once.
+  const galleryItems = production.gallery.map((g) => ({
+    src: cdnUrl(g.src)!,
+    alt: pickL10n(g.caption, locale, ''),
+    credit: g.credit,
+    variants: g.variants
+      ? {
+          w420: cdnUrl(g.variants.w420)!,
+          w600: cdnUrl(g.variants.w600)!,
+          w720: cdnUrl(g.variants.w720)!,
+          w828: cdnUrl(g.variants.w828)!,
+          w1080: cdnUrl(g.variants.w1080)!
         }
-      })
-        .then((r) => r.content)
-        .catch(() => null)
-    : null
+      : null
+  }))
 
   return (
     <main className={styles.page}>
@@ -275,6 +284,15 @@ export default async function ProductionDetailPage({
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      {production.poster.variants && (
+        <link
+          rel='preload'
+          as='image'
+          imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w720)} 720w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
+          imageSizes='(min-width: 1024px) 640px, 90vw'
+          fetchPriority='high'
+        />
+      )}
       {/* 1. Cover — natural aspect, capped at 65vh. Click to view full poster. */}
       {production.poster.src &&
         (() => {
@@ -289,17 +307,57 @@ export default async function ProductionDetailPage({
               .join(', ') +
             (production.poster.credit ? ` (${production.poster.credit})` : '')
           const posterSrc = cdnUrl(production.poster.src)!
+          // 90vw (not 100vw) reflects the actual rendered width on mobile:
+          // .cover is flex-centered with max-height: 65vh, so a typical
+          // ~0.71-aspect portrait poster lands at ~92% of viewport width.
+          // 100vw made the variant picker round up to 828w when 720w fits.
+          const posterSizes = '(min-width: 1024px) 640px, 90vw'
+          const variants = production.poster.variants
+          // width/height attrs reserve aspect pre-load (kills CLS) without
+          // overriding the natural aspect post-load (no `image-aspect-ratio`
+          // BP failure). When LQIP dims are missing, fall back to 720 × 1019
+          // — a typical theatrical-poster portrait (≈ 0.706 aspect). The
+          // browser only uses these as an intrinsic-ratio hint until the
+          // real image loads; post-load, the natural aspect wins regardless.
+          const posterW = production.poster.width ?? 720
+          const posterH = production.poster.height ?? 1019
           return (
             <PosterLightbox src={posterSrc} alt={posterAlt}>
               <figure className={styles.cover}>
-                {production.poster.width && production.poster.height ? (
+                {variants ? (
+                  // Pre-baked AVIF variants — bypass `/_next/image`. The
+                  // detail-page poster is the LCP element on production
+                  // pages; head preload happens in generateMetadata via the
+                  // `other.preload-image` JSON.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={cdnUrl(variants.w600)!}
+                    srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+                    sizes={posterSizes}
+                    alt={posterAlt}
+                    decoding='async'
+                    loading='eager'
+                    fetchPriority='high'
+                    width={posterW}
+                    height={posterH}
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '65vh',
+                      width: 'auto',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                ) : production.poster.width && production.poster.height ? (
                   <Image
                     src={posterSrc}
                     alt={posterAlt}
                     width={production.poster.width}
                     height={production.poster.height}
                     priority
-                    sizes='(min-width: 1024px) 60vw, 100vw'
+                    fetchPriority='high'
+                    sizes={posterSizes}
+                    quality={75}
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',
@@ -309,11 +367,15 @@ export default async function ProductionDetailPage({
                     }}
                   />
                 ) : (
-                  <img
+                  <Image
                     src={posterSrc}
                     alt={posterAlt}
-                    loading='eager'
-                    decoding='async'
+                    priority
+                    fetchPriority='high'
+                    width={0}
+                    height={0}
+                    sizes={posterSizes}
+                    quality={75}
                     style={{
                       maxWidth: '100%',
                       maxHeight: '65vh',
@@ -404,7 +466,16 @@ export default async function ProductionDetailPage({
 
           {/* Mobile-only media block — desktop renders the same trailer + photos inside the rail (see below). */}
           <div className={styles.inlineMedia}>
-            {trailerEmbedUrl && (
+            {trailerEmbedUrl && primaryVideo?.provider === 'youtube' && (
+              <div className={styles.trailer}>
+                <YouTubeFacade
+                  videoId={primaryVideo.id}
+                  title={`${production.title} — ${t('trailer')}`}
+                  playLabel={tAccess('playTrailer')}
+                />
+              </div>
+            )}
+            {trailerEmbedUrl && primaryVideo?.provider !== 'youtube' && (
               <div className={styles.trailer}>
                 <iframe
                   className={styles.trailerFrame}
@@ -417,20 +488,10 @@ export default async function ProductionDetailPage({
                 />
               </div>
             )}
-            {production.gallery.length > 0 && (
+            {galleryItems.length > 0 && (
               <section className={styles.section}>
                 <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-                <GalleryLightbox
-                  items={production.gallery.map((g) => ({
-                    src: cdnUrl(g.src)!,
-                    alt:
-                      g.caption?.[locale] ??
-                      g.caption?.ru ??
-                      g.caption?.en ??
-                      '',
-                    credit: g.credit
-                  }))}
-                />
+                <GalleryLightbox items={galleryItems} />
               </section>
             )}
           </div>
@@ -461,25 +522,23 @@ export default async function ProductionDetailPage({
             <p className={styles.tagline}>{production.tagline}</p>
           )}
 
-          {/* DA-7.6.C — Director's note, gated by directorsNote field.
-              Stored as fields.markdoc.inline since 2026-05-06; renderer
-              parses + transforms + renders to a <p className=...>. Plain
-              prose round-trips unchanged through Markdoc. */}
+          {/* DA-7.6.C — Director's note (Lexical richText, rendered via RichText). */}
           {production.directorsNote && (
             <blockquote className={styles.directorsNote}>
-              <InlineMarkdoc
-                value={production.directorsNote}
-                className={styles.directorsNoteText}
-              />
+              <div className={styles.directorsNoteText}>
+                <RichText data={production.directorsNote} />
+              </div>
               <footer className={styles.directorsNoteAttr}>
                 {t('directorsNoteAttr')}
               </footer>
             </blockquote>
           )}
 
-          {/* 4c. Compiled MDX body */}
-          {compiledBody && (
-            <div className={styles.bodyProse}>{compiledBody}</div>
+          {/* 4c. Body prose */}
+          {production.body && (
+            <div className={styles.bodyProse}>
+              <RichText data={production.body} />
+            </div>
           )}
 
           {/* 5. Credits — DA-2.A: leader-dot <dl> table, collapsed by default
@@ -709,7 +768,16 @@ export default async function ProductionDetailPage({
           {/* Desktop-only media block — mobile renders the same trailer + photos
               inline right after the title (see .inlineMedia above). */}
           <div className={styles.railMedia}>
-            {trailerEmbedUrl && (
+            {trailerEmbedUrl && primaryVideo?.provider === 'youtube' && (
+              <div className={styles.trailer}>
+                <YouTubeFacade
+                  videoId={primaryVideo.id}
+                  title={`${production.title} — ${t('trailer')}`}
+                  playLabel={tAccess('playTrailer')}
+                />
+              </div>
+            )}
+            {trailerEmbedUrl && primaryVideo?.provider !== 'youtube' && (
               <div className={styles.trailer}>
                 <iframe
                   className={styles.trailerFrame}
@@ -722,20 +790,10 @@ export default async function ProductionDetailPage({
                 />
               </div>
             )}
-            {production.gallery.length > 0 && (
+            {galleryItems.length > 0 && (
               <section className={styles.section}>
                 <h2 className={styles.sectionLabel}>{t('photos')}</h2>
-                <GalleryLightbox
-                  items={production.gallery.map((g) => ({
-                    src: cdnUrl(g.src)!,
-                    alt:
-                      g.caption?.[locale] ??
-                      g.caption?.ru ??
-                      g.caption?.en ??
-                      '',
-                    credit: g.credit
-                  }))}
-                />
+                <GalleryLightbox items={galleryItems} />
               </section>
             )}
           </div>

@@ -28,6 +28,11 @@
   max-height: 65vh;
   width: auto;
   height: auto;
+  /* Space is reserved pre-load by width/height attributes on the <img>
+     (page.tsx). Browser uses those as an aspect hint until the real image
+     loads, then defers to the natural aspect — no CSS aspect-ratio override,
+     which would distort off-aspect posters and fail the `image-aspect-ratio`
+     Best-Practices audit. */
   cursor: zoom-in;
 }
 
@@ -50,7 +55,10 @@
     display: grid;
     grid-template-columns: minmax(0, 720px) 1fr;
     align-items: start;
-    margin-left: max(var(--gutter-desktop), calc((100% - var(--max-width-content)) / 2));
+    margin-left: max(
+      var(--gutter-desktop),
+      calc((100% - var(--max-width-content)) / 2)
+    );
   }
 }
 
@@ -118,7 +126,7 @@
 .synopsis {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-snug);
   color: var(--ink);
   margin: 0 0 var(--space-7);
@@ -238,11 +246,12 @@ dd.creditsName {
   padding: var(--space-3) var(--space-5);
   border-radius: var(--border-radius-sm);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
-  transition: background var(--duration-fast) var(--easing-default),
-  color var(--duration-fast) var(--easing-default);
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
 }
 
 .btnPrimary {
@@ -312,7 +321,7 @@ dd.creditsName {
 .pressLink {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-snug);
   color: var(--ink);
   text-decoration-color: transparent;
@@ -451,7 +460,7 @@ dd.creditsName {
   background: var(--accent);
   color: var(--paper);
   font-family: var(--font-family-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   text-align: center;
@@ -574,7 +583,9 @@ dd.creditsName {
 }
 
 @media print {
-  .stickerRow { display: none; }
+  .stickerRow {
+    display: none;
+  }
 }
 
 /* DA-7.6.C — Director's note block */
@@ -587,7 +598,7 @@ dd.creditsName {
 .directorsNoteText {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-relaxed);
   color: var(--ink);
   margin: 0 0 var(--space-3);

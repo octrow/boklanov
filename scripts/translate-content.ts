@@ -19,7 +19,7 @@ import {
   readFileSync,
   readdirSync,
   unlinkSync,
-  writeFileSync,
+  writeFileSync
 } from 'fs'
 import { join, resolve } from 'path'
 import { parseArgs } from 'util'
@@ -40,14 +40,14 @@ type FieldKind =
   | 'date'
   | 'body'
   | 'about'
-  | 'venue'        // theatre / venue names, cities — short proper-noun-ish labels
-  | 'awardName'    // award + festival names
-  | 'awardCity'    // city of award/festival/run
+  | 'venue' // theatre / venue names, cities — short proper-noun-ish labels
+  | 'awardName' // award + festival names
+  | 'awardCity' // city of award/festival/run
   | 'awardCategory'
-  | 'linkLabel'    // externalLinks[].label
-  | 'runVenue'     // runs[].venue
-  | 'runCount'     // runs[].count e.g. "12 shows"
-  | 'tourCity'     // tour[] entries (city names)
+  | 'linkLabel' // externalLinks[].label
+  | 'runVenue' // runs[].venue
+  | 'runCount' // runs[].count e.g. "12 shows"
+  | 'tourCity' // tour[] entries (city names)
 
 interface TranslateJob {
   srcLocale: Locale
@@ -61,7 +61,7 @@ const stats = {
   outputTokens: 0,
   filesChanged: 0,
   cacheHits: 0,
-  cost: 0,
+  cost: 0
 }
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
@@ -69,74 +69,74 @@ const stats = {
 const { values: argv } = parseArgs({
   options: {
     'dry-run': { type: 'boolean', default: false },
-    slug:      { type: 'string',  multiple: true },
-    target:    { type: 'string',  multiple: true },
-    force:     { type: 'boolean', default: false },
-    only:      { type: 'string' },
-    limit:     { type: 'string' },
-    report:    { type: 'boolean', default: false },
-    budget:    { type: 'string' },
-    provider:  { type: 'string' },
+    slug: { type: 'string', multiple: true },
+    target: { type: 'string', multiple: true },
+    force: { type: 'boolean', default: false },
+    only: { type: 'string' },
+    limit: { type: 'string' },
+    report: { type: 'boolean', default: false },
+    budget: { type: 'string' },
+    provider: { type: 'string' }
   },
-  strict: false,
+  strict: false
 })
 
-const dryRun        = argv['dry-run'] as boolean
-const slugFilter    = (argv.slug   as string[] | undefined) ?? []
+const dryRun = argv['dry-run'] as boolean
+const slugFilter = (argv.slug as string[] | undefined) ?? []
 const targetLocales = ((argv.target as string[] | undefined) ?? []) as Locale[]
-const force         = argv.force as boolean
-const onlyScope     = argv.only as 'fields' | 'body' | 'about' | undefined
-const limitN        = argv.limit  ? parseInt(argv.limit as string, 10) : Infinity
-const reportOnly    = argv.report as boolean
-const budgetUsd     = argv.budget ? parseFloat(argv.budget as string) : Infinity
+const force = argv.force as boolean
+const onlyScope = argv.only as 'fields' | 'body' | 'about' | undefined
+const limitN = argv.limit ? parseInt(argv.limit as string, 10) : Infinity
+const reportOnly = argv.report as boolean
+const budgetUsd = argv.budget ? parseFloat(argv.budget as string) : Infinity
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
-const ROOT            = resolve(process.cwd())
+const ROOT = resolve(process.cwd())
 const PRODUCTIONS_DIR = join(ROOT, 'content', 'productions')
-const ABOUT_DIR       = join(ROOT, 'content', 'about')
-const CACHE_DIR       = join(ROOT, '.cache', 'translate')
+const ABOUT_DIR = join(ROOT, 'content', 'about')
+const CACHE_DIR = join(ROOT, '.cache', 'translate')
 
 const LOCALES: Locale[] = ['ru', 'en', 'de']
 
 // ── Provider config ───────────────────────────────────────────────────────────
 
 interface ProviderCfg {
-  envKey:      string
-  baseUrl?:    string      // undefined = Anthropic native SDK
-  proseModel:  string
-  shortModel:  string
-  pricing:     { in: number; out: number } // per 1M tokens, rough
+  envKey: string
+  baseUrl?: string // undefined = Anthropic native SDK
+  proseModel: string
+  shortModel: string
+  pricing: { in: number; out: number } // per 1M tokens, rough
 }
 
 const PROVIDER_CFGS: Record<string, ProviderCfg> = {
   anthropic: {
-    envKey:      'ANTHROPIC_API_KEY',
-    proseModel:  'claude-opus-4-7',
-    shortModel:  'claude-haiku-4-5-20251001',
-    pricing:     { in: 15, out: 75 },
+    envKey: 'ANTHROPIC_API_KEY',
+    proseModel: 'claude-opus-4-7',
+    shortModel: 'claude-haiku-4-5-20251001',
+    pricing: { in: 15, out: 75 }
   },
   cerebras: {
-    envKey:      'CEREBRAS_API_KEY',
-    baseUrl:     'https://api.cerebras.ai/v1',
-    proseModel:  'llama-3.3-70b',
-    shortModel:  'llama3.1-8b',
-    pricing:     { in: 0, out: 0 },  // free tier
+    envKey: 'CEREBRAS_API_KEY',
+    baseUrl: 'https://api.cerebras.ai/v1',
+    proseModel: 'llama-3.3-70b',
+    shortModel: 'llama3.1-8b',
+    pricing: { in: 0, out: 0 } // free tier
   },
   openrouter: {
-    envKey:      'OPENROUTER_API_KEY',
-    baseUrl:     'https://openrouter.ai/api/v1',
-    proseModel:  'google/gemini-2.0-flash-001',
-    shortModel:  'google/gemini-2.0-flash-lite-001',
-    pricing:     { in: 0.1, out: 0.4 },
+    envKey: 'OPENROUTER_API_KEY',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    proseModel: 'google/gemini-2.0-flash-001',
+    shortModel: 'google/gemini-2.0-flash-lite-001',
+    pricing: { in: 0.1, out: 0.4 }
   },
   gemini: {
-    envKey:      'GEMINI_API_KEY',
-    baseUrl:     'https://generativelanguage.googleapis.com/v1beta/openai/',
-    proseModel:  'gemini-2.0-flash',
-    shortModel:  'gemini-2.0-flash-lite',
-    pricing:     { in: 0.1, out: 0.4 },
-  },
+    envKey: 'GEMINI_API_KEY',
+    baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+    proseModel: 'gemini-2.0-flash',
+    shortModel: 'gemini-2.0-flash-lite',
+    pricing: { in: 0.1, out: 0.4 }
+  }
 }
 
 // ── Provider chain ────────────────────────────────────────────────────────────
@@ -146,13 +146,19 @@ const DETECTION_ORDER = ['anthropic', 'cerebras', 'openrouter', 'gemini']
 function buildProviderChain(requireKey: boolean): string[] {
   const preferred = argv.provider as string | undefined
   if (preferred && !PROVIDER_CFGS[preferred]) {
-    console.error(`[translate] unknown provider "${preferred}". Choose: ${Object.keys(PROVIDER_CFGS).join(', ')}`)
+    console.error(
+      `[translate] unknown provider "${preferred}". Choose: ${Object.keys(PROVIDER_CFGS).join(', ')}`
+    )
     process.exit(1)
   }
-  const available = DETECTION_ORDER.filter((n) => process.env[PROVIDER_CFGS[n].envKey])
+  const available = DETECTION_ORDER.filter(
+    (n) => process.env[PROVIDER_CFGS[n].envKey]
+  )
   if (available.length === 0) {
     if (!requireKey) return []
-    console.error('[translate] no API key found. Set one of: ANTHROPIC_API_KEY, CEREBRAS_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY')
+    console.error(
+      '[translate] no API key found. Set one of: ANTHROPIC_API_KEY, CEREBRAS_API_KEY, OPENROUTER_API_KEY, GEMINI_API_KEY'
+    )
     process.exit(1)
   }
   if (!preferred) return available
@@ -165,17 +171,22 @@ const PROVIDER_CHAIN = buildProviderChain(/* requireKey */ !reportOnly)
 // ── LLM clients (one per provider, lazy) ──────────────────────────────────────
 
 const _anthropicClients: Record<string, Anthropic> = {}
-const _openaiClients:    Record<string, OpenAI>    = {}
+const _openaiClients: Record<string, OpenAI> = {}
 
 function getClient(provider: string): Anthropic | OpenAI {
   const cfg = PROVIDER_CFGS[provider]
   if (provider === 'anthropic') {
     if (!_anthropicClients[provider])
-      _anthropicClients[provider] = new Anthropic({ apiKey: process.env[cfg.envKey] })
+      _anthropicClients[provider] = new Anthropic({
+        apiKey: process.env[cfg.envKey]
+      })
     return _anthropicClients[provider]
   }
   if (!_openaiClients[provider])
-    _openaiClients[provider] = new OpenAI({ apiKey: process.env[cfg.envKey], baseURL: cfg.baseUrl })
+    _openaiClients[provider] = new OpenAI({
+      apiKey: process.env[cfg.envKey],
+      baseURL: cfg.baseUrl
+    })
   return _openaiClients[provider]
 }
 
@@ -189,16 +200,20 @@ function modelFor(provider: string, kind: FieldKind): string {
 // Whether an error should cause us to try the next provider vs hard-fail
 function shouldRotate(err: any): boolean {
   const status = err?.status ?? err?.response?.status
-  if (!status) return true   // network-level error → try next
+  if (!status) return true // network-level error → try next
   // 401/403 = bad key for this provider → try next
   // 404     = model/endpoint not found → try next
   // 429     = rate limited → try next
   // 5xx     = server error → try next
-  return status !== 400      // 400 Bad Request is our fault, don't rotate
+  return status !== 400 // 400 Bad Request is our fault, don't rotate
 }
 
 // Single attempt to one provider — throws on any failure
-async function callProvider(provider: string, job: TranslateJob, userMsg: string): Promise<string> {
+async function callProvider(
+  provider: string,
+  job: TranslateJob,
+  userMsg: string
+): Promise<string> {
   const model = modelFor(provider, job.fieldKind)
 
   if (provider === 'anthropic') {
@@ -206,13 +221,15 @@ async function callProvider(provider: string, job: TranslateJob, userMsg: string
       model,
       max_tokens: 2048,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userMsg }],
+      messages: [{ role: 'user', content: userMsg }]
     })
     const cfg = PROVIDER_CFGS[provider]
-    const u   = msg.usage
-    stats.inputTokens  += u.input_tokens
+    const u = msg.usage
+    stats.inputTokens += u.input_tokens
     stats.outputTokens += u.output_tokens
-    stats.cost         += (u.input_tokens * cfg.pricing.in + u.output_tokens * cfg.pricing.out) / 1_000_000
+    stats.cost +=
+      (u.input_tokens * cfg.pricing.in + u.output_tokens * cfg.pricing.out) /
+      1_000_000
     return (msg.content[0] as { type: 'text'; text: string }).text.trim()
   } else {
     const msg = await (getClient(provider) as OpenAI).chat.completions.create({
@@ -221,14 +238,17 @@ async function callProvider(provider: string, job: TranslateJob, userMsg: string
       temperature: 0,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user',   content: userMsg },
-      ],
+        { role: 'user', content: userMsg }
+      ]
     })
     const cfg = PROVIDER_CFGS[provider]
-    const u   = msg.usage
-    stats.inputTokens  += u?.prompt_tokens     ?? 0
+    const u = msg.usage
+    stats.inputTokens += u?.prompt_tokens ?? 0
     stats.outputTokens += u?.completion_tokens ?? 0
-    stats.cost         += ((u?.prompt_tokens ?? 0) * cfg.pricing.in + (u?.completion_tokens ?? 0) * cfg.pricing.out) / 1_000_000
+    stats.cost +=
+      ((u?.prompt_tokens ?? 0) * cfg.pricing.in +
+        (u?.completion_tokens ?? 0) * cfg.pricing.out) /
+      1_000_000
     return (msg.choices[0].message.content ?? '').trim()
   }
 }
@@ -237,7 +257,9 @@ async function callProvider(provider: string, job: TranslateJob, userMsg: string
 
 function cacheKey(job: TranslateJob): string {
   return createHash('sha256')
-    .update(`${job.srcLocale}:${job.tgtLocale}:${job.fieldKind}:${job.sourceText}`)
+    .update(
+      `${job.srcLocale}:${job.tgtLocale}:${job.fieldKind}:${job.sourceText}`
+    )
     .digest('hex')
 }
 
@@ -276,7 +298,9 @@ async function translateText(job: TranslateJob): Promise<string> {
   if (cached !== null) return cached
 
   if (stats.cost >= budgetUsd) {
-    throw new Error(`Budget $${budgetUsd} exceeded (spent ~$${stats.cost.toFixed(2)})`)
+    throw new Error(
+      `Budget $${budgetUsd} exceeded (spent ~$${stats.cost.toFixed(2)})`
+    )
   }
 
   const userMsg = `<field_kind=${job.fieldKind}>\n<${job.srcLocale}> → <${job.tgtLocale}>\n---\n${job.sourceText}`
@@ -291,13 +315,15 @@ async function translateText(job: TranslateJob): Promise<string> {
         return text
       } catch (err: any) {
         lastErr = err
-        if (!shouldRotate(err)) throw err        // 400 Bad Request — our fault, stop
+        if (!shouldRotate(err)) throw err // 400 Bad Request — our fault, stop
         if (attempt === 0) {
           await new Promise((r) => setTimeout(r, 1500))
         } else {
           // second failure on this provider — rotate
           const status = err?.status ?? '?'
-          process.stderr.write(`  [warn] ${provider} failed (${status}), trying next provider\n`)
+          process.stderr.write(
+            `  [warn] ${provider} failed (${status}), trying next provider\n`
+          )
         }
       }
     }
@@ -308,10 +334,16 @@ async function translateText(job: TranslateJob): Promise<string> {
 // ── YAML helpers ──────────────────────────────────────────────────────────────
 
 function isEmpty(val: unknown): boolean {
-  return val === null || val === undefined || (typeof val === 'string' && val.trim() === '')
+  return (
+    val === null ||
+    val === undefined ||
+    (typeof val === 'string' && val.trim() === '')
+  )
 }
 
-function pickSource(values: Record<Locale, string | null | undefined>): [Locale, string] | null {
+function pickSource(
+  values: Record<Locale, string | null | undefined>
+): [Locale, string] | null {
   for (const loc of LOCALES) {
     const v = values[loc]
     if (!isEmpty(v)) return [loc, v as string]
@@ -323,7 +355,7 @@ function pickSourceField(data: any, field: string): [Locale, string] | null {
   return pickSource({
     ru: data[field]?.ru ?? null,
     en: data[field]?.en ?? null,
-    de: data[field]?.de ?? null,
+    de: data[field]?.de ?? null
   })
 }
 
@@ -345,7 +377,7 @@ async function translateL10nString(
   currentVal: unknown,
   path: (string | number)[],
   fieldKind: FieldKind,
-  logLabel: string,
+  logLabel: string
 ): Promise<boolean> {
   if (currentVal === null || currentVal === undefined) return false
   if (typeof currentVal === 'string' && currentVal.trim() === '') return false
@@ -357,10 +389,12 @@ async function translateL10nString(
 
   if (wasString) {
     srcText = currentVal as string
-    srcLoc  = inferLocaleFromText(srcText)
-    obj     = { [srcLoc]: srcText } as Record<Locale, string>
+    srcLoc = inferLocaleFromText(srcText)
+    obj = { [srcLoc]: srcText } as Record<Locale, string>
   } else if (typeof currentVal === 'object') {
-    const src = pickSource(currentVal as Record<Locale, string | null | undefined>)
+    const src = pickSource(
+      currentVal as Record<Locale, string | null | undefined>
+    )
     if (!src) return false
     ;[srcLoc, srcText] = src
     obj = { ...(currentVal as Record<Locale, string>) }
@@ -371,10 +405,17 @@ async function translateL10nString(
   let touched = false
   for (const loc of activeTargets(srcLoc)) {
     if (!isEmpty(obj[loc]) && !force) continue
-    const t = await translateText({ srcLocale: srcLoc, tgtLocale: loc, fieldKind, sourceText: srcText })
-    console.log(`  ${logLabel}.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`)
+    const t = await translateText({
+      srcLocale: srcLoc,
+      tgtLocale: loc,
+      fieldKind,
+      sourceText: srcText
+    })
+    console.log(
+      `  ${logLabel}.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`
+    )
     obj[loc] = t
-    touched  = true
+    touched = true
   }
 
   if ((touched || wasString) && !dryRun) {
@@ -411,10 +452,16 @@ interface GapRow {
 
 function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
   const data = parseDocument(readFileSync(yamlPath, 'utf8')).toJS() as any
-  const dir  = join(PRODUCTIONS_DIR, slug)
+  const dir = join(PRODUCTIONS_DIR, slug)
   const rows: GapRow[] = []
 
-  for (const field of ['title', 'synopsis', 'directorsNote', 'tagline', 'bookingCtaLabel'] as const) {
+  for (const field of [
+    'title',
+    'synopsis',
+    'directorsNote',
+    'tagline',
+    'bookingCtaLabel'
+  ] as const) {
     if (!data[field] || typeof data[field] !== 'object') continue
     const src = pickSourceField(data, field)
     if (!src) continue
@@ -428,7 +475,12 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
   if (data.theatre) {
     for (const key of ['name', 'shortName', 'city'] as const) {
       for (const loc of l10nStringGaps(data.theatre[key]))
-        rows.push({ slug, kind: 'theatre', field: `theatre.${key}`, locale: loc })
+        rows.push({
+          slug,
+          kind: 'theatre',
+          field: `theatre.${key}`,
+          locale: loc
+        })
     }
   }
 
@@ -438,7 +490,12 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
     data[collection].forEach((item: any, idx: number) => {
       for (const key of ['name', 'category', 'city'] as const) {
         for (const loc of l10nStringGaps(item?.[key]))
-          rows.push({ slug, kind: collection, field: `${collection}[${idx}].${key}`, locale: loc })
+          rows.push({
+            slug,
+            kind: collection,
+            field: `${collection}[${idx}].${key}`,
+            locale: loc
+          })
       }
     })
   }
@@ -447,7 +504,12 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
   if (Array.isArray(data.externalLinks)) {
     data.externalLinks.forEach((l: any, idx: number) => {
       for (const loc of l10nStringGaps(l?.label))
-        rows.push({ slug, kind: 'links', field: `externalLinks[${idx}].label`, locale: loc })
+        rows.push({
+          slug,
+          kind: 'links',
+          field: `externalLinks[${idx}].label`,
+          locale: loc
+        })
     })
   }
 
@@ -456,7 +518,12 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
     data.runs.forEach((r: any, idx: number) => {
       for (const key of ['venue', 'city', 'count'] as const) {
         for (const loc of l10nStringGaps(r?.[key]))
-          rows.push({ slug, kind: 'runs', field: `runs[${idx}].${key}`, locale: loc })
+          rows.push({
+            slug,
+            kind: 'runs',
+            field: `runs[${idx}].${key}`,
+            locale: loc
+          })
       }
     })
   }
@@ -479,7 +546,9 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
   }
 
   if (data.credits) {
-    const srcLoc = LOCALES.find((l) => Array.isArray(data.credits[l]) && data.credits[l].length > 0)
+    const srcLoc = LOCALES.find(
+      (l) => Array.isArray(data.credits[l]) && data.credits[l].length > 0
+    )
     if (srcLoc) {
       for (const loc of LOCALES) {
         if (loc === srcLoc) continue
@@ -497,13 +566,23 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
         const srcLoc = (item.language as Locale | undefined) ?? 'ru'
         for (const loc of LOCALES)
           if (loc !== srcLoc)
-            rows.push({ slug, kind: 'press', field: `press[${idx}].title`, locale: loc })
+            rows.push({
+              slug,
+              kind: 'press',
+              field: `press[${idx}].title`,
+              locale: loc
+            })
       } else {
         const hasSrc = LOCALES.some((l) => !isEmpty(item.title[l]))
         if (!hasSrc) return
         for (const loc of LOCALES)
           if (isEmpty(item.title[loc]))
-            rows.push({ slug, kind: 'press', field: `press[${idx}].title`, locale: loc })
+            rows.push({
+              slug,
+              kind: 'press',
+              field: `press[${idx}].title`,
+              locale: loc
+            })
       }
     })
   }
@@ -515,13 +594,20 @@ function gapsForProduction(slug: string, yamlPath: string): GapRow[] {
       if (!hasSrc) return
       for (const loc of LOCALES)
         if (isEmpty(item.caption[loc]))
-          rows.push({ slug, kind: 'caption', field: `gallery[${idx}].caption`, locale: loc })
+          rows.push({
+            slug,
+            kind: 'caption',
+            field: `gallery[${idx}].caption`,
+            locale: loc
+          })
     })
   }
 
   for (const loc of LOCALES) {
     const bodyPath = join(dir, `body.${loc}.md`)
-    const sibling  = LOCALES.find((l) => l !== loc && existsSync(join(dir, `body.${l}.md`)))
+    const sibling = LOCALES.find(
+      (l) => l !== loc && existsSync(join(dir, `body.${l}.md`))
+    )
     if (!existsSync(bodyPath) && sibling)
       rows.push({ slug, kind: 'body', field: `body.${loc}.md`, locale: loc })
   }
@@ -542,16 +628,32 @@ function runReport() {
   // about gaps
   for (const loc of LOCALES) {
     const p = join(ABOUT_DIR, `${loc}.yaml`)
-    if (!existsSync(p)) rows.push({ slug: 'about', kind: 'about', field: `${loc}.yaml`, locale: loc })
+    if (!existsSync(p))
+      rows.push({
+        slug: 'about',
+        kind: 'about',
+        field: `${loc}.yaml`,
+        locale: loc
+      })
     const m = join(ABOUT_DIR, `${loc}.md`)
-    if (!existsSync(m)) rows.push({ slug: 'about', kind: 'about', field: `${loc}.md`, locale: loc })
+    if (!existsSync(m))
+      rows.push({
+        slug: 'about',
+        kind: 'about',
+        field: `${loc}.md`,
+        locale: loc
+      })
   }
 
   console.log('\nGap report\n')
-  console.log('Slug'.padEnd(34) + 'Kind'.padEnd(10) + 'Field'.padEnd(28) + 'Locale')
+  console.log(
+    'Slug'.padEnd(34) + 'Kind'.padEnd(10) + 'Field'.padEnd(28) + 'Locale'
+  )
   console.log('─'.repeat(78))
   for (const r of rows)
-    console.log(r.slug.padEnd(34) + r.kind.padEnd(10) + r.field.padEnd(28) + r.locale)
+    console.log(
+      r.slug.padEnd(34) + r.kind.padEnd(10) + r.field.padEnd(28) + r.locale
+    )
   console.log(`\nTotal gaps: ${rows.length}`)
 }
 
@@ -580,7 +682,12 @@ function writeWithBackup(path: string, content: string) {
 function cleanupBaks() {
   for (const p of modifiedFiles) {
     const bak = p + '.bak'
-    if (existsSync(bak)) try { unlinkSync(bak) } catch {}
+    if (existsSync(bak))
+      try {
+        unlinkSync(bak)
+      } catch {
+        /* best-effort cleanup */
+      }
   }
 }
 
@@ -589,7 +696,11 @@ function restoreAllBaks() {
     const bak = p + '.bak'
     if (existsSync(bak)) {
       writeFileSync(p, readFileSync(bak, 'utf8'), 'utf8')
-      try { unlinkSync(bak) } catch {}
+      try {
+        unlinkSync(bak)
+      } catch {
+        /* best-effort cleanup */
+      }
       console.error(`  restored: ${p.replace(ROOT, '.')}`)
     }
   }
@@ -622,23 +733,23 @@ function runLintContent(): boolean {
 // ── Translate a production ────────────────────────────────────────────────────
 
 async function translateProduction(slug: string) {
-  const dir      = join(PRODUCTIONS_DIR, slug)
+  const dir = join(PRODUCTIONS_DIR, slug)
   const yamlPath = join(dir, 'index.yaml')
   if (!existsSync(yamlPath)) return
 
   const rawYaml = readFileSync(yamlPath, 'utf8')
-  const doc      = parseDocument(rawYaml)
-  const data     = doc.toJS() as any
-  let   changed  = false
+  const doc = parseDocument(rawYaml)
+  const data = doc.toJS() as any
+  let changed = false
 
   // scalar locale fields
   if (!onlyScope || onlyScope === 'fields') {
     const SCALAR_LOCALE_FIELDS: Array<[string, FieldKind]> = [
-      ['title',           'title'],
-      ['synopsis',        'synopsis'],
-      ['directorsNote',   'directorsNote'],
-      ['tagline',         'tagline'],
-      ['bookingCtaLabel', 'bookingCtaLabel'],
+      ['title', 'title'],
+      ['synopsis', 'synopsis'],
+      ['directorsNote', 'directorsNote'],
+      ['tagline', 'tagline'],
+      ['bookingCtaLabel', 'bookingCtaLabel']
     ]
     for (const [field, kind] of SCALAR_LOCALE_FIELDS) {
       const obj = data[field]
@@ -649,9 +760,19 @@ async function translateProduction(slug: string) {
 
       for (const loc of activeTargets(force ? undefined : srcLocale)) {
         if (!isEmpty(data[field]?.[loc]) && !force) continue
-        const t = await translateText({ srcLocale, tgtLocale: loc, fieldKind: kind, sourceText: srcText })
-        console.log(`  ${slug} ${field}.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`)
-        if (!dryRun) { doc.setIn([field, loc], t); changed = true }
+        const t = await translateText({
+          srcLocale,
+          tgtLocale: loc,
+          fieldKind: kind,
+          sourceText: srcText
+        })
+        console.log(
+          `  ${slug} ${field}.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`
+        )
+        if (!dryRun) {
+          doc.setIn([field, loc], t)
+          changed = true
+        }
       }
     }
 
@@ -662,9 +783,17 @@ async function translateProduction(slug: string) {
         const [srcLocale, srcText] = src
         for (const loc of activeTargets(force ? undefined : srcLocale)) {
           if (!isEmpty(data.premiereDate?.[loc]) && !force) continue
-          const t = await translateText({ srcLocale, tgtLocale: loc, fieldKind: 'date', sourceText: srcText })
+          const t = await translateText({
+            srcLocale,
+            tgtLocale: loc,
+            fieldKind: 'date',
+            sourceText: srcText
+          })
           console.log(`  ${slug} premiereDate.${loc} ← ${t}`)
-          if (!dryRun) { doc.setIn(['premiereDate', loc], t); changed = true }
+          if (!dryRun) {
+            doc.setIn(['premiereDate', loc], t)
+            changed = true
+          }
         }
       }
     }
@@ -672,10 +801,16 @@ async function translateProduction(slug: string) {
     // credits
     if (data.credits) {
       const srcLocale = LOCALES.find(
-        (l) => Array.isArray(data.credits[l]) && (data.credits[l] as any[]).length > 0
+        (l) =>
+          Array.isArray(data.credits[l]) &&
+          (data.credits[l] as any[]).length > 0
       )
       if (srcLocale) {
-        const srcList = data.credits[srcLocale] as Array<{ role: string; name: string; url?: string }>
+        const srcList = data.credits[srcLocale] as Array<{
+          role: string
+          name: string
+          url?: string
+        }>
         for (const loc of activeTargets(srcLocale)) {
           const tgtList = data.credits[loc]
           if (Array.isArray(tgtList) && tgtList.length > 0 && !force) continue
@@ -686,7 +821,7 @@ async function translateProduction(slug: string) {
                 srcLocale,
                 tgtLocale: loc,
                 fieldKind: 'role',
-                sourceText: item.role,
+                sourceText: item.role
               })
               const out: Record<string, string> = { role: r, name: item.name }
               if (item.url) out.url = item.url
@@ -695,7 +830,10 @@ async function translateProduction(slug: string) {
             { concurrency: 4 }
           )
           console.log(`  ${slug} credits.${loc} ← ${newList.length} entries`)
-          if (!dryRun) { doc.setIn(['credits', loc], doc.createNode(newList)); changed = true }
+          if (!dryRun) {
+            doc.setIn(['credits', loc], doc.createNode(newList))
+            changed = true
+          }
         }
       }
     }
@@ -712,7 +850,7 @@ async function translateProduction(slug: string) {
         if (titleIsString) {
           // Plain string: language field tells us locale, else default ru
           const lang = item.language as Locale | undefined
-          srcLoc  = (lang && LOCALES.includes(lang)) ? lang : 'ru'
+          srcLoc = lang && LOCALES.includes(lang) ? lang : 'ru'
           srcText = item.title
         } else {
           // Already locale-keyed: pick best source
@@ -723,19 +861,29 @@ async function translateProduction(slug: string) {
 
         // Build updated title object
         const titleObj: Record<Locale, string> = titleIsString
-          ? { [srcLoc]: srcText } as Record<Locale, string>
+          ? ({ [srcLoc]: srcText } as Record<Locale, string>)
           : { ...item.title }
 
         let pressChanged = false
         for (const loc of activeTargets(srcLoc)) {
           if (!isEmpty(titleObj[loc]) && !force) continue
-          const t = await translateText({ srcLocale: srcLoc, tgtLocale: loc, fieldKind: 'title', sourceText: srcText })
-          console.log(`  ${slug} press[${i}].title.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`)
+          const t = await translateText({
+            srcLocale: srcLoc,
+            tgtLocale: loc,
+            fieldKind: 'title',
+            sourceText: srcText
+          })
+          console.log(
+            `  ${slug} press[${i}].title.${loc} ← ${t.slice(0, 60)}${t.length > 60 ? '…' : ''}`
+          )
           titleObj[loc] = t
-          pressChanged  = true
+          pressChanged = true
         }
         if (pressChanged || titleIsString) {
-          if (!dryRun) { doc.setIn(['press', i, 'title'], doc.createNode(titleObj)); changed = true }
+          if (!dryRun) {
+            doc.setIn(['press', i, 'title'], doc.createNode(titleObj))
+            changed = true
+          }
         }
       }
     }
@@ -750,9 +898,19 @@ async function translateProduction(slug: string) {
         const srcText = item.caption[srcLoc]
         for (const loc of activeTargets(srcLoc)) {
           if (!isEmpty(item.caption[loc]) && !force) continue
-          const t = await translateText({ srcLocale: srcLoc, tgtLocale: loc, fieldKind: 'caption', sourceText: srcText })
-          console.log(`  ${slug} gallery[${i}].caption.${loc} ← ${t.slice(0, 50)}`)
-          if (!dryRun) { doc.setIn(['gallery', i, 'caption', loc], t); changed = true }
+          const t = await translateText({
+            srcLocale: srcLoc,
+            tgtLocale: loc,
+            fieldKind: 'caption',
+            sourceText: srcText
+          })
+          console.log(
+            `  ${slug} gallery[${i}].caption.${loc} ← ${t.slice(0, 50)}`
+          )
+          if (!dryRun) {
+            doc.setIn(['gallery', i, 'caption', loc], t)
+            changed = true
+          }
         }
       }
     }
@@ -760,11 +918,19 @@ async function translateProduction(slug: string) {
     // theatre.{name,shortName,city} — L10nString
     if (data.theatre && typeof data.theatre === 'object') {
       for (const [key, kind] of [
-        ['name',      'venue'],
+        ['name', 'venue'],
         ['shortName', 'venue'],
-        ['city',      'venue'],
+        ['city', 'venue']
       ] as Array<[string, FieldKind]>) {
-        if (await translateL10nString(doc, data.theatre[key], ['theatre', key], kind, `${slug} theatre.${key}`))
+        if (
+          await translateL10nString(
+            doc,
+            data.theatre[key],
+            ['theatre', key],
+            kind,
+            `${slug} theatre.${key}`
+          )
+        )
           changed = true
       }
     }
@@ -775,11 +941,19 @@ async function translateProduction(slug: string) {
         const a = data.awards[i]
         if (!a) continue
         for (const [key, kind] of [
-          ['name',     'awardName'],
+          ['name', 'awardName'],
           ['category', 'awardCategory'],
-          ['city',     'awardCity'],
+          ['city', 'awardCity']
         ] as Array<[string, FieldKind]>) {
-          if (await translateL10nString(doc, a[key], ['awards', i, key], kind, `${slug} awards[${i}].${key}`))
+          if (
+            await translateL10nString(
+              doc,
+              a[key],
+              ['awards', i, key],
+              kind,
+              `${slug} awards[${i}].${key}`
+            )
+          )
             changed = true
         }
       }
@@ -791,11 +965,19 @@ async function translateProduction(slug: string) {
         const f = data.festivals[i]
         if (!f) continue
         for (const [key, kind] of [
-          ['name',     'awardName'],
+          ['name', 'awardName'],
           ['category', 'awardCategory'],
-          ['city',     'awardCity'],
+          ['city', 'awardCity']
         ] as Array<[string, FieldKind]>) {
-          if (await translateL10nString(doc, f[key], ['festivals', i, key], kind, `${slug} festivals[${i}].${key}`))
+          if (
+            await translateL10nString(
+              doc,
+              f[key],
+              ['festivals', i, key],
+              kind,
+              `${slug} festivals[${i}].${key}`
+            )
+          )
             changed = true
         }
       }
@@ -806,7 +988,15 @@ async function translateProduction(slug: string) {
       for (let i = 0; i < data.externalLinks.length; i++) {
         const l = data.externalLinks[i]
         if (!l) continue
-        if (await translateL10nString(doc, l.label, ['externalLinks', i, 'label'], 'linkLabel', `${slug} externalLinks[${i}].label`))
+        if (
+          await translateL10nString(
+            doc,
+            l.label,
+            ['externalLinks', i, 'label'],
+            'linkLabel',
+            `${slug} externalLinks[${i}].label`
+          )
+        )
           changed = true
       }
     }
@@ -818,10 +1008,18 @@ async function translateProduction(slug: string) {
         if (!r) continue
         for (const [key, kind] of [
           ['venue', 'runVenue'],
-          ['city',  'awardCity'],
-          ['count', 'runCount'],
+          ['city', 'awardCity'],
+          ['count', 'runCount']
         ] as Array<[string, FieldKind]>) {
-          if (await translateL10nString(doc, r[key], ['runs', i, key], kind, `${slug} runs[${i}].${key}`))
+          if (
+            await translateL10nString(
+              doc,
+              r[key],
+              ['runs', i, key],
+              kind,
+              `${slug} runs[${i}].${key}`
+            )
+          )
             changed = true
         }
       }
@@ -830,7 +1028,15 @@ async function translateProduction(slug: string) {
     // tour[] — array of L10nString city entries
     if (Array.isArray(data.tour)) {
       for (let i = 0; i < data.tour.length; i++) {
-        if (await translateL10nString(doc, data.tour[i], ['tour', i], 'tourCity', `${slug} tour[${i}]`))
+        if (
+          await translateL10nString(
+            doc,
+            data.tour[i],
+            ['tour', i],
+            'tourCity',
+            `${slug} tour[${i}]`
+          )
+        )
           changed = true
       }
     }
@@ -857,8 +1063,18 @@ async function translateBodyFiles(slug: string, dir: string) {
 
   for (const loc of activeTargets(srcLocale)) {
     const bodyPath = join(dir, `body.${loc}.md`)
-    if (existsSync(bodyPath) && readFileSync(bodyPath, 'utf8').trim() !== '' && !force) continue
-    const t = await translateText({ srcLocale, tgtLocale: loc, fieldKind: 'body', sourceText: srcText })
+    if (
+      existsSync(bodyPath) &&
+      readFileSync(bodyPath, 'utf8').trim() !== '' &&
+      !force
+    )
+      continue
+    const t = await translateText({
+      srcLocale,
+      tgtLocale: loc,
+      fieldKind: 'body',
+      sourceText: srcText
+    })
     console.log(`  ${slug} body.${loc}.md ← ${t.length} chars`)
     if (!dryRun) writeWithBackup(bodyPath, t.endsWith('\n') ? t : t + '\n')
   }
@@ -870,21 +1086,26 @@ async function translateAbout() {
   if (onlyScope && onlyScope !== 'about') return
 
   // Structured YAML: translate milestones.label, lineage.role/.note, marginalia
-  const srcYamlLocale = LOCALES.find((l) => existsSync(join(ABOUT_DIR, `${l}.yaml`)))
+  const srcYamlLocale = LOCALES.find((l) =>
+    existsSync(join(ABOUT_DIR, `${l}.yaml`))
+  )
   if (!srcYamlLocale) return
 
-  const srcYamlRaw = readFileSync(join(ABOUT_DIR, `${srcYamlLocale}.yaml`), 'utf8')
-  const srcData    = parseDocument(srcYamlRaw).toJS() as any
+  const srcYamlRaw = readFileSync(
+    join(ABOUT_DIR, `${srcYamlLocale}.yaml`),
+    'utf8'
+  )
+  const srcData = parseDocument(srcYamlRaw).toJS() as any
 
   for (const loc of activeTargets(srcYamlLocale)) {
-    const tgtPath      = join(ABOUT_DIR, `${loc}.yaml`)
-    const tgtExists    = existsSync(tgtPath)
-    const newFile      = !tgtExists
-    const tgtDoc       = tgtExists
+    const tgtPath = join(ABOUT_DIR, `${loc}.yaml`)
+    const tgtExists = existsSync(tgtPath)
+    const newFile = !tgtExists
+    const tgtDoc = tgtExists
       ? parseDocument(readFileSync(tgtPath, 'utf8'))
       : parseDocument(srcYamlRaw)
-    const tgtData      = tgtDoc.toJS() as any
-    let   changed      = false
+    const tgtData = tgtDoc.toJS() as any
+    let changed = false
 
     // milestones[].label
     if (Array.isArray(srcData.milestones)) {
@@ -892,9 +1113,19 @@ async function translateAbout() {
         const srcLabel = srcData.milestones[i]?.label
         const tgtLabel = tgtData.milestones?.[i]?.label
         if (!isEmpty(srcLabel) && (newFile || isEmpty(tgtLabel) || force)) {
-          const t = await translateText({ srcLocale: srcYamlLocale, tgtLocale: loc, fieldKind: 'about', sourceText: srcLabel })
-          console.log(`  about milestones[${i}].label.${loc} ← ${t.slice(0, 60)}`)
-          if (!dryRun) { tgtDoc.setIn(['milestones', i, 'label'], t); changed = true }
+          const t = await translateText({
+            srcLocale: srcYamlLocale,
+            tgtLocale: loc,
+            fieldKind: 'about',
+            sourceText: srcLabel
+          })
+          console.log(
+            `  about milestones[${i}].label.${loc} ← ${t.slice(0, 60)}`
+          )
+          if (!dryRun) {
+            tgtDoc.setIn(['milestones', i, 'label'], t)
+            changed = true
+          }
         }
       }
     }
@@ -906,9 +1137,19 @@ async function translateAbout() {
           const srcVal = srcData.lineage[i]?.[key]
           const tgtVal = tgtData.lineage?.[i]?.[key]
           if (!isEmpty(srcVal) && (newFile || isEmpty(tgtVal) || force)) {
-            const t = await translateText({ srcLocale: srcYamlLocale, tgtLocale: loc, fieldKind: 'about', sourceText: srcVal })
-            console.log(`  about lineage[${i}].${key}.${loc} ← ${t.slice(0, 60)}`)
-            if (!dryRun) { tgtDoc.setIn(['lineage', i, key], t); changed = true }
+            const t = await translateText({
+              srcLocale: srcYamlLocale,
+              tgtLocale: loc,
+              fieldKind: 'about',
+              sourceText: srcVal
+            })
+            console.log(
+              `  about lineage[${i}].${key}.${loc} ← ${t.slice(0, 60)}`
+            )
+            if (!dryRun) {
+              tgtDoc.setIn(['lineage', i, key], t)
+              changed = true
+            }
           }
         }
       }
@@ -920,9 +1161,17 @@ async function translateAbout() {
         const srcVal = srcData.marginalia[i]
         const tgtVal = tgtData.marginalia?.[i]
         if (!isEmpty(srcVal) && (newFile || isEmpty(tgtVal) || force)) {
-          const t = await translateText({ srcLocale: srcYamlLocale, tgtLocale: loc, fieldKind: 'about', sourceText: srcVal })
+          const t = await translateText({
+            srcLocale: srcYamlLocale,
+            tgtLocale: loc,
+            fieldKind: 'about',
+            sourceText: srcVal
+          })
           console.log(`  about marginalia[${i}].${loc} ← ${t}`)
-          if (!dryRun) { tgtDoc.setIn(['marginalia', i], t); changed = true }
+          if (!dryRun) {
+            tgtDoc.setIn(['marginalia', i], t)
+            changed = true
+          }
         }
       }
     }
@@ -940,8 +1189,18 @@ async function translateAbout() {
   const srcMd = readFileSync(join(ABOUT_DIR, `${srcMdLocale}.md`), 'utf8')
   for (const loc of activeTargets(srcMdLocale)) {
     const mdPath = join(ABOUT_DIR, `${loc}.md`)
-    if (existsSync(mdPath) && readFileSync(mdPath, 'utf8').trim() !== '' && !force) continue
-    const t = await translateText({ srcLocale: srcMdLocale, tgtLocale: loc, fieldKind: 'body', sourceText: srcMd })
+    if (
+      existsSync(mdPath) &&
+      readFileSync(mdPath, 'utf8').trim() !== '' &&
+      !force
+    )
+      continue
+    const t = await translateText({
+      srcLocale: srcMdLocale,
+      tgtLocale: loc,
+      fieldKind: 'body',
+      sourceText: srcMd
+    })
     console.log(`  about ${loc}.md ← ${t.length} chars`)
     if (!dryRun) writeWithBackup(mdPath, t.endsWith('\n') ? t : t + '\n')
   }

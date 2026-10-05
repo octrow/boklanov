@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
@@ -10,6 +11,15 @@ export interface GalleryItem {
   src: string
   alt: string
   credit?: string | null
+  /** Pre-baked AVIF variants per PAYLOAD_IMAGE_VARIANTS_PLAN.md. Each URL
+   *  already includes the CDN base (callers pre-resolve via `cdnUrl`). */
+  variants?: {
+    w420: string
+    w600: string
+    w720: string
+    w828: string
+    w1080: string
+  } | null
 }
 
 interface Props {
@@ -62,30 +72,40 @@ export function GalleryLightbox({ items }: Props) {
   return (
     <>
       <div className={styles.grid}>
-        {items.map((item, i) => (
-          <div
-            key={`${item.src}-${i}`}
-            ref={(el) => {
-              triggerRefs.current[i] = el
-            }}
-            className={styles.trigger}
-            role='button'
-            tabIndex={0}
-            aria-label={t('viewPhotoOf', { index: i + 1, total })}
-            onClick={() => setActiveIndex(i)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
-            }}
-          >
-            <SpecimenPlate
-              src={item.src}
-              alt={item.alt}
-              credit={item.credit}
-              plateNumber={i + 1}
-              total={total}
-            />
-          </div>
-        ))}
+        {items.map((item, i) => {
+          // SpecimenPlate renders a visible "07 / 24" caption — the WCAG
+          // label-content-name-mismatch rule wants the accessible name to
+          // include that exact visible text, otherwise voice-control users
+          // can't activate the trigger by reading what they see.
+          const indexLabel = `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
+          return (
+            <div
+              key={`${item.src}-${i}`}
+              ref={(el) => {
+                triggerRefs.current[i] = el
+              }}
+              className={styles.trigger}
+              role='button'
+              tabIndex={0}
+              aria-label={`${indexLabel} — ${t('viewPhotoOf', { index: i + 1, total })}`}
+              onClick={() => setActiveIndex(i)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
+              }}
+            >
+              <SpecimenPlate
+                src={item.src}
+                variants={item.variants ?? null}
+                alt={item.alt}
+                credit={item.credit}
+                plateNumber={i + 1}
+                total={total}
+                sizes='(min-width: 1024px) 240px, (min-width: 768px) 25vw, 50vw'
+                quality={70}
+              />
+            </div>
+          )
+        })}
       </div>
 
       {isOpen && current && (
@@ -93,7 +113,10 @@ export function GalleryLightbox({ items }: Props) {
           className={styles.overlay}
           role='dialog'
           aria-modal='true'
-          aria-label={t('photoDialogOf', { index: (activeIndex ?? 0) + 1, total })}
+          aria-label={t('photoDialogOf', {
+            index: (activeIndex ?? 0) + 1,
+            total
+          })}
           onClick={handleClose}
         >
           <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
@@ -108,7 +131,30 @@ export function GalleryLightbox({ items }: Props) {
             </button>
 
             <div className={styles.imgWrap}>
-              <img src={current.src} alt={current.alt} className={styles.img} />
+              {current.variants ? (
+                // Lightbox view at most ~1000 CSS-px wide — w1080 is the
+                // ceiling, w828 covers tablet, w600 mobile.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={current.variants.w1080}
+                  srcSet={`${current.variants.w600} 600w, ${current.variants.w720} 720w, ${current.variants.w828} 828w, ${current.variants.w1080} 1080w`}
+                  sizes='min(90vw, 1000px)'
+                  className={styles.img}
+                  alt={current.alt}
+                  decoding='async'
+                  style={{ width: 'auto', height: 'auto' }}
+                />
+              ) : (
+                <Image
+                  src={current.src}
+                  alt={current.alt}
+                  width={0}
+                  height={0}
+                  sizes='min(90vw, 1000px)'
+                  className={styles.img}
+                  style={{ width: 'auto', height: 'auto' }}
+                />
+              )}
 
               {total > 1 && (
                 <>

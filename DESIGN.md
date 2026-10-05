@@ -18,20 +18,20 @@ References (energy): gorki.de, hau-berlin.de, volksbuehne-berlin.de. Grammar (no
 
 ## 2. Mood axis
 
-| Yes                                                 | No                                           |
-|-----------------------------------------------------|----------------------------------------------|
-| Curatorial, quiet, declarative                      | Promotional, hyped                           |
-| Warm paper + hairlines                              | Dark glass + glow                            |
-| Lora display / Inter body / JetBrains Mono metadata | Variable display fonts, Comic-Sans irony     |
-| Photos carry colour                                 | Brand gradients                              |
-| One signature gesture, fade transitions             | Parallax, scroll-driven, animated gradients  |
-| Hairline rules, sharp corners                       | Drop-shadows, soft 16px radii, glassmorphism |
-| Production photos credited                          | Stock "diverse smiling team"                 |
-| Spacious, Japanese Ma                               | Bento grids, marketing density               |
+| Yes                                                             | No                                                         |
+| --------------------------------------------------------------- | ---------------------------------------------------------- |
+| Curatorial, quiet, declarative                                  | Promotional, hyped                                         |
+| Warm paper + hairlines                                          | Dark glass + glow                                          |
+| Lora display / Inter body / JetBrains Mono metadata             | Variable display fonts, Comic-Sans irony                   |
+| Photos carry colour                                             | Brand gradients                                            |
+| One signature gesture, fade transitions                         | Parallax, scroll-driven, animated gradients                |
+| Hairline rules, sharp corners                                   | Drop-shadows, soft 16px radii, glassmorphism               |
+| Production photos credited                                      | Stock "diverse smiling team"                               |
+| Spacious, Japanese Ma                                           | Bento grids, marketing density                             |
 | Catalogue raisonné register (numbered plates, archival caption) | Catalogue marketing register (collection, "shop the look") |
-| Variable-weight Lora as breath, not animation       | Kinetic interpolation between weights        |
-| Mono labels with hairline underline (no fill, no radius) | Coloured pill chips, status hue         |
-| 1px low-contrast inset rule on photographic plates  | Outset shadow, blur radius >0, hover lift    |
+| Variable-weight Lora as breath, not animation                   | Kinetic interpolation between weights                      |
+| Mono labels with hairline underline (no fill, no radius)        | Coloured pill chips, status hue                            |
+| 1px low-contrast inset rule on photographic plates              | Outset shadow, blur radius >0, hover lift                  |
 
 ## 3. Colour
 
@@ -79,14 +79,20 @@ Components reference semantic aliases, not raw paper/ink.
 
 Self-hosted from `public/fonts/`. SIL OFL. Full Cyrillic. No Google Fonts CDN.
 
-v3 addition: Unbounded VF - scoped to hero wordmark + Sticker badges only.
+Brief D13 locks three families (Lora / Inter / JetBrains Mono). v3 extends with
+**Unbounded** scoped to hero wordmark + Sticker badges only — see §13.
 
-| Role     | Family         | Weights      | Use                                                             |
-|----------|----------------|--------------|-----------------------------------------------------------------|
-| Plakat   | **Unbounded**  | 200–900 VF   | Hero wordmark on `/` only, Sticker badges (v3)                  |
-| Display  | Lora-VF        | 400–700 VF   | Header + footer wordmark (lowercase), page H1, section H2, editorial prose, italic press attribution |
-| Body/UI  | Inter          | 400, 500, 600| Long-form prose, UI, CTAs                                       |
-| Mono     | JetBrains Mono | 400, 500     | Dates, durations, chips, credits, country codes                 |
+| Role    | Family         | Weights       | Use                                                                                                  |
+| ------- | -------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| Plakat  | **Unbounded**  | 200–900 VF    | Hero wordmark on `/` only, Sticker badges (v3)                                                       |
+| Display | Lora-VF        | 400–700 axis  | Header + footer wordmark (lowercase), page H1, section H2, editorial prose, italic press attribution |
+| Body/UI | Inter          | 400, 500, 600 | Long-form prose, UI, CTAs                                                                            |
+| Mono    | JetBrains Mono | 400, 500      | Dates, durations, chips, credits, country codes                                                      |
+
+Brief deviation (weights): Lora is now a single VF axis 400–700 (commit `f1613b1`,
+Phase 9.2). Brief §5.3 locked 400/500/600; the VF swap superseded that for
+weight-set flexibility at zero file-size cost. Unbounded/Inter/JetBrains Mono
+match brief lock.
 
 Voice rules:
 
@@ -96,18 +102,37 @@ Voice rules:
 - Italics only in Lora. Never in Inter or Unbounded.
 - Mono for any number that's not a price.
 
-Scale (fluid `clamp(min@375, mid, max@1280)`):
+Scale (10 tokens) — fluid `clamp(min@375, mid, max@1280)` unless marked fixed.
+Source: `app/globals.css`. Final collapse from 14 → 10 tokens by Wave 2 of
+`FONT_FIX_PLAN_2026-05-18`. Within editorial-ideal budget (6 brief-locked
+semantic + 4 role-named).
 
-| Token                 | Min | Max | Use                                         |
-|-----------------------|-----|-----|---------------------------------------------|
-| `--font-size-chip`    | 11  | 11  | Chips, age rating, country code             |
-| `--font-size-meta`    | 13  | 13  | Mono captions, dates                        |
-| `--font-size-base`    | 17  | 18  | Body                                        |
-| `--font-size-lg`      | 20  | 24  | h3, card titles                             |
-| `--font-size-2xl`     | 28  | 40  | h2, section titles                          |
-| `--font-size-4xl`     | 44  | 88  | Display, page H1                            |
-| `--font-size-hero`    | 48  | 96  | **v3** Unbounded hero wordmark on `/` only - narrowed `2388511` after visual review (was 72–168; cropped on mobile, oversized at desktop) |
-| `--font-size-sticker` | 11  | 13  | **v3** Unbounded Sticker badge text         |
+**Brief-locked semantic core (6):**
+
+| Token              | Min | Max | Use                                     |
+| ------------------ | --- | --- | --------------------------------------- |
+| `--font-size-chip` | 11  | 11  | Chips, age rating, country code (fixed) |
+| `--font-size-meta` | 13  | 13  | Mono captions, dates (fixed)            |
+| `--font-size-body` | 17  | 18  | Reading prose                           |
+| `--font-size-h3`   | 20  | 24  | h3, card titles                         |
+| `--font-size-h2`   | 28  | 40  | h2, section titles                      |
+| `--font-size-h1`   | 36  | 60  | Page H1 — see brief deviation below     |
+
+**Role-named extensions (4):**
+
+| Token                 | Min | Max | Use                                                                                                                                 |
+| --------------------- | --- | --- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `--font-size-caption` | 14  | 14  | Sans secondary text — between body and meta, not mono (fixed)                                                                       |
+| `--font-size-nav`     | 13  | 16  | Header nav links — desktop scale-up                                                                                                 |
+| `--font-size-hero`    | 36  | 80  | **v3** Unbounded hero wordmark on `/` only — retuned `2388511` (was 48–96; mobile-cropped and desktop-oversized at the brief value) |
+| `--font-size-sticker` | 11  | 13  | **v3** Unbounded Sticker badge text                                                                                                 |
+
+Brief deviation (scale): `--font-size-h1` is **36→60**, not the brief's **44→88**.
+The brief's display ceiling was never implemented in code; the de-facto page H1
+(formerly `--font-size-3xl`) has always been 36→60. The actual display ceiling
+is now `--font-size-hero` on `/` only. Brief §5.4 listed 6 semantic steps —
+this scale honors that (chip/meta/body/h3/h2/h1) plus 4 explicit role
+extensions, not t-shirt-sized intermediates.
 
 Tracking: `--letter-spacing-tight -0.015em` (Lora display), `--letter-spacing-wide 0.06em` (mono caps),
 `--letter-spacing-meta 0.01em` (mono captions). Unbounded ALL CAPS: `0.03em`.
@@ -198,21 +223,21 @@ Production detail (D7 layout, top -> bottom):
 
 1. Cover: `max-height: 65vh`, `object-fit: contain`, centered. Natural aspect ratio, no cropping. `PosterLightbox` wraps for click-to-expand.
 2. Run-of-show row (Phase 7.6): optional `runs[]` frontmatter. Mono chip row above title: `RUN · venue · city · yearFrom–yearTo · count`. Hidden when `runs[]` empty.
-2b. Sticker row (v3 fix-pass `2388511`): optional plakat badges above title. `aria-hidden="true"`. Vermillion `FESTIVAL AWARD · N` when `awards.length > 0`; cobalt `TOURING` when `tour.length > 0`. Max 2 stickers; canonical sources are TourRider + awards list. Translation keys: `productions.stickerAward` + `productions.stickerTour` (RU/EN/DE).
+   2b. Sticker row (v3 fix-pass `2388511`): optional plakat badges above title. `aria-hidden="true"`. Vermillion `FESTIVAL AWARD · N` when `awards.length > 0`; cobalt `TOURING` when `tour.length > 0`. Max 2 stickers; canonical sources are TourRider + awards list. Translation keys: `productions.stickerAward` + `productions.stickerTour` (RU/EN/DE).
 3. Title block: `<TheatreSlate>` component (Phase 9.3, `components/TheatreSlate.tsx`) — RU display Lora + smaller EN + DE if present, theatre line (mono meta with optional URL link), role line (mono uppercase, `--ink-marginalia`, `--letter-spacing-wide`), premiereDate (mono meta). Top + bottom rules. Heading element via `as` prop (`h1` on detail, `h2` on index when adopted).
 4. Chips row mono caps: `[18+] [2020] [90 MIN] [RU]`. Sharp corners.
 5. Synopsis Lora italic.
-5b. Director's note (Phase 7.6): optional `directorsNote.{ru,en}` frontmatter. Italic Lora `<blockquote>` with 2px hairline left rule + mono attribution `— РОМАН БОКЛАНОВ`. Hidden when field absent.
+   5b. Director's note (Phase 7.6): optional `directorsNote.{ru,en}` frontmatter. Italic Lora `<blockquote>` with 2px hairline left rule + mono attribution `— РОМАН БОКЛАНОВ`. Hidden when field absent.
 6. Credits as `<dl>` with leader-dot rows. `Director ........ Roman Boklanov`. Cast sub-block under hairline. No "in
    order of appearance". No puppet-as-cast.
-6. Action bar: Watch/listen (oxblood primary), Tech rider (PDF), Press kit (ZIP). Hide when asset absent.
-7. ON TOUR band: `<TourTicker>` CSS marquee (v3, replaces static `.slate` Plinth band). Driven by `tour[]`; empty -> hidden. No links. Pauses on hover + reduced-motion.
-8. Press: Lora italic link + mono outlet, hairline rules between items. Hidden when `press[]` empty.
-9. Gallery: `columns: 2` masonry tablet+, original aspect. Each item is a `<SpecimenPlate>` inside `<GalleryLightbox>` — single shared navigable overlay, ← / → arrows + keyboard. Hidden when `gallery[]` empty.
-10. Awards: list, mono year + name + city.
-11. External theatre links: single mono row.
-12. Recommends: 3 cards. Same form -> same age bucket -> most recent year. Lineage = tiebreaker.
-13. Sticky CTA `Email Roman about touring this show`. Mailto with prefilled subject + show name. `IntersectionObserver`
+7. Action bar: Watch/listen (oxblood primary), Tech rider (PDF), Press kit (ZIP). Hide when asset absent.
+8. ON TOUR band: `<TourTicker>` CSS marquee (v3, replaces static `.slate` Plinth band). Driven by `tour[]`; empty -> hidden. No links. Pauses on hover + reduced-motion.
+9. Press: Lora italic link + mono outlet, hairline rules between items. Hidden when `press[]` empty.
+10. Gallery: `columns: 2` masonry tablet+, original aspect. Each item is a `<SpecimenPlate>` inside `<GalleryLightbox>` — single shared navigable overlay, ← / → arrows + keyboard. Hidden when `gallery[]` empty.
+11. Awards: list, mono year + name + city.
+12. External theatre links: single mono row.
+13. Recommends: 3 cards. Same form -> same age bucket -> most recent year. Lineage = tiebreaker.
+14. Sticky CTA `Email Roman about touring this show`. Mailto with prefilled subject + show name. `IntersectionObserver`
     on cover. Right-rail grid on desktop, fixed bottom on mobile. `--z-sticky 100`.
 
 Theatre slate / right rail (desktop): see TourRider (Phase 9.7) above. Replaces the inline `.slate` div from `app/[locale]/productions/[slug]/page.tsx`.
@@ -328,7 +353,7 @@ Non-negotiable.
 
 No logo. `<SiteWordmark>` component. Two registers (v3 fix-pass `2388511`):
 
-- **Hero** (`/` only): Unbounded 700 ALL CAPS, `letter-spacing: 0.03em`, `--font-size-hero` clamp(48px, 28+4.5vw, 96px). Static gradient fill (vermillion→cobalt→mustard, 135deg). RU: `РОМАН БОКЛАНОВ`. EN/DE: `ROMAN BOKLANOV`. `aria-hidden`; SR h1 companion carries the plain text.
+- **Hero** (`/` only): Unbounded 700 ALL CAPS, `letter-spacing: 0.03em`, `--font-size-hero` clamp(36px, 23+4vw, 80px) (retuned 2026-05-03 — see §4 hero row). Static gradient fill (vermillion→cobalt→mustard, 135deg). RU: `РОМАН БОКЛАНОВ`. EN/DE: `ROMAN BOKLANOV`. `aria-hidden`; SR h1 companion carries the plain text.
 - **Header + footer**: Lora medium **lowercase**, `letter-spacing: --letter-spacing-tight`, solid colour (header `--ink`, footer `--ink-mute`). RU: `роман бокланов`. EN/DE: `roman boklanov`. Never italic. Never gradient.
 
 The lowercase Lora register at chrome scale is the v1/v2 anchor; ALL CAPS Unbounded was tried on every variant in 9v3.1 but reverted to hero-only after visual review (read as too tech, broke editorial register).

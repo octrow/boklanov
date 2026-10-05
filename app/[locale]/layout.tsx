@@ -1,3 +1,4 @@
+import '../typography.css'
 import '../globals.css'
 
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
@@ -15,6 +16,7 @@ import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 import { buildSearchIndex } from '@/lib/search'
 
@@ -40,10 +42,6 @@ try {
   document.documentElement.dataset.theme = 'gorky';
 }
 `
-
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -100,13 +98,24 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
 
-  const productions = getAllProductions(locale)
+  const productions = await getAllProductions(locale)
   const searchItems = buildSearchIndex(productions)
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* LCP poster ships from R2 via `<img srcset>` (no next/image), so the
+            browser can't infer the origin until it parses the preload `<link>`
+            emitted by the home page. Preconnect here so the TLS handshake
+            overlaps HTML parsing and shaves the load-delay phase of LCP. */}
+        {process.env.NEXT_PUBLIC_CDN_BASE && (
+          <link
+            rel='preconnect'
+            href={process.env.NEXT_PUBLIC_CDN_BASE}
+            crossOrigin='anonymous'
+          />
+        )}
         {/* Preload above-the-fold fonts. Phase 9.2: Lora is one VF file
             (Latin+Cyrillic combined) regardless of locale; Inter still subset-split. */}
         <link

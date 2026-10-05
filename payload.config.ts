@@ -1,0 +1,193 @@
+/**
+ * payload.config.ts — Payload 3 root config for boklanov.com
+ *
+ * Phase P1 install (see .design/boklanov-rewrite/PAYLOAD_MIGRATION_PLAN.md).
+ * Lives at repo root; imported via the `@payload-config` alias added in
+ * tsconfig.json so server entry points can `import config from '@payload-config'`.
+ *
+ * Storage:
+ *   - Postgres (Neon) via @payloadcms/db-postgres
+ *   - R2 via @payloadcms/storage-s3 (S3-compatible)
+ *
+ * Locales:
+ *   - ru (default), en, de — matches existing i18n/routing.ts
+ *
+ * Editor: lexicalEditor() is mounted only for the optional `media.alt`
+ * rich-text field; all production bodies stay as plain markdoc strings in
+ * `textarea` per PAYLOAD_MIGRATION_PLAN §P2.3 Q1 default.
+ */
+
+import { buildConfig } from 'payload'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { en } from '@payloadcms/translations/languages/en'
+import { ru } from '@payloadcms/translations/languages/ru'
+import sharp from 'sharp'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+import { Productions } from './collections/Productions'
+import { Media } from './collections/Media'
+import { Users } from './collections/Users'
+import { About } from './globals/About'
+import { Contact } from './globals/Contact'
+
+const dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// pg-connection-string@^2 emits a security warning whenever it sees sslmode
+// `require`, `prefer`, or `verify-ca` because v3 will adopt libpq semantics
+// (weaker than the current verify-full alias). Neon's standard connection
+// string is `?sslmode=require`. We're already getting verify-full behavior,
+// so promote the mode in the URL to silence the warning and pin the
+// stronger semantics across future pg-connection-string releases.
+function pinSslMode(url: string): string {
+  if (!url) return url
+  try {
+    const u = new URL(url)
+    const mode = u.searchParams.get('sslmode')
+    if (mode === 'require' || mode === 'prefer' || mode === 'verify-ca') {
+      u.searchParams.set('sslmode', 'verify-full')
+    }
+    return u.toString()
+  } catch {
+    return url
+  }
+}
+
+// Local runs use the docker `db` (npm run db:dev-refresh). Refuse the prod
+// Neon host outside Vercel unless explicitly allowed, so a stray env line
+// (or `vercel env pull`) can't point `next dev` / scripts at production.
+if (
+  /neon\.tech/.test(process.env.DATABASE_URL || '') &&
+  !process.env.VERCEL &&
+  process.env.ALLOW_PROD_DB !== '1'
+) {
+  throw new Error(
+    'DATABASE_URL points at production Neon. Use the local db, or set ALLOW_PROD_DB=1 on purpose.'
+  )
+}
+
+export default buildConfig({
+  secret: process.env.PAYLOAD_SECRET || 'CHANGE_ME_IN_ENV',
+  serverURL:
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''),
+
+  // Payload only auto-whitelists `serverURL` for cookie-bearing requests.
+  // Next dev hops to :3001..:3004 when :3000 is busy, and the
+  // feature/payloadcms Vercel preview is the active staging host — without
+  // these on the whitelist Payload rejects its own session cookie → 401 on
+  // /api/payload-preferences, 403 on /api/globals/*.
+  csrf: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'https://boklanovv2-git-feature-payloadcms-boklanovs-projects.vercel.app',
+    'https://boklanov.com'
+  ],
+
+  admin: {
+    user: 'users',
+    // `theme: 'all'` (default) keeps the light/dark switcher visible in
+    // the admin header. Roman + Daniil both pick dark in practice, but
+    // the toggle stays available for daylight editing or visual review.
+    theme: 'all',
+    meta: {
+      titleSuffix: ' · boklanov.com'
+    },
+    // Per-field locale UX (PAYLOAD_ADMIN_UX_PLAN.md §A.0–A.1 +
+    // §Round-2 R1).
+    // - `providers`: LocaleModeProvider wraps the admin tree, exposing
+    //   `useLocaleMode()` to every <LocalizedField>. Seeds itself from
+    //   localStorage and persists changes.
+    // - The header `actions` toggle was removed in Round-2: the mode
+    //   switch is now part of the per-field RU·EN·DE·ALL pill strip
+    //   rendered by `LocalizedTextLike` / `LocalizedRichTextTabs`.
+    components: {
+      providers: [
+        '/components/admin/LocaleModeProvider#default',
+        '/components/admin/LocalizedDocContext#default',
+        '/components/admin/ActiveLocaleBodyAttr#default'
+      ]
+    },
+    livePreview: {
+      // Matches DESIGN.md §6 public-site breakpoints — iPhone-15-class
+      // 390 width, iPad portrait 768, desktop 1440. Inherited by both
+      // Productions and About livePreview URLs.
+      breakpoints: [
+        { label: 'Mobile', name: 'm', width: 390, height: 800 },
+        { label: 'Tablet', name: 't', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'd', width: 1440, height: 900 }
+      ]
+    }
+  },
+
+  // RU is the primary editor locale (Roman). The community-maintained pack
+  // from @payloadcms/translations covers most chrome strings; missing keys
+  // fall through to EN per Payload's standard merge behavior.
+  i18n: {
+    supportedLanguages: { ru, en },
+    fallbackLanguage: 'en'
+  },
+
+  collections: [Productions, Media, Users],
+  globals: [About, Contact],
+
+  localization: {
+    locales: [
+      { label: 'Русский', code: 'ru' },
+      { label: 'English', code: 'en' },
+      { label: 'Deutsch', code: 'de' }
+    ],
+    defaultLocale: 'ru',
+    fallback: true
+  },
+
+  editor: lexicalEditor(),
+
+  db: postgresAdapter({
+    // Schema changes go through committed migrations (`npm run payload --
+    // migrate:create <name>`), applied by `vercel-build`. Dev push stays off
+    // while local .env and the deploy share one Neon database — otherwise
+    // `next dev` silently rewrites the production schema.
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
+    pool: {
+      connectionString: pinSslMode(process.env.DATABASE_URL || ''),
+      max: 5,
+      idleTimeoutMillis: 20000,
+      connectionTimeoutMillis: 10000
+    }
+  }),
+
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          // Mirror the existing R2 key prefix so previously-uploaded images
+          // stay accessible via NEXT_PUBLIC_CDN_BASE without any rewrites.
+          prefix: 'productions'
+        }
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION || 'auto',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
+        },
+        forcePathStyle: true
+      }
+    })
+  ],
+
+  sharp,
+
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts')
+  }
+})

@@ -16,16 +16,20 @@
 }
 
 /* Note-present wrapper: block on mobile */
-.row { /* block */ }
+.row {
+  /* block */
+}
 
 /* Prose column: transparent on mobile */
-.prose { /* transparent */ }
+.prose {
+  /* transparent */
+}
 
 /* Note: italic subordinate below prose on mobile */
 .note {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   line-height: var(--line-height-normal);
   color: var(--ink-faint);
   margin-top: var(--space-2);
@@ -58,7 +62,7 @@
 .pull {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   line-height: var(--line-height-snug);
   color: var(--ink);
   margin: 0;

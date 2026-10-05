@@ -1,11 +1,7 @@
 import type { MetadataRoute } from 'next'
 
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
-
-// Canonical base - override at build time with NEXT_PUBLIC_BASE_URL.
-const BASE = (
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'https://boklanov.com'
-).replace(/\/$/, '')
 
 const STATIC_PATHS = [
   '/',
@@ -45,8 +41,8 @@ function ruEnAlternates(
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const slugs = getAllProductions('en').map((p) => p.slug)
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const slugs = (await getAllProductions('en')).map((p) => p.slug)
   const now = new Date()
   const entries: MetadataRoute.Sitemap = []
 

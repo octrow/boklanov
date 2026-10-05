@@ -53,11 +53,19 @@ The script (`scripts/backup-r2-to-git.ts`) allowlists prefixes
 downloading, so non-media R2 objects don't churn through Class B
 operations or land in `public/`.
 
-### `app/api/keystatic-asset/route.ts` (Keystatic editor upload, fires per editor click)
+### `app/api/r2-asset/route.ts` (Payload editor upload, fires per editor click)
 
-| Operation       | API call    | Class | Count per upload |
-| --------------- | ----------- | ----- | ---------------- |
-| Upload new file | `PutObject` | A     | 1                |
+Per upload, the route writes the source + four AVIF variants inline
+(Pipeline A; see `IMAGE_UPLOAD_STANDARD.md`):
+
+| Operation                | API call     | Class | Count per upload |
+| ------------------------ | ------------ | ----- | ---------------- |
+| Upload new source file   | `PutObject`  | A     | 1                |
+| Bake 4 AVIF variants     | `PutObject`  | A     | 4                |
+| Variant idempotency HEAD | `HeadObject` | B     | up to 4          |
+
+DELETE on the same endpoint additionally fires four `DeleteObject` (Class A,
+free per R2 pricing) to clear the orphan variants alongside the source.
 
 ### Site visitors (images served via `r2.dev` public URL through Cloudflare CDN)
 

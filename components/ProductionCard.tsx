@@ -12,8 +12,6 @@ import type { ProductionView } from '@/lib/content'
 import styles from './ProductionCard.module.css'
 import { TypographicCover } from './TypographicCover'
 
-export { countryCode }
-
 export interface ProductionCardProps {
   production: ProductionView
   priority?: boolean
@@ -23,8 +21,10 @@ export interface ProductionCardProps {
   coverPhoto?: { src: string | null; credit: string | null } | null
 }
 
-const DEFAULT_SIZES =
-  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw'
+// Mobile renders at 90vw (not 100vw): the page wrapper has 20 px gutters, so
+// a 412-px viewport gives 372 px ≈ 90.3 vw. 100vw inflates srcset selection
+// to the next bucket (828w over 720w) for no visible benefit. See FeaturedStrip.
+const DEFAULT_SIZES = '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 90vw'
 
 export function ProductionCard({
   production,
@@ -54,10 +54,21 @@ export function ProductionCard({
   ]
     .filter(Boolean)
     .join(', ')
-  const effectiveCover = (coverPhoto?.src ? coverPhoto : null) ?? production.poster
+  const effectiveCover =
+    (coverPhoto?.src ? coverPhoto : null) ?? production.poster
   const alt = effectiveCover.credit
     ? `${altBase} (${effectiveCover.credit})`
     : altBase
+  // `coverPhoto` may be a productionsPhoto/featuredPhoto (which carries
+  // variants per content.ts), or a raw `{src, credit}` literal supplied by
+  // callers that don't know about variants. The cast keeps that flexibility
+  // without forcing every caller upstream.
+  const variants =
+    (
+      effectiveCover as {
+        variants?: import('@/lib/content').ImageVariants | null
+      }
+    ).variants ?? null
 
   // Only use lqip blur-up when showing the poster (lqip is only computed for poster)
   const coverStyle =
@@ -73,13 +84,33 @@ export function ProductionCard({
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
         {sticker}
-        {effectiveCover.src ? (
+        {effectiveCover.src && variants ? (
+          // Pre-baked AVIF variants live alongside the source in R2 — serve
+          // them directly via `<img srcset>` so we bypass `/_next/image`
+          // entirely. See PAYLOAD_IMAGE_VARIANTS_PLAN.md.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className={styles.coverImg}
+            src={cdnUrl(variants.w600)!}
+            srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
+            sizes={sizes}
+            alt={alt}
+            decoding='async'
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : undefined}
+            style={{ objectFit: 'cover' }}
+          />
+        ) : effectiveCover.src ? (
           <Image
             className={styles.coverImg}
             src={cdnUrl(effectiveCover.src)!}
             alt={alt}
             fill
             sizes={sizes}
+            // Posters are duotone-blended on top of a CSS layer — q=70 with
+            // AVIF/WebP is visually indistinguishable from q=75 and saves
+            // ~10–20 KiB per card on the LCP path.
+            quality={70}
             style={{ objectFit: 'cover' }}
             priority={priority}
             fetchPriority={priority ? 'high' : undefined}

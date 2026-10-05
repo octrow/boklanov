@@ -5,6 +5,29 @@ on: [push, pull_request]
 jobs:
   Build:
     runs-on: ubuntu-latest
+
+    # Throwaway Postgres for Payload: the build prerenders pages through
+    # Payload, so it needs a reachable DB with the current schema. Migrations
+    # create that schema from scratch, which also proves they apply cleanly.
+    # Never points at Neon — CI must not touch production data.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://postgres:ci@localhost:5432/postgres
+      DATABASE_URL_UNPOOLED: postgresql://postgres:ci@localhost:5432/postgres
+      PAYLOAD_SECRET: ci-only-not-a-secret
+
     steps:
       - uses: actions/checkout@v4
 
@@ -14,9 +37,7 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - name: migrate
+        run: npm run payload -- migrate
       - name: build
-        #        TODO Enable those lines below if you use a Redis cache, you'll also need to configure GitHub Repository Secrets
-        #        env:
-        #          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-        #          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: npm run build

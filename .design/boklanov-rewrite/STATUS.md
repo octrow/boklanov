@@ -39,6 +39,7 @@ Update: every shipped task. Status flows here -> nowhere (terminal).
 | 9 v2 visual refresh (Vitrine)   | done         | See `DESIGN_v2_PROPOSAL.md` + Phase-9 sub-table below. 8/8 code phases shipped to `main`. Vitrine becomes the v2 baseline that v3 supersedes (subject to acceptance gates).                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 9 v3 visual refresh (Plakat)    | in progress  | Branch `design_v3` cut from `main` 2026-05-02. See `DESIGN_v3_PROPOSAL.md` + Phase-9-v3 sub-table below. 9 of 10 phases shipped (9v3.0–9v3.8) + fix-pass `2388511`. 9v3.9 acceptance sweep in progress.                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | 10 Decap CMS layer              | deferred     | Activates on Roman demand. Locks: `editorial_workflow:false`, `backend.branch:draft`. ~2 days.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 11 CMS swap — Payload           | done         | Replaces Keystatic on `feature/payloadcms`. See `PAYLOAD_MIGRATION_PLAN.md` (P1–P5 shipped) + `PAYLOAD_POLISH_PLAN.md` (Tiers 1+2+3.1+3.3+4+5.1+5.2+5.3+5.5+6 shipped 2026-05-14). Postgres source-of-truth at Neon; `/admin` is the authoring UI; `content/{productions,about,contact}` and all `@keystatic/*` deps retired in `eaf5a37` + `a3535b0`. 51/54 productions have non-null `theatre.country` after the 5.3 backfill; three rows surface blank in /admin for manual completion.                                                                                                                                 |
 
 ## D3/D4 cutover (deferred)
 
@@ -52,13 +53,16 @@ When ready:
 
 R2 CDN note: 291 images uploaded to `boklanov-content` bucket 2026-05-02. Dev URL `https://pub-eaffa56b38f2484cb3a48ab54ac582b0.r2.dev` active (rate-limited, no Cloudflare cache). `cdn.boklanov.com` custom domain blocked until boklanov.com DNS moves to Cloudflare. To activate: set `NEXT_PUBLIC_CDN_BASE` in Vercel.
 
-## Open content tasks (Roman, via Obsidian)
+## Open content tasks (Roman, via /admin)
 
-- Photographer credits per gallery image -> `gallery[].credit` in `index.yaml`
+Post Phase 11 (Payload swap): all authoring now happens at `/admin/collections/productions`. The bullets below describe the same gaps as before, now expressed against Postgres fields:
+
+- Photographer credits per gallery image → `media.gallery[].credit`
 - Two festival-in-prose awards need overlay: `cinderella`, `sugar-kid`
-- Confirm RGISI / first-BTK milestone years
-- 18 productions show no theatre line (MD source has no `[Name](url)`). Roman adds `theatre:` in `index.yaml`
-- New productions: copy `_PRODUCTION_TEMPLATE.yaml` → `<slug>/index.yaml`, write `body.{ru,en,de}.md`
+- Confirm RGISI / first-BTK milestone years (About → Хронология)
+- 18 productions show no theatre line. Roman fills `production.theatre.{name,city,country,url}`
+- Three productions have NULL `theatre.country` after the 5.3 backfill — Roman picks a value from the country select: `lestnica-v-nebesa`, `lika-and-beam`, `total-fest-3`
+- New productions: hit «Создать» in `/admin/collections/productions` (no template file to copy — Payload renders empty defaults)
 
 ### Orphan-title audit (Phase 8.5)
 
@@ -141,6 +145,117 @@ Why setTimeout (not rAF) for the scan debounce: rAF callbacks are paused on back
 ### Data inconsistency found
 
 `featuredPhoto.src` in `bury-me-behind-the-baseboard/index.yaml` is `productions/bury-me-behind-the-baseboard/poster_de.webp` (missing leading `/`). Now visible as text in the admin — fix via Keystatic form or direct YAML edit.
+
+---
+
+## Lighthouse verification — `feature/payloadcms` preview (2026-05-17)
+
+Branch perf is shippable. Measured against the Vercel preview with
+Deployment Protection off (canonical-domain-equivalent path), mobile
+LH 13.3.0, simulated Slow-4G.
+
+| URL                                          | Perf (median of 3) | A11y / BP / SEO | LCP   | TBT      | CLS   |
+| -------------------------------------------- | ------------------ | --------------- | ----- | -------- | ----- |
+| `/ru` (home)                                 | 81 (range 80–90)   | 100 / 100 / 100 | 4.2 s | 20-90 ms | 0     |
+| `/ru/productions/beware-of-the-dog` (detail) | 82                 | 100 / 100 / 100 | 4.4 s | 20-30 ms | 0.002 |
+
+Real-user-equivalent LCP is ~1 s lower than reported. The dominant LCP
+audit is `redirects` (1,000-1,200 ms wasted) caused by Vercel's
+rewrite-caching layer (`x-vercel-enable-rewrite-caching: 1`) issuing a
+one-time 307 on cold headless navigations. Curl with edge-cache HIT
+returns 200 directly. This is a Lighthouse-vs-real-user measurement
+artifact, not a code fix.
+
+Code fixes shipped tonight:
+
+- `408904c` perf(detail): drop poster `sizes` `100vw` → `90vw` so the
+  variant picker selects 720w over 828w on DPR-1.75 mobile. LCP image
+  300 KB → 249 KB, detail page perf 79 → 82.
+- `d7b30be` Revert "perf(i18n): disable locale detection" (`380f0f0`) —
+  the hypothesis was that next-intl's locale-detection redirect caused
+  the 307; the 307 persisted after the change, confirming Vercel
+  rewrite-caching is the source. Reverted to keep the
+  Accept-Language UX default.
+
+Tooling shipped tonight (commits `9241d32`, `7ef0e57`, `b87938c`,
+`522f0ff`):
+
+- `scripts/lh-diff.sh` — local prod-build branch-vs-branch diff with
+  side-by-side metrics. Dirty-tree-safe, restores starting branch.
+- `LIGHTHOUSE_RUNBOOK.md` rewrite — adds "trust which target for which
+  metric" table (local is unreliable for LCP on this branch because of
+  `/_next/image` cold-sharp), `BASE_URL` recipe + `LH_EXTRA_HEADERS`
+  composition, Vercel preview bypass gotchas (cookie redirect costs
+  ~1.2 s, recommend disabling protection for representative numbers),
+  troubleshooting rows for the cold-image-CLS trap and the
+  local-vs-preview LCP divergence.
+
+Notable observations:
+
+- Run-to-run variance on simulated throttling is ±5 points perf and
+  up to ±1 s LCP. Outliers (one run at perf 57 due to cold function
+  start) are expected; median-of-3 is the canonical number.
+- Vercel preview deployments cold-start at ~400-700 ms TTFB. Warm with
+  2-3 curls before any audit; for variant changes also warm the LCP
+  image URL explicitly (HTML warm-up doesn't trigger image fetches).
+- `priorityFirst` propagation through `FeaturedStrip` → `ProductionCard`
+  - the `<link rel="preload" imageSrcSet imageSizes fetchPriority>`
+    injection on home / detail pages is verified working: both
+    `lcp-discovery-insight` and `lcp-breakdown-insight` score 1.
+
+Residual work (deferred — not blocking ship):
+
+- Detail page `image-delivery-insight` still flags ~150 KB savings
+  available from tighter AVIF compression; already aggressively tuned
+  in `e8049cd` + `3d9a392`, further reduction risks visible artifacts.
+- Home page hero `LCP element render delay` is 78 ms (clean); detail
+  page is 454 ms in some runs — driven by the surrounding gallery
+  layout cost. Investigate if detail LCP drifts > 4.5 s consistently.
+
+---
+
+## Refactor pass post-Payload (2026-05-17)
+
+Codebase hygiene sweep across `feature/payloadcms` before the merge to `main`. Six-phase
+priority pass (bugs → duplication → complexity → unused → style → readability) per
+`REFACTOR_PLAN.md`. 22 commits, range `3458619`…`45335d9`. Honest final gates: tsc 0,
+lint-tokens 0, build clean (159 production routes prerender). `npm run test` still red on a
+pre-existing ESLint 9 flat-config baseline failure tracked as standalone work.
+
+| Sweep | Outcome | Highlight                                                                                                                                                    |
+| ----- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1     | shipped | 2 must-fix bugs: OG locale hardcode (`3458619`) + DE credits fallback (`8b84fc6`).                                                                           |
+| 2     | shipped | `pickL10n` helper + project-wide EN→DE→RU fallback order (`7febc7b`); gallery items hoisted (`44c5644`).                                                     |
+| 3     | no-ship | Two real complexity items deferred (dual `<GalleryLightbox>` mount, panel concern split).                                                                    |
+| 4     | shipped | Deleted `lib/markdoc.tsx` + `pages/` stub; archived 7 one-shot scripts; dropped 8 dead deps; trimmed `COUNTRY_TO_CODE`. Net ≈ −1900 lines (mostly lockfile). |
+| 5     | no-ship | Live runtime code passes every style/safety bar. ESLint 9 migration + admin DE labels (~150 strings) deferred as own work.                                   |
+| 6     | shipped | `countryCode` direct import; 3 dead-reference comment tightenings; bug carry-back: `seed-payload.ts` body→Lexical wrap that sidework `dba9e9c` had missed.   |
+
+**Behavior changes shipped (visible, intentional):**
+
+1. OG cards from `/en/*` and `/de/*` now render theatre/city in the share locale.
+2. DE production pages now display `credits.de` when populated.
+3. Locale fallback ladder is now **EN → DE → RU** project-wide. On a DE page where `field.de` is
+   empty and both `field.en` + `field.ru` exist, the user sees EN. Convention saved as project
+   memory `project_locale_fallback_order.md` and applied to `pickL10n` + `resolveL10n` + credits
+   tail in `lib/content.ts`.
+
+**Sweep 6 disclosure:** Sweeps 1–5 used `cmd | tail ; echo $?` for gates, which captures
+`tail`'s exit code (always 0) instead of the gate's. The "all green" claims in those rows should
+read as "output looked clean, exit not actually verified." No sweep commit introduced any
+regression that Sweep 6's honest gates caught — the one type error surfaced
+(`scripts/seed-payload.ts:304, 345`) came from the parallel sidework `dba9e9c` (About body →
+Lexical) and was fixed in `3a5e0e1`. Verification template corrected in `REFACTOR_PLAN.md` §7.
+
+Standalone follow-ups not in scope of this pass:
+
+- **ESLint 9 flat-config migration** — `.eslintrc.json` → `eslint.config.js`. Unblocks
+  `npm run test`. New deps + one pass on whatever the new ruleset surfaces.
+- **Admin DE labels** (~150 strings across `globals/About.ts`, `globals/Contact.ts`,
+  `collections/Productions.ts`). Convention is RU/EN/DE per `PAYLOAD_POLISH_PLAN.md` Tier 3.
+- **`<GalleryLightbox>` single-mount + `<DetailMedia>` layout** — needs design/UX-led pass.
+- **`notion-data/`** — 253 MB local-only directory (untracked, gitignored). Safe to `rm -rf`
+  on demand. The only consumer (`photo-audit.mjs`) was archived to `_legacy/`.
 
 ---
 

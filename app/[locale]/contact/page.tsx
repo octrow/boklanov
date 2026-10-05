@@ -1,12 +1,11 @@
-import * as fs from 'node:fs'
-import * as path from 'node:path'
-
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { parse as parseYaml } from 'yaml'
 import * as React from 'react'
 
+import { getContact } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
 
 import { CopyEmailButton } from './CopyEmailButton'
 import styles from './page.module.css'
@@ -15,32 +14,42 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-interface ContactConfig {
-  intro: string
-  email: string
-  telegramUrl: string
-  instagramUrl: string
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'contact' })
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+
+  const url = locale === 'en' ? `${BASE}/contact` : `${BASE}/${locale}/contact`
+  const title = `${tMeta('siteName')} — ${t('title')}`
+
+  return {
+    title,
+    alternates: {
+      canonical: url,
+      languages: {
+        en: `${BASE}/contact`,
+        de: `${BASE}/de/contact`,
+        ru: `${BASE}/ru/contact`
+      }
+    },
+    openGraph: { title, url, type: 'website' }
+  }
 }
 
-interface ContactRaw {
-  intro?: { ru?: string | null; en?: string | null; de?: string | null } | null
-  email?: string | null
-  telegramUrl?: string | null
-  instagramUrl?: string | null
-}
-
-// Defaults match the values that lived inline before the Keystatic singleton
-// was introduced. Used when content/contact/index.yaml is missing or partial
-// (e.g. early local dev before pulling content) so the page never breaks.
 const FALLBACK = {
   email: 'roman.boklanov@web.de',
   telegramUrl: 'https://t.me/roman7593',
   instagramUrl: 'https://instagram.com/boklanovroman'
 } as const
 
-function pickIntro(intro: ContactRaw['intro'], locale: Locale): string {
-  if (!intro) return ''
-  // DE falls back to EN then RU; other locales just use their own value.
+function pickIntro(
+  intro: { ru?: string; en?: string; de?: string },
+  locale: Locale
+): string {
   const order =
     locale === 'de'
       ? (['de', 'en', 'ru'] as const)
@@ -52,19 +61,6 @@ function pickIntro(intro: ContactRaw['intro'], locale: Locale): string {
   return ''
 }
 
-function loadContact(locale: Locale): ContactConfig {
-  const p = path.resolve(process.cwd(), 'content', 'contact', 'index.yaml')
-  const raw = fs.existsSync(p)
-    ? ((parseYaml(fs.readFileSync(p, 'utf8')) ?? {}) as ContactRaw)
-    : {}
-  return {
-    intro: pickIntro(raw.intro, locale),
-    email: raw.email?.trim() || FALLBACK.email,
-    telegramUrl: raw.telegramUrl?.trim() || FALLBACK.telegramUrl,
-    instagramUrl: raw.instagramUrl?.trim() || FALLBACK.instagramUrl
-  }
-}
-
 export default async function ContactPage({
   params
 }: {
@@ -74,7 +70,11 @@ export default async function ContactPage({
   setRequestLocale(locale)
 
   const t = await getTranslations('contact')
-  const { intro, email, telegramUrl, instagramUrl } = loadContact(locale)
+  const c = await getContact()
+  const intro = pickIntro(c.intro, locale)
+  const email = c.email.trim() || FALLBACK.email
+  const telegramUrl = c.telegramUrl?.trim() || FALLBACK.telegramUrl
+  const instagramUrl = c.instagramUrl?.trim() || FALLBACK.instagramUrl
 
   const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(
     t('mailtoSubject')

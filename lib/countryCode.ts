@@ -1,24 +1,10 @@
-const COUNTRY_TO_CODE: Record<string, string> = {
-  Россия: 'RU',
-  Russia: 'RU',
-  Казахстан: 'KZ',
-  Kazakhstan: 'KZ',
-  Германия: 'DE',
-  Germany: 'DE',
-  Deutschland: 'DE',
-  Испания: 'ES',
-  Spain: 'ES',
-  España: 'ES',
-  Австрия: 'AT',
-  Austria: 'AT',
-  Österreich: 'AT',
-  Беларусь: 'BY',
-  Belarus: 'BY'
-}
-
-export function countryCode(name?: string): string | null {
+/** Production theatre.country is an ISO 3166-1 alpha-2 code since
+ *  PAYLOAD_POLISH_PLAN.md §5.3 backfill (51/54 rows have ISO codes;
+ *  3 are null, pending /admin completion). The Payload field is a
+ *  typed select, so new rows can only be ISO too. This wrapper exists
+ *  to normalize the null/undefined cases for renderers. */
+export function countryCode(name?: string | null): string | null {
   if (!name) return null
   const trimmed = name.trim()
-  if (/^[A-Z]{2}$/.test(trimmed)) return trimmed
-  return COUNTRY_TO_CODE[trimmed] ?? null
+  return /^[A-Z]{2}$/.test(trimmed) ? trimmed : null
 }

@@ -86,7 +86,10 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
 
         {/* Controls: locale switcher + theme toggle (desktop) */}
         <div className={styles.controls}>
-          <nav className={styles.localeSwitcher} aria-label={tA11y('langSwitcher')}>
+          <nav
+            className={styles.localeSwitcher}
+            aria-label={tA11y('langSwitcher')}
+          >
             {LOCALES.map((loc) => (
               <Link
                 key={loc}

@@ -169,7 +169,8 @@
     "viewPhotoOf": "View photo {index} of {total}",
     "photoDialogOf": "Photo {index} of {total}",
     "prevPhoto": "Previous photo",
-    "nextPhoto": "Next photo"
+    "nextPhoto": "Next photo",
+    "playTrailer": "Play trailer"
   },
   "common": {
     "photo": "Photo"

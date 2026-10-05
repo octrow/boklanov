@@ -40,7 +40,7 @@
 .statement {
   font-family: var(--font-family-display);
   font-style: italic;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-h3);
   line-height: var(--line-height-relaxed);
   color: var(--ink);
   max-width: var(--measure-prose);

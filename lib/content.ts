@@ -1,42 +1,74 @@
 /**
- * lib/content.ts - content loader API (F6)
+ * lib/content.ts — content loader API.
  *
- * Pure functions over the content tree. No I/O outside build-time file reads.
- * Source of truth:
- *   content/productions/<slug>/index.yaml         — structured data
- *   content/productions/<slug>/body.{ru,en,de}.md — long-form prose (optional)
+ * Source of truth (post-Payload migration, PAYLOAD_MIGRATION_PLAN §P3):
+ *   Postgres rows in `productions` collection, queried via Payload Local API
+ *   with `locale: 'all'` so we get every localized field as { ru, en, de }.
  *
- * Page routes call:
- *   - getAllProductions(locale)
- *   - getProduction(slug, locale)
- *   - getRelatedProductions(production, n=3)   → brief D9 algorithm
+ * Public interface (`Production`, `ProductionView`, `getAllProductions`,
+ * `getProduction`) is preserved verbatim. The getters became async — every
+ * caller awaits them.
+ *
+ * LQIP data still lives in `public/productions/<slug>/lqip.json` (built by
+ * the sharp LQIP pipeline; not migrated to Payload per plan §Q2 default).
  */
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
-import { parse as parseYaml } from 'yaml'
+import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 import type { Locale } from '@/i18n/routing'
 
-// ---------------------------------------------------------------------------
-// Paths
-// ---------------------------------------------------------------------------
-
-const CONTENT_DIR = path.resolve(process.cwd(), 'content', 'productions')
 const LQIP_DIR = path.resolve(process.cwd(), 'public', 'productions')
 
 // ---------------------------------------------------------------------------
-// Types - public shape consumed by page routes
+// Process-level in-memory cache — stored on globalThis so it survives Next.js
+// HMR module reloads. Acts as a safety net when unstable_cache is bypassed by
+// browser "Disable cache" / cache-control:no-cache (common in DevTools).
+// In production the TTL is 0 so this block is never entered; unstable_cache
+// with tag-based revalidation owns the production caching lifecycle.
+// ---------------------------------------------------------------------------
+type MemEntry<T> = { data: T; at: number }
+const g = globalThis as typeof globalThis & {
+  _bk?: {
+    all: MemEntry<Production[]> | null
+    about: MemEntry<AboutData> | null
+    contact: MemEntry<ContactData> | null
+  }
+}
+if (!g._bk) g._bk = { all: null, about: null, contact: null }
+const _mem = g._bk
+const MEM_TTL = process.env.NODE_ENV === 'development' ? 60_000 : 0
+
+// ---------------------------------------------------------------------------
+// Types - public shape consumed by page routes (unchanged from pre-migration)
 // ---------------------------------------------------------------------------
 
-/** A string field that can optionally be locale-keyed. Resolved to string in ProjectionView. */
 export type L10nString = string | { ru?: string; en?: string; de?: string }
+
+/** Pre-baked AVIF widths per PAYLOAD_IMAGE_VARIANTS_PLAN.md. URLs match
+ *  `<src.dirname>/<basename>.<W>.avif` (period-separated suffix). Computed
+ *  by `buildVariants()`; null until the bake script has run AND
+ *  `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1` is set, so consumers fall back to
+ *  the legacy `next/image` path during rollout. */
+export interface ImageVariants {
+  w420: string
+  w600: string
+  w720: string
+  w828: string
+  w1080: string
+}
 
 export interface GalleryItem {
   src: string
   credit: string | null
   caption: { ru: string | null; en: string | null; de?: string | null }
+  variants: ImageVariants | null
 }
 
 export interface CreditEntry {
@@ -50,7 +82,11 @@ export interface Production {
   notionIds: { ru?: string; en?: string }
   title: { ru?: string; en?: string; de?: string | null }
   synopsis: { ru?: string; en?: string; de?: string | null }
-  body: { ru: string; en: string; de?: string }
+  body: {
+    ru: SerializedEditorState | null
+    en: SerializedEditorState | null
+    de?: SerializedEditorState | null
+  }
   theatre: {
     name?: L10nString
     shortName?: L10nString
@@ -73,11 +109,18 @@ export interface Production {
     lqip: string | null
     width: number | null
     height: number | null
+    variants: ImageVariants | null
   }
-  /** Optional photo override for the /productions card. Overrides poster. */
-  productionsPhoto: { src: string | null; credit: string | null } | null
-  /** Optional photo override for the home featured strip. Fallback: featuredPhoto → productionsPhoto → poster. */
-  featuredPhoto: { src: string | null; credit: string | null } | null
+  productionsPhoto: {
+    src: string | null
+    credit: string | null
+    variants: ImageVariants | null
+  } | null
+  featuredPhoto: {
+    src: string | null
+    credit: string | null
+    variants: ImageVariants | null
+  } | null
   gallery: GalleryItem[]
   videos: Array<{ provider: string; id: string }>
   awards: Array<{
@@ -104,26 +147,26 @@ export interface Production {
   featured: boolean
   featuredOrder?: number
   listOrder?: number
-  /** false hides the booking CTA on the production page; default true. */
   bookingCta: boolean
-  /** Optional locale-keyed label override for the booking CTA. */
   bookingCtaLabel: { ru?: string; en?: string; de?: string | null } | null
-  /** Optional URL override for the booking CTA (replaces the default mailto). */
   bookingCtaUrl: string | null
   tags: string[]
   tour: L10nString[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
-  directorsNote: { ru?: string; en?: string; de?: string | null } | null
+  directorsNote: {
+    ru?: SerializedEditorState | null
+    en?: SerializedEditorState | null
+    de?: SerializedEditorState | null
+  } | null
   runs: Array<{
     venue?: L10nString
     city?: L10nString
     yearFrom?: number
     yearTo?: number
-    count?: L10nString
+    count?: string | { ru?: string; en?: string; de?: string }
   }>
 }
 
-/** Locale-projected view returned by getAllProductions / getProduction. */
 export interface ProductionView
   extends Omit<
     Production,
@@ -145,11 +188,11 @@ export interface ProductionView
   > {
   title: string
   synopsis: string
-  body: string
+  body: SerializedEditorState | null
   credits: CreditEntry[]
   premiereDate: string | null
   tagline: string | null
-  directorsNote: string | null
+  directorsNote: SerializedEditorState | null
   bookingCtaLabel: string | null
   press: Array<{
     title: string
@@ -185,219 +228,448 @@ export interface ProductionView
     url?: string
   }
   tour: string[]
-  /** original multi-locale title kept around for hreflang / OG. */
   titles: Production['title']
 }
 
 // ---------------------------------------------------------------------------
-// Internal: load + merge
+// Payload doc → Production mapper
 // ---------------------------------------------------------------------------
 
-/**
- * WS-1: flatten a possibly-migrated (nested) YAML frontmatter into the flat
- * shape that the rest of this file expects. If the YAML has already been
- * migrated (identity: key present) the groups are spread to top-level keys.
- * Un-migrated entries pass through unchanged so the reader works during a
- * partial or rolled-back migration.
- */
-function flattenFm(raw: Record<string, unknown>): Record<string, unknown> {
-  if (!('identity' in raw)) return raw // not yet migrated — pass through
-  const {
-    identity = {},
-    media = {},
-    production = {},
-    taxonomy = {},
-    team = {},
-    recognition = {},
-    history = {},
-    settings = {},
-    ...rest
-  } = raw as Record<string, Record<string, unknown>>
-  return {
-    ...rest,
-    ...(identity as object),
-    ...(media as object),
-    ...(production as object),
-    ...(taxonomy as object),
-    ...(team as object),
-    ...(recognition as object),
-    ...(history as object),
-    ...(settings as object)
-  }
-}
+type AnyMap = Record<string, unknown>
+type L10nObj = { ru?: string; en?: string; de?: string }
 
-let _cache: Production[] | null = null
-
-function loadAll(): Production[] {
-  if (_cache) return _cache
-
-  if (!fs.existsSync(CONTENT_DIR)) {
-    _cache = []
-    return _cache
-  }
-
-  const slugs = fs
-    .readdirSync(CONTENT_DIR, { withFileTypes: true })
-    .filter((e) => e.isDirectory())
-    .map((e) => e.name)
-
-  const out: Production[] = []
-  for (const slug of slugs) {
-    const dir = path.join(CONTENT_DIR, slug)
-    const yamlPath = path.join(dir, 'index.yaml')
-    if (!fs.existsSync(yamlPath)) continue
-
-    const raw = fs.readFileSync(yamlPath, 'utf8')
-    const rawFm = flattenFm((parseYaml(raw) ?? {}) as Record<string, unknown>)
-    const frontmatter = rawFm as Partial<Production>
-    frontmatter.body = readBodyFiles(dir)
-
-    const prod = fromFm(frontmatter, raw)
-
-    const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
-    if (fs.existsSync(lqipPath)) {
-      try {
-        const lqipData = JSON.parse(fs.readFileSync(lqipPath, 'utf8')) as {
-          poster?: string
-          posterWidth?: number
-          posterHeight?: number
-        }
-        prod.poster.lqip = lqipData.poster ?? null
-        prod.poster.width = lqipData.posterWidth ?? null
-        prod.poster.height = lqipData.posterHeight ?? null
-      } catch {
-        // malformed lqip.json - ignore
-      }
-    }
-
-    out.push(prod)
-  }
-
-  // Stable sort: featured first, then year desc, then slug.
-  out.sort((a, b) => {
-    if (a.featured !== b.featured) return a.featured ? -1 : 1
-    const ay = a.year ?? 0
-    const by = b.year ?? 0
-    if (ay !== by) return by - ay
-    return a.slug.localeCompare(b.slug)
-  })
-
-  _cache = out
+/** Normalise Payload's `locale: 'all'` response — already an object — to the
+ *  L10nString-ish shape used by the existing Production interface. Strips
+ *  null sub-values (Payload returns null for empty localized fields). */
+const asL10n = (v: unknown): L10nObj => {
+  if (v == null) return {}
+  if (typeof v === 'string') return { ru: v, en: v, de: v }
+  if (typeof v !== 'object') return {}
+  const o = v as Record<string, unknown>
+  const out: L10nObj = {}
+  if (typeof o.ru === 'string') out.ru = o.ru
+  if (typeof o.en === 'string') out.en = o.en
+  if (typeof o.de === 'string') out.de = o.de
   return out
 }
 
-/** Read body{Ru,En,De}.mdx for a production. Keystatic writes them under
- *  identity/ (the field group's path); older checkouts kept them next to
- *  index.yaml, and Keystatic left 0-byte identity/ placeholders beside those.
- *  So: first non-empty of identity/, root, then legacy body.{ru,en,de}.md. */
-function readBodyFiles(dir: string): { ru: string; en: string; de?: string } {
-  const read = (locale: 'ru' | 'en' | 'de'): string => {
-    const cap = locale === 'ru' ? 'Ru' : locale === 'en' ? 'En' : 'De'
-    const candidates = [
-      path.join(dir, 'identity', `body${cap}.mdx`),
-      path.join(dir, `body${cap}.mdx`),
-      path.join(dir, `body.${locale}.md`)
-    ]
-    for (const file of candidates) {
-      const text = fs.existsSync(file)
-        ? fs.readFileSync(file, 'utf8').trim()
-        : ''
-      if (text) return text
-    }
-    return ''
+const asString = (v: unknown): string => (typeof v === 'string' ? v : '')
+
+const asArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
+
+const isEditorState = (v: unknown): v is SerializedEditorState =>
+  typeof v === 'object' && v !== null && 'root' in v
+
+/** Extract per-locale Lexical SerializedEditorState objects from a Payload
+ *  `locale: 'all'` response for a localized richText field. */
+const asLexical = (
+  v: unknown
+): {
+  ru?: SerializedEditorState | null
+  en?: SerializedEditorState | null
+  de?: SerializedEditorState | null
+} => {
+  if (v == null || typeof v !== 'object') return {}
+  const o = v as Record<string, unknown>
+  return {
+    ru: isEditorState(o.ru) ? o.ru : null,
+    en: isEditorState(o.en) ? o.en : null,
+    de: isEditorState(o.de) ? o.de : null
   }
-  const out: { ru: string; en: string; de?: string } = {
-    ru: read('ru'),
-    en: read('en')
-  }
-  const de = read('de')
-  if (de) out.de = de
-  return out
 }
 
-/** Build a Production from yaml frontmatter (body already injected). */
-function fromFm(fm: Partial<Production>, _rawYaml: string): Production {
+/** Unwrap `{value: 'tag'}` entries from Payload array-of-text-with-named-field
+ *  back to plain string arrays expected by the legacy Production interface. */
+const flatStringArr = (v: unknown): string[] =>
+  asArray<AnyMap>(v)
+    .map((it) => (typeof it.value === 'string' ? it.value : ''))
+    .filter(Boolean)
+
+/** Variant emission is gated on this flag so we can roll out per-environment
+ *  after the bake-image-variants script lands the AVIFs in R2. Set to '1' in
+ *  Vercel envs (Preview + Production) once the script has run. */
+const VARIANTS_ENABLED = process.env.NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED === '1'
+
+const VARIANT_WIDTHS = [420, 600, 720, 828, 1080] as const
+
+/** Derive variant URLs from a source path by suffixing `.<W>.avif` to the
+ *  basename. Returns `null` when variants are disabled, the source is null,
+ *  the source is an external URL, or the extension is unrecognised. */
+function buildVariants(src: string | null | undefined): ImageVariants | null {
+  if (!VARIANTS_ENABLED) return null
+  if (typeof src !== 'string' || src.length === 0) return null
+  if (/^https?:/i.test(src)) return null
+  const ext = src.match(/\.(jpe?g|png|webp)$/i)
+  if (!ext) return null
+  const stem = src.slice(0, -ext[0].length)
   return {
-    slug: fm.slug as string,
-    notionIds: fm.notionIds ?? {},
-    title: fm.title ?? {},
-    synopsis: fm.synopsis ?? {},
-    body: {
-      ru: (fm.body as any)?.ru?.trim() ?? '',
-      en: (fm.body as any)?.en?.trim() ?? '',
-      ...((fm.body as any)?.de ? { de: (fm.body as any).de.trim() } : {})
+    w420: `${stem}.${VARIANT_WIDTHS[0]}.avif`,
+    w600: `${stem}.${VARIANT_WIDTHS[1]}.avif`,
+    w720: `${stem}.${VARIANT_WIDTHS[2]}.avif`,
+    w828: `${stem}.${VARIANT_WIDTHS[3]}.avif`,
+    w1080: `${stem}.${VARIANT_WIDTHS[4]}.avif`
+  }
+}
+
+/** Convert one Payload `productions` document (fetched with `locale: 'all'`)
+ *  to the legacy Production shape consumed by every page route. */
+function payloadDocToProduction(doc: AnyMap): Production {
+  const identity = (doc.identity as AnyMap) ?? {}
+  const media = (doc.media as AnyMap) ?? {}
+  const production = (doc.production as AnyMap) ?? {}
+  const theatre = (production.theatre as AnyMap) ?? {}
+  const taxonomy = (doc.taxonomy as AnyMap) ?? {}
+  const team = (doc.team as AnyMap) ?? {}
+  const recognition = (doc.recognition as AnyMap) ?? {}
+  const history = (doc.history as AnyMap) ?? {}
+  const settings = (doc.settings as AnyMap) ?? {}
+
+  const bodyL10n = asLexical(identity.body)
+  const body: Production['body'] = {
+    ru: bodyL10n.ru ?? null,
+    en: bodyL10n.en ?? null,
+    ...(bodyL10n.de !== undefined ? { de: bodyL10n.de } : {})
+  }
+
+  const poster = (media.poster as AnyMap) ?? {}
+  const productionsPhoto = (media.productionsPhoto as AnyMap) ?? {}
+  const featuredPhoto = (media.featuredPhoto as AnyMap) ?? {}
+
+  return {
+    slug: asString(doc.slug),
+    notionIds: {
+      ru: asString((settings.notionIds as AnyMap)?.ru) || undefined,
+      en: asString((settings.notionIds as AnyMap)?.en) || undefined
     },
-    theatre: fm.theatre ?? {},
-    year: fm.year,
-    premiereDate: fm.premiereDate,
-    ticketsUrl: fm.ticketsUrl ?? null,
-    ageRating: fm.ageRating ?? null,
-    durationMin: fm.durationMin ?? null,
-    role: Array.isArray(fm.role) ? fm.role : [fm.role ?? 'director'],
-    form: fm.form ?? [],
-    lineage: fm.lineage ?? [],
-    credits: fm.credits ?? { ru: [], en: [] },
-    poster: {
-      src: fm.poster?.src ?? null,
-      credit: fm.poster?.credit ?? null,
-      lqip: null, // filled by loadAll() from lqip.json
-      width: null,
-      height: null
+    title: asL10n(identity.title),
+    synopsis: asL10n(identity.synopsis),
+    body,
+    theatre: {
+      name: asL10n(theatre.name),
+      shortName: asL10n(theatre.shortName),
+      city: asL10n(theatre.city),
+      country: asString(theatre.country) || undefined,
+      url: asString(theatre.url) || undefined
     },
-    productionsPhoto: (fm as any).productionsPhoto?.src
-      ? {
-          src: (fm as any).productionsPhoto.src as string,
-          credit: (fm as any).productionsPhoto.credit ?? null
-        }
-      : null,
-    featuredPhoto: (fm as any).featuredPhoto?.src
-      ? {
-          src: (fm as any).featuredPhoto.src as string,
-          credit: (fm as any).featuredPhoto.credit ?? null
-        }
-      : null,
-    // Defensive filter: Keystatic's fields.image accepts an "Add" without a
-    // file selected, which writes `- {}` (empty object, no src) into the
-    // YAML array. Drop those before downstream consumers map over the
-    // gallery — otherwise an <img> with no src renders invisibly.
-    gallery: (fm.gallery ?? [])
-      .filter((g: any) => g && typeof g.src === 'string' && g.src.length > 0)
-      .map((g) => ({
-        src: g.src,
-        credit: g.credit ?? null,
-        caption: {
-          ru: (g.caption as any)?.ru ?? null,
-          en: (g.caption as any)?.en ?? null,
-          de: (g.caption as any)?.de ?? null
-        }
-      })),
-    videos: fm.videos ?? [],
-    awards: fm.awards ?? [],
-    festivals: fm.festivals ?? [],
-    press: fm.press ?? [],
-    externalLinks: fm.externalLinks ?? [],
-    techRider: fm.techRider ?? null,
-    pressKit: fm.pressKit ?? null,
-    featured: !!fm.featured,
-    featuredOrder:
-      typeof fm.featuredOrder === 'number' ? fm.featuredOrder : undefined,
-    listOrder: typeof fm.listOrder === 'number' ? fm.listOrder : undefined,
-    bookingCta: fm.bookingCta === false ? false : true,
-    bookingCtaLabel:
-      fm.bookingCtaLabel && typeof fm.bookingCtaLabel === 'object'
-        ? fm.bookingCtaLabel
+    year: typeof production.year === 'number' ? production.year : undefined,
+    premiereDate: asL10n(production.premiereDate),
+    ticketsUrl: asString(production.ticketsUrl) || null,
+    ageRating: asString(production.ageRating) || null,
+    durationMin:
+      typeof production.durationMin === 'number'
+        ? production.durationMin
         : null,
-    bookingCtaUrl: fm.bookingCtaUrl ?? null,
-    tags: fm.tags ?? [],
-    tour: (fm.tour as L10nString[] | undefined) ?? [],
-    tagline: fm.tagline ?? null,
-    directorsNote: fm.directorsNote ?? null,
-    runs: fm.runs ?? []
+    role: asArray<string>(taxonomy.role),
+    form: flatStringArr(taxonomy.form),
+    lineage: flatStringArr(taxonomy.lineage),
+    credits: {
+      ru: asArray<CreditEntry>(team.creditsRu),
+      en: asArray<CreditEntry>(team.creditsEn),
+      de: asArray<CreditEntry>(team.creditsDe)
+    },
+    poster: {
+      src: asString(poster.src) || null,
+      credit: asString(poster.credit) || null,
+      lqip: null,
+      width: null,
+      height: null,
+      variants: buildVariants(asString(poster.src) || null)
+    },
+    productionsPhoto: productionsPhoto.src
+      ? {
+          src: asString(productionsPhoto.src),
+          credit: asString(productionsPhoto.credit) || null,
+          variants: buildVariants(asString(productionsPhoto.src))
+        }
+      : null,
+    featuredPhoto: featuredPhoto.src
+      ? {
+          src: asString(featuredPhoto.src),
+          credit: asString(featuredPhoto.credit) || null,
+          variants: buildVariants(asString(featuredPhoto.src))
+        }
+      : null,
+    gallery: asArray<AnyMap>(media.gallery)
+      .filter((g) => typeof g.src === 'string' && (g.src as string).length > 0)
+      .map((g) => {
+        const cap = asL10n(g.caption)
+        const src = g.src as string
+        return {
+          src,
+          credit: asString(g.credit) || null,
+          caption: {
+            ru: cap.ru ?? null,
+            en: cap.en ?? null,
+            de: cap.de ?? null
+          },
+          variants: buildVariants(src)
+        }
+      }),
+    videos: asArray<AnyMap>(media.videos).map((v) => ({
+      provider: asString(v.provider),
+      id: asString(v.id)
+    })),
+    awards: asArray<AnyMap>(recognition.awards).map((a) => ({
+      name: asL10n(a.name),
+      category: asL10n(a.category),
+      year: typeof a.year === 'number' ? a.year : undefined,
+      city: asL10n(a.city)
+    })),
+    festivals: asArray<AnyMap>(recognition.festivals).map((f) => ({
+      name: asL10n(f.name),
+      category: asL10n(f.category),
+      year: typeof f.year === 'number' ? f.year : undefined,
+      city: asL10n(f.city)
+    })),
+    press: asArray<AnyMap>(recognition.press).map((p) => ({
+      title: asL10n(p.title),
+      url: asString(p.url),
+      outlet: asString(p.outlet) || undefined,
+      language: asString(p.language) || undefined
+    })),
+    externalLinks: asArray<AnyMap>(recognition.externalLinks).map((l) => ({
+      label: asL10n(l.label),
+      url: asString(l.url)
+    })),
+    techRider: asString(settings.techRider) || null,
+    pressKit: asString(settings.pressKit) || null,
+    featured: settings.featured === true,
+    featuredOrder:
+      typeof settings.featuredOrder === 'number'
+        ? settings.featuredOrder
+        : undefined,
+    listOrder:
+      typeof settings.listOrder === 'number' ? settings.listOrder : undefined,
+    bookingCta: settings.bookingCta === false ? false : true,
+    bookingCtaLabel: settings.bookingCtaLabel
+      ? asL10n(settings.bookingCtaLabel)
+      : null,
+    bookingCtaUrl: asString(settings.bookingCtaUrl) || null,
+    tags: flatStringArr(taxonomy.tags),
+    // Tour entries in Payload are `{ city: { ru, en, de } }`; legacy shape is
+    // an array of L10nString. Flatten the wrapping field.
+    tour: asArray<AnyMap>(history.tour).map((t) => asL10n(t.city)),
+    tagline: asL10n(identity.tagline),
+    directorsNote: asLexical(
+      identity.directorsNote
+    ) as Production['directorsNote'],
+    runs: asArray<AnyMap>(history.runs).map((r) => ({
+      venue: asL10n(r.venue),
+      city: asL10n(r.city),
+      yearFrom: typeof r.yearFrom === 'number' ? r.yearFrom : undefined,
+      yearTo: typeof r.yearTo === 'number' ? r.yearTo : undefined,
+      count: asL10n(r.count)
+    }))
+  }
+}
+
+/** Read sibling lqip.json if present. Unchanged from pre-migration. */
+function readLqip(slug: string): {
+  lqip: string | null
+  width: number | null
+  height: number | null
+} {
+  const lqipPath = path.join(LQIP_DIR, slug, 'lqip.json')
+  if (!fs.existsSync(lqipPath)) {
+    return { lqip: null, width: null, height: null }
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(lqipPath, 'utf8')) as {
+      poster?: string
+      posterWidth?: number
+      posterHeight?: number
+    }
+    return {
+      lqip: data.poster ?? null,
+      width: data.posterWidth ?? null,
+      height: data.posterHeight ?? null
+    }
+  } catch {
+    return { lqip: null, width: null, height: null }
   }
 }
 
 // ---------------------------------------------------------------------------
-// Locale projection
+// Cached fetchers — tagged for revalidation by hooks/revalidate.ts
+// ---------------------------------------------------------------------------
+
+const fetchAllProductions = unstable_cache(
+  async (): Promise<Production[]> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.all && now - _mem.all.at < MEM_TTL)
+      return _mem.all.data
+
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'productions',
+      locale: 'all',
+      depth: 0,
+      limit: 500,
+      pagination: false
+    })
+    const out = docs.map((d) => {
+      const prod = payloadDocToProduction(d as unknown as AnyMap)
+      const lqip = readLqip(prod.slug)
+      prod.poster.lqip = lqip.lqip
+      prod.poster.width = lqip.width
+      prod.poster.height = lqip.height
+      return prod
+    })
+    // Same sort as the legacy loader: featured → year desc → slug asc.
+    out.sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1
+      const ay = a.year ?? 0
+      const by = b.year ?? 0
+      if (ay !== by) return by - ay
+      return a.slug.localeCompare(b.slug)
+    })
+    _mem.all = { data: out, at: now }
+    return out
+  },
+  ['productions:all'],
+  { tags: ['productions'] }
+)
+
+// ---------------------------------------------------------------------------
+// About + Contact globals (Tier 5.5 — replaces fs reads of content/{about,contact})
+// ---------------------------------------------------------------------------
+
+/** Localized text shape returned by Payload's `locale: 'all'` mode after
+ *  passing through `asL10n` — empty locales drop out as `undefined`. Mirrors
+ *  L10nObj used by the productions mapper. */
+export type AboutL10n = L10nObj
+
+/** Per-locale Lexical bio body. Same shape as `Production.body` — DE is
+ *  optional because legacy rows may omit a DE column entirely. */
+export interface AboutBody {
+  ru: SerializedEditorState | null
+  en: SerializedEditorState | null
+  de?: SerializedEditorState | null
+}
+
+export interface AboutData {
+  body: AboutBody
+  portrait: { src: string | null; credit: string | null }
+  photos: Array<{ src: string; credit: string | null }>
+  milestones: Array<{ year: number | null; label: AboutL10n }>
+  lineage: Array<{
+    key: string
+    name: AboutL10n
+    role: AboutL10n
+    institution: AboutL10n
+    note: AboutL10n
+  }>
+  marginalia: Array<{ note: AboutL10n }>
+}
+
+export interface ContactData {
+  intro: AboutL10n
+  email: string
+  telegramUrl: string | null
+  instagramUrl: string | null
+}
+
+const fetchAboutGlobal = unstable_cache(
+  async (): Promise<AboutData> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.about && now - _mem.about.at < MEM_TTL)
+      return _mem.about.data
+
+    const payload = await getPayload({ config })
+    const doc = (await payload.findGlobal({
+      slug: 'about',
+      locale: 'all',
+      depth: 0
+    })) as unknown as AnyMap
+
+    const portrait = (doc.portrait as AnyMap | undefined) ?? {}
+    const rawPhotos = Array.isArray(doc.photos) ? (doc.photos as AnyMap[]) : []
+    const rawMilestones = Array.isArray(doc.milestones)
+      ? (doc.milestones as AnyMap[])
+      : []
+    const rawLineage = Array.isArray(doc.lineage)
+      ? (doc.lineage as AnyMap[])
+      : []
+    const rawMarginalia = Array.isArray(doc.marginalia)
+      ? (doc.marginalia as AnyMap[])
+      : []
+
+    const bodyL10n = asLexical(doc.body)
+    const result: AboutData = {
+      body: {
+        ru: bodyL10n.ru ?? null,
+        en: bodyL10n.en ?? null,
+        ...(bodyL10n.de !== undefined ? { de: bodyL10n.de } : {})
+      },
+      portrait: {
+        src: typeof portrait.src === 'string' ? portrait.src : null,
+        credit: typeof portrait.credit === 'string' ? portrait.credit : null
+      },
+      photos: rawPhotos
+        .filter((p) => typeof p.src === 'string' && p.src.length > 0)
+        .map((p) => ({
+          src: p.src as string,
+          credit: typeof p.credit === 'string' ? p.credit : null
+        })),
+      milestones: rawMilestones.map((m) => ({
+        year: typeof m.year === 'number' ? m.year : null,
+        label: asL10n(m.label)
+      })),
+      lineage: rawLineage.map((l) => ({
+        key: typeof l.key === 'string' ? l.key : '',
+        name: asL10n(l.name),
+        role: asL10n(l.role),
+        institution: asL10n(l.institution),
+        note: asL10n(l.note)
+      })),
+      marginalia: rawMarginalia.map((m) => ({ note: asL10n(m.note) }))
+    }
+    _mem.about = { data: result, at: now }
+    return result
+  },
+  ['about:global'],
+  { tags: ['about'] }
+)
+
+const fetchContactGlobal = unstable_cache(
+  async (): Promise<ContactData> => {
+    const now = Date.now()
+    if (MEM_TTL > 0 && _mem.contact && now - _mem.contact.at < MEM_TTL)
+      return _mem.contact.data
+
+    const payload = await getPayload({ config })
+    const doc = (await payload.findGlobal({
+      slug: 'contact',
+      locale: 'all',
+      depth: 0
+    })) as unknown as AnyMap
+
+    const result: ContactData = {
+      intro: asL10n(doc.intro),
+      email: typeof doc.email === 'string' ? doc.email : '',
+      telegramUrl:
+        typeof doc.telegramUrl === 'string' && doc.telegramUrl.length > 0
+          ? doc.telegramUrl
+          : null,
+      instagramUrl:
+        typeof doc.instagramUrl === 'string' && doc.instagramUrl.length > 0
+          ? doc.instagramUrl
+          : null
+    }
+    _mem.contact = { data: result, at: now }
+    return result
+  },
+  ['contact:global'],
+  { tags: ['contact'] }
+)
+
+export const getAbout = cache((): Promise<AboutData> => fetchAboutGlobal())
+export const getContact = cache(
+  (): Promise<ContactData> => fetchContactGlobal()
+)
+
+// ---------------------------------------------------------------------------
+// Locale projection (unchanged from pre-migration)
 // ---------------------------------------------------------------------------
 
 function resolveL10n(
@@ -406,7 +678,7 @@ function resolveL10n(
 ): string {
   if (val == null) return ''
   if (typeof val === 'string') return val
-  return val[locale] ?? val.en ?? val.ru ?? val.de ?? ''
+  return val[locale] ?? val.en ?? val.de ?? val.ru ?? ''
 }
 
 function resolveL10nOpt(
@@ -417,23 +689,45 @@ function resolveL10nOpt(
   return resolveL10n(val, locale)
 }
 
+/** Pick a localized value from a multilingual map, falling back
+ *  current-locale → en → de → ru → caller-supplied default.
+ *
+ *  Fallback order mirrors `routing.locales = ['en', 'de', 'ru']` (i18n/
+ *  routing.ts), so a missing value in the active locale prefers the
+ *  default-locale (EN), then DE, then RU before the caller's fallback.
+ *
+ *  Centralises the chain previously inlined across `project()` and gallery
+ *  alt callers. DE-graceful-empty fields (`directorsNote`, `tagline`) must
+ *  NOT use this helper — they intentionally stop at the DE slot rather than
+ *  falling back to EN/RU. See `DESIGN_v3_PROPOSAL.md` §9v3.7. */
+export function pickL10n<V, T>(
+  field: Partial<Record<Locale, V | null>> | null | undefined,
+  locale: Locale,
+  fallback: T
+): V | T {
+  if (!field) return fallback
+  return field[locale] ?? field.en ?? field.de ?? field.ru ?? fallback
+}
+
 function project(p: Production, locale: Locale): ProductionView {
-  // Fallback chain: requested → ru → en → '' (never throw).
-  const t = p.title[locale] ?? p.title.ru ?? p.title.en ?? p.slug
-  const s = p.synopsis[locale] ?? p.synopsis.ru ?? p.synopsis.en ?? ''
-  const b = p.body[locale as 'ru' | 'en' | 'de'] || p.body.ru || p.body.en || ''
-  // Credits & premiere date: per-locale with RU→EN fallback, mirroring
-  // the press/awards "original language" rule. DE chrome falls through
-  // to RU credits (v1 has no DE bodies - that's a v2 fill).
+  const t = pickL10n(p.title, locale, p.slug)
+  const s = pickL10n(p.synopsis, locale, '')
+  const b = pickL10n(p.body, locale, null)
+  // Array fallback chain — same EN→DE→RU order as `pickL10n`, but with a
+  // `.length` check so an empty-but-present array doesn't short-circuit.
   const credits =
+    (locale === 'de' && p.credits.de?.length ? p.credits.de : null) ??
     (locale === 'en' && p.credits.en?.length ? p.credits.en : null) ??
     (locale === 'ru' && p.credits.ru?.length ? p.credits.ru : null) ??
-    (p.credits.ru?.length ? p.credits.ru : (p.credits.en ?? []))
-  const premiereDate =
-    p.premiereDate?.[locale as 'ru' | 'en'] ??
-    p.premiereDate?.ru ??
-    p.premiereDate?.en ??
-    null
+    (p.credits.en?.length
+      ? p.credits.en
+      : p.credits.de?.length
+        ? p.credits.de
+        : (p.credits.ru ?? []))
+  const premiereDate = pickL10n(p.premiereDate, locale, null)
+  // directorsNote and tagline use DE-graceful-empty: DE pages with a null
+  // DE value show "forthcoming" rather than the RU/EN fallback. Per
+  // DESIGN_v3_PROPOSAL.md §9v3.7 — explicit, do not collapse into pickL10n.
   const directorsNote =
     locale === 'de'
       ? (p.directorsNote?.de ?? null)
@@ -445,12 +739,7 @@ function project(p: Production, locale: Locale): ProductionView {
     locale === 'de'
       ? (p.tagline?.de ?? null)
       : (p.tagline?.[locale as 'ru' | 'en'] ?? p.tagline?.ru ?? null)
-  const bookingCtaLabel = p.bookingCtaLabel
-    ? (p.bookingCtaLabel[locale] ??
-      p.bookingCtaLabel.ru ??
-      p.bookingCtaLabel.en ??
-      null)
-    : null
+  const bookingCtaLabel = pickL10n(p.bookingCtaLabel, locale, null)
 
   const resolvedPress = p.press.map((item) => ({
     ...item,
@@ -534,82 +823,20 @@ function project(p: Production, locale: Locale): ProductionView {
 }
 
 // ---------------------------------------------------------------------------
-// Public API
+// Public API — now async. Every caller in app/ and components/ awaits these.
 // ---------------------------------------------------------------------------
 
-export function getAllProductions(locale: Locale): ProductionView[] {
-  return loadAll().map((p) => project(p, locale))
-}
-
-export function getProduction(
-  slug: string,
-  locale: Locale
-): ProductionView | null {
-  const hit = loadAll().find((p) => p.slug === slug)
-  return hit ? project(hit, locale) : null
-}
-
-/**
- * Recommends algorithm (brief D9):
- *   "same age bucket + same theatre form + same lineage"
- * Score each candidate by overlap; return top N (default 3) excluding self.
- *
- * Scoring weights chosen so any single dimension is enough to surface a
- * candidate, but matches across multiple dimensions sort first.
- */
-export function getRelatedProductions(
-  production: ProductionView | Production,
-  n: number = 3
-): Production[] {
-  const all = loadAll()
-  const targetAge = ageBucket(production.ageRating ?? null)
-
-  type Scored = { prod: Production; score: number }
-  const scored: Scored[] = []
-
-  for (const cand of all) {
-    if (cand.slug === production.slug) continue
-    let score = 0
-    if (ageBucket(cand.ageRating ?? null) === targetAge && targetAge !== null) {
-      score += 3
-    }
-    const formOverlap = cand.form.filter((f) =>
-      production.form.includes(f)
-    ).length
-    score += formOverlap * 2
-    const lineageOverlap = cand.lineage.filter((l) =>
-      production.lineage.includes(l)
-    ).length
-    score += lineageOverlap * 4 // lineage is the strongest signal
-    if (score > 0) scored.push({ prod: cand, score })
+export const getAllProductions = cache(
+  async (locale: Locale): Promise<ProductionView[]> => {
+    const all = await fetchAllProductions()
+    return all.map((p) => project(p, locale))
   }
+)
 
-  scored.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score
-    // tie-break: prefer same role, then newer year
-    const aRoleEq = a.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
-    const bRoleEq = b.prod.role.some((r) => production.role.includes(r)) ? 1 : 0
-    if (aRoleEq !== bRoleEq) return bRoleEq - aRoleEq
-    return (b.prod.year ?? 0) - (a.prod.year ?? 0)
-  })
-
-  return scored.slice(0, n).map((s) => s.prod)
-}
-
-function ageBucket(rating: string | null): string | null {
-  if (!rating) return null
-  // brief D9: age BUCKETS, not exact ratings. Group 0+/3+/6+ as "kids",
-  // 12+ as "teens", 16+/18+ as "adults". This matches the filter UI
-  // we'll build in C4.
-  const m = rating.match(/(\d+)/)
-  if (!m) return null
-  const n = Number(m[1])
-  if (n <= 6) return 'kids'
-  if (n <= 12) return 'teens'
-  return 'adults'
-}
-
-/** For tests / scripts. */
-export function _resetCache() {
-  _cache = null
-}
+export const getProduction = cache(
+  async (slug: string, locale: Locale): Promise<ProductionView | null> => {
+    const all = await fetchAllProductions()
+    const hit = all.find((p) => p.slug === slug)
+    return hit ? project(hit, locale) : null
+  }
+)

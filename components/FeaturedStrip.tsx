@@ -19,14 +19,19 @@ interface FeaturedStripProps {
 
 // Cell widths track the broken-grid geometry: hero cols 1–7 (~58vw, capped at
 // max-width-page → ~580px @ 1693), mediums cols 8–12 (~42vw, ~420px), smalls
-// 4/12 each (~320px). Mobile + tablet fall back to 100vw / 50vw.
+// 4/12 each (~320px). Mobile + tablet fall back to 90vw / 50vw — 90vw (not
+// 100vw) reflects the actual rendered width on mobile: .page has 20 px
+// gutters, so a 412-px viewport renders 372 px ≈ 90.3 vw. 100vw made the
+// srcset picker round up to 828w when 720w fits — costs ~30 % on the LCP
+// image on Moto-class viewports. Mirror the hero value in
+// app/[locale]/page.tsx's preload `imageSizes`.
 const FEATURED_SIZES = [
-  '(min-width: 1024px) 600px, (min-width: 768px) 50vw, 100vw',
-  '(min-width: 1024px) 420px, (min-width: 768px) 50vw, 100vw',
-  '(min-width: 1024px) 420px, (min-width: 768px) 50vw, 100vw',
-  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw',
-  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw',
-  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 100vw'
+  '(min-width: 1024px) 600px, (min-width: 768px) 50vw, 90vw',
+  '(min-width: 1024px) 420px, (min-width: 768px) 50vw, 90vw',
+  '(min-width: 1024px) 420px, (min-width: 768px) 50vw, 90vw',
+  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 90vw',
+  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 90vw',
+  '(min-width: 1024px) 320px, (min-width: 768px) 50vw, 90vw'
 ]
 
 export async function FeaturedStrip({

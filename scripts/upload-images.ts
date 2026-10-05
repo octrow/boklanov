@@ -60,7 +60,7 @@ type SyncDir = { localDir: string; prefix: string }
 
 const SYNC_DIRS: SyncDir[] = [
   { localDir: join(PUBLIC_DIR, 'productions'), prefix: 'productions/' },
-  { localDir: join(PUBLIC_DIR, 'about'),       prefix: 'about/' },
+  { localDir: join(PUBLIC_DIR, 'about'), prefix: 'about/' }
 ]
 
 import { existsSync } from 'fs'
@@ -84,7 +84,11 @@ async function fetchRemoteSizes(prefix: string): Promise<Map<string, number>> {
   let token: string | undefined
   do {
     const res = await client.send(
-      new ListObjectsV2Command({ Bucket: BUCKET, Prefix: prefix, ContinuationToken: token })
+      new ListObjectsV2Command({
+        Bucket: BUCKET,
+        Prefix: prefix,
+        ContinuationToken: token
+      })
     )
     for (const obj of res.Contents ?? []) {
       if (obj.Key != null && obj.Size != null) map.set(obj.Key, obj.Size)
@@ -102,12 +106,16 @@ async function syncDir(
   if (!existsSync(localDir)) return
 
   const files = allFiles(localDir).filter((f) =>
-    onlySlug && prefix === 'productions/' ? f.includes(`/productions/${onlySlug}/`) : true
+    onlySlug && prefix === 'productions/'
+      ? f.includes(`/productions/${onlySlug}/`)
+      : true
   )
 
   if (files.length === 0) return
 
-  const remote = dryRun ? new Map<string, number>() : await fetchRemoteSizes(prefix)
+  const remote = dryRun
+    ? new Map<string, number>()
+    : await fetchRemoteSizes(prefix)
 
   let uploaded = 0
   let skipped = 0
@@ -115,7 +123,8 @@ async function syncDir(
   for (const localPath of files) {
     const key = prefix + relative(localDir, localPath).replace(/\\/g, '/')
     const size = statSync(localPath).size
-    const mime = MIME[extname(localPath).toLowerCase()] ?? 'application/octet-stream'
+    const mime =
+      MIME[extname(localPath).toLowerCase()] ?? 'application/octet-stream'
 
     if (dryRun) {
       console.log(`[dry] ${key}  (${(size / 1024).toFixed(0)} KB)`)
