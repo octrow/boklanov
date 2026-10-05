@@ -29,6 +29,15 @@ export default withPayload(
           'public/productions/**/*.{jpg,jpeg,png,webp,avif,gif,svg,mp4,mov,pdf}'
         ]
       },
+      // The OG route reads its satori fonts via fs + a dynamic node_modules
+      // path, which the tracer can't follow — without this every /api/og/*
+      // call 500s on Vercel with ENOENT.
+      outputFileTracingIncludes: {
+        '/api/og/**': [
+          'node_modules/@fontsource/lora/files/*-400-normal.woff',
+          'node_modules/@fontsource/jetbrains-mono/files/*-400-normal.woff'
+        ]
+      },
       staticPageGenerationTimeout: 300,
       // gray-matter is CommonJS; let Node load it as-is on the server.
       serverExternalPackages: ['gray-matter'],

@@ -299,7 +299,7 @@ export default async function ProductionDetailPage({
           const posterAlt =
             [
               production.role.join(' / '),
-              titleRu ?? titleEn ?? slug,
+              production.title || slug,
               production.theatre.name ?? production.theatre.shortName,
               production.year
             ]
