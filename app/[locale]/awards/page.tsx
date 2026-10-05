@@ -82,12 +82,6 @@ export default async function AwardsPage({
                 >
                   {group.title}
                 </Link>
-                <span
-                  className={styles.awardCount}
-                  aria-label={`${group.awards.length + group.festivals.length} entries`}
-                >
-                  ×{group.awards.length + group.festivals.length}
-                </span>
               </h2>
 
               {group.awards.length > 0 && (

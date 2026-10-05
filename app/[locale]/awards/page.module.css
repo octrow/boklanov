@@ -85,15 +85,6 @@
   box-shadow: var(--shadow-focus);
 }
 
-.awardCount {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-faint);
-  font-weight: var(--font-weight-normal);
-  margin-left: var(--space-3);
-}
-
 /* ── Sub-section label (Awards / Festivals divider) ─────────────────── */
 
 .subLabel {
@@ -129,12 +120,8 @@
   border-bottom: none;
 }
 
-@media (min-width: 768px) {
-  .awardRow {
-    grid-template-columns: 4ch 1fr auto;
-    grid-template-areas: 'meta name detail';
-  }
-}
+/* City · category always sits under the name: a third column on desktop
+   flipped rows between "city on the right" and "reason on the right". */
 
 .awardMeta {
   grid-area: meta;
@@ -146,15 +133,20 @@
 }
 
 .awardName {
+  /* Award names are prose (often 2-3 lines), so body face, not mono:
+     DESIGN §4 keeps mono for numbers and metadata. */
   grid-area: name;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--letter-spacing-meta);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-snug);
   color: var(--ink);
+  text-wrap: pretty;
+  max-width: var(--max-width-prose);
 }
 
 .awardDetail {
   grid-area: detail;
+  margin-top: var(--space-1);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
   letter-spacing: var(--letter-spacing-meta);
