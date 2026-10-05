@@ -136,6 +136,12 @@ export default buildConfig({
   editor: lexicalEditor(),
 
   db: postgresAdapter({
+    // Schema changes go through committed migrations (`npm run payload --
+    // migrate:create <name>`), applied by `vercel-build`. Dev push stays off
+    // while local .env and the deploy share one Neon database — otherwise
+    // `next dev` silently rewrites the production schema.
+    push: false,
+    migrationDir: path.resolve(dirname, 'migrations'),
     pool: {
       connectionString: pinSslMode(process.env.DATABASE_URL || ''),
       max: 5,

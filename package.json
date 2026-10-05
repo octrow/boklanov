@@ -34,7 +34,8 @@
     "analyze": "cross-env ANALYZE=true next build",
     "test": "run-p test:*",
     "test:lint": "eslint '**/*.{ts,tsx}'",
-    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check"
+    "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check",
+    "vercel-build": "npm run payload -- migrate && next build"
   },
   "overrides": {
     "postcss": "^8.5.14"
