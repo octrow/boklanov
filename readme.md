@@ -3,8 +3,7 @@
 Director portfolio. Next.js 15 App Router, React 19, Node 22. SSG. Lighthouse 4×100 prod (`100/100/100/100`,
 2026-05-04).
 
-Live: `boklanov.com`, served from `main` (Keystatic). This branch (`feature/payloadcms`) deploys to the
-`boklanov_v2` Vercel project until the Keystatic → Payload cutover (`openspec/changes/keystatic-to-payload-cutover`).
+Live: `boklanov.com`, served from `main` on Payload CMS (cutover 2026-10-05, `openspec/changes/keystatic-to-payload-cutover`).
 
 ## Stack
 
@@ -149,9 +148,10 @@ Tokens: `app/globals.css`. Source of truth: `DESIGN.md` §3–6.
 
 ## Deploy
 
-Vercel project `octrows-projects/boklanov` serves `main` (`boklanov.com`); `main` auto-deploys. The Payload branch
-deploys from `boklanovs-projects/boklanov_v2`, whose `vercel-build` runs `payload migrate` (direct URL) before
-`npm run build`.
+Vercel project `boklanovs-projects/boklanov_v2` serves `main` (`boklanov.com`, `www`); `main` auto-deploys. Its
+`vercel-build` runs `payload migrate` (direct URL) before `npm run build`. Neon (Vercel integration) gives production
+the Neon branch `production` and each git branch's previews a `preview/<branch>` Neon branch.
+`octrows-projects/boklanov` is the old Keystatic project; it fails on every Payload commit and can be disconnected.
 
 Schema: `push: false`; changes go through committed `migrations/`. Local runs use the docker db; `payload.config.ts`
 refuses a Neon `DATABASE_URL` outside Vercel unless `ALLOW_PROD_DB=1`. Workflow + backups: `PAYLOAD_MIGRATION_PLAN.md` §13.

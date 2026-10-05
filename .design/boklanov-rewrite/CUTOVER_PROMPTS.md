@@ -1,3 +1,6 @@
+> Historical (2026-10-05). The cutover is done; prod = `main` on Payload via `boklanov_v2`, Neon branch `production`.
+> See PAYLOAD_MIGRATION_PLAN.md §13. Remaining: tasks 3.6 (admin save) and group 4.
+
 # Cutover session prompts (2026-10-05)
 
 Two prompts: one to compact the current session, one to resume work on

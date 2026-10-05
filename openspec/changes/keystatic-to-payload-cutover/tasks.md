@@ -32,8 +32,8 @@ Run 2026-10-05: frozen `main` = `96056047`; backup `~/backups/boklanov/neon-2026
 - [x] 3.2 Freeze Keystatic Cloud editing
 - [x] 3.3 Record the frozen `main` sha; run the port with `--target <sha>`: dry run, resolve conflicts, then `--apply` (`ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`)
 - [x] 3.4 Verify every delta slug on the Payload preview in RU/EN/DE
-- [ ] 3.5 Promote: on the branch `git merge -s ours <frozen sha>`, PR into `main` merged with a merge commit (not squash), check `boklanovv2.vercel.app`, move `boklanov.com` to `boklanovs-projects/boklanov_v2`
-- [ ] 3.6 Smoke-test production: sitemap URLs 200, `/api/og/*` 200 `image/png`, `/feed`, an admin save Published without a deploy
+- [x] 3.5 Promote (#17, 00bda36; the domain was already on `boklanov_v2`, so no move; Neon `production` branch replaced with the preview branch data, see PAYLOAD_MIGRATION_PLAN §13): on the branch `git merge -s ours <frozen sha>`, PR into `main` merged with a merge commit (not squash), check `boklanovv2.vercel.app`, move `boklanov.com` to `boklanovs-projects/boklanov_v2`
+- [ ] 3.6 Smoke-test production: sitemap URLs 200, `/api/og/*` 200 `image/png`, `/feed` (done: 186/186, canonical fixed in #18); an admin save Published without a deploy (pending)
 
 ## 4. Editor handover
 

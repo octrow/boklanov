@@ -673,12 +673,14 @@ Two safety nets.
 
 Reality vs §1–§3 at this date:
 
-- **Two Vercel projects, not one.** Payload deploys from `boklanovs-projects/boklanov_v2` (see `LIGHTHOUSE_RUNBOOK.md`).
-  `octrows-projects/boklanov` serves `main` (Keystatic, live at `boklanov.com`) and fails on `feature/payloadcms`
-  because it has no Payload env. Which project becomes production is decided at cutover
-  (`openspec/changes/keystatic-to-payload-cutover`, task 3.5).
-- **One Neon database** (`ep-misty-darkness…`) serves the `boklanov_v2` deploy. Until 2026-10-05 local `.env`/`.env.local`
-  pointed at it too; now local runs use a docker PG 17 (see Dev database below).
+- **Two Vercel projects, not one.** `boklanovs-projects/boklanov_v2` serves `boklanov.com` (the domain is verified in
+  that account; `octrows-projects/boklanov` only has it as "Verification Required"). Before the cutover v2 built
+  Keystatic `main`; `octrows-projects/boklanov` is the old project and fails on Payload commits.
+- **Neon branches per Vercel environment** (Neon–Vercel integration, project `polished-credit-90947223`):
+  production deploys use Neon branch `production` (`ep-plain-rice…`); previews of git branch X use `preview/X`
+  (`feature/payloadcms` → `ep-misty-darkness…`). Until 2026-10-05 all editing, the 3.90 ALTERs, the migrations baseline
+  and the port happened on `preview/feature/payloadcms`; `production` still held the 2026-05-13 seed. Local runs now
+  use a docker PG 17 (see Dev database below).
 
 Schema management (commit `f0b7a1f`):
 
@@ -709,4 +711,17 @@ Dev database (task 1b.4, 2026-10-05): `docker-compose.yml` runs `postgres:17-alp
 `payload.config.ts` throws if `DATABASE_URL` is a `neon.tech` host outside Vercel, unless `ALLOW_PROD_DB=1`. A prod
 script run (e.g. the cutover port) is therefore explicit:
 `ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED" npm run payload:port-delta -- …`.
-R2 media stays shared: a local admin upload lands in the production bucket.
+R2 media stays shared: a local admin upload lands in the production bucket. `NEON_*` point at the Neon `production`
+branch.
+
+Cutover run (2026-10-05/06), what bit:
+
+- Merging `main` deployed Payload straight to `boklanov.com` (domain already on v2) with the Neon `production` branch,
+  i.e. May data. Fixed by replacing `production`'s `public` schema with a dump of `preview/feature/payloadcms`, in one
+  transaction (`DROP SCHEMA public CASCADE; CREATE SCHEMA public;` + `pg_restore -f -` piped to
+  `psql --single-transaction`), rehearsed on a local copy first. `neon branches restore` from the child branch did not
+  run. Pre-restore backup: `~/backups/boklanov/neon-prodbranch-2026-10-06-0011-pre-restore.dump`.
+- Vercel's Data Cache survives deploys: after a redeploy or a DB change outside the admin, POST `/api/revalidate` with
+  `{"secret": …, "tags": ["productions", "about", "contact"]}`.
+- `VERCEL_BRANCH_URL` is set on production deploys too; `lib/baseUrl.ts` now pins `boklanov.com` when
+  `VERCEL_ENV=production` (#18).
