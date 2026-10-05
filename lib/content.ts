@@ -286,16 +286,25 @@ function loadAll(): Production[] {
   return out
 }
 
-/** Read body{Ru,En,De}.mdx siblings of index.yaml (Keystatic layout).
- *  Missing files → ''. Falls back to the legacy body.{ru,en,de}.md naming
- *  so half-migrated checkouts still build. */
+/** Read body{Ru,En,De}.mdx for a production. Keystatic writes them under
+ *  identity/ (the field group's path); older checkouts kept them next to
+ *  index.yaml, and Keystatic left 0-byte identity/ placeholders beside those.
+ *  So: first non-empty of identity/, root, then legacy body.{ru,en,de}.md. */
 function readBodyFiles(dir: string): { ru: string; en: string; de?: string } {
   const read = (locale: 'ru' | 'en' | 'de'): string => {
     const cap = locale === 'ru' ? 'Ru' : locale === 'en' ? 'En' : 'De'
-    const mdx = path.join(dir, `body${cap}.mdx`)
-    if (fs.existsSync(mdx)) return fs.readFileSync(mdx, 'utf8').trim()
-    const legacy = path.join(dir, `body.${locale}.md`)
-    return fs.existsSync(legacy) ? fs.readFileSync(legacy, 'utf8').trim() : ''
+    const candidates = [
+      path.join(dir, 'identity', `body${cap}.mdx`),
+      path.join(dir, `body${cap}.mdx`),
+      path.join(dir, `body.${locale}.md`)
+    ]
+    for (const file of candidates) {
+      const text = fs.existsSync(file)
+        ? fs.readFileSync(file, 'utf8').trim()
+        : ''
+      if (text) return text
+    }
+    return ''
   }
   const out: { ru: string; en: string; de?: string } = {
     ru: read('ru'),
