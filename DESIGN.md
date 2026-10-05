@@ -279,7 +279,7 @@ Cmd-K: keyboard-only end-to-end. Groups: Productions, Awards, Press, Theatres. C
 /robots.txt
 ```
 
-Locale: RU = default, no prefix (`/`). Middleware rewrites `/` -> `/ru` internally; canonical URL stays prefix-free.
+Locale: EN = default, no prefix (`/`); RU and DE are prefixed (`/ru`, `/de`). `/en` redirects to `/`.
 
 Slugs: from RU title transliterated, or clean EN title. Set once, never changed. RU/EN sibling Notion pages merge into
 one record (`notionIds: {ru, en}`).

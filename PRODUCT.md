@@ -29,7 +29,7 @@ The work of an independent director of puppet, object and children's theatre, wi
 
 - Next.js on Vercel, Payload 3 CMS on Neon Postgres, media on Cloudflare R2.
 - Routes: `/`, `/productions`, `/productions/[slug]`, `/about`, `/awards`, `/press`, `/archive`, `/contact`, `/feed`.
-- Locales: ru (default), en, de.
+- Locales: en (default, no prefix), ru (`/ru`), de (`/de`).
 - Roman left Russia in 2022. Russian productions are described in the past tense, never as current repertoire.
 - Press and awards are shown fully translated on EN pages (decided 2026-10-06). DE completeness is still undecided.
 - Contact: Telegram and Instagram stay the primary channels, email secondary (May 2026 brief, reconfirmed 2026-10-06).

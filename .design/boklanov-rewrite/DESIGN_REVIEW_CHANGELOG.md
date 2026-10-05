@@ -89,14 +89,25 @@ The commit is in brackets.
     No "Selected honours" block above the list (decided 2026-10-06).
     [4811385]
 
+21. Polish:
+    - the arrow in the home invitation link no longer wraps onto a line of
+      its own (it did on /ru and /de);
+    - "ST. PETERSBURG" with a space in the EN ticker;
+    - PRODUCT.md and DESIGN.md now say EN is the default locale.
+
 ## Next
 
-- `/impeccable polish`.
+- `/impeccable critique site` again to re-score.
+- `/impeccable critique admin` (never run).
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
   account.
 
 ## Content to-dos for Roma (in the admin)
+
+- Home "All productions" shows the productions that have `listOrder` (4 now):
+  with 3 columns on desktop the 4th sits alone. Pick 3 or 6.
+- "NO WINER WAY" in the archive: check whether it's a typo.
 
 - Upload a press kit and tech rider (PDF). The EPK block appears once a file
   exists.

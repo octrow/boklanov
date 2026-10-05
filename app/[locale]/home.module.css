@@ -215,3 +215,7 @@
     padding: var(--space-8) 0;
   }
 }
+
+.nowrap {
+  white-space: nowrap;
+}

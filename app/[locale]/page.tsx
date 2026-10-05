@@ -46,6 +46,9 @@ export default async function HomePage({
   // Exclude titles already shown in the featured strip above.
   // Only productions with explicit `listOrder` appear here (choose + order + limit
   // via frontmatter). Sort ascending by listOrder.
+  const inviteWords = t('inviteHero').split(' ')
+  const inviteLast = inviteWords.pop()
+  const inviteHead = inviteWords.join(' ')
   const featuredSlugs = new Set(featured.map((p) => p.slug))
   const directorProductions = productions
     .filter(
@@ -87,8 +90,12 @@ export default async function HomePage({
       <SiteHero heroWordmark={t('heroWordmark')} statement={t('statement')}>
         {/* Curator path (PRODUCT.md): a route to contact above the fold */}
         <Link href='/contact' className={styles.inviteHero}>
-          <span>{t('inviteHero')}</span>
-          <IconArrowRight size={12} />
+          {inviteHead}{' '}
+          {/* last word + arrow never split: on /ru the arrow wrapped alone */}
+          <span className={styles.nowrap}>
+            {inviteLast}
+            <IconArrowRight size={12} />
+          </span>
         </Link>
       </SiteHero>
 
