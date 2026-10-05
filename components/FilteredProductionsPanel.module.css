@@ -43,10 +43,10 @@
   gap: var(--space-1);
 }
 
-/* Mono-caps group label (РОЛЬ / ФОРМА / ВОЗРАСТ / СТРАНА).
-   Hidden on mobile; shown on desktop where groups would otherwise merge visually. */
+/* Mono-caps group label (РОЛЬ / ФОРМА / ВОЗРАСТ / СТРАНА). Shown at every
+   width: without it "FAMILY · FESTIVAL · 3+ · 6+" had to be decoded. */
 .groupLabel {
-  display: none;
+  display: block;
   font-family: var(--font-family-mono);
   font-size: var(--font-size-chip);
   letter-spacing: 0.1em;
@@ -56,10 +56,14 @@
   padding-bottom: var(--space-1);
 }
 
-@media (min-width: 768px) {
-  .groupLabel {
-    display: block;
-  }
+/* Result count once a filter is on. */
+.count {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
+  color: var(--ink-mute);
+  margin: 0;
+  align-self: center;
 }
 
 /* Group separator: groups stack on mobile and carry labels on desktop, so

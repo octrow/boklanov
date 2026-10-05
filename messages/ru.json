@@ -64,7 +64,8 @@
     "rolePerformer": "актёр",
     "roleReader": "другие",
     "roleSketch": "эскиз",
-    "roleAll": "все"
+    "roleAll": "все",
+    "resultCount": "{count} из {total}"
   },
   "archive": {
     "title": "архив",

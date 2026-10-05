@@ -53,6 +53,8 @@ export interface FilterLabels {
   groupLabelAge: string
   groupLabelCountry: string
   filtersAria: string
+  /** "{count} of {total}" shown once a filter is on. */
+  resultCount: string
   /** Display label per form tag; unknown tags show as stored. */
   formLabels: Record<string, string>
 }
@@ -349,6 +351,13 @@ export function FilteredProductionsPanel({
         )}
 
         {/* Clear-all — oxblood per DESIGN §5.2 (only when non-default active) */}
+        {hasActiveFilters && (
+          <p className={styles.count} aria-live='polite'>
+            {labels.resultCount
+              .replace('{count}', String(filtered.length))
+              .replace('{total}', String(productions.length))}
+          </p>
+        )}
         {hasActiveFilters && (
           <button className={styles.clearAll} onClick={clearAll}>
             {labels.clearAll}

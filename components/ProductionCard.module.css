@@ -131,3 +131,16 @@
     font-size: var(--font-size-caption);
   }
 }
+
+/* Narrow cells (2-col phone grid, ~175px): step title and meta down so a
+   card reads as poster + two lines, not a column of wrapped mono. */
+@container card (max-width: 260px) {
+  .titleRu {
+    font-size: var(--font-size-body);
+  }
+
+  .meta {
+    font-size: var(--font-size-chip);
+    letter-spacing: 0;
+  }
+}

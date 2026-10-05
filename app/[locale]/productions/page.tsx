@@ -79,6 +79,7 @@ export default async function ProductionsIndexPage({
     groupLabelForm: t('filterForm'),
     groupLabelAge: t('filterAge'),
     groupLabelCountry: t('filterCountry'),
+    resultCount: t.raw('resultCount') as string,
     filtersAria: tA11y('filters'),
     formLabels: t.raw('formLabels') as Record<string, string>
   }

@@ -64,7 +64,8 @@
     "rolePerformer": "performer",
     "roleReader": "other",
     "roleSketch": "sketch",
-    "roleAll": "all"
+    "roleAll": "all",
+    "resultCount": "{count} of {total}"
   },
   "archive": {
     "title": "archive",
