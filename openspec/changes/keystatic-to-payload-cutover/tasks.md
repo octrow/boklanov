@@ -2,12 +2,19 @@
 
 ## 1. Port main fixes to feature/payloadcms
 
-- [ ] 1.1 Confirm `outputFileTracingExcludes` for `public/productions` media is present (df820fe); keep `lqip.json` traced
-- [ ] 1.2 Add `outputFileTracingIncludes` for `@fontsource` woff files under `/api/og/**`; verify the OG route's `.nft.json` lists them
-- [ ] 1.3 Add `lib/translit.ts` and use it in `components/CommandPalette.tsx`
-- [ ] 1.4 Transliterate and timestamp-suffix upload names in `app/api/r2-asset/route.ts`
+- [x] 1.1 Confirm `outputFileTracingExcludes` for `public/productions` media is present (df820fe); keep `lqip.json` traced
+- [x] 1.2 Add `outputFileTracingIncludes` for `@fontsource` woff files under `/api/og/**`; verify the OG route's `.nft.json` lists them
+- [x] 1.3 Add `lib/translit.ts` and use it in `components/CommandPalette.tsx`
+- [x] 1.4 Transliterate and timestamp-suffix upload names in `app/api/r2-asset/route.ts`
 - [ ] 1.5 Decide whether Payload `Media` uploads need the same naming (Payload keeps Unicode names and dedupes with `-1`); apply via a `beforeOperation` hook if yes
-- [ ] 1.6 Use the page-locale title for the poster alt in `app/[locale]/productions/[slug]/page.tsx`
+- [x] 1.6 Use the page-locale title for the poster alt in `app/[locale]/productions/[slug]/page.tsx`
+
+## 1b. Payload upgrade and schema management
+
+- [x] 1b.1 Upgrade Payload 3.84.1 → 3.90.2 (security release); regenerate types
+- [x] 1b.2 Add `media._objectkey` and `users.reset_password_requested_at` to Neon by hand (pg_dump backup first: `~/backups/boklanov/neon-2026-10-05-pre-payload-3.90.dump`)
+- [ ] 1b.3 Move schema changes to Payload migrations: baseline the current push-managed schema, mark it applied, commit `migrations/`, and run `payload migrate` in the deploy. In production push is off, so every future schema change needs a migration
+- [ ] 1b.4 Separate dev and prod databases (a Neon branch for dev), so `next dev` push mode never touches the prod schema
 
 ## 2. Content delta port script
 
