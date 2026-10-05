@@ -50,11 +50,11 @@ Read first, in this order:
 Where things stand:
 - Prod = `main` on Keystatic (boklanov.com, Vercel `octrows-projects/boklanov`). Roma still edits there until the freeze.
 - Payload = `feature/payloadcms` (Vercel `boklanovs-projects/boklanov_v2`), Payload 3.90.2, migrations-based schema, CI green.
-- Done: groups 1 (except 1.5), 1b, 2.
+- Done: groups 1, 1b, 2.
 
 Open tasks, in suggested order:
 1. (done) 1b.4: local docker dev DB.
-2. 1.5: decide whether Payload `Media` uploads need lib/translit naming (beforeOperation hook). Payload keeps Unicode names and dedupes with -1.
+2. (done) 1.5: Media uploads use lib/translit uploadFilename.
 3. Group 3, cutover. Agree the date with the user, freeze Keystatic, fresh pg17 backup, then
    `npm run payload:port-delta -- --fill-missing` (dry run; resolve conflicts), then `--apply`
    (the user runs this with `ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`: auto mode blocks prod DB writes). Verify delta slugs on the preview in RU/EN/DE.

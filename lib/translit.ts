@@ -44,3 +44,17 @@ export function transliterate(s: string): string {
     .map((c) => CYR_TO_LAT[c] ?? c)
     .join('')
 }
+
+// Storage name for an admin upload: readable Latin slug + base36 timestamp.
+// Stored objects are cached `immutable`, so every upload needs a fresh key
+// (a re-upload under an old name would be served stale for up to a year).
+export function uploadFilename(name: string, now: number = Date.now()): string {
+  const dot = name.lastIndexOf('.')
+  const ext = dot > 0 ? name.slice(dot).toLowerCase() : ''
+  const base =
+    transliterate(dot > 0 ? name.slice(0, dot) : name)
+      .replace(/[^a-z0-9._-]/g, '-')
+      .replace(/-{2,}/g, '-')
+      .replace(/^-|-$/g, '') || 'upload'
+  return `${base}-${now.toString(36)}${ext}`
+}

@@ -6,7 +6,7 @@
 - [x] 1.2 Add `outputFileTracingIncludes` for `@fontsource` woff files under `/api/og/**`; verify the OG route's `.nft.json` lists them
 - [x] 1.3 Add `lib/translit.ts` and use it in `components/CommandPalette.tsx`
 - [x] 1.4 Transliterate and timestamp-suffix upload names in `app/api/r2-asset/route.ts`
-- [ ] 1.5 Decide whether Payload `Media` uploads need the same naming (Payload keeps Unicode names and dedupes with `-1`); apply via a `beforeOperation` hook if yes
+- [x] 1.5 Payload `Media` uploads use the same naming: `uploadFilename()` in `lib/translit.ts` (shared with `r2-asset`), applied in a `beforeOperation` hook
 - [x] 1.6 Use the page-locale title for the poster alt in `app/[locale]/productions/[slug]/page.tsx`
 
 ## 1b. Payload upgrade and schema management

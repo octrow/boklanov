@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { uploadFilename } from '../lib/translit'
+
 /**
  * Media — Payload upload collection backed by R2 via s3Storage plugin.
  *
@@ -23,6 +25,17 @@ export const Media: CollectionConfig = {
     create: ({ req: { user } }) => Boolean(user),
     update: ({ req: { user } }) => Boolean(user),
     delete: ({ req: { user } }) => Boolean(user)
+  },
+  hooks: {
+    // Same naming as the Keystatic uploader (openspec media-upload-naming):
+    // Payload would keep "Афиша 2026.webp" as-is and reuse a deleted file's key.
+    beforeOperation: [
+      ({ operation, req }) => {
+        if ((operation === 'create' || operation === 'update') && req.file) {
+          req.file.name = uploadFilename(req.file.name)
+        }
+      }
+    ]
   },
   upload: {
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
