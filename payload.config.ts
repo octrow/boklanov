@@ -55,6 +55,19 @@ function pinSslMode(url: string): string {
   }
 }
 
+// Local runs use the docker `db` (npm run db:dev-refresh). Refuse the prod
+// Neon host outside Vercel unless explicitly allowed, so a stray env line
+// (or `vercel env pull`) can't point `next dev` / scripts at production.
+if (
+  /neon\.tech/.test(process.env.DATABASE_URL || '') &&
+  !process.env.VERCEL &&
+  process.env.ALLOW_PROD_DB !== '1'
+) {
+  throw new Error(
+    'DATABASE_URL points at production Neon. Use the local db, or set ALLOW_PROD_DB=1 on purpose.'
+  )
+}
+
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'CHANGE_ME_IN_ENV',
   serverURL:

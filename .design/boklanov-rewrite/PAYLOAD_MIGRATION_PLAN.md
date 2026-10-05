@@ -677,7 +677,8 @@ Reality vs §1–§3 at this date:
   `octrows-projects/boklanov` serves `main` (Keystatic, live at `boklanov.com`) and fails on `feature/payloadcms`
   because it has no Payload env. Which project becomes production is decided at cutover
   (`openspec/changes/keystatic-to-payload-cutover`, task 3.5).
-- **One Neon database** is shared by local `.env`/`.env.local` and the `boklanov_v2` deploy (`ep-misty-darkness…`).
+- **One Neon database** (`ep-misty-darkness…`) serves the `boklanov_v2` deploy. Until 2026-10-05 local `.env`/`.env.local`
+  pointed at it too; now local runs use a docker PG 17 (see Dev database below).
 
 Schema management (commit `f0b7a1f`):
 
@@ -695,11 +696,17 @@ Schema management (commit `f0b7a1f`):
 Workflow for a schema change (new field, Payload upgrade that adds columns):
 
 1. Change the collection/global, then generate against a throwaway DB, not Neon:
-   `DATABASE_URL=<local pg17> npm run payload -- migrate:create <name>`.
+   `npm run payload -- migrate:create <name>` (local `DATABASE_URL` is the docker db).
 2. Commit the generated `migrations/<ts>_<name>.{ts,json}` + `migrations/index.ts`.
 3. Push. CI applies it to an empty DB; the `boklanov_v2` deploy applies it to Neon in `vercel-build`.
 
 Backups: `pg_dump` must be v17 (Neon is PG 17): `docker run --rm postgres:17-alpine pg_dump "<url>" -Fc > file.dump`.
 First backup: `~/backups/boklanov/neon-2026-10-05-pre-payload-3.90.dump`.
 
-Open: a separate dev database (Neon branch), so a local `payload migrate` stops hitting production (cutover task 1b.4).
+Dev database (task 1b.4, 2026-10-05): `docker-compose.yml` runs `postgres:17-alpine` on `localhost:5433`, db `boklanov`.
+`npm run db:dev-refresh` dumps Neon (read-only, kept in `~/backups/boklanov/` as a backup too) and restores it locally.
+`.env` keeps prod as `NEON_DATABASE_URL{,_UNPOOLED}`; `DATABASE_URL` in `.env`/`.env.local` is the local db.
+`payload.config.ts` throws if `DATABASE_URL` is a `neon.tech` host outside Vercel, unless `ALLOW_PROD_DB=1`. A prod
+script run (e.g. the cutover port) is therefore explicit:
+`ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED" npm run payload:port-delta -- …`.
+R2 media stays shared: a local admin upload lands in the production bucket.

@@ -1,0 +1,19 @@
+# Local dev database (1b.4). Mirrors production Neon (PG 17) so `next dev`
+# and `payload migrate` never touch prod. Fill it with `npm run db:dev-refresh`.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: boklanov
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      retries: 15
+
+volumes:
+  pgdata:

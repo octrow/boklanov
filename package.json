@@ -36,7 +36,8 @@
     "test:lint": "eslint '**/*.{ts,tsx}'",
     "test:prettier": "prettier '**/*.{js,jsx,ts,tsx}' --check",
     "vercel-build": "DATABASE_URL=${DATABASE_URL_UNPOOLED:-$DATABASE_URL} npm run payload -- migrate && npm run build",
-    "payload:port-delta": "tsx scripts/port-content-delta.ts"
+    "payload:port-delta": "tsx scripts/port-content-delta.ts",
+    "db:dev-refresh": "bash scripts/db-dev-refresh.sh"
   },
   "overrides": {
     "postcss": "^8.5.14"

@@ -51,13 +51,15 @@ public/{fonts,productions/<slug>/}
 
 Node 22.x. npm 10+.
 
-Required env vars (see `.env.example` if present, otherwise ask Daniil): `DATABASE_URL` (Neon Postgres, pooled),
-`DATABASE_URL_UNPOOLED` (direct, used by `payload migrate`),
+Required env vars (see `.env.example` if present, otherwise ask Daniil): `DATABASE_URL` + `DATABASE_URL_UNPOOLED`
+(locally: the docker db `postgresql://postgres:dev@localhost:5433/boklanov`; on Vercel: Neon pooled / direct),
+`NEON_DATABASE_URL_UNPOOLED` (local only, source for `db:dev-refresh`),
 `PAYLOAD_SECRET`, `R2_ACCOUNT_ID` + `R2_ACCESS_KEY_ID` + `R2_SECRET_ACCESS_KEY` (+ `R2_BUCKET`, optional),
 `NEXT_PUBLIC_CDN_BASE` for prod image serving.
 
 ```bash
 npm install
+npm run db:dev-refresh                      # start docker pg17 on :5433, fill it from a Neon dump
 npm run dev                                 # http://localhost:3000 (predev regenerates Payload importMap)
 npm run build && npm start                  # prebuild regenerates payload-types + importMap
 npm test                                    # lint + prettier (parallel)
@@ -151,8 +153,8 @@ Vercel project `octrows-projects/boklanov` serves `main` (`boklanov.com`); `main
 deploys from `boklanovs-projects/boklanov_v2`, whose `vercel-build` runs `payload migrate` (direct URL) before
 `npm run build`.
 
-Schema: `push: false`; changes go through committed `migrations/`. Local `.env` points at the same Neon DB as the
-deploy, so `payload migrate` locally hits production. Workflow + backups: `PAYLOAD_MIGRATION_PLAN.md` §13.
+Schema: `push: false`; changes go through committed `migrations/`. Local runs use the docker db; `payload.config.ts`
+refuses a Neon `DATABASE_URL` outside Vercel unless `ALLOW_PROD_DB=1`. Workflow + backups: `PAYLOAD_MIGRATION_PLAN.md` §13.
 
 `git push origin main` blocked by safety hook — ask user to push.
 

@@ -21,7 +21,7 @@ Keep for the Keystatic → Payload cutover work on boklanov:
 2. State of main (prod, boklanov.com, Vercel `octrows-projects/boklanov`): PRs #14 (media excluded from function trace), #15 (OG fonts trace, transliterated collision-safe upload names via lib/translit.ts, localized poster alt), #16 (production bodies read from and moved to content/productions/<slug>/identity/body*.mdx) are merged and deployed green.
 3. State of feature/payloadcms (pushed, HEAD 6f14f4d, Vercel `boklanovs-projects/boklanov_v2` green, GitHub Build green): #15 fixes ported; Payload 3.90.2; push:false + migrations/20261005_173122_baseline + vercel-build (migrate over DATABASE_URL_UNPOOLED, then npm run build); CI with postgres:17 service; scripts/production-mapping.ts (shared mapping, year/durationMin fixed into the `production` group); scripts/port-content-delta.ts (`npm run payload:port-delta`, dry run default, --fill-missing, --apply); openspec specs + cutover change; CONTEXT.md glossary; PAYLOAD_MIGRATION_PLAN.md §13.
 4. Facts that are easy to lose:
-   - Local .env and the boklanov_v2 deploy share ONE Neon DB (ep-misty-darkness, PG 17). A local `payload migrate` or write hits production.
+   - Local runs use docker PG 17 on :5433 (`npm run db:dev-refresh`); prod Neon (ep-misty-darkness) is `NEON_DATABASE_URL{,_UNPOOLED}` in .env and needs `ALLOW_PROD_DB=1`.
    - pg_dump must be v17: `docker run --rm --network host postgres:17-alpine pg_dump ...`. Backups are in ~/backups/boklanov/.
    - Neon payload_migrations holds only the baseline row (batch 1).
    - Auto mode blocks writes to the prod DB, so the user runs those commands.
@@ -50,14 +50,14 @@ Read first, in this order:
 Where things stand:
 - Prod = `main` on Keystatic (boklanov.com, Vercel `octrows-projects/boklanov`). Roma still edits there until the freeze.
 - Payload = `feature/payloadcms` (Vercel `boklanovs-projects/boklanov_v2`), Payload 3.90.2, migrations-based schema, CI green.
-- Done: groups 1 (except 1.5), 1b.1–1b.3, 2.
+- Done: groups 1 (except 1.5), 1b, 2.
 
 Open tasks, in suggested order:
-1. 1b.4: separate dev DB (Neon branch) so local `next dev` / `payload migrate` stop touching production. Needs Neon console or neonctl; ask the user.
+1. (done) 1b.4: local docker dev DB.
 2. 1.5: decide whether Payload `Media` uploads need lib/translit naming (beforeOperation hook). Payload keeps Unicode names and dedupes with -1.
 3. Group 3, cutover. Agree the date with the user, freeze Keystatic, fresh pg17 backup, then
    `npm run payload:port-delta -- --fill-missing` (dry run; resolve conflicts), then `--apply`
-   (the user runs this: auto mode blocks prod DB writes). Verify delta slugs on the preview in RU/EN/DE.
+   (the user runs this with `ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`: auto mode blocks prod DB writes). Verify delta slugs on the preview in RU/EN/DE.
    Decide which Vercel project becomes production. Promote, then smoke-test: sitemap 200, /api/og/* image/png, /feed, an admin save Published without a deploy.
 4. Group 4: editor handover (admin URL + Saved vs Published walkthrough for Roma).
 

@@ -14,7 +14,7 @@
 - [x] 1b.1 Upgrade Payload 3.84.1 → 3.90.2 (security release); regenerate types
 - [x] 1b.2 Add `media._objectkey` and `users.reset_password_requested_at` to Neon by hand (pg_dump backup first: `~/backups/boklanov/neon-2026-10-05-pre-payload-3.90.dump`)
 - [x] 1b.3 Move schema changes to Payload migrations: baseline the current push-managed schema, mark it applied, commit `migrations/`, and run `payload migrate` in the deploy. In production push is off, so every future schema change needs a migration
-- [ ] 1b.4 Separate dev and prod databases (a Neon branch for dev), so `next dev` push mode never touches the prod schema
+- [x] 1b.4 Separate dev and prod databases: local docker PG 17 (`docker-compose.yml`, `npm run db:dev-refresh`), prod as `NEON_*` env, config refuses Neon outside Vercel without `ALLOW_PROD_DB=1`
 
 ## 2. Content delta port script
 
@@ -28,7 +28,7 @@
 
 - [ ] 3.1 Agree a cutover date with the editor and announce the freeze
 - [ ] 3.2 Freeze Keystatic Cloud editing
-- [ ] 3.3 Run the port against frozen `main`: dry run, resolve conflicts, then `--apply`
+- [ ] 3.3 Run the port against frozen `main`: dry run, resolve conflicts, then `--apply` (`ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`)
 - [ ] 3.4 Verify every delta slug on the Payload preview in RU/EN/DE
 - [ ] 3.5 Promote the Payload build to production
 - [ ] 3.6 Smoke-test production: sitemap URLs 200, `/api/og/*` 200 `image/png`, `/feed`, an admin save Published without a deploy
