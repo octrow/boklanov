@@ -51,8 +51,14 @@ interface FieldPlan {
 }
 
 function arg(name: string, fallback: string | null = null): string | null {
-  const hit = process.argv.find((a) => a.startsWith(`--${name}=`))
-  return hit ? hit.slice(name.length + 3) : fallback
+  // Accept `--name=value` and `--name value`.
+  const argv = process.argv
+  const hit = argv.find((a) => a.startsWith(`--${name}=`))
+  if (hit) return hit.slice(name.length + 3)
+  const i = argv.indexOf(`--${name}`)
+  return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--')
+    ? argv[i + 1]
+    : fallback
 }
 
 function gitShow(ref: string, file: string): string | null {
@@ -115,7 +121,8 @@ function richTextToPlain(node: unknown): string {
 function normalize(v: unknown): unknown {
   if (v == null) return null
   if (isRichText(v)) return normalize(richTextToPlain(v.root))
-  if (typeof v === 'string') return v.trim() || null
+  // Collapse space runs too: a formatter-only change is not an editor edit.
+  if (typeof v === 'string') return v.replace(/[ \t]+/g, ' ').trim() || null
   if (Array.isArray(v)) {
     const items = v.map(normalize)
     return items.length ? items : null
