@@ -11,14 +11,14 @@
   },
   "meta": {
     "siteName": "Roman Boklanov",
-    "siteDescription": "Theatre director - shows about people and things, for children, teenagers, and adults. Working between Bremen, Vienna, and Almaty.",
+    "siteDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty.",
     "homeTitle": "Roman Boklanov - theatre director",
-    "homeDescription": "Theatre director - shows about people and things, for children, teenagers, and adults. Working between Bremen, Vienna, and Almaty."
+    "homeDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty."
   },
   "home": {
     "heroMeta": "director · puppet theatre · theatre of objects",
     "heroWordmark": "Roman Boklanov",
-    "statement": "Shows about people and things - for children, teenagers, and adults. Roman Boklanov works between Bremen, Vienna and Almaty.",
+    "statement": "Shows about people and things - for children, teenagers, and families. Roman Boklanov works between Bremen, Vienna and Almaty.",
     "featuredLabel": "selected works",
     "allLabel": "productions",
     "viewAll": "all productions →",
@@ -47,6 +47,15 @@
     "empty": "No productions match these filters",
     "filterRole": "role",
     "filterForm": "form",
+    "formLabels": {
+      "solo": "solo",
+      "puppet": "puppet",
+      "family": "family",
+      "festival": "festival",
+      "reading": "reading",
+      "collage": "collage",
+      "коллаж": "collage"
+    },
     "filterAge": "age",
     "filterCountry": "country",
     "clearAll": "clear",

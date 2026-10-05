@@ -47,6 +47,15 @@
     "empty": "Нет постановок, подходящих под фильтры",
     "filterRole": "роль",
     "filterForm": "форма",
+    "formLabels": {
+      "solo": "соло",
+      "puppet": "куклы",
+      "family": "семейный",
+      "festival": "фестиваль",
+      "reading": "читка",
+      "collage": "коллаж",
+      "коллаж": "коллаж"
+    },
     "filterAge": "возраст",
     "filterCountry": "страна",
     "clearAll": "сбросить",

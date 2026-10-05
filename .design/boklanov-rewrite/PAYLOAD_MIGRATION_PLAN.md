@@ -725,3 +725,8 @@ Cutover run (2026-10-05/06), what bit:
   `{"secret": …, "tags": ["productions", "about", "contact"]}`.
 - `VERCEL_BRANCH_URL` is set on production deploys too; `lib/baseUrl.ts` now pins `boklanov.com` when
   `VERCEL_ENV=production` (#18).
+- Found 2026-10-06: the seed wrote ru → en → de without array row ids, so localized sub-fields of array rows kept only
+  DE (press titles, award name/category/city, tour cities; 184 values). `port-content-delta` compares arrays whole and
+  missed it. `scripts/fill-array-locales.ts` refills empty ones from the frozen Keystatic YAML (`cd228b1`), matching
+  rows by index; idempotent. Admin edits send row ids (`LocalizedDocContext` sends the full array), so they keep the
+  other locales.

@@ -53,6 +53,8 @@ export interface FilterLabels {
   groupLabelAge: string
   groupLabelCountry: string
   filtersAria: string
+  /** Display label per form tag; unknown tags show as stored. */
+  formLabels: Record<string, string>
 }
 
 export interface FilteredProductionsPanelProps {
@@ -253,7 +255,7 @@ export function FilteredProductionsPanel({
                       setParam('form', activeForm === form ? null : form)
                     }
                   >
-                    {form}
+                    {labels.formLabels[form] ?? form}
                   </button>
                 ))}
               </div>

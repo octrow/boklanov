@@ -51,6 +51,9 @@ export async function TourRider({
   pressKit
 }: TourRiderProps) {
   const t = await getTranslations('productionDetail')
+  const formLabels = (await getTranslations('productions')).raw(
+    'formLabels'
+  ) as Record<string, string>
   const rows: TourRiderRowProps[] = []
   if (year) rows.push({ label: t('riderYear'), value: year })
   if (durationMin)
@@ -69,7 +72,7 @@ export async function TourRider({
   if (form && form.length > 0) {
     rows.push({
       label: t('riderForm'),
-      value: form.map((f) => f.toUpperCase()).join(' · ')
+      value: form.map((f) => (formLabels[f] ?? f).toUpperCase()).join(' · ')
     })
   }
   if (lineage && lineage.length > 0) {
