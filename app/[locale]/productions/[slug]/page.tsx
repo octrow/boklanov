@@ -470,7 +470,33 @@ export default async function ProductionDetailPage({
             premiereLabel={t('premiereLabel')}
           />
 
-          {/* Mobile-only media block — desktop renders the same trailer + photos inside the rail (see below). */}
+          {/* 3. Chips row */}
+          {chips.length > 0 && (
+            <ul className={styles.chips}>
+              {chips.map((c) => (
+                <li key={c} className={styles.chip}>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
+          {production.synopsis &&
+            (locale === 'de' ? (
+              <Marginalia note={t('deForthcoming')}>
+                <p className={styles.synopsis}>{production.synopsis}</p>
+              </Marginalia>
+            ) : (
+              <p className={styles.synopsis}>{production.synopsis}</p>
+            ))}
+
+          {/* 4b. Tagline — subgenre / format label */}
+          {production.tagline && (
+            <p className={styles.tagline}>{production.tagline}</p>
+          )}
+
+          {/* Mobile-only media block, after the synopsis so text leads on a phone — desktop renders the same trailer + photos inside the rail (see below). */}
           <div className={styles.inlineMedia}>
             {trailerEmbedUrl && primaryVideo?.provider === 'youtube' && (
               <div className={styles.trailer}>
@@ -501,32 +527,6 @@ export default async function ProductionDetailPage({
               </section>
             )}
           </div>
-
-          {/* 3. Chips row */}
-          {chips.length > 0 && (
-            <ul className={styles.chips}>
-              {chips.map((c) => (
-                <li key={c} className={styles.chip}>
-                  {c}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
-          {production.synopsis &&
-            (locale === 'de' ? (
-              <Marginalia note={t('deForthcoming')}>
-                <p className={styles.synopsis}>{production.synopsis}</p>
-              </Marginalia>
-            ) : (
-              <p className={styles.synopsis}>{production.synopsis}</p>
-            ))}
-
-          {/* 4b. Tagline — subgenre / format label */}
-          {production.tagline && (
-            <p className={styles.tagline}>{production.tagline}</p>
-          )}
 
           {/* DA-7.6.C — Director's note (Lexical richText, rendered via RichText). */}
           {production.directorsNote && (

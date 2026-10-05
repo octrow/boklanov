@@ -19,12 +19,21 @@
   border-bottom: 1px solid var(--rule);
 }
 
-/* Filter group: on mobile a flex row of chips; on desktop a column (label above chips). */
+/* Filter group: on mobile one full-width row per group so chips wrap inside
+   it (flex-shrink: 0 pushed the role row past 390px); on desktop a column
+   (label above chips). */
 .group {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  flex-shrink: 0;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .group {
+    flex: 0 0 auto;
+  }
 }
 
 /* Inner chip row — always a horizontal flex regardless of group direction. */
@@ -53,8 +62,10 @@
   }
 }
 
-/* Visual separator between groups — shown on mobile only; labels replace it on desktop. */
+/* Group separator: groups stack on mobile and carry labels on desktop, so
+   it is never shown (a wrapped '·' read as an orphan line). */
 .sep {
+  display: none;
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
   color: var(--ink-faint);
@@ -97,8 +108,10 @@
     color var(--duration-fast) var(--easing-default);
   /* Touch target ≥44px on mobile per DESIGN §7.5 + P1 spec. */
   min-height: 44px;
+  min-width: 44px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
 }
 
 .chip:hover {

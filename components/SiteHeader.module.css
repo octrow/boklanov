@@ -120,6 +120,9 @@
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* hit area; was 21px tall */
   transition: color var(--duration-fast) var(--easing-default);
 }
 
@@ -160,13 +163,6 @@
 .localeSwitcher {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-}
-
-@media (min-width: 1024px) {
-  .localeSwitcher {
-    gap: var(--space-3);
-  }
 }
 
 .localeLink {
@@ -176,13 +172,19 @@
   /* --ink-mute (5.46:1 on paper) not --ink-faint (2.86:1 — fails AA for interactive links). */
   color: var(--ink-mute);
   text-decoration: none;
-  padding: 2px 0;
+  /* Spacing lives in the padding, not the row gap, so each code gets a
+     44px-tall hit area (was 16x25) at the same visual rhythm. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-1);
   transition: color var(--duration-fast) var(--easing-default);
 }
 
 @media (min-width: 1024px) {
   .localeLink {
     font-size: var(--font-size-nav);
+    padding: 0 6px; /* = old 12px gap */
   }
 }
 
