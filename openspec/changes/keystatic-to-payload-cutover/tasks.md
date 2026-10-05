@@ -13,7 +13,7 @@
 
 - [x] 1b.1 Upgrade Payload 3.84.1 → 3.90.2 (security release); regenerate types
 - [x] 1b.2 Add `media._objectkey` and `users.reset_password_requested_at` to Neon by hand (pg_dump backup first: `~/backups/boklanov/neon-2026-10-05-pre-payload-3.90.dump`)
-- [ ] 1b.3 Move schema changes to Payload migrations: baseline the current push-managed schema, mark it applied, commit `migrations/`, and run `payload migrate` in the deploy. In production push is off, so every future schema change needs a migration
+- [x] 1b.3 Move schema changes to Payload migrations: baseline the current push-managed schema, mark it applied, commit `migrations/`, and run `payload migrate` in the deploy. In production push is off, so every future schema change needs a migration
 - [ ] 1b.4 Separate dev and prod databases (a Neon branch for dev), so `next dev` push mode never touches the prod schema
 
 ## 2. Content delta port script

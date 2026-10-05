@@ -3,12 +3,13 @@
 Director portfolio. Next.js 15 App Router, React 19, Node 22. SSG. Lighthouse 4×100 prod (`100/100/100/100`,
 2026-05-04).
 
-Live: `boklanov.vercel.app`. Apex `boklanov.com` cutover deferred.
+Live: `boklanov.com`, served from `main` (Keystatic). This branch (`feature/payloadcms`) deploys to the
+`boklanov_v2` Vercel project until the Keystatic → Payload cutover (`openspec/changes/keystatic-to-payload-cutover`).
 
 ## Stack
 
 - `next@15` App Router, `react@19`
-- `next-intl@4` — RU default (no prefix), `/en`, `/de`
+- `next-intl@4` — EN default (no prefix), `/ru`, `/de`
 - `payload@3` + `@payloadcms/db-postgres` + `@payloadcms/storage-s3` + `@payloadcms/richtext-lexical` — admin at
   `/admin`, in-process with Next.js. Source of truth: Neon Postgres. Images on R2 via S3 adapter.
 - `@vercel/og` `satori` — per-production OG `1200x630`
@@ -50,7 +51,8 @@ public/{fonts,productions/<slug>/}
 
 Node 22.x. npm 10+.
 
-Required env vars (see `.env.example` if present, otherwise ask Daniil): `DATABASE_URL` (Neon Postgres),
+Required env vars (see `.env.example` if present, otherwise ask Daniil): `DATABASE_URL` (Neon Postgres, pooled),
+`DATABASE_URL_UNPOOLED` (direct, used by `payload migrate`),
 `PAYLOAD_SECRET`, `R2_ACCOUNT_ID` + `R2_ACCESS_KEY_ID` + `R2_SECRET_ACCESS_KEY` (+ `R2_BUCKET`, optional),
 `NEXT_PUBLIC_CDN_BASE` for prod image serving.
 
@@ -62,6 +64,7 @@ npm test                                    # lint + prettier (parallel)
 npm run lint-content                        # block ![[wikilink]] in content/**/*.md
 npm run lint-tokens                         # block --specimen-rule scope leak outside SpecimenPlate.module.css
 npm run payload                             # Payload CLI (e.g. payload migrate)
+npm run payload -- migrate:create <name>    # new schema migration — run against a local pg17, not Neon
 npm run payload:generate:types              # write payload-types.ts from collection schemas
 npm run payload:generate:importmap          # regen admin importMap (auto on predev/prebuild)
 npm run analyze                             # ANALYZE=true next build
@@ -144,11 +147,16 @@ Tokens: `app/globals.css`. Source of truth: `DESIGN.md` §3–6.
 
 ## Deploy
 
-Vercel project `octrows-projects/boklanov`. `main` auto-deploys.
+Vercel project `octrows-projects/boklanov` serves `main` (`boklanov.com`); `main` auto-deploys. The Payload branch
+deploys from `boklanovs-projects/boklanov_v2`, whose `vercel-build` runs `payload migrate` (direct URL) before
+`npm run build`.
+
+Schema: `push: false`; changes go through committed `migrations/`. Local `.env` points at the same Neon DB as the
+deploy, so `payload migrate` locally hits production. Workflow + backups: `PAYLOAD_MIGRATION_PLAN.md` §13.
 
 `git push origin main` blocked by safety hook — ask user to push.
 
-D3/D4 apex cutover (deferred): DNS at Spaceship — A `@ → 76.76.21.21`, CNAME `www → cname.vercel-dns.com`, TTL 300.
+D3/D4 apex cutover (done — `boklanov.com` is live; kept for reference): DNS at Spaceship — A `@ → 76.76.21.21`, CNAME `www → cname.vercel-dns.com`, TTL 300.
 Vercel → Settings → Domains → add `boklanov.com` + `www.boklanov.com`. R2 CDN activates after apex moves to Cloudflare
 DNS.
 

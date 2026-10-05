@@ -668,3 +668,38 @@ Two safety nets.
 - Payload docs (Context7, v3.84.0): localization, postgres adapter, s3 storage, afterChange hooks, livePreview.
 - `STATUS.md` Constraints — birthday surprise, push hook, hreflang, past-tense.
 - `MAP.md` §7 — post-implementation update prompt to run at C.
+
+## 13. Schema migrations + deploy (added 2026-10-05)
+
+Reality vs §1–§3 at this date:
+
+- **Two Vercel projects, not one.** Payload deploys from `boklanovs-projects/boklanov_v2` (see `LIGHTHOUSE_RUNBOOK.md`).
+  `octrows-projects/boklanov` serves `main` (Keystatic, live at `boklanov.com`) and fails on `feature/payloadcms`
+  because it has no Payload env. Which project becomes production is decided at cutover
+  (`openspec/changes/keystatic-to-payload-cutover`, task 3.5).
+- **One Neon database** is shared by local `.env`/`.env.local` and the `boklanov_v2` deploy (`ep-misty-darkness…`).
+
+Schema management (commit `f0b7a1f`):
+
+- `push: false` in `payload.config.ts`. Dev push used to sync the schema on `next dev`, so with a shared DB it rewrote
+  the production schema as a side effect. Production never pushes, so the Payload 3.90 upgrade 500'd `/api/media` and
+  admin login until two columns were added by hand.
+- `migrations/` is committed. `20261005_173122_baseline` is the full schema, verified by applying it to an empty PG 17
+  and diffing `pg_dump --schema-only` with Neon (identical apart from column order). Neon's `payload_migrations` has the
+  baseline marked as batch 1; the old `dev` / batch −1 row is gone.
+- `vercel-build`: `DATABASE_URL=${DATABASE_URL_UNPOOLED:-$DATABASE_URL} payload migrate && npm run build`. Migrations
+  run over the direct (unpooled) URL as §P1 intended; a failed migration fails the deploy before the build.
+- CI (`.github/workflows/build.yml`): a throwaway `postgres:17-alpine` service, `payload migrate` from scratch, then
+  `npm run build`. It proves migrations apply cleanly and the site builds on an empty DB, and it never touches Neon.
+
+Workflow for a schema change (new field, Payload upgrade that adds columns):
+
+1. Change the collection/global, then generate against a throwaway DB, not Neon:
+   `DATABASE_URL=<local pg17> npm run payload -- migrate:create <name>`.
+2. Commit the generated `migrations/<ts>_<name>.{ts,json}` + `migrations/index.ts`.
+3. Push. CI applies it to an empty DB; the `boklanov_v2` deploy applies it to Neon in `vercel-build`.
+
+Backups: `pg_dump` must be v17 (Neon is PG 17): `docker run --rm postgres:17-alpine pg_dump "<url>" -Fc > file.dump`.
+First backup: `~/backups/boklanov/neon-2026-10-05-pre-payload-3.90.dump`.
+
+Open: a separate dev database (Neon branch), so a local `payload migrate` stops hitting production (cutover task 1b.4).
