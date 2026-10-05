@@ -7,11 +7,11 @@ Portfolio site of theatre director Roman Boklanov: productions, bio, press, in R
 ### Content lifecycle
 
 **Saved**:
-An edit stored in the editor (Keystatic on `main`, Payload on `feature/payloadcms`); not yet visible to visitors.
+An edit stored in the admin. Since the Cutover a Saved edit becomes Published within seconds, without a deploy; there are no drafts. (Before it, under Keystatic, Saved meant committed but not yet deployed.)
 _Avoid_: uploaded, published (when only saved)
 
 **Published**:
-An edit visible on boklanov.com — a Saved edit plus a successful production deploy.
+An edit visible on boklanov.com.
 _Avoid_: saved, live (when only saved)
 
 **Content delta**:
