@@ -18,11 +18,11 @@
 
 ## 2. Content delta port script
 
-- [ ] 2.1 Write a per-slug port script: parse YAML at `4e7497e` and at a target ref, deep-diff the values with whitespace normalised, and output creates/updates
-- [ ] 2.2 Add a three-way check against current Payload values and report conflicts instead of writing them
-- [ ] 2.3 Map YAML field paths to Payload fields, reusing `seed-payload.ts` mapping and MDX→Lexical conversion
-- [ ] 2.4 Dry run by default; write only with `--apply`
-- [ ] 2.5 Dry-run against current `main` and review the plan (expect: create `vaikenemisen-kielioppi`, `dialogi-po-povodu-dzhaza` status, aiaccio / beware-of-the-dog / oskar-und-die-dame-in-rosa edits)
+- [x] 2.1 Write a per-slug port script: parse YAML at `4e7497e` and at a target ref, deep-diff the values with whitespace normalised, and output creates/updates
+- [x] 2.2 Add a three-way check against current Payload values and report conflicts instead of writing them
+- [x] 2.3 Map YAML field paths to Payload fields, reusing `seed-payload.ts` mapping and MDX→Lexical conversion
+- [x] 2.4 Dry run by default; write only with `--apply`
+- [x] 2.5 Dry-run against current `main` and review the plan (expect: create `vaikenemisen-kielioppi`, `dialogi-po-povodu-dzhaza` status, aiaccio / beware-of-the-dog / oskar-und-die-dame-in-rosa edits)
 
 ## 3. Cutover
 
