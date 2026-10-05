@@ -1,15 +1,16 @@
 /**
  * keystatic.config.ts — content schema for boklanov.com
  *
- * Source of truth stays at content/productions/<slug>/{index.yaml, bodyRu.mdx, bodyEn.mdx, bodyDe.mdx}.
+ * Source of truth stays at content/productions/<slug>/{index.yaml, identity/body{Ru,En,De}.mdx}.
  * Keystatic edits these files in place; the runtime in lib/content.ts reads them.
  *
  * Layout produced by this config (verified against Keystatic Discussion #361):
  *   content/productions/<slug>/
  *     index.yaml      ← all structured fields below (data: 'yaml')
- *     bodyRu.mdx      ← from fields.mdx({ ... }) named bodyRu
- *     bodyEn.mdx
- *     bodyDe.mdx
+ *     identity/
+ *       bodyRu.mdx    ← from fields.mdx({ ... }) named bodyRu inside the identity group
+ *       bodyEn.mdx
+ *       bodyDe.mdx
  *
  * Storage:
  *   - dev (`npm run dev`): `kind: 'local'` — writes to disk directly.
@@ -250,8 +251,9 @@ export default config({
 
             // === Body — full editorial per locale ===
             // Per Keystatic Discussion #361: with format.data='yaml' and no
-            // contentField, each fields.mdx is written as <fieldKey>.mdx next to
-            // index.yaml (bodyRu.mdx / bodyEn.mdx / bodyDe.mdx).
+            // contentField, each fields.mdx is written as <fieldKey>.mdx under
+            // its group's path — here identity/bodyRu.mdx (…En, …De), not next
+            // to index.yaml. lib/content.ts reads identity/ first.
             bodyRu: fields.mdx({
               label: 'Body (RU)',
               description: desc(
