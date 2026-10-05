@@ -37,4 +37,4 @@
 - [Rich text: MDX on main vs Lexical in Payload] → body MDX changes go through the existing MDX→Lexical conversion used by the seed, and the result is reviewed per slug.
 - [Merging into `main` ends Keystatic] → the branch has no Keystatic config or routes, so freeze (3.2) and port (3.3) must happen before the merge.
 - [Editor saves in Keystatic after the freeze] → disable Keystatic Cloud editing and tell the editor the cutover date in advance.
-- [Rollback] → move `boklanov.com` back to `octrows-projects/boklanov` and Instant Rollback it to the last Keystatic deploy (its build of the new `main` fails, the old deploy keeps serving), and any edits made in Payload after cutover would then need the reverse port.
+- [Rollback] → Instant Rollback `boklanov_v2` to its last Keystatic deploy of `main` (before 00bda36; the domain was on `boklanov_v2` all along), and any edits made in Payload after cutover would then need the reverse port.
