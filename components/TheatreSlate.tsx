@@ -20,6 +20,7 @@ type TheatreSlateProps = {
   theatre?: TheatreInput
   roleLabel?: string | null
   premiereDate?: string | null
+  premiereLabel?: string
   as?: 'h1' | 'h2'
 }
 
@@ -39,6 +40,7 @@ export function TheatreSlate({
   theatre,
   roleLabel,
   premiereDate,
+  premiereLabel,
   as = 'h1'
 }: TheatreSlateProps) {
   const showEn = !!titleEn && titleEn !== titleRu
@@ -70,7 +72,11 @@ export function TheatreSlate({
         </p>
       )}
       {roleLabel && <p className={styles.role}>{roleLabel}</p>}
-      {premiereDate && <p className={styles.premiereDate}>{premiereDate}</p>}
+      {premiereDate && (
+        <p className={styles.premiereDate}>
+          {premiereLabel ? `${premiereLabel} ${premiereDate}` : premiereDate}
+        </p>
+      )}
     </header>
   )
 }

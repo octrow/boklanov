@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
@@ -33,15 +32,17 @@ export function ProductionCard({
   sizes = DEFAULT_SIZES,
   coverPhoto
 }: ProductionCardProps) {
-  const t = useTranslations('productionDetail')
   const titleMain = production.title
 
-  const theatre = production.theatre.shortName ?? production.theatre.name
+  // Full name + city: curators can't decode shortName codes (BTK, TT).
+  const theatre = production.theatre.name ?? production.theatre.shortName
   const country = countryCode(production.theatre.country)
-  const premMark = production.year
-    ? `${t('premPrefix')} ${production.year}`
-    : null
-  const meta = [theatre, premMark, production.ageRating, country]
+  const meta = [
+    theatre,
+    production.theatre.city,
+    production.year,
+    production.ageRating
+  ]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
 

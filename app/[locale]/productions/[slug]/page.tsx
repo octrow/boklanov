@@ -467,6 +467,7 @@ export default async function ProductionDetailPage({
             theatre={production.theatre}
             roleLabel={roleLabel}
             premiereDate={production.premiereDate}
+            premiereLabel={t('premiereLabel')}
           />
 
           {/* Mobile-only media block — desktop renders the same trailer + photos inside the rail (see below). */}
