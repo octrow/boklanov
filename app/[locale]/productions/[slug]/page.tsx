@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
+
+import { IconArrowRight } from '@/components/IconArrowRight'
 import { notFound } from 'next/navigation'
 import * as React from 'react'
 import { RichText } from '@payloadcms/richtext-lexical/react'
@@ -21,6 +23,7 @@ import { cdnUrl } from '@/lib/cdn'
 import {
   getAllProductions,
   getProduction,
+  lexicalToText,
   pickL10n,
   type ProductionView
 } from '@/lib/content'
@@ -193,6 +196,7 @@ export default async function ProductionDetailPage({
   const t = await getTranslations('productionDetail')
   const tProductions = await getTranslations('productions')
   const tAccess = await getTranslations('accessibility')
+  const tHome = await getTranslations('home')
 
   const allProductions = await getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
@@ -262,6 +266,19 @@ export default async function ProductionDetailPage({
   const ctaEnabled = production.bookingCta !== false
   const ctaUrl = production.bookingCtaUrl || mailto
   const ctaLabel = production.bookingCtaLabel || t('bookingCta')
+  // The synopsis is often the body's first sentence (lina-marlina): print it
+  // once, in the body.
+  const norm = (x: string) =>
+    x
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim()
+      .toLowerCase()
+  const synopsisInBody =
+    !!production.synopsis &&
+    norm(lexicalToText(production.body)).startsWith(
+      norm(production.synopsis).slice(0, 60)
+    )
+  const showSynopsis = !!production.synopsis && !synopsisInBody
 
   const schema = creativeWorkSchema(production, slug, locale)
 
@@ -482,7 +499,7 @@ export default async function ProductionDetailPage({
           )}
 
           {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
-          {production.synopsis &&
+          {showSynopsis &&
             (locale === 'de' ? (
               <Marginalia note={t('deForthcoming')}>
                 <p className={styles.synopsis}>{production.synopsis}</p>
@@ -547,10 +564,10 @@ export default async function ProductionDetailPage({
             </div>
           )}
 
-          {/* 5. Credits — DA-2.A: leader-dot <dl> table, collapsed by default
-              (same disclosure pattern as TourRider §4.4). */}
+          {/* 5. Credits — DA-2.A: leader-dot <dl> table. Open by default: the
+              team is the strongest fact a curator gets here. */}
           {production.credits.length > 0 && (
-            <details className={styles.creditsBlock}>
+            <details className={styles.creditsBlock} open>
               <summary className={styles.creditsSummary}>
                 <span className={styles.creditsSummaryLabel}>
                   {t('credits')}
@@ -736,6 +753,17 @@ export default async function ProductionDetailPage({
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {/* 12. Closing invite (desktop; on mobile the fixed CTA is it). */}
+          {ctaEnabled && (
+            <section className={styles.invite}>
+              <h2 className={styles.inviteTitle}>{tHome('inviteTitle')}</h2>
+              <a className={styles.inviteCta} href={ctaUrl}>
+                <span>{ctaLabel}</span>
+                <IconArrowRight size={14} />
+              </a>
             </section>
           )}
         </div>

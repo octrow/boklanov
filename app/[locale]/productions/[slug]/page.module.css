@@ -693,3 +693,59 @@ dd.creditsName {
 .bodyProse em {
   font-style: italic;
 }
+
+/* 12. Closing invite — same band as /about. Desktop only: on mobile the
+   fixed sticky CTA already carries the invitation. */
+.invite {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .invite {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin-top: var(--space-8);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--rule);
+  }
+}
+
+.inviteTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  text-wrap: balance;
+  color: var(--ink);
+  margin: 0;
+}
+
+.inviteCta {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    color var(--duration-fast) var(--easing-default);
+}
+
+.inviteCta:hover {
+  background: var(--accent);
+  color: var(--ink-on-accent);
+}
+
+.inviteCta:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}

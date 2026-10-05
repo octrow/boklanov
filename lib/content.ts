@@ -256,7 +256,7 @@ const asL10n = (v: unknown): L10nObj => {
 }
 
 /** One-line richText fields (tagline, synopsis) render as plain text. */
-const lexicalToText = (v: unknown): string => {
+export const lexicalToText = (v: unknown): string => {
   const walk = (n: unknown): string => {
     const node = n as { type?: unknown; text?: unknown; children?: unknown[] }
     if (typeof node?.text === 'string') return node.text
