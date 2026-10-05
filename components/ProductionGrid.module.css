@@ -1,7 +1,7 @@
 /* DESIGN.md §6 + §15.1 — productions grid.
-   2-col mobile, 3-col ≥768px, 4-col ≥1024px (DESIGN ProductionGrid 2/3/4:
-   a 1-col phone list of 55 posters was ~20k px). Gutters 20/24/32 per
-   tokens; mobile uses a tighter gap so two posters fit at 390px. */
+   2-col below 1024px (a 1-col phone list of 55 posters was ~20k px),
+   3-col desktop: posters stay large (decided 2026-10-06, 4-col was too
+   small). Gutters per tokens; mobile uses a tighter gap. */
 
 .grid {
   display: grid;
@@ -13,7 +13,6 @@
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--gutter-tablet);
     row-gap: var(--space-7);
   }
@@ -21,7 +20,7 @@
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--gutter-desktop);
   }
 }
