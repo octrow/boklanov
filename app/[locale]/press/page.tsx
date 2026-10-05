@@ -50,6 +50,17 @@ function outletFromUrl(url: string): string {
   }
 }
 
+/** A bare homepage link ("sobaka.ru" → http://sobaka.ru/) points at no
+ *  article: hide it on the site, the row stays in the admin. */
+function isArticle(url: string): boolean {
+  try {
+    const u = new URL(url)
+    return u.pathname.replace(/\/+$/, '') !== '' || u.search !== ''
+  } catch {
+    return false
+  }
+}
+
 export default async function PressPage({
   params
 }: {
@@ -61,67 +72,70 @@ export default async function PressPage({
   const t = await getTranslations('press')
   const productions = await getAllProductions(locale)
 
-  interface PressItem {
-    title: string
-    url: string
-    outlet: string
-    productionSlug: string
-    productionTitle: string
-  }
-
-  const items: PressItem[] = []
-  for (const prod of productions) {
-    for (const item of prod.press) {
-      items.push({
-        title: item.title,
-        url: item.url,
-        outlet: item.outlet ?? outletFromUrl(item.url),
-        productionSlug: prod.slug,
-        productionTitle: prod.title
-      })
-    }
-  }
+  // One group per production, newest first (undated last), so the
+  // production, year and city are said once instead of on every row.
+  const groups = productions
+    .map((prod) => ({
+      prod,
+      items: prod.press
+        .filter((item) => isArticle(item.url))
+        .map((item) => ({
+          ...item,
+          outlet: item.outlet ?? outletFromUrl(item.url)
+        }))
+    }))
+    .filter((g) => g.items.length > 0)
+    .sort(
+      (a, b) =>
+        (b.prod.year ?? -Infinity) - (a.prod.year ?? -Infinity) ||
+        a.prod.title.localeCompare(b.prod.title)
+    )
 
   return (
     <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
+      {locale !== 'ru' && groups.length > 0 && (
+        <p className={styles.note}>{t('originalNote')}</p>
+      )}
 
-      {items.length === 0 ? (
+      {groups.length === 0 ? (
         <EmptyState body={t('empty')} />
       ) : (
-        <div className={styles.grid}>
-          {items.map((item, i) => (
-            <article key={i} className={styles.card}>
-              <blockquote className={styles.quote}>
-                <a
-                  href={item.url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={styles.quoteLink}
-                >
-                  {item.title}
-                </a>
-              </blockquote>
-              <footer className={styles.cardFooter}>
-                <a
-                  href={item.url}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={styles.outletLink}
-                >
-                  {item.outlet}
-                </a>
-                <span className={styles.separator}>·</span>
-                <Link
-                  href={`/productions/${item.productionSlug}`}
-                  className={styles.productionRef}
-                >
-                  {item.productionTitle}
-                </Link>
-              </footer>
-            </article>
-          ))}
-        </div>
+        groups.map(({ prod, items }) => (
+          <section key={prod.slug} className={styles.group}>
+            <h2 className={styles.groupHead}>
+              <Link
+                href={`/productions/${prod.slug}`}
+                className={styles.groupLink}
+              >
+                {prod.title}
+              </Link>
+              <span className={styles.groupMeta}>
+                {[prod.year, prod.theatre.city].filter(Boolean).join(' · ')}
+              </span>
+            </h2>
+            <ul className={styles.list}>
+              {items.map((item, i) => (
+                <li key={i}>
+                  <a
+                    href={item.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={styles.item}
+                  >
+                    <span className={styles.headline}>{item.title}</span>
+                    <span className={styles.outlet}>
+                      {item.outlet}
+                      {item.language && item.language !== locale
+                        ? ` · ${item.language.toUpperCase()}`
+                        : ''}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
       )}
     </main>
   )

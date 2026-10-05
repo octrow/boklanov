@@ -88,7 +88,8 @@
   },
   "press": {
     "title": "Presse",
-    "empty": "Keine Pressematerialien"
+    "empty": "Keine Pressematerialien",
+    "originalNote": "Die Überschriften sind übersetzt. Die Artikel sind in der Originalsprache, meist Russisch."
   },
   "awards": {
     "title": "Auszeichnungen & Festivals",

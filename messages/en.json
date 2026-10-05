@@ -88,7 +88,8 @@
   },
   "press": {
     "title": "press",
-    "empty": "No press materials"
+    "empty": "No press materials",
+    "originalNote": "Headlines are translated. The articles are in their original language, mostly Russian."
   },
   "awards": {
     "title": "awards & festivals",
