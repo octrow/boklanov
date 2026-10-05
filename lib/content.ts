@@ -509,11 +509,14 @@ function readLqip(slug: string): {
 }
 
 // ---------------------------------------------------------------------------
-// Gallery rows whose file was never uploaded (68 at 2026-10-06) render as
-// empty numbered slots. Drop them from the site, keep them in the admin.
-// One ListObjectsV2 sweep over the bucket (not per-file HEADs: r2.dev
-// rate-limits those), only when the cache refills (deploy / revalidate).
-// Any listing error keeps every photo, so an R2 hiccup can't empty galleries.
+// Images are checked against one ListObjectsV2 sweep over the bucket (not
+// per-file HEADs: r2.dev rate-limits those), only when the cache refills
+// (deploy / revalidate). Any listing error keeps everything as is, so an R2
+// hiccup can't empty galleries.
+//  - Gallery rows whose file was never uploaded (68 at 2026-10-06) render as
+//    empty numbered slots: drop them from the site, keep them in the admin.
+//  - Admin uploads (uploads/) get no baked `.<W>.avif` variants, so the
+//    derived srcset 404s: fall back to the original file.
 // ---------------------------------------------------------------------------
 
 async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
@@ -545,21 +548,26 @@ async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
     } while (token)
     return keys
   } catch (err) {
-    console.warn('[content] R2 listing failed, keeping all gallery photos', err)
+    console.warn('[content] R2 listing failed, skipping image checks', err)
     return null
   }
 }
 
-async function dropMissingGalleryPhotos(prods: Production[]): Promise<void> {
-  const keys = await listBucketKeys('productions/')
+async function checkImagesInR2(prods: Production[]): Promise<void> {
+  const keys = await listBucketKeys('')
   if (!keys) return
-  const missing = (src: string) =>
-    !/^https?:/i.test(src) && !keys.has(src.replace(/^\/+/, ''))
+  const has = (src: string) =>
+    /^https?:/i.test(src) || keys.has(src.replace(/^\/+/, ''))
+  const unbaked = <T extends { variants: ImageVariants | null }>(img: T): T =>
+    img.variants && !has(img.variants.w420) ? { ...img, variants: null } : img
   let hidden = 0
   for (const p of prods) {
-    const kept = p.gallery.filter((g) => !missing(g.src))
+    const kept = p.gallery.filter((g) => has(g.src))
     hidden += p.gallery.length - kept.length
-    p.gallery = kept
+    p.gallery = kept.map(unbaked)
+    p.poster = unbaked(p.poster)
+    if (p.productionsPhoto) p.productionsPhoto = unbaked(p.productionsPhoto)
+    if (p.featuredPhoto) p.featuredPhoto = unbaked(p.featuredPhoto)
   }
   if (hidden)
     console.warn(`[content] hiding ${hidden} gallery photo(s) missing in R2`)
@@ -591,7 +599,7 @@ const fetchAllProductions = unstable_cache(
       prod.poster.height = lqip.height
       return prod
     })
-    await dropMissingGalleryPhotos(out)
+    await checkImagesInR2(out)
     // Same sort as the legacy loader: featured → year desc → slug asc.
     out.sort((a, b) => {
       if (a.featured !== b.featured) return a.featured ? -1 : 1
