@@ -126,7 +126,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `${base}/${locale}/productions/${slug}`
   const ogImage = `${base}/api/og/${slug}?locale=${locale}`
 
-  const descriptionParts = [production.title, production.theatre.name, production.year]
+  const descriptionParts = [
+    production.title,
+    production.theatre.name,
+    production.year
+  ]
     .filter(Boolean)
     .join(' · ')
   const description = production.synopsis?.trim() || descriptionParts
@@ -200,7 +204,8 @@ export default async function ProductionDetailPage({
   const chips: string[] = []
   if (production.ageRating) chips.push(production.ageRating)
   if (production.year) chips.push(String(production.year))
-  if (production.durationMin) chips.push(`${production.durationMin} ${t('riderMin')}`)
+  if (production.durationMin)
+    chips.push(`${production.durationMin} ${t('riderMin')}`)
   if (country) chips.push(country)
 
   const roleLabelMap: Record<string, string> = {
@@ -276,7 +281,7 @@ export default async function ProductionDetailPage({
           const posterAlt =
             [
               production.role.join(' / '),
-              titleRu ?? titleEn ?? slug,
+              production.title || slug,
               production.theatre.name ?? production.theatre.shortName,
               production.year
             ]

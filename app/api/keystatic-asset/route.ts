@@ -34,6 +34,7 @@
 import { NextResponse } from 'next/server'
 import { writeFile, mkdir, unlink } from 'node:fs/promises'
 import path from 'node:path'
+import { transliterate } from '@/lib/translit'
 
 const ALLOWED_EXT = new Set([
   '.jpg',
@@ -213,7 +214,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'file too large' }, { status: 413 })
   }
 
-  const filename = sanitizeSegment(file.name) || `upload${ext}`
+  // Transliterate first so Cyrillic names stay readable ("Афиша 2026.webp" →
+  // "afisha-2026-…") instead of collapsing to dashes. R2 objects are cached
+  // `immutable`, so a timestamp suffix keeps two uploads with the same name
+  // from silently overwriting each other's key.
+  const base =
+    sanitizeSegment(
+      transliterate(path.basename(file.name, path.extname(file.name)))
+    )
+      .replace(/-{2,}/g, '-')
+      .replace(/^-|-$/g, '') || 'upload'
+  const filename = `${base}-${Date.now().toString(36)}${ext}`
   const src = `/${directory}/${filename}`
   const r2Key = `${directory}/${filename}`
   const contentType = MIME[ext] ?? 'application/octet-stream'

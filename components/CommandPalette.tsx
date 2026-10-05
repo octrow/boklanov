@@ -5,56 +5,9 @@ import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import type { SearchItem } from '@/lib/search'
+import { transliterate } from '@/lib/translit'
 
 import styles from './CommandPalette.module.css'
-
-// ---------------------------------------------------------------------------
-// Transliteration helpers — Cyr ↔ Lat for fuzzy search
-// ---------------------------------------------------------------------------
-
-const CYR_TO_LAT: Record<string, string> = {
-  а: 'a',
-  б: 'b',
-  в: 'v',
-  г: 'g',
-  д: 'd',
-  е: 'e',
-  ё: 'yo',
-  ж: 'zh',
-  з: 'z',
-  и: 'i',
-  й: 'j',
-  к: 'k',
-  л: 'l',
-  м: 'm',
-  н: 'n',
-  о: 'o',
-  п: 'p',
-  р: 'r',
-  с: 's',
-  т: 't',
-  у: 'u',
-  ф: 'f',
-  х: 'kh',
-  ц: 'ts',
-  ч: 'ch',
-  ш: 'sh',
-  щ: 'shch',
-  ъ: '',
-  ы: 'y',
-  ь: '',
-  э: 'e',
-  ю: 'yu',
-  я: 'ya'
-}
-
-function transliterate(s: string): string {
-  return s
-    .toLowerCase()
-    .split('')
-    .map((c) => CYR_TO_LAT[c] ?? c)
-    .join('')
-}
 
 function searchKey(s: string): string {
   const lower = s.toLowerCase()
