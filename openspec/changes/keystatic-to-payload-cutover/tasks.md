@@ -28,9 +28,9 @@
 
 - [ ] 3.1 Agree a cutover date with the editor and announce the freeze
 - [ ] 3.2 Freeze Keystatic Cloud editing
-- [ ] 3.3 Run the port against frozen `main`: dry run, resolve conflicts, then `--apply` (`ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`)
+- [ ] 3.3 Record the frozen `main` sha; run the port with `--target <sha>`: dry run, resolve conflicts, then `--apply` (`ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`)
 - [ ] 3.4 Verify every delta slug on the Payload preview in RU/EN/DE
-- [ ] 3.5 Promote the Payload build to production
+- [ ] 3.5 Promote: on the branch `git merge -s ours <frozen sha>`, PR into `main` merged with a merge commit (not squash), check `boklanovv2.vercel.app`, move `boklanov.com` to `boklanovs-projects/boklanov_v2`
 - [ ] 3.6 Smoke-test production: sitemap URLs 200, `/api/og/*` 200 `image/png`, `/feed`, an admin save Published without a deploy
 
 ## 4. Editor handover

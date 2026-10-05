@@ -28,7 +28,7 @@ Keep for the Keystatic → Payload cutover work on boklanov:
    - Port dry run on a PG17 restore of prod: 12 updates + 165 fills + 1 create (vaikenemisen-kielioppi), 0 conflicts, idempotent.
    - Vercel project `boklanov` always fails on feature/payloadcms (no Payload env). This predates the session.
    - zsh: quote globs in args, and don't word-split a $var package list.
-5. Open tasks: 1.5, 1b.4, groups 3–4 in openspec/changes/keystatic-to-payload-cutover/tasks.md.
+5. Open tasks: groups 3–4 in openspec/changes/keystatic-to-payload-cutover/tasks.md.
 
 Drop: tool output, intermediate diffs, search failures, verification command details.
 ```
@@ -58,7 +58,7 @@ Open tasks, in suggested order:
 3. Group 3, cutover. Agree the date with the user, freeze Keystatic, fresh pg17 backup, then
    `npm run payload:port-delta -- --fill-missing` (dry run; resolve conflicts), then `--apply`
    (the user runs this with `ALLOW_PROD_DB=1 DATABASE_URL="$NEON_DATABASE_URL_UNPOOLED"`: auto mode blocks prod DB writes). Verify delta slugs on the preview in RU/EN/DE.
-   Decide which Vercel project becomes production. Promote, then smoke-test: sitemap 200, /api/og/* image/png, /feed, an admin save Published without a deploy.
+   Production = `boklanov_v2`; merge via `merge -s ours` + merge commit (decided, see design.md). Promote, then smoke-test: sitemap 200, /api/og/* image/png, /feed, an admin save Published without a deploy.
 4. Group 4: editor handover (admin URL + Saved vs Published walkthrough for Roma).
 
 Rules for this work:
