@@ -31,7 +31,8 @@ The work of an independent director of puppet, object and children's theatre, wi
 - Routes: `/`, `/productions`, `/productions/[slug]`, `/about`, `/awards`, `/press`, `/archive`, `/contact`, `/feed`.
 - Locales: ru (default), en, de.
 - Roman left Russia in 2022. Russian productions are described in the past tense, never as current repertoire.
-- Undecided: whether press stays in its original language, and how complete DE should be. Not confirmed in the 2026-10-06 init; earlier brief said press untranslated, DE partial.
+- Press and awards are shown fully translated on EN pages (decided 2026-10-06). DE completeness is still undecided.
+- Contact: Telegram and Instagram stay the primary channels, email secondary (May 2026 brief, reconfirmed 2026-10-06).
 
 ## Brand Commitments
 
