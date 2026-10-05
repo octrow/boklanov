@@ -247,10 +247,29 @@ const asL10n = (v: unknown): L10nObj => {
   if (typeof v !== 'object') return {}
   const o = v as Record<string, unknown>
   const out: L10nObj = {}
-  if (typeof o.ru === 'string') out.ru = o.ru
-  if (typeof o.en === 'string') out.en = o.en
-  if (typeof o.de === 'string') out.de = o.de
+  for (const l of ['ru', 'en', 'de'] as const) {
+    const val = o[l]
+    const text = typeof val === 'string' ? val : lexicalToText(val) || null
+    if (text !== null) out[l] = text
+  }
   return out
+}
+
+/** One-line richText fields (tagline, synopsis) render as plain text. */
+const lexicalToText = (v: unknown): string => {
+  const walk = (n: unknown): string => {
+    const node = n as { type?: unknown; text?: unknown; children?: unknown[] }
+    if (typeof node?.text === 'string') return node.text
+    // Blocks are joined with a space, inline text nodes are not.
+    return (node?.children ?? [])
+      .map(walk)
+      .join(node.type === 'root' ? ' ' : '')
+  }
+  return v && typeof v === 'object' && 'root' in v
+    ? walk((v as { root: unknown }).root)
+        .replace(/\s+/g, ' ')
+        .trim()
+    : ''
 }
 
 const asString = (v: unknown): string => (typeof v === 'string' ? v : '')
