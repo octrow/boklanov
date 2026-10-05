@@ -115,6 +115,7 @@
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
   margin: 0;
+  max-width: var(--max-width-prose); /* align with the bio column; was ~125ch */
 }
 
 /* ── Photos ──────────────────────────────────────────────────────────── */

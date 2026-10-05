@@ -59,7 +59,7 @@ export function TypographicCover({
       data-cover-style='typographic'
       aria-hidden='true'
     >
-      <h4 className={styles.title}>{title}</h4>
+      <p className={styles.title}>{title}</p>
       {synopsisLine && <p className={styles.synopsis}>{synopsisLine}</p>}
       {metaParts.length > 0 && (
         <p className={styles.meta}>{metaParts.join(' · ')}</p>
