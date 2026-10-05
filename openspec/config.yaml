@@ -1,0 +1,42 @@
+schema: spec-driven
+
+context: |
+  Portfolio site of theatre director Roman Boklanov (productions, bio, press), RU/EN/DE.
+  Stack: Next.js App Router + next-intl (localePrefix as-needed, default en), deployed on Vercel.
+  Production branch `main`: content in content/productions/*.yaml edited via Keystatic Cloud
+  (commits by keystatic-cloud[bot] trigger prod deploys). Branch `feature/payloadcms`: content
+  moves to Payload 3 + PostgreSQL. Media lives in Cloudflare R2 behind cdn.boklanov.com;
+  public/productions is a git backup of R2 (backup-r2-to-git workflow), not a serving path.
+  Domain glossary: CONTEXT.md (Saved vs Published, Content delta, Cutover).
+  Conventional commits (`<type>: <description>`).
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

@@ -1,0 +1,32 @@
+# Tasks
+
+## 1. Port main fixes to feature/payloadcms
+
+- [ ] 1.1 Confirm `outputFileTracingExcludes` for `public/productions` media is present (df820fe); keep `lqip.json` traced
+- [ ] 1.2 Add `outputFileTracingIncludes` for `@fontsource` woff files under `/api/og/**`; verify the OG route's `.nft.json` lists them
+- [ ] 1.3 Add `lib/translit.ts` and use it in `components/CommandPalette.tsx`
+- [ ] 1.4 Transliterate and timestamp-suffix upload names in `app/api/r2-asset/route.ts`
+- [ ] 1.5 Decide whether Payload `Media` uploads need the same naming (Payload keeps Unicode names and dedupes with `-1`); apply via a `beforeOperation` hook if yes
+- [ ] 1.6 Use the page-locale title for the poster alt in `app/[locale]/productions/[slug]/page.tsx`
+
+## 2. Content delta port script
+
+- [ ] 2.1 Write a per-slug port script: parse YAML at `4e7497e` and at a target ref, deep-diff the values with whitespace normalised, and output creates/updates
+- [ ] 2.2 Add a three-way check against current Payload values and report conflicts instead of writing them
+- [ ] 2.3 Map YAML field paths to Payload fields, reusing `seed-payload.ts` mapping and MDX→Lexical conversion
+- [ ] 2.4 Dry run by default; write only with `--apply`
+- [ ] 2.5 Dry-run against current `main` and review the plan (expect: create `vaikenemisen-kielioppi`, `dialogi-po-povodu-dzhaza` status, aiaccio / beware-of-the-dog / oskar-und-die-dame-in-rosa edits)
+
+## 3. Cutover
+
+- [ ] 3.1 Agree a cutover date with the editor and announce the freeze
+- [ ] 3.2 Freeze Keystatic Cloud editing
+- [ ] 3.3 Run the port against frozen `main`: dry run, resolve conflicts, then `--apply`
+- [ ] 3.4 Verify every delta slug on the Payload preview in RU/EN/DE
+- [ ] 3.5 Promote the Payload build to production
+- [ ] 3.6 Smoke-test production: sitemap URLs 200, `/api/og/*` 200 `image/png`, `/feed`, an admin save Published without a deploy
+
+## 4. Editor handover
+
+- [ ] 4.1 Send the editor the admin URL and a short Saved vs Published walkthrough
+- [ ] 4.2 Remove or archive the Keystatic config and routes once rollback is no longer needed
