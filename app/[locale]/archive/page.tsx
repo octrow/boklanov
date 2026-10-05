@@ -60,7 +60,7 @@ export default async function ArchivePage({
     .sort((a, b) => (a.year ?? Infinity) - (b.year ?? Infinity)) // undated last
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {entries.length === 0 ? (

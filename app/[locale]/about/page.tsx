@@ -236,7 +236,7 @@ export default async function AboutPage({
   const schema = personSchema(locale, leadParagraphText)
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

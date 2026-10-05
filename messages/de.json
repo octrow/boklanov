@@ -142,9 +142,10 @@
   },
   "notFound": {
     "heading": "seite nicht gefunden",
-    "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "body": "Unter dieser Adresse gibt es nichts. Alle Inszenierungen sind hier, oder schreiben Sie Roman direkt.",
     "home": "Startseite",
-    "productions": "alle Inszenierungen"
+    "productions": "alle Inszenierungen",
+    "contact": "Kontakt"
   },
   "footer": {
     "colophon": "AUSGABE 2026",
@@ -182,7 +183,8 @@
     "photoDialogOf": "Foto {index} von {total}",
     "prevPhoto": "Vorheriges Foto",
     "nextPhoto": "Nächstes Foto",
-    "playTrailer": "Trailer abspielen"
+    "playTrailer": "Trailer abspielen",
+    "skipToContent": "Zum Inhalt springen"
   },
   "common": {
     "photo": "Foto"

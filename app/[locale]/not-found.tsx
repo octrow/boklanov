@@ -10,7 +10,7 @@ export default async function NotFound() {
   const tA11y = await getTranslations('accessibility')
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <p className={styles.code}>404</p>
       <h1 className={styles.heading}>{t('heading')}</h1>
       <p className={styles.body}>{t('body')}</p>
@@ -20,6 +20,9 @@ export default async function NotFound() {
         </Link>
         <Link href='/productions' className={styles.link}>
           {t('productions')}
+        </Link>
+        <Link href='/contact' className={styles.link}>
+          {t('contact')}
         </Link>
       </nav>
     </main>

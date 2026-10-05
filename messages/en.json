@@ -142,9 +142,10 @@
   },
   "notFound": {
     "heading": "page not found",
-    "body": "The page you're looking for doesn't exist or has been moved.",
+    "body": "This address leads nowhere. The productions are all here, or write to Roman directly.",
     "home": "home",
-    "productions": "all productions"
+    "productions": "all productions",
+    "contact": "contact"
   },
   "footer": {
     "colophon": "2026 EDITION",
@@ -182,7 +183,8 @@
     "photoDialogOf": "Photo {index} of {total}",
     "prevPhoto": "Previous photo",
     "nextPhoto": "Next photo",
-    "playTrailer": "Play trailer"
+    "playTrailer": "Play trailer",
+    "skipToContent": "Skip to content"
   },
   "common": {
     "photo": "Photo"

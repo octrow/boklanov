@@ -284,7 +284,7 @@ export default async function ProductionDetailPage({
   }))
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}

@@ -81,7 +81,7 @@ export default async function ContactPage({
   )}`
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {intro && <p className={styles.intro}>{intro}</p>}

@@ -55,6 +55,10 @@ export function ProductionCard({
   ]
     .filter(Boolean)
     .join(', ')
+  // A cover that fails to load (missing file, R2 hiccup) falls back to the
+  // typographic cover instead of showing alt text in a dark box.
+  const [failed, setFailed] = React.useState(false)
+  const onError = () => setFailed(true)
   const effectiveCover =
     (coverPhoto?.src ? coverPhoto : null) ?? production.poster
   const alt = effectiveCover.credit
@@ -85,7 +89,7 @@ export function ProductionCard({
     <Link href={`/productions/${production.slug}`} className={styles.card}>
       <div className={styles.cover} style={coverStyle}>
         {sticker}
-        {effectiveCover.src && variants ? (
+        {failed ? null : effectiveCover.src && variants ? (
           // Pre-baked AVIF variants live alongside the source in R2 — serve
           // them directly via `<img srcset>` so we bypass `/_next/image`
           // entirely. See PAYLOAD_IMAGE_VARIANTS_PLAN.md.
@@ -100,6 +104,11 @@ export function ProductionCard({
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : undefined}
             style={{ objectFit: 'cover' }}
+            onError={onError}
+            // An error before hydration never reaches onError; catch it here.
+            ref={(el) => {
+              if (el?.complete && el.naturalWidth === 0) setFailed(true)
+            }}
           />
         ) : effectiveCover.src ? (
           <Image
@@ -115,8 +124,10 @@ export function ProductionCard({
             style={{ objectFit: 'cover' }}
             priority={priority}
             fetchPriority={priority ? 'high' : undefined}
+            onError={onError}
           />
-        ) : (
+        ) : null}
+        {(failed || !effectiveCover.src) && (
           <TypographicCover
             slug={production.slug}
             title={titleMain ?? production.slug}

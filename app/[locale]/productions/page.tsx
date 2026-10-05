@@ -84,7 +84,7 @@ export default async function ProductionsIndexPage({
   }
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>{t('title')}</h1>
       </header>

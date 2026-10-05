@@ -73,7 +73,7 @@ export default async function HomePage({
     )?.variants ?? null
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       {lcpVariants && (
         <link
           rel='preload'

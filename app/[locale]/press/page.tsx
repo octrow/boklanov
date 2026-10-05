@@ -83,7 +83,7 @@ export default async function PressPage({
   }
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {items.length === 0 ? (

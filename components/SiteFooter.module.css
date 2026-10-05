@@ -39,7 +39,9 @@
 .col {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  align-items: flex-start;
+  /* Links carry their own 44px height (DESIGN §7.5), so no gap. */
+  gap: 0;
 }
 
 /* ── Links ────────────────────────────────────────────────────────────── */
@@ -51,6 +53,9 @@
   color: var(--ink-mute);
   text-decoration: none;
   transition: color var(--duration-fast) var(--easing-default);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .footerLink:hover {
@@ -89,4 +94,8 @@
 }
 
 /* DA-7.6.B — Hide nav columns on print; keep colophon */
-@media print { .inner { display: none; } }
+@media print {
+  .inner {
+    display: none;
+  }
+}

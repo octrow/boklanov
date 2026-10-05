@@ -100,6 +100,7 @@ export default async function LocaleLayout({
 
   const productions = await getAllProductions(locale)
   const searchItems = buildSearchIndex(productions)
+  const tA11y = await getTranslations({ locale, namespace: 'accessibility' })
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -163,6 +164,9 @@ export default async function LocaleLayout({
         )}
       </head>
       <body>
+        <a href='#main' className='skip-link'>
+          {tA11y('skipToContent')}
+        </a>
         <DuotonePosterSprite />
         <NextIntlClientProvider>
           <CommandPaletteProvider items={searchItems} locale={locale}>

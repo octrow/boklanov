@@ -66,7 +66,7 @@ export default async function AwardsPage({
     }))
 
   return (
-    <main className={styles.page}>
+    <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
 
       {groups.length === 0 ? (
