@@ -244,3 +244,54 @@
   color: var(--ink-mute);
   margin: var(--space-2) 0 0;
 }
+
+/* ── Invitation (same grammar as the home band) ──────────────────────── */
+
+.invite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--rule);
+  max-width: var(--max-width-prose);
+}
+
+.inviteTitle {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-relaxed);
+  text-wrap: balance;
+  color: var(--ink);
+  margin: 0;
+}
+
+.inviteCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  transition:
+    color var(--duration-fast) var(--easing-default),
+    background var(--duration-fast) var(--easing-default);
+}
+
+.inviteCta:hover {
+  background: var(--accent);
+  color: var(--ink-on-accent);
+}
+
+@media (min-width: 768px) {
+  .inviteCta {
+    align-self: flex-start;
+  }
+}

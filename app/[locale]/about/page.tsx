@@ -8,10 +8,12 @@ import type {
   SerializedLexicalNode
 } from '@payloadcms/richtext-lexical/lexical'
 
+import { IconArrowRight } from '@/components/IconArrowRight'
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
+import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
 
@@ -298,7 +300,10 @@ export default async function AboutPage({
       <section className={styles.geographySection}>
         <p className={styles.geographyLabel}>{tAbout('stagedIn')}</p>
         <p className={styles.geographyCities}>
-          {(tHome.raw('stagingCities') as string[]).filter(Boolean).join(' · ')}
+          {/* nbsp glues each '·' to the city before it: no line starts with a dot */}
+          {(tHome.raw('stagingCities') as string[])
+            .filter(Boolean)
+            .join('\u00a0· ')}
         </p>
       </section>
 
@@ -353,6 +358,14 @@ export default async function AboutPage({
           </div>
         </section>
       )}
+      {/* Curator path (PRODUCT.md): About must not end in a dead end */}
+      <section className={styles.invite}>
+        <p className={styles.inviteTitle}>{tHome('inviteTitle')}</p>
+        <Link href='/contact' className={styles.inviteCta}>
+          <span>{tHome('inviteCta')}</span>
+          <IconArrowRight size={14} />
+        </Link>
+      </section>
     </main>
   )
 }
