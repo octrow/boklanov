@@ -81,9 +81,17 @@ The commit is in brackets.
 19. Desktop grid back to 3 columns so posters stay large (4 columns made them
     too small). [1756875]
 
+20. /awards:
+    - award names in the body face instead of mono;
+    - city and category always under the name;
+    - the "×N" count is gone.
+
+    No "Selected honours" block above the list (decided 2026-10-06).
+    [4811385]
+
 ## Next
 
-- `/impeccable typeset` (/awards), then `polish`.
+- `/impeccable polish`.
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
   account.
