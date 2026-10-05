@@ -509,6 +509,63 @@ function readLqip(slug: string): {
 }
 
 // ---------------------------------------------------------------------------
+// Gallery rows whose file was never uploaded (68 at 2026-10-06) render as
+// empty numbered slots. Drop them from the site, keep them in the admin.
+// One ListObjectsV2 sweep over the bucket (not per-file HEADs: r2.dev
+// rate-limits those), only when the cache refills (deploy / revalidate).
+// Any listing error keeps every photo, so an R2 hiccup can't empty galleries.
+// ---------------------------------------------------------------------------
+
+async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
+  const { S3Client, ListObjectsV2Command } = await import('@aws-sdk/client-s3')
+  const bucket = process.env.S3_BUCKET
+  if (!bucket || !process.env.S3_ENDPOINT) return null
+  const client = new S3Client({
+    endpoint: process.env.S3_ENDPOINT,
+    region: process.env.S3_REGION || 'auto',
+    credentials: {
+      accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
+    },
+    forcePathStyle: true
+  })
+  const keys = new Set<string>()
+  try {
+    let token: string | undefined
+    do {
+      const res = await client.send(
+        new ListObjectsV2Command({
+          Bucket: bucket,
+          Prefix: prefix,
+          ContinuationToken: token
+        })
+      )
+      for (const o of res.Contents ?? []) if (o.Key) keys.add(o.Key)
+      token = res.IsTruncated ? res.NextContinuationToken : undefined
+    } while (token)
+    return keys
+  } catch (err) {
+    console.warn('[content] R2 listing failed, keeping all gallery photos', err)
+    return null
+  }
+}
+
+async function dropMissingGalleryPhotos(prods: Production[]): Promise<void> {
+  const keys = await listBucketKeys('productions/')
+  if (!keys) return
+  const missing = (src: string) =>
+    !/^https?:/i.test(src) && !keys.has(src.replace(/^\/+/, ''))
+  let hidden = 0
+  for (const p of prods) {
+    const kept = p.gallery.filter((g) => !missing(g.src))
+    hidden += p.gallery.length - kept.length
+    p.gallery = kept
+  }
+  if (hidden)
+    console.warn(`[content] hiding ${hidden} gallery photo(s) missing in R2`)
+}
+
+// ---------------------------------------------------------------------------
 // Cached fetchers — tagged for revalidation by hooks/revalidate.ts
 // ---------------------------------------------------------------------------
 
@@ -534,6 +591,7 @@ const fetchAllProductions = unstable_cache(
       prod.poster.height = lqip.height
       return prod
     })
+    await dropMissingGalleryPhotos(out)
     // Same sort as the legacy loader: featured → year desc → slug asc.
     out.sort((a, b) => {
       if (a.featured !== b.featured) return a.featured ? -1 : 1
