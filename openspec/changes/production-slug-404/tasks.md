@@ -12,5 +12,5 @@
 
 ## 3. Ship
 
-- [ ] 3.1 Commit to main (`fix: unknown production slugs return the site's 404, not 500`), push, wait for the boklanov_v2 status to be success; verify `scripts/check-missing-pages.sh` passes against https://boklanov.com and, in a browser, `document.title` on `/productions/xyz` and `/de/nope` is the localized not-found title (the raw server HTML keeps the layout title; accepted 2026-10-06)
-- [ ] 3.2 Verify a known production page still renders 200 and a production page not touched by the deploy still loads; add a DESIGN_REVIEW_CHANGELOG.md entry and commit it
+- [x] 3.1 Commit to main (`fix: unknown production slugs return the site's 404, not 500`), push, wait for the boklanov_v2 status to be success; verify `scripts/check-missing-pages.sh` passes against https://boklanov.com and, in a browser, `document.title` on `/productions/xyz` and `/de/nope` is the localized not-found title (the raw server HTML keeps the layout title; accepted 2026-10-06)
+- [x] 3.2 Verify a known production page still renders 200 and a production page not touched by the deploy still loads; add a DESIGN_REVIEW_CHANGELOG.md entry and commit it

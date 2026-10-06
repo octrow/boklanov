@@ -195,6 +195,20 @@ The commit is in brackets.
     - P2 404 title lost after hydration, /press note vs untranslated
       headlines, "FI" on /press.
 
+31. `production-slug-404` (P0):
+    - an unknown production URL (`/productions/xyz`, any locale, wrong letter
+      case) now returns the site's 404 instead of an unstyled HTTP 500;
+    - cause, found with a local production build: the server not-found page
+      read the locale from request headers, which throws inside the
+      statically generated production route ("Page changed from static to
+      dynamic at runtime … reason: headers"); it is now a client component
+      using the layout's translations;
+    - the 404 tab title is localized and stays after load (it used to switch
+      to the home title); the raw server HTML keeps the site title (accepted);
+    - no redirects needed: all 54 Keystatic slugs still exist;
+    - check: `scripts/check-missing-pages.sh [base]` (6 URLs), passes on
+      boklanov.com. [7acfe79]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
