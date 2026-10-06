@@ -117,9 +117,8 @@ The commit is in brackets.
 
 ## Next
 
-- The user runs `bash ops/2026-10-06-restore-gallery-from-notion.sh` (68
-  photos to R2) unless already done. Check: the nikita, aiaccio and online
-  galleries show photos on boklanov.com.
+- Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
+  returns 200, checked 2026-10-06).
 - Apply the OpenSpec changes above, `mobile-booking-cta` first
   (`/opsx:apply mobile-booking-cta`).
 - `/impeccable critique admin` (never run).
