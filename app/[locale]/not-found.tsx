@@ -1,22 +1,22 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+'use client'
+
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
 
 import styles from './not-found.module.css'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('notFound')
-  return { title: t('title') }
-}
-
-export default async function NotFound() {
-  const t = await getTranslations('notFound')
-  const tA11y = await getTranslations('accessibility')
+// Client component: translations come from the layout's NextIntlClientProvider.
+// A server version reads the request locale from headers, which throws inside
+// statically generated routes (/productions/[slug]) and turned 404s into 500s.
+export default function NotFound() {
+  const t = useTranslations('notFound')
+  const tA11y = useTranslations('accessibility')
 
   return (
     <main id='main' className={styles.page}>
+      <title>{t('title')}</title>
       <p className={styles.code}>404</p>
       <h1 className={styles.heading}>{t('heading')}</h1>
       <p className={styles.body}>{t('body')}</p>

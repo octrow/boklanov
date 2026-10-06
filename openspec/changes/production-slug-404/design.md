@@ -5,7 +5,9 @@
 - The slug route has `generateStaticParams` (locales × slugs from the DB) and the default `dynamicParams = true`, so unknown slugs are rendered on demand on Vercel and call `notFound()` (`page.tsx:196`).
 - `app/[locale]/not-found.tsx` is a server component that calls `getTranslations('notFound')` without a locale, in both `generateMetadata` (added in 4c5a714) and the component. It relies on next-intl's request locale.
 - `/nope` goes through `app/[locale]/[...rest]/page.tsx` (no static params) and returns the themed 404 on prod. Only the statically generated route fails, and only on prod; `next dev` renders everything dynamically, which is why local returns 404.
-- Leading hypothesis (unconfirmed): when `notFound()` fires during on-demand static rendering, the not-found boundary renders without the request locale, `getTranslations` without a locale throws (it would need headers, which static rendering forbids), and the failure surfaces as the Pages-router 500.
+- Confirmed 2026-10-06 with a local `next build && next start` (same 500 for `/productions/xyz` and `/de/productions/xyz`, 404 for `/nope`):
+  `Error: Page changed from static to dynamic at runtime /en/productions/xyz, reason: headers` at `get requestLocale` (next-intl). The not-found boundary reads the request locale through headers inside a statically generated route.
+- Original hypothesis: when `notFound()` fires during on-demand static rendering, the not-found boundary renders without the request locale, `getTranslations` without a locale throws (it would need headers, which static rendering forbids), and the failure surfaces as the Pages-router 500.
 
 ## Goals / Non-Goals
 
@@ -23,6 +25,8 @@
 3. **Check script, not a test framework.** `scripts/check-missing-pages.sh [base-url]`: curl status for unknown slugs in en/ru/de, the upper-case slug, `/nope`, and one known slug (expect 404 ×5, 200 ×1); exit non-zero on mismatch. Default base is https://boklanov.com.
 
 ## Risks / Trade-offs
+
+- [The client not-found has no server metadata, so the raw server HTML of a 404 carries the layout title] → accepted 2026-10-06: the status is 404, the 404 body was already only in the RSC payload, and the browser shows the localized title (React 19 `<title>` in the client body). Page-level `generateMetadata` does not help: Next drops it when `notFound()` fires.
 
 - [The trace points somewhere else, e.g. `getProduction` throwing on prod data] → follow the trace; the spec and the check stay the same, only the design note and the fix change.
 - [A new production slug misbehaves after the fix] → the second requirement; verify by loading a slug that was not in the last build's static params (rename a test slug locally, or check a production created after the deploy).

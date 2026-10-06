@@ -2,7 +2,7 @@
 
 ## 1. 404 title
 
-- [ ] 1.1 Keep the not-found title after hydration (design decision 1); verify with Playwright that `document.title` after load on `/nope`, `/de/nope`, `/ru/nope` and `/productions/xyz` is the localized not-found title and `document.querySelectorAll('title').length === 1`
+- [ ] 1.1 Keep the not-found title after hydration (already done by production-slug-404: client not-found renders `<title>`; only verify here); verify with Playwright that `document.title` after load on `/nope`, `/de/nope`, `/ru/nope` and `/productions/xyz` is the localized not-found title and `document.querySelectorAll('title').length === 1`
 
 ## 2. Press and metadata
 
