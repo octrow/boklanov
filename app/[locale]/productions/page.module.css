@@ -19,6 +19,7 @@
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-5);
@@ -42,6 +43,15 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
   letter-spacing: var(--letter-spacing-wide);
+  color: var(--ink-mute);
+  margin: 0;
+}
+
+/* Result count next to the H1, always visible (filled client-side). */
+.count {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
   margin: 0;
 }

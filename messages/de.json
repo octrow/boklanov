@@ -65,7 +65,9 @@
     "roleReader": "andere",
     "roleSketch": "Skizze",
     "roleAll": "alle",
-    "resultCount": "{count} von {total}"
+    "resultCount": "{count} von {total}",
+    "filterToggle": "Filter",
+    "roleDefaultSummary": "Regie: Roman"
   },
   "archive": {
     "title": "Archiv",

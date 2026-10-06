@@ -65,7 +65,9 @@
     "roleReader": "other",
     "roleSketch": "sketch",
     "roleAll": "all",
-    "resultCount": "{count} of {total}"
+    "resultCount": "{count} of {total}",
+    "filterToggle": "filter",
+    "roleDefaultSummary": "directed by Roman"
   },
   "archive": {
     "title": "archive",

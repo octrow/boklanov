@@ -65,7 +65,9 @@
     "roleReader": "другие",
     "roleSketch": "эскиз",
     "roleAll": "все",
-    "resultCount": "{count} из {total}"
+    "resultCount": "{count} из {total}",
+    "filterToggle": "фильтр",
+    "roleDefaultSummary": "режиссура Романа"
   },
   "archive": {
     "title": "архив",

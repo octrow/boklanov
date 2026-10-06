@@ -80,6 +80,8 @@ export default async function ProductionsIndexPage({
     groupLabelAge: t('filterAge'),
     groupLabelCountry: t('filterCountry'),
     resultCount: t.raw('resultCount') as string,
+    filterToggle: t('filterToggle'),
+    roleDefaultSummary: t('roleDefaultSummary'),
     filtersAria: tA11y('filters'),
     formLabels: t.raw('formLabels') as Record<string, string>
   }
@@ -88,6 +90,8 @@ export default async function ProductionsIndexPage({
     <main id='main' className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>{t('title')}</h1>
+        {/* Filled by FilteredProductionsPanel (portal): "31 of 55". */}
+        <p id='productions-count' className={styles.count} aria-live='polite' />
       </header>
 
       {/*
@@ -108,6 +112,7 @@ export default async function ProductionsIndexPage({
         <FilteredProductionsPanel
           productions={sortedProductions}
           labels={labels}
+          countSlotId='productions-count'
         />
       </Suspense>
     </main>

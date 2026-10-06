@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 
 import { ProductionGrid } from '@/components/ProductionGrid'
 import type { ProductionView } from '@/lib/content'
@@ -53,8 +54,12 @@ export interface FilterLabels {
   groupLabelAge: string
   groupLabelCountry: string
   filtersAria: string
-  /** "{count} of {total}" shown once a filter is on. */
+  /** "{count} of {total}", always shown next to the page title. */
   resultCount: string
+  /** Mobile disclosure button prefix ("filter"). */
+  filterToggle: string
+  /** Names the default role (director) in the summary: "directed by Roman". */
+  roleDefaultSummary: string
   /** Display label per form tag; unknown tags show as stored. */
   formLabels: Record<string, string>
 }
@@ -62,17 +67,43 @@ export interface FilterLabels {
 export interface FilteredProductionsPanelProps {
   productions: ProductionView[]
   labels: FilterLabels
+  /** id of the element next to the H1 that receives the result count. */
+  countSlotId: string
 }
+
+const FILTERS_ID = 'production-filters'
 
 export function FilteredProductionsPanel({
   productions,
-  labels
+  labels,
+  countSlotId
 }: FilteredProductionsPanelProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const [countryOpen, setCountryOpen] = React.useState(false)
   const countryRef = React.useRef<HTMLDivElement | null>(null)
+  // Mobile (<768px) only: the toolbar sits behind a disclosure button.
+  const [filtersOpen, setFiltersOpen] = React.useState(false)
+  const toggleRef = React.useRef<HTMLButtonElement | null>(null)
+  const [countSlot, setCountSlot] = React.useState<HTMLElement | null>(null)
+
+  React.useEffect(() => {
+    setCountSlot(document.getElementById(countSlotId))
+  }, [countSlotId])
+
+  React.useEffect(() => {
+    if (!filtersOpen) return
+    function onKey(e: KeyboardEvent) {
+      // The country popover handles its own Esc first.
+      if (e.key !== 'Escape' || countryRef.current?.contains(e.target as Node))
+        return
+      setFiltersOpen(false)
+      toggleRef.current?.focus()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [filtersOpen])
 
   React.useEffect(() => {
     if (!countryOpen) return
@@ -189,12 +220,50 @@ export function FilteredProductionsPanel({
     other: labels.roleReader
   }
 
+  // Names every active filter, including the default role, so the default
+  // is never a hidden state: "directed by Roman · puppet · 6+".
+  const summary = [
+    activeRole === 'director'
+      ? labels.roleDefaultSummary
+      : activeRole === 'all'
+        ? labels.roleAll
+        : (roleLabelMap[activeRole] ?? activeRole),
+    activeForm && (labels.formLabels[activeForm] ?? activeForm),
+    activeAges.length > 0 && activeAges.map((a) => `${a}+`).join(', '),
+    activeCountry
+  ]
+    .filter(Boolean)
+    .join(' · ')
+  const countText = labels.resultCount
+    .replace('{count}', String(filtered.length))
+    .replace('{total}', String(productions.length))
+
   return (
     <div className={styles.panel}>
+      {countSlot && createPortal(countText, countSlot)}
+
+      <button
+        ref={toggleRef}
+        type='button'
+        className={styles.filterToggle}
+        aria-expanded={filtersOpen}
+        aria-controls={FILTERS_ID}
+        onClick={() => setFiltersOpen((v) => !v)}
+      >
+        <span>
+          {labels.filterToggle} · {summary}
+        </span>
+        <span className={styles.caret} aria-hidden='true'>
+          {filtersOpen ? '▴' : '▾'}
+        </span>
+      </button>
+
       {/* Filter strip — wraps on overflow. Country group is a disclosure popover
           to keep the bar narrow even when many countries appear in the data. */}
       <div
+        id={FILTERS_ID}
         className={styles.filterBar}
+        data-open={filtersOpen || undefined}
         role='toolbar'
         aria-label={labels.filtersAria}
       >
@@ -351,13 +420,6 @@ export function FilteredProductionsPanel({
         )}
 
         {/* Clear-all — oxblood per DESIGN §5.2 (only when non-default active) */}
-        {hasActiveFilters && (
-          <p className={styles.count} aria-live='polite'>
-            {labels.resultCount
-              .replace('{count}', String(filtered.length))
-              .replace('{total}', String(productions.length))}
-          </p>
-        )}
         {hasActiveFilters && (
           <button className={styles.clearAll} onClick={clearAll}>
             {labels.clearAll}

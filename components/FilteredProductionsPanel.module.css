@@ -56,14 +56,44 @@
   padding-bottom: var(--space-1);
 }
 
-/* Result count once a filter is on. */
-.count {
+/* Mobile disclosure: one button ("FILTER · DIRECTED BY ROMAN ▾") instead of
+   15 open controls, so the first row of posters is in the first viewport.
+   ≥768px the toolbar is always open and the button is hidden. */
+.filterToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-meta);
-  letter-spacing: var(--letter-spacing-meta);
-  color: var(--ink-mute);
-  margin: 0;
-  align-self: center;
+  font-size: var(--font-size-chip);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.filterToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+@media (max-width: 767px) {
+  .filterBar:not([data-open]) {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .filterToggle {
+    display: none;
+  }
 }
 
 /* Group separator: groups stack on mobile and carry labels on desktop, so
@@ -216,4 +246,15 @@
   outline: none;
   box-shadow: var(--shadow-focus);
   border-radius: var(--border-radius-sm);
+}
+
+/* Desktop: all four groups on one row (EN 1041px / DE 1067px at the old
+   spacing vs a 1016px bar left "COUNTRY" orphaned on a second row). */
+@media (min-width: 1024px) {
+  .filterBar {
+    gap: var(--space-4);
+  }
+  .chip {
+    padding-inline: var(--space-1);
+  }
 }
