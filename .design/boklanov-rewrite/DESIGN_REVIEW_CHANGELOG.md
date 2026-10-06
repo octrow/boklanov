@@ -95,12 +95,33 @@ The commit is in brackets.
     - PRODUCT.md and DESIGN.md now say EN is the default locale. [12d05b6]
 22. Changelog and prompts updated for a fresh session.
 
+## Third critique (23/36): OpenSpec changes
+
+23. Third site critique: 23/36 again; the old issues are gone and new ones
+    of the same weight replaced them
+    (`.impeccable/critique/2026-10-06T14-27-10Z__app-locale.md`). Decided
+    2026-10-06: the home page stays as is (no stills instead of posters, no
+    duotone change, no ticker city order change). The findings are split into
+    OpenSpec changes, in this order:
+    - `mobile-booking-cta` (P1): the mobile sticky CTA appears after the
+      slate, yields to the invite and footer, leads to Telegram first;
+    - `mobile-productions-filters` (P1): filters collapse on phones, the count
+      sits by the H1, the default "Directed by Roman" is named;
+    - `mobile-touch-targets` (P2): /press, /awards, /archive, slate and
+      credits links get 44px;
+    - `production-page-polish` (P2): cover credit under the poster, poster
+      dims, clean alt;
+    - `tour-ticker-pause` (P2): pause toggle (WCAG 2.2.2);
+    - `curator-facts-and-labels`: country names, duration on cards, 404 and
+      home titles.
+
 ## Next
 
 - The user runs `bash ops/2026-10-06-restore-gallery-from-notion.sh` (68
   photos to R2) unless already done. Check: the nikita, aiaccio and online
   galleries show photos on boklanov.com.
-- `/impeccable critique site` again to re-score (20/32 → 23/36 so far).
+- Apply the OpenSpec changes above, `mobile-booking-cta` first
+  (`/opsx:apply mobile-booking-cta`).
 - `/impeccable critique admin` (never run).
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
@@ -120,3 +141,9 @@ The commit is in brackets.
 - "TЮZ" in an EN press title; "Vienne"; 14 archive rows without a year; all
   statuses are "live"; the /productions/online poster is an Instagram
   screenshot.
+- From the third critique: award lines name a performer in brackets
+  ("Winner of the festival (Anastasia Polezhaeva)"), so it's unclear what
+  Roman won; the "puppet" form is set on only 6 of 55 productions; check
+  "Holiday recipe" vs "Holiday Recipe" (duplicate?); photo credits are in
+  Cyrillic on EN pages (e.g. "Павел Семченко"); /about has no CV or
+  timeline a curator can forward.
