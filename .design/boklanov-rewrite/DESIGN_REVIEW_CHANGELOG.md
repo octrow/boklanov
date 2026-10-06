@@ -238,6 +238,21 @@ The commit is in brackets.
       card first showed "productions" as its token);
     - check: `npx tsx scripts/check-availability.mts`. [52957b3]
 
+34. `production-page-structure` (P2):
+    - the award/touring sticker row moved inside the reading column, so it
+      starts at the title's left edge (390: x=20, 1440: x=175) instead of
+      x=0 where the rotated sticker was clipped;
+    - credits are grouped by role: consecutive people with the same role sit
+      under one label (bury: "Actors" once, both names under it);
+    - the production page's press list hides bare outlet homepage links
+      ("sobaka.ru", "Fontanka.ru"), the same rule as /press; `isArticle()`
+      now lives in `lib/listRules.ts` for both pages (/press still 38 rows);
+    - press headlines are underlined at rest (`--rule-strong`, accent on
+      hover) and have a 44px hit area (`tap-target`);
+    - "Watch / listen" is outlined; the booking bar is the only filled call
+      to action. The unused `.btnPrimary` style is gone;
+    - check: `npx tsx scripts/check-list-rules.mts`. [a4e2e20]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
