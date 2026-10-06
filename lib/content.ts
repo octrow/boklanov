@@ -77,6 +77,15 @@ export interface CreditEntry {
   url?: string
 }
 
+// Admin "Status" (Productions → Settings). 'live' is the default.
+export const PRODUCTION_STATUSES = [
+  'live',
+  'in-development',
+  'archived',
+  'on-tour'
+] as const
+export type ProductionStatus = (typeof PRODUCTION_STATUSES)[number]
+
 export interface Production {
   slug: string
   notionIds: { ru?: string; en?: string }
@@ -147,6 +156,7 @@ export interface Production {
   featured: boolean
   featuredOrder?: number
   listOrder?: number
+  status: ProductionStatus
   bookingCta: boolean
   bookingCtaLabel: { ru?: string; en?: string; de?: string | null } | null
   bookingCtaUrl: string | null
@@ -459,6 +469,9 @@ function payloadDocToProduction(doc: AnyMap): Production {
         : undefined,
     listOrder:
       typeof settings.listOrder === 'number' ? settings.listOrder : undefined,
+    status: (PRODUCTION_STATUSES as readonly unknown[]).includes(doc.status)
+      ? (doc.status as ProductionStatus)
+      : 'live',
     bookingCta: settings.bookingCta === false ? false : true,
     bookingCtaLabel: settings.bookingCtaLabel
       ? asL10n(settings.bookingCtaLabel)
@@ -611,7 +624,9 @@ const fetchAllProductions = unstable_cache(
     _mem.all = { data: out, at: now }
     return out
   },
-  ['productions:all'],
+  // Bump the key when the Production shape changes: the Vercel data cache
+  // outlives deploys, so old entries would lack new fields (v2: status).
+  ['productions:all:v2'],
   { tags: ['productions'] }
 )
 

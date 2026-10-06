@@ -107,6 +107,12 @@
   word-break: break-word;
 }
 
+/* Availability token (admin Status): same mono line, ink not mute. */
+.availability {
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
 .titleStack {
   display: flex;
   flex-direction: column;

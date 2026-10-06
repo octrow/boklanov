@@ -68,7 +68,10 @@
     "resultCount": "{count} of {total}",
     "filterToggle": "filter",
     "roleDefaultSummary": "directed by Roman",
-    "cardDuration": "{n} min"
+    "cardDuration": "{n} min",
+    "availabilityOnTour": "On tour",
+    "availabilityInDevelopment": "In development",
+    "availabilityArchive": "Archive"
   },
   "archive": {
     "title": "archive",

@@ -21,5 +21,8 @@
 
 ## Risks / Trade-offs
 
+- [`unstable_cache` entries made by the old mapper have no `status`, and the Vercel data cache outlives deploys; locally every card first showed the namespace name as its token] → cache key bumped to `productions:all:v2`, and `availabilityLabel` returns null for an unknown status. Check: `npx tsx scripts/check-availability.mts`.
+- [Verification without test statuses: writing statuses to the local DB was not permitted in this session] → verified with the two productions already "In development" locally (mcqueen-blood-beneath-skin, total-fest-4) plus the assert check for Archive/On tour; the sticker checked on bury-me-behind-the-baseboard (Live, tour cities: band shown, no TOURING).
+
 - [All 55 are "Live" today, so nothing visible changes until Roma sets statuses] → content to-do in the changelog; verify locally by setting statuses in the local DB.
 - ["Live" means "currently running" in the admin; a Russian show left on Live reads as current] → content, not code; the changelog to-do names it.

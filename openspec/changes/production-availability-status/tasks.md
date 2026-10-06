@@ -2,12 +2,12 @@
 
 ## 1. Data
 
-- [ ] 1.1 Map `status` into `Production` in `lib/content.ts` (fallback `live`); verify `npx tsc --noEmit` passes and a local production with status set in the local admin returns it
+- [x] 1.1 Map `status` into `Production` in `lib/content.ts` (fallback `live`); verify `npx tsc --noEmit` passes and a local production with status set in the local admin returns it
 
 ## 2. Cards and sticker
 
-- [ ] 2.1 Add the availability token to `ProductionCard` meta and remove the city; labels in `messages/{en,ru,de}.json`; verify at 390 and 1440 on local `/productions` and `/` with one production set to Archived (2021), one On tour, one Live: tokens "ARCHIVE · 2021", "ON TOUR", none; RU and DE translated; no city in any card meta
-- [ ] 2.2 Show the TOURING sticker only for `status === 'on-tour'`; verify locally on a production with tour cities and status Archived (no sticker, band present) and one On tour (sticker)
+- [x] 2.1 Add the availability token to `ProductionCard` meta and remove the city; labels in `messages/{en,ru,de}.json`; verify at 390 and 1440 on local `/productions` and `/` with one production set to Archived (2021), one On tour, one Live: tokens "ARCHIVE · 2021", "ON TOUR", none; RU and DE translated; no city in any card meta
+- [x] 2.2 Show the TOURING sticker only for `status === 'on-tour'`; verify locally on a production with tour cities and status Archived (no sticker, band present) and one On tour (sticker)
 
 ## 3. Ship
 

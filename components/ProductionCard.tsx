@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
+import { availabilityLabel } from '@/lib/availability'
 import { cdnUrl } from '@/lib/cdn'
 import { countryCode, countryName } from '@/lib/countryCode'
 import type { ProductionView } from '@/lib/content'
@@ -41,9 +42,9 @@ export function ProductionCard({
   const locale = useLocale()
   const t = useTranslations('productions')
   const country = countryName(countryCode(production.theatre.country), locale)
+  // No city: the theatre is enough on a card; the slate names the city.
   const meta = [
     theatre,
-    production.theatre.city,
     production.year,
     production.ageRating,
     production.durationMin
@@ -52,6 +53,11 @@ export function ProductionCard({
   ]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
+  const availability = availabilityLabel(
+    production.status,
+    production.year,
+    (k) => t(k)
+  )
 
   // Alt format from DESIGN §12: {role} {title}, {theatre}, {year} ({photographer})
   const altBase = [
@@ -150,9 +156,17 @@ export function ProductionCard({
         {titleMain && <h2 className={styles.titleRu}>{titleMain}</h2>}
       </div>
 
-      {meta && (
+      {(meta || availability) && (
         <div className={styles.metaWrap}>
-          <p className={styles.meta}>{meta}</p>
+          <p className={styles.meta}>
+            {meta}
+            {availability && (
+              <>
+                {meta && ' · '}
+                <span className={styles.availability}>{availability}</span>
+              </>
+            )}
+          </p>
         </div>
       )}
     </Link>

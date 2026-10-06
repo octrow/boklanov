@@ -68,7 +68,10 @@
     "resultCount": "{count} из {total}",
     "filterToggle": "фильтр",
     "roleDefaultSummary": "режиссура Романа",
-    "cardDuration": "{n} мин"
+    "cardDuration": "{n} мин",
+    "availabilityOnTour": "На гастролях",
+    "availabilityInDevelopment": "В работе",
+    "availabilityArchive": "Архив"
   },
   "archive": {
     "title": "архив",

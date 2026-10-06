@@ -68,7 +68,10 @@
     "resultCount": "{count} von {total}",
     "filterToggle": "Filter",
     "roleDefaultSummary": "Regie: Roman",
-    "cardDuration": "{n} Min."
+    "cardDuration": "{n} Min.",
+    "availabilityOnTour": "Auf Tournee",
+    "availabilityInDevelopment": "In Arbeit",
+    "availabilityArchive": "Archiv"
   },
   "archive": {
     "title": "Archiv",

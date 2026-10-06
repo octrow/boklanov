@@ -386,11 +386,11 @@ export default async function ProductionDetailPage({
 
       {/* v3 §2.2 — plakat sticker badges above title.
           Award sticker fires when production has any award; tour sticker fires
-          when production has a `tour[]` (the Plinth). At most 2 stickers per
+          when its admin Status is "On tour". At most 2 stickers per
           page (cap from proposal §2.2 max-3-per-page; we leave room for a
           third elsewhere). Hidden from screen readers — TourRider + awards
           list are the canonical sources. */}
-      {(production.awards.length > 0 || production.tour.length > 0) && (
+      {(production.awards.length > 0 || production.status === 'on-tour') && (
         <div className={styles.stickerRow} aria-hidden='true'>
           {production.awards.length > 0 && (
             <Sticker
@@ -405,7 +405,8 @@ export default async function ProductionDetailPage({
                 : `${t('stickerAward')} · ${production.awards.length}`}
             </Sticker>
           )}
-          {production.tour.length > 0 && (
+          {/* Status, not tour[]: past tours don't make a show available now. */}
+          {production.status === 'on-tour' && (
             <Sticker variant='tour' accent='cobalt' rotate={3} layout='inline'>
               {t('stickerTour')}
             </Sticker>
