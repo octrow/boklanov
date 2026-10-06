@@ -43,7 +43,7 @@ The commit is in brackets.
     rows stay in the admin. [5b4e5f3]
 12. Prompts for compacting and resuming the session. [63d8e39]
 
-## Second critique (23/36): plan in progress
+## Second critique (23/36): plan carried out
 
 13. Covers uploaded through the admin no longer break. Before, the site asked
     for AVIF versions that admin uploads don't have, and got a 404. Now it falls
@@ -80,7 +80,6 @@ The commit is in brackets.
     - a "2 of 55" counter appears once a filter is on. [e4c548b]
 19. Desktop grid back to 3 columns so posters stay large (4 columns made them
     too small). [1756875]
-
 20. /awards:
     - award names in the body face instead of mono;
     - city and category always under the name;
@@ -93,11 +92,15 @@ The commit is in brackets.
     - the arrow in the home invitation link no longer wraps onto a line of
       its own (it did on /ru and /de);
     - "ST. PETERSBURG" with a space in the EN ticker;
-    - PRODUCT.md and DESIGN.md now say EN is the default locale.
+    - PRODUCT.md and DESIGN.md now say EN is the default locale. [12d05b6]
+22. Changelog and prompts updated for a fresh session.
 
 ## Next
 
-- `/impeccable critique site` again to re-score.
+- The user runs `bash ops/2026-10-06-restore-gallery-from-notion.sh` (68
+  photos to R2) unless already done. Check: the nikita, aiaccio and online
+  galleries show photos on boklanov.com.
+- `/impeccable critique site` again to re-score (20/32 → 23/36 so far).
 - `/impeccable critique admin` (never run).
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
@@ -108,7 +111,6 @@ The commit is in brackets.
 - Home "All productions" shows the productions that have `listOrder` (4 now):
   with 3 columns on desktop the 4th sits alone. Pick 3 or 6.
 - "NO WINER WAY" in the archive: check whether it's a typo.
-
 - Upload a press kit and tech rider (PDF). The EPK block appears once a file
   exists.
 - Translate the Finnish press headline into EN; set the language on the other
