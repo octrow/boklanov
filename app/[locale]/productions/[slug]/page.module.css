@@ -36,6 +36,13 @@
   cursor: zoom-in;
 }
 
+/* Phones: a portrait poster at 65vh pushed the title out of the first screen. */
+@media (max-width: 767px) {
+  .cover img {
+    max-height: 45svh;
+  }
+}
+
 .coverCredit {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);

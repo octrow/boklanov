@@ -18,6 +18,38 @@
   display: contents;
 }
 
+/* Phone preview: photos after the third wait in the lightbox. */
+.more {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .beyondPreview {
+    display: none;
+  }
+
+  .more {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-meta);
+    letter-spacing: var(--letter-spacing-meta);
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    cursor: pointer;
+  }
+
+  .more:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+}
+
 /* Lightbox overlay */
 .overlay {
   position: fixed;

@@ -318,7 +318,7 @@ export default async function ProductionDetailPage({
           )
           const posterSrc = cdnUrl(production.poster.src)!
           // 90vw (not 100vw) reflects the actual rendered width on mobile:
-          // .cover is flex-centered with max-height: 65vh, so a typical
+          // .cover img caps at 65vh (45svh on phones), so a typical
           // ~0.71-aspect portrait poster lands at ~92% of viewport width.
           // 100vw made the variant picker round up to 828w when 720w fits.
           const posterSizes = '(min-width: 1024px) 640px, 90vw'
@@ -350,13 +350,6 @@ export default async function ProductionDetailPage({
                     fetchPriority='high'
                     width={posterW}
                     height={posterH}
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '65vh',
-                      width: 'auto',
-                      height: 'auto',
-                      display: 'block'
-                    }}
                   />
                 ) : production.poster.width && production.poster.height ? (
                   <Image
@@ -368,13 +361,6 @@ export default async function ProductionDetailPage({
                     fetchPriority='high'
                     sizes={posterSizes}
                     quality={75}
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '65vh',
-                      width: 'auto',
-                      height: 'auto',
-                      display: 'block'
-                    }}
                   />
                 ) : (
                   <Image
@@ -386,13 +372,6 @@ export default async function ProductionDetailPage({
                     height={posterH}
                     sizes={posterSizes}
                     quality={75}
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '65vh',
-                      width: 'auto',
-                      height: 'auto',
-                      display: 'block'
-                    }}
                   />
                 )}
                 {production.poster.credit && (
@@ -486,6 +465,15 @@ export default async function ProductionDetailPage({
                 </li>
               ))}
             </ul>
+          )}
+
+          {/* 3b. Tour band — next to the chips, so where it has played sits with year/age/duration */}
+          {production.tour && production.tour.length > 0 && (
+            <TourTicker
+              cities={production.tour}
+              accent='cobalt'
+              label={t('onTour')}
+            />
           )}
 
           {/* 4. One-line synopsis — DE: annotate RU fallback with forthcoming note */}
@@ -634,15 +622,6 @@ export default async function ProductionDetailPage({
                 </a>
               )}
             </div>
-          )}
-
-          {/* 6b. Plinth tour band — DA-2.D (§3.G.2) · v3: TourTicker CSS marquee */}
-          {production.tour && production.tour.length > 0 && (
-            <TourTicker
-              cities={production.tour}
-              accent='cobalt'
-              label={t('onTour')}
-            />
           )}
 
           {/* 7. Awards & Festivals */}

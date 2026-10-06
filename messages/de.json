@@ -193,7 +193,8 @@
     "nextPhoto": "Nächstes Foto",
     "playTrailer": "Trailer abspielen",
     "skipToContent": "Zum Inhalt springen",
-    "pauseTicker": "Städte-Laufband anhalten"
+    "pauseTicker": "Städte-Laufband anhalten",
+    "allPhotos": "Alle {total} Fotos"
   },
   "common": {
     "photo": "Foto"

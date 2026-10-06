@@ -22,6 +22,10 @@ export interface GalleryItem {
   } | null
 }
 
+// Phones show the first PREVIEW photos plus an "All N photos" button (CSS
+// hides the rest below 768px); wider viewports show the whole grid.
+const PREVIEW = 3
+
 interface Props {
   items: GalleryItem[]
 }
@@ -31,6 +35,7 @@ export function GalleryLightbox({ items }: Props) {
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null)
   const closeRef = React.useRef<HTMLButtonElement>(null)
   const triggerRefs = React.useRef<Array<HTMLDivElement | null>>([])
+  const moreRef = React.useRef<HTMLButtonElement>(null)
 
   const total = items.length
   const isOpen = activeIndex !== null
@@ -39,7 +44,11 @@ export function GalleryLightbox({ items }: Props) {
     const prev = activeIndex
     setActiveIndex(null)
     requestAnimationFrame(() => {
-      if (prev !== null) triggerRefs.current[prev]?.focus()
+      if (prev === null) return
+      // A photo hidden by the phone preview can't take focus: use the button.
+      if (prev >= PREVIEW && moreRef.current?.offsetParent)
+        moreRef.current.focus()
+      else triggerRefs.current[prev]?.focus()
     })
   }, [activeIndex])
 
@@ -84,7 +93,11 @@ export function GalleryLightbox({ items }: Props) {
               ref={(el) => {
                 triggerRefs.current[i] = el
               }}
-              className={styles.trigger}
+              className={
+                total > PREVIEW && i >= PREVIEW
+                  ? `${styles.trigger} ${styles.beyondPreview}`
+                  : styles.trigger
+              }
               role='button'
               tabIndex={0}
               aria-label={`${indexLabel} — ${t('viewPhotoOf', { index: i + 1, total })}`}
@@ -107,6 +120,16 @@ export function GalleryLightbox({ items }: Props) {
           )
         })}
       </div>
+      {total > PREVIEW && (
+        <button
+          ref={moreRef}
+          type='button'
+          className={styles.more}
+          onClick={() => setActiveIndex(PREVIEW)}
+        >
+          {t('allPhotos', { total })}
+        </button>
+      )}
 
       {isOpen && current && (
         <div

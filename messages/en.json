@@ -193,7 +193,8 @@
     "nextPhoto": "Next photo",
     "playTrailer": "Play trailer",
     "skipToContent": "Skip to content",
-    "pauseTicker": "Pause the city ticker"
+    "pauseTicker": "Pause the city ticker",
+    "allPhotos": "All {total} photos"
   },
   "common": {
     "photo": "Photo"

@@ -20,5 +20,8 @@
 
 ## Risks / Trade-offs
 
+- [The poster `<img>`/`<Image>` carried inline `style={{ maxHeight: '65vh', … }}` duplicating `.cover img`, which beat the phone media query] → removed the inline styles; `.cover img` is the single source.
+- [Pre-existing: closing the lightbox from a visible photo returns focus to `<body>`, because the triggers are `display: contents` and can't take focus] → out of scope; closing from a hidden photo returns focus to the "All N photos" button.
+
 - [45svh makes a landscape poster tiny] → max-height only bites on tall images; landscape posters are width-bound and unaffected.
 - [Hidden photos via CSS still download] → they are `loading=lazy` and below the fold; acceptable. Ceiling noted in a `ponytail:` comment.

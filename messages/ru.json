@@ -193,7 +193,8 @@
     "nextPhoto": "Следующее фото",
     "playTrailer": "Воспроизвести трейлер",
     "skipToContent": "Перейти к содержанию",
-    "pauseTicker": "Остановить бегущую строку"
+    "pauseTicker": "Остановить бегущую строку",
+    "allPhotos": "Все {total} фото"
   },
   "common": {
     "photo": "Фото"
