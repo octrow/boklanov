@@ -12,4 +12,4 @@
 
 ## 3. Ship
 
-- [ ] 3.1 Lint, build, commit to main, verify on boklanov.com, changelog entry; add "credit names on EN pages are Cyrillic" to Roma's content to-dos
+- [x] 3.1 Lint, build, commit to main, verify on boklanov.com, changelog entry; add "credit names on EN pages are Cyrillic" to Roma's content to-dos
