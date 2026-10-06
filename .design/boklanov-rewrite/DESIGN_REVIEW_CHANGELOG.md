@@ -163,12 +163,24 @@ The commit is in brackets.
       page and bury-me-behind-the-baseboard. City order is unchanged (home
       page left as is). [cbaca13]
 
+29. `curator-facts-and-labels`:
+    - countries are shown by name, not ISO code ("Finnland", «Финляндия»):
+      in the /productions filter (sorted by name, KZ/RU last), the filter
+      summary, typographic covers, detail-page chips and the rider;
+      `?country=FI` stays in the URL (`countryName()` in lib/countryCode.ts,
+      check: `npx tsx scripts/check-country-name.mts`);
+    - the country popover now wraps; longer names overflowed it as one row;
+    - cards end with the duration when known ("60 min" / «60 мин» / "60
+      Min."), no dangling separator without it;
+    - the 404 has its own title ("Roman Boklanov — page not found", RU/DE);
+      the home title uses an em dash like every other page. [4c5a714]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- Apply the last OpenSpec change, `curator-facts-and-labels`
-  (`/opsx:apply curator-facts-and-labels`).
+- All six OpenSpec changes from the third critique are shipped. Next: a
+  fourth `/impeccable critique site` to re-score.
 - Uploaded posters with no stored size use the portrait 720×1019 default, so
   a landscape one (vaikenemisen-kielioppi) reserves the wrong box until it
   loads. Fill `posterWidth`/`posterHeight` from the Payload media doc.
