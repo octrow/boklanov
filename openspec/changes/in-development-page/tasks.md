@@ -7,5 +7,5 @@
 
 ## 2. Ship
 
-- [ ] 2.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 1.1 and 1.2 checks on boklanov.com
-- [ ] 2.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and the total-fest-4 content to-do for Roma; commit
+- [x] 2.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 1.1 and 1.2 checks on boklanov.com
+- [x] 2.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and the total-fest-4 content to-do for Roma; commit

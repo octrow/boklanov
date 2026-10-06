@@ -294,6 +294,15 @@ The commit is in brackets.
     - an admin label override and `bookingCta: false` still win;
     - check: `npx tsx scripts/check-booking-kind.mts`. [93767aa]
 
+38. `in-development-page` (P1):
+    - a production with Status "In development" shows "In development"
+      (RU «В работе», DE "In Arbeit") under the title, with "· premiere
+      <date>" once a premiere date is set; other productions are unchanged;
+    - with no poster, photos, video or synopsis the page shows one note
+      under the title: "Photos, credits and press will appear here after the
+      premiere." (RU/DE likewise) instead of ending in empty space;
+    - applies to mcqueen-blood-beneath-skin and total-fest-4. [52689a5]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
@@ -336,3 +345,5 @@ The commit is in brackets.
   the bio doesn't; "Participant" and "Long list" entries count towards the
   FESTIVAL AWARD sticker; Bury has a different poster on home, grid and its
   page; the RU title of the-ape-star ends with a space.
+  total-fest-4 is a festival, not a production: move it to /about
+  or the awards, or give it a poster and synopsis.
