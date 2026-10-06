@@ -253,6 +253,22 @@ The commit is in brackets.
       to action. The unused `.btnPrimary` style is gone;
     - check: `npx tsx scripts/check-list-rules.mts`. [a4e2e20]
 
+35. `press-and-404-labels` (P2):
+    - the 404 tab title stays localized after load ("Roman Boklanov — page
+      not found" / «…страница не найдена» / "…Seite nicht gefunden"), already
+      fixed by entry 31; verified on 4 URLs. The layout's home `<title>` also
+      stays in `<head>` after ours (accepted 2026-10-07: `document.title` is
+      ours, 404s aren't indexed);
+    - the /press note no longer promises full translation: "Headlines are in
+      English where a translation exists. Articles are in their original
+      language, mostly Russian." (DE likewise; /ru/press shows no note, as
+      before);
+    - the article language tag is a name in the page's language: "Vuosaari ·
+      Finnish" / "Finnisch" / «финский» instead of "FI" (`languageName()` in
+      `lib/countryCode.ts`);
+    - production pages list en, ru and de in their hreflang alternates (de
+      was missing). [2b3ae11]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
