@@ -190,7 +190,8 @@
     "prevPhoto": "Previous photo",
     "nextPhoto": "Next photo",
     "playTrailer": "Play trailer",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "pauseTicker": "Pause the city ticker"
   },
   "common": {
     "photo": "Photo"

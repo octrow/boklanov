@@ -1,10 +1,11 @@
 /* v3 §2.9 — CSS marquee tour band. Accent-coloured full-width strip.
-   Pauses on hover. prefers-reduced-motion zeroes animation entirely.
+   Pauses on hover, on focus and via the toggle button (WCAG 2.2.2).
+   prefers-reduced-motion zeroes animation and hides the toggle.
    Scoped to productions with tour[] data — only bury-me-behind-the-baseboard
    has non-empty tour data as of Phase 9v3.3. */
 
 .section {
-  overflow: hidden;
+  position: relative;
   padding: var(--space-2) 0;
 }
 
@@ -26,6 +27,9 @@
 .ticker {
   display: flex;
   width: 100%;
+  /* Clip here, not on .section, so the toggle's 44px hit area can
+     overhang the 32px band without making it taller. */
+  overflow: hidden;
 }
 
 .track {
@@ -43,19 +47,45 @@
   font-synthesis: none;
 }
 
-.section[data-accent='vermillion'] .track,
-.section[data-accent='cobalt'] .track {
+.section[data-accent='vermillion'],
+.section[data-accent='cobalt'] {
   color: var(--ink-on-accent);
 }
-.section[data-accent='mustard'] .track {
+.section[data-accent='mustard'] {
   color: var(--ink-on-mustard);
 }
-.section[data-accent='paper'] .track {
+.section[data-accent='paper'] {
   color: var(--band-reverse-ink);
 }
 
-.track:hover {
+.section:is(:hover, :focus-within, [data-motion='paused']) .track {
   animation-play-state: paused;
+}
+
+.section[data-motion='playing'] .track {
+  animation-play-state: running;
+}
+
+/* Square at the band's right edge, filled with the band colour so the
+   text scrolls under it. Height follows the band; .tap-target adds 44px. */
+.toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
 }
 
 @keyframes ticker {
@@ -70,6 +100,10 @@
 @media (prefers-reduced-motion: reduce) {
   .track {
     animation: none;
+  }
+
+  .toggle {
+    display: none;
   }
 }
 

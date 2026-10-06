@@ -190,7 +190,8 @@
     "prevPhoto": "Vorheriges Foto",
     "nextPhoto": "Nächstes Foto",
     "playTrailer": "Trailer abspielen",
-    "skipToContent": "Zum Inhalt springen"
+    "skipToContent": "Zum Inhalt springen",
+    "pauseTicker": "Städte-Laufband anhalten"
   },
   "common": {
     "photo": "Foto"

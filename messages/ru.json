@@ -190,7 +190,8 @@
     "prevPhoto": "Предыдущее фото",
     "nextPhoto": "Следующее фото",
     "playTrailer": "Воспроизвести трейлер",
-    "skipToContent": "Перейти к содержанию"
+    "skipToContent": "Перейти к содержанию",
+    "pauseTicker": "Остановить бегущую строку"
   },
   "common": {
     "photo": "Фото"
