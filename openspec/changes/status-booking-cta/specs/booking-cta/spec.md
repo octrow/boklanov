@@ -26,7 +26,7 @@ A label set on the production in the admin SHALL override these, and a productio
 
 #### Scenario: Show abroad
 
-- **WHEN** a visitor opens a production with Status "Live" at a theatre outside Russia (e.g. bury-me-behind-the-baseboard)
+- **WHEN** a visitor opens a production with Status "Live" at a theatre outside Russia (e.g. beware-of-the-dog, Almaty)
 - **THEN** the call to action reads "Ask Roman about touring this show"
 
 ### Requirement: Contact subject matches the call to action

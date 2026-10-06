@@ -22,6 +22,7 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
+import { bookingKind } from '@/lib/bookingKind'
 import { groupRuns, isArticle } from '@/lib/listRules'
 import {
   getAllProductions,
@@ -257,7 +258,14 @@ export default async function ProductionDetailPage({
   // replaces the default contact link; bookingCtaLabel replaces the i18n label.
   const ctaEnabled = production.bookingCta !== false
   const ctaUrl = production.bookingCtaUrl || contactHref
-  const ctaLabel = production.bookingCtaLabel || t('bookingCta')
+  const ctaKey = {
+    tour: 'bookingCtaTour',
+    new: 'bookingCtaNew',
+    premiere: 'bookingCtaPremiere'
+  } as const
+  const ctaLabel =
+    production.bookingCtaLabel ||
+    t(ctaKey[bookingKind(production.status, production.theatre.country)])
   // The synopsis is often the body's first sentence (lina-marlina): print it
   // once, in the body.
   const norm = (x: string) =>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
+import { bookingKind } from '@/lib/bookingKind'
 import { getAllProductions, getContact } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
@@ -82,10 +83,22 @@ export default async function ContactPage({
   )}`
   // Lookup table for `?show=<slug>` from a production page's booking CTA.
   // The page stays static; the client island reads the query string.
+  const productions = await getAllProductions(locale)
   const showTitles = Object.fromEntries(
-    (await getAllProductions(locale)).map((p) => [
+    productions.map((p) => [p.slug, p.title ?? p.titles.en ?? p.slug])
+  )
+  // Email subject per show, matching the CTA it came from (lib/bookingKind).
+  const subjectKey = {
+    tour: 'mailtoSubjectTour',
+    new: 'mailtoSubjectNew',
+    premiere: 'mailtoSubjectPremiere'
+  } as const
+  const showSubjects = Object.fromEntries(
+    productions.map((p) => [
       p.slug,
-      p.title ?? p.titles.en ?? p.slug
+      (
+        t.raw(subjectKey[bookingKind(p.status, p.theatre.country)]) as string
+      ).replace('{title}', showTitles[p.slug])
     ])
   )
   const mailtoAttrs = {
@@ -151,10 +164,9 @@ export default async function ContactPage({
           }
         >
           <ShowMailtoLink
-            titles={showTitles}
+            subjects={showSubjects}
             email={email}
             subject={t('mailtoSubject')}
-            showSubject={t.raw('mailtoSubjectShow') as string}
             {...mailtoAttrs}
           >
             {t('emailCta')}
