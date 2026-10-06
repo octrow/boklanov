@@ -13,4 +13,4 @@
 
 ## 3. Ship
 
-- [ ] 3.1 Re-run the script (all zero outside prose), lint, build, commit to main, verify on boklanov.com, changelog entry
+- [x] 3.1 Re-run the script (all zero outside prose), lint, build, commit to main, verify on boklanov.com, changelog entry

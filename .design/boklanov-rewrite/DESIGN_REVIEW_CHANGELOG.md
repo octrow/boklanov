@@ -139,12 +139,24 @@ The commit is in brackets.
     - admin-uploaded posters without variants get width/height attributes
       (720×1019 default) instead of 0×0. [5c57c8c]
 
+27. `mobile-touch-targets`:
+    - a global `.tap-target` class gives standalone links an invisible
+      44px-tall hit area centred on the text, so type and row rhythm don't
+      change;
+    - applied to /press groups, /awards productions, /archive titles, credit
+      names, production links, the slate theatre link and the header
+      wordmark;
+    - checked at 390×844 on /press, /awards, /archive and two production
+      pages: before, 10 + 11 + 24 + 8 + 1 links were under 44px; now none
+      outside prose (the skip-link stays off-screen until focus). No nested
+      links were found. [875f846]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- Apply the remaining OpenSpec changes, `mobile-touch-targets` next
-  (`/opsx:apply mobile-touch-targets`).
+- Apply the remaining OpenSpec changes, `tour-ticker-pause` next
+  (`/opsx:apply tour-ticker-pause`).
 - Uploaded posters with no stored size use the portrait 720×1019 default, so
   a landscape one (vaikenemisen-kielioppi) reserves the wrong box until it
   loads. Fill `posterWidth`/`posterHeight` from the Payload media doc.
