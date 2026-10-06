@@ -209,6 +209,20 @@ The commit is in brackets.
     - check: `scripts/check-missing-pages.sh [base]` (6 URLs), passes on
       boklanov.com. [7acfe79]
 
+32. `mobile-production-page` (P1):
+    - on phones the poster is capped at 45svh, so the title, theatre,
+      premiere and chips are in the first screen (bury-me-behind-the-baseboard
+      at 390: H1 top 718 → 601px); the cap was not working at first because
+      inline `maxHeight: 65vh` styles on the poster beat the media query, so
+      they were removed and CSS owns the size;
+    - phones show 3 gallery photos and an "All 11 photos" / «Все 11 фото» /
+      "Alle 11 Fotos" button (46px) that opens the lightbox on photo 4;
+      desktop shows the full grid;
+    - the tour city band sits right after the chips on all viewports;
+    - bury-me-behind-the-baseboard at 390: 9294 → 6850px; desktop unchanged;
+    - known, older: closing the lightbox from a visible photo drops focus to
+      `<body>` (triggers are `display: contents`). [82b203d]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image

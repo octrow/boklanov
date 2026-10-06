@@ -12,5 +12,5 @@
 
 ## 3. Ship
 
-- [ ] 3.1 `npx tsc --noEmit` and eslint on touched files pass; commit to main, push, wait for the boklanov_v2 status; verify 1.1, 1.2 and 2.1 on boklanov.com at 390 and 1440 (EN and RU)
-- [ ] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and commit it
+- [x] 3.1 `npx tsc --noEmit` and eslint on touched files pass; commit to main, push, wait for the boklanov_v2 status; verify 1.1, 1.2 and 2.1 on boklanov.com at 390 and 1440 (EN and RU)
+- [x] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and commit it
