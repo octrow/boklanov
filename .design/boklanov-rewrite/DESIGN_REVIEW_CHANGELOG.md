@@ -175,12 +175,31 @@ The commit is in brackets.
     - the 404 has its own title ("Roman Boklanov — page not found", RU/DE);
       the home title uses an em dash like every other page. [4c5a714]
 
+## Fourth critique (24/36)
+
+30. Fourth site critique: 24/36 (`.impeccable/critique/2026-10-06T17-40-24Z__app-locale.md`).
+    The six shipped changes hold on prod. New P0: an unknown production URL
+    (`/productions/xyz`, all locales) returns an unstyled HTTP 500 on prod
+    (local dev returns 404). Plan, in order, as OpenSpec changes:
+    - P0 unknown production slug → site 404, plus a 404≠500 check and
+      redirects from old slugs;
+    - P1 mobile production page: title before a capped poster, photo strip,
+      tour facts next to the chips;
+    - P1 availability on cards from the admin "Status" field ("ON TOUR",
+      "ARCHIVE · 2021", nothing for Live; city leaves the card line); the
+      TOURING sticker moves to the status too (decided 2026-10-06, option 1).
+      Roma sets the statuses;
+    - P2 production page structure: sticker gutter, credits grouped by role,
+      outlet-only press rows, Watch/listen as a secondary button, visible
+      press links;
+    - P2 404 title lost after hydration, /press note vs untranslated
+      headlines, "FI" on /press.
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- All six OpenSpec changes from the third critique are shipped. Next: a
-  fourth `/impeccable critique site` to re-score.
+- Fourth critique done (24/36); work through its plan (entry 30).
 - Uploaded posters with no stored size use the portrait 720×1019 default, so
   a landscape one (vaikenemisen-kielioppi) reserves the wrong box until it
   loads. Fill `posterWidth`/`posterHeight` from the Payload media doc.
@@ -209,3 +228,5 @@ The commit is in brackets.
   "Holiday recipe" vs "Holiday Recipe" (duplicate?); photo credits are in
   Cyrillic on EN pages (e.g. "Павел Семченко"); /about has no CV or
   timeline a curator can forward.
+- From the fourth critique: set "Status" on every production (Live / On tour
+  / Archived); today all 55 are "Live", so the new card marker shows nothing.
