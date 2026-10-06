@@ -2,8 +2,8 @@
 
 ## 1. Page
 
-- [ ] 1.1 Show the "In development" status line (plus "· premiere <date>" when `premiereDate` is set) near the title for Status "In development" only; verify on localhost that mcqueen-blood-beneath-skin and total-fest-4 show it in EN/RU/DE and bury-me-behind-the-baseboard does not
-- [ ] 1.2 Confirm the note copy in proposal.md with the user, add it to `messages/{en,ru,de}.json`, and render it when an in-development page has no poster, photos, video or synopsis; verify with a 390×844 screenshot of mcqueen-blood-beneath-skin that the note sits under the title block and the page has no empty gap before the closing call to action
+- [x] 1.1 Show the "In development" status line (plus "· premiere <date>" when `premiereDate` is set) near the title for Status "In development" only; verify on localhost that mcqueen-blood-beneath-skin and total-fest-4 show it in EN/RU/DE and bury-me-behind-the-baseboard does not
+- [x] 1.2 Confirm the note copy in proposal.md with the user, add it to `messages/{en,ru,de}.json`, and render it when an in-development page has no poster, photos, video or synopsis; verify with a 390×844 screenshot of mcqueen-blood-beneath-skin that the note sits under the title block and the page has no empty gap before the closing call to action
 
 ## 2. Ship
 

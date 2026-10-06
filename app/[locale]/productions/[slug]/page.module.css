@@ -667,6 +667,15 @@ dd.creditsName {
   }
 }
 
+.devNote {
+  font-family: var(--font-family-serif);
+  font-size: var(--font-size-body);
+  font-style: italic;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-7);
+  max-width: 60ch;
+}
+
 .tagline {
   font-family: var(--font-family-serif);
   font-size: var(--font-size-body);

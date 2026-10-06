@@ -146,7 +146,8 @@
     "riderPressKitLink": "ZIP",
     "riderTechRiderAria": "Технический райдер, PDF",
     "riderPressKitAria": "Пресс-кит, ZIP",
-    "premiereLabel": "премьера"
+    "premiereLabel": "премьера",
+    "inDevelopmentNote": "Фото, состав и пресса появятся здесь после премьеры."
   },
   "about": {
     "stagedIn": "ГДЕ СТАВИЛ",

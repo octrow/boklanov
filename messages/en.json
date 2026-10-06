@@ -146,7 +146,8 @@
     "riderPressKitLink": "ZIP",
     "riderTechRiderAria": "Technical rider, PDF",
     "riderPressKitAria": "Press kit, ZIP",
-    "premiereLabel": "premiere"
+    "premiereLabel": "premiere",
+    "inDevelopmentNote": "Photos, credits and press will appear here after the premiere."
   },
   "about": {
     "stagedIn": "STAGED IN",

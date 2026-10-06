@@ -279,6 +279,12 @@ export default async function ProductionDetailPage({
       norm(production.synopsis).slice(0, 60)
     )
   const showSynopsis = !!production.synopsis && !synopsisInBody
+  const showDevNote =
+    production.status === 'in-development' &&
+    !production.poster.src &&
+    production.gallery.length === 0 &&
+    production.videos.length === 0 &&
+    !production.synopsis
 
   const schema = creativeWorkSchema(production, slug, locale)
 
@@ -471,6 +477,11 @@ export default async function ProductionDetailPage({
               roleLabel={roleLabel}
               premiereDate={production.premiereDate}
               premiereLabel={t('premiereLabel')}
+              statusLabel={
+                production.status === 'in-development'
+                  ? tProductions('availabilityInDevelopment')
+                  : null
+              }
             />
           </div>
 
@@ -507,6 +518,10 @@ export default async function ProductionDetailPage({
           {/* 4b. Tagline — subgenre / format label */}
           {production.tagline && (
             <p className={styles.tagline}>{production.tagline}</p>
+          )}
+
+          {showDevNote && (
+            <p className={styles.devNote}>{t('inDevelopmentNote')}</p>
           )}
 
           {/* Mobile-only media block, after the synopsis so text leads on a phone — desktop renders the same trailer + photos inside the rail (see below). */}
