@@ -11,5 +11,5 @@
 
 ## 3. Ship
 
-- [ ] 3.1 eslint and tsc on touched files pass; commit to main, push, wait for boklanov_v2 success; verify on boklanov.com that cards have no city and no token (all Live) and nothing else changed
-- [ ] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and a Roma content to-do ("set Status on every production: Live / On tour / In development / Archived"); commit
+- [x] 3.1 eslint and tsc on touched files pass; commit to main, push, wait for boklanov_v2 success; verify on boklanov.com that cards have no city and no token (all Live) and nothing else changed
+- [x] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry and a Roma content to-do ("set Status on every production: Live / On tour / In development / Archived"); commit

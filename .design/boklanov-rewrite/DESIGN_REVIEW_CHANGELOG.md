@@ -223,6 +223,21 @@ The commit is in brackets.
     - known, older: closing the lightbox from a visible photo drops focus to
       `<body>` (triggers are `display: contents`). [82b203d]
 
+33. `production-availability-status` (P1, decided 2026-10-06, option 1):
+    - cards (home and /productions) end their meta line with the admin
+      Status: "On tour" / «На гастролях» / "Auf Tournee", "In development" /
+      «В работе» / "In Arbeit", "Archive · 2021" / «Архив · 2021» / "Archiv ·
+      2021"; Live shows nothing. Today 2 productions are In development
+      (mcqueen-blood-beneath-skin, total-fest-4), the other 53 are Live;
+    - the city left the card meta line (the theatre stays);
+    - the TOURING sticker on the production page shows only for Status "On
+      tour"; before, any past tour city triggered it (bury-me-behind-the-
+      baseboard lost it; its tour band stays);
+    - the productions cache key is now `productions:all:v2`: the Vercel data
+      cache outlives deploys and old entries had no status (locally every
+      card first showed "productions" as its token);
+    - check: `npx tsx scripts/check-availability.mts`. [52957b3]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
