@@ -12,5 +12,5 @@
 
 ## 3. Ship
 
-- [ ] 3.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat the 2.2 and 2.3 checks on boklanov.com
-- [ ] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry (fifth critique plan + this change) and commit it
+- [x] 3.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat the 2.2 and 2.3 checks on boklanov.com
+- [x] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry (fifth critique plan + this change) and commit it

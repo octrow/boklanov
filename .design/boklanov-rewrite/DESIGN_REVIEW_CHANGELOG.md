@@ -269,6 +269,31 @@ The commit is in brackets.
     - production pages list en, ru and de in their hreflang alternates (de
       was missing). [2b3ae11]
 
+## Fifth critique (23/36)
+
+36. Fifth site critique: 23/36 (`.impeccable/critique/2026-10-06T20-56-44Z__app-locale.md`).
+    The fourth critique's fixes hold on prod; the drop is a stricter reading
+    of consistency and error prevention. Plan (decided 2026-10-07), as
+    OpenSpec changes:
+    - P1 the booking call to action follows the production's state;
+      archived and Russian shows offer a new production;
+    - P1 a designed state for productions in development.
+      Not taken now: genre in the home tagline, button grammar / duplicate
+      "Photos" H2, small targets on /press, content contradictions (Roma).
+
+37. `status-booking-cta` (P1):
+    - the sticky bar and closing button read by Status and theatre country:
+      "Ask Roman about touring this show" (On tour, or Live outside Russia),
+      "Ask Roman about a new production" (Archived, or Live at a Russian
+      theatre), "Ask Roman about the premiere" (In development); RU/DE
+      likewise. Today: 14 touring, 15 new production, 2 premiere;
+    - bury-me-behind-the-baseboard is a Great Puppet Theatre show, so it now
+      offers a new production; if it still tours, Roma sets Status "On tour";
+    - `/contact?show=` prefills the matching email subject ("Touring: …",
+      "New production / …", "Premiere: …");
+    - an admin label override and `bookingCta: false` still win;
+    - check: `npx tsx scripts/check-booking-kind.mts`. [93767aa]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
@@ -304,3 +329,10 @@ The commit is in brackets.
   timeline a curator can forward.
 - From the fourth critique: set "Status" on every production (Live / On tour
   / Archived); today all 55 are "Live", so the new card marker shows nothing.
+- From the fifth critique: if bury-me-behind-the-baseboard (or any other
+  Russian-theatre show) can still tour, set its Status to "On tour", or its
+  button says "new production". Name spellings drift (Maksim/Maxim Morozov,
+  Lidia Klirikova / "Lydia Klirovich"); /about "Staged in" lists countries
+  the bio doesn't; "Participant" and "Long list" entries count towards the
+  FESTIVAL AWARD sticker; Bury has a different poster on home, grid and its
+  page; the RU title of the-ape-star ends with a space.
