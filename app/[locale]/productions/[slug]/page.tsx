@@ -22,6 +22,7 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
+import { groupRuns, isArticle } from '@/lib/listRules'
 import {
   getAllProductions,
   getProduction,
@@ -243,6 +244,7 @@ export default async function ProductionDetailPage({
       : primaryVideo?.provider === 'vimeo'
         ? `https://vimeo.com/${primaryVideo.id}`
         : null
+  const pressArticles = production.press.filter((p) => isArticle(p.url))
   const trailerEmbedUrl =
     primaryVideo?.provider === 'youtube'
       ? `https://www.youtube-nocookie.com/embed/${primaryVideo.id}`
@@ -384,40 +386,46 @@ export default async function ProductionDetailPage({
           )
         })()}
 
-      {/* v3 §2.2 — plakat sticker badges above title.
-          Award sticker fires when production has any award; tour sticker fires
-          when its admin Status is "On tour". At most 2 stickers per
-          page (cap from proposal §2.2 max-3-per-page; we leave room for a
-          third elsewhere). Hidden from screen readers — TourRider + awards
-          list are the canonical sources. */}
-      {(production.awards.length > 0 || production.status === 'on-tour') && (
-        <div className={styles.stickerRow} aria-hidden='true'>
-          {production.awards.length > 0 && (
-            <Sticker
-              variant='award'
-              accent='vermillion'
-              rotate={-3}
-              shadow
-              layout='inline'
-            >
-              {production.awards.length === 1
-                ? t('stickerAward')
-                : `${t('stickerAward')} · ${production.awards.length}`}
-            </Sticker>
-          )}
-          {/* Status, not tour[]: past tours don't make a show available now. */}
-          {production.status === 'on-tour' && (
-            <Sticker variant='tour' accent='cobalt' rotate={3} layout='inline'>
-              {t('stickerTour')}
-            </Sticker>
-          )}
-        </div>
-      )}
-
       {/* .layout: on desktop becomes a CSS grid [720px content | 1fr rail].
           .stickyCta lives in the rail column so it's visible from landing. */}
       <div className={styles.layout}>
         <div className={styles.column}>
+          {/* v3 §2.2 — plakat sticker badges above title.
+              Award sticker fires when production has any award; tour sticker fires
+              when its admin Status is "On tour". At most 2 stickers per
+              page (cap from proposal §2.2 max-3-per-page; we leave room for a
+              third elsewhere). Hidden from screen readers — TourRider + awards
+              list are the canonical sources. */}
+          {(production.awards.length > 0 ||
+            production.status === 'on-tour') && (
+            <div className={styles.stickerRow} aria-hidden='true'>
+              {production.awards.length > 0 && (
+                <Sticker
+                  variant='award'
+                  accent='vermillion'
+                  rotate={-3}
+                  shadow
+                  layout='inline'
+                >
+                  {production.awards.length === 1
+                    ? t('stickerAward')
+                    : `${t('stickerAward')} · ${production.awards.length}`}
+                </Sticker>
+              )}
+              {/* Status, not tour[]: past tours don't make a show available now. */}
+              {production.status === 'on-tour' && (
+                <Sticker
+                  variant='tour'
+                  accent='cobalt'
+                  rotate={3}
+                  layout='inline'
+                >
+                  {t('stickerTour')}
+                </Sticker>
+              )}
+            </div>
+          )}
+
           {/* DA-7.6.D — Run-of-show row, mono line above the title */}
           {production.runs.length > 0 && (
             <ul className={styles.runsRow}>
@@ -553,23 +561,25 @@ export default async function ProductionDetailPage({
                 </span>
               </summary>
               <dl className={styles.creditsDl}>
-                {production.credits.map((c, i) => (
-                  <div key={`${c.role}-${i}`} className={styles.creditsRow}>
-                    <dt className={styles.creditsRole}>{c.role}</dt>
-                    <dd className={styles.creditsName}>
-                      {c.url ? (
-                        <a
-                          href={c.url}
-                          target='_blank'
-                          rel='noreferrer noopener'
-                          className={`${styles.creditsLink} tap-target`}
-                        >
-                          {c.name}
-                        </a>
-                      ) : (
-                        c.name
-                      )}
-                    </dd>
+                {groupRuns(production.credits, (c) => c.role).map((g, i) => (
+                  <div key={`${g.key}-${i}`} className={styles.creditsRow}>
+                    <dt className={styles.creditsRole}>{g.key}</dt>
+                    {g.items.map((c, j) => (
+                      <dd key={j} className={styles.creditsName}>
+                        {c.url ? (
+                          <a
+                            href={c.url}
+                            target='_blank'
+                            rel='noreferrer noopener'
+                            className={`${styles.creditsLink} tap-target`}
+                          >
+                            {c.name}
+                          </a>
+                        ) : (
+                          c.name
+                        )}
+                      </dd>
+                    ))}
                   </div>
                 ))}
               </dl>
@@ -584,7 +594,7 @@ export default async function ProductionDetailPage({
             <div className={styles.actionBar}>
               {videoUrl && (
                 <a
-                  className={`${styles.btn} ${styles.btnPrimary}`}
+                  className={`${styles.btn} ${styles.btnSecondary}`}
                   href={videoUrl}
                   target='_blank'
                   rel='noreferrer noopener'
@@ -675,15 +685,15 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
-          {/* 9. Press */}
-          {production.press.length > 0 && (
+          {/* 9. Press — articles only, same rule as /press */}
+          {pressArticles.length > 0 && (
             <section className={styles.section}>
               <h2 className={styles.sectionLabel}>{t('press')}</h2>
               <ul className={styles.pressList}>
-                {production.press.map((p, i) => (
+                {pressArticles.map((p, i) => (
                   <li key={`${p.url}-${i}`} className={styles.pressItem}>
                     <a
-                      className={styles.pressLink}
+                      className={`${styles.pressLink} tap-target`}
                       href={p.url}
                       target='_blank'
                       rel='noreferrer noopener'

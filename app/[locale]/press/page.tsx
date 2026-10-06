@@ -9,6 +9,7 @@ import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 
+import { isArticle } from '@/lib/listRules'
 import styles from './page.module.css'
 
 export function generateStaticParams() {
@@ -47,17 +48,6 @@ function outletFromUrl(url: string): string {
     return host.replace(/^www\./, '')
   } catch {
     return url
-  }
-}
-
-/** A bare homepage link ("sobaka.ru" → http://sobaka.ru/) points at no
- *  article: hide it on the site, the row stays in the admin. */
-function isArticle(url: string): boolean {
-  try {
-    const u = new URL(url)
-    return u.pathname.replace(/\/+$/, '') !== '' || u.search !== ''
-  } catch {
-    return false
   }
 }
 

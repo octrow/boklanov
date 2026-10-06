@@ -209,7 +209,12 @@
 @media (min-width: 768px) {
   .creditsRow {
     grid-template-columns: minmax(140px, 1fr) 2fr;
-    gap: var(--space-4);
+    column-gap: var(--space-4);
+  }
+
+  /* A role with several people: names stack in the second column. */
+  dd.creditsName {
+    grid-column: 2;
   }
 }
 
@@ -260,17 +265,6 @@ dd.creditsName {
   transition:
     background var(--duration-fast) var(--easing-default),
     color var(--duration-fast) var(--easing-default);
-}
-
-.btnPrimary {
-  background: var(--accent);
-  color: var(--paper);
-  border: 1px solid var(--accent);
-}
-
-.btnPrimary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
 }
 
 .btnSecondary {
@@ -332,7 +326,9 @@ dd.creditsName {
   font-size: var(--font-size-h3);
   line-height: var(--line-height-snug);
   color: var(--ink);
-  text-decoration-color: transparent;
+  text-decoration-line: underline;
+  text-decoration-color: var(--rule-strong);
+  text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
   transition: text-decoration-color var(--duration-fast) var(--easing-default);
 }
@@ -607,13 +603,14 @@ dd.creditsName {
 }
 
 /* v3 §2.2 — sticker badge row above title.
+   Lives inside .column so it shares the title's gutter.
    Decorative; aria-hidden. Wraps to two lines on narrow viewports. */
 .stickerRow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-  margin: var(--space-5) 0 var(--space-4);
+  margin: 0 0 var(--space-5);
 }
 
 @media print {
