@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { posterAlt } from '@/lib/posterAlt'
 
 import { IconArrowRight } from '@/components/IconArrowRight'
 import { notFound } from 'next/navigation'
@@ -198,6 +199,7 @@ export default async function ProductionDetailPage({
   const tProductions = await getTranslations('productions')
   const tAccess = await getTranslations('accessibility')
   const tHome = await getTranslations('home')
+  const tCommon = await getTranslations('common')
 
   const allProductions = await getAllProductions(locale)
   const productionIndex = allProductions.findIndex((p) => p.slug === slug)
@@ -305,16 +307,15 @@ export default async function ProductionDetailPage({
       {/* 1. Cover — natural aspect, capped at 65vh. Click to view full poster. */}
       {production.poster.src &&
         (() => {
-          const posterAlt =
+          const alt = posterAlt(
             [
-              production.role.join(' / '),
               production.title || slug,
+              production.role.join(' / '),
               production.theatre.name ?? production.theatre.shortName,
               production.year
-            ]
-              .filter(Boolean)
-              .join(', ') +
-            (production.poster.credit ? ` (${production.poster.credit})` : '')
+            ],
+            production.poster.credit
+          )
           const posterSrc = cdnUrl(production.poster.src)!
           // 90vw (not 100vw) reflects the actual rendered width on mobile:
           // .cover is flex-centered with max-height: 65vh, so a typical
@@ -331,7 +332,7 @@ export default async function ProductionDetailPage({
           const posterW = production.poster.width ?? 720
           const posterH = production.poster.height ?? 1019
           return (
-            <PosterLightbox src={posterSrc} alt={posterAlt}>
+            <PosterLightbox src={posterSrc} alt={alt}>
               <figure className={styles.cover}>
                 {variants ? (
                   // Pre-baked AVIF variants — bypass `/_next/image`. The
@@ -343,7 +344,7 @@ export default async function ProductionDetailPage({
                     src={cdnUrl(variants.w600)!}
                     srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
                     sizes={posterSizes}
-                    alt={posterAlt}
+                    alt={alt}
                     decoding='async'
                     loading='eager'
                     fetchPriority='high'
@@ -360,7 +361,7 @@ export default async function ProductionDetailPage({
                 ) : production.poster.width && production.poster.height ? (
                   <Image
                     src={posterSrc}
-                    alt={posterAlt}
+                    alt={alt}
                     width={production.poster.width}
                     height={production.poster.height}
                     priority
@@ -378,11 +379,11 @@ export default async function ProductionDetailPage({
                 ) : (
                   <Image
                     src={posterSrc}
-                    alt={posterAlt}
+                    alt={alt}
                     priority
                     fetchPriority='high'
-                    width={0}
-                    height={0}
+                    width={posterW}
+                    height={posterH}
                     sizes={posterSizes}
                     quality={75}
                     style={{
@@ -396,7 +397,7 @@ export default async function ProductionDetailPage({
                 )}
                 {production.poster.credit && (
                   <figcaption className={styles.coverCredit}>
-                    {production.poster.credit}
+                    {tCommon('photo')}: {production.poster.credit}
                   </figcaption>
                 )}
               </figure>

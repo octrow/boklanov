@@ -14,11 +14,11 @@
   margin: 0 auto;
   width: 100%;
   max-width: var(--max-width-wide);
-  max-height: 65vh;
-  overflow: hidden;
+  /* Column: the credit sits under the poster. No max-height/overflow here —
+     the <img> caps itself at 65vh, so the caption is never clipped. */
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   background: var(--paper-sunken);
 }
 
@@ -41,6 +41,7 @@
   font-size: var(--font-size-meta);
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
+  text-align: center;
   padding: var(--space-2) var(--gutter-mobile);
 }
 
