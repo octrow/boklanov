@@ -8,4 +8,4 @@
 
 ## 2. Ship
 
-- [ ] 2.1 Lint, build, commit to main, verify on boklanov.com, changelog entry
+- [x] 2.1 Lint, build, commit to main, verify on boklanov.com, changelog entry

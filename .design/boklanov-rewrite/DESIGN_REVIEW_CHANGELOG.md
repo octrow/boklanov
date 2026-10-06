@@ -151,12 +151,24 @@ The commit is in brackets.
       outside prose (the skip-link stays off-screen until focus). No nested
       links were found. [875f846]
 
+28. `tour-ticker-pause` (WCAG 2.2.2):
+    - the city ticker (home and production tour band) has a pause/play
+      button at its right edge: 44px hit area, `aria-pressed`, label "Pause
+      the city ticker" / «Остановить бегущую строку» / "Städte-Laufband
+      anhalten"; the band stays 31–32px tall;
+    - hover and keyboard focus pause it too; once the visitor uses the
+      button, their choice wins;
+    - with reduced motion the band is static and the button is hidden;
+    - checked on boklanov.com at 390 (tap) and 1440 (Space/Enter) on the home
+      page and bury-me-behind-the-baseboard. City order is unchanged (home
+      page left as is). [cbaca13]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- Apply the remaining OpenSpec changes, `tour-ticker-pause` next
-  (`/opsx:apply tour-ticker-pause`).
+- Apply the last OpenSpec change, `curator-facts-and-labels`
+  (`/opsx:apply curator-facts-and-labels`).
 - Uploaded posters with no stored size use the portrait 720×1019 default, so
   a landscape one (vaikenemisen-kielioppi) reserves the wrong box until it
   loads. Fill `posterWidth`/`posterHeight` from the Payload media doc.
