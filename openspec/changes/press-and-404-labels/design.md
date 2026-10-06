@@ -19,4 +19,4 @@
 
 ## Risks / Trade-offs
 
-- [Two `<title>` elements in head] → task verifies a single title after hydration.
+- [Two `<title>` elements in head] → accepted 2026-10-07: the not-found `<title>` comes first, so `document.title` and the tab are correct; the layout title stays too. 404s are not indexed.

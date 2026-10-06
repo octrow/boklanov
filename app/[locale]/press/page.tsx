@@ -8,6 +8,7 @@ import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
+import { languageName } from '@/lib/countryCode'
 
 import { isArticle } from '@/lib/listRules'
 import styles from './page.module.css'
@@ -117,7 +118,7 @@ export default async function PressPage({
                     <span className={styles.outlet}>
                       {item.outlet}
                       {item.language && item.language !== locale
-                        ? ` · ${item.language.toUpperCase()}`
+                        ? ` · ${languageName(item.language, locale)}`
                         : ''}
                     </span>
                   </a>

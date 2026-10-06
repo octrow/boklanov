@@ -98,7 +98,7 @@
   "press": {
     "title": "press",
     "empty": "No press materials",
-    "originalNote": "Headlines are translated. The articles are in their original language, mostly Russian."
+    "originalNote": "Headlines are in English where a translation exists. Articles are in their original language, mostly Russian."
   },
   "awards": {
     "title": "awards & festivals",
