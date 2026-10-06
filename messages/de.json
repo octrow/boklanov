@@ -82,6 +82,8 @@
     "emailLabel": "oder per E-Mail",
     "emailCta": "Roman per E-Mail",
     "mailtoSubject": "Zusammenarbeit / Tournee",
+    "mailtoSubjectShow": "Tournee: {title}",
+    "showTopic": "Betreff:",
     "copyButton": "kopieren",
     "copiedButton": "✓",
     "copyAria": "E-Mail-Adresse kopieren",

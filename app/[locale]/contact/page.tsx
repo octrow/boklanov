@@ -2,12 +2,13 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import * as React from 'react'
 
-import { getContact } from '@/lib/content'
+import { getAllProductions, getContact } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 
 import { CopyEmailButton } from './CopyEmailButton'
+import { ShowMailtoLink, ShowTopicLine } from './ShowTopic'
 import styles from './page.module.css'
 
 export function generateStaticParams() {
@@ -79,10 +80,33 @@ export default async function ContactPage({
   const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(
     t('mailtoSubject')
   )}`
+  // Lookup table for `?show=<slug>` from a production page's booking CTA.
+  // The page stays static; the client island reads the query string.
+  const showTitles = Object.fromEntries(
+    (await getAllProductions(locale)).map((p) => [
+      p.slug,
+      p.title ?? p.titles.en ?? p.slug
+    ])
+  )
+  const mailtoAttrs = {
+    className: styles.mailtoLink,
+    'data-ph-event': 'booking_cta_click',
+    'data-ph-locale': locale,
+    'data-ph-source': 'contact',
+    'data-ph-channel': 'email'
+  }
 
   return (
     <main id='main' className={styles.page}>
       <h1 className={styles.heading}>{t('title')}</h1>
+
+      <React.Suspense fallback={null}>
+        <ShowTopicLine
+          titles={showTitles}
+          label={t('showTopic')}
+          className={styles.secondaryLabel}
+        />
+      </React.Suspense>
 
       {intro && <p className={styles.intro}>{intro}</p>}
 
@@ -119,16 +143,23 @@ export default async function ContactPage({
           button, copy-pasteable address. */}
       <section className={styles.secondarySection}>
         <p className={styles.secondaryLabel}>{t('emailLabel')}</p>
-        <a
-          href={mailtoHref}
-          className={styles.mailtoLink}
-          data-ph-event='booking_cta_click'
-          data-ph-locale={locale}
-          data-ph-source='contact'
-          data-ph-channel='email'
+        <React.Suspense
+          fallback={
+            <a href={mailtoHref} {...mailtoAttrs}>
+              {t('emailCta')}
+            </a>
+          }
         >
-          {t('emailCta')}
-        </a>
+          <ShowMailtoLink
+            titles={showTitles}
+            email={email}
+            subject={t('mailtoSubject')}
+            showSubject={t.raw('mailtoSubjectShow') as string}
+            {...mailtoAttrs}
+          >
+            {t('emailCta')}
+          </ShowMailtoLink>
+        </React.Suspense>
         <div className={styles.emailSection}>
           <span className={styles.emailAddress}>{email}</span>
           <CopyEmailButton email={email} />

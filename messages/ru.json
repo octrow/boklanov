@@ -82,6 +82,8 @@
     "emailLabel": "или по электронной почте",
     "emailCta": "Написать Роману",
     "mailtoSubject": "Сотрудничество / гастроли",
+    "mailtoSubjectShow": "Гастроли: {title}",
+    "showTopic": "Тема:",
     "copyButton": "копировать",
     "copiedButton": "✓",
     "copyAria": "Скопировать адрес эл. почты",

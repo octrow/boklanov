@@ -11,6 +11,7 @@ import { GalleryLightbox } from '@/components/GalleryLightbox'
 import { Marginalia } from '@/components/Marginalia'
 import { PosterLightbox } from '@/components/PosterLightbox'
 import { Sticker } from '@/components/Sticker'
+import { BookingBar } from '@/components/BookingBar'
 import { TourTicker } from '@/components/TourTicker'
 import { YouTubeFacade } from '@/components/YouTubeFacade'
 import { countryCode } from '@/lib/countryCode'
@@ -205,9 +206,6 @@ export default async function ProductionDetailPage({
       ? `${String(productionIndex + 1).padStart(2, '0')} / ${String(allProductions.length).padStart(2, '0')}`
       : null
 
-  const titleRu = production.titles.ru
-  const titleEn = production.titles.en
-
   const country = countryCode(production.theatre.country)
   const chips: string[] = []
   if (production.ageRating) chips.push(production.ageRating)
@@ -227,20 +225,9 @@ export default async function ProductionDetailPage({
     ? production.role.map((r) => roleLabelMap[r] ?? r).join(' / ')
     : null
 
-  // Sticky CTA mailto: pre-filled per brief D7. Subject names the show; body
-  // hints what we want from a touring inquiry. EN body — most curators write
-  // either RU or EN; EN reads cleanly to both.
-  const subject = `Touring inquiry: ${titleRu ?? titleEn ?? slug}`
-  const body =
-    `Hi Roman,\n\n` +
-    `I'm interested in touring ${titleRu ?? titleEn ?? slug} ` +
-    `(${production.year ?? ''}${production.role.length ? `, ${production.role.join(' / ')}` : ''}).\n\n` +
-    `Tour window:\n` +
-    `Venue / festival:\n` +
-    `Notes:\n`
-  const mailto = `mailto:roman.boklanov@web.de?subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`
+  // Booking CTA → /contact?show=<slug>: Telegram first, email with the show
+  // named in the subject (PRODUCT.md: TG/IG are the primary channels).
+  const contactHref = `${locale === 'en' ? '' : `/${locale}`}/contact?show=${encodeURIComponent(slug)}`
 
   // Roman left Russia in 2022: RU work is past, never sold as current
   // repertoire (PRODUCT.md), even when the theatre still lists it.
@@ -262,9 +249,9 @@ export default async function ProductionDetailPage({
         : null
 
   // Per-mdx CTA overrides (frontmatter): bookingCta=false hides; bookingCtaUrl
-  // replaces the default mailto; bookingCtaLabel replaces the i18n label.
+  // replaces the default contact link; bookingCtaLabel replaces the i18n label.
   const ctaEnabled = production.bookingCta !== false
-  const ctaUrl = production.bookingCtaUrl || mailto
+  const ctaUrl = production.bookingCtaUrl || contactHref
   const ctaLabel = production.bookingCtaLabel || t('bookingCta')
   // The synopsis is often the body's first sentence (lina-marlina): print it
   // once, in the body.
@@ -478,14 +465,16 @@ export default async function ProductionDetailPage({
           )}
 
           {/* 2. Title block — TheatreSlate component (Phase 9.3, DESIGN_v2_PROPOSAL.md §4.1) */}
-          <TheatreSlate
-            as='h1'
-            titleRu={production.title}
-            theatre={production.theatre}
-            roleLabel={roleLabel}
-            premiereDate={production.premiereDate}
-            premiereLabel={t('premiereLabel')}
-          />
+          <div data-booking-start>
+            <TheatreSlate
+              as='h1'
+              titleRu={production.title}
+              theatre={production.theatre}
+              roleLabel={roleLabel}
+              premiereDate={production.premiereDate}
+              premiereLabel={t('premiereLabel')}
+            />
+          </div>
 
           {/* 3. Chips row */}
           {chips.length > 0 && (
@@ -756,9 +745,9 @@ export default async function ProductionDetailPage({
             </section>
           )}
 
-          {/* 12. Closing invite (desktop; on mobile the fixed CTA is it). */}
+          {/* 12. Closing invite, every viewport (BookingBar hides at it). */}
           {ctaEnabled && (
-            <section className={styles.invite}>
+            <section className={styles.invite} data-booking-end>
               <h2 className={styles.inviteTitle}>{tHome('inviteTitle')}</h2>
               <a className={styles.inviteCta} href={ctaUrl}>
                 <span>{ctaLabel}</span>
@@ -789,15 +778,17 @@ export default async function ProductionDetailPage({
               Hide via `bookingCta: false` in frontmatter; override label/url via
               bookingCtaLabel / bookingCtaUrl. */}
           {ctaEnabled && (
-            <a
+            <BookingBar
               className={styles.stickyCta}
               href={ctaUrl}
+              startSelector='[data-booking-start]'
+              endSelector='[data-booking-end], footer'
               data-ph-event='booking_cta_click'
               data-ph-slug={slug}
               data-ph-locale={locale}
             >
               {ctaLabel}
-            </a>
+            </BookingBar>
           )}
           {/* Desktop-only media block — mobile renders the same trailer + photos
               inline right after the title (see .inlineMedia above). */}

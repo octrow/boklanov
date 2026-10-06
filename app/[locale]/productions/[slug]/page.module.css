@@ -465,7 +465,30 @@ dd.creditsName {
   text-decoration: none;
   text-align: center;
   box-shadow: var(--shadow-sm);
-  transition: background var(--duration-fast) var(--easing-default);
+  transition:
+    background var(--duration-fast) var(--easing-default),
+    transform var(--duration-fast) var(--easing-default),
+    opacity var(--duration-fast) var(--easing-default),
+    visibility 0s linear var(--duration-fast);
+
+  /* Mobile: hidden until BookingBar sets data-visible (slate scrolled out,
+     invite/footer not on screen). main's 128px bottom padding clears it. */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(calc(100% + var(--space-4)));
+}
+
+.stickyCta[data-visible] {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stickyCta {
+    transition: background var(--duration-fast) var(--easing-default);
+  }
 }
 
 .stickyCta:hover {
@@ -487,6 +510,9 @@ dd.creditsName {
     max-width: none;
     min-height: 56px;
     box-shadow: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -694,21 +720,15 @@ dd.creditsName {
   font-style: italic;
 }
 
-/* 12. Closing invite — same band as /about. Desktop only: on mobile the
-   fixed sticky CTA already carries the invitation. */
+/* 12. Closing invite — same band as /about, on every viewport. On mobile
+   the fixed bar hides while this is on screen (BookingBar). */
 .invite {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .invite {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    margin-top: var(--space-8);
-    padding-top: var(--space-7);
-    border-top: 1px solid var(--rule);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--rule);
 }
 
 .inviteTitle {
