@@ -123,12 +123,20 @@ The commit is in brackets.
     - the closing invite is shown on phones as well;
     - EN label is now "Ask Roman about touring this show". [82840ee]
 
+25. `mobile-productions-filters`:
+    - on a phone the 15 filter controls sit behind one button, "filter ·
+      directed by Roman" (it lists every active filter); the first row of
+      posters is now in the first screen;
+    - "31 of 55" always stands next to the title, so the default
+      (director) is no longer a hidden state;
+    - desktop: all four filter groups fit on one row. [3d1ab19]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- Apply the remaining OpenSpec changes, `mobile-productions-filters` next
-  (`/opsx:apply mobile-productions-filters`).
+- Apply the remaining OpenSpec changes, `production-page-polish` next
+  (`/opsx:apply production-page-polish`).
 - `/impeccable critique admin` (never run).
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
