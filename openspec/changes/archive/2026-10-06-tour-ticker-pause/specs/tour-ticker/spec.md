@@ -36,4 +36,4 @@ The full city list SHALL remain exposed once through the region's accessible nam
 #### Scenario: Screen reader
 
 - **WHEN** a screen reader reaches the ticker
-- **THEN** it announces the label and the city list once, and the toggle
+- **THEN** it announces the label and the city list once, and the toggle is announced separately as a pressed/not-pressed button
