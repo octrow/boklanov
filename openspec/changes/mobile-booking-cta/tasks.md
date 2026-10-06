@@ -17,4 +17,4 @@
 
 ## 4. Ship
 
-- [ ] 4.1 Lint, typecheck, `next build`; commit to main; after the Vercel status is success, re-run the 390px check on boklanov.com and add an entry to DESIGN_REVIEW_CHANGELOG.md
+- [x] 4.1 Lint, typecheck, `next build`; commit to main; after the Vercel status is success, re-run the 390px check on boklanov.com and add an entry to DESIGN_REVIEW_CHANGELOG.md

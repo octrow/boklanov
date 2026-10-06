@@ -115,12 +115,20 @@ The commit is in brackets.
     - `curator-facts-and-labels`: country names, duration on cards, 404 and
       home titles.
 
+24. `mobile-booking-cta`:
+    - on a phone the booking bar is hidden at first paint, appears once the
+      title slate scrolls out, and hides at the closing invite and footer;
+    - it leads to `/contact?show=<slug>`: Telegram first, and the email
+      subject names the show ("Touring: …", RU/DE too);
+    - the closing invite is shown on phones as well;
+    - EN label is now "Ask Roman about touring this show". [82840ee]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
-- Apply the OpenSpec changes above, `mobile-booking-cta` first
-  (`/opsx:apply mobile-booking-cta`).
+- Apply the remaining OpenSpec changes, `mobile-productions-filters` next
+  (`/opsx:apply mobile-productions-filters`).
 - `/impeccable critique admin` (never run).
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
