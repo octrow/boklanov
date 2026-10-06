@@ -1,11 +1,12 @@
 'use client'
 
 import Image from 'next/image'
+import { useLocale, useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
 import { cdnUrl } from '@/lib/cdn'
-import { countryCode } from '@/lib/countryCode'
+import { countryCode, countryName } from '@/lib/countryCode'
 import type { ProductionView } from '@/lib/content'
 
 import styles from './ProductionCard.module.css'
@@ -37,12 +38,17 @@ export function ProductionCard({
 
   // Full name + city: curators can't decode shortName codes (BTK, TT).
   const theatre = production.theatre.name ?? production.theatre.shortName
-  const country = countryCode(production.theatre.country)
+  const locale = useLocale()
+  const t = useTranslations('productions')
+  const country = countryName(countryCode(production.theatre.country), locale)
   const meta = [
     theatre,
     production.theatre.city,
     production.year,
-    production.ageRating
+    production.ageRating,
+    production.durationMin
+      ? t('cardDuration', { n: production.durationMin })
+      : null
   ]
     .filter((v) => v !== null && v !== undefined && v !== '')
     .join(' · ')
@@ -133,7 +139,7 @@ export function ProductionCard({
             slug={production.slug}
             title={titleMain ?? production.slug}
             theatre={theatre ?? null}
-            countryCode={country}
+            country={country}
             year={production.year ?? null}
             synopsis={production.synopsis}
           />

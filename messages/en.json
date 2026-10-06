@@ -12,7 +12,7 @@
   "meta": {
     "siteName": "Roman Boklanov",
     "siteDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty.",
-    "homeTitle": "Roman Boklanov - theatre director",
+    "homeTitle": "Roman Boklanov — theatre director",
     "homeDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty."
   },
   "home": {
@@ -67,7 +67,8 @@
     "roleAll": "all",
     "resultCount": "{count} of {total}",
     "filterToggle": "filter",
-    "roleDefaultSummary": "directed by Roman"
+    "roleDefaultSummary": "directed by Roman",
+    "cardDuration": "{n} min"
   },
   "archive": {
     "title": "archive",
@@ -147,6 +148,7 @@
     "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "notFound": {
+    "title": "Roman Boklanov — page not found",
     "heading": "page not found",
     "body": "This address leads nowhere. The productions are all here, or write to Roman directly.",
     "home": "home",

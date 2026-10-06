@@ -12,7 +12,7 @@
   "meta": {
     "siteName": "Roman Boklanov",
     "siteDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Familien. Zwischen Bremen, Wien und Almaty.",
-    "homeTitle": "Roman Boklanov - Theaterregisseur",
+    "homeTitle": "Roman Boklanov — Theaterregisseur",
     "homeDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Familien. Zwischen Bremen, Wien und Almaty."
   },
   "home": {
@@ -67,7 +67,8 @@
     "roleAll": "alle",
     "resultCount": "{count} von {total}",
     "filterToggle": "Filter",
-    "roleDefaultSummary": "Regie: Roman"
+    "roleDefaultSummary": "Regie: Roman",
+    "cardDuration": "{n} Min."
   },
   "archive": {
     "title": "Archiv",
@@ -147,6 +148,7 @@
     "deForthcoming": "Deutsche Übersetzung folgt"
   },
   "notFound": {
+    "title": "Roman Boklanov — Seite nicht gefunden",
     "heading": "seite nicht gefunden",
     "body": "Unter dieser Adresse gibt es nichts. Alle Inszenierungen sind hier, oder schreiben Sie Roman direkt.",
     "home": "Startseite",

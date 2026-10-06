@@ -1,9 +1,15 @@
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
 import { Link } from '@/i18n/navigation'
 
 import styles from './not-found.module.css'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('notFound')
+  return { title: t('title') }
+}
 
 export default async function NotFound() {
   const t = await getTranslations('notFound')

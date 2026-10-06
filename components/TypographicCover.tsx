@@ -9,7 +9,8 @@ interface TypographicCoverProps {
   /** Theatre short name (top of meta line). */
   theatre?: string | null
   /** Optional country/city marker (mid of meta line). */
-  countryCode?: string | null
+  /** Localized country name. */
+  country?: string | null
   year?: number | null
   /** Optional synopsis line — proposal §6.2 collision-buster. Rendered as
    * italic Lora above meta when present, truncated to 60 chars. */
@@ -45,12 +46,12 @@ export function TypographicCover({
   slug,
   title,
   theatre,
-  countryCode,
+  country,
   year,
   synopsis
 }: TypographicCoverProps) {
   const variant = variantForSlug(slug)
-  const metaParts = [theatre, countryCode, year].filter(Boolean)
+  const metaParts = [theatre, country, year].filter(Boolean)
   const synopsisLine = synopsis ? truncate(synopsis, 60) : null
 
   return (

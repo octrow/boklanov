@@ -8,3 +8,17 @@ export function countryCode(name?: string | null): string | null {
   const trimmed = name.trim()
   return /^[A-Z]{2}$/.test(trimmed) ? trimmed : null
 }
+
+/** Localized country name for an ISO code ("FI" → "Finnland" in de).
+ *  Falls back to the code if the runtime has no name for it. */
+export function countryName(
+  code: string | null | undefined,
+  locale: string
+): string | null {
+  if (!code) return null
+  try {
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code
+  } catch {
+    return code
+  }
+}

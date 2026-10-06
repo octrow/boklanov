@@ -15,7 +15,7 @@ import { Sticker } from '@/components/Sticker'
 import { BookingBar } from '@/components/BookingBar'
 import { TourTicker } from '@/components/TourTicker'
 import { YouTubeFacade } from '@/components/YouTubeFacade'
-import { countryCode } from '@/lib/countryCode'
+import { countryCode, countryName } from '@/lib/countryCode'
 import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
@@ -208,7 +208,7 @@ export default async function ProductionDetailPage({
       ? `${String(productionIndex + 1).padStart(2, '0')} / ${String(allProductions.length).padStart(2, '0')}`
       : null
 
-  const country = countryCode(production.theatre.country)
+  const country = countryName(countryCode(production.theatre.country), locale)
   const chips: string[] = []
   if (production.ageRating) chips.push(production.ageRating)
   if (production.year) chips.push(String(production.year))

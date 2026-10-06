@@ -1,12 +1,13 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import * as React from 'react'
 import { createPortal } from 'react-dom'
 
 import { ProductionGrid } from '@/components/ProductionGrid'
 import type { ProductionView } from '@/lib/content'
-import { countryCode } from '@/lib/countryCode'
+import { countryCode, countryName } from '@/lib/countryCode'
 
 import styles from './FilteredProductionsPanel.module.css'
 
@@ -79,6 +80,7 @@ export function FilteredProductionsPanel({
   countSlotId
 }: FilteredProductionsPanelProps) {
   const searchParams = useSearchParams()
+  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   const [countryOpen, setCountryOpen] = React.useState(false)
@@ -156,10 +158,15 @@ export function FilteredProductionsPanel({
           .filter((c): c is string => c !== null)
       )
     ]
-    const head = codes.filter((c) => !demoted.has(c)).sort()
-    const tail = codes.filter((c) => demoted.has(c)).sort()
+    const byName = (a: string, b: string) =>
+      (countryName(a, locale) ?? a).localeCompare(
+        countryName(b, locale) ?? b,
+        locale
+      )
+    const head = codes.filter((c) => !demoted.has(c)).sort(byName)
+    const tail = codes.filter((c) => demoted.has(c)).sort(byName)
     return [...head, ...tail]
-  }, [productions])
+  }, [productions, locale])
 
   // ── Filter productions ───────────────────────────────────────────────
 
@@ -230,7 +237,7 @@ export function FilteredProductionsPanel({
         : (roleLabelMap[activeRole] ?? activeRole),
     activeForm && (labels.formLabels[activeForm] ?? activeForm),
     activeAges.length > 0 && activeAges.map((a) => `${a}+`).join(', '),
-    activeCountry
+    countryName(activeCountry, locale)
   ]
     .filter(Boolean)
     .join(' · ')
@@ -382,7 +389,8 @@ export function FilteredProductionsPanel({
                   onClick={() => setCountryOpen((v) => !v)}
                 >
                   <span className={styles.countryTriggerLabel}>
-                    {activeCountry ?? labels.groupLabelCountry}
+                    {countryName(activeCountry, locale) ??
+                      labels.groupLabelCountry}
                   </span>
                   <span className={styles.caret} aria-hidden='true'>
                     ▾
@@ -409,7 +417,7 @@ export function FilteredProductionsPanel({
                           setCountryOpen(false)
                         }}
                       >
-                        {code}
+                        {countryName(code, locale)}
                       </button>
                     ))}
                   </div>
