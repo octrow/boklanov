@@ -106,7 +106,7 @@ export default async function PressPage({
             <h2 className={styles.groupHead}>
               <Link
                 href={`/productions/${prod.slug}`}
-                className={styles.groupLink}
+                className={`${styles.groupLink} tap-target`}
               >
                 {prod.title}
               </Link>

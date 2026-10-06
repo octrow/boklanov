@@ -59,7 +59,7 @@ export function TheatreSlate({
         <p className={styles.theatre}>
           {theatreUrl ? (
             <a
-              className={styles.theatreLink}
+              className={`${styles.theatreLink} tap-target`}
               href={theatreUrl}
               target='_blank'
               rel='noreferrer noopener'

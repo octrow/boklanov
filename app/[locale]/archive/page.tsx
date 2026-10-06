@@ -82,7 +82,7 @@ export default async function ArchivePage({
                 <td className={styles.tdTitle}>
                   <Link
                     href={`/productions/${prod.slug}`}
-                    className={styles.titleLink}
+                    className={`${styles.titleLink} tap-target`}
                   >
                     {prod.title}
                   </Link>

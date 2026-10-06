@@ -335,6 +335,22 @@ a.link-bare {
   top: var(--space-3);
 }
 
+/* Standalone text links in lists and tables: an invisible 44px-tall hit area
+   centred on the text (WCAG 2.5.5), so the type and row rhythm stay as is. */
+.tap-target {
+  position: relative;
+}
+
+.tap-target::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
 /* Form controls inherit type — no platform fonts leaking in. */
 input,
 button,

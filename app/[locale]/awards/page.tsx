@@ -78,7 +78,7 @@ export default async function AwardsPage({
               <h2 className={styles.productionTitle}>
                 <Link
                   href={`/productions/${group.slug}`}
-                  className={styles.productionLink}
+                  className={`${styles.productionLink} tap-target`}
                 >
                   {group.title}
                 </Link>

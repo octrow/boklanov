@@ -573,7 +573,7 @@ export default async function ProductionDetailPage({
                           href={c.url}
                           target='_blank'
                           rel='noreferrer noopener'
-                          className={styles.creditsLink}
+                          className={`${styles.creditsLink} tap-target`}
                         >
                           {c.name}
                         </a>
@@ -727,6 +727,7 @@ export default async function ProductionDetailPage({
                 {production.theatre.url && (
                   <li className={styles.linksItem}>
                     <a
+                      className='tap-target'
                       href={production.theatre.url}
                       target='_blank'
                       rel='noreferrer noopener'
@@ -737,7 +738,12 @@ export default async function ProductionDetailPage({
                 )}
                 {production.externalLinks.map((l) => (
                   <li key={l.url} className={styles.linksItem}>
-                    <a href={l.url} target='_blank' rel='noreferrer noopener'>
+                    <a
+                      className='tap-target'
+                      href={l.url}
+                      target='_blank'
+                      rel='noreferrer noopener'
+                    >
                       {l.label}
                     </a>
                   </li>

@@ -63,7 +63,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
       )}
       <div className={styles.inner}>
         {/* Wordmark */}
-        <Link href='/' className={styles.wordmark}>
+        <Link href='/' className={`${styles.wordmark} tap-target`}>
           <SiteWordmark variant='header' text={t('wordmark')} />
         </Link>
 
