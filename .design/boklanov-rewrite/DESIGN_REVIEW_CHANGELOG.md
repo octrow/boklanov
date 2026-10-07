@@ -366,11 +366,11 @@ The commit is in brackets.
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
   returns 200, checked 2026-10-06).
 - Fourth critique done (24/36); work through its plan (entry 30).
-- Poster size is now stored on the production (`media.poster.width/height`,
+- Done: poster size is stored on the production (`media.poster.width/height`,
   measured by a hook when the path changes), so a landscape poster
   (vaikenemisen-kielioppi, 1280×720) reserves the right box. Admin uploads
-  never had a Payload media doc to read it from. Run once on prod:
-  `bash ops/2026-10-07-fill-poster-dims.sh` (42 posters).
+  never had a Payload media doc to read it from. Backfilled on prod with
+  `ops/2026-10-07-fill-poster-dims.sh`: 42 posters (2026-10-07). [64ea933]
 - `/impeccable critique admin` (never run).
 - After Next 16 (entry 42), check in the admin: a save shows on the site
   within seconds; the RU/EN/DE locale switch on a localized text field moves
