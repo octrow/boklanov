@@ -9,6 +9,6 @@
 
 ## 2. Ship
 
-- [ ] 2.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 1.1–1.4 on boklanov.com
-- [ ] 2.2 Check Vercel Skew Protection for boklanov_v2 (`vercel project` / API, read-only); if off, tell the user how to enable it (dashboard, their action)
-- [ ] 2.3 Add a DESIGN_REVIEW_CHANGELOG.md entry and the sixth-critique content to-dos for Roma (Statuses, home listOrder, DE titles and theatre names, Bury synopsis fragment, empty gallery alt on lina-marlina); commit
+- [x] 2.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 1.1–1.4 on boklanov.com
+- [x] 2.2 Check Vercel Skew Protection for boklanov_v2 (`vercel project` / API, read-only); if off, tell the user how to enable it (dashboard, their action)
+- [x] 2.3 Add a DESIGN_REVIEW_CHANGELOG.md entry and the sixth-critique content to-dos for Roma (Statuses, home listOrder, DE titles and theatre names, Bury synopsis fragment, empty gallery alt on lina-marlina); commit

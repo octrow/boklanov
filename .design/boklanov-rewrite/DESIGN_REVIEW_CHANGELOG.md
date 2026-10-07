@@ -326,6 +326,20 @@ The commit is in brackets.
     - Telegram documents the prefill for username links; check once on a
       phone. [64c9dd2]
 
+41. `production-page-consistency`:
+    - desktop (≥1024px): the poster is capped at 50vh instead of 65vh, so at
+      1440×900 the title ends at 713px (lina-marlina), 827px (bury), 797px
+      (vaikenemisen-kielioppi), all in the first screen; phones unchanged;
+    - "Buy tickets", "Watch / listen" and the rider/press-kit links use the
+      booking button's grammar (mono, uppercase, outlined) with a neutral
+      border; only booking is in the accent;
+    - production pages are titled "Lina-Marlina — Roman Boklanov" (RU «… —
+      Роман Бокланов»); Open Graph and Twitter titles match, in the page's
+      language (before: always the Russian title);
+    - Credits and tour-rider toggles are 44px tall (were 37px);
+    - Vercel Skew Protection looks off for boklanov_v2 (no `?dpl=` on asset
+      URLs); enable it in the project settings → Advanced. [62445a1]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
@@ -370,3 +384,9 @@ The commit is in brackets.
   page; the RU title of the-ape-star ends with a space.
   total-fest-4 is a festival, not a production: move it to /about
   or the awards, or give it a poster and synopsis.
+- From the sixth critique: Status is still "Live" everywhere, so no show
+  reads as bookable or on tour; the home "Selected works" (`listOrder`) are
+  all 2021–23 and mostly Russian: add a current touring show; German titles
+  and theatre names read machine-translated: check them in the DE locale;
+  the Bury synopsis reads as a fragment; the lina-marlina gallery photos have
+  empty alt text.
