@@ -41,6 +41,8 @@ export function BookingBar({
     const onEnd = new Map<Element, boolean>()
 
     const io = new IntersectionObserver((entries) => {
+      // ponytail: no slate on the page, show the bar right away
+      if (!start) setPastStart(true)
       for (const e of entries) {
         if (e.target === start) {
           setPastStart(!e.isIntersecting && e.boundingClientRect.top < 0)
@@ -51,7 +53,6 @@ export function BookingBar({
       setAtEnd([...onEnd.values()].some(Boolean))
     })
     if (start) io.observe(start)
-    else setPastStart(true) // ponytail: no slate on the page, show the bar right away
     ends.forEach((el) => io.observe(el))
 
     return () => {

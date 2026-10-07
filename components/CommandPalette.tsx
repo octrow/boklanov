@@ -141,10 +141,6 @@ export function CommandPalette({
     inputRef.current?.focus()
   }, [])
 
-  React.useEffect(() => {
-    setActiveIdx(0)
-  }, [query])
-
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Escape') {
       onClose()
@@ -213,7 +209,10 @@ export function CommandPalette({
             ref={inputRef}
             type='search'
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setActiveIdx(0)
+            }}
             className={styles.input}
             placeholder={t('placeholder')}
             aria-label={t('inputAria')}

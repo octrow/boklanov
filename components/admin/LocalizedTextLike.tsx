@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useField, useLocale } from '@payloadcms/ui'
 import { useLocaleMode } from './LocaleModeProvider'
 import {
@@ -120,12 +120,14 @@ export const LocalizedTextLike: React.FC<Props> = ({ path, label, as }) => {
   //
   // PAYLOAD_ADMIN_UX_PLAN.md §Round-3 R2.
   const [selectedTab, setSelectedTab] = useState<LocaleCode>(activeLocale)
-  useEffect(() => {
-    // If the URL locale changes externally (e.g. richText's pill click
-    // on the same page) keep selectedTab in sync so the visible input
-    // matches what Payload would show.
+  // If the URL locale changes externally (e.g. richText's pill click
+  // on the same page) keep selectedTab in sync so the visible input
+  // matches what Payload would show.
+  const [prevActiveLocale, setPrevActiveLocale] = useState(activeLocale)
+  if (prevActiveLocale !== activeLocale) {
+    setPrevActiveLocale(activeLocale)
     setSelectedTab(activeLocale)
-  }, [activeLocale])
+  }
 
   const onPillClick = (pill: LocaleCode | 'all') => {
     if (pill === 'all') {

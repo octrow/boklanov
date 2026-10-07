@@ -74,6 +74,9 @@ export interface FilteredProductionsPanelProps {
 
 const FILTERS_ID = 'production-filters'
 
+// The count slot is server-rendered and never replaced, so nothing to watch.
+const noSubscribe = () => () => {}
+
 export function FilteredProductionsPanel({
   productions,
   labels,
@@ -88,11 +91,11 @@ export function FilteredProductionsPanel({
   // Mobile (<768px) only: the toolbar sits behind a disclosure button.
   const [filtersOpen, setFiltersOpen] = React.useState(false)
   const toggleRef = React.useRef<HTMLButtonElement | null>(null)
-  const [countSlot, setCountSlot] = React.useState<HTMLElement | null>(null)
-
-  React.useEffect(() => {
-    setCountSlot(document.getElementById(countSlotId))
-  }, [countSlotId])
+  const countSlot = React.useSyncExternalStore(
+    noSubscribe,
+    () => document.getElementById(countSlotId),
+    () => null
+  )
 
   React.useEffect(() => {
     if (!filtersOpen) return

@@ -51,19 +51,45 @@ function MoonIcon() {
 type Theme = 'gorky' | 'paper'
 const STORAGE_KEY = 'boklanov.theme'
 
+// Fallback when localStorage throws (private mode), so a toggle still sticks.
+let memoryTheme: Theme = 'gorky'
+const listeners = new Set<() => void>()
+
 function readStoredTheme(): Theme {
   try {
     const v = localStorage.getItem(STORAGE_KEY)
     if (v === 'gorky' || v === 'paper') return v
+    return 'gorky'
+  } catch {
+    return memoryTheme
+  }
+}
+
+function writeTheme(next: Theme) {
+  memoryTheme = next
+  try {
+    localStorage.setItem(STORAGE_KEY, next)
   } catch {
     // localStorage unavailable
   }
-  return 'gorky'
+  listeners.forEach((l) => l())
+}
+
+function subscribe(onChange: () => void) {
+  listeners.add(onChange)
+  return () => {
+    listeners.delete(onChange)
+  }
 }
 
 export function ThemeToggle() {
   const t = useTranslations('accessibility')
-  const [theme, setTheme] = React.useState<Theme | null>(null)
+  // null on the server and during hydration, the stored theme after.
+  const theme = React.useSyncExternalStore<Theme | null>(
+    subscribe,
+    readStoredTheme,
+    () => null
+  )
 
   // Re-apply data-theme from localStorage after every render.
   // Next.js App Router wipes imperative DOM attributes on locale navigation;
@@ -72,22 +98,13 @@ export function ThemeToggle() {
     document.documentElement.dataset.theme = readStoredTheme()
   })
 
-  React.useEffect(() => {
-    setTheme(readStoredTheme())
-  }, [])
-
   function toggle() {
     // Treat unhydrated state as gorky (the default), so the first click
     // always lands on paper rather than no-op'ing.
     const current: Theme = theme ?? 'gorky'
     const next: Theme = current === 'gorky' ? 'paper' : 'gorky'
-    setTheme(next)
     document.documentElement.dataset.theme = next
-    try {
-      localStorage.setItem(STORAGE_KEY, next)
-    } catch {
-      // ignore
-    }
+    writeTheme(next)
   }
 
   // SSR-safe: render the default-state glyph until hydration completes.

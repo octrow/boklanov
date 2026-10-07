@@ -43,9 +43,6 @@ export default [
           caughtErrorsIgnorePattern: '^_'
         }
       ],
-      // ponytail: new in react-hooks 7 (Next 16); warn until the six flagged
-      // effects are reworked, they behaved fine on Next 15.
-      'react-hooks/set-state-in-effect': 1,
       'react/prop-types': 0,
       'react/react-in-jsx-scope': 0,
       'react/jsx-uses-react': 0
