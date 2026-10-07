@@ -1,4 +1,4 @@
-# Design review changelog (2026-10-05 … 2026-10-06)
+# Design review changelog (2026-10-05 … 2026-10-07)
 
 Every change from the `/impeccable` review of boklanov.com, in order. Each one
 is on `main` and deployed to prod (Vercel `boklanovs-projects/boklanov_v2`).
@@ -340,6 +340,27 @@ The commit is in brackets.
     - Vercel Skew Protection looks off for boklanov_v2 (no `?dpl=` on asset
       URLs); enable it in the project settings → Advanced. [62445a1]
 
+## Maintenance
+
+42. Next.js 15.4 → 16.4, to close GitHub's 91 Dependabot alerts (3 critical).
+    Next 15.4 has no patched release, and Payload 3.90 accepts only 15.4.x or
+    ≥16.3.3.
+    - first `npm audit fix`, sharp 0.35.5, undici and dompurify pinned to
+      patched versions [9d18c14];
+    - `middleware.ts` is now `proxy.ts`; `revalidateTag` gets
+      `{ expire: 0 }` so admin saves still show within seconds;
+      `eslint.config.mjs` uses the flat exports of eslint-config-next 16;
+      `@floating-ui/react` is a direct dependency (`@payloadcms/ui` imports
+      it without declaring it) [529f29b];
+    - the new `react-hooks/set-state-in-effect` rule is an error with zero
+      hits: ThemeToggle and the productions count use `useSyncExternalStore`,
+      the command palette resets its highlight on input, the unused
+      SlateStrike is removed [31f31c0];
+    - 2 alerts remain, both build-time only: braces (no patched version) and
+      the old esbuild inside drizzle-kit;
+    - the OG image route is checked on prod only: Next 16's `ImageResponse`
+      refuses localhost image URLs, so it fails under `next start`.
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
@@ -349,6 +370,9 @@ The commit is in brackets.
   a landscape one (vaikenemisen-kielioppi) reserves the wrong box until it
   loads. Fill `posterWidth`/`posterHeight` from the Payload media doc.
 - `/impeccable critique admin` (never run).
+- After Next 16 (entry 42), check in the admin: a save shows on the site
+  within seconds; the RU/EN/DE locale switch on a localized text field moves
+  the visible input along.
 - The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
   every push and fails without a DB. Disconnect it from Git in the octrow@yandex
   account.
