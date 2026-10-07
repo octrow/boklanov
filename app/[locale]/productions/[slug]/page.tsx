@@ -136,9 +136,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .filter(Boolean)
     .join(' · ')
   const description = production.synopsis?.trim() || descriptionParts
+  const tMeta = await getTranslations({ locale, namespace: 'meta' })
+  const title = `${production.title.trim()} — ${tMeta('siteName')}`
 
   return {
-    title: production.title,
+    title,
     description,
     alternates: {
       canonical: url,
@@ -149,7 +151,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
     },
     openGraph: {
-      title: production.titles.ru ?? production.title,
+      title,
       description,
       url,
       images: [
@@ -164,7 +166,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: production.titles.ru ?? production.title,
+      title,
       description,
       images: [ogImage]
     }

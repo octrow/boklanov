@@ -43,6 +43,13 @@
   }
 }
 
+/* Desktop: leave room for the title in the first screen (1440×900). */
+@media (min-width: 1024px) {
+  .cover img {
+    max-height: 50vh;
+  }
+}
+
 .coverCredit {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-meta);
@@ -154,6 +161,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 44px;
   padding: var(--space-2) 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -256,11 +264,12 @@ dd.creditsName {
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--border-radius-sm);
-  font-family: var(--font-family-body);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-medium);
+  padding: 0 var(--space-5);
+  /* Same grammar as the booking button (.inviteCta), neutral border. */
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
   text-decoration: none;
   transition:
     background var(--duration-fast) var(--easing-default),
