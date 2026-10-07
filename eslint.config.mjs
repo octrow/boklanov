@@ -1,15 +1,8 @@
-import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended
-})
+import nextVitals from 'eslint-config-next/core-web-vitals'
+import nextTs from 'eslint-config-next/typescript'
+import prettier from 'eslint-config-prettier/flat'
+import react from 'eslint-plugin-react'
 
 export default [
   {
@@ -24,16 +17,16 @@ export default [
       'scripts/_legacy/**',
       'app/(payload)/admin/importMap.js',
       'payload-types.ts',
+      'migrations/**',
       'next-env.d.ts'
     ]
   },
-  ...compat.extends(
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'next/core-web-vitals',
-    'prettier'
-  ),
+  js.configs.recommended,
+  ...nextVitals,
+  ...nextTs,
+  // eslint-config-next registers the react plugin; take only the rules here.
+  { rules: react.configs.flat.recommended.rules },
+  prettier,
   {
     settings: {
       react: { version: 'detect' }
@@ -50,6 +43,9 @@ export default [
           caughtErrorsIgnorePattern: '^_'
         }
       ],
+      // ponytail: new in react-hooks 7 (Next 16); warn until the six flagged
+      // effects are reworked, they behaved fine on Next 15.
+      'react-hooks/set-state-in-effect': 1,
       'react/prop-types': 0,
       'react/react-in-jsx-scope': 0,
       'react/jsx-uses-react': 0

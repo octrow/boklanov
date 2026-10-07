@@ -50,7 +50,7 @@ export const revalidateProduction: CollectionAfterChangeHook = async ({
   // segment caches so the very next request rebuilds.
   const paths = ['/[locale]/productions', '/[locale]']
 
-  for (const t of tags) revalidateTag(t)
+  for (const t of tags) revalidateTag(t, { expire: 0 })
   for (const p of paths) revalidatePath(p, 'page')
 
   await fanOutRevalidate(payload.logger, [...tags], paths)
@@ -69,7 +69,7 @@ export const revalidateProductionDelete: CollectionAfterDeleteHook = async ({
   if (d?.slug) tags.add(`production:${d.slug}`)
   const paths = ['/[locale]/productions', '/[locale]']
 
-  for (const t of tags) revalidateTag(t)
+  for (const t of tags) revalidateTag(t, { expire: 0 })
   for (const p of paths) revalidatePath(p, 'page')
 
   await fanOutRevalidate(payload.logger, [...tags], paths)
@@ -82,7 +82,7 @@ export const revalidateAbout: GlobalAfterChangeHook = async ({
   req: { payload, context }
 }) => {
   if (context?.disableRevalidate) return doc
-  revalidateTag('about')
+  revalidateTag('about', { expire: 0 })
   revalidatePath('/[locale]/about', 'page')
   await fanOutRevalidate(payload.logger, ['about'], ['/[locale]/about'])
   return doc
@@ -93,7 +93,7 @@ export const revalidateContact: GlobalAfterChangeHook = async ({
   req: { payload, context }
 }) => {
   if (context?.disableRevalidate) return doc
-  revalidateTag('contact')
+  revalidateTag('contact', { expire: 0 })
   revalidatePath('/[locale]/contact', 'page')
   await fanOutRevalidate(payload.logger, ['contact'], ['/[locale]/contact'])
   return doc

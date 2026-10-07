@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     ? paths.filter((p): p is string => typeof p === 'string')
     : []
 
-  for (const t of tagList) revalidateTag(t)
+  for (const t of tagList) revalidateTag(t, { expire: 0 })
   for (const p of pathList) revalidatePath(p, 'page')
 
   return NextResponse.json({
