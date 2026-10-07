@@ -303,6 +303,29 @@ The commit is in brackets.
       premiere." (RU/DE likewise) instead of ending in empty space;
     - applies to mcqueen-blood-beneath-skin and total-fest-4. [52689a5]
 
+## Sixth critique (21/32)
+
+39. Sixth site critique: 21/32 (`.impeccable/critique/2026-10-06T21-57-00Z__app-locale.md`).
+    Posters stay the primary image of a production (decided 2026-10-07; the
+    "stage photos first" finding is dropped). Plan, as OpenSpec changes:
+    - `contact-show-message`: the Telegram chat opens with a first message
+      about the show; a copy button for Telegram and Instagram;
+    - `production-page-consistency`: the poster shrinks on desktop so the
+      title is in the first screen, one button style, page titles carry the
+      site name, 44px credits/rider toggles.
+
+40. `contact-show-message`:
+    - on `/contact?show=<slug>` the Telegram button opens `t.me/roman7593`
+      with a first message filled in, of the same kind as the booking button:
+      "Hello Roman, I'm writing about touring Beware of the Dog!" (tour),
+      "…about a new production (…)", "…about the premiere of …"; RU/DE
+      likewise;
+    - a "Copy message" button under Telegram/Instagram copies the same text
+      (Instagram has no prefill), styled like the email Copy button;
+    - `/contact` without `?show=`, or with an unknown slug, is unchanged;
+    - Telegram documents the prefill for username links; check once on a
+      phone. [64c9dd2]
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image

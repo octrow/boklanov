@@ -12,5 +12,5 @@
 
 ## 3. Ship
 
-- [ ] 3.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 2.1 and 2.2 checks on boklanov.com; open the prod Telegram link once on a phone if the user can (Telegram prefill for a personal chat is documented, not yet observed)
-- [ ] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry (sixth critique plan + this change) and commit
+- [x] 3.1 tsc and eslint on touched files pass; commit to main, push, wait for boklanov_v2 success; repeat 2.1 and 2.2 checks on boklanov.com; open the prod Telegram link once on a phone if the user can (Telegram prefill for a personal chat is documented, not yet observed)
+- [x] 3.2 Add a DESIGN_REVIEW_CHANGELOG.md entry (sixth critique plan + this change) and commit
