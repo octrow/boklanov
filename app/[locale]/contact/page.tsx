@@ -9,7 +9,12 @@ import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 
 import { CopyEmailButton } from './CopyEmailButton'
-import { ShowMailtoLink, ShowTopicLine } from './ShowTopic'
+import {
+  ShowCopyMessage,
+  ShowMailtoLink,
+  ShowTelegramLink,
+  ShowTopicLine
+} from './ShowTopic'
 import styles from './page.module.css'
 
 export function generateStaticParams() {
@@ -101,6 +106,30 @@ export default async function ContactPage({
       ).replace('{title}', showTitles[p.slug])
     ])
   )
+  // First chat message per show, same kind as the subject.
+  const messageKey = {
+    tour: 'messageTour',
+    new: 'messageNew',
+    premiere: 'messagePremiere'
+  } as const
+  const showMessages = Object.fromEntries(
+    productions.map((p) => [
+      p.slug,
+      (t.raw(messageKey[bookingKind(p.status, p.theatre.country)]) as string)
+        .replace('{title}', showTitles[p.slug])
+        // "…the Dog!." → "…the Dog!" when the title ends a sentence itself.
+        .replace(/([.!?])\.$/, '$1')
+    ])
+  )
+  const telegramAttrs = {
+    target: '_blank',
+    rel: 'noopener noreferrer',
+    className: styles.primaryButton,
+    'data-ph-event': 'booking_cta_click',
+    'data-ph-locale': locale,
+    'data-ph-source': 'contact',
+    'data-ph-channel': 'telegram'
+  }
   const mailtoAttrs = {
     className: styles.mailtoLink,
     'data-ph-event': 'booking_cta_click',
@@ -126,18 +155,21 @@ export default async function ContactPage({
       {/* Primary: Telegram + Instagram (DESIGN_BRIEF D8 — reordered
           2026-05-01; Roman responds fastest on these channels). */}
       <section className={styles.primaryRow}>
-        <a
-          href={telegramUrl}
-          target='_blank'
-          rel='noopener noreferrer'
-          className={styles.primaryButton}
-          data-ph-event='booking_cta_click'
-          data-ph-locale={locale}
-          data-ph-source='contact'
-          data-ph-channel='telegram'
+        <React.Suspense
+          fallback={
+            <a href={telegramUrl} {...telegramAttrs}>
+              {t('telegramCta')}
+            </a>
+          }
         >
-          {t('telegramCta')}
-        </a>
+          <ShowTelegramLink
+            messages={showMessages}
+            href={telegramUrl}
+            {...telegramAttrs}
+          >
+            {t('telegramCta')}
+          </ShowTelegramLink>
+        </React.Suspense>
         <a
           href={instagramUrl}
           target='_blank'
@@ -150,6 +182,15 @@ export default async function ContactPage({
         >
           {t('instagramCta')}
         </a>
+        <React.Suspense fallback={null}>
+          <ShowCopyMessage
+            messages={showMessages}
+            label={t('copyMessage')}
+            copiedLabel={t('messageCopied')}
+            className={styles.messageRow}
+            buttonClassName={styles.copyButton}
+          />
+        </React.Suspense>
       </section>
 
       {/* Secondary: email — mono caps subhead, hairline-bordered mailto

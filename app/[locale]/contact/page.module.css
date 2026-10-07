@@ -61,8 +61,14 @@
 @media (min-width: 768px) {
   .primaryRow {
     flex-direction: row;
+    flex-wrap: wrap;
     gap: var(--space-4);
   }
+}
+
+/* Copy-message control under the Telegram/Instagram pair (only with ?show=). */
+.messageRow {
+  flex-basis: 100%;
 }
 
 .primaryButton {
