@@ -400,8 +400,9 @@ function payloadDocToProduction(doc: AnyMap): Production {
       src: asString(poster.src) || null,
       credit: asString(poster.credit) || null,
       lqip: null,
-      width: null,
-      height: null,
+      // Stored by the posterDims hook; lqip.json dims, when present, win.
+      width: typeof poster.width === 'number' ? poster.width : null,
+      height: typeof poster.height === 'number' ? poster.height : null,
       variants: buildVariants(asString(poster.src) || null)
     },
     productionsPhoto: productionsPhoto.src
@@ -608,8 +609,10 @@ const fetchAllProductions = unstable_cache(
       const prod = payloadDocToProduction(d as unknown as AnyMap)
       const lqip = readLqip(prod.slug)
       prod.poster.lqip = lqip.lqip
-      prod.poster.width = lqip.width
-      prod.poster.height = lqip.height
+      if (lqip.width && lqip.height) {
+        prod.poster.width = lqip.width
+        prod.poster.height = lqip.height
+      }
       return prod
     })
     await checkImagesInR2(out)

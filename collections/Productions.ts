@@ -9,6 +9,7 @@ import {
   revalidateProduction,
   revalidateProductionDelete
 } from '../hooks/revalidate'
+import { posterDims } from '../hooks/posterDims'
 
 // Block-shaped Lexical features stripped from inline-only richText
 // fields (tagline / synopsis / directorsNote). Removing all of these
@@ -87,6 +88,7 @@ export const Productions: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user)
   },
   hooks: {
+    beforeChange: [posterDims],
     afterChange: [revalidateProduction],
     afterDelete: [revalidateProductionDelete]
   },
@@ -292,6 +294,10 @@ export const Productions: CollectionConfig = {
                         }
                       }
                     },
+                    // Pixel size, filled by the posterDims hook when src
+                    // changes; the page reserves this box before load.
+                    { name: 'width', type: 'number', admin: { hidden: true } },
+                    { name: 'height', type: 'number', admin: { hidden: true } },
                     {
                       name: 'credit',
                       type: 'text',

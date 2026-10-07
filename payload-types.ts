@@ -224,6 +224,8 @@ export interface Production {
        * Path to the poster. Type manually or click "Upload" in the preview below. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
        */
       src?: string | null;
+      width?: number | null;
+      height?: number | null;
       /**
        * Photographer name. Rendered in small print under the image.
        */
@@ -816,6 +818,8 @@ export interface ProductionsSelect<T extends boolean = true> {
           | T
           | {
               src?: T;
+              width?: T;
+              height?: T;
               credit?: T;
             };
         productionsPhoto?:
