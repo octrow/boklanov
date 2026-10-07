@@ -373,9 +373,8 @@ The commit is in brackets.
 - After Next 16 (entry 42), check in the admin: a save shows on the site
   within seconds; the RU/EN/DE locale switch on a localized text field moves
   the visible input along.
-- The old Vercel project `octrows-projects/boklanov` (Keystatic) still builds
-  every push and fails without a DB. Disconnect it from Git in the octrow@yandex
-  account.
+- Done: the old Vercel project `octrows-projects/boklanov` (Keystatic) is
+  disconnected from Git and no longer builds on push (2026-10-07).
 
 ## Content to-dos for Roma (in the admin)
 
