@@ -129,7 +129,9 @@ body[data-active-locale='de'] {
    The stock header Localizer switches via router.push, past Payload's
    leave-without-saving guard, so unsaved edits could vanish; hidden.
    --------------------------------------------------------------------*/
-.app-header .localizer {
+.app-header .localizer,
+.app-header__localizer-spacing {
+  /* the invisible spacer kept a 150px hole between «Выйти» and the avatar */
   display: none;
 }
 
@@ -962,4 +964,26 @@ $form-max: 880px;
 .account-actions__logout {
   color: var(--theme-text);
   text-underline-offset: 3px;
+}
+
+/* Row fields: Payload's `width: 33%` leaves the row ~9px short of the
+   column once the 16px gaps are in, so the last field («Возраст», «Ссылка»)
+   looked narrower than the full-width fields below. Grow to fill. */
+.row__fields > .field-type {
+  flex-grow: 1;
+}
+
+/* Header right edge follows the content column of the page it sits on
+   (form 880, dashboard 1080, list 1200) instead of the window edge, so
+   «email · Выйти» and the avatar sit above the content they belong to. */
+.app-header__wrapper {
+  max-width: 1200px;
+}
+
+.template-default:has(.bk-dash) .app-header__wrapper {
+  max-width: 1080px;
+}
+
+.template-default:has(.document-fields__fields) .app-header__wrapper {
+  max-width: $form-max;
 }
