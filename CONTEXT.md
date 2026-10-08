@@ -21,3 +21,13 @@ _Avoid_: backlog, diff
 **Cutover**:
 The moment production switches from Keystatic to Payload; Keystatic is frozen and the Content delta is moved into Payload.
 _Avoid_: migration (overloaded with DB migrations)
+
+### Translation
+
+**Main texts**:
+The five texts of a Production that define whether it reads in a language: title, tagline, synopsis, body, director's note. Everything else localized (captions, venues, cities, awards, link labels) is minor.
+_Avoid_: content, all fields
+
+**Untranslated** (per language):
+A Production is Untranslated into EN (or DE) when any Main text is filled in RU and empty in that language. Counted separately for EN and DE.
+_Avoid_: missing translation (when only a minor field is empty)

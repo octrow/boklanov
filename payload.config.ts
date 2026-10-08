@@ -106,7 +106,9 @@ export default buildConfig({
       providers: [
         '/components/admin/LocalizedDocContext#default',
         '/components/admin/ActiveLocaleBodyAttr#default'
-      ]
+      ],
+      // /admin: sections, what still needs doing, recent edits.
+      views: { dashboard: { Component: '/components/admin/Dashboard#default' } }
     },
     livePreview: {
       // Matches DESIGN.md §6 public-site breakpoints — iPhone-15-class
@@ -125,7 +127,10 @@ export default buildConfig({
   // fall through to EN per Payload's standard merge behavior.
   i18n: {
     supportedLanguages: { ru, en },
-    fallbackLanguage: 'en'
+    fallbackLanguage: 'en',
+    // The RU pack ships `searchBy: 'Искать по'` without {{label}}, so the
+    // list search placeholder read «Искать по » with nothing after it.
+    translations: { ru: { general: { searchBy: 'Поиск по {{label}}' } } }
   },
 
   collections: [Productions, Media, Users],

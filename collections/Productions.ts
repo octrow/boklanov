@@ -77,7 +77,8 @@ export const Productions: CollectionConfig = {
     components: {
       edit: {
         beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
-      }
+      },
+      beforeListTable: ['/components/admin/SearchPlaceholder#default']
     },
     group: { ru: 'Контент', en: 'Content' },
     livePreview: {
@@ -87,8 +88,8 @@ export const Productions: CollectionConfig = {
       }
     },
     description: {
-      ru: 'Спектакли Романа. Слаг — имя папки в публичном URL.',
-      en: "Roman's productions. Slug is the public URL segment."
+      ru: 'Все спектакли. Нажмите на строку, чтобы открыть спектакль.',
+      en: 'All productions. Click a row to open it.'
     }
   },
   access: {
@@ -140,7 +141,9 @@ export const Productions: CollectionConfig = {
                       en: 'Production title. Shown on cards, the page, and the browser tab title.'
                     },
                     components: {
-                      afterInput: ['/components/admin/LocaleHint#default']
+                      afterInput: ['/components/admin/LocaleHint#default'],
+                      Cell: '/components/admin/ListCells#TitleCell',
+                      Label: '/components/admin/ListCells#PlainLabel'
                     }
                   }
                 },
@@ -293,7 +296,8 @@ export const Productions: CollectionConfig = {
                           afterInput: [
                             '/components/admin/ImagePathPreview#ImagePathPreview'
                           ],
-                          Cell: '/components/admin/ListCells#PosterCell'
+                          Cell: '/components/admin/ListCells#PosterCell',
+                          Label: '/components/admin/ListCells#PlainLabel'
                         }
                       }
                     },
@@ -570,6 +574,10 @@ export const Productions: CollectionConfig = {
                   max: 2100,
                   index: true,
                   admin: {
+                    components: {
+                      Cell: '/components/admin/ListCells#YearCell',
+                      Label: '/components/admin/ListCells#PlainLabel'
+                    },
                     description: {
                       ru: 'Числовой год — используется для сортировки и в карточках.',
                       en: 'Numeric year used for sort and display on cards.'
@@ -1441,6 +1449,9 @@ export const Productions: CollectionConfig = {
               label: { ru: 'Статус', en: 'Status' },
               defaultValue: 'live',
               admin: {
+                components: {
+                  Cell: '/components/admin/ListCells#StatusCell'
+                },
                 description: {
                   ru: 'Состояние спектакля. По умолчанию — «Идёт» (играется сейчас).',
                   en: 'Lifecycle of this production. Default is "Live" (currently running).'
@@ -1519,7 +1530,8 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'На главной', en: 'Featured' },
                   admin: {
                     components: {
-                      Cell: '/components/admin/ListCells#FeaturedCell'
+                      Cell: '/components/admin/ListCells#FeaturedCell',
+                      Label: '/components/admin/ListCells#PlainLabel'
                     },
                     description: {
                       ru: 'Показывать спектакль в подборке на главной.',

@@ -386,6 +386,30 @@ The commit is in brackets.
       nested; needs a top-level title column + backfill). Sorting by year was
       dropped: 25 of 55 productions have no year.
 
+44. External review of the admin (`review/review-1.md`, 2026-10-08), worked
+    through with `/grill-with-docs` + `/impeccable`. Its top item was a
+    regression from entry 43: the custom poster cell sat in Payload's linked
+    first column and dropped the link, so no row opened a production.
+    - Productions list: the whole row opens the production (title link
+      stretched over the row, checkbox above it); headings without the
+      group path («Постер», «Название», «Год премьеры», «Статус», «На
+      главной»); 2:3 poster frame with a grey placeholder; status badges
+      (Идёт green, На гастролях blue, В работе amber, В архиве grey); ★ for
+      featured; empty cells instead of «Без метки»; 1200px max width;
+      readable checkboxes; red «Удалить»; «Поиск по названию или слагу»
+      (the RU pack's `searchBy` had no `{{label}}`).
+    - `/admin` is our own dashboard: sections with counts and «+ Добавить»,
+      productions by status (each links to the filtered list), «Нужно
+      доделать» (Untranslated EN / DE by the five Main texts, expandable,
+      each opens the production in that language; no year; no poster),
+      «Недавно изменённые» (last 5 of productions + About + Contact).
+      Terms in `CONTEXT.md` › Translation.
+    - Sidebar: icons per section (CSS masks on Payload's nav ids), readable
+      group headings.
+      Not done, by decision: ⌘K palette, floating bulk-action bar, density
+      toggle, header profile/role/environment, moving logout, row action
+      icons (the clickable row covers them).
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image

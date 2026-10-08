@@ -8,6 +8,7 @@ import {
   isLocaleCode,
   type LocaleCode
 } from './LocalizedDocContext'
+import { toPlainText } from './plainText'
 
 /**
  * Slotted as `admin.components.afterInput` on every localized text /
@@ -18,25 +19,6 @@ import {
  * Editing always happens in the field above, for the page locale chosen in
  * the document header (LocaleSwitch), and goes live on Save.
  */
-
-/** Plain text of a Lexical SerializedEditorState (paragraphs joined by a
- *  blank line); strings pass through. */
-const toPlainText = (value: unknown): string => {
-  if (typeof value === 'string') return value
-  if (!value || typeof value !== 'object') return ''
-  const inline = (node: unknown): string => {
-    if (!node || typeof node !== 'object') return ''
-    const n = node as { text?: unknown; children?: unknown }
-    if (typeof n.text === 'string') return n.text
-    return Array.isArray(n.children) ? n.children.map(inline).join('') : ''
-  }
-  const root = (value as { root?: { children?: unknown } }).root
-  const blocks = Array.isArray(root?.children) ? root.children : []
-  return blocks
-    .map(inline)
-    .filter((t) => t.trim())
-    .join('\n\n')
-}
 
 const wrapStyle: React.CSSProperties = {
   marginTop: 8,
