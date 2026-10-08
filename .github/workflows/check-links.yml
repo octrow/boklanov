@@ -1,8 +1,10 @@
 name: Check links
 
-# Quarterly dead-link check of boklanov.com (scripts/check-links.sh). Opens
-# an issue listing what died, so GitHub mails the repo owner; the fix flow
-# is scripts/fix-dead-links.ts (Wayback snapshots) via an ops/ script.
+# Quarterly dead-link check of boklanov.com (scripts/check-links.sh). Dead
+# links fail the run, which GitHub mails to whoever last edited this
+# schedule (issues are disabled on the repo); the list is in the run
+# summary. Fix flow: scripts/fix-dead-links.ts (Wayback snapshots) via an
+# ops/ script, as in ops/2026-10-09-fix-dead-links.sh.
 
 on:
   schedule:
@@ -11,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   check:
@@ -21,27 +22,19 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check
-        id: check
         run: |
-          if bash scripts/check-links.sh > report.txt; then
-            echo "dead=0" >> "$GITHUB_OUTPUT"
+          status=0
+          bash scripts/check-links.sh > report.txt || status=$?
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "### $(wc -l < report.txt) dead link(s) on boklanov.com"
+              echo 'Code and URL; `000` = no answer.'
+              echo '```'
+              cat report.txt
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "dead=$(wc -l < report.txt)" >> "$GITHUB_OUTPUT"
+            echo "No dead links." >> "$GITHUB_STEP_SUMMARY"
           fi
           cat report.txt
-
-      - name: Open issue
-        if: steps.check.outputs.dead != '0'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          {
-            echo "Квартальная проверка нашла ${{ steps.check.outputs.dead }} мёртвых ссылок на boklanov.com (код ответа и адрес; 000 — сайт не ответил):"
-            echo
-            echo '```'
-            cat report.txt
-            echo '```'
-            echo
-            echo "Как чинить: найти снимки в web.archive.org и прогнать их через scripts/fix-dead-links.ts, как в ops/2026-10-09-fix-dead-links.sh."
-          } > body.md
-          gh issue create --title "Мёртвые ссылки $(date -u +%F)" --body-file body.md
+          exit "$status"
