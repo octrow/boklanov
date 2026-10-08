@@ -1,9 +1,8 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
 import type { DefaultCellComponentProps } from 'payload'
-import { FieldLabel, useConfig, useTranslation } from '@payloadcms/ui'
+import { FieldLabel, Link, useConfig, useTranslation } from '@payloadcms/ui'
 import { getTranslation } from '@payloadcms/translations'
 
 /**

@@ -1,7 +1,6 @@
 import React from 'react'
-import Link from 'next/link'
 import type { AdminViewServerProps } from 'payload'
-import { Gutter } from '@payloadcms/ui'
+import { Gutter, Link } from '@payloadcms/ui'
 import { toPlainText } from './plainText'
 import LocalTime from './LocalTime'
 
