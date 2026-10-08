@@ -1,0 +1,231 @@
+{
+  "_sources": {
+    "BDF": "https://grandkidsfest.ru/navigator/names/rezhissery/roman-boklanov/",
+    "puppets": "https://puppets.ru/pers/40",
+    "ptj103": "https://ptj.spb.ru/archive/103/puppet-home-103/lyudi-s-kuklami-i-bez-kurs-ruslana-kudashova/",
+    "ptj109": "https://ptj.spb.ru/archive/109/theater-plus-youth/molrezhi-i-molredy/",
+    "spbved": "https://spbvedomosti.ru/news/culture/roman-boklanov-esli-spektakl-rozhden-v-lyubvi-to-i-zritel-ego-polyubit/",
+    "luxtoday": "https://luxtoday.lu/ru/interview/khobbi/lyubov-dolzhna-bit-ne-tiranichnoi-a-bezuslovnoi",
+    "catalog": "this site's own production records (premiere years, theatres, awards)",
+    "milestones": [
+      "BDF",
+      "puppets",
+      "BDF",
+      "BDF",
+      "puppets (БТК-РГИСИ, 2016–2021)",
+      "catalog (Снегурочка: award row, role Брусило)",
+      "BDF",
+      "BDF; ptj109 «выпуск 2021 года»",
+      "spbved 11.09.2021; puppets",
+      "ptj103",
+      "BDF; catalog award row",
+      "catalog (Алматы, Вена, Бремерхафен, Гестензет, Аликанте)",
+      "catalog (Theater 11, Bremen); luxtoday",
+      "catalog (Helsinki 98; Узбекский национальный театр кукол)"
+    ],
+    "lineage": ["BDF; puppets; luxtoday", "BDF; spbved", "luxtoday"],
+    "marginalia": ["spbved (headline quote)", "BDF", "luxtoday", "ptj109"]
+  },
+  "milestones": [
+    {
+      "year": 1993,
+      "label": {
+        "ru": "Родился в Усть-Каменогорске, Казахстан",
+        "en": "Born in Ust-Kamenogorsk, Kazakhstan",
+        "de": "Geboren in Ust-Kamenogorsk, Kasachstan"
+      }
+    },
+    {
+      "year": 2012,
+      "label": {
+        "ru": "Кукловод в телепередаче «Теле-теремок» (до 2019)",
+        "en": "Puppeteer on the children's TV show Tele-Teremok (until 2019)",
+        "de": "Puppenspieler in der Kindersendung „Tele-Teremok“ (bis 2019)"
+      }
+    },
+    {
+      "year": 2015,
+      "label": {
+        "ru": "Окончил Новосибирский театральный институт, мастерская Эльмиры Куриленко",
+        "en": "Graduates from the Novosibirsk Theatre Institute, Elmira Kurilenko's class",
+        "de": "Abschluss am Theaterinstitut Nowosibirsk, Klasse von Elmira Kurilenko"
+      }
+    },
+    {
+      "year": 2015,
+      "label": {
+        "ru": "Артист театра «Старый дом», Новосибирск",
+        "en": "Actor at the Old House theatre, Novosibirsk",
+        "de": "Schauspieler am Theater „Stary Dom“, Nowosibirsk"
+      }
+    },
+    {
+      "year": 2016,
+      "label": {
+        "ru": "Поступает в РГИСИ к Руслану Кудашову, курс при Большом театре кукол",
+        "en": "Enters RGISI under Ruslan Kudashov, a class at the Bolshoi Puppet Theatre",
+        "de": "Studium an der RGISI bei Ruslan Kudaschow, Klasse am Großen Puppentheater"
+      }
+    },
+    {
+      "year": 2017,
+      "label": {
+        "ru": "«Снегурочка» «Старого дома» с его участием получает «Золотую маску»",
+        "en": "The Old House's Snegurochka, with him in the cast, wins a Golden Mask",
+        "de": "„Snegurotschka“ des „Stary Dom“, mit ihm im Ensemble, erhält die Goldene Maske"
+      }
+    },
+    {
+      "year": 2019,
+      "label": {
+        "ru": "Режиссёр-консультант арт-резиденции театра «2+Ку», Томск",
+        "en": "Directing consultant at the 2+Ku theatre art residency, Tomsk",
+        "de": "Regieberater der Kunstresidenz des Theaters „2+Ku“, Tomsk"
+      }
+    },
+    {
+      "year": 2021,
+      "label": {
+        "ru": "Окончил РГИСИ как режиссёр театра кукол",
+        "en": "Graduates from RGISI as a puppet theatre director",
+        "de": "Abschluss an der RGISI als Puppentheaterregisseur"
+      }
+    },
+    {
+      "year": 2021,
+      "label": {
+        "ru": "С продюсером Елизаветой Екимовой основал «Типа театр»",
+        "en": "Co-founds Tipa Teatr with producer Elizaveta Ekimova",
+        "de": "Gründet mit der Produzentin Elisaweta Ekimowa das „Tipa Teatr“"
+      }
+    },
+    {
+      "year": 2021,
+      "label": {
+        "ru": "«Меня опять усыновила Горилла» — в программе «Детский weekend» «Золотой маски»",
+        "en": "The Ape Star is shown in the Golden Mask Children's Weekend",
+        "de": "„Der Affenstern“ im Programm „Kinderwochenende“ der Goldenen Maske"
+      }
+    },
+    {
+      "year": 2022,
+      "label": {
+        "ru": "Премия «Прорыв» — «Лучший режиссёр» за «Гориллу»",
+        "en": "Proryv Prize for young theatre artists: Best Director, for The Ape Star",
+        "de": "Preis „Proryw“: Beste Regie, für „Der Affenstern“"
+      }
+    },
+    {
+      "year": 2023,
+      "label": {
+        "ru": "Первые постановки за пределами России: Алматы, Вена, Бремерхафен, Аликанте",
+        "en": "First productions outside Russia: Almaty, Vienna, Bremerhaven, Alicante",
+        "de": "Erste Inszenierungen außerhalb Russlands: Almaty, Wien, Bremerhaven, Alicante"
+      }
+    },
+    {
+      "year": 2025,
+      "label": {
+        "ru": "«Дерзкие» в Бремене — документальный спектакль с подростками",
+        "en": "The Bold Ones in Bremen, a documentary production with teenagers",
+        "de": "„Die Dreisten“ in Bremen, ein dokumentarisches Stück mit Jugendlichen"
+      }
+    },
+    {
+      "year": 2026,
+      "label": {
+        "ru": "Премьеры в Хельсинки и Ташкенте",
+        "en": "Premieres in Helsinki and Tashkent",
+        "de": "Premieren in Helsinki und Taschkent"
+      }
+    }
+  ],
+  "lineage": [
+    {
+      "key": "kudashov",
+      "name": {
+        "ru": "Руслан Кудашов",
+        "en": "Ruslan Kudashov",
+        "de": "Ruslan Kudaschow"
+      },
+      "role": { "ru": "Мастер", "en": "Master", "de": "Meister" },
+      "institution": {
+        "ru": "РГИСИ, курс при Большом театре кукол, 2016–2021",
+        "en": "RGISI, class at the Bolshoi Puppet Theatre, 2016–2021",
+        "de": "RGISI, Klasse am Großen Puppentheater, 2016–2021"
+      },
+      "note": {
+        "ru": "«Его школа во мне, но я ищу свой путь»",
+        "en": "“His school is in me, but I am looking for my own way”",
+        "de": "„Seine Schule steckt in mir, aber ich suche meinen eigenen Weg“"
+      }
+    },
+    {
+      "key": "kurilenko",
+      "name": {
+        "ru": "Эльмира Куриленко",
+        "en": "Elmira Kurilenko",
+        "de": "Elmira Kurilenko"
+      },
+      "role": {
+        "ru": "Первый мастер",
+        "en": "First master",
+        "de": "Erste Meisterin"
+      },
+      "institution": {
+        "ru": "Новосибирский театральный институт, выпуск 2015",
+        "en": "Novosibirsk Theatre Institute, class of 2015",
+        "de": "Theaterinstitut Nowosibirsk, Abschluss 2015"
+      },
+      "note": {
+        "ru": "Познакомила его с театром кукол",
+        "en": "Introduced him to puppet theatre",
+        "de": "Brachte ihn zum Puppentheater"
+      }
+    },
+    {
+      "key": "krymov-tumina",
+      "name": {
+        "ru": "Дмитрий Крымов, Яна Тумина",
+        "en": "Dmitry Krymov, Yana Tumina",
+        "de": "Dmitri Krymow, Jana Tumina"
+      },
+      "role": { "ru": "Ориентиры", "en": "Inspiration", "de": "Vorbilder" },
+      "note": {
+        "ru": "«Я стараюсь вдохновляться, но не копировать»",
+        "en": "“I try to be inspired, but not to copy”",
+        "de": "„Ich lasse mich inspirieren, aber ich kopiere nicht“"
+      }
+    }
+  ],
+  "marginalia": [
+    {
+      "note": {
+        "ru": "«Если спектакль рождён в любви, то и зритель его полюбит»",
+        "en": "“If a production is born in love, the audience will love it too”",
+        "de": "„Wenn eine Inszenierung aus Liebe entsteht, wird das Publikum sie auch lieben“"
+      }
+    },
+    {
+      "note": {
+        "ru": "«Мои ведущие темы — возникновение или разрушение семьи, инаковость»",
+        "en": "“My main themes are how a family forms or falls apart, and otherness”",
+        "de": "„Meine Hauptthemen: wie Familie entsteht oder zerbricht, und das Anderssein“"
+      }
+    },
+    {
+      "note": {
+        "ru": "«Вы не обязаны быть копиями» — Руслан Кудашов своим студентам",
+        "en": "“You don't have to be copies” — Ruslan Kudashov to his students",
+        "de": "„Ihr müsst keine Kopien sein“ — Ruslan Kudaschow zu seinen Studierenden"
+      }
+    },
+    {
+      "note": {
+        "ru": "«Я делаю спектакль для зрителей и для артистов»",
+        "en": "“I make a production for the audience and for the actors”",
+        "de": "„Ich mache eine Inszenierung für das Publikum und für die Schauspieler“"
+      }
+    }
+  ]
+}

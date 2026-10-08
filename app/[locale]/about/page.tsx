@@ -330,8 +330,8 @@ export default async function AboutPage({
         <section className={styles.milestonesSection}>
           <h2 className={styles.lineageHeading}>{tAbout('chronology')}</h2>
           <div className={styles.milestones}>
-            {milestones.map((m) => (
-              <div key={m.year} className={styles.milestone}>
+            {milestones.map((m, i) => (
+              <div key={`${m.year}-${i}`} className={styles.milestone}>
                 <span className={styles.milestoneYear}>{m.year}</span>
                 <span className={styles.milestoneLabel}>{m.label}</span>
               </div>
