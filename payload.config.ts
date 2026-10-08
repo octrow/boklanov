@@ -35,6 +35,16 @@ import { Contact } from './globals/Contact'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Scripts and the Payload CLI (tsx, `payload migrate`) run outside Next.
+// A Neon connection that drops mid-write left a script waiting forever on
+// the dead socket (2026-10-09, move-long-synopses): keepAlive notices the
+// drop, query_timeout turns the wait into an error. The site's own queries
+// are already bounded by the Vercel function timeout.
+const SCRIPT_QUERY_TIMEOUT_MS = 60_000
+const SCRIPT_POOL = process.env.NEXT_RUNTIME
+  ? {}
+  : { keepAlive: true, query_timeout: SCRIPT_QUERY_TIMEOUT_MS }
+
 // pg-connection-string@^2 emits a security warning whenever it sees sslmode
 // `require`, `prefer`, or `verify-ca` because v3 will adopt libpq semantics
 // (weaker than the current verify-full alias). Neon's standard connection
@@ -168,7 +178,8 @@ export default buildConfig({
       connectionString: pinSslMode(process.env.DATABASE_URL || ''),
       max: 5,
       idleTimeoutMillis: 20000,
-      connectionTimeoutMillis: 10000
+      connectionTimeoutMillis: 10000,
+      ...SCRIPT_POOL
     }
   }),
 
