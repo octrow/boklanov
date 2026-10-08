@@ -9,7 +9,6 @@
     "catalog": "this site's own production records (premiere years, theatres, awards)",
     "milestones": [
       "BDF",
-      "puppets",
       "BDF",
       "BDF",
       "puppets (БТК-РГИСИ, 2016–2021)",
@@ -33,14 +32,6 @@
         "ru": "Родился в Усть-Каменогорске, Казахстан",
         "en": "Born in Ust-Kamenogorsk, Kazakhstan",
         "de": "Geboren in Ust-Kamenogorsk, Kasachstan"
-      }
-    },
-    {
-      "year": 2012,
-      "label": {
-        "ru": "Кукловод в телепередаче «Теле-теремок» (до 2019)",
-        "en": "Puppeteer on the children's TV show Tele-Teremok (until 2019)",
-        "de": "Puppenspieler in der Kindersendung „Tele-Teremok“ (bis 2019)"
       }
     },
     {
@@ -148,7 +139,11 @@
         "en": "Ruslan Kudashov",
         "de": "Ruslan Kudaschow"
       },
-      "role": { "ru": "Мастер", "en": "Master", "de": "Meister" },
+      "role": {
+        "ru": "Мастер",
+        "en": "Master",
+        "de": "Meister"
+      },
       "institution": {
         "ru": "РГИСИ, курс при Большом театре кукол, 2016–2021",
         "en": "RGISI, class at the Bolshoi Puppet Theatre, 2016–2021",
@@ -190,7 +185,11 @@
         "en": "Dmitry Krymov, Yana Tumina",
         "de": "Dmitri Krymow, Jana Tumina"
       },
-      "role": { "ru": "Ориентиры", "en": "Inspiration", "de": "Vorbilder" },
+      "role": {
+        "ru": "Ориентиры",
+        "en": "Inspiration",
+        "de": "Vorbilder"
+      },
       "note": {
         "ru": "«Я стараюсь вдохновляться, но не копировать»",
         "en": "“I try to be inspired, but not to copy”",
