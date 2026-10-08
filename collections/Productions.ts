@@ -61,9 +61,8 @@ export const Productions: CollectionConfig = {
     plural: { ru: 'Спектакли', en: 'Productions' }
   },
   admin: {
-    // ponytail: the document heading stays the slug: useAsTitle can't be a
-    // nested field. A top-level title copy (migration + backfill) fixes it.
-    useAsTitle: 'slug',
+    // useAsTitle can't be a nested field, so `title` mirrors identity.title.
+    useAsTitle: 'title',
     listSearchableFields: ['identity.title', 'slug'],
     pagination: { defaultLimit: 50 },
     defaultColumns: [
@@ -86,10 +85,6 @@ export const Productions: CollectionConfig = {
         const slug = (data as { slug?: string })?.slug ?? ''
         return `/${locale.code}/productions/${slug}`
       }
-    },
-    description: {
-      ru: 'Все спектакли. Нажмите на строку, чтобы открыть спектакль.',
-      en: 'All productions. Click a row to open it.'
     }
   },
   access: {
@@ -104,6 +99,19 @@ export const Productions: CollectionConfig = {
     afterDelete: [revalidateProductionDelete]
   },
   fields: [
+    // Hidden copy of identity.title for the document heading (useAsTitle).
+    // Kept in sync on every save; the migration backfills existing rows.
+    {
+      name: 'title',
+      type: 'text',
+      localized: true,
+      admin: { hidden: true },
+      hooks: {
+        beforeChange: [
+          ({ siblingData, value }) => siblingData.identity?.title ?? value
+        ]
+      }
+    },
     // ── Tabs ─────────────────────────────────────────────────────────────
     // Layout-only `type: 'tabs'` (unnamed) wraps everything below so the
     // form reads as a tab strip, not a 10 000-px scroll. Inner groups keep

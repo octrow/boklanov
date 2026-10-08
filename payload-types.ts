@@ -126,13 +126,12 @@ export interface UserAuthOperations {
   };
 }
 /**
- * Roman's productions. Slug is the public URL segment.
- *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "productions".
  */
 export interface Production {
   id: number;
+  title?: string | null;
   identity: {
     /**
      * Production title. Shown on cards, the page, and the browser tab title.
@@ -801,6 +800,7 @@ export interface PayloadMigration {
  * via the `definition` "productions_select".
  */
 export interface ProductionsSelect<T extends boolean = true> {
+  title?: T;
   identity?:
     | T
     | {

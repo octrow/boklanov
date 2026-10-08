@@ -98,6 +98,9 @@ export default buildConfig({
     meta: {
       titleSuffix: ' · boklanov.com'
     },
+    // "7 октября 2026, 22:16"; the default 'MMMM do yyyy, h:mm a' renders
+    // "октября 7-е 2026, 10:16 ПП" in Russian.
+    dateFormat: 'd MMMM yyyy, HH:mm',
     // One save model: every field edits the page locale (LocaleSwitch in
     // each document header) and Save writes it. LocalizedDocContext only
     // reads all three locales for LocaleHint; ActiveLocaleBodyAttr gates
