@@ -1924,6 +1924,570 @@
           "url": null
         }
       ]
+    },
+    "winter-when-i-grew-up": {
+      "creditsRu": [
+        {
+          "role": "Автор",
+          "name": "Петер ван Гестел",
+          "url": null
+        },
+        {
+          "role": "Режиссёр",
+          "name": "Денис Казачук",
+          "url": null
+        },
+        {
+          "role": "Художник",
+          "name": "Ирина Титовец",
+          "url": null
+        },
+        {
+          "role": "Художник по свету",
+          "name": "Яна Бойцова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Роман Бокланов",
+          "url": "https://puppets.ru/pers/40"
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Роман Фурштатский",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Мария Гельштейн",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Ирина Криворукова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Марина Хомутова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Дарья Левингер",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Максим Морозов",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Ксения Павлова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Дмитрий Скрябин",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Владислав Тутак",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Михаил Кулишкин",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Алексей Егоров",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Лидия Клирикова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Алёна Волкова",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Олег Пинжов",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Елизавета Гордеева",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Стефания Гараева-Жученко",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Чой Джун-Хюнг",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Author",
+          "name": "Peter van Gestel",
+          "url": null
+        },
+        {
+          "role": "Director",
+          "name": "Denis Kazachuk",
+          "url": null
+        },
+        {
+          "role": "Designer",
+          "name": "Irina Titovets",
+          "url": null
+        },
+        {
+          "role": "Lighting designer",
+          "name": "Yana Boytsova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Roman Boklanov",
+          "url": "https://puppets.ru/pers/40"
+        },
+        {
+          "role": "Actors",
+          "name": "Roman Furshtatsky",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Maria Gelstein",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Irina Krivorukova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Marina Khomutova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Daria Levinger",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Maxim Morozov",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Ksenia Pavlova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Dmitry Skryabin",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Vladislav Tutak",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Mikhail Kulishkin",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Alexey Egorov",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Lidiya Klirikova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Alyona Volkova",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Oleg Pinzhov",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Elizaveta Gordeeva",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Stefania Garaeva-Zhuchenko",
+          "url": null
+        },
+        {
+          "role": "Actors",
+          "name": "Jun-Hyung Choi",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Autor",
+          "name": "Peter van Gestel",
+          "url": null
+        },
+        {
+          "role": "Regie",
+          "name": "Denis Kazachuk",
+          "url": null
+        },
+        {
+          "role": "Ausstattung",
+          "name": "Irina Titovets",
+          "url": null
+        },
+        {
+          "role": "Lichtdesign",
+          "name": "Yana Boytsova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Roman Boklanov",
+          "url": "https://puppets.ru/pers/40"
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Roman Furshtatsky",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Maria Gelstein",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Irina Krivorukova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Marina Khomutova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Daria Levinger",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Maxim Morozov",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Ksenia Pavlova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Dmitry Skryabin",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Vladislav Tutak",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Mikhail Kulishkin",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Alexey Egorov",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Lidiya Klirikova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Alyona Volkova",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Oleg Pinzhov",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Elizaveta Gordeeva",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Stefania Garaeva-Zhuchenko",
+          "url": null
+        },
+        {
+          "role": "Mitwirkende",
+          "name": "Jun-Hyung Choi",
+          "url": null
+        }
+      ]
+    },
+    "uber-den-zaun": {
+      "creditsRu": [
+        {
+          "role": "Автор и режиссёр",
+          "name": "Йенс Эрвин Зимссен",
+          "url": null
+        },
+        {
+          "role": "Музыкальный руководитель",
+          "name": "Ян-Хендрик Элерс",
+          "url": null
+        },
+        {
+          "role": "Художник по костюмам",
+          "name": "Мириам Эббинг",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Роман Бокланов",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Алекса Хармс",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Владимир Макаров",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Денис Полевиков",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Свен Реезе",
+          "url": null
+        },
+        {
+          "role": "В спектакле участвуют",
+          "name": "Маргарита Виснер",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Writer and director",
+          "name": "Jens Erwin Siemssen",
+          "url": null
+        },
+        {
+          "role": "Musical director",
+          "name": "Jan-Hendrik Ehlers",
+          "url": null
+        },
+        {
+          "role": "Costume designer",
+          "name": "Miriam Ebbing",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Alexa Harms",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Vladimir Makarov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Denis Polevikov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Sven Reese",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Margarita Wiesner",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Buch und Regie",
+          "name": "Jens Erwin Siemssen",
+          "url": null
+        },
+        {
+          "role": "Musikalische Leitung",
+          "name": "Jan-Hendrik Ehlers",
+          "url": null
+        },
+        {
+          "role": "Kostüm",
+          "name": "Miriam Ebbing",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Alexa Harms",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Vladimir Makarov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Denis Polevikov",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Sven Reese",
+          "url": null
+        },
+        {
+          "role": "Ensemble",
+          "name": "Margarita Wiesner",
+          "url": null
+        }
+      ]
+    },
+    "no-winer-way": {
+      "creditsRu": [
+        {
+          "role": "Артист (подготовительный этап)",
+          "name": "Роман Бокланов",
+          "url": null
+        },
+        {
+          "role": "Автор и режиссёр",
+          "name": "Йенс Эрвин Зимссен",
+          "url": null
+        },
+        {
+          "role": "Музыкальный руководитель",
+          "name": "Ян-Хендрик Элерс",
+          "url": null
+        },
+        {
+          "role": "Художник по костюмам",
+          "name": "Мириам Эббинг",
+          "url": null
+        },
+        {
+          "role": "Видеопроекции",
+          "name": "Флориан Айбе",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Performer (preparatory stage)",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Writer and director",
+          "name": "Jens Erwin Siemssen",
+          "url": null
+        },
+        {
+          "role": "Musical director",
+          "name": "Jan-Hendrik Ehlers",
+          "url": null
+        },
+        {
+          "role": "Costume designer",
+          "name": "Miriam Ebbing",
+          "url": null
+        },
+        {
+          "role": "Projections",
+          "name": "Florian Eybe",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Darsteller (Vorbereitungsphase)",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Buch und Regie",
+          "name": "Jens Erwin Siemssen",
+          "url": null
+        },
+        {
+          "role": "Musikalische Leitung",
+          "name": "Jan-Hendrik Ehlers",
+          "url": null
+        },
+        {
+          "role": "Kostüm",
+          "name": "Miriam Ebbing",
+          "url": null
+        },
+        {
+          "role": "Projektion",
+          "name": "Florian Eybe",
+          "url": null
+        }
+      ]
     }
   },
   "fields": {
@@ -1990,7 +2554,8 @@
     },
     "aibolit": {
       "*": {
-        "production.year": 2012
+        "production.year": 2012,
+        "production.ageRating": "6+"
       }
     },
     "ecclesiastes": {
@@ -2032,11 +2597,19 @@
       },
       "de": {
         "production.premiereDate": "28. Mai 2018"
+      },
+      "*": {
+        "production.ageRating": "16+",
+        "production.durationMin": 80,
+        "production.theatre.url": "https://www.afisha.ru/performance/minotavrum-204442/"
       }
     },
     "life-of-insects": {
       "*": {
-        "production.year": 2017
+        "production.year": 2017,
+        "production.ageRating": "18+",
+        "production.durationMin": 180,
+        "production.theatre.url": "https://puppets.ru/jiznnasekomih"
       },
       "ru": {
         "production.premiereDate": "22 октября 2017 г.",
@@ -2065,7 +2638,10 @@
     },
     "winter-when-i-grew-up": {
       "*": {
-        "production.year": 2018
+        "production.year": 2018,
+        "production.ageRating": "12+",
+        "production.durationMin": 60,
+        "production.theatre.url": "https://puppets.ru/zimakogdayaviros"
       },
       "ru": {
         "production.premiereDate": "28 декабря 2018 г.",
@@ -2094,7 +2670,10 @@
     },
     "the-outsider": {
       "*": {
-        "production.year": 2019
+        "production.year": 2019,
+        "production.ageRating": "16+",
+        "production.durationMin": 70,
+        "production.theatre.url": "https://www.afisha.ru/performance/207430/"
       },
       "ru": {
         "identity.synopsis": {
@@ -2120,7 +2699,9 @@
     },
     "flea-circus": {
       "*": {
-        "production.year": 2017
+        "production.year": 2017,
+        "production.ageRating": "12+",
+        "production.durationMin": 80
       },
       "ru": {
         "production.premiereDate": "6 ноября 2017 г.",
@@ -2276,7 +2857,10 @@
     },
     "happy-birthday": {
       "*": {
-        "production.year": 2020
+        "production.year": 2020,
+        "production.ageRating": "18+",
+        "production.durationMin": 60,
+        "production.theatre.url": "https://special.tochkadostupa.spb.ru/events/15-04-1"
       },
       "ru": {
         "production.premiereDate": "15 апреля 2020 г.",
@@ -2319,19 +2903,37 @@
         "production.premiereDate": "15 августа 2023 г.",
         "identity.title": "NO FINER WAY",
         "title": "NO FINER WAY",
-        "production.theatre.city": "Бремерхафен"
+        "production.theatre.city": "Бремерхафен",
+        "identity.synopsis": {
+          "paragraphs": [
+            "Спектакль на вокзале Колумбус в Бремерхафене. С 1953 по 1969 год лайнер UNITED STATES регулярно ходил между Бремерхафеном и Нью-Йорком. Каждый его заход переворачивал жизнь портового города: экипаж заполнял магазины, бары и рестораны, а перед отплытием, под гудок тифона, на Колумбус-кай собирались толпы, чтобы проводить легендарный лайнер в Америку."
+          ]
+        }
       },
       "en": {
         "production.premiereDate": "August 15, 2023",
         "identity.title": "NO FINER WAY",
         "title": "NO FINER WAY",
-        "production.theatre.city": "Bremerhaven"
+        "production.theatre.city": "Bremerhaven",
+        "identity.synopsis": {
+          "paragraphs": [
+            "Theatre at the Columbus Station in Bremerhaven. From 1953 to 1969 the liner UNITED STATES sailed a regular transatlantic service between Bremerhaven and New York. Each arrival threw the port city into a stir: the crew poured into its shops, bars and restaurants, and before departure, as the ship's horn sounded, crowds lined the Columbus Quay to see the legendary liner off to America."
+          ]
+        }
       },
       "de": {
         "production.premiereDate": "15. August 2023",
         "identity.title": "NO FINER WAY",
         "title": "NO FINER WAY",
-        "production.theatre.city": "Bremerhaven"
+        "production.theatre.city": "Bremerhaven",
+        "identity.synopsis": {
+          "paragraphs": [
+            "Theater im Columbusbahnhof in Bremerhaven. Bei der Ankunft der UNITED STATES geriet Bremerhaven jedes Mal in Aufruhr. Die Besatzung strömte in Läden, Kneipen und Restaurants der Hafenstadt. Kurz vor Abfahrt dröhnte dann das Typhon. Unzählige Menschen säumten die Columbuskaje, um den legendären Ozeanliner für die Reise in die USA zu verabschieden. Von 1953 bis 1969 fuhr das Schiff im regelmäßigen Transatlantikdienst zwischen Bremerhaven und New York."
+          ]
+        }
+      },
+      "*": {
+        "production.theatre.url": "https://www.das-letzte-kleinod.de/programm/no-finer-way/"
       }
     },
     "oskar-und-die-dame-in-rosa": {
@@ -2378,6 +2980,9 @@
             "Eine immersive Aufführung, die das Publikum zurück in eine gewöhnliche russische Schule versetzt. Zuerst betritt man ein futuristisches „Labor“ und erzählt Performer-„Klonen“ von der eigenen Schulzeit; diese Daten werden in den Simulator „geladen“, und im Klassenzimmer versucht man dann, sich in einem von fünfzehn Schülern wiederzuerkennen. Das Projekt lässt sich als Forschung wie als Erfahrung mit therapeutischer Wirkung erleben."
           ]
         }
+      },
+      "*": {
+        "production.theatre.url": "https://tochkadostupa.spb.ru/2019/program"
       }
     },
     "sea-day-suitcase": {
@@ -2429,6 +3034,10 @@
       },
       "de": {
         "production.premiereDate": "28. April 2016"
+      },
+      "*": {
+        "production.ageRating": "16+",
+        "production.theatre.url": "https://old-house.ru/snegurochka.html"
       }
     },
     "snow-queen": {
@@ -2455,6 +3064,10 @@
             "Ein Familienstück des Projekts „Museum + Theater“ im Anna-Achmatowa-Museum im Fontanny-Haus, Regie: Svetlana Ozerskaya. Gemeinsam mit Gerda reist das Publikum in den Norden, um Prüfungen zu bestehen, Kai zu finden und den Frühling näherzubringen. Die schlichte Inszenierung verbindet Puppentheater, Videoprojektion und Animation."
           ]
         }
+      },
+      "*": {
+        "production.ageRating": "6+",
+        "production.theatre.url": "https://www.akhmatova.spb.ru/snezhaya-koroleva"
       }
     },
     "the-old-man-and-the-sea": {
@@ -2510,13 +3123,31 @@
     },
     "uber-den-zaun": {
       "ru": {
-        "production.premiereDate": "16 мая 2023 г."
+        "production.premiereDate": "16 мая 2023 г.",
+        "identity.synopsis": {
+          "paragraphs": [
+            "События в посольствах ФРГ изменили мир: в сентябре 1989 года тысячи беженцев из ГДР искали защиты в западногерманских представительствах в Праге, Варшаве и Будапеште, чтобы добиться права на выезд. Через два месяца пала Берлинская стена. Железнодорожный театр Das Letzte Kleinod рассказывает эту историю в спектакле-путешествии, который играют на вокзалах Востока и Запада Германии."
+          ]
+        }
       },
       "en": {
-        "production.premiereDate": "May 16, 2023"
+        "production.premiereDate": "May 16, 2023",
+        "identity.synopsis": {
+          "paragraphs": [
+            "The events at the West German embassies changed the world: in September 1989 thousands of refugees from East Germany sought protection in the embassies in Prague, Warsaw and Budapest to force their way out. Two months later the Wall fell. The railway theatre Das Letzte Kleinod tells this story in a travelling performance played at railway stations in East and West."
+          ]
+        }
       },
       "de": {
-        "production.premiereDate": "16. Mai 2023"
+        "production.premiereDate": "16. Mai 2023",
+        "identity.synopsis": {
+          "paragraphs": [
+            "Die Geschehnisse in den deutschen Botschaften veränderten die Welt: Tausende von Zufluchtsuchenden aus der DDR baten im September 1989 um Schutz in den Auslandsvertretungen in Prag, Warschau und Budapest, um ihre Ausreise durchzusetzen. Zwei Monate später fiel die Mauer. Das Eisenbahntheater Das Letzte Kleinod erzählt diese Geschichte in einer reisenden Aufführung an Bahnhöfen in Ost und West."
+          ]
+        }
+      },
+      "*": {
+        "production.theatre.url": "https://www.das-letzte-kleinod.de/programm/ueber-den-zaun/"
       }
     },
     "pre-theatre": {
