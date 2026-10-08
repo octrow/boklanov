@@ -1,0 +1,35 @@
+name: Backup DB
+
+# Nightly encrypted pg_dump of the production Neon DB into R2. Neon's free
+# restore window is short and editors change content through the admin, so
+# this is the only copy of their edits outside Neon. See scripts/backup-db.sh
+# for the restore steps.
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: backup-db
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dump, encrypt, upload to R2
+        env:
+          DATABASE_URL: ${{ secrets.NEON_DATABASE_URL_UNPOOLED }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET || 'boklanov-content' }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: bash scripts/backup-db.sh
