@@ -38,7 +38,8 @@ export const BASE_URL = resolve()
  *  director of every production and as the home WebSite's author. */
 export const PERSON_ID = `${BASE_URL}/#person`
 
-/** Share preview for every page without its own (productions use /api/og).
+/** Bundled share preview, used when About › Share preview is empty (see
+ *  lib/shareImage.ts). Productions use /api/og.
  *  Listed per page: a child `openGraph` replaces the layout's wholesale. */
 export const DEFAULT_OG_IMAGE = {
   url: '/og.jpg',

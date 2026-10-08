@@ -11,7 +11,8 @@ import type {
 import { IconArrowRight } from '@/components/IconArrowRight'
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
-import { BASE_URL as BASE, DEFAULT_OG_IMAGE, PERSON_ID } from '@/lib/baseUrl'
+import { BASE_URL as BASE, PERSON_ID } from '@/lib/baseUrl'
+import { getShareImage } from '@/lib/shareImage'
 import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -186,7 +187,7 @@ export async function generateMetadata({
       description,
       url,
       type: 'profile',
-      images: [DEFAULT_OG_IMAGE]
+      images: [await getShareImage()]
     }
   }
 }

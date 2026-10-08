@@ -79,12 +79,18 @@ export const revalidateProductionDelete: CollectionAfterDeleteHook = async ({
 
 export const revalidateAbout: GlobalAfterChangeHook = async ({
   doc,
+  previousDoc,
   req: { payload, context }
 }) => {
   if (context?.disableRevalidate) return doc
   revalidateTag('about', { expire: 0 })
-  revalidatePath('/[locale]/about', 'page')
-  await fanOutRevalidate(payload.logger, ['about'], ['/[locale]/about'])
+  // The share preview sits in every page's og:image, not just /about.
+  const shareChanged =
+    (doc as { shareImage?: unknown }).shareImage !==
+    (previousDoc as { shareImage?: unknown } | undefined)?.shareImage
+  const paths = shareChanged ? ['/[locale]'] : ['/[locale]/about']
+  revalidatePath(paths[0], shareChanged ? 'layout' : 'page')
+  await fanOutRevalidate(payload.logger, ['about'], paths)
   return doc
 }
 

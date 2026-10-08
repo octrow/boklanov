@@ -1138,6 +1138,10 @@ export interface About {
     credit?: string | null;
   };
   /**
+   * Image shown by Telegram, WhatsApp, VK and mail clients when a site link is shared. Any photo works: the site crops it to 1200×630 around the most salient area; a landscape photo loses the least. Empty uses the default portrait. Productions keep their own poster-based preview.
+   */
+  shareImage?: string | null;
+  /**
    * Extra photos for the bottom block. Empty entries are filtered at render time.
    */
   photos?:
@@ -1249,6 +1253,7 @@ export interface AboutSelect<T extends boolean = true> {
         src?: T;
         credit?: T;
       };
+  shareImage?: T;
   photos?:
     | T
     | {

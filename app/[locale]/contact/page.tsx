@@ -6,7 +6,8 @@ import { bookingKind } from '@/lib/bookingKind'
 import { getAllProductions, getContact } from '@/lib/content'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
-import { BASE_URL as BASE, DEFAULT_OG_IMAGE } from '@/lib/baseUrl'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { getShareImage } from '@/lib/shareImage'
 
 import { CopyEmailButton } from './CopyEmailButton'
 import {
@@ -43,7 +44,7 @@ export async function generateMetadata({
         ru: `${BASE}/ru/contact`
       }
     },
-    openGraph: { title, url, type: 'website', images: [DEFAULT_OG_IMAGE] }
+    openGraph: { title, url, type: 'website', images: [await getShareImage()] }
   }
 }
 

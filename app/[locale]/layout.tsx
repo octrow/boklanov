@@ -16,7 +16,8 @@ import { DuotonePosterSprite } from '@/components/DuotonePosterSprite'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { routing, type Locale } from '@/i18n/routing'
-import { BASE_URL as BASE, DEFAULT_OG_IMAGE } from '@/lib/baseUrl'
+import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { getShareImage } from '@/lib/shareImage'
 import { getAllProductions } from '@/lib/content'
 import { buildSearchIndex } from '@/lib/search'
 
@@ -83,7 +84,7 @@ export async function generateMetadata({
       description,
       url,
       locale,
-      images: [DEFAULT_OG_IMAGE]
+      images: [await getShareImage()]
     }
   }
 }

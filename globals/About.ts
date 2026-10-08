@@ -132,6 +132,23 @@ export const About: GlobalConfig = {
               ]
             },
             {
+              name: 'shareImage',
+              type: 'text',
+              label: { ru: 'Превью для соцсетей', en: 'Share preview' },
+              admin: {
+                className: 'image-path',
+                description: {
+                  ru: 'Картинка, которую показывают Telegram, WhatsApp, VK и почта, когда пересылают ссылку на сайт. Подойдёт любое фото: сайт сам обрежет его до 1200×630, оставив самую заметную часть; горизонтальное фото обрежется меньше всего. Пусто — стандартный портрет. У спектаклей превью своё, из постера.',
+                  en: 'Image shown by Telegram, WhatsApp, VK and mail clients when a site link is shared. Any photo works: the site crops it to 1200×630 around the most salient area; a landscape photo loses the least. Empty uses the default portrait. Productions keep their own poster-based preview.'
+                },
+                components: {
+                  afterInput: [
+                    '/components/admin/ImagePathPreview#ImagePathPreview'
+                  ]
+                }
+              }
+            },
+            {
               name: 'photos',
               type: 'array',
               label: { ru: 'Фотографии', en: 'Photos' },

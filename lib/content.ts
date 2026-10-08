@@ -659,6 +659,7 @@ export interface AboutBody {
 export interface AboutData {
   body: AboutBody
   portrait: { src: string | null; credit: string | null }
+  shareImage: string | null
   photos: Array<{ src: string; credit: string | null }>
   milestones: Array<{ year: number | null; label: AboutL10n }>
   lineage: Array<{
@@ -714,6 +715,10 @@ const fetchAboutGlobal = unstable_cache(
         src: typeof portrait.src === 'string' ? portrait.src : null,
         credit: typeof portrait.credit === 'string' ? portrait.credit : null
       },
+      shareImage:
+        typeof doc.shareImage === 'string' && doc.shareImage.length > 0
+          ? doc.shareImage
+          : null,
       photos: rawPhotos
         .filter((p) => typeof p.src === 'string' && p.src.length > 0)
         .map((p) => ({
