@@ -185,9 +185,9 @@ export function toPayloadProduction(
 
     taxonomy: {
       role: arrayWrap(tax.role as string[]),
-      form: arrayWrap(tax.form as string[]).map((v) => ({ value: v })),
-      lineage: arrayWrap(tax.lineage as string[]).map((v) => ({ value: v })),
-      tags: arrayWrap(tax.tags as string[]).map((v) => ({ value: v }))
+      form: arrayWrap(tax.form as string[]),
+      lineage: arrayWrap(tax.lineage as string[]),
+      tags: arrayWrap(tax.tags as string[])
     },
 
     team: {

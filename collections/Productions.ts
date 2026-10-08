@@ -10,12 +10,26 @@ import {
   revalidateProductionDelete
 } from '../hooks/revalidate'
 import { posterDims } from '../hooks/posterDims'
+import { yearFromPremiereDate } from '../hooks/yearFromPremiereDate'
 
 // Block-shaped Lexical features stripped from inline-only richText
 // fields (tagline / synopsis / directorsNote). Removing all of these
 // also removes the `+` block-insert gutter glyph and the bottom
 // toolbar, giving the fields a clean text-input look.
 // See PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R3 + §B.1.
+// Russian scale plus the German/Finnish ones the catalogue already uses.
+const AGE_RATINGS = [
+  '0+',
+  '3+',
+  '4+',
+  '5+',
+  '6+',
+  '12+',
+  '14+',
+  '16+',
+  '18+'
+] as const
+
 const INLINE_ONLY_DROP_FEATURES = new Set([
   'heading',
   'align',
@@ -25,6 +39,22 @@ const INLINE_ONLY_DROP_FEATURES = new Set([
   'checklist',
   'relationship',
   'blockquote',
+  'upload',
+  'horizontalRule'
+])
+
+// Body keeps headings, lists, quotes and links; these formats are not
+// styled on the site, so the toolbar doesn't offer them.
+const BODY_DROP_FEATURES = new Set([
+  'underline',
+  'strikethrough',
+  'subscript',
+  'superscript',
+  'inlineCode',
+  'align',
+  'indent',
+  'checklist',
+  'relationship',
   'upload',
   'horizontalRule'
 ])
@@ -135,7 +165,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'identity',
               type: 'group',
-              label: { ru: 'Текст', en: 'Content' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'title',
@@ -163,7 +194,9 @@ export const Productions: CollectionConfig = {
                   editor: lexicalEditor({
                     admin: RICHTEXT_ADMIN_CHROME,
                     features: ({ defaultFeatures }) => [
-                      ...defaultFeatures,
+                      ...defaultFeatures.filter(
+                        (f) => !BODY_DROP_FEATURES.has(f.key)
+                      ),
                       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
                       FixedToolbarFeature(),
                       InlineToolbarFeature()
@@ -278,7 +311,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'media',
               type: 'group',
-              label: { ru: 'Медиа', en: 'Media' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'poster',
@@ -296,9 +330,10 @@ export const Productions: CollectionConfig = {
                       type: 'text',
                       label: { ru: 'Постер', en: 'Poster image' },
                       admin: {
+                        className: 'image-path',
                         description: {
-                          ru: 'Путь к постеру. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/bury-me-behind-the-baseboard/poster.jpg',
-                          en: 'Path to the poster. Click "Загрузить" under the field or type the path. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg'
+                          ru: 'Путь к файлу. Обычно его заполняет кнопка «Загрузить».',
+                          en: 'File path. Usually filled by the upload button.'
                         },
                         components: {
                           afterInput: [
@@ -332,8 +367,8 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Обложка для каталога', en: 'Catalogue cover' },
                   admin: {
                     description: {
-                      ru: 'Опциональная замена постера специально для карточки на /productions. Если не задана — используется постер.',
-                      en: 'Optional override for the /productions card only. Falls back to the poster when blank.'
+                      ru: 'Необязательно. Своя картинка для карточки в каталоге спектаклей. Если пусто — берётся постер.',
+                      en: 'Optional. Own image for the catalogue card; blank uses the poster.'
                     }
                   },
                   fields: [
@@ -345,13 +380,21 @@ export const Productions: CollectionConfig = {
                         en: 'Catalogue cover image'
                       },
                       admin: {
+                        className: 'image-path',
                         description: {
-                          ru: 'Заменяет постер на карточке в каталоге спектаклей. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/{slug}/cover.webp',
-                          en: 'Replaces the poster on the catalogue card. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/cover.webp'
+                          ru: 'Путь к файлу. Обычно его заполняет кнопка «Загрузить».',
+                          en: 'File path. Usually filled by the upload button.'
                         },
                         components: {
                           afterInput: [
-                            '/components/admin/ImagePathPreview#ImagePathPreview'
+                            {
+                              path: '/components/admin/ImagePathPreview#ImagePathPreview',
+                              clientProps: {
+                                fallback: [
+                                  { path: 'media.poster.src', label: 'постер' }
+                                ]
+                              }
+                            }
                           ]
                         }
                       }
@@ -388,13 +431,25 @@ export const Productions: CollectionConfig = {
                         en: 'Homepage cover image'
                       },
                       admin: {
+                        className: 'image-path',
                         description: {
-                          ru: 'Заменяет картинку спектакля на главной. Нажмите «Загрузить» под полем или впишите путь вручную.',
-                          en: 'Replaces the production image on the homepage.'
+                          ru: 'Путь к файлу. Обычно его заполняет кнопка «Загрузить».',
+                          en: 'File path. Usually filled by the upload button.'
                         },
                         components: {
                           afterInput: [
-                            '/components/admin/ImagePathPreview#ImagePathPreview'
+                            {
+                              path: '/components/admin/ImagePathPreview#ImagePathPreview',
+                              clientProps: {
+                                fallback: [
+                                  {
+                                    path: 'media.productionsPhoto.src',
+                                    label: 'обложка для каталога'
+                                  },
+                                  { path: 'media.poster.src', label: 'постер' }
+                                ]
+                              }
+                            }
                           ]
                         }
                       }
@@ -417,7 +472,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Галерея', en: 'Gallery' },
                   labels: {
-                    singular: { ru: 'Фото', en: 'Photo' },
+                    singular: { ru: 'фото', en: 'Photo' },
                     plural: { ru: 'Галерея', en: 'Gallery' }
                   },
                   admin: {
@@ -435,9 +490,10 @@ export const Productions: CollectionConfig = {
                       type: 'text',
                       label: { ru: 'Путь к фото', en: 'Image path' },
                       admin: {
+                        className: 'image-path',
                         description: {
-                          ru: 'Путь к изображению. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/{slug}/01.jpg',
-                          en: 'Path to the image. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/01.jpg'
+                          ru: 'Путь к файлу. Обычно его заполняет кнопка «Загрузить».',
+                          en: 'File path. Usually filled by the upload button.'
                         },
                         components: {
                           afterInput: [
@@ -479,7 +535,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Видео', en: 'Videos' },
                   labels: {
-                    singular: { ru: 'Видео', en: 'Video' },
+                    singular: { ru: 'видео', en: 'Video' },
                     plural: { ru: 'Видео', en: 'Videos' }
                   },
                   admin: {
@@ -535,7 +591,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'production',
               type: 'group',
-              label: { ru: 'Постановка', en: 'Production details' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'premiereDate',
@@ -553,15 +610,49 @@ export const Productions: CollectionConfig = {
                   }
                 },
                 {
-                  name: 'ageRating',
-                  type: 'text',
-                  label: { ru: 'Возраст', en: 'Age rating' },
-                  admin: {
-                    description: {
-                      ru: 'Возрастное ограничение по российскому стандарту: 0+, 6+, 12+, 16+, 18+.',
-                      en: 'Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.'
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'year',
+                      type: 'number',
+                      label: { ru: 'Год премьеры', en: 'Premiere year' },
+                      min: 1900,
+                      max: 2100,
+                      index: true,
+                      hooks: { beforeChange: [yearFromPremiereDate] },
+                      admin: {
+                        width: '33%',
+                        components: {
+                          Cell: '/components/admin/ListCells#YearCell',
+                          Label: '/components/admin/ListCells#PlainLabel'
+                        },
+                        description: {
+                          ru: 'Если пусто — берётся из даты премьеры.',
+                          en: 'Blank: taken from the premiere date.'
+                        }
+                      }
+                    },
+                    {
+                      name: 'durationMin',
+                      type: 'number',
+                      label: { ru: 'Длительность, мин', en: 'Duration, min' },
+                      min: 1,
+                      admin: {
+                        width: '33%',
+                        description: {
+                          ru: 'С антрактом.',
+                          en: 'Including intermission.'
+                        }
+                      }
+                    },
+                    {
+                      name: 'ageRating',
+                      type: 'select',
+                      label: { ru: 'Возраст', en: 'Age rating' },
+                      options: AGE_RATINGS.map((v) => ({ label: v, value: v })),
+                      admin: { width: '33%' }
                     }
-                  }
+                  ]
                 },
                 {
                   name: 'ticketsUrl',
@@ -575,42 +666,13 @@ export const Productions: CollectionConfig = {
                   }
                 },
                 {
-                  name: 'year',
-                  type: 'number',
-                  label: { ru: 'Год премьеры', en: 'Premiere year' },
-                  min: 1900,
-                  max: 2100,
-                  index: true,
-                  admin: {
-                    components: {
-                      Cell: '/components/admin/ListCells#YearCell',
-                      Label: '/components/admin/ListCells#PlainLabel'
-                    },
-                    description: {
-                      ru: 'Числовой год — используется для сортировки и в карточках.',
-                      en: 'Numeric year used for sort and display on cards.'
-                    }
-                  }
-                },
-                {
-                  name: 'durationMin',
-                  type: 'number',
-                  label: { ru: 'Длительность (мин)', en: 'Duration (min)' },
-                  admin: {
-                    description: {
-                      ru: 'Длительность спектакля в минутах, с антрактом. Опционально.',
-                      en: 'Performance length in minutes including intermission. Optional.'
-                    }
-                  }
-                },
-                {
                   name: 'theatre',
                   type: 'group',
                   label: { ru: 'Театр', en: 'Theatre' },
                   admin: {
                     description: {
-                      ru: 'Театр-производитель премьеры. Не путать с площадками гастролей (см. «Гастроли» / «История площадок»).',
-                      en: 'Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).'
+                      ru: 'Театр-производитель премьеры. Не путать с площадками гастролей (вкладка «Показы»).',
+                      en: 'Producing theatre for the premiere. Not the touring venues (Shows tab).'
                     }
                   },
                   fields: [
@@ -774,7 +836,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'taxonomy',
               type: 'group',
-              label: { ru: 'Жанр и теги', en: 'Genre & tags' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'role',
@@ -815,77 +878,70 @@ export const Productions: CollectionConfig = {
                   ]
                 },
                 {
+                  // Slugs the site filters by and translates
+                  // (messages/*.json productions.formLabels).
                   name: 'form',
-                  type: 'array',
+                  type: 'select',
+                  hasMany: true,
                   label: { ru: 'Форма', en: 'Form' },
-                  labels: {
-                    singular: { ru: 'Форму', en: 'Form' },
-                    plural: { ru: 'Форма', en: 'Form' }
-                  },
-                  fields: [
+                  options: [
+                    { value: 'theater', label: { ru: 'Театр', en: 'Theatre' } },
                     {
-                      name: 'value',
-                      type: 'text',
-                      label: { ru: 'Значение', en: 'Value' }
+                      value: 'ensemble',
+                      label: { ru: 'Ансамбль', en: 'Ensemble' }
+                    },
+                    { value: 'solo', label: { ru: 'Соло', en: 'Solo' } },
+                    { value: 'puppet', label: { ru: 'Куклы', en: 'Puppets' } },
+                    {
+                      value: 'family',
+                      label: { ru: 'Семейный', en: 'Family' }
+                    },
+                    { value: 'reading', label: { ru: 'Читка', en: 'Reading' } },
+                    {
+                      value: 'collage',
+                      label: { ru: 'Коллаж', en: 'Collage' }
+                    },
+                    {
+                      value: 'festival',
+                      label: { ru: 'фестиваль', en: 'Festival' }
                     }
                   ],
                   admin: {
-                    components: {
-                      RowLabel: '/components/admin/ValueRowLabel#default'
-                    },
                     description: {
-                      ru: 'Жанр / форма спектакля. Свободный текст — можно вводить любой тег. Устоявшиеся: solo, puppet, theater, family, festival, reading.',
-                      en: 'Theatrical form / genre. Free-form — type any tag. Established values: solo, puppet, theater, family, festival, reading.'
+                      ru: 'Жанр / форма спектакля. По ней работает фильтр в каталоге. Нужной формы нет — напишите Даниилу.',
+                      en: 'Form / genre; the catalogue filter uses it. Missing one? Ask Daniil.'
                     }
                   }
                 },
                 {
                   name: 'lineage',
-                  type: 'array',
+                  type: 'select',
+                  hasMany: true,
                   label: { ru: 'Школа', en: 'Lineage' },
-                  labels: {
-                    singular: { ru: 'Школу', en: 'Lineage' },
-                    plural: { ru: 'Школа', en: 'Lineage' }
-                  },
-                  fields: [
+                  options: [
+                    { value: 'btk', label: { ru: 'БТК', en: 'BTK' } },
                     {
-                      name: 'value',
-                      type: 'text',
-                      label: { ru: 'Значение', en: 'Value' }
-                    }
+                      value: 'kudashov',
+                      label: { ru: 'Кудашов', en: 'Kudashov' }
+                    },
+                    { value: 'rgisi', label: { ru: 'РГИСИ', en: 'RGISI' } }
                   ],
                   admin: {
-                    components: {
-                      RowLabel: '/components/admin/ValueRowLabel#default'
-                    },
                     description: {
-                      ru: 'Традиция или школа, к которой восходит спектакль. Свободный текст. Устоявшиеся: btk, kudashov, rgisi.',
-                      en: 'Tradition or school the production traces back to. Free-form. Established values: btk, kudashov, rgisi.'
+                      ru: 'Традиция или школа, к которой восходит спектакль. Нужной нет — напишите Даниилу.',
+                      en: 'Tradition or school the production traces back to. Missing one? Ask Daniil.'
                     }
                   }
                 },
                 {
                   name: 'tags',
-                  type: 'array',
+                  type: 'text',
+                  hasMany: true,
                   label: { ru: 'Теги', en: 'Tags' },
-                  labels: {
-                    singular: { ru: 'Тег', en: 'Tag' },
-                    plural: { ru: 'Теги', en: 'Tags' }
-                  },
-                  fields: [
-                    {
-                      name: 'value',
-                      type: 'text',
-                      label: { ru: 'Тег', en: 'Tag' }
-                    }
-                  ],
                   admin: {
-                    components: {
-                      RowLabel: '/components/admin/ValueRowLabel#default'
-                    },
                     description: {
-                      ru: 'Произвольные ключевые слова для поиска и фильтрации. Отличается от формы (жанр) и школы (традиция).',
-                      en: 'Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).'
+                      ru: 'Ключевые слова для поиска. Введите слово и нажмите Enter. Отличается от формы (жанр) и школы (традиция).',
+                      en: 'Search keywords. Type one and press Enter. Distinct from form (genre) and lineage (tradition).'
                     }
                   }
                 }
@@ -896,14 +952,15 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Команда', en: 'Team' },
           description: {
-            ru: 'Команда и состав. Видимый список зависит от языка вверху страницы: RU/EN/DE показывает свой список, ALL — все три сразу.',
-            en: 'Cast & crew. Visible list follows the locale pill at the top: RU/EN/DE shows that locale only; ALL shows all three side-by-side.'
+            ru: 'Команда и состав. У каждого языка свой список: показан тот, что выбран вверху страницы.',
+            en: 'Cast & crew. Each language has its own list; the one picked at the top is shown.'
           },
           fields: [
             {
               name: 'team',
               type: 'group',
-              label: { ru: 'Команда', en: 'Team' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   // Three parallel arrays — see keystatic.config.ts §Credits comment
@@ -917,30 +974,39 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (RU)', en: 'Team (RU)' },
                   labels: {
-                    singular: { ru: 'Строку', en: 'Row' },
+                    singular: { ru: 'человека', en: 'Person' },
                     plural: { ru: 'Команда (RU)', en: 'Team (RU)' }
                   },
                   admin: {
                     className: 'team-credits-locale team-credits-locale--ru',
+                    initCollapsed: true,
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }
                   },
                   fields: [
                     {
-                      name: 'role',
-                      type: 'text',
-                      label: { ru: 'Роль', en: 'Role' }
-                    },
-                    {
-                      name: 'name',
-                      type: 'text',
-                      label: { ru: 'Имя', en: 'Name' }
-                    },
-                    {
-                      name: 'url',
-                      type: 'text',
-                      label: { ru: 'Ссылка', en: 'URL' }
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'role',
+                          type: 'text',
+                          label: { ru: 'Роль', en: 'Role' },
+                          admin: { width: '40%' }
+                        },
+                        {
+                          name: 'name',
+                          type: 'text',
+                          label: { ru: 'Имя', en: 'Name' },
+                          admin: { width: '30%' }
+                        },
+                        {
+                          name: 'url',
+                          type: 'text',
+                          label: { ru: 'Ссылка', en: 'URL' },
+                          admin: { width: '30%' }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -949,30 +1015,39 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (EN)', en: 'Team (EN)' },
                   labels: {
-                    singular: { ru: 'Строку', en: 'Row' },
+                    singular: { ru: 'человека', en: 'Person' },
                     plural: { ru: 'Команда (EN)', en: 'Team (EN)' }
                   },
                   admin: {
                     className: 'team-credits-locale team-credits-locale--en',
+                    initCollapsed: true,
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }
                   },
                   fields: [
                     {
-                      name: 'role',
-                      type: 'text',
-                      label: { ru: 'Роль', en: 'Role' }
-                    },
-                    {
-                      name: 'name',
-                      type: 'text',
-                      label: { ru: 'Имя', en: 'Name' }
-                    },
-                    {
-                      name: 'url',
-                      type: 'text',
-                      label: { ru: 'Ссылка', en: 'URL' }
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'role',
+                          type: 'text',
+                          label: { ru: 'Роль', en: 'Role' },
+                          admin: { width: '40%' }
+                        },
+                        {
+                          name: 'name',
+                          type: 'text',
+                          label: { ru: 'Имя', en: 'Name' },
+                          admin: { width: '30%' }
+                        },
+                        {
+                          name: 'url',
+                          type: 'text',
+                          label: { ru: 'Ссылка', en: 'URL' },
+                          admin: { width: '30%' }
+                        }
+                      ]
                     }
                   ]
                 },
@@ -981,30 +1056,39 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (DE)', en: 'Team (DE)' },
                   labels: {
-                    singular: { ru: 'Строку', en: 'Row' },
+                    singular: { ru: 'человека', en: 'Person' },
                     plural: { ru: 'Команда (DE)', en: 'Team (DE)' }
                   },
                   admin: {
                     className: 'team-credits-locale team-credits-locale--de',
+                    initCollapsed: true,
                     components: {
                       RowLabel: '/components/admin/CreditRowLabel#default'
                     }
                   },
                   fields: [
                     {
-                      name: 'role',
-                      type: 'text',
-                      label: { ru: 'Роль', en: 'Role' }
-                    },
-                    {
-                      name: 'name',
-                      type: 'text',
-                      label: { ru: 'Имя', en: 'Name' }
-                    },
-                    {
-                      name: 'url',
-                      type: 'text',
-                      label: { ru: 'Ссылка', en: 'URL' }
+                      type: 'row',
+                      fields: [
+                        {
+                          name: 'role',
+                          type: 'text',
+                          label: { ru: 'Роль', en: 'Role' },
+                          admin: { width: '40%' }
+                        },
+                        {
+                          name: 'name',
+                          type: 'text',
+                          label: { ru: 'Имя', en: 'Name' },
+                          admin: { width: '30%' }
+                        },
+                        {
+                          name: 'url',
+                          type: 'text',
+                          label: { ru: 'Ссылка', en: 'URL' },
+                          admin: { width: '30%' }
+                        }
+                      ]
                     }
                   ]
                 }
@@ -1022,14 +1106,15 @@ export const Productions: CollectionConfig = {
             {
               name: 'recognition',
               type: 'group',
-              label: { ru: 'Награды и пресса', en: 'Awards & press' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'awards',
                   type: 'array',
                   label: { ru: 'Награды', en: 'Awards' },
                   labels: {
-                    singular: { ru: 'Награду', en: 'Award' },
+                    singular: { ru: 'награду', en: 'Award' },
                     plural: { ru: 'Награды', en: 'Awards' }
                   },
                   admin: {
@@ -1116,7 +1201,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Фестивали', en: 'Festivals' },
                   labels: {
-                    singular: { ru: 'Фестиваль', en: 'Festival' },
+                    singular: { ru: 'фестиваль', en: 'Festival' },
                     plural: { ru: 'Фестивали', en: 'Festivals' }
                   },
                   admin: {
@@ -1192,7 +1277,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Пресса', en: 'Press' },
                   labels: {
-                    singular: { ru: 'Публикацию', en: 'Press item' },
+                    singular: { ru: 'публикацию', en: 'Press item' },
                     plural: { ru: 'Пресса', en: 'Press' }
                   },
                   admin: {
@@ -1244,14 +1329,63 @@ export const Productions: CollectionConfig = {
                     },
                     {
                       name: 'language',
-                      type: 'text',
-                      label: { ru: 'Язык', en: 'Language' },
-                      admin: {
-                        description: {
-                          ru: 'Код языка статьи: ru / en / de.',
-                          en: 'Article language code: ru / en / de.'
+                      type: 'select',
+                      label: { ru: 'Язык статьи', en: 'Article language' },
+                      options: [
+                        {
+                          value: 'ru',
+                          label: { ru: 'Русский', en: 'Russian' }
+                        },
+                        {
+                          value: 'en',
+                          label: { ru: 'Английский', en: 'English' }
+                        },
+                        {
+                          value: 'de',
+                          label: { ru: 'Немецкий', en: 'German' }
+                        },
+                        {
+                          value: 'fi',
+                          label: { ru: 'Финский', en: 'Finnish' }
+                        },
+                        {
+                          value: 'et',
+                          label: { ru: 'Эстонский', en: 'Estonian' }
+                        },
+                        {
+                          value: 'lv',
+                          label: { ru: 'Латышский', en: 'Latvian' }
+                        },
+                        {
+                          value: 'lt',
+                          label: { ru: 'Литовский', en: 'Lithuanian' }
+                        },
+                        {
+                          value: 'pl',
+                          label: { ru: 'Польский', en: 'Polish' }
+                        },
+                        { value: 'cs', label: { ru: 'Чешский', en: 'Czech' } },
+                        {
+                          value: 'fr',
+                          label: { ru: 'Французский', en: 'French' }
+                        },
+                        {
+                          value: 'it',
+                          label: { ru: 'Итальянский', en: 'Italian' }
+                        },
+                        {
+                          value: 'es',
+                          label: { ru: 'Испанский', en: 'Spanish' }
+                        },
+                        {
+                          value: 'uk',
+                          label: { ru: 'Украинский', en: 'Ukrainian' }
+                        },
+                        {
+                          value: 'kk',
+                          label: { ru: 'Казахский', en: 'Kazakh' }
                         }
-                      }
+                      ]
                     }
                   ]
                 },
@@ -1260,7 +1394,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Внешние ссылки', en: 'External links' },
                   labels: {
-                    singular: { ru: 'Ссылку', en: 'Link' },
+                    singular: { ru: 'ссылку', en: 'Link' },
                     plural: { ru: 'Внешние ссылки', en: 'External links' }
                   },
                   admin: {
@@ -1315,7 +1449,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'history',
               type: 'group',
-              label: { ru: 'Показы', en: 'Shows' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   // Tour cities — l10n strings. Same as keystatic's array of l10n.
@@ -1323,7 +1458,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Гастроли', en: 'Tour' },
                   labels: {
-                    singular: { ru: 'Город', en: 'City' },
+                    singular: { ru: 'город', en: 'City' },
                     plural: { ru: 'Гастроли', en: 'Tour' }
                   },
                   admin: {
@@ -1331,8 +1466,8 @@ export const Productions: CollectionConfig = {
                       RowLabel: '/components/admin/CityRowLabel#default'
                     },
                     description: {
-                      ru: 'Города, где спектакль был на гастролях. Не путать с городом премьеры (см. «Театр» выше).',
-                      en: 'Cities where this production has toured. Not the premiere venue (see Theatre above).'
+                      ru: 'Города, где спектакль был на гастролях. Не путать с городом премьеры (вкладка «О постановке» → «Театр»).',
+                      en: 'Cities where this production has toured. Not the premiere venue (About tab → Theatre).'
                     }
                   },
                   fields: [
@@ -1358,7 +1493,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'История площадок', en: 'Venue history' },
                   labels: {
-                    singular: { ru: 'Серию', en: 'Run' },
+                    singular: { ru: 'площадку', en: 'Venue' },
                     plural: { ru: 'История площадок', en: 'Venue history' }
                   },
                   admin: {
@@ -1457,6 +1592,7 @@ export const Productions: CollectionConfig = {
               label: { ru: 'Статус', en: 'Status' },
               defaultValue: 'live',
               admin: {
+                isClearable: false,
                 components: {
                   Cell: '/components/admin/ListCells#StatusCell'
                 },
@@ -1484,7 +1620,8 @@ export const Productions: CollectionConfig = {
             {
               name: 'settings',
               type: 'group',
-              label: { ru: 'Настройки', en: 'Settings' },
+              // The tab already names it.
+              label: false,
               fields: [
                 {
                   name: 'bookingCta',

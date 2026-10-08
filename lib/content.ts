@@ -309,9 +309,17 @@ const asLexical = (
 
 /** Unwrap `{value: 'tag'}` entries from Payload array-of-text-with-named-field
  *  back to plain string arrays expected by the legacy Production interface. */
+// taxonomy form/lineage/tags: plain strings (hasMany select/text); the
+// `{ value }` rows are the pre-2026-10-08 array shape.
 const flatStringArr = (v: unknown): string[] =>
-  asArray<AnyMap>(v)
-    .map((it) => (typeof it.value === 'string' ? it.value : ''))
+  asArray<unknown>(v)
+    .map((it) =>
+      typeof it === 'string'
+        ? it
+        : typeof (it as AnyMap)?.value === 'string'
+          ? ((it as AnyMap).value as string)
+          : ''
+    )
     .filter(Boolean)
 
 /** Variant emission is gated on this flag so we can roll out per-environment

@@ -103,9 +103,10 @@ export const About: GlobalConfig = {
                   type: 'text',
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
+                    className: 'image-path',
                     description: {
-                      ru: 'Главное портретное фото. Нажмите «Загрузить» под полем или впишите путь вручную.',
-                      en: 'Main portrait photo. Click "Загрузить" under the field or type the path.'
+                      ru: 'Главное портретное фото.',
+                      en: 'Main portrait photo.'
                     },
                     components: {
                       afterInput: [
@@ -150,9 +151,10 @@ export const About: GlobalConfig = {
                   type: 'text',
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
+                    className: 'image-path',
                     description: {
-                      ru: 'Дополнительное фото. Нажмите «Загрузить» под полем или впишите путь вручную.',
-                      en: 'Additional photo. Click "Загрузить" under the field or type the path.'
+                      ru: 'Дополнительное фото.',
+                      en: 'Additional photo.'
                     },
                     components: {
                       afterInput: [

@@ -114,6 +114,8 @@ export default buildConfig({
         Logo: '/components/admin/Graphics#Logo',
         Icon: '/components/admin/Graphics#Icon'
       },
+      // Signed-in email + «Выйти» by the avatar (sidebar icon hidden).
+      actions: ['/components/admin/AccountActions#default'],
       // /admin: sections, what still needs doing, recent edits.
       views: { dashboard: { Component: '/components/admin/Dashboard#default' } }
     },

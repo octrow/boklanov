@@ -220,7 +220,7 @@ export interface Production {
      */
     poster?: {
       /**
-       * Path to the poster. Click "Загрузить" under the field or type the path. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
+       * File path. Usually filled by the upload button.
        */
       src?: string | null;
       width?: number | null;
@@ -231,11 +231,11 @@ export interface Production {
       credit?: string | null;
     };
     /**
-     * Optional override for the /productions card only. Falls back to the poster when blank.
+     * Optional. Own image for the catalogue card; blank uses the poster.
      */
     productionsPhoto?: {
       /**
-       * Replaces the poster on the catalogue card. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/cover.webp
+       * File path. Usually filled by the upload button.
        */
       src?: string | null;
       /**
@@ -248,7 +248,7 @@ export interface Production {
      */
     featuredPhoto?: {
       /**
-       * Replaces the production image on the homepage.
+       * File path. Usually filled by the upload button.
        */
       src?: string | null;
       /**
@@ -262,7 +262,7 @@ export interface Production {
     gallery?:
       | {
           /**
-           * Path to the image. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/01.jpg
+           * File path. Usually filled by the upload button.
            */
           src?: string | null;
           /**
@@ -298,23 +298,20 @@ export interface Production {
      */
     premiereDate?: string | null;
     /**
-     * Russian-standard age rating: 0+, 6+, 12+, 16+, 18+.
+     * Blank: taken from the premiere date.
      */
-    ageRating?: string | null;
+    year?: number | null;
+    /**
+     * Including intermission.
+     */
+    durationMin?: number | null;
+    ageRating?: ('0+' | '3+' | '4+' | '5+' | '6+' | '12+' | '14+' | '16+' | '18+') | null;
     /**
      * Public ticketing page if one exists. Must include https://
      */
     ticketsUrl?: string | null;
     /**
-     * Numeric year used for sort and display on cards.
-     */
-    year?: number | null;
-    /**
-     * Performance length in minutes including intermission. Optional.
-     */
-    durationMin?: number | null;
-    /**
-     * Producing theatre for the premiere. Not the touring venues (see Tour cities / Runs).
+     * Producing theatre for the premiere. Not the touring venues (Shows tab).
      */
     theatre?: {
       /**
@@ -374,32 +371,17 @@ export interface Production {
      */
     role?: ('director' | 'co-director' | 'performer' | 'art-director' | 'playwright' | 'producer')[] | null;
     /**
-     * Theatrical form / genre. Free-form — type any tag. Established values: solo, puppet, theater, family, festival, reading.
+     * Form / genre; the catalogue filter uses it. Missing one? Ask Daniil.
      */
-    form?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
+    form?: ('theater' | 'ensemble' | 'solo' | 'puppet' | 'family' | 'reading' | 'collage' | 'festival')[] | null;
     /**
-     * Tradition or school the production traces back to. Free-form. Established values: btk, kudashov, rgisi.
+     * Tradition or school the production traces back to. Missing one? Ask Daniil.
      */
-    lineage?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
+    lineage?: ('btk' | 'kudashov' | 'rgisi')[] | null;
     /**
-     * Free-form keywords surfaced on listing/search. Distinct from form (genre) and lineage (tradition).
+     * Search keywords. Type one and press Enter. Distinct from form (genre) and lineage (tradition).
      */
-    tags?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
+    tags?: string[] | null;
   };
   team?: {
     creditsRu?:
@@ -497,10 +479,9 @@ export interface Production {
            * Outlet name (e.g. sobaka.ru, Süddeutsche Zeitung).
            */
           outlet?: string | null;
-          /**
-           * Article language code: ru / en / de.
-           */
-          language?: string | null;
+          language?:
+            | ('ru' | 'en' | 'de' | 'fi' | 'et' | 'lv' | 'lt' | 'pl' | 'cs' | 'fr' | 'it' | 'es' | 'uk' | 'kk')
+            | null;
           id?: string | null;
         }[]
       | null;
@@ -523,7 +504,7 @@ export interface Production {
   };
   history?: {
     /**
-     * Cities where this production has toured. Not the premiere venue (see Theatre above).
+     * Cities where this production has toured. Not the premiere venue (About tab → Theatre).
      */
     tour?:
       | {
@@ -853,10 +834,10 @@ export interface ProductionsSelect<T extends boolean = true> {
     | T
     | {
         premiereDate?: T;
-        ageRating?: T;
-        ticketsUrl?: T;
         year?: T;
         durationMin?: T;
+        ageRating?: T;
+        ticketsUrl?: T;
         theatre?:
           | T
           | {
@@ -872,24 +853,9 @@ export interface ProductionsSelect<T extends boolean = true> {
     | T
     | {
         role?: T;
-        form?:
-          | T
-          | {
-              value?: T;
-              id?: T;
-            };
-        lineage?:
-          | T
-          | {
-              value?: T;
-              id?: T;
-            };
-        tags?:
-          | T
-          | {
-              value?: T;
-              id?: T;
-            };
+        form?: T;
+        lineage?: T;
+        tags?: T;
       };
   team?:
     | T
@@ -1168,7 +1134,7 @@ export interface About {
    */
   portrait?: {
     /**
-     * Main portrait photo. Click "Загрузить" under the field or type the path.
+     * Main portrait photo.
      */
     src?: string | null;
     /**
@@ -1182,7 +1148,7 @@ export interface About {
   photos?:
     | {
         /**
-         * Additional photo. Click "Загрузить" under the field or type the path.
+         * Additional photo.
          */
         src?: string | null;
         /**

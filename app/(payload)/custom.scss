@@ -367,11 +367,48 @@ html[data-theme='dark'] {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+
+  /* Columns sized by content: the poster no longer pushes the title
+     110 px away, and the mostly empty star column stays narrow. */
+  #heading-media__poster__src,
+  #heading-settings__featured {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  #heading-production__year,
+  #heading-status {
+    width: 120px;
+  }
+
+  /* Sort arrows on every column were noise; shown on hover and on the
+     column that is actually sorted. */
+  .sort-column__buttons {
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+
+  .table thead th:hover .sort-column__buttons,
+  .table thead th:focus-within .sort-column__buttons,
+  .sort-column__buttons:has(.sort-column--active) {
+    opacity: 1;
+  }
+
+  /* «Создать» is the screen's main action. */
+  .list-create-new-doc__create-new-button {
+    background: var(--theme-text);
+    color: var(--theme-bg);
+
+    &:hover {
+      background: var(--theme-elevation-800);
+      color: var(--theme-bg);
+    }
+  }
 }
 
 .list-poster {
   display: block;
-  width: 32px;
+  width: 40px;
   aspect-ratio: 2 / 3;
   border-radius: 4px;
   overflow: hidden;
@@ -581,9 +618,20 @@ $icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 
   }
 }
 
+.bk-dash__h3 {
+  margin: 20px 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--theme-elevation-700);
+}
+
+.bk-dash__status--zero {
+  opacity: 0.55;
+}
+
 .bk-dash__statuses {
   list-style: none;
-  margin: 16px 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -710,4 +758,202 @@ html:has(.progress-bar:not(.progress-bar--fade-out)) {
 .bk-section:active,
 .bk-dash__statuses a:active {
   background: var(--theme-elevation-100);
+}
+
+/* ----------------------------------------------------------------------
+   Edit views: one readable column (~75 characters of help text). The
+   header and the sticky save bar share its width, so language and Save
+   sit next to the fields they act on.
+   --------------------------------------------------------------------*/
+$form-max: 880px;
+
+.doc-header__header,
+.doc-controls__wrapper,
+.document-fields__fields {
+  max-width: $form-max;
+}
+
+/* «Создано» is trivia; dropping it lets «Последнее изменение», language
+   and Save share the narrow bar without truncation. */
+.doc-controls__meta > li:nth-child(n + 2) {
+  display: none;
+}
+
+/* A lone «Редактировать» tab names the page we are already on. */
+.doc-tabs:not(:has(.doc-tab + .doc-tab)) {
+  display: none;
+}
+
+/* Save: quiet while there is nothing to save, the one dark button once
+   there is. Payload greys out a filled button, which reads as broken. */
+#action-save:disabled {
+  background: transparent;
+  border: 1px solid var(--theme-elevation-150);
+  color: var(--theme-elevation-500);
+  box-shadow: none;
+}
+
+#action-save:not(:disabled) {
+  background: var(--theme-text);
+  color: var(--theme-bg);
+}
+
+/* «⊕ Добавить …» under arrays: Payload's elevation-400 is ~2.6:1. */
+.array-field__add-row {
+  color: var(--theme-elevation-800);
+}
+
+/* Production tabs hold one unlabeled group each (the tab names it);
+   Payload's divider + 40px gaps then split e.g. Статус from the rest of
+   «Настройки» for no reason. */
+.collection-edit--productions .group-field--within-tab {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* ----------------------------------------------------------------------
+   Image fields (ImagePathPreview.tsx). The picture leads; the path input
+   drops below it as a small mono line for the rare hand edit. The label
+   repeats the group title («Постер» → «Постер»), so it is visually
+   hidden but kept for screen readers.
+   --------------------------------------------------------------------*/
+.image-path {
+  > .field-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .field-type__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image-preview {
+    order: -1;
+  }
+
+  input {
+    height: 30px;
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--theme-elevation-650);
+  }
+}
+
+.image-preview {
+  margin-bottom: 8px;
+}
+
+.image-preview__frame {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+
+  img {
+    display: block;
+    max-width: 320px;
+    max-height: 320px;
+    border-radius: 4px;
+    object-fit: contain;
+    background: var(--theme-elevation-50);
+  }
+
+  figcaption {
+    font-size: 12px;
+    color: var(--theme-elevation-700);
+  }
+}
+
+.image-preview__frame--inherited img {
+  opacity: 0.45;
+}
+
+.image-preview__empty {
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 120px;
+  border: 1px dashed var(--theme-elevation-250);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--theme-elevation-650);
+}
+
+.image-preview__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.image-preview__upload {
+  padding: 5px 12px;
+  border: 1px solid var(--theme-elevation-250);
+  border-radius: 4px;
+  background: var(--theme-elevation-0);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: var(--theme-elevation-400);
+    background: var(--theme-elevation-50);
+  }
+}
+
+/* Remove only empties the field (Save still decides), so a quiet text
+   button, not a peer of Upload. */
+.image-preview__remove {
+  padding: 5px 0;
+  border: 0;
+  background: none;
+  color: var(--theme-elevation-650);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--theme-error-600);
+  }
+}
+
+.image-preview__status {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--theme-elevation-800);
+}
+
+.image-preview__status--error {
+  color: var(--theme-error-600);
+}
+
+/* Header account: email + «Выйти» (AccountActions.tsx). */
+.nav__log-out {
+  display: none;
+}
+
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.account-actions__who {
+  color: var(--theme-elevation-700);
+}
+
+.account-actions__logout {
+  color: var(--theme-text);
+  text-underline-offset: 3px;
 }

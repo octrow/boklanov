@@ -1,33 +1,25 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { LOCALES, type LocaleCode } from './LocalizedDocContext'
+import { useLocale } from '@payloadcms/ui'
 
 /**
- * Mirrors the URL's `?locale=` search param onto
+ * Mirrors Payload's current locale onto
  * `document.body.dataset.activeLocale` so plain SCSS in
- * app/(payload)/custom.scss can branch on the active locale without
- * threading the value through every component.
+ * app/(payload)/custom.scss can show only that locale's Команда array
+ * (creditsRu / creditsEn / creditsDe) on the Productions form.
  *
- * Used by §Round-2 R4 in PAYLOAD_ADMIN_UX_PLAN.md to gate the parallel
- * Команда credit arrays (creditsRu / creditsEn / creditsDe) on the
- * Productions edit form: in switch mode only the matching array is
- * visible; in all mode every array is visible.
+ * Reads useLocale(), the same source as LocaleSwitch: Payload remembers
+ * the last locale in user preferences, so a URL without `?locale=` can
+ * still be DE, and the URL alone showed the RU list under «Deutsch».
  *
  * Mounted via payload.config.ts → admin.components.providers. The
  * component renders no DOM — children pass through unchanged.
  */
-
-const isLocaleCode = (s: string | null): s is LocaleCode =>
-  s !== null && (LOCALES as readonly string[]).includes(s)
-
 const ActiveLocaleBodyAttr: React.FC<{ children?: React.ReactNode }> = ({
   children
 }) => {
-  const searchParams = useSearchParams()
-  const raw = searchParams?.get('locale') ?? null
-  const active: LocaleCode = isLocaleCode(raw) ? raw : 'ru'
+  const active = useLocale().code
 
   useEffect(() => {
     document.body.dataset.activeLocale = active

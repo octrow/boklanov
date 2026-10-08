@@ -5,22 +5,29 @@ import { useField, useFormFields } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
 
 /**
- * Thumbnail + Upload + Clear controls under any `src` text input that holds
+ * Image preview + Upload / Remove under any `src` text input that holds
  * an image path. Slotted via `admin.components.afterInput` on
- * Productions.media.*.src and gallery[].src.
+ * Productions.media.*.src, gallery[].src and the About photos; the
+ * `image-path` field class (custom.scss) lifts it above the path input,
+ * which stays as a small secondary line.
  *
  * Upload   POSTs multipart {file, directory} to /api/r2-asset.
  *          Directory is derived from the production slug:
  *            productions/<slug>/
  *          (the slug field lives at the top level of the productions doc).
- * Clear    empties the field only. Deleting files from R2 is left to ops:
+ * Remove   empties the field only. Deleting files from R2 is left to ops:
  *          one file can back several fields (poster and a cover), and a
  *          delete here went live before Save (2026-10-08 admin critique).
+ * Fallback optional `fallback` clientProp: the fields the site uses when
+ *          this one is blank (cover → poster). Shown dimmed, so the editor
+ *          sees what is live without reading the fallback rules.
  *
  * Reuses the existing R2-only upload endpoint (shipped 2026-05-06 per
  * STATUS.md §8.6) so we don't fork a parallel uploader. Path encoding
  * matches what lib/cdn.ts and the public site already expect.
  */
+
+type Fallback = { path: string; label: string }
 
 const cdnBase = process.env.NEXT_PUBLIC_CDN_BASE?.replace(/\/$/, '') ?? ''
 
@@ -56,20 +63,10 @@ const deriveDirectory = (
   return 'uploads'
 }
 
-const buttonStyle: React.CSSProperties = {
-  padding: '4px 10px',
-  fontSize: 12,
-  fontWeight: 500,
-  border: '1px solid var(--theme-elevation-200, #ddd)',
-  borderRadius: 4,
-  background: 'var(--theme-elevation-50, #fff)',
-  color: 'var(--theme-text)',
-  cursor: 'pointer',
-  lineHeight: 1.4
-}
-
-export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
-  const fieldPath = path as string
+export const ImagePathPreview: TextFieldClientComponent = (props) => {
+  const fieldPath = props.path as string
+  const fallback = ((props as { fallback?: Fallback[] }).fallback ??
+    []) as Fallback[]
   const { value, setValue } = useField<string>({ path: fieldPath })
 
   // Read the production slug off the top-level form field; useFormFields
@@ -78,7 +75,19 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
   const slug =
     typeof slugField?.value === 'string' ? slugField.value : undefined
 
+  // First non-blank fallback as one "label\npath" string, so the selector
+  // result compares by value and the field doesn't re-render on every edit.
+  const inherited = useFormFields(([fields]) => {
+    for (const f of fallback) {
+      const v = fields[f.path]?.value
+      if (typeof v === 'string' && v) return `${f.label}\n${v}`
+    }
+    return ''
+  })
+  const [inheritedLabel, inheritedPath] = inherited.split('\n')
+
   const url = resolveUrl(value)
+  const shownUrl = url ?? resolveUrl(inheritedPath)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -123,30 +132,50 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
     // Clears the field without touching R2. Use for "this production
     // shouldn't reference this image anymore but keep the file around."
     setValue('')
-    setStatus(
-      'Поле очищено. Нажмите «Сохранить», чтобы убрать картинку с сайта.'
-    )
+    setStatus('Картинка убрана. Нажмите «Сохранить», чтобы убрать её с сайта.')
   }
 
   return (
-    <div style={{ marginTop: 8 }}>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+    <div className='image-preview'>
+      {shownUrl ? (
+        <figure
+          className={`image-preview__frame${url ? '' : ' image-preview__frame--inherited'}`}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={shownUrl}
+            alt={url ? `Превью: ${value}` : `Сейчас: ${inheritedLabel}`}
+            onError={(e) => {
+              const target = e.currentTarget
+              target.style.opacity = '0.3'
+              target.title = `Картинка не открывается: ${shownUrl}`
+            }}
+          />
+          {url ? null : (
+            <figcaption>Сейчас используется {inheritedLabel}</figcaption>
+          )}
+        </figure>
+      ) : (
+        <div className='image-preview__empty'>Нет картинки</div>
+      )}
+
+      <div className='image-preview__actions'>
         <button
           type='button'
+          className='image-preview__upload'
           onClick={onPick}
           disabled={busy}
-          style={buttonStyle}
         >
-          Загрузить
+          {value ? 'Заменить' : 'Загрузить'}
         </button>
         {value ? (
           <button
             type='button'
+            className='image-preview__remove'
             onClick={onClear}
             disabled={busy}
-            style={buttonStyle}
           >
-            Очистить
+            Убрать
           </button>
         ) : null}
         <input
@@ -154,52 +183,16 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
           type='file'
           accept='image/jpeg,image/png,image/webp,image/avif,image/gif,image/svg+xml'
           onChange={onUpload}
-          style={{ display: 'none' }}
+          hidden
         />
       </div>
 
       {status ? (
         <div
           role='status'
-          style={{
-            marginTop: 6,
-            fontSize: 13,
-            color: status.startsWith('Ошибка')
-              ? 'var(--theme-error-600)'
-              : 'var(--theme-elevation-800)'
-          }}
+          className={`image-preview__status${status.startsWith('Ошибка') ? ' image-preview__status--error' : ''}`}
         >
           {status}
-        </div>
-      ) : null}
-
-      {url ? (
-        <div
-          style={{
-            marginTop: 8,
-            padding: 8,
-            border: '1px solid var(--theme-elevation-150, #e5e5e5)',
-            borderRadius: 4,
-            display: 'inline-block',
-            background: 'var(--theme-elevation-50, #fafafa)'
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={url}
-            alt={`Превью: ${value}`}
-            style={{
-              maxWidth: 240,
-              maxHeight: 180,
-              display: 'block',
-              objectFit: 'contain'
-            }}
-            onError={(e) => {
-              const target = e.currentTarget
-              target.style.opacity = '0.3'
-              target.title = `Картинка не открывается: ${url}`
-            }}
-          />
         </div>
       ) : null}
     </div>

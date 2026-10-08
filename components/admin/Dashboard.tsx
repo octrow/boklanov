@@ -288,9 +288,15 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
             </li>
           ))}
         </ul>
-        <ul className='bk-dash__statuses' aria-label={t.statusesLabel}>
+        <h3 id='bk-statuses' className='bk-dash__h3'>
+          {t.statusesLabel}
+        </h3>
+        <ul className='bk-dash__statuses' aria-labelledby='bk-statuses'>
           {STATUSES.map((s) => (
-            <li key={s}>
+            <li
+              key={s}
+              className={byStatus[s] ? undefined : 'bk-dash__status--zero'}
+            >
               <Link href={`${list}?where[status][equals]=${s}`}>
                 <span className={`status-badge status-badge--${s}`}>
                   {t.status[s]}
