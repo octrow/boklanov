@@ -179,6 +179,64 @@ body[data-active-locale='de'] {
 }
 
 /* ----------------------------------------------------------------------
+   Warm greys. Payload's neutral base scale re-tinted toward the site's
+   paper/ink (globals.css: #f2f0ea / #080706): same lightness per step, so
+   every contrast ratio Payload ships is kept; a little chroma, most at
+   mid-scale. Both admin themes derive their elevations from this scale.
+   --------------------------------------------------------------------*/
+:root {
+  --color-base-0: oklch(99.2% 0.004 85);
+  --color-base-50: oklch(97% 0.005 75);
+  --color-base-100: oklch(94% 0.006 75);
+  --color-base-150: oklch(89.8% 0.007 75);
+  --color-base-200: oklch(85.8% 0.0075 75);
+  --color-base-250: oklch(81.7% 0.008 75);
+  --color-base-300: oklch(77.3% 0.009 75);
+  --color-base-350: oklch(73.2% 0.009 75);
+  --color-base-400: oklch(68.6% 0.01 75);
+  --color-base-450: oklch(64.3% 0.01 75);
+  --color-base-500: oklch(60% 0.01 75);
+  --color-base-550: oklch(55.2% 0.01 75);
+  --color-base-600: oklch(50.7% 0.01 75);
+  --color-base-650: oklch(45.7% 0.009 75);
+  --color-base-700: oklch(40.9% 0.009 75);
+  --color-base-750: oklch(35.6% 0.008 75);
+  --color-base-800: oklch(30.5% 0.0075 75);
+  --color-base-850: oklch(25.2% 0.007 75);
+  --color-base-900: oklch(19.1% 0.006 75);
+  --color-base-950: oklch(12.9% 0.005 75);
+  --color-base-1000: oklch(9.5% 0.004 60);
+}
+
+/* Wordmark (components/admin/Graphics.tsx). */
+.bk-wordmark {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--theme-text);
+  white-space: nowrap;
+}
+
+.bk-wordmark--icon {
+  font-size: 19px;
+  letter-spacing: 0;
+}
+
+/* Payload sizes the header icon slot for an 18px glyph. */
+.step-nav__home {
+  width: auto;
+  height: auto;
+}
+
+/* The collection description is list help («нажмите на строку…»);
+   Payload repeats it under every document heading. */
+.doc-header__after-header .custom-view-description {
+  display: none;
+}
+
+/* ----------------------------------------------------------------------
    Status colours (list badges + dashboard). Payload ships no green and
    its "success" is blue, so the four states get their own pairs.
    --------------------------------------------------------------------*/

@@ -44,6 +44,8 @@ import { default as default_4ef13d4fc6ce28dbd550419ec8c51c88 } from '../../../co
 import { default as default_94425923c6b7a85329d3968b1d501dbf } from '../../../components/admin/MilestoneRowLabel'
 import { default as default_40fa02a5b5f36da1e1e3617810d6fd2a } from '../../../components/admin/LineageRowLabel'
 import { default as default_eea100559141ac76815f24194c0d31e7 } from '../../../components/admin/NoteRowLabel'
+import { Icon as Icon_80ebcb12978a9db9a1c04af0af89c7ec } from '../../../components/admin/Graphics'
+import { Logo as Logo_80ebcb12978a9db9a1c04af0af89c7ec } from '../../../components/admin/Graphics'
 import { default as default_e81464b80559c0d57859bf3e31f16962 } from '../../../components/admin/LocalizedDocContext'
 import { default as default_0126073f560a4e4177348cbfbdc28a66 } from '../../../components/admin/ActiveLocaleBodyAttr'
 import { default as default_16b88e9b8c48e393fa86591406efd08f } from '../../../components/admin/Dashboard'
@@ -98,6 +100,8 @@ export const importMap = {
   "/components/admin/MilestoneRowLabel#default": default_94425923c6b7a85329d3968b1d501dbf,
   "/components/admin/LineageRowLabel#default": default_40fa02a5b5f36da1e1e3617810d6fd2a,
   "/components/admin/NoteRowLabel#default": default_eea100559141ac76815f24194c0d31e7,
+  "/components/admin/Graphics#Icon": Icon_80ebcb12978a9db9a1c04af0af89c7ec,
+  "/components/admin/Graphics#Logo": Logo_80ebcb12978a9db9a1c04af0af89c7ec,
   "/components/admin/LocalizedDocContext#default": default_e81464b80559c0d57859bf3e31f16962,
   "/components/admin/ActiveLocaleBodyAttr#default": default_0126073f560a4e4177348cbfbdc28a66,
   "/components/admin/Dashboard#default": default_16b88e9b8c48e393fa86591406efd08f,

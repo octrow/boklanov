@@ -107,6 +107,10 @@ export default buildConfig({
         '/components/admin/LocalizedDocContext#default',
         '/components/admin/ActiveLocaleBodyAttr#default'
       ],
+      graphics: {
+        Logo: '/components/admin/Graphics#Logo',
+        Icon: '/components/admin/Graphics#Icon'
+      },
       // /admin: sections, what still needs doing, recent edits.
       views: { dashboard: { Component: '/components/admin/Dashboard#default' } }
     },

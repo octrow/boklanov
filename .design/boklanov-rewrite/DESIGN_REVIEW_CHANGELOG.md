@@ -410,6 +410,14 @@ The commit is in brackets.
       toggle, header profile/role/environment, moving logout, row action
       icons (the clickable row covers them).
 
+45. Admin branding (2026-10-08, ideas from Payload's theming guides): the
+    wordmark «роман бокланов» (lowercase Lora) replaces Payload's logo on
+    the login screen, «рб» its icon in the header; Payload's neutral
+    `--color-base-*` scale is re-tinted warm toward the site's paper/ink at
+    the same lightness per step, so contrast is unchanged in both themes.
+    The collection description no longer repeats under document headings.
+    No Tailwind: `custom.scss` on Payload's variables covers it.
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
