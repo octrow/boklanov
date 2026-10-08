@@ -56,23 +56,12 @@ export default withPayload(
           { protocol: 'https', hostname: '*.r2.dev' }
         ]
       },
-      // Vercel's preview deploys (`*.vercel.app`) ship with an automatic
-      // `x-robots-tag: noindex` header — set only when the upstream response
-      // doesn't already carry one. This branch's preview URL is the active
-      // staging host for boklanov-rewrite, so we emit our own header to
-      // override that default. Production (boklanov.com) doesn't get the
-      // automatic noindex in the first place, so this is a no-op there.
-      //
-      // `/admin/*` is excluded via path-to-regexp negative lookahead — Payload
-      // emits `<meta name="robots" content="noindex, nofollow">` in its admin
-      // HTML, and we don't want the blanket override to contradict it. The
-      // pattern below matches everything that doesn't start with `admin`.
+      // No blanket `index, follow`: Vercel adds `x-robots-tag: noindex` to
+      // preview deploys (`*.vercel.app`) only when the response has none, so
+      // previews stay out of search and production is indexable by default.
+      // Payload's admin is noindexed explicitly on every environment.
       async headers() {
         return [
-          {
-            source: '/((?!admin(?:/|$)).*)',
-            headers: [{ key: 'x-robots-tag', value: 'index, follow' }]
-          },
           {
             source: '/admin/:path*',
             headers: [{ key: 'x-robots-tag', value: 'noindex, nofollow' }]
