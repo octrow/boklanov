@@ -1710,6 +1710,59 @@
           "url": "https://puppets.ru/pers/51"
         }
       ]
+    },
+    "sea-day-suitcase": {
+      "creditsRu": [
+        {
+          "role": "Автор и исполнитель",
+          "name": "Ольга Астанина",
+          "url": null
+        },
+        {
+          "role": "Режиссер",
+          "name": "Бокланов Роман",
+          "url": null
+        },
+        {
+          "role": "Мультипликатор",
+          "name": "Артур Шугуров",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Author and artist",
+          "name": "Olga Astanina",
+          "url": null
+        },
+        {
+          "role": "Director",
+          "name": "Boklanov Roman",
+          "url": null
+        },
+        {
+          "role": "Animator",
+          "name": "Artur Shugurov",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Autor und Künstler",
+          "name": "Olga Astanina",
+          "url": null
+        },
+        {
+          "role": "Regie",
+          "name": "Boklanov Roman",
+          "url": null
+        },
+        {
+          "role": "Animator",
+          "name": "Artur Shugurov",
+          "url": null
+        }
+      ]
     }
   },
   "fields": {
@@ -1720,24 +1773,28 @@
           "paragraphs": [
             "Семейный спектакль по сказке Антона Соя. Корова Муля не похожа на остальных: у неё белые пятна на чёрной шкуре, и вместо спокойной жизни в стаде она мечтает стать фигуристкой. Окружающим это кажется нелепостью, но спектакль о том, как важно верить в свою мечту, сомневаться в навязанных границах и идти своим путём."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       },
       "*": {
-        "production.year": 2025
+        "production.year": 2025,
+        "production.ageRating": "3+"
       },
       "en": {
         "identity.synopsis": {
           "paragraphs": [
             "A family show based on Anton Soy's tale. Mulya the cow is not like the others: she has white spots on a black hide, and instead of a quiet life in the herd she dreams of becoming a figure skater. Everyone around finds this absurd, but the show is about believing in your dream, questioning the limits others set for you and going your own way."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       },
       "de": {
         "identity.synopsis": {
           "paragraphs": [
             "Ein Familienstück nach einem Märchen von Anton Soy. Die Kuh Mulja ist anders als die anderen: Sie hat weiße Flecken auf schwarzem Fell und träumt statt vom ruhigen Leben in der Herde davon, Eiskunstläuferin zu werden. Alle finden das lächerlich, doch das Stück erzählt davon, an seinen Traum zu glauben, auferlegte Grenzen zu hinterfragen und seinen eigenen Weg zu gehen."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       }
     },
     "the-ape-star": {
@@ -1939,7 +1996,8 @@
           "paragraphs": [
             "Театральный эксперимент без линейного сюжета, собранный из сцен и высказываний подростков молодёжной группы Theater 11. Отправной точкой стали испытания, с которыми сталкивались женщины разных эпох, и реальные биографии женщин, изменивших мир, — не самых известных, но вдохновляющих своей смелостью. Участники открыто говорят о принятии себя, сопротивлении, насилии и неравенстве."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       },
       "en": {
         "production.premiereDate": "February 15, 2025",
@@ -1947,7 +2005,8 @@
           "paragraphs": [
             "A theatre experiment without a linear plot, built from scenes and statements by the teenagers of Theater 11's youth group. Its starting point is what women of different eras had to face, and the real lives of women who changed the world: not the most famous ones, but inspiring in their courage. The performers speak openly about self-acceptance, resistance, violence and inequality."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       },
       "de": {
         "production.premiereDate": "15. Februar 2025",
@@ -1955,7 +2014,8 @@
           "paragraphs": [
             "Ein Theaterexperiment ohne lineare Handlung, zusammengesetzt aus Szenen und Aussagen der Jugendlichen der Jugendgruppe des Theater 11. Ausgangspunkt sind die Prüfungen, denen Frauen verschiedener Epochen ausgesetzt waren, und die realen Biografien von Frauen, die die Welt verändert haben: nicht die bekanntesten, aber inspirierend in ihrem Mut. Die Mitwirkenden sprechen offen über Selbstannahme, Widerstand, Gewalt und Ungleichheit."
           ]
-        }
+        },
+        "production.theatre.name": "Theater 11"
       }
     },
     "dialogi-po-povodu-dzhaza": {
@@ -2082,13 +2142,22 @@
     },
     "no-winer-way": {
       "ru": {
-        "production.premiereDate": "15 августа 2023 г."
+        "production.premiereDate": "15 августа 2023 г.",
+        "identity.title": "NO FINER WAY",
+        "title": "NO FINER WAY",
+        "production.theatre.city": "Бремерхафен"
       },
       "en": {
-        "production.premiereDate": "August 15, 2023"
+        "production.premiereDate": "August 15, 2023",
+        "identity.title": "NO FINER WAY",
+        "title": "NO FINER WAY",
+        "production.theatre.city": "Bremerhaven"
       },
       "de": {
-        "production.premiereDate": "15. August 2023"
+        "production.premiereDate": "15. August 2023",
+        "identity.title": "NO FINER WAY",
+        "title": "NO FINER WAY",
+        "production.theatre.city": "Bremerhaven"
       }
     },
     "oskar-und-die-dame-in-rosa": {
@@ -2268,6 +2337,11 @@
       },
       "de": {
         "production.premiereDate": "16. Mai 2023"
+      }
+    },
+    "pre-theatre": {
+      "*": {
+        "production.year": 2021
       }
     }
   }

@@ -26,7 +26,7 @@ docker run --rm --network host -v ~/backups/boklanov:/b postgres:17-alpine \
   pg_dump -Fc "$PROD_URL" -f "/b/$DUMP"
 ls -lh ~/backups/boklanov/"$DUMP"
 
-echo "== 2. dry run (expect ~240 changes, no '!' lines)"
+echo "== 2. dry run (expect ~264 changes, or ~20 if the first patch is already in; no '!' lines)"
 ALLOW_PROD_DB=1 DATABASE_URL="$PROD_URL" npx tsx scripts/fill-content.ts "$PATCH" > /tmp/content-fill-dry.txt
 grep '^  !' /tmp/content-fill-dry.txt || true
 tail -1 /tmp/content-fill-dry.txt
