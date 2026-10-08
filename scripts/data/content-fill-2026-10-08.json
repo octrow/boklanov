@@ -2343,6 +2343,37 @@
       "*": {
         "production.year": 2021
       }
+    },
+    "kto-ya": {
+      "*": {
+        "production.year": 2024,
+        "production.ageRating": "3+",
+        "production.durationMin": 45
+      },
+      "ru": {
+        "production.premiereDate": "31 августа 2024 г.",
+        "identity.synopsis": {
+          "paragraphs": [
+            "«Кем ты хочешь стать?» — вопрос, который взрослые постоянно задают детям. Но что, если родитель не готов услышать ответ и навязывает свои мечты? Герой спектакля — крокодильчик, родившийся в семье уток, — спрашивает себя: «Кто же я? Утка или злющий крокодил? А может, есть и другие варианты?» Семейная история о любви, поиске себя и принятии, где есть место смеху и хулиганству, философии и простой истине: если ты кого-то любишь, совершенно неважно, как он выглядит и чем занимается."
+          ]
+        }
+      },
+      "en": {
+        "production.premiereDate": "August 31, 2024",
+        "identity.synopsis": {
+          "paragraphs": [
+            "“What do you want to be when you grow up?” is the question grown-ups keep asking children. But what if a parent isn't ready to hear the answer and pushes their own dreams instead? The hero, a little crocodile born into a family of ducks, asks himself: “Who am I? A duck or a fierce crocodile? Or is there something else?” A family story about love, finding yourself and acceptance, with room for laughter and mischief, philosophy and a simple truth: if you love someone, it doesn't matter what they look like or what they do."
+          ]
+        }
+      },
+      "de": {
+        "production.premiereDate": "31. August 2024",
+        "identity.synopsis": {
+          "paragraphs": [
+            "„Was willst du mal werden?“ – diese Frage stellen Erwachsene Kindern ständig. Doch was, wenn Eltern die Antwort gar nicht hören wollen und ihre eigenen Träume aufdrängen? Der Held, ein kleines Krokodil, das in einer Entenfamilie zur Welt kam, fragt sich: „Wer bin ich? Eine Ente oder ein grimmiges Krokodil? Oder gibt es noch etwas anderes?“ Eine Familiengeschichte über Liebe, Selbstfindung und Annahme, mit Platz für Lachen und Unfug, Philosophie und eine einfache Wahrheit: Wenn man jemanden liebt, ist es ganz egal, wie er aussieht oder was er tut."
+          ]
+        }
+      }
     }
   }
 }
