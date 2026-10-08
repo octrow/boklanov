@@ -46,7 +46,6 @@ const COPY = {
     productions: 'Спектакли',
     about: 'О режиссёре',
     contact: 'Контакты',
-    media: 'Медиатека',
     add: 'Добавить',
     edited: 'Изменено',
     statusesLabel: 'Спектакли по статусу',
@@ -74,7 +73,6 @@ const COPY = {
     productions: 'Productions',
     about: 'About page',
     contact: 'Contact',
-    media: 'Media library',
     add: 'Add',
     edited: 'Edited',
     statusesLabel: 'Productions by status',
@@ -126,7 +124,7 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
   const list = `${admin}/collections/productions`
   const doc = (id: Row['id']) => `${list}/${encodeURIComponent(String(id))}`
 
-  const [productions, mediaCount, about, contact] = await Promise.all([
+  const [productions, about, contact] = await Promise.all([
     payload.find({
       collection: 'productions',
       locale: 'all',
@@ -143,7 +141,6 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
         media: { poster: { src: true } }
       }
     }),
-    payload.count({ collection: 'media', overrideAccess: false, user }),
     payload.findGlobal({
       slug: 'about',
       depth: 0,
@@ -221,18 +218,6 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
           {t.edited} <LocalTime iso={contact.updatedAt as string} lang={lang} />
         </>
       ) : null
-    },
-    {
-      key: 'media',
-      name: t.media,
-      href: `${admin}/collections/media`,
-      meta: t.count(
-        mediaCount.totalDocs,
-        'изображение',
-        'изображения',
-        'изображений'
-      ),
-      add: `${admin}/collections/media/create`
     }
   ]
 

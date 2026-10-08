@@ -28,6 +28,20 @@ _Avoid_: migration (overloaded with DB migrations)
 The five texts of a Production that define whether it reads in a language: title, tagline, synopsis, body, director's note. Everything else localized (captions, venues, cities, awards, link labels) is minor.
 _Avoid_: content, all fields
 
+**Synopsis**:
+The two- or three-sentence summary of a Production (about 300 characters at most) that stands in for it in cards, search results and link previews. Longer prose belongs in the body.
+_Avoid_: description, annotation
+
 **Untranslated** (per language):
 A Production is Untranslated into EN (or DE) when any Main text is filled in RU and empty in that language. Counted separately for EN and DE.
 _Avoid_: missing translation (when only a minor field is empty)
+
+### Images
+
+**Image path**:
+The address of a Production or About-page image file; the site renders images only from Image paths, and the photo credit lives next to the path.
+_Avoid_: media item
+
+**Media library**:
+The admin's registry of uploaded files. Not a source of truth: nothing on the site reads it, and uploads from a Production do not appear in it.
+_Avoid_: gallery (a Production's photos)

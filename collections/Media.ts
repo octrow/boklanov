@@ -18,6 +18,10 @@ export const Media: CollectionConfig = {
     plural: { ru: 'Изображения', en: 'Images' }
   },
   admin: {
+    // Not a source of truth: the site reads image paths, and uploads from a
+    // production go straight to R2 (ImagePathPreview), never through here.
+    // Hidden until images move to upload relations (review №3, п. 1).
+    hidden: true,
     hideAPIURL: true,
     group: { ru: 'Медиатека', en: 'Media library' },
     components: {

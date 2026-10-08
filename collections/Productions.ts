@@ -158,8 +158,8 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Основное', en: 'Main' },
           description: {
-            ru: 'Название, полный текст, подзаголовок, синопсис и записка режиссёра.',
-            en: "Title, body, tagline, synopsis, and director's note."
+            ru: 'Название, подзаголовок, синопсис, полный текст и записка режиссёра — в том порядке, в каком они идут на странице.',
+            en: "Title, tagline, synopsis, body, and director's note, in page order."
           },
           fields: [
             {
@@ -183,32 +183,6 @@ export const Productions: CollectionConfig = {
                       afterInput: ['/components/admin/LocaleHint#default'],
                       Cell: '/components/admin/ListCells#TitleCell',
                       Label: '/components/admin/ListCells#PlainLabel'
-                    }
-                  }
-                },
-                {
-                  name: 'body',
-                  type: 'richText',
-                  label: { ru: 'Полный текст', en: 'Body text' },
-                  localized: true,
-                  editor: lexicalEditor({
-                    admin: RICHTEXT_ADMIN_CHROME,
-                    features: ({ defaultFeatures }) => [
-                      ...defaultFeatures.filter(
-                        (f) => !BODY_DROP_FEATURES.has(f.key)
-                      ),
-                      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
-                      FixedToolbarFeature(),
-                      InlineToolbarFeature()
-                    ]
-                  }),
-                  admin: {
-                    description: {
-                      ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
-                      en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
-                    },
-                    components: {
-                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -253,8 +227,37 @@ export const Productions: CollectionConfig = {
                   }),
                   admin: {
                     description: {
-                      ru: 'Одно-два предложения, показываются на карточках спектаклей и в результатах поиска. 50–200 знаков. Поддерживается жирный, курсив, ссылки.',
-                      en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.'
+                      ru: '2–3 предложения, до ~300 знаков: показываются под названием, на карточках и в результатах поиска. Длиннее — в «Полный текст». Поддерживается жирный, курсив, ссылки.',
+                      en: '2–3 sentences, up to ~300 chars: shown under the title, on cards and in search results. Longer prose goes in the body. Bold, italic, and links supported.'
+                    },
+                    components: {
+                      afterInput: [
+                        '/components/admin/SynopsisLength#default',
+                        '/components/admin/LocaleHint#default'
+                      ]
+                    }
+                  }
+                },
+                {
+                  name: 'body',
+                  type: 'richText',
+                  label: { ru: 'Полный текст', en: 'Body text' },
+                  localized: true,
+                  editor: lexicalEditor({
+                    admin: RICHTEXT_ADMIN_CHROME,
+                    features: ({ defaultFeatures }) => [
+                      ...defaultFeatures.filter(
+                        (f) => !BODY_DROP_FEATURES.has(f.key)
+                      ),
+                      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+                      FixedToolbarFeature(),
+                      InlineToolbarFeature()
+                    ]
+                  }),
+                  admin: {
+                    description: {
+                      ru: 'Полный редакторский текст. Поддерживаются заголовки H2/H3, списки, цитаты, ссылки, выделение.',
+                      en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
                     },
                     components: {
                       afterInput: ['/components/admin/LocaleHint#default']
@@ -827,10 +830,10 @@ export const Productions: CollectionConfig = {
           ]
         },
         {
-          label: { ru: 'Жанр и теги', en: 'Genre & tags' },
+          label: { ru: 'Роли и жанр', en: 'Roles & genre' },
           description: {
-            ru: 'Роли Романа, жанр, традиция и свободные теги.',
-            en: "Roman's roles, form/genre, lineage, and free-form tags."
+            ru: 'Роли Романа, жанр и традиция.',
+            en: "Roman's roles, form/genre, and lineage."
           },
           fields: [
             {
@@ -939,6 +942,10 @@ export const Productions: CollectionConfig = {
                   hasMany: true,
                   label: { ru: 'Теги', en: 'Tags' },
                   admin: {
+                    // ponytail: hidden, not dropped — nothing on the site
+                    // reads tags (review №3, п. 3). Drop the column in a
+                    // migration once nobody misses it.
+                    hidden: true,
                     description: {
                       ru: 'Ключевые слова для поиска. Введите слово и нажмите Enter. Отличается от формы (жанр) и школы (традиция).',
                       en: 'Search keywords. Type one and press Enter. Distinct from form (genre) and lineage (tradition).'
