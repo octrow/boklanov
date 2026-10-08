@@ -2578,20 +2578,20 @@
     "about": {
       "ru": [
         [
-          "в России, Казахстане, Германии, Испании, Австрии, Беларуси.",
-          "в России, Казахстане, Германии, Испании, Австрии, Беларуси, Финляндии и Узбекистане."
+          "Австрии, Беларуси, Финляндии и Узбекистане.",
+          "Австрии, Финляндии и Узбекистане."
         ]
       ],
       "en": [
         [
-          "Russia, Kazakhstan, Germany, Spain, Austria, and Belarus.",
-          "Russia, Kazakhstan, Germany, Spain, Austria, Belarus, Finland, and Uzbekistan."
+          "Austria, Belarus, Finland, and Uzbekistan.",
+          "Austria, Finland, and Uzbekistan."
         ]
       ],
       "de": [
         [
-          "Russland, Kasachstan, Deutschland, Spanien, Österreich und Belarus gezeigt.",
-          "Russland, Kasachstan, Deutschland, Spanien, Österreich, Belarus, Finnland und Usbekistan gezeigt."
+          "Österreich, Belarus, Finnland und Usbekistan gezeigt.",
+          "Österreich, Finnland und Usbekistan gezeigt."
         ]
       ]
     }
