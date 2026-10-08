@@ -1871,6 +1871,59 @@
           "url": null
         }
       ]
+    },
+    "dialogi-po-povodu-dzhaza": {
+      "creditsRu": [
+        {
+          "role": "Режиссёр",
+          "name": "Роман Бокланов",
+          "url": null
+        },
+        {
+          "role": "Автор пьесы",
+          "name": "Елена Ерпылева",
+          "url": null
+        },
+        {
+          "role": "Актриса",
+          "name": "Лейли Нариманова",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Director",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Playwright",
+          "name": "Elena Erpyleva",
+          "url": null
+        },
+        {
+          "role": "Actress",
+          "name": "Leyli Narimanova",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Regie",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Autorin",
+          "name": "Elena Erpyleva",
+          "url": null
+        },
+        {
+          "role": "Darstellerin",
+          "name": "Leyli Narimanova",
+          "url": null
+        }
+      ]
     }
   },
   "fields": {
@@ -2132,7 +2185,7 @@
         "production.theatre.name": "Театральная студия 8+",
         "identity.synopsis": {
           "paragraphs": [
-            "Моноспектакль по пьесе Е. Ерпылевой: единственная актриса, Лейли Нариманова, играет всех персонажей. Её героиня так и не научилась слышать других и осталась одна. Начав с телефонной ссоры с концертным администратором, она перебирает воспоминания, как вещи из старого чемодана, а обычные предметы — настольная лампа, манекен, пляжное полотенце — превращаются в людей из её жизни: мать, дочь, бывших мужчин."
+            "Моноспектакль по пьесе Елены Ерпылевой. Мы стараемся прожить жизнь достойно, но готовой партитуры нет, и, как джазистам, нам приходится импровизировать в надежде прийти к гармонии. Героиня больше не чувствует в себе сил её искать и пытается понять, где свернула не туда. Она перебирает воспоминания, как вещи из старого чемодана, а обычные предметы — настольная лампа, манекен, пляжное полотенце — превращаются в людей из её жизни. Всех персонажей играет одна актриса, Лейли Нариманова."
           ]
         }
       },
@@ -2142,7 +2195,7 @@
         "production.theatre.city": "Vienna",
         "identity.synopsis": {
           "paragraphs": [
-            "A one-woman show based on a play by E. Erpyleva: a single actress, Leyli Narimanova, plays every character. Her heroine never learned to hear others and has ended up alone. Starting from a phone row with a concert manager, she sorts through memories like things in an old suitcase, and ordinary objects (a desk lamp, a mannequin, a beach towel) turn into the people of her life: her mother, her daughter, her former men."
+            "A one-woman show based on a play by Elena Erpyleva. We try to live our lives well, but there is no score to follow, and like jazz musicians we have to improvise in the hope of reaching harmony. The heroine no longer has the strength to look for it and tries to work out where she took a wrong turn. She sorts through memories like things in an old suitcase, and ordinary objects (a desk lamp, a mannequin, a beach towel) turn into the people of her life. A single actress, Leyli Narimanova, plays every character."
           ]
         }
       },
@@ -2151,14 +2204,21 @@
         "production.theatre.name": "Theaterstudio 8+",
         "identity.synopsis": {
           "paragraphs": [
-            "Ein Solostück nach einem Text von E. Erpyleva: Eine einzige Schauspielerin, Leyli Narimanova, spielt alle Figuren. Ihre Heldin hat nie gelernt, anderen zuzuhören, und ist allein geblieben. Ausgehend von einem Telefonstreit mit einem Konzertveranstalter geht sie ihre Erinnerungen durch wie Sachen in einem alten Koffer, und gewöhnliche Dinge (eine Tischlampe, eine Schaufensterpuppe, ein Strandtuch) werden zu den Menschen ihres Lebens: Mutter, Tochter, frühere Männer."
+            "Ein Solostück nach einem Text von Elena Erpyleva. Wir versuchen, unser Leben gut zu leben, doch es gibt keine Partitur, und wie Jazzmusiker müssen wir improvisieren, in der Hoffnung, zur Harmonie zu finden. Die Heldin hat keine Kraft mehr, sie zu suchen, und versucht zu verstehen, wo sie falsch abgebogen ist. Sie geht ihre Erinnerungen durch wie Sachen in einem alten Koffer, und gewöhnliche Dinge (eine Tischlampe, eine Schaufensterpuppe, ein Strandtuch) werden zu den Menschen ihres Lebens. Eine einzige Schauspielerin, Leyli Narimanova, spielt alle Figuren."
           ]
         }
+      },
+      "*": {
+        "production.durationMin": 50,
+        "production.ticketsUrl": "https://8plus.nearyou.live/performance.php?h=1&i=33&l=ru",
+        "production.theatre.url": "https://8plus.nearyou.live/"
       }
     },
     "dogs-dont-dance-ballet": {
       "*": {
-        "production.year": 2024
+        "production.year": 2024,
+        "production.ticketsUrl": "https://8plus.nearyou.live/performance.php?h=1&i=30&l=ru",
+        "production.theatre.url": "https://8plus.nearyou.live/"
       },
       "ru": {
         "identity.synopsis": {
