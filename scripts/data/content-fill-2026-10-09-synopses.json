@@ -1,0 +1,733 @@
+{
+  "fields": {
+    "lina-marlina": {
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "In an underwater town, a mermaid with a beautiful voice and unusual blue hair is born. As she grows up, she dreams of singing her own songs. However, her parents, who love her dearly, want to protect her from the dangers of the world and make her suppress her vibrant personality."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "In einer Unterwasserstadt wird eine Meerjungfrau mit wunderschöner Stimme und ungewöhnlichen blauen Haaren geboren. Als sie aufwächst, träumt sie davon, ihre eigenen Lieder zu singen."
+          ]
+        }
+      }
+    },
+    "holiday-recipe": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Жители лесной деревни ещё никогда не обходились без их традиционного лакомства. Но в этот раз в канун праздника все пироги таинственно исчезают. Неужели пропажа испортит всем жителям деревни праздник и Новый год не наступит?"
+          ]
+        }
+      }
+    },
+    "khalif-aist": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Однажды молодого халифа поразила мысль о полёте, и с тех пор он потерял покой: мир вокруг стал чужим, а вся жизнь превратилась в поиск способа взлететь. Но, когда халиф наконец полетел, он узнал, что значит «летать» на самом деле."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Однажды молодого халифа поразила мысль о полёте, и с тех пор он потерял покой: мир вокруг стал чужим, а вся жизнь превратилась в поиск способа взлететь. Но, когда халиф наконец полетел, он узнал, что значит «летать» на самом деле. Спектакль по сказке Вильгельма Гауфа в инсценировке Клавы Ильиной — философская история о большой мечте, о том, как далеко она может увести от дома, и о поиске себя и своего места в мире.",
+            "Шестнадцать артистов играют около сорока персонажей. Для спектакля Алина Корытова придумала более тридцати кукол разных систем — от тонких теневых и планшетных до натуралистичных гигантов; театр кукол соединяется с драматическим, музыкальным и пластическим. Проект инициирован Фондом развития культуры и искусства Узбекистана."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "One day a young caliph is struck by the thought of flight, and from then on he knows no peace: the world around him turns strange, and his whole life becomes a search for a way to take off. But when the caliph finally flies, he learns what flying really means."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "One day a young caliph is struck by the thought of flight, and from then on he knows no peace: the world around him turns strange, and his whole life becomes a search for a way to take off. But when the caliph finally flies, he learns what flying really means. Based on Wilhelm Hauff's fairy tale in an adaptation by Klava Ilyina, the show is a philosophical story about a big dream, how far it can take you from home, and finding yourself and your place in the world.",
+            "Sixteen actors play some forty characters. Alina Korytova designed more than thirty puppets of different kinds for it, from delicate shadow and tabletop puppets to lifelike giants, and puppetry meets drama, music and movement. The project was initiated by the Art and Culture Development Foundation of Uzbekistan."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Eines Tages packt einen jungen Kalifen der Gedanke ans Fliegen, und seitdem findet er keine Ruhe mehr: Die Welt um ihn wird ihm fremd, sein ganzes Leben wird zur Suche nach einem Weg, sich in die Luft zu erheben. Doch als der Kalif endlich fliegt, erfährt er, was Fliegen wirklich bedeutet."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Eines Tages packt einen jungen Kalifen der Gedanke ans Fliegen, und seitdem findet er keine Ruhe mehr: Die Welt um ihn wird ihm fremd, sein ganzes Leben wird zur Suche nach einem Weg, sich in die Luft zu erheben. Doch als der Kalif endlich fliegt, erfährt er, was Fliegen wirklich bedeutet. Nach Wilhelm Hauffs Märchen in der Bühnenfassung von Klava Ilyina: eine philosophische Geschichte über einen großen Traum, wie weit er von zu Hause wegführen kann, und über die Suche nach sich selbst und dem eigenen Platz in der Welt.",
+            "Sechzehn Darsteller spielen rund vierzig Figuren. Alina Korytova hat dafür mehr als dreißig Puppen verschiedener Systeme entworfen, von zarten Schatten- und Tischpuppen bis zu naturgetreuen Riesen; Puppentheater verbindet sich mit Schauspiel, Musik und Bewegung. Initiiert wurde das Projekt von der Stiftung für Kunst- und Kulturentwicklung Usbekistans."
+          ]
+        }
+      }
+    },
+    "vaikenemisen-kielioppi": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Визуальный спектакль-коллаж об опыте ЛГБТК+-людей в России с 2010-х годов до наших дней. В его основе — разговоры с квир-людьми, живущими в России и уехавшими из неё, но интервью не пересказываются со сцены, а превращаются в образы: предметы, материалы, кукол, тени и пластику актёров."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Визуальный спектакль-коллаж об опыте ЛГБТК+-людей в России с 2010-х годов до наших дней. В его основе — разговоры с квир-людьми, живущими в России и уехавшими из неё, но интервью не пересказываются со сцены, а превращаются в образы: предметы, материалы, кукол, тени и пластику актёров. Спектакль исследует молчание — то, что остаётся несказанным друзьям, семье, коллегам и самому себе."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A visual collage performance about the experience of LGBTQ+ people in Russia from the 2010s to today."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Eine visuelle Collage über die Erfahrungen von LGBTQ+-Menschen in Russland von den 2010er Jahren bis heute."
+          ]
+        }
+      }
+    },
+    "god-of-carnage": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Комедия Ясмины Реза 2007 года, которая шла на многих сценах Европы и Америки и получила премию Лоренса Оливье. Две супружеские пары встречаются, чтобы уладить конфликт между своими детьми, но вежливый разговор быстро превращается в поле боя, где взрослые ведут себя хуже детей."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Комедия Ясмины Реза 2007 года, которая шла на многих сценах Европы и Америки и получила премию Лоренса Оливье. Две супружеские пары встречаются, чтобы уладить конфликт между своими детьми, но вежливый разговор быстро превращается в поле боя, где взрослые ведут себя хуже детей. Спектакль о добре и зле, любви и ненависти, искренности и фальши в современном обществе.",
+            "На русском языке с немецкими субтитрами, 80 минут без антракта."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Yasmina Reza's 2007 comedy, staged across Europe and America and winner of the Laurence Olivier Award. Two married couples meet to settle a fight between their children, but the polite conversation soon turns into a battlefield where the adults behave worse than the kids."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Yasmina Reza's 2007 comedy, staged across Europe and America and winner of the Laurence Olivier Award. Two married couples meet to settle a fight between their children, but the polite conversation soon turns into a battlefield where the adults behave worse than the kids. A show about good and evil, love and hate, sincerity and pretence in today's society.",
+            "In Russian with German surtitles, 80 minutes with no interval."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Die Komödie von Yasmina Reza aus dem Jahr 2007, gespielt auf vielen Bühnen Europas und Amerikas und ausgezeichnet mit dem Laurence Olivier Award."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Die Komödie von Yasmina Reza aus dem Jahr 2007, gespielt auf vielen Bühnen Europas und Amerikas und ausgezeichnet mit dem Laurence Olivier Award. Zwei Ehepaare treffen sich, um einen Streit zwischen ihren Kindern beizulegen, doch das höfliche Gespräch wird schnell zum Schlachtfeld, auf dem sich die Erwachsenen schlimmer benehmen als die Kinder. Ein Stück über Gut und Böse, Liebe und Hass, Aufrichtigkeit und Heuchelei in der heutigen Gesellschaft.",
+            "Auf Russisch mit deutschen Übertiteln, 80 Minuten ohne Pause."
+          ]
+        }
+      }
+    },
+    "dialogi-po-povodu-dzhaza": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Моноспектакль по пьесе Елены Ерпылевой. Мы стараемся прожить жизнь достойно, но готовой партитуры нет, и, как джазистам, нам приходится импровизировать в надежде прийти к гармонии. Героиня больше не чувствует в себе сил её искать и пытается понять, где свернула не туда."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Моноспектакль по пьесе Елены Ерпылевой. Мы стараемся прожить жизнь достойно, но готовой партитуры нет, и, как джазистам, нам приходится импровизировать в надежде прийти к гармонии. Героиня больше не чувствует в себе сил её искать и пытается понять, где свернула не туда. Она перебирает воспоминания, как вещи из старого чемодана, а обычные предметы — настольная лампа, манекен, пляжное полотенце — превращаются в людей из её жизни. Всех персонажей играет одна актриса, Лейли Нариманова."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A one-woman show based on a play by Elena Erpyleva. We try to live our lives well, but there is no score to follow, and like jazz musicians we have to improvise in the hope of reaching harmony. The heroine no longer has the strength to look for it and tries to work out where she took a wrong turn."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A one-woman show based on a play by Elena Erpyleva. We try to live our lives well, but there is no score to follow, and like jazz musicians we have to improvise in the hope of reaching harmony. The heroine no longer has the strength to look for it and tries to work out where she took a wrong turn. She sorts through memories like things in an old suitcase, and ordinary objects (a desk lamp, a mannequin, a beach towel) turn into the people of her life. A single actress, Leyli Narimanova, plays every character."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Solostück nach einem Text von Elena Erpyleva. Wir versuchen, unser Leben gut zu leben, doch es gibt keine Partitur, und wie Jazzmusiker müssen wir improvisieren, in der Hoffnung, zur Harmonie zu finden."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Solostück nach einem Text von Elena Erpyleva. Wir versuchen, unser Leben gut zu leben, doch es gibt keine Partitur, und wie Jazzmusiker müssen wir improvisieren, in der Hoffnung, zur Harmonie zu finden. Die Heldin hat keine Kraft mehr, sie zu suchen, und versucht zu verstehen, wo sie falsch abgebogen ist. Sie geht ihre Erinnerungen durch wie Sachen in einem alten Koffer, und gewöhnliche Dinge (eine Tischlampe, eine Schaufensterpuppe, ein Strandtuch) werden zu den Menschen ihres Lebens. Eine einzige Schauspielerin, Leyli Narimanova, spielt alle Figuren."
+          ]
+        }
+      }
+    },
+    "derzkie": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Театральный эксперимент без линейного сюжета, собранный из сцен и высказываний подростков молодёжной группы Theater 11. Отправной точкой стали испытания, с которыми сталкивались женщины разных эпох, и реальные биографии женщин, изменивших мир, — не самых известных, но вдохновляющих своей смелостью."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Театральный эксперимент без линейного сюжета, собранный из сцен и высказываний подростков молодёжной группы Theater 11. Отправной точкой стали испытания, с которыми сталкивались женщины разных эпох, и реальные биографии женщин, изменивших мир, — не самых известных, но вдохновляющих своей смелостью. Участники открыто говорят о принятии себя, сопротивлении, насилии и неравенстве."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A theatre experiment without a linear plot, built from scenes and statements by the teenagers of Theater 11's youth group. Its starting point is what women of different eras had to face, and the real lives of women who changed the world: not the most famous ones, but inspiring in their courage."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A theatre experiment without a linear plot, built from scenes and statements by the teenagers of Theater 11's youth group. Its starting point is what women of different eras had to face, and the real lives of women who changed the world: not the most famous ones, but inspiring in their courage. The performers speak openly about self-acceptance, resistance, violence and inequality."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Theaterexperiment ohne lineare Handlung, zusammengesetzt aus Szenen und Aussagen der Jugendlichen der Jugendgruppe des Theater 11."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Theaterexperiment ohne lineare Handlung, zusammengesetzt aus Szenen und Aussagen der Jugendlichen der Jugendgruppe des Theater 11. Ausgangspunkt sind die Prüfungen, denen Frauen verschiedener Epochen ausgesetzt waren, und die realen Biografien von Frauen, die die Welt verändert haben: nicht die bekanntesten, aber inspirierend in ihrem Mut. Die Mitwirkenden sprechen offen über Selbstannahme, Widerstand, Gewalt und Ungleichheit."
+          ]
+        }
+      }
+    },
+    "cow-on-ice": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Семейный спектакль по сказке Антона Соя. Корова Муля не похожа на остальных: у неё белые пятна на чёрной шкуре, и вместо спокойной жизни в стаде она мечтает стать фигуристкой."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Семейный спектакль по сказке Антона Соя. Корова Муля не похожа на остальных: у неё белые пятна на чёрной шкуре, и вместо спокойной жизни в стаде она мечтает стать фигуристкой. Окружающим это кажется нелепостью, но спектакль о том, как важно верить в свою мечту, сомневаться в навязанных границах и идти своим путём."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A family show based on Anton Soy's tale. Mulya the cow is not like the others: she has white spots on a black hide, and instead of a quiet life in the herd she dreams of becoming a figure skater."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A family show based on Anton Soy's tale. Mulya the cow is not like the others: she has white spots on a black hide, and instead of a quiet life in the herd she dreams of becoming a figure skater. Everyone around finds this absurd, but the show is about believing in your dream, questioning the limits others set for you and going your own way."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Familienstück nach einem Märchen von Anton Soy. Die Kuh Mulja ist anders als die anderen: Sie hat weiße Flecken auf schwarzem Fell und träumt statt vom ruhigen Leben in der Herde davon, Eiskunstläuferin zu werden."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Familienstück nach einem Märchen von Anton Soy. Die Kuh Mulja ist anders als die anderen: Sie hat weiße Flecken auf schwarzem Fell und träumt statt vom ruhigen Leben in der Herde davon, Eiskunstläuferin zu werden. Alle finden das lächerlich, doch das Stück erzählt davon, an seinen Traum zu glauben, auferlegte Grenzen zu hinterfragen und seinen eigenen Weg zu gehen."
+          ]
+        }
+      }
+    },
+    "total-fest-3": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "III Международный театральный фестиваль «Total Fest. Диалоги» прошёл на площадке Тотального театра в Алматы с 7 по 14 апреля 2024 года."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "III Международный театральный фестиваль «Total Fest. Диалоги» прошёл на площадке Тотального театра в Алматы с 7 по 14 апреля 2024 года. Каждый год у фестиваля новая тема: в 2022-м — «О любви», в 2023-м — «Действующее лицо», в 2024-м — подростки и молодёжь, разговор о взрослении, внутренних дилеммах и отношениях с друзьями и семьёй. В программе были театры из Алматы и Караганды, России, Австрии и Эстонии: сказки, сайт-специфик, аудио- и моноспектакли, а также режиссёрская лаборатория и фотовыставка. Фестиваль открылся спектаклем Романа Бокланова «Осторожно, злая собака!», а сам Бокланов, один из организаторов, сыграл моноспектакль «Похороните меня за плинтусом» в версии, выпущенной в Вене за месяц до фестиваля."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "The 3rd Total Fest. Dialogues International Theatre Festival took place at Total Theatre's venue in Almaty from 7 to 14 April 2024."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "The 3rd Total Fest. Dialogues International Theatre Festival took place at Total Theatre's venue in Almaty from 7 to 14 April 2024. Each year the festival has a new theme: About Love in 2022, Dramatis Persona in 2023, and in 2024 teenagers and young people, with conversations about growing up, inner dilemmas and relationships with friends and family. The programme brought companies from Almaty and Karaganda, Russia, Austria and Estonia: fairy tales, site-specific pieces, audio plays and solo shows, plus a directors' lab and a photo exhibition. The festival opened with Roman Boklanov's Beware of the Dog!, and Boklanov, one of the organisers, performed his solo Bury Me Behind the Baseboard in the version premiered in Vienna a month earlier."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Das III. Internationale Theaterfestival „Total Fest. Dialoge“ fand vom 7. bis 14. April 2024 in der Spielstätte des Total Theatre in Almaty statt."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Das III. Internationale Theaterfestival „Total Fest. Dialoge“ fand vom 7. bis 14. April 2024 in der Spielstätte des Total Theatre in Almaty statt. Jedes Jahr hat das Festival ein neues Thema: 2022 „Über die Liebe“, 2023 „Handelnde Person“, 2024 Jugendliche und junge Erwachsene, mit Gesprächen über das Erwachsenwerden, innere Dilemmata und Beziehungen zu Freunden und Familie. Im Programm waren Theater aus Almaty und Karaganda, Russland, Österreich und Estland: Märchen, ortsspezifische Arbeiten, Hörspiele und Solostücke, dazu ein Regielabor und eine Fotoausstellung. Eröffnet wurde das Festival mit Roman Boklanovs „Vorsicht, bissiger Hund!“; Boklanov, einer der Organisatoren, spielte zudem sein Solostück „Begraben Sie mich hinter der Fußleiste“ in der Fassung, die einen Monat zuvor in Wien Premiere hatte."
+          ]
+        }
+      }
+    },
+    "kto-ya": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "«Кем ты хочешь стать?» — вопрос, который взрослые постоянно задают детям. Но что, если родитель не готов услышать ответ и навязывает свои мечты?"
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "«Кем ты хочешь стать?» — вопрос, который взрослые постоянно задают детям. Но что, если родитель не готов услышать ответ и навязывает свои мечты? Герой спектакля — крокодильчик, родившийся в семье уток, — спрашивает себя: «Кто же я? Утка или злющий крокодил? А может, есть и другие варианты?» Семейная история о любви, поиске себя и принятии, где есть место смеху и хулиганству, философии и простой истине: если ты кого-то любишь, совершенно неважно, как он выглядит и чем занимается."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "“What do you want to be when you grow up?” is the question grown-ups keep asking children. But what if a parent isn't ready to hear the answer and pushes their own dreams instead?"
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "“What do you want to be when you grow up?” is the question grown-ups keep asking children. But what if a parent isn't ready to hear the answer and pushes their own dreams instead? The hero, a little crocodile born into a family of ducks, asks himself: “Who am I? A duck or a fierce crocodile? Or is there something else?” A family story about love, finding yourself and acceptance, with room for laughter and mischief, philosophy and a simple truth: if you love someone, it doesn't matter what they look like or what they do."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "„Was willst du mal werden?“ – diese Frage stellen Erwachsene Kindern ständig. Doch was, wenn Eltern die Antwort gar nicht hören wollen und ihre eigenen Träume aufdrängen?"
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "„Was willst du mal werden?“ – diese Frage stellen Erwachsene Kindern ständig. Doch was, wenn Eltern die Antwort gar nicht hören wollen und ihre eigenen Träume aufdrängen? Der Held, ein kleines Krokodil, das in einer Entenfamilie zur Welt kam, fragt sich: „Wer bin ich? Eine Ente oder ein grimmiges Krokodil? Oder gibt es noch etwas anderes?“ Eine Familiengeschichte über Liebe, Selbstfindung und Annahme, mit Platz für Lachen und Unfug, Philosophie und eine einfache Wahrheit: Wenn man jemanden liebt, ist es ganz egal, wie er aussieht oder was er tut."
+          ]
+        }
+      }
+    },
+    "dogs-dont-dance-ballet": {
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Familienstück nach dem Buch von Anna Kemp. Der Hund Biff ist anders als die anderen Hunde: Er träumt davon, Ballerina zu werden, obwohl die Erwachsenen ihm immer wieder sagen, dass Hunde kein Ballett tanzen."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Familienstück nach dem Buch von Anna Kemp. Der Hund Biff ist anders als die anderen Hunde: Er träumt davon, Ballerina zu werden, obwohl die Erwachsenen ihm immer wieder sagen, dass Hunde kein Ballett tanzen. Eine Geschichte darüber, stark zu bleiben und seinem Traum zu folgen, auch wenn er unerreichbar scheint."
+          ]
+        }
+      }
+    },
+    "uber-den-zaun": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "События в посольствах ФРГ изменили мир: в сентябре 1989 года тысячи беженцев из ГДР искали защиты в западногерманских представительствах в Праге, Варшаве и Будапеште, чтобы добиться права на выезд. Через два месяца пала Берлинская стена."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "События в посольствах ФРГ изменили мир: в сентябре 1989 года тысячи беженцев из ГДР искали защиты в западногерманских представительствах в Праге, Варшаве и Будапеште, чтобы добиться права на выезд. Через два месяца пала Берлинская стена. Железнодорожный театр Das Letzte Kleinod рассказывает эту историю в спектакле-путешествии, который играют на вокзалах Востока и Запада Германии.",
+            "Уличный спектакль немецкого театра Das Letzte Kleinod. Роман Бокланов участвовал в постановке в качестве актёра с 16 мая по 4 июля 2023 года."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "The events at the West German embassies changed the world: in September 1989 thousands of refugees from East Germany sought protection in the embassies in Prague, Warsaw and Budapest to force their way out. Two months later the Wall fell."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "The events at the West German embassies changed the world: in September 1989 thousands of refugees from East Germany sought protection in the embassies in Prague, Warsaw and Budapest to force their way out. Two months later the Wall fell. The railway theatre Das Letzte Kleinod tells this story in a travelling performance played at railway stations in East and West.",
+            "An outdoor performance by the German theater Das Letzte Kleinod. Roman Boklanov participated in the production as a performer from May 16 to July 4, 2023."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Die Geschehnisse in den deutschen Botschaften veränderten die Welt: Tausende von Zufluchtsuchenden aus der DDR baten im September 1989 um Schutz in den Auslandsvertretungen in Prag, Warschau und Budapest, um ihre Ausreise durchzusetzen. Zwei Monate später fiel die Mauer."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Die Geschehnisse in den deutschen Botschaften veränderten die Welt: Tausende von Zufluchtsuchenden aus der DDR baten im September 1989 um Schutz in den Auslandsvertretungen in Prag, Warschau und Budapest, um ihre Ausreise durchzusetzen. Zwei Monate später fiel die Mauer. Das Eisenbahntheater Das Letzte Kleinod erzählt diese Geschichte in einer reisenden Aufführung an Bahnhöfen in Ost und West.",
+            "Eine Freiluftaufführung des deutschen Theaters Das Letzte Kleinod. Roman Boklanov nahm vom 16. Mai bis 4. Juli 2023 als Darsteller an der Produktion teil."
+          ]
+        }
+      }
+    },
+    "oskar-und-die-dame-in-rosa": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Спектакль для семейного просмотра в жанре фигуративного театра учит принимать жизнь во всех её проявлениях и ценить каждую секунду."
+          ]
+        }
+      }
+    },
+    "no-winer-way": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Спектакль на вокзале Колумбус в Бремерхафене. С 1953 по 1969 год лайнер UNITED STATES регулярно ходил между Бремерхафеном и Нью-Йорком."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Спектакль на вокзале Колумбус в Бремерхафене. С 1953 по 1969 год лайнер UNITED STATES регулярно ходил между Бремерхафеном и Нью-Йорком. Каждый его заход переворачивал жизнь портового города: экипаж заполнял магазины, бары и рестораны, а перед отплытием, под гудок тифона, на Колумбус-кай собирались толпы, чтобы проводить легендарный лайнер в Америку.",
+            "Уличный спектакль немецкого театра Das Letzte Kleinod. Роман Бокланов участвовал в подготовительном этапе постановки с 21 марта по 10 апреля 2023 года."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Theatre at the Columbus Station in Bremerhaven. From 1953 to 1969 the liner UNITED STATES sailed a regular transatlantic service between Bremerhaven and New York."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Theatre at the Columbus Station in Bremerhaven. From 1953 to 1969 the liner UNITED STATES sailed a regular transatlantic service between Bremerhaven and New York. Each arrival threw the port city into a stir: the crew poured into its shops, bars and restaurants, and before departure, as the ship's horn sounded, crowds lined the Columbus Quay to see the legendary liner off to America.",
+            "An outdoor performance by the German theater Das Letzte Kleinod. Roman Boklanov participated in the preparatory stage of the production from March 21 to April 10, 2023."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Theater im Columbusbahnhof in Bremerhaven. Bei der Ankunft der UNITED STATES geriet Bremerhaven jedes Mal in Aufruhr. Die Besatzung strömte in Läden, Kneipen und Restaurants der Hafenstadt. Kurz vor Abfahrt dröhnte dann das Typhon."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Theater im Columbusbahnhof in Bremerhaven. Bei der Ankunft der UNITED STATES geriet Bremerhaven jedes Mal in Aufruhr. Die Besatzung strömte in Läden, Kneipen und Restaurants der Hafenstadt. Kurz vor Abfahrt dröhnte dann das Typhon. Unzählige Menschen säumten die Columbuskaje, um den legendären Ozeanliner für die Reise in die USA zu verabschieden. Von 1953 bis 1969 fuhr das Schiff im regelmäßigen Transatlantikdienst zwischen Bremerhaven und New York.",
+            "Eine Freiluftaufführung des deutschen Theaters Das Letzte Kleinod. Roman Boklanov nahm an der Vorbereitungsphase der Produktion vom 21. März bis 10. April 2023 teil."
+          ]
+        }
+      }
+    },
+    "single-one-on-the-moon": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Кукольный спектакль «типа театра» на музыку Daft Punk, визуально вдохновлённый комиксами о последних жителях Луны. Колонизация Луны не удалась, и большинство поселенцев хотят вернуться на Землю, но главный герой Коп остаётся: он мечтал об этой службе с детства."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A puppet show by 'tipa teatr' set to the music of Daft Punk and visually inspired by comics about the last inhabitants of the Moon. The colonisation of the Moon has failed and most settlers want to go back to Earth, but the hero, Cop, stays: he has dreamed of this post since childhood."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A puppet show by 'tipa teatr' set to the music of Daft Punk and visually inspired by comics about the last inhabitants of the Moon. The colonisation of the Moon has failed and most settlers want to go back to Earth, but the hero, Cop, stays: he has dreamed of this post since childhood. Two robots who watch over people tell of his meetings and partings, which in the end lead him to love."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Puppenspiel von „tipa teatr“ zur Musik von Daft Punk, visuell inspiriert von Comics über die letzten Bewohner des Mondes. Die Besiedlung des Mondes ist gescheitert, die meisten Siedler wollen zurück zur Erde, doch der Held Cop bleibt: Von diesem Dienst hat er seit seiner Kindheit geträumt."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Puppenspiel von „tipa teatr“ zur Musik von Daft Punk, visuell inspiriert von Comics über die letzten Bewohner des Mondes. Die Besiedlung des Mondes ist gescheitert, die meisten Siedler wollen zurück zur Erde, doch der Held Cop bleibt: Von diesem Dienst hat er seit seiner Kindheit geträumt. Zwei Roboter, die die Menschen beobachten, erzählen von seinen Begegnungen und Abschieden, die ihn am Ende zur Liebe führen."
+          ]
+        }
+      }
+    },
+    "happy-birthday": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Онлайн-спектакль-вечеринка Ксении Пещик, созданный во время карантина. У героя день рождения, но из-за локдауна он один в квартире и может пригласить лишь одного человека, который останется с ним до снятия ограничений."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Онлайн-спектакль-вечеринка Ксении Пещик, созданный во время карантина. У героя день рождения, но из-за локдауна он один в квартире и может пригласить лишь одного человека, который останется с ним до снятия ограничений. Зритель выбирает роль: «именинник» принимает видеозвонки от родных и друзей и решает, с кем ждать конца карантина, а «гости» наблюдают и подсказывают в чате."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "An online party-performance by Ksenia Peshchik, made during the quarantine. It is the hero's birthday, but lockdown has left him alone in his flat, and he may invite just one person to stay with him until the restrictions end."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "An online party-performance by Ksenia Peshchik, made during the quarantine. It is the hero's birthday, but lockdown has left him alone in his flat, and he may invite just one person to stay with him until the restrictions end. Viewers choose a role: the 'birthday boy' takes video calls from family and friends and decides who to wait out the quarantine with, while the 'guests' watch and give hints in the chat."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Eine Online-Party-Performance von Ksenia Peshchik, entstanden während der Quarantäne. Der Held hat Geburtstag, doch der Lockdown hat ihn allein in seiner Wohnung zurückgelassen, und er darf nur eine Person einladen, die bis zum Ende der Beschränkungen bei ihm bleibt."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Eine Online-Party-Performance von Ksenia Peshchik, entstanden während der Quarantäne. Der Held hat Geburtstag, doch der Lockdown hat ihn allein in seiner Wohnung zurückgelassen, und er darf nur eine Person einladen, die bis zum Ende der Beschränkungen bei ihm bleibt. Das Publikum wählt eine Rolle: Das „Geburtstagskind“ nimmt Videoanrufe von Familie und Freunden entgegen und entscheidet, mit wem es das Ende der Quarantäne abwartet, die „Gäste“ schauen zu und geben im Chat Tipps."
+          ]
+        }
+      }
+    },
+    "the-outsider": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Сценическая версия романа Альбера Камю, созданная студентами режиссёрской мастерской Руслана Кудашова в постановке Дениса Казачука. Вместо привычных кукол актёры работают с гапитами — схематичными деревянными заготовками кукол без индивидуальных черт."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Сценическая версия романа Альбера Камю, созданная студентами режиссёрской мастерской Руслана Кудашова в постановке Дениса Казачука. Вместо привычных кукол актёры работают с гапитами — схематичными деревянными заготовками кукол без индивидуальных черт. Важную роль в спектакле играют свет и игра теней. В 2019 году спектакль был показан на международном молодёжном театральном форуме «M.@rt.контакт» в Могилёве."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A stage version of Albert Camus's novel, created by students of Ruslan Kudashov's directing studio and staged by Denis Kazachuk. Instead of conventional puppets the actors work with gapits: schematic wooden puppet blanks without individual features."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A stage version of Albert Camus's novel, created by students of Ruslan Kudashov's directing studio and staged by Denis Kazachuk. Instead of conventional puppets the actors work with gapits: schematic wooden puppet blanks without individual features. Light and the play of shadows carry much of the performance. In 2019 it was shown at the M.@rt.kontakt International Youth Theatre Forum in Mogilev."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Eine Bühnenfassung von Albert Camus' Roman, entstanden mit Studierenden der Regieklasse von Ruslan Kudashov in der Inszenierung von Denis Kazachuk. Statt gewohnter Puppen arbeiten die Darsteller mit Gapits, schematischen hölzernen Puppenrohlingen ohne individuelle Züge."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Eine Bühnenfassung von Albert Camus' Roman, entstanden mit Studierenden der Regieklasse von Ruslan Kudashov in der Inszenierung von Denis Kazachuk. Statt gewohnter Puppen arbeiten die Darsteller mit Gapits, schematischen hölzernen Puppenrohlingen ohne individuelle Züge. Licht und Schattenspiel tragen einen großen Teil der Aufführung. 2019 war sie beim Internationalen Jugendtheaterforum „M.@rt.kontakt“ in Mogiljow zu sehen."
+          ]
+        }
+      }
+    },
+    "snow-queen": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Семейный спектакль проекта «Музей + Театр» в Музее Анны Ахматовой в Фонтанном доме, режиссёр Светлана Озерская. Вместе с Гердой зрители отправляются на Север, чтобы пройти через испытания, найти Кая и приблизить приход весны."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Семейный спектакль проекта «Музей + Театр» в Музее Анны Ахматовой в Фонтанном доме, режиссёр Светлана Озерская. Вместе с Гердой зрители отправляются на Север, чтобы пройти через испытания, найти Кая и приблизить приход весны. Лаконичная постановка строится на сочетании кукольного театра, видеопроекций и анимации."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A family show by the Museum + Theatre project at the Anna Akhmatova Museum in the Fountain House, directed by Svetlana Ozerskaya. Together with Gerda the audience travels north to pass through trials, find Kai and bring spring closer."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A family show by the Museum + Theatre project at the Anna Akhmatova Museum in the Fountain House, directed by Svetlana Ozerskaya. Together with Gerda the audience travels north to pass through trials, find Kai and bring spring closer. The spare staging combines puppet theatre, video projection and animation."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Familienstück des Projekts „Museum + Theater“ im Anna-Achmatowa-Museum im Fontanny-Haus, Regie: Svetlana Ozerskaya. Gemeinsam mit Gerda reist das Publikum in den Norden, um Prüfungen zu bestehen, Kai zu finden und den Frühling näherzubringen."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Familienstück des Projekts „Museum + Theater“ im Anna-Achmatowa-Museum im Fontanny-Haus, Regie: Svetlana Ozerskaya. Gemeinsam mit Gerda reist das Publikum in den Norden, um Prüfungen zu bestehen, Kai zu finden und den Frühling näherzubringen. Die schlichte Inszenierung verbindet Puppentheater, Videoprojektion und Animation."
+          ]
+        }
+      }
+    },
+    "school-simulator": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Иммерсивный спектакль, который возвращает зрителя в атмосферу обычной российской школы."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Иммерсивный спектакль, который возвращает зрителя в атмосферу обычной российской школы. Сначала зритель попадает в футуристическую «лабораторию» и рассказывает перформерам-«клонам» о своих школьных годах, затем эти данные «загружаются» в симулятор, и уже в классе он пытается узнать себя в одном из пятнадцати учеников. Проект можно воспринимать и как исследование, и как опыт с терапевтическим эффектом."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "An immersive show that takes the audience back into an ordinary Russian school."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "An immersive show that takes the audience back into an ordinary Russian school. Each viewer first enters a futuristic 'laboratory' and tells performer 'clones' about their school years; this data is then 'uploaded' into the simulator, and in the classroom the viewer tries to recognise themselves in one of fifteen pupils. The project works both as research and as an experience with a therapeutic effect."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Eine immersive Aufführung, die das Publikum zurück in eine gewöhnliche russische Schule versetzt."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Eine immersive Aufführung, die das Publikum zurück in eine gewöhnliche russische Schule versetzt. Zuerst betritt man ein futuristisches „Labor“ und erzählt Performer-„Klonen“ von der eigenen Schulzeit; diese Daten werden in den Simulator „geladen“, und im Klassenzimmer versucht man dann, sich in einem von fünfzehn Schülern wiederzuerkennen. Das Projekt lässt sich als Forschung wie als Erfahrung mit therapeutischer Wirkung erleben."
+          ]
+        }
+      }
+    },
+    "winter-when-i-grew-up": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Амстердам, 1947 год. Десятилетний Томас вспоминает прошедшую зиму. В его классе появляется новенький, Пит Зван: у него нет родителей, он живёт с тётей и двоюродной сестрой Бет. Мальчики становятся друзьями, а в Бет Томас влюбляется."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Амстердам, 1947 год. Десятилетний Томас вспоминает прошедшую зиму. В его классе появляется новенький, Пит Зван: у него нет родителей, он живёт с тётей и двоюродной сестрой Бет. Мальчики становятся друзьями, а в Бет Томас влюбляется. Постепенно он узнаёт историю семьи Пита и понимает, что эта зима изменила его жизнь. Спектакль студентов мастерской Руслана Кудашова по повести Петера ван Гестела."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Amsterdam, 1947. Ten-year-old Thomas looks back on the past winter. A new boy, Piet Zwaan, joins his class: he has no parents and lives with his aunt and his cousin Bet. The boys become friends, and Thomas falls in love with Bet."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Amsterdam, 1947. Ten-year-old Thomas looks back on the past winter. A new boy, Piet Zwaan, joins his class: he has no parents and lives with his aunt and his cousin Bet. The boys become friends, and Thomas falls in love with Bet. Little by little he learns the story of Piet's family and realises that this winter changed his life. A production by students of Ruslan Kudashov's course, after Peter van Gestel's novel."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Amsterdam, 1947. Der zehnjährige Thomas erinnert sich an den vergangenen Winter. In seine Klasse kommt ein Neuer, Piet Zwaan: Er hat keine Eltern und lebt bei seiner Tante und seiner Cousine Bet. Die Jungen werden Freunde, und Thomas verliebt sich in Bet."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Amsterdam, 1947. Der zehnjährige Thomas erinnert sich an den vergangenen Winter. In seine Klasse kommt ein Neuer, Piet Zwaan: Er hat keine Eltern und lebt bei seiner Tante und seiner Cousine Bet. Die Jungen werden Freunde, und Thomas verliebt sich in Bet. Nach und nach erfährt er die Geschichte von Piets Familie und begreift, dass dieser Winter sein Leben verändert hat. Eine Inszenierung von Studierenden der Klasse Ruslan Kudashovs nach dem Roman von Peter van Gestel."
+          ]
+        }
+      }
+    },
+    "life-of-insects": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Спектакль по мотивам романа Виктора Пелевина, герои которого — узнаваемые типы российского общества начала 1990-х, показанные через сравнение с жизнью насекомых. Постановка выросла из учебных наблюдений за насекомыми и этюдов на пластику рук."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Спектакль по мотивам романа Виктора Пелевина, герои которого — узнаваемые типы российского общества начала 1990-х, показанные через сравнение с жизнью насекомых. Постановка выросла из учебных наблюдений за насекомыми и этюдов на пластику рук. Студенты режиссёрского курса Руслана Кудашова собирают из этих этюдов образы эпохи «лихих 90-х», которая продолжает жить в людях."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Based on Victor Pelevin's novel, whose characters are recognisable types from Russian society of the early 1990s, seen through the lives of insects. The production grew out of classroom observations of insects and études for the hands."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Based on Victor Pelevin's novel, whose characters are recognisable types from Russian society of the early 1990s, seen through the lives of insects. The production grew out of classroom observations of insects and études for the hands. Students of Ruslan Kudashov's directing course build from these études the images of the 'wild nineties', an era that still lives on in people."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Nach Viktor Pelewins Roman, dessen Figuren erkennbare Typen der russischen Gesellschaft der frühen 1990er Jahre sind, gezeigt im Spiegel des Insektenlebens. Die Inszenierung entstand aus Beobachtungen von Insekten im Unterricht und aus Etüden für die Hände."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Nach Viktor Pelewins Roman, dessen Figuren erkennbare Typen der russischen Gesellschaft der frühen 1990er Jahre sind, gezeigt im Spiegel des Insektenlebens. Die Inszenierung entstand aus Beobachtungen von Insekten im Unterricht und aus Etüden für die Hände. Studierende der Regieklasse von Ruslan Kudashov formen daraus Bilder der „wilden Neunziger“, einer Zeit, die in den Menschen weiterlebt."
+          ]
+        }
+      }
+    },
+    "flea-circus": {
+      "ru": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Спектакль из миниатюр о жизни блохи, сделанный студентами второго курса режиссёрской мастерской Руслана Кудашова (РГИСИ) под руководством Анатолия Гущина для IV фестиваля «БТК-ФЕСТ: Театр актуальных кукол», посвящённого цирку."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Спектакль из миниатюр о жизни блохи, сделанный студентами второго курса режиссёрской мастерской Руслана Кудашова (РГИСИ) под руководством Анатолия Гущина для IV фестиваля «БТК-ФЕСТ: Театр актуальных кукол», посвящённого цирку. Каждую миниатюру ставили один или два студента, и у каждой свой планшет: блоха помогает Бетховену сочинить «Лунную сонату», выступает в цирке, летит на Марс и убегает от Смерти — огромной куклы, которой управляют двое артистов. Действие идёт в фойе Большого театра кукол."
+          ]
+        }
+      },
+      "en": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "A show of miniatures about the life of a flea, made by second-year students of Ruslan Kudashov's directing studio (RGISI) under director Anatoly Gushchin for the 4th BTK-FEST: Theatre of Topical Puppets, devoted that year to the circus."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "A show of miniatures about the life of a flea, made by second-year students of Ruslan Kudashov's directing studio (RGISI) under director Anatoly Gushchin for the 4th BTK-FEST: Theatre of Topical Puppets, devoted that year to the circus. Each miniature was staged by one or two students on its own small stage: the flea helps Beethoven write the Moonlight Sonata, performs in the circus, flies to Mars and escapes Death, a huge puppet worked by two actors. The show plays in the foyer of the Big Puppet Theatre."
+          ]
+        }
+      },
+      "de": {
+        "identity.synopsis": {
+          "paragraphs": [
+            "Ein Abend aus Miniaturen über das Leben eines Flohs, entstanden mit Studierenden des zweiten Jahrgangs der Regieklasse von Ruslan Kudashov (RGISI) unter der Leitung von Anatoli Gushchin für das 4. BTK-FEST: Theater der aktuellen Puppen, das in jenem Jahr dem Zirkus gewidmet war."
+          ]
+        },
+        "identity.body": {
+          "paragraphs": [
+            "Ein Abend aus Miniaturen über das Leben eines Flohs, entstanden mit Studierenden des zweiten Jahrgangs der Regieklasse von Ruslan Kudashov (RGISI) unter der Leitung von Anatoli Gushchin für das 4. BTK-FEST: Theater der aktuellen Puppen, das in jenem Jahr dem Zirkus gewidmet war. Jede Miniatur inszenierten ein oder zwei Studierende auf einer eigenen kleinen Bühne: Der Floh hilft Beethoven bei der Mondscheinsonate, tritt im Zirkus auf, fliegt zum Mars und entkommt dem Tod, einer riesigen Puppe, die zwei Darsteller führen. Gespielt wird im Foyer des Großen Puppentheaters."
+          ]
+        }
+      }
+    }
+  }
+}
