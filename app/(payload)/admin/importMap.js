@@ -1,3 +1,4 @@
+import { default as default_f9a418cf5d5f1c78554285058b30f04c } from '../../../components/admin/TranslationCell'
 import { PlainLabel as PlainLabel_07f513c68167caf320c51b8dc6c45309 } from '../../../components/admin/ListCells'
 import { TitleCell as TitleCell_07f513c68167caf320c51b8dc6c45309 } from '../../../components/admin/ListCells'
 import { default as default_07e57f45bffa6a4f21a1e79e46e6e165 } from '../../../components/admin/LocaleHint'
@@ -49,6 +50,7 @@ import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc056
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/components/admin/TranslationCell#default": default_f9a418cf5d5f1c78554285058b30f04c,
   "/components/admin/ListCells#PlainLabel": PlainLabel_07f513c68167caf320c51b8dc6c45309,
   "/components/admin/ListCells#TitleCell": TitleCell_07f513c68167caf320c51b8dc6c45309,
   "/components/admin/LocaleHint#default": default_07e57f45bffa6a4f21a1e79e46e6e165,

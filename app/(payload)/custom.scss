@@ -987,3 +987,19 @@ $form-max: 880px;
 .template-default:has(.document-fields__fields) .app-header__wrapper {
   max-width: $form-max;
 }
+
+/* «Нет перевода» column (TranslationCell.tsx). */
+.list-untranslated {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.list-untranslated__lang {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--theme-error-700);
+  background: var(--theme-error-100);
+}

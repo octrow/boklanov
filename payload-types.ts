@@ -516,7 +516,7 @@ export interface Production {
         }[]
       | null;
     /**
-     * Venue history — where the production has been performed and roughly how many times.
+     * Where the production has been performed and how many times, if known.
      */
     runs?:
       | {
@@ -550,7 +550,7 @@ export interface Production {
   status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null;
   settings?: {
     /**
-     * When off, the production page has no "Book" button.
+     * Button on the production page. Turn off when the production cannot be booked.
      */
     bookingCta?: boolean | null;
     /**

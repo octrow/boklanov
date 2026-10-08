@@ -2,6 +2,7 @@ import React from 'react'
 import type { AdminViewServerProps } from 'payload'
 import { Gutter, Link } from '@payloadcms/ui'
 import { toPlainText } from './plainText'
+import { MAIN_TEXTS, isUntranslated } from './untranslated'
 import LocalTime from './LocalTime'
 
 /**
@@ -14,14 +15,6 @@ import LocalTime from './LocalTime'
  * (CONTEXT.md › Translation). Payload's list filters can't express that,
  * so the dashboard lists those productions itself.
  */
-
-const MAIN_TEXTS = [
-  'title',
-  'tagline',
-  'synopsis',
-  'body',
-  'directorsNote'
-] as const
 
 const STATUSES = ['live', 'on-tour', 'in-development', 'archived'] as const
 type Status = (typeof STATUSES)[number]
@@ -104,12 +97,6 @@ const pluralRu = (n: number, one: string, few: string, many: string) => {
 }
 
 const text = (v: unknown) => toPlainText(v).trim()
-
-const isUntranslated = (row: Row, lang: 'en' | 'de') =>
-  MAIN_TEXTS.some((k) => {
-    const v = row.identity?.[k]
-    return text(v?.ru) !== '' && text(v?.[lang]) === ''
-  })
 
 const titleOf = (row: Row, lang: Lang) =>
   text(row.identity?.title?.[lang]) ||

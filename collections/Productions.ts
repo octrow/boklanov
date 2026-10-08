@@ -103,6 +103,7 @@ export const Productions: CollectionConfig = {
       'identity.title',
       'production.year',
       'status',
+      'translation',
       'settings.featured'
     ],
     hideAPIURL: true,
@@ -143,6 +144,18 @@ export const Productions: CollectionConfig = {
         beforeChange: [
           ({ siblingData, value }) => siblingData.identity?.title ?? value
         ]
+      }
+    },
+    // List-only column: languages this production is Untranslated into.
+    // `ui` stores nothing; the cell computes it (TranslationCell).
+    {
+      name: 'translation',
+      type: 'ui',
+      label: { ru: 'Нет перевода', en: 'Untranslated' },
+      admin: {
+        components: {
+          Cell: '/components/admin/TranslationCell#default'
+        }
       }
     },
     // ── Tabs ─────────────────────────────────────────────────────────────
