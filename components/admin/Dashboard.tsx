@@ -153,12 +153,10 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
   const noYear = rows.filter((r) => r.production?.year == null).length
   const noPoster = rows.filter((r) => !r.media?.poster?.src).length
   // Rendered on the site only when filled, so an empty one is invisible.
-  const aboutEmpty = [
-    about.photos,
-    about.milestones,
-    about.lineage,
-    about.marginalia
-  ].filter((v) => !v?.length).length
+  // Extra photos are optional (none to add yet), so they don't count.
+  const aboutEmpty = [about.milestones, about.lineage, about.marginalia].filter(
+    (v) => !v?.length
+  ).length
 
   const recent = [
     ...rows.map((r) => ({
