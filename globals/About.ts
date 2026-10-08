@@ -6,6 +6,7 @@ import {
   InlineToolbarFeature
 } from '@payloadcms/richtext-lexical'
 import { revalidateAbout } from '../hooks/revalidate'
+import { BODY_DROP_FEATURES } from '../collections/Productions'
 
 /**
  * About — port of keystatic singleton `about`. Four tabs: Bio, Visuals,
@@ -40,8 +41,8 @@ export const About: GlobalConfig = {
         {
           label: { ru: 'Био', en: 'Bio' },
           description: {
-            ru: 'Биографический текст. Первый абзац — лид (отображается крупным шрифтом).',
-            en: 'Biography body. First paragraph is the lead (rendered prominently).'
+            ru: 'Текст биографии на всех трёх языках.',
+            en: 'Biography text in all three languages.'
           },
           fields: [
             {
@@ -62,7 +63,9 @@ export const About: GlobalConfig = {
                   placeholder: ''
                 },
                 features: ({ defaultFeatures }) => [
-                  ...defaultFeatures,
+                  ...defaultFeatures.filter(
+                    (f) => !BODY_DROP_FEATURES.has(f.key)
+                  ),
                   HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
                   FixedToolbarFeature(),
                   InlineToolbarFeature()
@@ -133,7 +136,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Фотографии', en: 'Photos' },
               labels: {
-                singular: { ru: 'Фото', en: 'Photo' },
+                singular: { ru: 'фото', en: 'Photo' },
                 plural: { ru: 'Фотографии', en: 'Photos' }
               },
               admin: {
@@ -190,7 +193,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Хронология', en: 'Timeline' },
               labels: {
-                singular: { ru: 'Веху', en: 'Milestone' },
+                singular: { ru: 'веху', en: 'Milestone' },
                 plural: { ru: 'Хронология', en: 'Timeline' }
               },
               admin: {
@@ -236,7 +239,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Преемственность', en: 'Lineage' },
               labels: {
-                singular: { ru: 'Учителя', en: 'Mentor' },
+                singular: { ru: 'учителя', en: 'Mentor' },
                 plural: { ru: 'Преемственность', en: 'Lineage' }
               },
               admin: {
@@ -336,7 +339,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Заметки', en: 'Notes' },
               labels: {
-                singular: { ru: 'Заметку', en: 'Note' },
+                singular: { ru: 'заметку', en: 'Note' },
                 plural: { ru: 'Заметки', en: 'Notes' }
               },
               admin: {

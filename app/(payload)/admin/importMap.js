@@ -35,12 +35,6 @@ import { StatusCell as StatusCell_07f513c68167caf320c51b8dc6c45309 } from '../..
 import { FeaturedCell as FeaturedCell_07f513c68167caf320c51b8dc6c45309 } from '../../../components/admin/ListCells'
 import { default as default_c0497aefb23192ab4504f7c9d5160e3c } from '../../../components/admin/SearchPlaceholder'
 import { default as default_4ef13d4fc6ce28dbd550419ec8c51c88 } from '../../../components/admin/LocaleSwitch'
-import { AlignFeatureClient as AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { IndentFeatureClient as IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { ChecklistFeatureClient as ChecklistFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { RelationshipFeatureClient as RelationshipFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_94425923c6b7a85329d3968b1d501dbf } from '../../../components/admin/MilestoneRowLabel'
 import { default as default_40fa02a5b5f36da1e1e3617810d6fd2a } from '../../../components/admin/LineageRowLabel'
 import { default as default_eea100559141ac76815f24194c0d31e7 } from '../../../components/admin/NoteRowLabel'
@@ -92,12 +86,6 @@ export const importMap = {
   "/components/admin/ListCells#FeaturedCell": FeaturedCell_07f513c68167caf320c51b8dc6c45309,
   "/components/admin/SearchPlaceholder#default": default_c0497aefb23192ab4504f7c9d5160e3c,
   "/components/admin/LocaleSwitch#default": default_4ef13d4fc6ce28dbd550419ec8c51c88,
-  "@payloadcms/richtext-lexical/client#AlignFeatureClient": AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#IndentFeatureClient": IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#ChecklistFeatureClient": ChecklistFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#RelationshipFeatureClient": RelationshipFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/components/admin/MilestoneRowLabel#default": default_94425923c6b7a85329d3968b1d501dbf,
   "/components/admin/LineageRowLabel#default": default_40fa02a5b5f36da1e1e3617810d6fd2a,
   "/components/admin/NoteRowLabel#default": default_eea100559141ac76815f24194c0d31e7,

@@ -45,7 +45,7 @@ const INLINE_ONLY_DROP_FEATURES = new Set([
 
 // Body keeps headings, lists, quotes and links; these formats are not
 // styled on the site, so the toolbar doesn't offer them.
-const BODY_DROP_FEATURES = new Set([
+export const BODY_DROP_FEATURES = new Set([
   'underline',
   'strikethrough',
   'subscript',
@@ -90,6 +90,9 @@ export const Productions: CollectionConfig = {
     singular: { ru: 'Спектакль', en: 'Production' },
     plural: { ru: 'Спектакли', en: 'Productions' }
   },
+  // Same order as the catalogue on the site (app/[locale]/productions):
+  // explicit listOrder first (Postgres puts NULLs last), then newest year.
+  defaultSort: ['settings.listOrder', '-production.year'],
   admin: {
     // useAsTitle can't be a nested field, so `title` mirrors identity.title.
     useAsTitle: 'title',
@@ -815,10 +818,10 @@ export const Productions: CollectionConfig = {
                     {
                       name: 'year',
                       type: 'number',
-                      label: { ru: 'Год', en: 'Year' },
+                      label: { ru: 'Год основания', en: 'Year founded' },
                       admin: {
                         description: {
-                          ru: 'Год основания театра. Опционально.',
+                          ru: 'Год основания театра. Необязательно.',
                           en: 'Year the theatre was founded. Optional.'
                         }
                       }
@@ -1508,8 +1511,8 @@ export const Productions: CollectionConfig = {
                       RowLabel: '/components/admin/RunRowLabel#default'
                     },
                     description: {
-                      ru: 'История площадок — где шёл спектакль и сколько примерно раз.',
-                      en: 'Venue history — where the production has been performed and roughly how many times.'
+                      ru: 'Где шёл спектакль и сколько раз, если известно.',
+                      en: 'Where the production has been performed and how many times, if known.'
                     }
                   },
                   fields: [
@@ -1633,12 +1636,15 @@ export const Productions: CollectionConfig = {
                 {
                   name: 'bookingCta',
                   type: 'checkbox',
-                  label: { ru: 'Кнопка «Заказать»', en: 'Booking CTA' },
+                  label: {
+                    ru: 'Показывать кнопку «Заказать»',
+                    en: 'Show the Book button'
+                  },
                   defaultValue: true,
                   admin: {
                     description: {
-                      ru: 'Когда выключено — на странице спектакля нет кнопки «Заказать».',
-                      en: 'When off, the production page has no "Book" button.'
+                      ru: 'Кнопка на странице спектакля. Выключите, если спектакль сейчас нельзя заказать.',
+                      en: 'Button on the production page. Turn off when the production cannot be booked.'
                     }
                   }
                 },

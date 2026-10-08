@@ -138,24 +138,6 @@ export interface Production {
      */
     title: string;
     /**
-     * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
-     */
-    body?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    /**
      * Short hook line (≤80 chars) under the title. Bold, italic, and links supported.
      */
     tagline?: {
@@ -174,9 +156,27 @@ export interface Production {
       [k: string]: unknown;
     } | null;
     /**
-     * One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.
+     * 2–3 sentences, up to ~300 chars: shown under the title, on cards and in search results. Longer prose goes in the body. Bold, italic, and links supported.
      */
     synopsis?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.
+     */
+    body?: {
       root: {
         type: string;
         children: {
@@ -786,9 +786,9 @@ export interface ProductionsSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        body?: T;
         tagline?: T;
         synopsis?: T;
+        body?: T;
         directorsNote?: T;
       };
   slug?: T;
@@ -1228,15 +1228,15 @@ export interface Contact {
    */
   intro?: string | null;
   /**
-   * Roman's public email. Used in the mailto link and copy block.
+   * Roman's public email. Used in the mailto link and copy block. Same in every language.
    */
   email: string;
   /**
-   * Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593
+   * Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593. Same in every language.
    */
   telegramUrl?: string | null;
   /**
-   * Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman
+   * Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman. Same in every language.
    */
   instagramUrl?: string | null;
   updatedAt?: string | null;

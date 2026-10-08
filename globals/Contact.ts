@@ -16,6 +16,9 @@ export const Contact: GlobalConfig = {
       elements: {
         beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
       }
+    },
+    livePreview: {
+      url: ({ locale }) => `/${locale.code}/contact`
     }
   },
   access: {
@@ -48,8 +51,8 @@ export const Contact: GlobalConfig = {
       required: true,
       admin: {
         description: {
-          ru: 'Публичный email Романа. Используется в mailto-ссылке и подписи.',
-          en: "Roman's public email. Used in the mailto link and copy block."
+          ru: 'Публичный email Романа. Используется в mailto-ссылке и подписи. Общий для всех языков.',
+          en: "Roman's public email. Used in the mailto link and copy block. Same in every language."
         }
       }
     },
@@ -59,8 +62,8 @@ export const Contact: GlobalConfig = {
       label: { ru: 'Telegram', en: 'Telegram URL' },
       admin: {
         description: {
-          ru: 'Полный URL Telegram-аккаунта. Обязательно с https://. Пример: https://t.me/roman7593',
-          en: 'Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593'
+          ru: 'Полный URL Telegram-аккаунта. Обязательно с https://. Пример: https://t.me/roman7593. Общий для всех языков.',
+          en: 'Full Telegram account URL. Must include https://. e.g. https://t.me/roman7593. Same in every language.'
         }
       }
     },
@@ -70,8 +73,8 @@ export const Contact: GlobalConfig = {
       label: { ru: 'Instagram', en: 'Instagram URL' },
       admin: {
         description: {
-          ru: 'Полный URL Instagram-аккаунта. Обязательно с https://. Пример: https://instagram.com/boklanovroman',
-          en: 'Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman'
+          ru: 'Полный URL Instagram-аккаунта. Обязательно с https://. Пример: https://instagram.com/boklanovroman. Общий для всех языков.',
+          en: 'Full Instagram account URL. Must include https://. e.g. https://instagram.com/boklanovroman. Same in every language.'
         }
       }
     }

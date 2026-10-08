@@ -60,6 +60,7 @@ const COPY = {
     noDe: 'Без немецкого перевода',
     noYear: 'Без года',
     noPoster: 'Без постера',
+    aboutEmpty: 'Пустые разделы «О режиссёре»',
     allDone: 'Всё на месте.',
     recent: 'Недавно изменённые',
     page: 'Страница',
@@ -87,6 +88,7 @@ const COPY = {
     noDe: 'Missing German',
     noYear: 'No year',
     noPoster: 'No poster',
+    aboutEmpty: 'Empty About-page sections',
     allDone: 'Nothing missing.',
     recent: 'Recently edited',
     page: 'Page',
@@ -163,6 +165,13 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
   const noDe = rows.filter((r) => isUntranslated(r, 'de'))
   const noYear = rows.filter((r) => r.production?.year == null).length
   const noPoster = rows.filter((r) => !r.media?.poster?.src).length
+  // Rendered on the site only when filled, so an empty one is invisible.
+  const aboutEmpty = [
+    about.photos,
+    about.milestones,
+    about.lineage,
+    about.marginalia
+  ].filter((v) => !v?.length).length
 
   const recent = [
     ...rows.map((r) => ({
@@ -237,9 +246,16 @@ const Dashboard = async ({ initPageResult, i18n }: AdminViewServerProps) => {
       label: t.noPoster,
       n: noPoster,
       href: `${list}?where[media.poster.src][exists]=false`
+    },
+    {
+      key: 'about',
+      label: t.aboutEmpty,
+      n: aboutEmpty,
+      href: `${admin}/globals/about`
     }
   ]
-  const nothingToDo = noEn.length + noDe.length + noYear + noPoster === 0
+  const nothingToDo =
+    noEn.length + noDe.length + noYear + noPoster + aboutEmpty === 0
 
   return (
     <Gutter className='bk-dash'>

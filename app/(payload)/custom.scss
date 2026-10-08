@@ -247,6 +247,12 @@ body[data-active-locale='de'] {
   letter-spacing: 0;
 }
 
+/* Payload cuts every crumb at 160px («Страница «О режиссё…») with the
+   whole header free; titles here are short, so allow a real phrase. */
+.step-nav span {
+  max-width: 40ch;
+}
+
 /* Payload sizes the header icon slot for an 18px glyph. */
 .step-nav__home {
   width: auto;
