@@ -1,0 +1,47 @@
+name: Check links
+
+# Quarterly dead-link check of boklanov.com (scripts/check-links.sh). Opens
+# an issue listing what died, so GitHub mails the repo owner; the fix flow
+# is scripts/fix-dead-links.ts (Wayback snapshots) via an ops/ script.
+
+on:
+  schedule:
+    - cron: '0 6 1 1,4,7,10 *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check
+        id: check
+        run: |
+          if bash scripts/check-links.sh > report.txt; then
+            echo "dead=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "dead=$(wc -l < report.txt)" >> "$GITHUB_OUTPUT"
+          fi
+          cat report.txt
+
+      - name: Open issue
+        if: steps.check.outputs.dead != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Квартальная проверка нашла ${{ steps.check.outputs.dead }} мёртвых ссылок на boklanov.com (код ответа и адрес; 000 — сайт не ответил):"
+            echo
+            echo '```'
+            cat report.txt
+            echo '```'
+            echo
+            echo "Как чинить: найти снимки в web.archive.org и прогнать их через scripts/fix-dead-links.ts, как в ops/2026-10-09-fix-dead-links.sh."
+          } > body.md
+          gh issue create --title "Мёртвые ссылки $(date -u +%F)" --body-file body.md
