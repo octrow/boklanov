@@ -10,6 +10,7 @@
  *   rows:    { "recognition.awards": { <rowId>: { en: { name }, de: { name } } } }
  *   credits: { <slug>: { creditsRu?: Row[], creditsEn?: Row[], creditsDe?: Row[] } }
  *   fields:  { <slug>: { "*"|ru|en|de: { "production.year": 2021, ... } } }
+ *   globals: { about: { ru: [["old phrase", "new phrase"]] } } — rich-text swaps
  * "*" holds non-localized fields. A field value { paragraphs: string[] } is
  * written as Lexical rich text. Rows match by id; a missing id is reported
  * and skipped. Unchanged values are not written.
@@ -32,6 +33,8 @@ type Patch = {
   rows?: Record<string, Record<string, Partial<Record<Locale, Row>>>>
   credits?: Record<string, Record<string, Row[]>>
   fields?: Record<string, Partial<Record<Locale | '*', Row>>>
+  /** Phrase swaps inside a global's rich text: { about: { ru: [[from, to]] } } */
+  globals?: Record<string, Partial<Record<Locale, [string, string][]>>>
 }
 
 const file = process.argv[2]
@@ -191,6 +194,52 @@ for (const { id, slug } of docs) {
         id,
         locale,
         data: data as Partial<Production>,
+        context: { disableRevalidate: true }
+      })
+      writes++
+    }
+  }
+}
+
+type TextNode = { type?: string; text?: string; children?: TextNode[] }
+const swapText = (node: TextNode, from: string, to: string): TextNode =>
+  node.type === 'text' && node.text?.includes(from)
+    ? { ...node, text: node.text.replace(from, to) }
+    : node.children
+      ? { ...node, children: node.children.map((c) => swapText(c, from, to)) }
+      : node
+
+for (const [slug, byLocale] of Object.entries(patch.globals ?? {})) {
+  for (const locale of LOCALES) {
+    const swaps = byLocale[locale]
+    if (!swaps?.length) continue
+    const doc = (await payload.findGlobal({
+      slug: slug as 'about',
+      locale,
+      fallbackLocale: false,
+      depth: 0
+    })) as unknown as Row
+    const body = doc.body as { root: TextNode } | null
+    if (!body) continue
+    let root = body.root
+    for (const [from, to] of swaps) {
+      const text = JSON.stringify(root)
+      if (text.includes(JSON.stringify(to).slice(1, -1))) continue
+      if (!text.includes(JSON.stringify(from).slice(1, -1))) {
+        console.log(
+          `  ! ${slug} (${locale}): phrase not found — ${from.slice(0, 50)}`
+        )
+        continue
+      }
+      root = swapText(root, from, to)
+      console.log(`■ ${slug} (${locale})\n  body: ${from} → ${to}`)
+      changes++
+    }
+    if (apply && root !== body.root) {
+      await payload.updateGlobal({
+        slug: slug as 'about',
+        locale,
+        data: { body: { ...body, root } } as never,
         context: { disableRevalidate: true }
       })
       writes++

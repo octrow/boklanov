@@ -43,5 +43,5 @@ ALLOW_PROD_DB=1 DATABASE_URL="$PROD_URL" npx tsx scripts/fill-content.ts "$PATCH
 
 echo "== 5. revalidate"
 curl -s -X POST https://boklanov.com/api/revalidate -H 'content-type: application/json' \
-  -d "{\"secret\":\"$SECRET\",\"tags\":[\"productions\"]}"
+  -d "{\"secret\":\"$SECRET\",\"tags\":[\"productions\",\"about\"]}"
 echo
