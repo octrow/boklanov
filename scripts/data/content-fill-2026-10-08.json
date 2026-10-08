@@ -2478,7 +2478,7 @@
         "production.theatre.city": "Алматы",
         "identity.synopsis": {
           "paragraphs": [
-            "Третий международный театральный фестиваль Тотального театра прошёл на его площадке в Алматы с 7 по 14 апреля 2024 года. Программа была посвящена спектаклям для подростков и молодёжи из Казахстана, России, Австрии и Эстонии — от сказок и сайт-специфик до аудиопостановок и моноспектаклей; в неё также вошли режиссёрская лаборатория и две выставки. Фестиваль открылся спектаклем Романа Бокланова «Осторожно, злая собака!»."
+            "III Международный театральный фестиваль «Total Fest. Диалоги» прошёл на площадке Тотального театра в Алматы с 7 по 14 апреля 2024 года. Каждый год у фестиваля новая тема: в 2022-м — «О любви», в 2023-м — «Действующее лицо», в 2024-м — подростки и молодёжь, разговор о взрослении, внутренних дилеммах и отношениях с друзьями и семьёй. В программе были театры из Алматы и Караганды, России и Эстонии: сказки, сайт-специфик, аудио- и моноспектакли, а также режиссёрская лаборатория и фотовыставка. Фестиваль открылся спектаклем Романа Бокланова «Осторожно, злая собака!»."
           ]
         }
       },
@@ -2488,7 +2488,7 @@
         "production.theatre.city": "Almaty",
         "identity.synopsis": {
           "paragraphs": [
-            "Total Theatre's third international theatre festival took place at its own venue in Almaty from 7 to 14 April 2024. The programme was devoted to shows for teenagers and young people from Kazakhstan, Russia, Austria and Estonia, from fairy tales and site-specific pieces to audio plays and solo shows, with a directors' lab and two exhibitions alongside. The festival opened with Roman Boklanov's Beware of the Dog!"
+            "The 3rd Total Fest. Dialogues International Theatre Festival took place at Total Theatre's venue in Almaty from 7 to 14 April 2024. Each year the festival has a new theme: About Love in 2022, Dramatis Persona in 2023, and in 2024 teenagers and young people, with conversations about growing up, inner dilemmas and relationships with friends and family. The programme brought companies from Almaty and Karaganda, Russia and Estonia: fairy tales, site-specific pieces, audio plays and solo shows, plus a directors' lab and a photo exhibition. The festival opened with Roman Boklanov's Beware of the Dog!"
           ]
         }
       },
@@ -2498,7 +2498,7 @@
         "production.theatre.city": "Almaty",
         "identity.synopsis": {
           "paragraphs": [
-            "Das dritte internationale Theaterfestival des Total Theatre fand vom 7. bis 14. April 2024 in dessen Spielstätte in Almaty statt. Das Programm war Inszenierungen für Jugendliche und junge Erwachsene aus Kasachstan, Russland, Österreich und Estland gewidmet, von Märchen und ortsspezifischen Arbeiten bis zu Hörspielen und Solostücken, dazu ein Regielabor und zwei Ausstellungen. Eröffnet wurde das Festival mit Roman Boklanovs „Vorsicht, bissiger Hund!“."
+            "Das III. Internationale Theaterfestival „Total Fest. Dialoge“ fand vom 7. bis 14. April 2024 in der Spielstätte des Total Theatre in Almaty statt. Jedes Jahr hat das Festival ein neues Thema: 2022 „Über die Liebe“, 2023 „Handelnde Person“, 2024 Jugendliche und junge Erwachsene, mit Gesprächen über das Erwachsenwerden, innere Dilemmata und Beziehungen zu Freunden und Familie. Im Programm waren Theater aus Almaty und Karaganda, Russland und Estland: Märchen, ortsspezifische Arbeiten, Hörspiele und Solostücke, dazu ein Regielabor und eine Fotoausstellung. Eröffnet wurde das Festival mit Roman Boklanovs „Vorsicht, bissiger Hund!“."
           ]
         }
       }
@@ -2553,6 +2553,24 @@
             "„Was willst du mal werden?“ – diese Frage stellen Erwachsene Kindern ständig. Doch was, wenn Eltern die Antwort gar nicht hören wollen und ihre eigenen Träume aufdrängen? Der Held, ein kleines Krokodil, das in einer Entenfamilie zur Welt kam, fragt sich: „Wer bin ich? Eine Ente oder ein grimmiges Krokodil? Oder gibt es noch etwas anderes?“ Eine Familiengeschichte über Liebe, Selbstfindung und Annahme, mit Platz für Lachen und Unfug, Philosophie und eine einfache Wahrheit: Wenn man jemanden liebt, ist es ganz egal, wie er aussieht oder was er tut."
           ]
         }
+      }
+    },
+    "lika-and-beam": {
+      "*": {
+        "production.theatre.country": "RU"
+      },
+      "ru": {
+        "production.theatre.city": "Москва",
+        "identity.title": "Лика и Луч",
+        "title": "Лика и Луч"
+      },
+      "en": {
+        "production.theatre.city": "Moscow",
+        "identity.title": "Lika and the Ray",
+        "title": "Lika and the Ray"
+      },
+      "de": {
+        "production.theatre.city": "Moskau"
       }
     }
   }
