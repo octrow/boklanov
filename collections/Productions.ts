@@ -951,22 +951,6 @@ export const Productions: CollectionConfig = {
                       en: 'Tradition or school the production traces back to. Missing one? Ask Daniil.'
                     }
                   }
-                },
-                {
-                  name: 'tags',
-                  type: 'text',
-                  hasMany: true,
-                  label: { ru: 'Теги', en: 'Tags' },
-                  admin: {
-                    // ponytail: hidden, not dropped — nothing on the site
-                    // reads tags (review №3, п. 3). Drop the column in a
-                    // migration once nobody misses it.
-                    hidden: true,
-                    description: {
-                      ru: 'Ключевые слова для поиска. Введите слово и нажмите Enter. Отличается от формы (жанр) и школы (традиция).',
-                      en: 'Search keywords. Type one and press Enter. Distinct from form (genre) and lineage (tradition).'
-                    }
-                  }
                 }
               ]
             }

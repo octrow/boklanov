@@ -378,10 +378,6 @@ export interface Production {
      * Tradition or school the production traces back to. Missing one? Ask Daniil.
      */
     lineage?: ('btk' | 'kudashov' | 'rgisi')[] | null;
-    /**
-     * Search keywords. Type one and press Enter. Distinct from form (genre) and lineage (tradition).
-     */
-    tags?: string[] | null;
   };
   team?: {
     creditsRu?:
@@ -855,7 +851,6 @@ export interface ProductionsSelect<T extends boolean = true> {
         role?: T;
         form?: T;
         lineage?: T;
-        tags?: T;
       };
   team?:
     | T

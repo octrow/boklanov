@@ -160,7 +160,6 @@ export interface Production {
   bookingCta: boolean
   bookingCtaLabel: { ru?: string; en?: string; de?: string | null } | null
   bookingCtaUrl: string | null
-  tags: string[]
   tour: L10nString[]
   tagline: { ru?: string; en?: string | null; de?: string | null } | null
   directorsNote: {
@@ -309,7 +308,7 @@ const asLexical = (
 
 /** Unwrap `{value: 'tag'}` entries from Payload array-of-text-with-named-field
  *  back to plain string arrays expected by the legacy Production interface. */
-// taxonomy form/lineage/tags: plain strings (hasMany select/text); the
+// taxonomy form/lineage: plain strings (hasMany select/text); the
 // `{ value }` rows are the pre-2026-10-08 array shape.
 const flatStringArr = (v: unknown): string[] =>
   asArray<unknown>(v)
@@ -486,7 +485,6 @@ function payloadDocToProduction(doc: AnyMap): Production {
       ? asL10n(settings.bookingCtaLabel)
       : null,
     bookingCtaUrl: asString(settings.bookingCtaUrl) || null,
-    tags: flatStringArr(taxonomy.tags),
     // Tour entries in Payload are `{ city: { ru, en, de } }`; legacy shape is
     // an array of L10nString. Flatten the wrapping field.
     tour: asArray<AnyMap>(history.tour).map((t) => asL10n(t.city)),
