@@ -173,6 +173,29 @@ body[data-active-locale='de'] {
   }
 }
 
+.locale-switch__item:active,
+.locale-switch__item--pending {
+  background: var(--theme-elevation-150);
+  color: var(--theme-text);
+}
+
+.locale-switch__item--pending {
+  cursor: progress;
+  animation: locale-pending 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes locale-pending {
+  to {
+    background: var(--theme-elevation-300);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locale-switch__item--pending {
+    animation: none;
+  }
+}
+
 /* Field help is real instructions; Payload's default grey reads 2.8:1. */
 .field-description {
   color: var(--theme-elevation-700);
