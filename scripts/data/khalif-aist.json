@@ -1,0 +1,133 @@
+{
+  "slug": "khalif-aist",
+  "posterUrl": "https://www.afisha.uz/uploads/media/2026/05/68365a63c5cfa9983b2f7b628f55c077.jpg",
+  "common": {
+    "status": "live",
+    "production": {
+      "year": 2026,
+      "ageRating": "6+",
+      "theatre": { "country": "UZ" }
+    },
+    "taxonomy": {
+      "role": ["director"],
+      "form": ["puppet", "family"],
+      "tags": ["puppet", "family show", "roman boklanov", "theater"]
+    },
+    "settings": { "bookingCta": false, "featured": false },
+    "team": {
+      "creditsRu": [
+        { "role": "Режиссёр", "name": "Роман Бокланов" },
+        { "role": "Инсценировка", "name": "Клава Ильина" },
+        { "role": "Художник-постановщик", "name": "Алина Корытова" },
+        { "role": "Художник по свету", "name": "Ксения Козлова" },
+        { "role": "Композитор", "name": "Алима Байтерекова" }
+      ],
+      "creditsEn": [
+        { "role": "Director", "name": "Roman Boklanov" },
+        { "role": "Adaptation", "name": "Klava Ilyina" },
+        { "role": "Production designer", "name": "Alina Korytova" },
+        { "role": "Lighting designer", "name": "Ksenia Kozlova" },
+        { "role": "Composer", "name": "Alima Bayterekova" }
+      ],
+      "creditsDe": [
+        { "role": "Regie", "name": "Roman Boklanov" },
+        { "role": "Bühnenfassung", "name": "Klava Ilyina" },
+        { "role": "Ausstattung", "name": "Alina Korytova" },
+        { "role": "Lichtdesign", "name": "Ksenia Kozlova" },
+        { "role": "Komposition", "name": "Alima Bayterekova" }
+      ]
+    },
+    "recognition": {
+      "press": [
+        {
+          "url": "https://oteatre.info/boklanov-v-uzbekistane/",
+          "outlet": "Театр.",
+          "language": "ru"
+        },
+        {
+          "url": "https://www.afisha.uz/ru/theatres/2026/05/18/xalif-aist",
+          "outlet": "Afisha.uz",
+          "language": "ru"
+        }
+      ]
+    }
+  },
+  "ru": {
+    "title": "Халиф-аист",
+    "identity": {
+      "title": "Халиф-аист",
+      "synopsis": {
+        "paragraphs": [
+          "Однажды молодого халифа поразила мысль о полёте, и с тех пор он потерял покой: мир вокруг стал чужим, а вся жизнь превратилась в поиск способа взлететь. Но, когда халиф наконец полетел, он узнал, что значит «летать» на самом деле. Спектакль по сказке Вильгельма Гауфа в инсценировке Клавы Ильиной — философская история о большой мечте, о том, как далеко она может увести от дома, и о поиске себя и своего места в мире.",
+          "Шестнадцать артистов играют около сорока персонажей. Для спектакля Алина Корытова придумала более тридцати кукол разных систем — от тонких теневых и планшетных до натуралистичных гигантов; театр кукол соединяется с драматическим, музыкальным и пластическим. Проект инициирован Фондом развития культуры и искусства Узбекистана."
+        ]
+      }
+    },
+    "production": {
+      "premiereDate": "1 июня 2026 г.",
+      "theatre": {
+        "name": "Узбекский национальный театр кукол",
+        "city": "Ташкент"
+      }
+    },
+    "recognition": {
+      "press": [
+        {
+          "title": "Роман Бокланов выпускает в Узбекистане премьеру о полёте и покинутом доме"
+        },
+        { "title": "Спектакль «Халиф-Аист»" }
+      ]
+    }
+  },
+  "en": {
+    "title": "Caliph Stork",
+    "identity": {
+      "title": "Caliph Stork",
+      "synopsis": {
+        "paragraphs": [
+          "One day a young caliph is struck by the thought of flight, and from then on he knows no peace: the world around him turns strange, and his whole life becomes a search for a way to take off. But when the caliph finally flies, he learns what flying really means. Based on Wilhelm Hauff's fairy tale in an adaptation by Klava Ilyina, the show is a philosophical story about a big dream, how far it can take you from home, and finding yourself and your place in the world.",
+          "Sixteen actors play some forty characters. Alina Korytova designed more than thirty puppets of different kinds for it, from delicate shadow and tabletop puppets to lifelike giants, and puppetry meets drama, music and movement. The project was initiated by the Art and Culture Development Foundation of Uzbekistan."
+        ]
+      }
+    },
+    "production": {
+      "premiereDate": "June 1, 2026",
+      "theatre": { "name": "Uzbek National Puppet Theatre", "city": "Tashkent" }
+    },
+    "recognition": {
+      "press": [
+        {
+          "title": "Roman Boklanov stages a premiere in Uzbekistan about flight and a home left behind"
+        },
+        { "title": "Caliph Stork" }
+      ]
+    }
+  },
+  "de": {
+    "title": "Kalif Storch",
+    "identity": {
+      "title": "Kalif Storch",
+      "synopsis": {
+        "paragraphs": [
+          "Eines Tages packt einen jungen Kalifen der Gedanke ans Fliegen, und seitdem findet er keine Ruhe mehr: Die Welt um ihn wird ihm fremd, sein ganzes Leben wird zur Suche nach einem Weg, sich in die Luft zu erheben. Doch als der Kalif endlich fliegt, erfährt er, was Fliegen wirklich bedeutet. Nach Wilhelm Hauffs Märchen in der Bühnenfassung von Klava Ilyina: eine philosophische Geschichte über einen großen Traum, wie weit er von zu Hause wegführen kann, und über die Suche nach sich selbst und dem eigenen Platz in der Welt.",
+          "Sechzehn Darsteller spielen rund vierzig Figuren. Alina Korytova hat dafür mehr als dreißig Puppen verschiedener Systeme entworfen, von zarten Schatten- und Tischpuppen bis zu naturgetreuen Riesen; Puppentheater verbindet sich mit Schauspiel, Musik und Bewegung. Initiiert wurde das Projekt von der Stiftung für Kunst- und Kulturentwicklung Usbekistans."
+        ]
+      }
+    },
+    "production": {
+      "premiereDate": "1. Juni 2026",
+      "theatre": {
+        "name": "Usbekisches Nationales Puppentheater",
+        "city": "Taschkent"
+      }
+    },
+    "recognition": {
+      "press": [
+        {
+          "title": "Roman Boklanov bringt in Usbekistan eine Premiere über das Fliegen und ein verlassenes Zuhause heraus"
+        },
+        { "title": "Kalif Storch" }
+      ]
+    }
+  }
+}
