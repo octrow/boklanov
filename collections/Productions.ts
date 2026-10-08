@@ -61,14 +61,24 @@ export const Productions: CollectionConfig = {
     plural: { ru: 'Спектакли', en: 'Productions' }
   },
   admin: {
+    // ponytail: the document heading stays the slug: useAsTitle can't be a
+    // nested field. A top-level title copy (migration + backfill) fixes it.
     useAsTitle: 'slug',
+    listSearchableFields: ['identity.title', 'slug'],
+    pagination: { defaultLimit: 50 },
     defaultColumns: [
+      'media.poster.src',
       'identity.title',
       'production.year',
-      'production.durationMin',
       'status',
       'settings.featured'
     ],
+    hideAPIURL: true,
+    components: {
+      edit: {
+        beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
+      }
+    },
     group: { ru: 'Контент', en: 'Content' },
     livePreview: {
       url: ({ data, locale }) => {
@@ -109,7 +119,7 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Основное', en: 'Main' },
           description: {
-            ru: 'Название, полный текст, слоган, синопсис и режиссёрская заметка.',
+            ru: 'Название, полный текст, подзаголовок, синопсис и записка режиссёра.',
             en: "Title, body, tagline, synopsis, and director's note."
           },
           fields: [
@@ -126,11 +136,11 @@ export const Productions: CollectionConfig = {
                   required: true,
                   admin: {
                     description: {
-                      ru: 'Название спектакля во всех трёх локалях. Показывается в карточке, на странице и в SEO-заголовке.',
-                      en: 'Production title in all three locales. Shown on cards, page, and SEO title.'
+                      ru: 'Название спектакля. Показывается в карточке, на странице и в заголовке вкладки браузера.',
+                      en: 'Production title. Shown on cards, the page, and the browser tab title.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -154,9 +164,7 @@ export const Productions: CollectionConfig = {
                       en: 'Full editorial body. H2/H3 headings, lists, blockquotes, links, and emphasis are supported.'
                     },
                     components: {
-                      beforeInput: [
-                        '/components/admin/LocalizedRichTextTabs#default'
-                      ]
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -183,9 +191,7 @@ export const Productions: CollectionConfig = {
                       en: 'Short hook line (≤80 chars) under the title. Bold, italic, and links supported.'
                     },
                     components: {
-                      beforeInput: [
-                        '/components/admin/LocalizedRichTextTabs#default'
-                      ]
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -203,13 +209,11 @@ export const Productions: CollectionConfig = {
                   }),
                   admin: {
                     description: {
-                      ru: 'Одно-два предложения, показываются на карточках продакшенов и в результатах поиска. 50–200 знаков. Поддерживается жирный, курсив, ссылки.',
+                      ru: 'Одно-два предложения, показываются на карточках спектаклей и в результатах поиска. 50–200 знаков. Поддерживается жирный, курсив, ссылки.',
                       en: 'One-or-two-sentence pitch shown on production cards and in search results. 50–200 chars. Bold, italic, and links supported.'
                     },
                     components: {
-                      beforeInput: [
-                        '/components/admin/LocalizedRichTextTabs#default'
-                      ]
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -227,13 +231,11 @@ export const Productions: CollectionConfig = {
                   }),
                   admin: {
                     description: {
-                      ru: 'Цитата от Романа — рендерится как blockquote на странице. Поддерживается жирный, курсив, ссылки.',
-                      en: 'Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.'
+                      ru: 'Слова Романа — на странице показываются как цитата. Поддерживается жирный, курсив, ссылки.',
+                      en: "Roman's words — shown as a quote on the page. Bold, italic, and links supported."
                     },
                     components: {
-                      beforeInput: [
-                        '/components/admin/LocalizedRichTextTabs#default'
-                      ]
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 }
@@ -248,7 +250,7 @@ export const Productions: CollectionConfig = {
               index: true,
               admin: {
                 description: {
-                  ru: 'Имя папки в content/productions/. Только нижний регистр и дефисы. После публикации лучше не менять — это часть публичного URL.',
+                  ru: 'Адрес страницы: boklanov.com/productions/<слаг>. Только латиница в нижнем регистре и дефисы. После публикации лучше не менять — старые ссылки перестанут работать.',
                   en: "Folder name in content/productions/. Lowercase + dashes only. Avoid changing after publish — it's part of the live URL."
                 }
               }
@@ -273,7 +275,7 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Постер', en: 'Poster' },
                   admin: {
                     description: {
-                      ru: 'Главное изображение продакшена — основа карточек, страницы и OG-картинки.',
+                      ru: 'Главное изображение спектакля — на карточках, на странице и в превью ссылки в мессенджерах.',
                       en: 'Primary image — used on cards, the production page, and the OG preview.'
                     }
                   },
@@ -284,13 +286,14 @@ export const Productions: CollectionConfig = {
                       label: { ru: 'Постер', en: 'Poster image' },
                       admin: {
                         description: {
-                          ru: 'Путь к постеру. Можно вписать вручную или нажать «Upload» в превью ниже. Пример: /productions/bury-me-behind-the-baseboard/poster.jpg',
-                          en: 'Path to the poster. Type manually or click "Upload" in the preview below. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg'
+                          ru: 'Путь к постеру. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/bury-me-behind-the-baseboard/poster.jpg',
+                          en: 'Path to the poster. Click "Загрузить" under the field or type the path. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg'
                         },
                         components: {
                           afterInput: [
                             '/components/admin/ImagePathPreview#ImagePathPreview'
-                          ]
+                          ],
+                          Cell: '/components/admin/ListCells#PosterCell'
                         }
                       }
                     },
@@ -331,8 +334,8 @@ export const Productions: CollectionConfig = {
                       },
                       admin: {
                         description: {
-                          ru: 'Путь, который переопределяет постер на карточке в /productions. Можно вписать или загрузить через «Upload». Пример: /productions/{slug}/cover.webp',
-                          en: 'Path that overrides the poster on the /productions card. Type manually or use Upload below. e.g. /productions/{slug}/cover.webp'
+                          ru: 'Заменяет постер на карточке в каталоге спектаклей. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/{slug}/cover.webp',
+                          en: 'Replaces the poster on the catalogue card. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/cover.webp'
                         },
                         components: {
                           afterInput: [
@@ -360,8 +363,8 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Обложка для главной', en: 'Homepage cover' },
                   admin: {
                     description: {
-                      ru: 'Опциональная замена productionsPhoto на ленте «Featured» главной. Каскад: featuredPhoto → productionsPhoto → poster.',
-                      en: 'Optional override on the home featured strip. Cascade: featuredPhoto → productionsPhoto → poster.'
+                      ru: 'Необязательно. Заменяет картинку спектакля на главной. Если пусто — берётся обложка для каталога, а если и её нет — постер.',
+                      en: 'Optional. Replaces the production image on the homepage. Falls back to the catalogue cover, then the poster.'
                     }
                   },
                   fields: [
@@ -374,8 +377,8 @@ export const Productions: CollectionConfig = {
                       },
                       admin: {
                         description: {
-                          ru: 'Путь, который переопределяет productionsPhoto на ленте «Featured» главной.',
-                          en: 'Path that overrides productionsPhoto on the home featured strip.'
+                          ru: 'Заменяет картинку спектакля на главной. Нажмите «Загрузить» под полем или впишите путь вручную.',
+                          en: 'Replaces the production image on the homepage.'
                         },
                         components: {
                           afterInput: [
@@ -410,7 +413,7 @@ export const Productions: CollectionConfig = {
                       RowLabel: '/components/admin/GalleryRowLabel#default'
                     },
                     description: {
-                      ru: 'Доп. фотографии продакшена. Порядок здесь = порядок на странице.',
+                      ru: 'Фотографии спектакля. Порядок здесь = порядок на странице.',
                       en: 'Extra production photos. Order here = order on the page.'
                     }
                   },
@@ -421,8 +424,8 @@ export const Productions: CollectionConfig = {
                       label: { ru: 'Путь к фото', en: 'Image path' },
                       admin: {
                         description: {
-                          ru: 'Путь к изображению. Можно вписать или загрузить через «Upload». Пример: /productions/{slug}/01.jpg',
-                          en: 'Path to the image. Type manually or use Upload below. e.g. /productions/{slug}/01.jpg'
+                          ru: 'Путь к изображению. Нажмите «Загрузить» под полем или впишите путь вручную. Пример: /productions/{slug}/01.jpg',
+                          en: 'Path to the image. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/01.jpg'
                         },
                         components: {
                           afterInput: [
@@ -453,7 +456,7 @@ export const Productions: CollectionConfig = {
                           en: 'Per-locale caption. Doubles as alt text for screen readers.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     }
@@ -472,7 +475,7 @@ export const Productions: CollectionConfig = {
                       RowLabel: '/components/admin/VideoRowLabel#default'
                     },
                     description: {
-                      ru: 'Видеовставки на странице продакшена.',
+                      ru: 'Видео на странице спектакля.',
                       en: 'Embedded videos on the production page.'
                     }
                   },
@@ -533,7 +536,7 @@ export const Productions: CollectionConfig = {
                       en: 'Free-form premiere date — fuzzy values like "Spring 2021" or "March 2021" are fine.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -602,11 +605,11 @@ export const Productions: CollectionConfig = {
                       localized: true,
                       admin: {
                         description: {
-                          ru: 'Полное название театра во всех трёх локалях.',
-                          en: 'Full theatre name in all three locales.'
+                          ru: 'Полное название театра.',
+                          en: 'Full theatre name.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -621,7 +624,7 @@ export const Productions: CollectionConfig = {
                           en: 'Shortened name (if any). Used in dense lists.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -636,7 +639,7 @@ export const Productions: CollectionConfig = {
                           en: 'City where the producing theatre is based.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -712,8 +715,8 @@ export const Productions: CollectionConfig = {
                       ],
                       admin: {
                         description: {
-                          ru: 'Страна театра-производителя. Добавь новые значения в options, если нужна страна вне списка.',
-                          en: 'Country of the producing theatre. Extend options[] when a new country is needed.'
+                          ru: 'Страна театра. Если нужной страны нет в списке, напишите Даниилу.',
+                          en: 'Country of the theatre. If it is missing from the list, ask Daniil.'
                         }
                       }
                     },
@@ -800,7 +803,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Форма', en: 'Form' },
                   labels: {
-                    singular: { ru: 'Форма', en: 'Form' },
+                    singular: { ru: 'Форму', en: 'Form' },
                     plural: { ru: 'Форма', en: 'Form' }
                   },
                   fields: [
@@ -825,7 +828,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Школа', en: 'Lineage' },
                   labels: {
-                    singular: { ru: 'Школа', en: 'Lineage' },
+                    singular: { ru: 'Школу', en: 'Lineage' },
                     plural: { ru: 'Школа', en: 'Lineage' }
                   },
                   fields: [
@@ -898,7 +901,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (RU)', en: 'Team (RU)' },
                   labels: {
-                    singular: { ru: 'Строка', en: 'Row' },
+                    singular: { ru: 'Строку', en: 'Row' },
                     plural: { ru: 'Команда (RU)', en: 'Team (RU)' }
                   },
                   admin: {
@@ -930,7 +933,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (EN)', en: 'Team (EN)' },
                   labels: {
-                    singular: { ru: 'Строка', en: 'Row' },
+                    singular: { ru: 'Строку', en: 'Row' },
                     plural: { ru: 'Команда (EN)', en: 'Team (EN)' }
                   },
                   admin: {
@@ -962,7 +965,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Команда (DE)', en: 'Team (DE)' },
                   labels: {
-                    singular: { ru: 'Строка', en: 'Row' },
+                    singular: { ru: 'Строку', en: 'Row' },
                     plural: { ru: 'Команда (DE)', en: 'Team (DE)' }
                   },
                   admin: {
@@ -1010,7 +1013,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Награды', en: 'Awards' },
                   labels: {
-                    singular: { ru: 'Награда', en: 'Award' },
+                    singular: { ru: 'Награду', en: 'Award' },
                     plural: { ru: 'Награды', en: 'Awards' }
                   },
                   admin: {
@@ -1034,7 +1037,7 @@ export const Productions: CollectionConfig = {
                           en: 'Name of the award or nomination.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1060,7 +1063,7 @@ export const Productions: CollectionConfig = {
                           en: 'Award category. If a specific person — phrase as "Best male performance — Maksim Morozov".'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1075,7 +1078,7 @@ export const Productions: CollectionConfig = {
                           en: 'City where the award was given.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1121,7 +1124,7 @@ export const Productions: CollectionConfig = {
                           en: 'Name of the festival.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1147,7 +1150,7 @@ export const Productions: CollectionConfig = {
                           en: 'Festival programme or section.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1162,7 +1165,7 @@ export const Productions: CollectionConfig = {
                           en: 'Festival city.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     }
@@ -1173,7 +1176,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Пресса', en: 'Press' },
                   labels: {
-                    singular: { ru: 'Публикация', en: 'Press item' },
+                    singular: { ru: 'Публикацию', en: 'Press item' },
                     plural: { ru: 'Пресса', en: 'Press' }
                   },
                   admin: {
@@ -1193,11 +1196,11 @@ export const Productions: CollectionConfig = {
                       localized: true,
                       admin: {
                         description: {
-                          ru: 'Заголовок публикации в трёх локалях.',
-                          en: 'Article headline in all three locales.'
+                          ru: 'Заголовок публикации.',
+                          en: 'Article headline.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1241,7 +1244,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'Внешние ссылки', en: 'External links' },
                   labels: {
-                    singular: { ru: 'Ссылка', en: 'Link' },
+                    singular: { ru: 'Ссылку', en: 'Link' },
                     plural: { ru: 'Внешние ссылки', en: 'External links' }
                   },
                   admin: {
@@ -1261,11 +1264,11 @@ export const Productions: CollectionConfig = {
                       localized: true,
                       admin: {
                         description: {
-                          ru: 'Что это за ссылка — текст для кнопки/ссылки в трёх локалях.',
-                          en: 'What the link represents — anchor text in all three locales.'
+                          ru: 'Текст ссылки — что увидит читатель.',
+                          en: 'Link text the reader sees.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1328,7 +1331,7 @@ export const Productions: CollectionConfig = {
                           en: 'Tour city.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     }
@@ -1339,7 +1342,7 @@ export const Productions: CollectionConfig = {
                   type: 'array',
                   label: { ru: 'История площадок', en: 'Venue history' },
                   labels: {
-                    singular: { ru: 'Серия', en: 'Run' },
+                    singular: { ru: 'Серию', en: 'Run' },
                     plural: { ru: 'История площадок', en: 'Venue history' }
                   },
                   admin: {
@@ -1363,7 +1366,7 @@ export const Productions: CollectionConfig = {
                           en: 'Name of the venue or theatre where the production ran.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1378,7 +1381,7 @@ export const Productions: CollectionConfig = {
                           en: 'City of this venue.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     },
@@ -1415,7 +1418,7 @@ export const Productions: CollectionConfig = {
                           en: 'Approximate count. Free-form — "60+", "more than 100", etc.'
                         },
                         components: {
-                          Field: '/components/admin/LocalizedText#default'
+                          afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
                     }
@@ -1428,8 +1431,8 @@ export const Productions: CollectionConfig = {
         {
           label: { ru: 'Настройки', en: 'Settings' },
           description: {
-            ru: 'Статус, бронирование, размещение на главной, тех-райдер, пресс-кит, Notion IDs.',
-            en: 'Status, booking CTA, home placement, tech rider, press kit, and Notion IDs.'
+            ru: 'Статус, бронирование, место на главной, тех-райдер, пресс-кит.',
+            en: 'Status, booking button, homepage placement, tech rider, press kit.'
           },
           fields: [
             {
@@ -1439,7 +1442,7 @@ export const Productions: CollectionConfig = {
               defaultValue: 'live',
               admin: {
                 description: {
-                  ru: 'Жизненный цикл продакшена. По умолчанию — «Идёт» (играется сейчас).',
+                  ru: 'Состояние спектакля. По умолчанию — «Идёт» (играется сейчас).',
                   en: 'Lifecycle of this production. Default is "Live" (currently running).'
                 }
               },
@@ -1471,8 +1474,8 @@ export const Productions: CollectionConfig = {
                   defaultValue: true,
                   admin: {
                     description: {
-                      ru: 'Когда выключено — страница продакшена скрывает кнопку «забронировать». Label и URL ниже игнорируются.',
-                      en: 'When off, the production page hides the booking call-to-action — label/URL below are ignored.'
+                      ru: 'Когда выключено — на странице спектакля нет кнопки «Заказать».',
+                      en: 'When off, the production page has no "Book" button.'
                     }
                   }
                 },
@@ -1487,11 +1490,11 @@ export const Productions: CollectionConfig = {
                         (siblingData as { bookingCta?: boolean })?.bookingCta
                       ),
                     description: {
-                      ru: 'Текст кнопки бронирования в трёх локалях. Если пусто — используется дефолтная фраза для каждой локали.',
-                      en: 'Booking-button text per locale. Falls back to the default phrase for each locale when blank.'
+                      ru: 'Текст кнопки бронирования. Если пусто — стандартная фраза.',
+                      en: 'Booking button text. Blank means the standard phrase.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -1505,8 +1508,8 @@ export const Productions: CollectionConfig = {
                         (siblingData as { bookingCta?: boolean })?.bookingCta
                       ),
                     description: {
-                      ru: 'Необязательно. Если пусто — кнопка ведёт на дефолтный mailto-адрес (см. lib/booking.ts).',
-                      en: 'Optional. Leave blank to fall back to the default mailto link (see lib/booking.ts).'
+                      ru: 'Необязательно. Если пусто — кнопка открывает письмо на основной адрес.',
+                      en: 'Optional. Blank opens an email to the main address.'
                     }
                   }
                 },
@@ -1515,9 +1518,12 @@ export const Productions: CollectionConfig = {
                   type: 'checkbox',
                   label: { ru: 'На главной', en: 'Featured' },
                   admin: {
+                    components: {
+                      Cell: '/components/admin/ListCells#FeaturedCell'
+                    },
                     description: {
-                      ru: 'Показывать на главной в featured-стрипе.',
-                      en: 'Surfaces this production on the home featured strip.'
+                      ru: 'Показывать спектакль в подборке на главной.',
+                      en: 'Show this production in the homepage selection.'
                     }
                   }
                 },
@@ -1556,8 +1562,8 @@ export const Productions: CollectionConfig = {
                   },
                   admin: {
                     description: {
-                      ru: 'Внешний URL на тех-райдер (PDF). Когда задан — на странице появляется ссылка «Тех. райдер» в TourRider.',
-                      en: 'External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the TourRider sheet on the page.'
+                      ru: 'Внешний URL на тех-райдер (PDF). Когда задан — на странице появляется ссылка «Тех. райдер» в блоке для организаторов.',
+                      en: 'External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the presenters block on the page.'
                     }
                   }
                 },
@@ -1567,8 +1573,8 @@ export const Productions: CollectionConfig = {
                   label: { ru: 'Пресс-кит', en: 'Press kit' },
                   admin: {
                     description: {
-                      ru: 'Внешний URL на пресс-кит (ZIP/PDF). Когда задан — на странице появляется ссылка «Пресс-кит» в TourRider.',
-                      en: 'External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the TourRider sheet on the page.'
+                      ru: 'Внешний URL на пресс-кит (ZIP/PDF). Когда задан — на странице появляется ссылка «Пресс-кит» в блоке для организаторов.',
+                      en: 'External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the presenters block on the page.'
                     }
                   }
                 },
@@ -1581,6 +1587,8 @@ export const Productions: CollectionConfig = {
                     en: 'Notion IDs (legacy)'
                   },
                   admin: {
+                    // Legacy cross-reference data; nothing to edit.
+                    hidden: true,
                     description: {
                       ru: 'Из старой Notion-CMS. По духу — read-only. Оставь как есть, если только не нужна повторная миграция.',
                       en: 'From the original Notion-based CMS. Read-only in spirit — leave as-is unless re-migrating.'

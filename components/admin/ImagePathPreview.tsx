@@ -5,7 +5,7 @@ import { useField, useFormFields } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
 
 /**
- * Thumbnail + Upload + Remove controls under any `src` text input that holds
+ * Thumbnail + Upload + Clear controls under any `src` text input that holds
  * an image path. Slotted via `admin.components.afterInput` on
  * Productions.media.*.src and gallery[].src.
  *
@@ -13,7 +13,9 @@ import type { TextFieldClientComponent } from 'payload'
  *          Directory is derived from the production slug:
  *            productions/<slug>/
  *          (the slug field lives at the top level of the productions doc).
- * Remove   DELETEs {src} to /api/r2-asset, then clears the field.
+ * Clear    empties the field only. Deleting files from R2 is left to ops:
+ *          one file can back several fields (poster and a cover), and a
+ *          delete here went live before Save (2026-10-08 admin critique).
  *
  * Reuses the existing R2-only upload endpoint (shipped 2026-05-06 per
  * STATUS.md §8.6) so we don't fork a parallel uploader. Path encoding
@@ -61,6 +63,7 @@ const buttonStyle: React.CSSProperties = {
   border: '1px solid var(--theme-elevation-200, #ddd)',
   borderRadius: 4,
   background: 'var(--theme-elevation-50, #fff)',
+  color: 'var(--theme-text)',
   cursor: 'pointer',
   lineHeight: 1.4
 }
@@ -88,7 +91,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
     if (!file) return
 
     setBusy(true)
-    setStatus('Uploading…')
+    setStatus('Загрузка…')
     try {
       const fd = new FormData()
       fd.append('file', file)
@@ -102,37 +105,14 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
         throw new Error(data.error ?? `HTTP ${res.status}`)
       }
       setValue(data.src)
-      setStatus(`Uploaded ${file.name}`)
-    } catch (err) {
       setStatus(
-        err instanceof Error ? `Error: ${err.message}` : 'Upload failed'
+        `Загружено: ${file.name}. Нажмите «Сохранить», чтобы файл появился на сайте.`
       )
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const onRemove = async () => {
-    if (!value) return
-    if (!confirm(`Remove ${value} from R2?`)) return
-
-    setBusy(true)
-    setStatus('Removing…')
-    try {
-      const res = await fetch('/api/r2-asset', {
-        method: 'DELETE',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ src: value })
-      })
-      const data = (await res.json()) as { removed?: boolean; error?: string }
-      if (!res.ok) {
-        throw new Error(data.error ?? `HTTP ${res.status}`)
-      }
-      setValue('')
-      setStatus('Removed')
     } catch (err) {
       setStatus(
-        err instanceof Error ? `Error: ${err.message}` : 'Remove failed'
+        `Ошибка: не удалось загрузить ${file.name}${
+          err instanceof Error ? ` (${err.message})` : ''
+        }. Попробуйте ещё раз.`
       )
     } finally {
       setBusy(false)
@@ -143,7 +123,9 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
     // Clears the field without touching R2. Use for "this production
     // shouldn't reference this image anymore but keep the file around."
     setValue('')
-    setStatus('Cleared (R2 untouched)')
+    setStatus(
+      'Поле очищено. Нажмите «Сохранить», чтобы убрать картинку с сайта.'
+    )
   }
 
   return (
@@ -155,31 +137,17 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
           disabled={busy}
           style={buttonStyle}
         >
-          Upload
+          Загрузить
         </button>
         {value ? (
-          <>
-            <button
-              type='button'
-              onClick={onClear}
-              disabled={busy}
-              style={buttonStyle}
-            >
-              Clear
-            </button>
-            <button
-              type='button'
-              onClick={onRemove}
-              disabled={busy}
-              style={{
-                ...buttonStyle,
-                color: '#a00',
-                borderColor: '#e6c0c0'
-              }}
-            >
-              Delete from R2
-            </button>
-          </>
+          <button
+            type='button'
+            onClick={onClear}
+            disabled={busy}
+            style={buttonStyle}
+          >
+            Очистить
+          </button>
         ) : null}
         <input
           ref={fileInputRef}
@@ -192,12 +160,13 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
 
       {status ? (
         <div
+          role='status'
           style={{
             marginTop: 6,
-            fontSize: 11,
-            color: status.startsWith('Error')
-              ? '#a00'
-              : 'var(--theme-elevation-500, #666)'
+            fontSize: 13,
+            color: status.startsWith('Ошибка')
+              ? 'var(--theme-error-600)'
+              : 'var(--theme-elevation-800)'
           }}
         >
           {status}
@@ -218,7 +187,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={url}
-            alt='preview'
+            alt={`Превью: ${value}`}
             style={{
               maxWidth: 240,
               maxHeight: 180,
@@ -228,7 +197,7 @@ export const ImagePathPreview: TextFieldClientComponent = ({ path }) => {
             onError={(e) => {
               const target = e.currentTarget
               target.style.opacity = '0.3'
-              target.title = `Image not reachable: ${url}`
+              target.title = `Картинка не открывается: ${url}`
             }}
           />
         </div>

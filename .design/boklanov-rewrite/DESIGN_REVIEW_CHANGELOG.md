@@ -361,6 +361,31 @@ The commit is in brackets.
     - the OG image route is checked on prod only: Next 16's `ImageResponse`
       refuses localhost image URLs, so it fails under `next start`.
 
+## Admin critique (17/40)
+
+43. `/impeccable critique admin` (2026-10-08, first run, 17/40, Poor):
+    `.impeccable/critique/2026-10-07T19-40-40Z__app-payload-admin.md`.
+    Decisions: everything goes through Save; one language switch; R2 delete
+    removed from the editor. Done in one pass:
+    - one save model: the autosave layer (debounced per-locale PATCH) and
+      the per-field RU/EN/DE/ALL pills are gone. Every field edits the page
+      locale and goes live on Save. ALL mode, which flattened rich text in
+      the other locales, went with them;
+    - `LocaleSwitch` (Русский / English / Deutsch) in every document header.
+      It is made of links, so Payload's «leave without saving» guard fires;
+      the stock header Localizer (router.push, no guard) is hidden;
+    - `LocaleHint` under each localized field: the RU original on EN/DE
+      pages, and «Нет перевода: EN, DE»;
+    - image fields: «Delete from R2» removed; Загрузить / Очистить, RU status
+      and errors that say a Save is still needed;
+    - Productions list: search by title, 50 per page, poster thumbnails,
+      «На главной: Да / —»; API tab and Notion IDs hidden;
+    - RU help texts rewritten without code paths and jargon; accusative
+      «Добавить Веху / Серию …»; field descriptions at readable contrast.
+      Not done: the document heading is still the slug (`useAsTitle` can't be
+      nested; needs a top-level title column + backfill). Sorting by year was
+      dropped: 25 of 55 productions have no year.
+
 ## Next
 
 - Done: the 68 gallery photos are on R2 (nikita, aiaccio, online: every image
@@ -371,10 +396,11 @@ The commit is in brackets.
   (vaikenemisen-kielioppi, 1280×720) reserves the right box. Admin uploads
   never had a Payload media doc to read it from. Backfilled on prod with
   `ops/2026-10-07-fill-poster-dims.sh`: 42 posters (2026-10-07). [64ea933]
-- `/impeccable critique admin` (never run).
-- After Next 16 (entry 42), check in the admin: a save shows on the site
-  within seconds; the RU/EN/DE locale switch on a localized text field moves
-  the visible input along.
+- Done: `/impeccable critique admin` (entry 43).
+- Check in the admin on prod (entries 42, 43): a save shows on the site
+  within seconds; the header language switch, and its unsaved-changes prompt.
+- Tell Roma: no autosave any more, everything needs «Сохранить»; the language
+  is chosen in the document header.
 - Done: the old Vercel project `octrows-projects/boklanov` (Keystatic) is
   disconnected from Git and no longer builds on push (2026-10-07).
 

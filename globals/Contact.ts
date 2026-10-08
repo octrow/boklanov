@@ -10,7 +10,13 @@ export const Contact: GlobalConfig = {
   slug: 'contact',
   label: { ru: 'Контакты', en: 'Contact' },
   admin: {
-    group: { ru: 'Контент', en: 'Content' }
+    hideAPIURL: true,
+    group: { ru: 'Контент', en: 'Content' },
+    components: {
+      elements: {
+        beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
+      }
+    }
   },
   access: {
     read: () => true,
@@ -31,7 +37,7 @@ export const Contact: GlobalConfig = {
           en: 'Optional intro paragraph above the contact buttons.'
         },
         components: {
-          Field: '/components/admin/LocalizedTextarea#default'
+          afterInput: ['/components/admin/LocaleHint#default']
         }
       }
     },

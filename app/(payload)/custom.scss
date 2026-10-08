@@ -100,36 +100,80 @@
   margin-top: 6px;
 }
 
-/* ----------------------------------------------------------------------
-   Команда tab — Option B from PAYLOAD_ADMIN_UX_PLAN.md §Round-2 R4.
-
-   Three parallel arrays (creditsRu / creditsEn / creditsDe) on the
-   Productions form are conditionally visible:
-   - switch mode + locale=ru → only --ru visible
-   - switch mode + locale=en → only --en visible
-   - switch mode + locale=de → only --de visible
-   - all mode               → all three visible (the default Команда tab look)
-
-   `data-locale-mode` is set by LocaleModeProvider.tsx.
-   `data-active-locale` is set by ActiveLocaleBodyAttr.tsx.
-   --------------------------------------------------------------------*/
-body[data-locale-mode='switch'][data-active-locale='ru'] {
+/* Команда tab: three parallel arrays (creditsRu / creditsEn / creditsDe)
+   on the Productions form. Only the page locale's array shows.
+   `data-active-locale` is set by ActiveLocaleBodyAttr.tsx. */
+body[data-active-locale='ru'] {
   .team-credits-locale--en,
   .team-credits-locale--de {
     display: none;
   }
 }
 
-body[data-locale-mode='switch'][data-active-locale='en'] {
+body[data-active-locale='en'] {
   .team-credits-locale--ru,
   .team-credits-locale--de {
     display: none;
   }
 }
 
-body[data-locale-mode='switch'][data-active-locale='de'] {
+body[data-active-locale='de'] {
   .team-credits-locale--ru,
   .team-credits-locale--en {
     display: none;
   }
+}
+
+/* ----------------------------------------------------------------------
+   Page language: LocaleSwitch (document header) is the one control.
+   The stock header Localizer switches via router.push, past Payload's
+   leave-without-saving guard, so unsaved edits could vanish; hidden.
+   --------------------------------------------------------------------*/
+.app-header .localizer {
+  display: none;
+}
+
+.locale-switch {
+  display: flex;
+  border: 1px solid var(--theme-elevation-250);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.locale-switch__item {
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--theme-elevation-800);
+  text-decoration: none;
+
+  & + & {
+    border-left: 1px solid var(--theme-elevation-250);
+  }
+
+  &:hover {
+    background: var(--theme-elevation-100);
+    color: var(--theme-text);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-text);
+    outline-offset: -2px;
+  }
+}
+
+.locale-switch__item--active {
+  background: var(--theme-text);
+  color: var(--theme-bg);
+  font-weight: 600;
+
+  &:hover {
+    background: var(--theme-text);
+    color: var(--theme-bg);
+  }
+}
+
+/* Field help is real instructions; Payload's default grey reads 2.8:1. */
+.field-description {
+  color: var(--theme-elevation-700);
 }

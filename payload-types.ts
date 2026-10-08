@@ -135,7 +135,7 @@ export interface Production {
   id: number;
   identity: {
     /**
-     * Production title in all three locales. Shown on cards, page, and SEO title.
+     * Production title. Shown on cards, the page, and the browser tab title.
      */
     title: string;
     /**
@@ -193,7 +193,7 @@ export interface Production {
       [k: string]: unknown;
     } | null;
     /**
-     * Quote from Roman — rendered as a blockquote on the page. Bold, italic, and links supported.
+     * Roman's words — shown as a quote on the page. Bold, italic, and links supported.
      */
     directorsNote?: {
       root: {
@@ -221,7 +221,7 @@ export interface Production {
      */
     poster?: {
       /**
-       * Path to the poster. Type manually or click "Upload" in the preview below. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
+       * Path to the poster. Click "Загрузить" under the field or type the path. e.g. /productions/bury-me-behind-the-baseboard/poster.jpg
        */
       src?: string | null;
       width?: number | null;
@@ -236,7 +236,7 @@ export interface Production {
      */
     productionsPhoto?: {
       /**
-       * Path that overrides the poster on the /productions card. Type manually or use Upload below. e.g. /productions/{slug}/cover.webp
+       * Replaces the poster on the catalogue card. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/cover.webp
        */
       src?: string | null;
       /**
@@ -245,11 +245,11 @@ export interface Production {
       credit?: string | null;
     };
     /**
-     * Optional override on the home featured strip. Cascade: featuredPhoto → productionsPhoto → poster.
+     * Optional. Replaces the production image on the homepage. Falls back to the catalogue cover, then the poster.
      */
     featuredPhoto?: {
       /**
-       * Path that overrides productionsPhoto on the home featured strip.
+       * Replaces the production image on the homepage.
        */
       src?: string | null;
       /**
@@ -263,7 +263,7 @@ export interface Production {
     gallery?:
       | {
           /**
-           * Path to the image. Type manually or use Upload below. e.g. /productions/{slug}/01.jpg
+           * Path to the image. Click "Загрузить" under the field or type the path. e.g. /productions/{slug}/01.jpg
            */
           src?: string | null;
           /**
@@ -319,7 +319,7 @@ export interface Production {
      */
     theatre?: {
       /**
-       * Full theatre name in all three locales.
+       * Full theatre name.
        */
       name?: string | null;
       /**
@@ -331,7 +331,7 @@ export interface Production {
        */
       city?: string | null;
       /**
-       * Country of the producing theatre. Extend options[] when a new country is needed.
+       * Country of the theatre. If it is missing from the list, ask Daniil.
        */
       country?:
         | (
@@ -487,7 +487,7 @@ export interface Production {
     press?:
       | {
           /**
-           * Article headline in all three locales.
+           * Article headline.
            */
           title?: string | null;
           /**
@@ -511,7 +511,7 @@ export interface Production {
     externalLinks?:
       | {
           /**
-           * What the link represents — anchor text in all three locales.
+           * Link text the reader sees.
            */
           label?: string | null;
           /**
@@ -570,19 +570,19 @@ export interface Production {
   status?: ('live' | 'in-development' | 'archived' | 'on-tour') | null;
   settings?: {
     /**
-     * When off, the production page hides the booking call-to-action — label/URL below are ignored.
+     * When off, the production page has no "Book" button.
      */
     bookingCta?: boolean | null;
     /**
-     * Booking-button text per locale. Falls back to the default phrase for each locale when blank.
+     * Booking button text. Blank means the standard phrase.
      */
     bookingCtaLabel?: string | null;
     /**
-     * Optional. Leave blank to fall back to the default mailto link (see lib/booking.ts).
+     * Optional. Blank opens an email to the main address.
      */
     bookingCtaUrl?: string | null;
     /**
-     * Surfaces this production on the home featured strip.
+     * Show this production in the homepage selection.
      */
     featured?: boolean | null;
     /**
@@ -594,11 +594,11 @@ export interface Production {
      */
     listOrder?: number | null;
     /**
-     * External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the TourRider sheet on the page.
+     * External URL to a tech-rider PDF. When set, a "Tech rider" link appears in the presenters block on the page.
      */
     techRider?: string | null;
     /**
-     * External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the TourRider sheet on the page.
+     * External URL to a press kit (ZIP/PDF). When set, a "Press kit" link appears in the presenters block on the page.
      */
     pressKit?: string | null;
     /**
@@ -625,7 +625,7 @@ export interface Production {
 export interface Media {
   id: number;
   /**
-   * Accessibility / SEO alt text, per locale.
+   * Image description for blind readers and search engines.
    */
   alt?: string | null;
   /**
@@ -1168,7 +1168,7 @@ export interface About {
    */
   portrait?: {
     /**
-     * Main portrait photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.
+     * Main portrait photo. Click "Загрузить" under the field or type the path.
      */
     src?: string | null;
     /**
@@ -1182,7 +1182,7 @@ export interface About {
   photos?:
     | {
         /**
-         * Additional photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.
+         * Additional photo. Click "Загрузить" under the field or type the path.
          */
         src?: string | null;
         /**
@@ -1193,7 +1193,7 @@ export interface About {
       }[]
     | null;
   /**
-   * Biographical timeline. Year + short label per locale.
+   * Biography timeline: year and a short description.
    */
   milestones?:
     | {
@@ -1202,7 +1202,7 @@ export interface About {
          */
         year?: number | null;
         /**
-         * Milestone description in all three locales.
+         * What happened that year.
          */
         label?: string | null;
         id?: string | null;
@@ -1218,7 +1218,7 @@ export interface About {
          */
         key?: string | null;
         /**
-         * Teacher / institution name in all three locales.
+         * Teacher or institution name.
          */
         name?: string | null;
         /**
@@ -1242,7 +1242,7 @@ export interface About {
   marginalia?:
     | {
         /**
-         * Short marginal note across three locales.
+         * Short note.
          */
         note?: string | null;
         id?: string | null;

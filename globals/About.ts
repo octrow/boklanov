@@ -15,7 +15,13 @@ export const About: GlobalConfig = {
   slug: 'about',
   label: { ru: 'Страница «О режиссёре»', en: 'About page' },
   admin: {
+    hideAPIURL: true,
     group: { ru: 'Контент', en: 'Content' },
+    components: {
+      elements: {
+        beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
+      }
+    },
     livePreview: {
       url: ({ locale }) => `/${locale.code}/about`
     }
@@ -68,9 +74,7 @@ export const About: GlobalConfig = {
                   en: 'Biography. H2/H3 headings, lists, blockquotes, links, and emphasis are supported. First paragraph is the lead (rendered prominently).'
                 },
                 components: {
-                  beforeInput: [
-                    '/components/admin/LocalizedRichTextTabs#default'
-                  ]
+                  afterInput: ['/components/admin/LocaleHint#default']
                 }
               }
             }
@@ -79,8 +83,8 @@ export const About: GlobalConfig = {
         {
           label: { ru: 'Визуал', en: 'Visuals' },
           description: {
-            ru: 'Общие изображения для всех локалей: портрет и галерея.',
-            en: 'Shared images across all locales: portrait and photo gallery.'
+            ru: 'Изображения общие для всех языков: портрет и галерея.',
+            en: 'Images shared by all languages: portrait and photo gallery.'
           },
           fields: [
             {
@@ -100,8 +104,8 @@ export const About: GlobalConfig = {
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
                     description: {
-                      ru: 'Главное портретное фото. Можно вписать вручную или нажать «Upload» в превью ниже. Путь в public/about/ или R2.',
-                      en: 'Main portrait photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.'
+                      ru: 'Главное портретное фото. Нажмите «Загрузить» под полем или впишите путь вручную.',
+                      en: 'Main portrait photo. Click "Загрузить" under the field or type the path.'
                     },
                     components: {
                       afterInput: [
@@ -147,8 +151,8 @@ export const About: GlobalConfig = {
                   label: { ru: 'Путь к фото', en: 'Image path' },
                   admin: {
                     description: {
-                      ru: 'Дополнительное фото. Можно вписать вручную или нажать «Upload» в превью ниже. Путь в public/about/ или R2.',
-                      en: 'Additional photo. Type manually or click "Upload" in the preview below. Path under public/about/ or R2.'
+                      ru: 'Дополнительное фото. Нажмите «Загрузить» под полем или впишите путь вручную.',
+                      en: 'Additional photo. Click "Загрузить" under the field or type the path.'
                     },
                     components: {
                       afterInput: [
@@ -184,7 +188,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Хронология', en: 'Timeline' },
               labels: {
-                singular: { ru: 'Веха', en: 'Milestone' },
+                singular: { ru: 'Веху', en: 'Milestone' },
                 plural: { ru: 'Хронология', en: 'Timeline' }
               },
               admin: {
@@ -192,8 +196,8 @@ export const About: GlobalConfig = {
                   RowLabel: '/components/admin/MilestoneRowLabel#default'
                 },
                 description: {
-                  ru: 'Биографическая таймлайн. Год + краткое описание на трёх языках.',
-                  en: 'Biographical timeline. Year + short label per locale.'
+                  ru: 'Хронология биографии: год и короткое описание.',
+                  en: 'Biography timeline: year and a short description.'
                 }
               },
               fields: [
@@ -215,11 +219,11 @@ export const About: GlobalConfig = {
                   localized: true,
                   admin: {
                     description: {
-                      ru: 'Описание вехи в трёх локалях.',
-                      en: 'Milestone description in all three locales.'
+                      ru: 'Что произошло в этот год.',
+                      en: 'What happened that year.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 }
@@ -230,7 +234,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Преемственность', en: 'Lineage' },
               labels: {
-                singular: { ru: 'Учитель', en: 'Mentor' },
+                singular: { ru: 'Учителя', en: 'Mentor' },
                 plural: { ru: 'Преемственность', en: 'Lineage' }
               },
               admin: {
@@ -249,7 +253,7 @@ export const About: GlobalConfig = {
                   label: { ru: 'Ключ', en: 'Key' },
                   admin: {
                     description: {
-                      ru: 'Стабильный slug-ключ (например, kudashov, btk). Общий для всех локалей.',
+                      ru: 'Короткий латинский ключ (например, kudashov, btk). Один для всех языков; после создания не менять.',
                       en: 'Stable slug key (e.g. kudashov, btk). Shared across locales.'
                     }
                   }
@@ -261,11 +265,11 @@ export const About: GlobalConfig = {
                   localized: true,
                   admin: {
                     description: {
-                      ru: 'Имя учителя / организации в трёх локалях.',
-                      en: 'Teacher / institution name in all three locales.'
+                      ru: 'Имя учителя или название организации.',
+                      en: 'Teacher or institution name.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -280,7 +284,7 @@ export const About: GlobalConfig = {
                       en: 'Role / relationship (master, rector, etc.).'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -295,7 +299,7 @@ export const About: GlobalConfig = {
                       en: 'Institution / theatre, if applicable.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 },
@@ -310,7 +314,7 @@ export const About: GlobalConfig = {
                       en: 'Optional note about the connection / influence.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 }
@@ -330,7 +334,7 @@ export const About: GlobalConfig = {
               type: 'array',
               label: { ru: 'Заметки', en: 'Notes' },
               labels: {
-                singular: { ru: 'Заметка', en: 'Note' },
+                singular: { ru: 'Заметку', en: 'Note' },
                 plural: { ru: 'Заметки', en: 'Notes' }
               },
               admin: {
@@ -350,11 +354,11 @@ export const About: GlobalConfig = {
                   localized: true,
                   admin: {
                     description: {
-                      ru: 'Короткая пометка в трёх локалях.',
-                      en: 'Short marginal note across three locales.'
+                      ru: 'Короткая пометка.',
+                      en: 'Short note.'
                     },
                     components: {
-                      Field: '/components/admin/LocalizedText#default'
+                      afterInput: ['/components/admin/LocaleHint#default']
                     }
                   }
                 }

@@ -22,7 +22,7 @@ The work of an independent director of puppet, object and children's theatre, wi
 ## Operating Context
 
 - The public site is read on mobile first, in RU, EN or DE.
-- Saving in the admin puts the edit on the site within seconds, without a deploy. There are no drafts. Localized text fields autosave about 1.5 s after typing stops, and Save stays grey for them. Other fields need Save.
+- Saving in the admin puts the edit on the site within seconds, without a deploy. There are no drafts and no autosave: every field, in every language, goes live only on Save. The page edits one language at a time, chosen in the document header (Русский / English / Deutsch); switching with unsaved changes asks first. On EN/DE pages each translatable field shows the RU original beneath it.
 - Glossary: `CONTEXT.md` (Saved, Published).
 
 ## Capabilities and Constraints

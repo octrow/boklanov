@@ -18,7 +18,13 @@ export const Media: CollectionConfig = {
     plural: { ru: 'Изображения', en: 'Images' }
   },
   admin: {
-    group: { ru: 'Медиатека', en: 'Media library' }
+    hideAPIURL: true,
+    group: { ru: 'Медиатека', en: 'Media library' },
+    components: {
+      edit: {
+        beforeDocumentControls: ['/components/admin/LocaleSwitch#default']
+      }
+    }
   },
   access: {
     read: () => true,
@@ -85,11 +91,11 @@ export const Media: CollectionConfig = {
       localized: true,
       admin: {
         description: {
-          ru: 'Alt-текст для доступности и SEO. По локалям.',
-          en: 'Accessibility / SEO alt text, per locale.'
+          ru: 'Описание изображения для незрячих читателей и поисковиков.',
+          en: 'Image description for blind readers and search engines.'
         },
         components: {
-          Field: '/components/admin/LocalizedText#default'
+          afterInput: ['/components/admin/LocaleHint#default']
         }
       }
     },

@@ -29,6 +29,7 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      label: { ru: 'Имя', en: 'Name' },
       admin: {
         description: {
           ru: 'Имя для отображения в шапке админки.',

@@ -98,17 +98,12 @@ export default buildConfig({
     meta: {
       titleSuffix: ' · boklanov.com'
     },
-    // Per-field locale UX (PAYLOAD_ADMIN_UX_PLAN.md §A.0–A.1 +
-    // §Round-2 R1).
-    // - `providers`: LocaleModeProvider wraps the admin tree, exposing
-    //   `useLocaleMode()` to every <LocalizedField>. Seeds itself from
-    //   localStorage and persists changes.
-    // - The header `actions` toggle was removed in Round-2: the mode
-    //   switch is now part of the per-field RU·EN·DE·ALL pill strip
-    //   rendered by `LocalizedTextLike` / `LocalizedRichTextTabs`.
+    // One save model: every field edits the page locale (LocaleSwitch in
+    // each document header) and Save writes it. LocalizedDocContext only
+    // reads all three locales for LocaleHint; ActiveLocaleBodyAttr gates
+    // the per-locale Команда arrays in custom.scss.
     components: {
       providers: [
-        '/components/admin/LocaleModeProvider#default',
         '/components/admin/LocalizedDocContext#default',
         '/components/admin/ActiveLocaleBodyAttr#default'
       ]
