@@ -2076,26 +2076,32 @@
     },
     "god-of-carnage": {
       "*": {
-        "production.year": 2025
+        "production.year": 2025,
+        "production.durationMin": 80,
+        "production.ticketsUrl": "https://8plus.nearyou.live/performance.php?h=1&i=31&l=ru",
+        "production.theatre.url": "https://8plus.nearyou.live/"
       },
       "ru": {
         "identity.synopsis": {
           "paragraphs": [
-            "Комедия Ясмины Реза. Две супружеские пары встречаются, чтобы уладить конфликт между своими детьми, но вежливый разговор быстро превращается в поле боя, где взрослые ведут себя хуже детей. Спектакль об искренности и фальши, любви и ненависти в современном обществе; идёт на русском языке с немецкими субтитрами."
+            "Комедия Ясмины Реза 2007 года, которая шла на многих сценах Европы и Америки и получила премию Лоренса Оливье. Две супружеские пары встречаются, чтобы уладить конфликт между своими детьми, но вежливый разговор быстро превращается в поле боя, где взрослые ведут себя хуже детей. Спектакль о добре и зле, любви и ненависти, искренности и фальши в современном обществе.",
+            "На русском языке с немецкими субтитрами, 80 минут без антракта."
           ]
         }
       },
       "en": {
         "identity.synopsis": {
           "paragraphs": [
-            "Yasmina Reza's comedy. Two married couples meet to settle a fight between their children, but the polite conversation soon turns into a battlefield where the adults behave worse than the kids. A show about sincerity and pretence, love and hate in today's society; performed in Russian with German surtitles."
+            "Yasmina Reza's 2007 comedy, staged across Europe and America and winner of the Laurence Olivier Award. Two married couples meet to settle a fight between their children, but the polite conversation soon turns into a battlefield where the adults behave worse than the kids. A show about good and evil, love and hate, sincerity and pretence in today's society.",
+            "In Russian with German surtitles, 80 minutes with no interval."
           ]
         }
       },
       "de": {
         "identity.synopsis": {
           "paragraphs": [
-            "Die Komödie von Yasmina Reza. Zwei Ehepaare treffen sich, um einen Streit zwischen ihren Kindern beizulegen, doch das höfliche Gespräch wird schnell zum Schlachtfeld, auf dem sich die Erwachsenen schlimmer benehmen als die Kinder. Ein Stück über Aufrichtigkeit und Heuchelei, Liebe und Hass in der heutigen Gesellschaft; auf Russisch mit deutschen Übertiteln."
+            "Die Komödie von Yasmina Reza aus dem Jahr 2007, gespielt auf vielen Bühnen Europas und Amerikas und ausgezeichnet mit dem Laurence Olivier Award. Zwei Ehepaare treffen sich, um einen Streit zwischen ihren Kindern beizulegen, doch das höfliche Gespräch wird schnell zum Schlachtfeld, auf dem sich die Erwachsenen schlimmer benehmen als die Kinder. Ein Stück über Gut und Böse, Liebe und Hass, Aufrichtigkeit und Heuchelei in der heutigen Gesellschaft.",
+            "Auf Russisch mit deutschen Übertiteln, 80 Minuten ohne Pause."
           ]
         }
       }
