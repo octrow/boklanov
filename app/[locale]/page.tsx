@@ -8,6 +8,7 @@ import { SiteHero } from '@/components/SiteHero'
 import { TourTicker } from '@/components/TourTicker'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { BASE_URL, PERSON_ID } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import { getAllProductions } from '@/lib/content'
 
@@ -23,6 +24,18 @@ export default async function HomePage({
   const t = await getTranslations('home')
   const tAbout = await getTranslations('about')
   const tProductions = await getTranslations('productions')
+  const tMeta = await getTranslations('meta')
+
+  // WebSite `name` is what Google shows as the site name in results.
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: tMeta('siteName'),
+    alternateName: ['Roman Boklanov', 'Роман Бокланов'],
+    url: `${BASE_URL}/`,
+    inLanguage: locale,
+    author: { '@id': PERSON_ID }
+  }
 
   const productions = await getAllProductions(locale)
 
@@ -77,6 +90,10 @@ export default async function HomePage({
 
   return (
     <main id='main' className={styles.page}>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       {lcpVariants && (
         <link
           rel='preload'

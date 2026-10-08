@@ -11,7 +11,7 @@ import type {
 import { IconArrowRight } from '@/components/IconArrowRight'
 import { Marginalia } from '@/components/Marginalia'
 import { SpecimenPlate } from '@/components/SpecimenPlate'
-import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { BASE_URL as BASE, DEFAULT_OG_IMAGE, PERSON_ID } from '@/lib/baseUrl'
 import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
@@ -185,15 +185,21 @@ export async function generateMetadata({
       title: name,
       description,
       url,
-      type: 'profile'
+      type: 'profile',
+      images: [DEFAULT_OG_IMAGE]
     }
   }
 }
 
-function personSchema(locale: Locale, description: string) {
+function personSchema(
+  locale: Locale,
+  description: string,
+  image: string | undefined
+) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': PERSON_ID,
     name: 'Roman Boklanov',
     alternateName: 'Роман Бокланов',
     jobTitle:
@@ -205,6 +211,7 @@ function personSchema(locale: Locale, description: string) {
     description,
     url: locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`,
     email: 'roman.boklanov@web.de',
+    image,
     sameAs: ['https://instagram.com/boklanovroman', 'https://t.me/roman7593']
   }
 }
@@ -233,7 +240,11 @@ export default async function AboutPage({
   const bodyNodes = (bodyState?.root?.children ?? []) as SerializedLexicalNode[]
   const [leadNode, ...restNodes] = bodyNodes
 
-  const schema = personSchema(locale, leadParagraphText)
+  const schema = personSchema(
+    locale,
+    leadParagraphText,
+    portraitUrl ?? undefined
+  )
 
   return (
     <main id='main' className={styles.page}>

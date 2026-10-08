@@ -20,7 +20,7 @@ import { TheatreSlate } from '@/components/TheatreSlate'
 import { TourRider } from '@/components/TourRider'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
-import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { BASE_URL as BASE, PERSON_ID } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import { bookingKind } from '@/lib/bookingKind'
 import { groupRuns, isArticle } from '@/lib/listRules'
@@ -73,6 +73,7 @@ function creativeWorkSchema(
     url: pageUrl,
     director: {
       '@type': 'Person',
+      '@id': PERSON_ID,
       name: 'Roman Boklanov',
       url: `${BASE}/about`
     }

@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 import { FilteredProductionsPanel } from '@/components/FilteredProductionsPanel'
 import { ProductionGrid } from '@/components/ProductionGrid'
 import type { Locale } from '@/i18n/routing'
-import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { BASE_URL as BASE, DEFAULT_OG_IMAGE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 
 import styles from './page.module.css'
@@ -34,7 +34,7 @@ export async function generateMetadata({
         ru: `${BASE}/ru/productions`
       }
     },
-    openGraph: { title, url, type: 'website' }
+    openGraph: { title, url, type: 'website', images: [DEFAULT_OG_IMAGE] }
   }
 }
 

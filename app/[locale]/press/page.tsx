@@ -6,7 +6,7 @@ import { EmptyState } from '@/components/EmptyState'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
-import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { BASE_URL as BASE, DEFAULT_OG_IMAGE } from '@/lib/baseUrl'
 import { getAllProductions } from '@/lib/content'
 import { languageName } from '@/lib/countryCode'
 
@@ -39,7 +39,7 @@ export async function generateMetadata({
         ru: `${BASE}/ru/press`
       }
     },
-    openGraph: { title, url, type: 'website' }
+    openGraph: { title, url, type: 'website', images: [DEFAULT_OG_IMAGE] }
   }
 }
 
