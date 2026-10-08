@@ -308,6 +308,16 @@ export default async function ProductionDetailPage({
       : null
   }))
 
+  // When LQIP dims are missing, fall back to 720 × 1019 — a typical
+  // theatrical-poster portrait (≈ 0.706 aspect).
+  const posterW = production.poster.width ?? 720
+  const posterH = production.poster.height ?? 1019
+  const posterAspect = posterW / posterH
+  // Mirrors `.cover img`: rendered width is the height cap × aspect (50vh on
+  // desktop, 65vh tablet). The old flat `640px` pulled 720w for a ~330px-wide
+  // desktop poster. Phones keep 90vw — the column, not the cap, binds there.
+  const posterSizes = `(min-width: 1024px) ${Math.round(50 * posterAspect)}vh, (min-width: 768px) ${Math.round(65 * posterAspect)}vh, 90vw`
+
   return (
     <main id='main' className={styles.page}>
       <script
@@ -319,7 +329,7 @@ export default async function ProductionDetailPage({
           rel='preload'
           as='image'
           imageSrcSet={`${cdnUrl(production.poster.variants.w420)} 420w, ${cdnUrl(production.poster.variants.w600)} 600w, ${cdnUrl(production.poster.variants.w720)} 720w, ${cdnUrl(production.poster.variants.w828)} 828w, ${cdnUrl(production.poster.variants.w1080)} 1080w`}
-          imageSizes='(min-width: 1024px) 640px, 90vw'
+          imageSizes={posterSizes}
           fetchPriority='high'
         />
       )}
@@ -336,23 +346,15 @@ export default async function ProductionDetailPage({
             production.poster.credit
           )
           const posterSrc = cdnUrl(production.poster.src)!
-          // 90vw (not 100vw) reflects the actual rendered width on mobile:
-          // .cover img caps at 65vh (45svh on phones), so a typical
-          // ~0.71-aspect portrait poster lands at ~92% of viewport width.
-          // 100vw made the variant picker round up to 828w when 720w fits.
-          const posterSizes = '(min-width: 1024px) 640px, 90vw'
           const variants = production.poster.variants
-          // width/height attrs reserve aspect pre-load (kills CLS) without
-          // overriding the natural aspect post-load (no `image-aspect-ratio`
-          // BP failure). When LQIP dims are missing, fall back to 720 × 1019
-          // — a typical theatrical-poster portrait (≈ 0.706 aspect). The
-          // browser only uses these as an intrinsic-ratio hint until the
-          // real image loads; post-load, the natural aspect wins regardless.
-          const posterW = production.poster.width ?? 720
-          const posterH = production.poster.height ?? 1019
           return (
             <PosterLightbox src={posterSrc} alt={alt}>
-              <figure className={styles.cover}>
+              <figure
+                className={styles.cover}
+                style={
+                  { '--poster-aspect': posterAspect } as React.CSSProperties
+                }
+              >
                 {variants ? (
                   // Pre-baked AVIF variants — bypass `/_next/image`. The
                   // detail-page poster is the LCP element on production

@@ -23,30 +23,31 @@
 }
 
 .cover img {
+  --cover-cap: 65vh;
   display: block;
-  max-width: 100%;
-  max-height: 65vh;
-  width: auto;
+  /* A definite width is what reserves space pre-load: with width/height both
+     auto the box is 0×0 until the file arrives (CLS 0.28 on desktop). Width =
+     cap × aspect (--poster-aspect, set from the width/height attrs in
+     page.tsx), so the height lands on the cap exactly. object-fit keeps a
+     poster whose real aspect differs from the stored dims undistorted. */
+  width: min(100%, calc(var(--cover-cap) * var(--poster-aspect, 0.706)));
   height: auto;
-  /* Space is reserved pre-load by width/height attributes on the <img>
-     (page.tsx). Browser uses those as an aspect hint until the real image
-     loads, then defers to the natural aspect — no CSS aspect-ratio override,
-     which would distort off-aspect posters and fail the `image-aspect-ratio`
-     Best-Practices audit. */
+  max-height: var(--cover-cap);
+  object-fit: contain;
   cursor: zoom-in;
 }
 
 /* Phones: a portrait poster at 65vh pushed the title out of the first screen. */
 @media (max-width: 767px) {
   .cover img {
-    max-height: 45svh;
+    --cover-cap: 45svh;
   }
 }
 
 /* Desktop: leave room for the title in the first screen (1440×900). */
 @media (min-width: 1024px) {
   .cover img {
-    max-height: 50vh;
+    --cover-cap: 50vh;
   }
 }
 
