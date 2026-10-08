@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prod run: posters, gallery photos and videos for 16 productions
+# Prod run: posters, gallery photos and videos for 17 productions
 # (scripts/add-media.ts with scripts/data/media-2026-10-09.json: images to R2
 # with AVIF variants, only where the production has none yet), then the
 # content patch additions (credits, synopses, age, duration, theatre links).
@@ -25,7 +25,7 @@ docker run --rm --network host -v ~/backups/boklanov:/b postgres:17-alpine \
   pg_dump -Fc "$PROD_URL" -f "/b/$DUMP"
 ls -lh ~/backups/boklanov/"$DUMP"
 
-echo "== 2. dry run (expect: 16 productions, no 'kept'/'!'; ~40 content changes)"
+echo "== 2. dry run (expect: 17 productions; 'kept' only for winter-when-i-grew-up, uber-den-zaun (done in the first run) and single (admin-filled); no '!'; ~46 content changes)"
 run scripts/add-media.ts "$MEDIA" | grep -E '^■|kept|!|write'
 run scripts/fill-content.ts "$PATCH" | grep -E '^  !|change\(s\)'
 

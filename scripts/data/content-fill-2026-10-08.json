@@ -2488,6 +2488,172 @@
           "url": null
         }
       ]
+    },
+    "snegurochka": {
+      "creditsRu": [
+        {
+          "role": "Режиссёр",
+          "name": "Галина Пьянова",
+          "url": null
+        },
+        {
+          "role": "Автор пьесы",
+          "name": "Александр Островский",
+          "url": null
+        },
+        {
+          "role": "Композитор",
+          "name": "Александр Маноцков",
+          "url": null
+        },
+        {
+          "role": "Художник",
+          "name": "Антон Болкунов",
+          "url": null
+        },
+        {
+          "role": "Художник по костюмам",
+          "name": "Елена Турчанинова",
+          "url": null
+        },
+        {
+          "role": "Режиссёр по пластике",
+          "name": "Олег Жуковский",
+          "url": null
+        },
+        {
+          "role": "Художник по свету",
+          "name": "Александр Рязанцев",
+          "url": null
+        },
+        {
+          "role": "Артист",
+          "name": "Роман Бокланов",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Director",
+          "name": "Galina Pyanova",
+          "url": null
+        },
+        {
+          "role": "Playwright",
+          "name": "Alexander Ostrovsky",
+          "url": null
+        },
+        {
+          "role": "Composer",
+          "name": "Alexander Manotskov",
+          "url": null
+        },
+        {
+          "role": "Designer",
+          "name": "Anton Bolkunov",
+          "url": null
+        },
+        {
+          "role": "Costume designer",
+          "name": "Elena Turchaninova",
+          "url": null
+        },
+        {
+          "role": "Movement director",
+          "name": "Oleg Zhukovsky",
+          "url": null
+        },
+        {
+          "role": "Lighting designer",
+          "name": "Alexander Ryazantsev",
+          "url": null
+        },
+        {
+          "role": "Performer",
+          "name": "Roman Boklanov",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Regie",
+          "name": "Galina Pyanova",
+          "url": null
+        },
+        {
+          "role": "Autor",
+          "name": "Alexander Ostrovsky",
+          "url": null
+        },
+        {
+          "role": "Komposition",
+          "name": "Alexander Manotskov",
+          "url": null
+        },
+        {
+          "role": "Ausstattung",
+          "name": "Anton Bolkunov",
+          "url": null
+        },
+        {
+          "role": "Kostüm",
+          "name": "Elena Turchaninova",
+          "url": null
+        },
+        {
+          "role": "Choreografie",
+          "name": "Oleg Zhukovsky",
+          "url": null
+        },
+        {
+          "role": "Lichtdesign",
+          "name": "Alexander Ryazantsev",
+          "url": null
+        },
+        {
+          "role": "Darsteller",
+          "name": "Roman Boklanov",
+          "url": null
+        }
+      ]
+    },
+    "single-one-on-the-moon": {
+      "creditsRu": [
+        {
+          "role": "Режиссёр",
+          "name": "Алёна Волкова",
+          "url": null
+        },
+        {
+          "role": "Артист",
+          "name": "Роман Бокланов",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Director",
+          "name": "Alyona Volkova",
+          "url": null
+        },
+        {
+          "role": "Performer",
+          "name": "Roman Boklanov",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Regie",
+          "name": "Alyona Volkova",
+          "url": null
+        },
+        {
+          "role": "Darsteller",
+          "name": "Roman Boklanov",
+          "url": null
+        }
+      ]
     }
   },
   "fields": {
