@@ -1763,6 +1763,114 @@
           "url": null
         }
       ]
+    },
+    "oskar-und-die-dame-in-rosa": {
+      "creditsRu": [
+        {
+          "role": "Режиссёр",
+          "name": "Роман Бокланов",
+          "url": null
+        },
+        {
+          "role": "Перевод",
+          "name": "Аннетт и Пауль Бэкер",
+          "url": null
+        },
+        {
+          "role": "Сценограф",
+          "name": "Алёна Хоффманн",
+          "url": null
+        },
+        {
+          "role": "Художественный руководитель",
+          "name": "Ольга Борисова",
+          "url": null
+        }
+      ],
+      "creditsEn": [
+        {
+          "role": "Director",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Translation",
+          "name": "Annette and Paul Becker",
+          "url": null
+        },
+        {
+          "role": "Stage design",
+          "name": "Alena Hoffmann",
+          "url": null
+        },
+        {
+          "role": "Cast",
+          "name": "Anna Handl",
+          "url": null
+        },
+        {
+          "role": "Cast",
+          "name": "Leyli Narimanova",
+          "url": null
+        },
+        {
+          "role": "Cast",
+          "name": "Tukaz Kulieva",
+          "url": null
+        },
+        {
+          "role": "Cast",
+          "name": "Yaroslava Kriesten",
+          "url": null
+        },
+        {
+          "role": "Artistic direction",
+          "name": "Olga Borissov",
+          "url": null
+        }
+      ],
+      "creditsDe": [
+        {
+          "role": "Regie",
+          "name": "Roman Boklanov",
+          "url": null
+        },
+        {
+          "role": "Übersetzung",
+          "name": "Annette und Paul Becker",
+          "url": null
+        },
+        {
+          "role": "Bühnenbild",
+          "name": "Alena Hoffmann",
+          "url": null
+        },
+        {
+          "role": "Besetzung",
+          "name": "Anna Handl",
+          "url": null
+        },
+        {
+          "role": "Besetzung",
+          "name": "Leyli Narimanova",
+          "url": null
+        },
+        {
+          "role": "Besetzung",
+          "name": "Tukaz Kulieva",
+          "url": null
+        },
+        {
+          "role": "Besetzung",
+          "name": "Yaroslava Kriesten",
+          "url": null
+        },
+        {
+          "role": "Künstlerische Leitung",
+          "name": "Olga Borissov",
+          "url": null
+        }
+      ]
     }
   },
   "fields": {
@@ -2168,19 +2276,25 @@
     },
     "oskar-und-die-dame-in-rosa": {
       "*": {
-        "production.year": 2023
+        "production.year": 2023,
+        "production.ageRating": "14+",
+        "production.ticketsUrl": "https://8plus.nearyou.live/performance.php?h=1&i=25&l=ru",
+        "production.theatre.url": "https://8plus.nearyou.live/"
       },
       "ru": {
         "production.theatre.city": "Вена",
-        "production.premiereDate": "30 ноября 2023 г."
+        "production.premiereDate": "30 ноября 2023 г.",
+        "production.theatre.name": "Театральная студия 8+"
       },
       "en": {
         "production.theatre.city": "Vienna",
-        "production.premiereDate": "November 30, 2023"
+        "production.premiereDate": "November 30, 2023",
+        "production.theatre.name": "Theatre Studio 8+"
       },
       "de": {
         "production.theatre.city": "Wien",
-        "production.premiereDate": "30. November 2023"
+        "production.premiereDate": "30. November 2023",
+        "production.theatre.name": "Theaterstudio 8+"
       }
     },
     "school-simulator": {
