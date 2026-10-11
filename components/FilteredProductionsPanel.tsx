@@ -388,7 +388,7 @@ export function FilteredProductionsPanel({
                   className={`${styles.chip} ${styles.countryTrigger} ${activeCountry !== null ? styles.chipActive : ''}`}
                   aria-haspopup='true'
                   aria-expanded={countryOpen}
-                  aria-controls='country-popover'
+                  aria-controls={countryOpen ? 'country-popover' : undefined}
                   onClick={() => setCountryOpen((v) => !v)}
                 >
                   <span className={styles.countryTriggerLabel}>

@@ -52,7 +52,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
           </span>
           {folio.sectionKey && (
             <>
-              <span className={styles.folioSep}>⟶</span>
+              <span>⟶</span>
               <span className={styles.folioSection}>
                 {t(folio.sectionKey as Parameters<typeof t>[0]).toUpperCase()}
               </span>
@@ -60,7 +60,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
           )}
           {folio.index && (
             <>
-              <span className={styles.folioSep}>⟶</span>
+              <span>⟶</span>
               <span className={styles.folioIndex}>{folio.index}</span>
             </>
           )}
