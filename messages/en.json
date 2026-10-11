@@ -13,7 +13,9 @@
     "siteName": "Roman Boklanov",
     "siteDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty.",
     "homeTitle": "Roman Boklanov — theatre director",
-    "homeDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty."
+    "homeDescription": "Theatre director - shows about people and things, for children, teenagers, and families. Working between Bremen, Vienna, and Almaty.",
+    "titleStaged": "staged by Roman Boklanov",
+    "titleWith": "with Roman Boklanov"
   },
   "home": {
     "heroMeta": "director · puppet theatre · theatre of objects",
@@ -72,7 +74,8 @@
     "availabilityOnTour": "On tour",
     "availabilityInDevelopment": "In development",
     "availabilityArchive": "Archive",
-    "metaDescription": "All productions by Roman Boklanov: puppet, object and drama theatre for children, teenagers and families. Filter by role, form, age, country."
+    "metaDescription": "All productions by Roman Boklanov: puppet, object and drama theatre for children, teenagers and families. Filter by role, form, age, country.",
+    "metaTitle": "Productions — Roman Boklanov, theatre director"
   },
   "archive": {
     "title": "archive",
@@ -81,7 +84,8 @@
     "colTitle": "title",
     "colTheatre": "theatre",
     "colRole": "role",
-    "metaDescription": "Full archive of Roman Boklanov's theatre work: every production, reading and performance, with theatres, cities and years."
+    "metaDescription": "Full archive of Roman Boklanov's theatre work: every production, reading and performance, with theatres, cities and years.",
+    "metaTitle": "Archive of works — Roman Boklanov, theatre director"
   },
   "contact": {
     "title": "contact",
@@ -103,20 +107,23 @@
     "copiedButton": "✓",
     "copyAria": "Copy email address",
     "copiedAria": "Copied",
-    "metaDescription": "Contact theatre director Roman Boklanov about productions, festival invitations, guest stagings or press — by email, Telegram or Instagram."
+    "metaDescription": "Contact theatre director Roman Boklanov about productions, festival invitations, guest stagings or press — by email, Telegram or Instagram.",
+    "metaTitle": "Contact Roman Boklanov, theatre director"
   },
   "press": {
     "title": "press",
     "empty": "No press materials",
     "originalNote": "Headlines are in English where a translation exists. Articles are in their original language, mostly Russian.",
-    "metaDescription": "Press about Roman Boklanov's productions: reviews, interviews and articles, grouped by production, with links to the originals."
+    "metaDescription": "Press about Roman Boklanov's productions: reviews, interviews and articles, grouped by production, with links to the originals.",
+    "metaTitle": "Press & reviews — Roman Boklanov, theatre director"
   },
   "awards": {
     "title": "awards & festivals",
     "empty": "No awards or festivals data",
     "awardsLabel": "prizes",
     "festivalsLabel": "festivals",
-    "metaDescription": "Awards and festivals of theatre director Roman Boklanov: 20+ prizes at Russian and international festivals, with productions and years."
+    "metaDescription": "Awards and festivals of theatre director Roman Boklanov: 20+ prizes at Russian and international festivals, with productions and years.",
+    "metaTitle": "Awards & festivals — Roman Boklanov, theatre director"
   },
   "productionDetail": {
     "watchListen": "Watch / listen",
@@ -163,7 +170,8 @@
     "stagedIn": "STAGED IN",
     "chronology": "chronology",
     "lineage": "lineage",
-    "deForthcoming": "Deutsche Übersetzung folgt"
+    "deForthcoming": "Deutsche Übersetzung folgt",
+    "metaTitle": "About Roman Boklanov, theatre director"
   },
   "notFound": {
     "title": "Roman Boklanov — page not found",

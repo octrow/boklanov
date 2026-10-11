@@ -25,10 +25,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'press' })
-  const tMeta = await getTranslations({ locale, namespace: 'meta' })
 
   const url = locale === 'en' ? `${BASE}/press` : `${BASE}/${locale}/press`
-  const title = `${tMeta('siteName')} — ${t('title')}`
+  const title = t('metaTitle')
 
   const description = t('metaDescription')
 

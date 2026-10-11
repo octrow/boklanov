@@ -25,6 +25,7 @@ import { cdnUrl } from '@/lib/cdn'
 import { bookingKind } from '@/lib/bookingKind'
 import { groupRuns, isArticle } from '@/lib/listRules'
 import { clampDescription } from '@/lib/metaDescription'
+import { productionTitle } from '@/lib/productionTitle'
 import {
   getAllProductions,
   getProduction,
@@ -33,9 +34,6 @@ import {
   type ProductionView
 } from '@/lib/content'
 import styles from './page.module.css'
-
-// Audit tools and SERPs cut titles past ~60 chars.
-const TITLE_MAX = 60
 
 // Map theatre country code to a BCP 47 language tag for inLanguage.
 function productionLanguage(country: string | undefined): string {
@@ -147,11 +145,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     production.synopsis?.trim() ||
       `${descriptionParts}. ${tMeta('siteDescription')}`
   )
-  // Long bilingual titles ("X (The Y)") overflow the ~60-char SERP slot;
-  // drop the name suffix rather than truncate the production title.
-  const fullTitle = `${production.title.trim()} — ${tMeta('siteName')}`
-  const title =
-    fullTitle.length > TITLE_MAX ? production.title.trim() : fullTitle
+  const own = production.title.trim()
+  const clash = (await getAllProductions(locale)).some(
+    (p) => p.slug !== slug && p.title.trim() === own
+  )
+  const title = productionTitle({
+    title: own,
+    roles: production.role,
+    year: production.year,
+    clash,
+    suffixStaged: tMeta('titleStaged'),
+    suffixWith: tMeta('titleWith'),
+    siteName: tMeta('siteName')
+  })
 
   return {
     title,

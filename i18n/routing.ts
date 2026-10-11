@@ -19,7 +19,10 @@ export const routing = defineRouting({
   // hreflang already ships as <link rel="alternate"> from each page's
   // metadata; the middleware's duplicate `Link:` header made crawlers report
   // every locale twice ("Hreflang: Multiple Entries").
-  alternateLinks: false
+  alternateLinks: false,
+  // Detection is off, so the NEXT_LOCALE cookie was never read — it only
+  // made every response set a cookie.
+  localeCookie: false
 })
 
 export type Locale = (typeof routing.locales)[number]

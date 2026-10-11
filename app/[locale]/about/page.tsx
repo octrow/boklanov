@@ -171,12 +171,8 @@ export async function generateMetadata({
   )
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
-  const name =
-    locale === 'ru'
-      ? 'Роман Бокланов — о режиссёре'
-      : locale === 'de'
-        ? 'Roman Boklanov — über'
-        : 'Roman Boklanov — about'
+  const tAbout = await getTranslations({ locale, namespace: 'about' })
+  const name = tAbout('metaTitle')
 
   return {
     title: name,

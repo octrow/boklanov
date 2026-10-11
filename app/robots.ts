@@ -8,7 +8,11 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/'
+      allow: '/',
+      // `/contact?show=<slug>` is the booking CTA on every production page:
+      // same content as /contact (canonical points there), but crawlers
+      // indexed ~100 copies of it as duplicate pages.
+      disallow: '/*?show='
     },
     sitemap: `${BASE}/sitemap.xml`
   }

@@ -13,7 +13,9 @@
     "siteName": "Roman Boklanov",
     "siteDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Familien. Zwischen Bremen, Wien und Almaty.",
     "homeTitle": "Roman Boklanov — Theaterregisseur",
-    "homeDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Familien. Zwischen Bremen, Wien und Almaty."
+    "homeDescription": "Theaterregisseur - Stücke über Menschen und Dinge, für Kinder, Jugendliche und Familien. Zwischen Bremen, Wien und Almaty.",
+    "titleStaged": "Inszenierung von Roman Boklanov",
+    "titleWith": "mit Roman Boklanov"
   },
   "home": {
     "heroMeta": "Regisseur · Figurentheater · Objekttheater",
@@ -72,7 +74,8 @@
     "availabilityOnTour": "Auf Tournee",
     "availabilityInDevelopment": "In Arbeit",
     "availabilityArchive": "Archiv",
-    "metaDescription": "Alle Inszenierungen von Roman Boklanov: Puppen-, Objekt- und Schauspieltheater für Kinder, Jugendliche und Familien. Filter nach Rolle und Land."
+    "metaDescription": "Alle Inszenierungen von Roman Boklanov: Puppen-, Objekt- und Schauspieltheater für Kinder, Jugendliche und Familien. Filter nach Rolle und Land.",
+    "metaTitle": "Inszenierungen — Roman Boklanov, Theaterregisseur"
   },
   "archive": {
     "title": "Archiv",
@@ -81,7 +84,8 @@
     "colTitle": "Titel",
     "colTheatre": "Theater",
     "colRole": "Rolle",
-    "metaDescription": "Vollständiges Archiv der Theaterarbeit von Roman Boklanov: alle Inszenierungen, Lesungen und Auftritte mit Theatern, Städten und Jahren."
+    "metaDescription": "Vollständiges Archiv der Theaterarbeit von Roman Boklanov: alle Inszenierungen, Lesungen und Auftritte mit Theatern, Städten und Jahren.",
+    "metaTitle": "Werkarchiv — Roman Boklanov, Theaterregisseur"
   },
   "contact": {
     "title": "Kontakt",
@@ -103,20 +107,23 @@
     "copiedButton": "✓",
     "copyAria": "E-Mail-Adresse kopieren",
     "copiedAria": "Kopiert",
-    "metaDescription": "Kontakt zu Roman Boklanov für Inszenierungen, Festivaleinladungen, Gastregie oder Presse — per E-Mail, Telegram oder Instagram."
+    "metaDescription": "Kontakt zu Roman Boklanov für Inszenierungen, Festivaleinladungen, Gastregie oder Presse — per E-Mail, Telegram oder Instagram.",
+    "metaTitle": "Kontakt — Roman Boklanov, Theaterregisseur"
   },
   "press": {
     "title": "Presse",
     "empty": "Keine Pressematerialien",
     "originalNote": "Überschriften sind übersetzt, wo eine Übersetzung vorliegt. Die Artikel sind in der Originalsprache, meist Russisch.",
-    "metaDescription": "Presse zu den Inszenierungen von Roman Boklanov: Kritiken, Interviews und Artikel, nach Inszenierung geordnet, mit Links zu den Originalen."
+    "metaDescription": "Presse zu den Inszenierungen von Roman Boklanov: Kritiken, Interviews und Artikel, nach Inszenierung geordnet, mit Links zu den Originalen.",
+    "metaTitle": "Presse & Kritiken — Roman Boklanov, Theaterregisseur"
   },
   "awards": {
     "title": "Auszeichnungen & Festivals",
     "empty": "Keine Auszeichnungs- oder Festivaldaten",
     "awardsLabel": "Preise",
     "festivalsLabel": "Festivals",
-    "metaDescription": "Auszeichnungen und Festivals des Regisseurs Roman Boklanov: über 20 Preise bei russischen und internationalen Festivals, mit Inszenierung und Jahr."
+    "metaDescription": "Auszeichnungen und Festivals des Regisseurs Roman Boklanov: über 20 Preise bei russischen und internationalen Festivals, mit Inszenierung und Jahr.",
+    "metaTitle": "Auszeichnungen & Festivals — Roman Boklanov"
   },
   "productionDetail": {
     "watchListen": "Ansehen / hören",
@@ -163,7 +170,8 @@
     "stagedIn": "INSZENIERTE IN",
     "chronology": "Chronologie",
     "lineage": "Tradition",
-    "deForthcoming": "Deutsche Übersetzung folgt"
+    "deForthcoming": "Deutsche Übersetzung folgt",
+    "metaTitle": "Über Roman Boklanov, Theaterregisseur"
   },
   "notFound": {
     "title": "Roman Boklanov — Seite nicht gefunden",
