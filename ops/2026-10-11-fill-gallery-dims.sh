@@ -29,8 +29,11 @@ ls -lh ~/backups/boklanov/"$DUMP"
 echo "== 2. dry run (~1 min; expect ~454 filled, 0 failed, no '!')"
 run
 
+# Drop keys typed while the ~1 min dry run was going, then ask.
+read -r -t 0.1 -n 10000 _ || true
 read -r -p "Write to prod? [y/N] " ok
-[[ $ok == y ]] || { echo "stopped, nothing written"; exit 0; }
+ok=$(tr -d '[:space:]' <<<"$ok")
+[[ ${ok,,} == y ]] || { printf 'stopped (got %q), nothing written\n' "$ok"; exit 0; }
 
 echo "== 3. apply"
 run --apply | tail -1
