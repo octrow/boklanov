@@ -34,8 +34,11 @@ export async function generateMetadata({
   const url = locale === 'en' ? `${BASE}/contact` : `${BASE}/${locale}/contact`
   const title = `${tMeta('siteName')} — ${t('title')}`
 
+  const description = t('metaDescription')
+
   return {
     title,
+    description,
     alternates: {
       canonical: url,
       languages: {
@@ -44,7 +47,13 @@ export async function generateMetadata({
         ru: `${BASE}/ru/contact`
       }
     },
-    openGraph: { title, url, type: 'website', images: [await getShareImage()] }
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+      images: [await getShareImage()]
+    }
   }
 }
 

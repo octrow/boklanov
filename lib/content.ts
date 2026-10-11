@@ -954,3 +954,25 @@ export const getProduction = cache(
     return hit ? project(hit, locale) : null
   }
 )
+
+/** Drop the fields cards never read before handing productions to a client
+ *  component: React serialises every prop into the inline RSC payload, and
+ *  the full list made /productions ship ~470 KB of inline JS. */
+export function toCardView(p: ProductionView): ProductionView {
+  return {
+    ...p,
+    body: null,
+    directorsNote: null,
+    credits: [],
+    gallery: [],
+    videos: [],
+    press: [],
+    awards: [],
+    festivals: [],
+    externalLinks: [],
+    runs: [],
+    tour: [],
+    lineage: [],
+    featuredPhoto: null
+  }
+}

@@ -8,7 +8,7 @@ import { ProductionGrid } from '@/components/ProductionGrid'
 import type { Locale } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import { getShareImage } from '@/lib/shareImage'
-import { getAllProductions } from '@/lib/content'
+import { getAllProductions, toCardView } from '@/lib/content'
 
 import styles from './page.module.css'
 
@@ -25,8 +25,11 @@ export async function generateMetadata({
     locale === 'en' ? `${BASE}/productions` : `${BASE}/${locale}/productions`
   const title = `${tMeta('siteName')} — ${t('title')}`
 
+  const description = t('metaDescription')
+
   return {
     title,
+    description,
     alternates: {
       canonical: url,
       languages: {
@@ -35,7 +38,13 @@ export async function generateMetadata({
         ru: `${BASE}/ru/productions`
       }
     },
-    openGraph: { title, url, type: 'website', images: [await getShareImage()] }
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+      images: [await getShareImage()]
+    }
   }
 }
 
@@ -48,7 +57,7 @@ export default async function ProductionsIndexPage({
   setRequestLocale(locale)
   const t = await getTranslations('productions')
   const tA11y = await getTranslations('accessibility')
-  const productions = await getAllProductions(locale)
+  const productions = (await getAllProductions(locale)).map(toCardView)
 
   // Sort: productions with explicit `listOrder` float to the top (ascending),
   // the rest follow in the default loadAll() order (year desc, slug).

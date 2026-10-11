@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import * as React from 'react'
 
-import type { ProductionView } from '@/lib/content'
+import { toCardView, type ProductionView } from '@/lib/content'
 
 import { DuotonePoster } from './DuotonePoster'
 import { ProductionCard } from './ProductionCard'
@@ -46,7 +46,7 @@ export async function FeaturedStrip({
         <li key={p.slug} className={styles.cell}>
           <DuotonePoster slug={p.slug}>
             <ProductionCard
-              production={p}
+              production={toCardView(p)}
               priority={priorityFirst && i === 0}
               sizes={FEATURED_SIZES[i] ?? FEATURED_SIZES[5]}
               coverPhoto={p.featuredPhoto ?? p.productionsPhoto ?? null}

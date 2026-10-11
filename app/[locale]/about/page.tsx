@@ -17,6 +17,7 @@ import { getAbout, type AboutData, type AboutL10n } from '@/lib/content'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { cdnUrl } from '@/lib/cdn'
+import { clampDescription } from '@/lib/metaDescription'
 
 import styles from './page.module.css'
 
@@ -165,7 +166,9 @@ export async function generateMetadata({
   // home meta blurb so `<meta name="description">` is always emitted (else the
   // SEO category drops to 92).
   const t = await getTranslations({ locale, namespace: 'meta' })
-  const description = leadParagraphText || t('homeDescription')
+  const description = clampDescription(
+    leadParagraphText || t('homeDescription')
+  )
 
   const url = locale === 'en' ? `${BASE}/about` : `${BASE}/${locale}/about`
   const name =

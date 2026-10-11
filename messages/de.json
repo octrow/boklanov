@@ -71,7 +71,8 @@
     "cardDuration": "{n} Min.",
     "availabilityOnTour": "Auf Tournee",
     "availabilityInDevelopment": "In Arbeit",
-    "availabilityArchive": "Archiv"
+    "availabilityArchive": "Archiv",
+    "metaDescription": "Alle Inszenierungen von Roman Boklanov: Puppen-, Objekt- und Schauspieltheater für Kinder, Jugendliche und Familien in Russland, Kasachstan, Deutschland, Österreich, Spanien, Finnland und Usbekistan. Filter nach Rolle, Form, Alter und Land."
   },
   "archive": {
     "title": "Archiv",
@@ -79,7 +80,8 @@
     "colYear": "Jahr",
     "colTitle": "Titel",
     "colTheatre": "Theater",
-    "colRole": "Rolle"
+    "colRole": "Rolle",
+    "metaDescription": "Vollständiges Archiv der Theaterarbeit von Roman Boklanov: alle Inszenierungen, Lesungen und Auftritte mit Theatern, Städten und Jahren — Puppen-, Objekt- und Schauspieltheater für Kinder, Jugendliche und Familien."
   },
   "contact": {
     "title": "Kontakt",
@@ -100,18 +102,21 @@
     "copyButton": "kopieren",
     "copiedButton": "✓",
     "copyAria": "E-Mail-Adresse kopieren",
-    "copiedAria": "Kopiert"
+    "copiedAria": "Kopiert",
+    "metaDescription": "Kontakt zum Theaterregisseur Roman Boklanov für neue Inszenierungen, Festivaleinladungen, Gastregie und Presseanfragen. Zwischen Bremen, Wien und Almaty — per E-Mail, Telegram oder Instagram."
   },
   "press": {
     "title": "Presse",
     "empty": "Keine Pressematerialien",
-    "originalNote": "Überschriften sind übersetzt, wo eine Übersetzung vorliegt. Die Artikel sind in der Originalsprache, meist Russisch."
+    "originalNote": "Überschriften sind übersetzt, wo eine Übersetzung vorliegt. Die Artikel sind in der Originalsprache, meist Russisch.",
+    "metaDescription": "Pressestimmen zu den Inszenierungen von Roman Boklanov: Kritiken, Interviews und Artikel, nach Inszenierung geordnet und mit Links zu den Originalen. Überschriften übersetzt, Artikel meist auf Russisch."
   },
   "awards": {
     "title": "Auszeichnungen & Festivals",
     "empty": "Keine Auszeichnungs- oder Festivaldaten",
     "awardsLabel": "Preise",
-    "festivalsLabel": "Festivals"
+    "festivalsLabel": "Festivals",
+    "metaDescription": "Auszeichnungen und Festivalteilnahmen des Theaterregisseurs Roman Boklanov: über 20 Preise bei russischen und internationalen Festivals, jeweils mit Inszenierung, Jahr und Stadt."
   },
   "productionDetail": {
     "watchListen": "Ansehen / hören",

@@ -10,7 +10,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { BASE_URL, PERSON_ID } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
-import { getAllProductions } from '@/lib/content'
+import { getAllProductions, toCardView } from '@/lib/content'
 
 import styles from './home.module.css'
 
@@ -153,7 +153,7 @@ export default async function HomePage({
           </Link>
         </div>
         <ProductionGrid
-          productions={directorProductions}
+          productions={directorProductions.map(toCardView)}
           emptyLabel={tProductions('empty')}
           duotoneAll
         />

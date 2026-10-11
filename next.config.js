@@ -60,8 +60,18 @@ export default withPayload(
       // preview deploys (`*.vercel.app`) only when the response has none, so
       // previews stay out of search and production is indexable by default.
       // Payload's admin is noindexed explicitly on every environment.
+      poweredByHeader: false,
       async headers() {
         return [
+          {
+            source: '/:path*',
+            headers: [
+              { key: 'X-Content-Type-Options', value: 'nosniff' },
+              // SAMEORIGIN, not DENY: Payload live preview iframes the site
+              // from /admin on the same origin.
+              { key: 'X-Frame-Options', value: 'SAMEORIGIN' }
+            ]
+          },
           {
             source: '/admin/:path*',
             headers: [{ key: 'x-robots-tag', value: 'noindex, nofollow' }]

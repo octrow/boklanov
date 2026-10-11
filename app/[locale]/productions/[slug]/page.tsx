@@ -24,6 +24,7 @@ import { BASE_URL as BASE, PERSON_ID } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import { bookingKind } from '@/lib/bookingKind'
 import { groupRuns, isArticle } from '@/lib/listRules'
+import { clampDescription } from '@/lib/metaDescription'
 import {
   getAllProductions,
   getProduction,
@@ -32,6 +33,9 @@ import {
   type ProductionView
 } from '@/lib/content'
 import styles from './page.module.css'
+
+// Audit tools and SERPs cut titles past ~60 chars.
+const TITLE_MAX = 60
 
 // Map theatre country code to a BCP 47 language tag for inLanguage.
 function productionLanguage(country: string | undefined): string {
@@ -136,9 +140,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ]
     .filter(Boolean)
     .join(' · ')
-  const description = production.synopsis?.trim() || descriptionParts
   const tMeta = await getTranslations({ locale, namespace: 'meta' })
-  const title = `${production.title.trim()} — ${tMeta('siteName')}`
+  // No synopsis → "Title · Theatre · Year" alone is too thin a snippet; pad it
+  // with the site blurb (the title keeps it unique per page).
+  const description = clampDescription(
+    production.synopsis?.trim() ||
+      `${descriptionParts}. ${tMeta('siteDescription')}`
+  )
+  // Long bilingual titles ("X (The Y)") overflow the ~60-char SERP slot;
+  // drop the name suffix rather than truncate the production title.
+  const fullTitle = `${production.title.trim()} — ${tMeta('siteName')}`
+  const title =
+    fullTitle.length > TITLE_MAX ? production.title.trim() : fullTitle
 
   return {
     title,
