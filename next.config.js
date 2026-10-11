@@ -69,7 +69,11 @@ export default withPayload(
               { key: 'X-Content-Type-Options', value: 'nosniff' },
               // SAMEORIGIN, not DENY: Payload live preview iframes the site
               // from /admin on the same origin.
-              { key: 'X-Frame-Options', value: 'SAMEORIGIN' }
+              { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+              {
+                key: 'Referrer-Policy',
+                value: 'strict-origin-when-cross-origin'
+              }
             ]
           },
           {

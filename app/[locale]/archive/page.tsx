@@ -37,6 +37,7 @@ export async function generateMetadata({
       canonical: url,
       languages: {
         en: `${BASE}/archive`,
+        'x-default': `${BASE}/archive`,
         de: `${BASE}/de/archive`,
         ru: `${BASE}/ru/archive`
       }

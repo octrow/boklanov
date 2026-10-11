@@ -39,6 +39,7 @@ export async function generateMetadata({
       canonical: url,
       languages: {
         en: `${BASE}/press`,
+        'x-default': `${BASE}/press`,
         de: `${BASE}/de/press`,
         ru: `${BASE}/ru/press`
       }

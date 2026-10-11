@@ -72,7 +72,7 @@
     "availabilityOnTour": "On tour",
     "availabilityInDevelopment": "In development",
     "availabilityArchive": "Archive",
-    "metaDescription": "All productions by Roman Boklanov: puppet, object and drama theatre for children, teenagers and families, staged in Russia, Kazakhstan, Germany, Austria, Spain, Finland and Uzbekistan. Filter by role, form, age and country."
+    "metaDescription": "All productions by Roman Boklanov: puppet, object and drama theatre for children, teenagers and families. Filter by role, form, age, country."
   },
   "archive": {
     "title": "archive",
@@ -81,7 +81,7 @@
     "colTitle": "title",
     "colTheatre": "theatre",
     "colRole": "role",
-    "metaDescription": "Complete archive of Roman Boklanov's theatre work: every staged production, reading and performance, with theatres, cities and years — puppet, object and drama theatre for children, teenagers and families."
+    "metaDescription": "Full archive of Roman Boklanov's theatre work: every production, reading and performance, with theatres, cities and years."
   },
   "contact": {
     "title": "contact",
@@ -103,20 +103,20 @@
     "copiedButton": "✓",
     "copyAria": "Copy email address",
     "copiedAria": "Copied",
-    "metaDescription": "Contact theatre director Roman Boklanov about new productions, festival invitations, guest stagings and press requests. Working between Bremen, Vienna and Almaty — by email, Telegram or Instagram."
+    "metaDescription": "Contact theatre director Roman Boklanov about productions, festival invitations, guest stagings or press — by email, Telegram or Instagram."
   },
   "press": {
     "title": "press",
     "empty": "No press materials",
     "originalNote": "Headlines are in English where a translation exists. Articles are in their original language, mostly Russian.",
-    "metaDescription": "Press coverage of Roman Boklanov's productions: reviews, interviews and articles, grouped by production, with links to the original publications. Headlines translated where available; articles mostly in Russian."
+    "metaDescription": "Press about Roman Boklanov's productions: reviews, interviews and articles, grouped by production, with links to the originals."
   },
   "awards": {
     "title": "awards & festivals",
     "empty": "No awards or festivals data",
     "awardsLabel": "prizes",
     "festivalsLabel": "festivals",
-    "metaDescription": "Awards and festival appearances of theatre director Roman Boklanov: 20+ prizes at Russian and international festivals, listed with the productions, years and cities behind each one."
+    "metaDescription": "Awards and festivals of theatre director Roman Boklanov: 20+ prizes at Russian and international festivals, with productions and years."
   },
   "productionDetail": {
     "watchListen": "Watch / listen",

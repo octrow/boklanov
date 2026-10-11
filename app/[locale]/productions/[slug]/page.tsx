@@ -160,6 +160,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: url,
       languages: {
         en: `${base}/productions/${slug}`,
+        'x-default': `${base}/productions/${slug}`,
         ru: `${base}/ru/productions/${slug}`,
         de: `${base}/de/productions/${slug}`
       }
@@ -307,9 +308,12 @@ export default async function ProductionDetailPage({
   // Gallery items are rendered twice — once in the mobile/tablet column
   // (`.inlineMedia`, hidden ≥1024px) and once in the desktop rail
   // (`.railMedia`, hidden <1024px). Same data both times — compute once.
-  const galleryItems = production.gallery.map((g) => ({
+  const galleryItems = production.gallery.map((g, i, all) => ({
     src: cdnUrl(g.src)!,
-    alt: pickL10n(g.caption, locale, ''),
+    // Most photos have no caption; an empty alt left 183 images unnamed.
+    alt:
+      pickL10n(g.caption, locale, '') ||
+      `${production.title} — ${tAccess('photoDialogOf', { index: i + 1, total: all.length })}`,
     credit: g.credit,
     variants: g.variants
       ? {

@@ -183,7 +183,11 @@ export async function generateMetadata({
     description,
     alternates: {
       canonical: url,
-      languages: { en: `${BASE}/about`, ru: `${BASE}/ru/about` }
+      languages: {
+        en: `${BASE}/about`,
+        'x-default': `${BASE}/about`,
+        ru: `${BASE}/ru/about`
+      }
     },
     openGraph: {
       title: name,

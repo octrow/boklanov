@@ -113,6 +113,9 @@ export function ProductionCard({
             srcSet={`${cdnUrl(variants.w420)} 420w, ${cdnUrl(variants.w600)} 600w, ${cdnUrl(variants.w720)} 720w, ${cdnUrl(variants.w828)} 828w, ${cdnUrl(variants.w1080)} 1080w`}
             sizes={sizes}
             alt={alt}
+            // Ratio hint only (matches the 4/5 .cover box); CSS sizes it.
+            width={600}
+            height={750}
             decoding='async'
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : undefined}

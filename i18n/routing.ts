@@ -15,7 +15,11 @@ export const routing = defineRouting({
   // i18n/navigation auto-prefixes with the active locale (read from the
   // pathname), so /de/about → /de/productions, etc. The choice persists for
   // the whole navigation session until the user switches again.
-  localeDetection: false
+  localeDetection: false,
+  // hreflang already ships as <link rel="alternate"> from each page's
+  // metadata; the middleware's duplicate `Link:` header made crawlers report
+  // every locale twice ("Hreflang: Multiple Entries").
+  alternateLinks: false
 })
 
 export type Locale = (typeof routing.locales)[number]

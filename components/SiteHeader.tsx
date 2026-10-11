@@ -1,9 +1,10 @@
 'use client'
 
+import NextLink from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import * as React from 'react'
 
-import { Link, usePathname } from '@/i18n/navigation'
+import { getPathname, Link, usePathname } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { folioFor } from '@/lib/folio'
 
@@ -28,6 +29,10 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
   const { toggle: toggleSearch } = React.useContext(CommandPaletteContext)
 
   const folio = folioFor(pathname, productions)
+  // next-intl's `<Link locale>` prefixes the default locale (`/en/about`) and
+  // relies on a middleware 307 to strip it; link to the final URL instead.
+  const localeHref = (loc: Locale) =>
+    getPathname({ href: pathname, locale: loc })
 
   const navLinks = [
     { href: '/productions' as const, label: t('productions') },
@@ -91,10 +96,10 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
             aria-label={tA11y('langSwitcher')}
           >
             {LOCALES.map((loc) => (
-              <Link
+              <NextLink
                 key={loc}
-                href={pathname}
-                locale={loc}
+                href={localeHref(loc)}
+                hrefLang={loc}
                 className={
                   loc === locale
                     ? `${styles.localeLink} ${styles.localeLinkActive}`
@@ -102,7 +107,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
                 }
               >
                 {loc.toUpperCase()}
-              </Link>
+              </NextLink>
             ))}
           </nav>
           <ThemeToggle />
@@ -171,10 +176,10 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
           ))}
           <div className={styles.mobileLocaleSwitcher}>
             {LOCALES.map((loc) => (
-              <Link
+              <NextLink
                 key={loc}
-                href={pathname}
-                locale={loc}
+                href={localeHref(loc)}
+                hrefLang={loc}
                 className={
                   loc === locale
                     ? `${styles.localeLink} ${styles.localeLinkActive}`
@@ -183,7 +188,7 @@ export function SiteHeader({ productions }: SiteHeaderProps) {
                 onClick={() => setMenuOpen(false)}
               >
                 {loc.toUpperCase()}
-              </Link>
+              </NextLink>
             ))}
             <ThemeToggle />
           </div>
