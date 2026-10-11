@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prod run: 7 press links stored as http:// switched to their https://
+# Prod run: 10 press links (11 rows) stored as http:// switched to their https://
 # twins (each verified to answer 200). Screaming Frog "Security: HTTP URLs".
 # Data: scripts/data/http-links-2026-10-11.tsv
 # From the repo root:
