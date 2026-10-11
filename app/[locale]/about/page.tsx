@@ -186,7 +186,8 @@ export async function generateMetadata({
       languages: {
         en: `${BASE}/about`,
         'x-default': `${BASE}/about`,
-        ru: `${BASE}/ru/about`
+        ru: `${BASE}/ru/about`,
+        de: `${BASE}/de/about`
       }
     },
     openGraph: {
