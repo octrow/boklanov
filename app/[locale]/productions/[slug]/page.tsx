@@ -323,7 +323,9 @@ export default async function ProductionDetailPage({
           w828: cdnUrl(g.variants.w828)!,
           w1080: cdnUrl(g.variants.w1080)!
         }
-      : null
+      : null,
+    width: g.width,
+    height: g.height
   }))
 
   // When LQIP dims are missing, fall back to 720 × 1019 — a typical

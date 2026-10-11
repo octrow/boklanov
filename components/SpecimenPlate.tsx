@@ -24,6 +24,10 @@ interface SpecimenPlateProps {
     w828: string
     w1080: string
   } | null
+  /** Pixel size when known: gives the browser the aspect ratio up front so
+   *  the plate doesn't shift the grid when the lazy image arrives. */
+  width?: number | null
+  height?: number | null
 }
 
 /**
@@ -43,7 +47,9 @@ export function SpecimenPlate({
   loading = 'lazy',
   sizes = '(min-width: 768px) 50vw, 90vw',
   quality,
-  variants
+  variants,
+  width,
+  height
 }: SpecimenPlateProps) {
   const indexLabel = `${String(plateNumber).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 
@@ -57,6 +63,8 @@ export function SpecimenPlate({
             srcSet={`${variants.w420} 420w, ${variants.w600} 600w, ${variants.w720} 720w, ${variants.w828} 828w, ${variants.w1080} 1080w`}
             sizes={sizes}
             alt={alt}
+            width={width ?? undefined}
+            height={height ?? undefined}
             decoding='async'
             loading={loading}
             style={{ width: '100%', height: 'auto' }}
@@ -65,8 +73,8 @@ export function SpecimenPlate({
           <Image
             src={src}
             alt={alt}
-            width={0}
-            height={0}
+            width={width ?? 0}
+            height={height ?? 0}
             sizes={sizes}
             quality={quality}
             loading={loading}

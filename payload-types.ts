@@ -273,6 +273,8 @@ export interface Production {
            * Per-locale caption. Doubles as alt text for screen readers.
            */
           caption?: string | null;
+          width?: number | null;
+          height?: number | null;
           id?: string | null;
         }[]
       | null;
@@ -817,6 +819,8 @@ export interface ProductionsSelect<T extends boolean = true> {
               src?: T;
               credit?: T;
               caption?: T;
+              width?: T;
+              height?: T;
               id?: T;
             };
         videos?:

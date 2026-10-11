@@ -9,6 +9,7 @@ import {
   revalidateProduction,
   revalidateProductionDelete
 } from '../hooks/revalidate'
+import { galleryDims } from '../hooks/galleryDims'
 import { posterDims } from '../hooks/posterDims'
 import { yearFromPremiereDate } from '../hooks/yearFromPremiereDate'
 
@@ -128,7 +129,7 @@ export const Productions: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user)
   },
   hooks: {
-    beforeChange: [posterDims],
+    beforeChange: [posterDims, galleryDims],
     afterChange: [revalidateProduction],
     afterDelete: [revalidateProductionDelete]
   },
@@ -546,7 +547,11 @@ export const Productions: CollectionConfig = {
                           afterInput: ['/components/admin/LocaleHint#default']
                         }
                       }
-                    }
+                    },
+                    // Pixel size, filled by the galleryDims hook when src
+                    // changes; the page reserves this box before load.
+                    { name: 'width', type: 'number', admin: { hidden: true } },
+                    { name: 'height', type: 'number', admin: { hidden: true } }
                   ]
                 },
                 {

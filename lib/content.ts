@@ -69,6 +69,9 @@ export interface GalleryItem {
   credit: string | null
   caption: { ru: string | null; en: string | null; de?: string | null }
   variants: ImageVariants | null
+  /** Stored by the galleryDims hook; null for photos not yet measured. */
+  width: number | null
+  height: number | null
 }
 
 export interface CreditEntry {
@@ -439,7 +442,9 @@ function payloadDocToProduction(doc: AnyMap): Production {
             en: cap.en ?? null,
             de: cap.de ?? null
           },
-          variants: buildVariants(src)
+          variants: buildVariants(src),
+          width: typeof g.width === 'number' ? g.width : null,
+          height: typeof g.height === 'number' ? g.height : null
         }
       }),
     videos: asArray<AnyMap>(media.videos).map((v) => ({

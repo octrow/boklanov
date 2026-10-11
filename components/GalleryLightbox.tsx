@@ -20,6 +20,8 @@ export interface GalleryItem {
     w828: string
     w1080: string
   } | null
+  width?: number | null
+  height?: number | null
 }
 
 // Phones show the first PREVIEW photos plus an "All N photos" button (CSS
@@ -109,6 +111,8 @@ export function GalleryLightbox({ items }: Props) {
               <SpecimenPlate
                 src={item.src}
                 variants={item.variants ?? null}
+                width={item.width}
+                height={item.height}
                 alt={item.alt}
                 credit={item.credit}
                 plateNumber={i + 1}
