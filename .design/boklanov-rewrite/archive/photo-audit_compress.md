@@ -1,6 +1,6 @@
 Full version (original): .design/boklanov-rewrite/archive/photo-audit.md
 Read log: 2026-04-30T15:18:34.556Z
-Set path: /home/octrow/develompent/boklanov/notion-data/Роман Бокланов/site map database
+Set path: ~/develompent/boklanov/notion-data/Роман Бокланов/site map database
 
 Assert states:
 records:56 img_nodes:32(57%) poster_nodes:4(7%) disk_imgs:419(250.6MB)

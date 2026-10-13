@@ -68,3 +68,6 @@ __pycache__/
 # for archaeology. Not used at build/run time (loader source = Payload/Postgres
 # since Phase 11). Safe to `rm -rf` locally to free disk.
 /notion-data/
+
+# private notes to the site owner
+/docs/for-roma-*.md

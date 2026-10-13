@@ -33,7 +33,7 @@ Keep for the boklanov /impeccable design work:
    - I can neither read nor write prod Neon. Local DB is docker pg17 on :5433 (container boklanov-db-1).
    - Dev server: run `NEXT_PUBLIC_IMAGE_VARIANTS_ENABLED=1 npx next dev -p 3010` with run_in_background.
      Never use `pkill -f` (it kills my own shell). After DB changes POST /api/revalidate, then wait 60 s.
-   - Playwright: /home/octrow/node_modules/playwright-core with
+   - Playwright: ~/node_modules/playwright-core with
      ~/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome. Use waitUntil 'load', not 'networkidle'.
    - lib/content.ts checkImagesInR2:
      - one ListObjectsV2 hides gallery rows whose file is missing;
