@@ -13,11 +13,7 @@ Next.js 15 (App Router) with Payload CMS 3 running in the same process, on Postg
 Three languages (EN, RU, DE), 56 productions, and Lighthouse 100/100/100/100 on the production site (measured
 2026-05-04).
 
-<p>
-  <img src=".github/assets/home.webp" alt="Home page: gradient wordmark, tour-city ticker, selected works" width="64%">
-  <img src=".github/assets/mobile.webp" alt="Home page in Russian on a 390 px phone" width="27%">
-</p>
-<img src=".github/assets/production.webp" alt="Production page: poster first, then title, award sticker and a facts table" width="64%">
+![Home page on desktop and on a 390 px phone (Russian): gradient wordmark, tour-city ticker, selected works](.github/assets/hero.webp)
 
 ## What's in it
 
@@ -33,6 +29,8 @@ Three languages (EN, RU, DE), 56 productions, and Lighthouse 100/100/100/100 on 
 - **SEO**: `hreflang` alternates, sitemap with a real `lastmod` per production, an RSS feed in RU and EN.
 - **Ops in CI**: a nightly encrypted database backup, a quarterly dead-link check of the live site.
 - Self-hosted fonts (Lora, Inter, JetBrains Mono, Unbounded), two themes (dark by default, light "paper").
+
+![Production page: poster first, then title, award sticker and a facts table](.github/assets/production.webp)
 
 ## Run it locally
 
