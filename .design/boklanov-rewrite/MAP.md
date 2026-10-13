@@ -11,7 +11,7 @@ Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 | 1   | `.design/boklanov-rewrite/STATUS.md`                       | Phase status, open tasks, next actions, constraints                                                                                                                                                                                                                            |   ~80 |
 | 2   | `.design/boklanov-rewrite/CONTENT.md`                      | Authoring workflow + frontmatter shape                                                                                                                                                                                                                                         |   ~80 |
 | 3   | `DESIGN.md`                                                | Visual identity + IA + tokens + anti-patterns                                                                                                                                                                                                                                  |  ~220 |
-| 4   | `readme.md`                                                | Stack, dev, deploy, doc map                                                                                                                                                                                                                                                    |   ~75 |
+| 4   | `docs/DEVELOPMENT.md`                                      | Stack, dev, deploy, doc map                                                                                                                                                                                                                                                    |   ~75 |
 | 5   | `.design/boklanov-rewrite/DESIGN_v2_PROPOSAL.md`           | Vitrine direction — 3 §11 unfreeze commits + 8 code phases, 6 components, decisions taken                                                                                                                                                                                      |  ~290 |
 | 6   | `.design/boklanov-rewrite/DESIGN_v3_PROPOSAL.md`           | Plakat direction (branch `design_v3`) — 9 §11 unfreezes, 10 phases, Bauhaus trio palette, Unbounded display, ALL CAPS wordmark, full DE                                                                                                                                        |  ~340 |
 | 7   | `.design/boklanov-rewrite/FEATURED_STRIP_GRID_RESEARCH.md` | Broken-grid root-cause + ranked options + subgrid / container-queries layers + implementation log for `<FeaturedStrip>` §2.4 re-attempt                                                                                                                                        |  ~570 |
@@ -23,7 +23,7 @@ Status: A=active, O=open, F=frozen archive, X=stale (none after reorg).
 Plus `.design/boklanov-rewrite/MAP.md` (this file) and `content/AUTHORING.ru.md` (Roman's RU day-to-day, owned by
 Roman).
 
-**Entry point:** `readme.md` -> `MAP.md` -> the doc you need.
+**Entry point:** `docs/DEVELOPMENT.md` -> `MAP.md` -> the doc you need.
 
 ## 2. Frozen archive (`.design/boklanov-rewrite/archive/`)
 
@@ -138,7 +138,7 @@ Update planning docs for the work just shipped. Read .design/boklanov-rewrite/MA
 
 5. MAP.md — only if an active doc was added, renamed, or moved (§1 + §3).
 
-6. readme.md — only if dev commands or stack moved.
+6. docs/DEVELOPMENT.md — only if dev commands or stack moved.
 
 Do NOT edit archive/*. If a locked D-decision or §11 anti-pattern is genuinely changing, that is a MAP.md §5 unfreeze event — flag it and ask, do not silently edit.
 Do NOT create new docs without appending to MAP.md §1 in the same commit.
@@ -157,7 +157,7 @@ Continuing the boklanov.com rewrite. Context order:
 2. Read .design/boklanov-rewrite/STATUS.md — current phase, open tasks, constraints, next actions, recent commits. Treat constraints as hard rules.
 3. Read .design/boklanov-rewrite/CONTENT.md only if the task touches authoring, frontmatter, Obsidian, R2, or images.
 4. Read DESIGN.md only if the task touches visual identity, tokens, IA, routes, motion, components, or anti-patterns.
-5. Skim readme.md for dev commands if you need to run anything.
+5. Skim docs/DEVELOPMENT.md for dev commands if you need to run anything.
 6. Open archive/<file>.md ONLY if you need a non-derivable answer (D-decision, R-review item, A-answer from Roman, 9-option matrix, per-route detail). archive/* is read-only history. Always read `*_compress.md` first; open the full original only if the compressed version lacks the specific detail.
 
 Hard rules (from STATUS.md Constraints, do not violate):

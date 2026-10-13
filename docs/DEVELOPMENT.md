@@ -185,7 +185,7 @@ GoFullPage + claude.ai. Workflow: `.design/review/WORKFLOW.md`.
 
 ## Docs
 
-Cold-read order: `readme.md` → `.design/boklanov-rewrite/MAP.md` → target doc.
+Cold-read order: `docs/DEVELOPMENT.md` → `.design/boklanov-rewrite/MAP.md` → target doc.
 
 | Doc                                                        | Role                                                                |
 | ---------------------------------------------------------- | ------------------------------------------------------------------- |
