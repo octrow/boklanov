@@ -56,7 +56,7 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "classnames": "^2.5.1",
-    "graphql": "^16.14.0",
+    "graphql": "^17.0.2",
     "next": "^16.4.0",
     "next-intl": "^4.11.0",
     "openai": "^6.35.0",
