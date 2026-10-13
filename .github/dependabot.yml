@@ -8,6 +8,11 @@ updates:
       npm:
         patterns: ['*']
         update-types: [minor, patch]
+    # Majors (TypeScript 7, graphql 17, ...) break the Payload/Lexical peer ranges;
+    # upgrade them by hand together with Payload.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
