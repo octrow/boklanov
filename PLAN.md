@@ -35,3 +35,4 @@ All other logic-map findings (#1-#6, #8-#15) are ✅ in [the plan](docs/plans/20
 - [docs/logic-map.md](docs/logic-map.md): request and admin-save flow, Known gaps
 - [docs/r2-operations.md](docs/r2-operations.md): R2 operations
 - [openspec/changes/keystatic-to-payload-cutover/](openspec/changes/keystatic-to-payload-cutover/): open cutover change
+- [docs/skills-roadmap-2026-11-05.md](docs/skills-roadmap-2026-11-05.md): навыки с рынка вакансий, 2 пункта: TS strict + bundle budget + Playwright e2e на 3 локали; Neon PITR restore как CI-джоб
