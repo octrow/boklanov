@@ -56,8 +56,7 @@ tsconfig.tsbuildinfo
 .cache/translate/
 
 # runtime cache mirrored into R2 (cache/preview, cache/recordmap from older
-# code paths). The backup-r2-to-git workflow allowlists image prefixes only,
-# but this guard keeps it out of git locally too.
+# code paths); this guard keeps it out of git.
 /public/cache/
 
 # python bytecode (from skill scripts)

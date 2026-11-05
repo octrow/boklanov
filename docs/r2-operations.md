@@ -36,22 +36,9 @@ Paid rates (if exceeded): Class A $4.50 / million · Class B $0.36 / million · 
 
 Before the May 2026 refactor the script called `HeadObjectCommand` per file (315 files → 315 Class B per run). Now it does one `ListObjectsV2` (Class A) and compares locally.
 
-### `.github/workflows/backup-r2-to-git.yml` (runs on push to `main` paths `content/**`, daily cron 03:00 UTC, or manual dispatch)
+### R2 to git mirror (removed)
 
-Mirrors R2 → `public/` so git stays the eventual source of truth for
-editor-uploaded media. Replaces the older `sync-r2.yml` (which went
-the opposite direction; deleted after the R2-only migration — see
-[`KEYSTATIC_R2_ONLY_PLAN.md`](../.design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md)).
-
-| Operation                 | API call        | Class | Count per run    |
-| ------------------------- | --------------- | ----- | ---------------- |
-| List bucket for diff      | `ListObjectsV2` | A     | 1                |
-| Download new/changed file | `GetObject`     | B     | N new files only |
-
-The script (`scripts/backup-r2-to-git.ts`) allowlists prefixes
-(`productions/`, `about/`, `uploads/`) plus image extensions before
-downloading, so non-media R2 objects don't churn through Class B
-operations or land in `public/`.
+`.github/workflows/backup-r2-to-git.yml` and `scripts/backup-r2-to-git.ts` no longer exist (the workflow was never in the repo after the Payload cutover). R2 is the only copy of editor-uploaded media: back the bucket up on the Cloudflare side if a copy is needed.
 
 ### `app/api/r2-asset/route.ts` (Payload editor upload, fires per editor click)
 
@@ -87,8 +74,8 @@ Primary sources:
 
 Pace estimate after the R2-only migration (2026-05-06):
 
-- **Class A**: 1 ListObjectsV2 per `backup-r2-to-git` run + 1 PutObject per editor upload. Push-triggered backup ≈ N runs/month following editor saves (likely ≤ 30); daily cron adds ~30 runs/month. Editor uploads ≈ ≤ 30 PutObjects/month. Total ≈ 60–100 Class A/month.
-- **Class B**: 1 GetObject per new file per backup run. With one or two new uploads per backup-triggering save, ≪ 100/month.
+- **Class A**: 1 PutObject per editor upload, ≤ 30/month (the mirror that used to add ListObjectsV2 runs is gone).
+- **Class B**: ≈ 0 (no mirror downloads).
 
 Both well under 1 % of the free tier.
 

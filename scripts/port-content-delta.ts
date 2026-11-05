@@ -22,7 +22,7 @@
  * admin would be undone, hence opt-in and listed separately as `+`.
  *
  * Dry run by default; writes only with --apply. Revalidation hooks are skipped
- * (`disableRevalidate`), so redeploy or revalidate after applying.
+ * (`disableRevalidate`), so run `npm run revalidate` after applying.
  * See openspec/changes/keystatic-to-payload-cutover.
  */
 

@@ -115,28 +115,7 @@ overwrite, non-image, >25 MB. Renamed from `/api/keystatic-asset` once Payload b
 
 ## Translate
 
-`scripts/translate-content.ts` predates Phase 11 and still operates on the disk YAML/MDX layout. After the Payload swap
-there is no on-disk content to translate. The script is kept for one-off backfills if Payload exports are dumped back
-to disk; in normal operation, translate in `/admin` directly. Original spec preserved below for completeness.
-
-Fill missing `en`/`de`/`ru` fields across `content/productions/*/index.yaml`, `body.{ru,en,de}.md`, `content/about/*`.
-Source priority `ru → en → de`. Fill-only by default — never overwrites existing prose. Translates every `L10nString`
-field including `awards`, `festivals`, `externalLinks`, `theatre.name`, `runs[]`, `press[].title`. Verbatim-only:
-scalars, URLs, slugs, ISO codes, enums (`form`, `lineage`, `role`, `ageRating`, `tags`), asset paths, `credits[].name`.
-
-```bash
-set -a && source .env && set +a
-npm run translate-content -- --report                      # gap inventory; no API calls
-npm run translate-content -- --dry-run --slug <slug>
-npm run translate-content                                  # full run, fill-only
-npm run translate-content -- --target de --only fields
-npm run translate-content -- --budget 2 --limit 10
-npm run translate-content -- --force --slug <slug>         # overwrite
-```
-
-Provider auto-detected by env: `ANTHROPIC_API_KEY` > `CEREBRAS_API_KEY` > `OPENROUTER_API_KEY` > `GEMINI_API_KEY`.
-Override `--provider <name>`. Cache `.cache/translate/` (gitignored). Spec:
-`.design/boklanov-rewrite/TRANSLATE_PLAN.md`.
+Translate in `/admin` directly. The old `translate-content` script (disk YAML/MDX layout) was removed with the Payload cutover.
 
 ## Theme
 
