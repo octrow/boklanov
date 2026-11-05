@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
+import { formatRoles } from '@/lib/roleLabels'
 import { getShareImage } from '@/lib/shareImage'
 import { getAllProductions } from '@/lib/content'
 
@@ -62,6 +63,7 @@ export default async function ArchivePage({
   setRequestLocale(locale)
 
   const t = await getTranslations('archive')
+  const tProductions = await getTranslations('productions')
   const productions = await getAllProductions(locale)
 
   // Long-tail CV: exclude director role; sort year asc for chronological doc feel.
@@ -105,7 +107,9 @@ export default async function ArchivePage({
                     .filter(Boolean)
                     .join(', ') || '—'}
                 </td>
-                <td className={styles.tdRole}>{prod.role}</td>
+                <td className={styles.tdRole}>
+                  {formatRoles(prod.role, tProductions)}
+                </td>
               </tr>
             ))}
           </tbody>

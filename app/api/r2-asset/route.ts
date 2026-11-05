@@ -23,12 +23,9 @@
  *   - Overwrites are allowed (dev experiments are ephemeral).
  *
  * Prod (Vercel): R2 upload only.
- *   - Binaries no longer land in the GitHub repo synchronously. The
- *     .github/workflows/backup-r2-to-git.yml workflow mirrors R2 -> public/
- *     on a schedule + content-push so git stays the eventual source of
- *     truth (see .design/boklanov-rewrite/KEYSTATIC_R2_ONLY_PLAN.md). The
- *     same workflow also removes public/ files no longer in R2, so an
- *     editor remove-then-save propagates into git asynchronously.
+ *   - Binaries do not land in the GitHub repo. R2 is the source of truth
+ *     (no R2 -> public/ mirror runs; the old backup-r2-to-git workflow and
+ *     script were removed, see docs/plans/2026-11-05-logic-map-fixes.md #5).
  *
  * Required env vars:
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
@@ -38,6 +35,8 @@
 import { NextResponse } from 'next/server'
 import { writeFile, mkdir, unlink } from 'node:fs/promises'
 import path from 'node:path'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { uploadFilename } from '@/lib/translit'
 
 import {
@@ -57,8 +56,8 @@ const ALLOWED_EXT = new Set([
   '.svg',
   '.avif'
 ])
-// Mirror of scripts/backup-r2-to-git.ts. Limits which prefixes the editor
-// can write to and (more importantly) delete from, so a malformed src
+// Limits which prefixes the editor can delete from (the editor-managed
+// media tree), so a malformed src
 // can't reach into anything outside the editor-managed media tree.
 const ALLOWED_DELETE_PREFIXES = ['productions/', 'about/', 'uploads/']
 const PUBLIC_ROOT = path.resolve(process.cwd(), 'public')
@@ -186,10 +185,28 @@ function decomposeSrc(
 }
 
 // ---------------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------------
+
+/** The route sits outside the proxy matcher (`api` is skipped), so each
+ *  handler checks the Payload admin session cookie itself. */
+async function hasAdminSession(req: Request): Promise<boolean> {
+  const payload = await getPayload({ config })
+  const { user } = await payload.auth({ headers: req.headers })
+  return Boolean(user)
+}
+
+function unauthorized() {
+  return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+}
+
+// ---------------------------------------------------------------------------
 // Route handlers
 // ---------------------------------------------------------------------------
 
 export async function POST(req: Request) {
+  if (!(await hasAdminSession(req))) return unauthorized()
+
   let form: FormData
   try {
     form = await req.formData()
@@ -233,8 +250,7 @@ export async function POST(req: Request) {
   const buffer = Buffer.from(await file.arrayBuffer())
 
   // ── Production ────────────────────────────────────────────────────────────
-  // R2 only. The new .github/workflows/backup-r2-to-git.yml workflow is the
-  // path that gets the binary into git, asynchronously and batched.
+  // R2 only: nothing mirrors the binary into git.
   if (process.env.NODE_ENV === 'production') {
     try {
       await uploadToR2(buffer, r2Key, contentType)
@@ -338,6 +354,8 @@ async function deleteVariantsInline(r2Key: string): Promise<number | null> {
 }
 
 export async function DELETE(req: Request) {
+  if (!(await hasAdminSession(req))) return unauthorized()
+
   let body: unknown
   try {
     body = await req.json()
@@ -361,9 +379,7 @@ export async function DELETE(req: Request) {
   const src = `/${r2Key}`
 
   // ── Production ────────────────────────────────────────────────────────────
-  // R2 only. The backup-r2-to-git workflow notices the orphan in public/
-  // (file present in git, no matching key in R2) and removes it on its
-  // next run, so the deletion lands in git asynchronously.
+  // R2 only: no public/ copy is touched.
   if (process.env.NODE_ENV === 'production') {
     try {
       await deleteFromR2(r2Key)

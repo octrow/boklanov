@@ -253,7 +253,7 @@ type L10nObj = { ru?: string; en?: string; de?: string }
 /** Normalise Payload's `locale: 'all'` response — already an object — to the
  *  L10nString-ish shape used by the existing Production interface. Strips
  *  null sub-values (Payload returns null for empty localized fields). */
-const asL10n = (v: unknown): L10nObj => {
+export const asL10n = (v: unknown): L10nObj => {
   if (v == null) return {}
   if (typeof v === 'string') return { ru: v, en: v, de: v }
   if (typeof v !== 'object') return {}
@@ -261,7 +261,8 @@ const asL10n = (v: unknown): L10nObj => {
   const out: L10nObj = {}
   for (const l of ['ru', 'en', 'de'] as const) {
     const val = o[l]
-    const text = typeof val === 'string' ? val : lexicalToText(val) || null
+    // "" counts as missing, so the fallback chain moves on.
+    const text = (typeof val === 'string' ? val : lexicalToText(val)) || null
     if (text !== null) out[l] = text
   }
   return out
@@ -291,9 +292,22 @@ const asArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
 const isEditorState = (v: unknown): v is SerializedEditorState =>
   typeof v === 'object' && v !== null && 'root' in v
 
+/** An editor state counts only when it holds something: any non-paragraph
+ *  node, or a paragraph with text. The default Payload writes for a blank
+ *  field (root with no or only empty paragraphs) is "missing". */
+const hasEditorContent = (v: SerializedEditorState): boolean => {
+  const children = (v.root as { children?: { type?: string }[] }).children
+  return (children ?? []).some(
+    (c) => c.type !== 'paragraph' || lexicalToText({ root: c }) !== ''
+  )
+}
+
+const asEditorState = (v: unknown): SerializedEditorState | null =>
+  isEditorState(v) && hasEditorContent(v) ? v : null
+
 /** Extract per-locale Lexical SerializedEditorState objects from a Payload
  *  `locale: 'all'` response for a localized richText field. */
-const asLexical = (
+export const asLexical = (
   v: unknown
 ): {
   ru?: SerializedEditorState | null
@@ -303,9 +317,9 @@ const asLexical = (
   if (v == null || typeof v !== 'object') return {}
   const o = v as Record<string, unknown>
   return {
-    ru: isEditorState(o.ru) ? o.ru : null,
-    en: isEditorState(o.en) ? o.en : null,
-    de: isEditorState(o.de) ? o.de : null
+    ru: asEditorState(o.ru),
+    en: asEditorState(o.en),
+    de: asEditorState(o.de)
   }
 }
 
@@ -547,7 +561,12 @@ function readLqip(slug: string): {
 async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
   const { S3Client, ListObjectsV2Command } = await import('@aws-sdk/client-s3')
   const bucket = process.env.S3_BUCKET
-  if (!bucket || !process.env.S3_ENDPOINT) return null
+  if (!bucket || !process.env.S3_ENDPOINT) {
+    console.warn(
+      '[content] S3_BUCKET / S3_ENDPOINT unset, skipping image checks'
+    )
+    return null
+  }
   const client = new S3Client({
     endpoint: process.env.S3_ENDPOINT,
     region: process.env.S3_REGION || 'auto',

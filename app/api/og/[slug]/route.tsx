@@ -9,6 +9,7 @@ import * as React from 'react'
 import type { Locale } from '@/i18n/routing'
 import { routing } from '@/i18n/routing'
 import { getProduction } from '@/lib/content'
+import { absolutePosterUrl, satoriCanDraw } from '@/lib/posterUrl'
 
 // Node runtime — needed for fs-based content + font loading.
 export const runtime = 'nodejs'
@@ -106,12 +107,15 @@ export async function GET(
     .filter(Boolean)
     .join(' · ')
 
-  // Absolute poster URL — constructed from request origin so preview deploys work.
-  // satori only handles JPEG/PNG; webp silently renders blank, so skip those.
+  // Absolute poster URL — CDN first (admin uploads live in R2 only), request
+  // origin otherwise so local and preview deploys work. satori only handles
+  // JPEG/PNG; webp and avif silently render blank, so skip those.
   const { origin } = new URL(request.url)
   const posterSrc = production.poster.src
   const posterUrl =
-    posterSrc && !posterSrc.endsWith('.webp') ? `${origin}${posterSrc}` : null
+    posterSrc && satoriCanDraw(posterSrc)
+      ? absolutePosterUrl(posterSrc, origin)
+      : null
 
   // ── Text rail (right side) ──────────────────────────────────────────────
   const textRail = (

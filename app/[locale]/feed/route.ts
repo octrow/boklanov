@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server'
 import { BASE_URL as BASE } from '@/lib/baseUrl'
 import type { Locale } from '@/i18n/routing'
 import { getAllProductions } from '@/lib/content'
+import { cdata, xmlEscape } from '@/lib/xml'
 
 function localeBase(locale: Locale): string {
   return locale === 'en' ? BASE : `${BASE}/${locale}`
@@ -40,15 +41,14 @@ export async function GET(
     .map((p) => {
       const url = `${base}/productions/${p.slug}`
       const pubDate = p.year ? new Date(p.year, 0, 1).toUTCString() : ''
-      const synopsis = p.synopsis ? p.synopsis.replace(/&/g, '&amp;') : ''
       return [
         '    <item>',
-        `      <title><![CDATA[${p.title}]]></title>`,
+        `      <title>${cdata(p.title)}</title>`,
         `      <link>${url}</link>`,
         `      <guid isPermaLink="true">${url}</guid>`,
         pubDate ? `      <pubDate>${pubDate}</pubDate>` : '',
-        synopsis
-          ? `      <description><![CDATA[${synopsis}]]></description>`
+        p.synopsis
+          ? `      <description>${cdata(p.synopsis)}</description>`
           : '',
         '    </item>'
       ]
@@ -60,9 +60,9 @@ export async function GET(
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${feedTitle}</title>
+    <title>${xmlEscape(feedTitle)}</title>
     <link>${base}</link>
-    <description>${feedDesc}</description>
+    <description>${xmlEscape(feedDesc)}</description>
     <language>${locale}</language>
     <atom:link href="${base}/feed" rel="self" type="application/rss+xml"/>
 ${items}

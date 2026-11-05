@@ -4,6 +4,7 @@
  */
 
 import type { ProductionView } from './content'
+import { isArticle } from './listRules'
 
 export type SearchItem =
   | {
@@ -64,7 +65,7 @@ export function buildSearchIndex(productions: ProductionView[]): SearchItem[] {
 
     // Press
     for (const item of prod.press) {
-      if (!item.title) continue
+      if (!item.title || !isArticle(item.url)) continue
       items.push({
         type: 'press',
         slug: prod.slug,

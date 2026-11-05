@@ -24,6 +24,8 @@ import { BASE_URL as BASE, PERSON_ID } from '@/lib/baseUrl'
 import { cdnUrl } from '@/lib/cdn'
 import { bookingKind } from '@/lib/bookingKind'
 import { groupRuns, isArticle } from '@/lib/listRules'
+import { absolutePosterUrl } from '@/lib/posterUrl'
+import { formatRoles } from '@/lib/roleLabels'
 import { clampDescription } from '@/lib/metaDescription'
 import { productionTitle } from '@/lib/productionTitle'
 import {
@@ -109,9 +111,7 @@ function creativeWorkSchema(
   }
 
   if (production.poster.src) {
-    schema.image = production.poster.src.startsWith('http')
-      ? production.poster.src
-      : `${BASE}${production.poster.src}`
+    schema.image = absolutePosterUrl(production.poster.src, BASE)
   }
 
   return schema
@@ -242,15 +242,8 @@ export default async function ProductionDetailPage({
     chips.push(`${production.durationMin} ${t('riderMin')}`)
   if (country) chips.push(country)
 
-  const roleLabelMap: Record<string, string> = {
-    director: tProductions('roleDirector'),
-    'co-director': tProductions('roleCoDirector'),
-    performer: tProductions('rolePerformer'),
-    reader: tProductions('roleReader'),
-    sketch: tProductions('roleSketch')
-  }
   const roleLabel = production.role.length
-    ? production.role.map((r) => roleLabelMap[r] ?? r).join(' / ')
+    ? formatRoles(production.role, tProductions)
     : null
 
   // Booking CTA → /contact?show=<slug>: Telegram first, email with the show

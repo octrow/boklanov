@@ -12,9 +12,9 @@ import { fanOutRevalidate } from './revalidate-peers'
  * site, so calling revalidateTag / revalidatePath here flushes the RSC cache
  * synchronously. No webhook hop. See PAYLOAD_MIGRATION_PLAN §P3.2.
  *
- * Convention: every fetch in lib/content.ts wraps in unstable_cache with two
- * tags — a collection-wide tag (`productions`) and a slug-specific tag
- * (`production:<slug>`). Hooks bust both.
+ * Convention: the Productions fetch in lib/content.ts wraps in unstable_cache
+ * with one collection-wide tag (`productions`). Hooks bust it; there is no
+ * per-slug tag.
  *
  * Cross-host fan-out: after the local bust, fire `/api/revalidate` POSTs to
  * every host listed in REVALIDATE_PEERS. This is what makes a save on
@@ -26,26 +26,13 @@ import { fanOutRevalidate } from './revalidate-peers'
  * the peer fan-out (we don't want a 5000-row seed to issue 5000 pings).
  */
 
-type WithSlug = { slug?: string | null }
-
 export const revalidateProduction: CollectionAfterChangeHook = async ({
   doc,
-  previousDoc,
   req: { payload, context }
 }) => {
   if (context?.disableRevalidate) return doc
 
-  const d = doc as WithSlug
-  const prev = previousDoc as WithSlug | undefined
-
   const tags = new Set<string>(['productions'])
-  if (d.slug) {
-    tags.add(`production:${d.slug}`)
-    payload.logger.info(`revalidateTag production:${d.slug}`)
-  }
-  if (prev?.slug && prev.slug !== d.slug) {
-    tags.add(`production:${prev.slug}`)
-  }
   // Home featured strip + /productions index are server-rendered; bust the
   // segment caches so the very next request rebuilds.
   const paths = ['/[locale]/productions', '/[locale]']
@@ -63,10 +50,8 @@ export const revalidateProductionDelete: CollectionAfterDeleteHook = async ({
   req: { payload, context }
 }) => {
   if (context?.disableRevalidate) return doc
-  const d = doc as WithSlug
 
   const tags = new Set<string>(['productions'])
-  if (d?.slug) tags.add(`production:${d.slug}`)
   const paths = ['/[locale]/productions', '/[locale]']
 
   for (const t of tags) revalidateTag(t, { expire: 0 })

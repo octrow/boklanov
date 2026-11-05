@@ -16,13 +16,13 @@ export async function GET(req: Request): Promise<Response> {
   const src = cdnUrl((await getAbout()).shareImage)
   if (!src) return fallback
 
-  const res = await fetch(src)
-  if (!res.ok) {
-    console.error(`share-image: ${src} → ${res.status}`)
-    return fallback
-  }
   let jpeg: Buffer
   try {
+    const res = await fetch(src)
+    if (!res.ok) {
+      console.error(`share-image: ${src} → ${res.status}`)
+      return fallback
+    }
     jpeg = await sharp(Buffer.from(await res.arrayBuffer()))
       .rotate()
       .resize(WIDTH, HEIGHT, {
@@ -32,8 +32,9 @@ export async function GET(req: Request): Promise<Response> {
       .jpeg({ quality: 85, progressive: true })
       .toBuffer()
   } catch (err) {
-    // A file sharp can't decode must not take the preview down with it.
-    console.error(`share-image: cannot decode ${src}`, err)
+    // An unreachable URL (a relative src with no CDN base) or a file sharp
+    // can't decode must not take the preview down with it.
+    console.error(`share-image: cannot load ${src}`, err)
     return fallback
   }
   return new Response(new Uint8Array(jpeg), {
