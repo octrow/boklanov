@@ -9,7 +9,7 @@ import { mock, test } from 'node:test'
 mock.module('payload', { namedExports: { getPayload: async () => ({}) } })
 mock.module('@payload-config', { defaultExport: {} })
 
-const { asL10n, asLexical } = await import('./content')
+const { asL10n, asLexical, warnIfTruncated } = await import('./content')
 
 test('asL10n drops empty strings so the chain falls through', () => {
   assert.deepEqual(asL10n({ ru: 'x', en: '', de: null }), { ru: 'x' })
@@ -28,4 +28,9 @@ test('asLexical maps a state with no nodes to null', () => {
   assert.equal(out.en, null)
   assert.equal(out.de, null)
   assert.equal(out.ru, para)
+})
+
+test('warnIfTruncated flags a result that hit the cap', () => {
+  assert.equal(warnIfTruncated(499, 500), false)
+  assert.equal(warnIfTruncated(500, 500), true)
 })

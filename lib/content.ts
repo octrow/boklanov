@@ -577,6 +577,7 @@ async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
     forcePathStyle: true
   })
   const keys = new Set<string>()
+  const t0 = Date.now()
   try {
     let token: string | undefined
     do {
@@ -590,6 +591,9 @@ async function listBucketKeys(prefix: string): Promise<Set<string> | null> {
       for (const o of res.Contents ?? []) if (o.Key) keys.add(o.Key)
       token = res.IsTruncated ? res.NextContinuationToken : undefined
     } while (token)
+    console.info(
+      `[content] R2 listing: ${keys.size} keys in ${Date.now() - t0} ms`
+    )
     return keys
   } catch (err) {
     console.warn('[content] R2 listing failed, skipping image checks', err)
@@ -621,6 +625,17 @@ async function checkImagesInR2(prods: Production[]): Promise<void> {
 // Cached fetchers — tagged for revalidation by hooks/revalidate.ts
 // ---------------------------------------------------------------------------
 
+const PRODUCTIONS_LIMIT = 500
+
+/** Warn when a capped query returned exactly its cap: rows may be cut. */
+export function warnIfTruncated(count: number, limit: number): boolean {
+  if (count < limit) return false
+  console.warn(
+    `[content] productions query hit limit ${limit}: results may be truncated, raise PRODUCTIONS_LIMIT`
+  )
+  return true
+}
+
 const fetchAllProductions = unstable_cache(
   async (): Promise<Production[]> => {
     const now = Date.now()
@@ -632,9 +647,10 @@ const fetchAllProductions = unstable_cache(
       collection: 'productions',
       locale: 'all',
       depth: 0,
-      limit: 500,
+      limit: PRODUCTIONS_LIMIT,
       pagination: false
     })
+    warnIfTruncated(docs.length, PRODUCTIONS_LIMIT)
     const out = docs.map((d) => {
       const prod = payloadDocToProduction(d as unknown as AnyMap)
       const lqip = readLqip(prod.slug)

@@ -13,6 +13,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 1. `CONTEXT.md`: the domain terms.
 2. `docs/logic-map.md`: how a request or an admin save becomes a page: every step, every branch, the module behind it.
 3. `docs/plans/`: `2026-11-05-logic-map-fixes.md` lists the known logic gaps.
+4. Open bugs, plans and ideas: [PLAN.md](PLAN.md).
 
 Rules:
 

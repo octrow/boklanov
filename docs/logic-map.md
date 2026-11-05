@@ -126,7 +126,7 @@ Decides: the list of Productions, their shape and their order.
 In: nothing (all locales at once). Out: `Production[]` with `{ru,en,de}` maps per localized field.
 Steps inside:
 
-- `payload.find` on `productions`, `locale: 'all'`, `depth: 0`, limit 500;
+- `payload.find` on `productions`, `locale: 'all'`, `depth: 0`, limit 500 (`PRODUCTIONS_LIMIT`, warns when hit);
 - map each doc to `Production`: strings become `{ru,en,de}` maps; null, empty strings and empty one-line rich text (tagline, synopsis) drop out; a body or director's note editor state with no text node and no non-paragraph node becomes null; `status` not in the four known values becomes `live`, `bookingCta` is true unless `false`;
 - `poster.lqip` read from `public/productions/<slug>/lqip.json`; when the file has dimensions they overwrite the stored poster dimensions;
 - variant URLs derived from the Image path (`.420/.600/.720/.828/.1080.avif`) only when the variants flag is on, the path is local and ends in jpg, jpeg, png or webp;
