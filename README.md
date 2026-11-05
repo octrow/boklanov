@@ -1,34 +1,30 @@
 # boklanov.com
 
 [![Build](https://github.com/octrow/boklanov/actions/workflows/build.yml/badge.svg)](https://github.com/octrow/boklanov/actions/workflows/build.yml)
-[![License: MIT (code)](<https://img.shields.io/badge/license-MIT%20(code)-blue.svg>)](license)
+[![License: MIT (code)](https://img.shields.io/badge/license-MIT%20%28code%29-blue.svg)](license)
 
 [Русская версия](README.ru.md)
 
-Source of [boklanov.com](https://boklanov.com), the portfolio of theatre director Roman Boklanov. It is written for
-a festival curator or a theatre's artistic director who opens it on a phone and has a minute and a half: what he
-staged, where it toured, which awards it won, and how to ask about bringing a show over.
+Source of [boklanov.com](https://boklanov.com), the portfolio of theatre director Roman Boklanov.
+A festival curator opens it on a phone and has a minute and a half. He sees what Roman staged, where it toured,
+which awards it won, and how to ask about bringing a show over.
 
-Next.js 15 (App Router) with Payload CMS 3 running in the same process, on Postgres, with images on Cloudflare R2.
-Three languages (EN, RU, DE), 56 productions, and Lighthouse 100/100/100/100 on the production site (measured
-2026-05-04).
+Next.js 15 (App Router) and Payload CMS 3 in one process, Postgres, images on Cloudflare R2.
+Three languages (EN, RU, DE), 56 productions, Lighthouse 100/100/100/100 on the production site (measured 2026-05-04).
 
 ![Home page on desktop and on a 390 px phone (Russian): gradient wordmark, tour-city ticker, selected works](.github/assets/hero.webp)
 
 ## What's in it
 
-- **Payload admin at `/admin`**, built for one non-technical editor: Russian originals shown under the EN/DE fields,
-  a "needs work" list on the dashboard (missing translation, year or poster), a status per production.
-  Saving fires `revalidateTag`, so the page updates a few seconds later with no rebuild.
-- **Poster first.** Every card and production page leads with the poster; photos come after.
-- **Booking button that depends on status**: "ask about touring", "about a new production" or "about the premiere".
-  It leads to the contact page, where the Telegram link carries a first message already written for that show.
-- **Images**: uploads go through `/api/r2-asset`, which writes the source to R2 and bakes four AVIF sizes on the spot.
-  Stored width and height keep the gallery from shifting; LQIP placeholders live next to each production.
-- **Per-production Open Graph images** rendered with `@vercel/og`.
-- **SEO**: `hreflang` alternates, sitemap with a real `lastmod` per production, an RSS feed in RU and EN.
-- **Ops in CI**: a nightly encrypted database backup, a quarterly dead-link check of the live site.
-- Self-hosted fonts (Lora, Inter, JetBrains Mono, Unbounded), two themes (dark by default, light "paper").
+- Payload admin at `/admin` for one non-technical editor, with a "needs work" list on the dashboard.
+- Saving a production updates the live page in a few seconds, with no rebuild.
+- Poster first on every card and production page.
+- Booking button that depends on the show status, with a ready first Telegram message.
+- Uploads go to R2 and get four AVIF sizes. Open Graph image per production.
+- `hreflang`, sitemap with `lastmod`, RSS in RU and EN.
+- Three languages, two themes (dark and light "paper").
+
+More detail: [docs/features.md](docs/features.md).
 
 ![Production page: poster first, then title, award sticker and a facts table](.github/assets/production.webp)
 
