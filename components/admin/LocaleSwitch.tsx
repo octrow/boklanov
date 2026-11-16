@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Link, useLocale } from '@payloadcms/ui'
 
@@ -27,8 +27,9 @@ const LocaleSwitch: React.FC = () => {
   const pathname = usePathname() ?? ''
   const params = useSearchParams()
   const active = useLocale().code
-  const [pending, setPending] = useState<string | null>(null)
-  useEffect(() => setPending(null), [active])
+  // A click is pending only until the active locale changes.
+  const [clicked, setClicked] = useState<{ code: string; from: string }>()
+  const pending = clicked?.from === active ? clicked.code : null
 
   const hrefFor = (code: string) => {
     const next = new URLSearchParams(params?.toString() ?? '')
@@ -55,7 +56,7 @@ const LocaleSwitch: React.FC = () => {
               pending === code ? ' locale-switch__item--pending' : ''
             }`}
             aria-busy={pending === code || undefined}
-            onClick={() => setPending(code)}
+            onClick={() => setClicked({ code, from: active })}
           >
             {label}
           </Link>
