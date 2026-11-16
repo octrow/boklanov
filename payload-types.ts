@@ -478,8 +478,7 @@ export interface Production {
            */
           outlet?: string | null;
           language?:
-            | ('ru' | 'en' | 'de' | 'fi' | 'et' | 'lv' | 'lt' | 'pl' | 'cs' | 'fr' | 'it' | 'es' | 'uk' | 'kk')
-            | null;
+            ('ru' | 'en' | 'de' | 'fi' | 'et' | 'lv' | 'lt' | 'pl' | 'cs' | 'fr' | 'it' | 'es' | 'uk' | 'kk') | null;
           id?: string | null;
         }[]
       | null;

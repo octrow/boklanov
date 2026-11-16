@@ -5,6 +5,7 @@ import * as migration_20261008_180546_admin_review_2_fields from './20261008_180
 import * as migration_20261008_212024_drop_tags from './20261008_212024_drop_tags'
 import * as migration_20261008_222722_share_image from './20261008_222722_share_image'
 import * as migration_20261011_135214_gallery_dims from './20261011_135214_gallery_dims'
+import * as migration_20261116_111706_payload_3_93 from './20261116_111706_payload_3_93'
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20261011_135214_gallery_dims.up,
     down: migration_20261011_135214_gallery_dims.down,
     name: '20261011_135214_gallery_dims'
+  },
+  {
+    up: migration_20261116_111706_payload_3_93.up,
+    down: migration_20261116_111706_payload_3_93.down,
+    name: '20261116_111706_payload_3_93'
   }
 ]
