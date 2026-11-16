@@ -341,7 +341,9 @@ export default async function ProductionDetailPage({
     <main id='main' className={styles.page}>
       <script
         type='application/ld+json'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c')
+        }}
       />
       {production.poster.variants && (
         <link

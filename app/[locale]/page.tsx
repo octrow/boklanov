@@ -92,7 +92,9 @@ export default async function HomePage({
     <main id='main' className={styles.page}>
       <script
         type='application/ld+json'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema).replace(/</g, '\\u003c')
+        }}
       />
       {lcpVariants && (
         <link

@@ -18,6 +18,7 @@
    * see archive/DESIGN_BRIEF.md D11 row.
    * Paper variant available via [data-theme="paper"] below.
    */
+  color-scheme: dark;
   --paper: #080706; /* near-black page bg — D10 floor */
   --paper-raised: #161413; /* cards, modals, raised surfaces */
   --paper-sunken: #040303; /* inputs, code wells, sunken zones */
@@ -166,6 +167,7 @@
  * ========================================================== */
 
 [data-theme='paper'] {
+  color-scheme: light;
   --paper: #f2f0ea;
   --paper-raised: #fbfaf6;
   --paper-sunken: #ece9e1;

@@ -255,7 +255,9 @@ export default async function AboutPage({
     <main id='main' className={styles.page}>
       <script
         type='application/ld+json'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema).replace(/</g, '\\u003c')
+        }}
       />
       <h1 className={styles.heading}>{t('about')}</h1>
 
