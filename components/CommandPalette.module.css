@@ -3,36 +3,39 @@
 
 /* ── Overlay ──────────────────────────────────────────────────────────── */
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-modal);
-  background: var(--overlay);
+/* The dialog is the modal box; ::backdrop is the dimmed overlay. */
+
+.dialog {
+  width: calc(100% - 2 * var(--gutter-mobile));
+  max-width: 600px;
+  margin: 80px auto 0;
+  padding: 0;
+  background: var(--paper-raised);
+  color: inherit;
+  border: 1px solid var(--rule-strong);
+  max-height: calc(100vh - 160px);
+  overflow: hidden;
+}
+
+.dialog[open] {
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 80px;
-  padding-left: var(--gutter-mobile);
-  padding-right: var(--gutter-mobile);
+  flex-direction: column;
+}
+
+.dialog:modal {
+  overscroll-behavior: contain;
+}
+
+.dialog::backdrop {
+  background: var(--overlay);
+  overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 @media (min-width: 768px) {
-  .overlay {
-    padding-top: 120px;
+  .dialog {
+    margin-top: 120px;
   }
-}
-
-/* ── Modal ────────────────────────────────────────────────────────────── */
-
-.modal {
-  width: 100%;
-  max-width: 600px;
-  background: var(--paper-raised);
-  border: 1px solid var(--rule-strong);
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 160px);
-  overflow: hidden;
 }
 
 /* ── Input ────────────────────────────────────────────────────────────── */

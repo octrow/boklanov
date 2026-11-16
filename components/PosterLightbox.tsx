@@ -12,35 +12,35 @@ interface Props {
   children: React.ReactNode
 }
 
+// Fallback for browsers without `closedby` (Safari): a click that lands on the
+// dialog element itself and outside its box is a backdrop click.
+function closeOnBackdropClick(e: React.MouseEvent<HTMLDialogElement>) {
+  if ('closedBy' in HTMLDialogElement.prototype) return
+  if (e.target !== e.currentTarget) return
+  const r = e.currentTarget.getBoundingClientRect()
+  const inside =
+    e.clientX >= r.left &&
+    e.clientX <= r.right &&
+    e.clientY >= r.top &&
+    e.clientY <= r.bottom
+  if (!inside) e.currentTarget.close()
+}
+
+const LIGHT_DISMISS = { closedby: 'any' } as Record<string, string>
+
 export function PosterLightbox({ src, alt, children }: Props) {
   const t = useTranslations('accessibility')
   const [open, setOpen] = React.useState(false)
-  const triggerRef = React.useRef<HTMLDivElement>(null)
-  const closeRef = React.useRef<HTMLButtonElement>(null)
-
-  const handleClose = React.useCallback(() => {
-    setOpen(false)
-    requestAnimationFrame(() => triggerRef.current?.focus())
-  }, [])
+  const dialogRef = React.useRef<HTMLDialogElement>(null)
 
   React.useEffect(() => {
-    if (!open) return
-    closeRef.current?.focus()
-    document.body.style.overflow = 'hidden'
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [open, handleClose])
+    const dialog = dialogRef.current
+    if (open && dialog && !dialog.open) dialog.showModal()
+  }, [open])
 
   return (
     <>
       <div
-        ref={triggerRef}
         className={styles.trigger}
         role='button'
         tabIndex={0}
@@ -53,15 +53,16 @@ export function PosterLightbox({ src, alt, children }: Props) {
         {children}
       </div>
 
-      {open && (
-        <div
-          className={styles.overlay}
-          role='dialog'
-          aria-modal='true'
-          aria-label={t('fullPoster')}
-          onClick={handleClose}
-        >
-          <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
+      <dialog
+        ref={dialogRef}
+        className={styles.dialog}
+        aria-label={t('fullPoster')}
+        {...LIGHT_DISMISS}
+        onClose={() => setOpen(false)}
+        onClick={closeOnBackdropClick}
+      >
+        {open && (
+          <>
             <Image
               src={src}
               alt={alt}
@@ -72,17 +73,17 @@ export function PosterLightbox({ src, alt, children }: Props) {
               style={{ width: 'auto', height: 'auto' }}
             />
             <button
-              ref={closeRef}
               type='button'
               className={styles.close}
               aria-label={t('close')}
-              onClick={handleClose}
+              autoFocus
+              onClick={() => dialogRef.current?.close()}
             >
               ✕
             </button>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </dialog>
     </>
   )
 }

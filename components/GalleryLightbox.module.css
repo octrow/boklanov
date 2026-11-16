@@ -50,26 +50,34 @@
   }
 }
 
-/* Lightbox overlay */
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-overlay);
-  background: rgba(0, 0, 0, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6);
-  cursor: zoom-out;
+/* Lightbox — the dialog is the frame (flex column so the meta bar sits below
+   the image); ::backdrop is the dimmed overlay. */
+.dialog {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  /* The close button sits outside the box. */
+  overflow: visible;
+  max-width: min(90vw, 1000px);
+  max-height: none;
+  cursor: default;
 }
 
-/* Frame — flex column so meta bar sits below image naturally */
-.frame {
-  position: relative;
-  max-width: min(90vw, 1000px);
-  cursor: default;
+.dialog[open] {
   display: flex;
   flex-direction: column;
+}
+
+.dialog:modal {
+  overscroll-behavior: contain;
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.92);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  cursor: zoom-out;
 }
 
 /* Image container — arrows are positioned relative to this */
@@ -189,9 +197,8 @@
 
 /* Mobile — smaller controls, lighter overlay */
 @media (max-width: 767px) {
-  .overlay {
+  .dialog::backdrop {
     background: rgba(0, 0, 0, 0.75);
-    padding: var(--space-4);
   }
 
   .navBtn {

@@ -117,6 +117,22 @@ interface CommandPaletteProps {
   locale: string
 }
 
+// Fallback for browsers without `closedby` (Safari): a click that lands on the
+// dialog element itself and outside its box is a backdrop click.
+function closeOnBackdropClick(e: React.MouseEvent<HTMLDialogElement>) {
+  if ('closedBy' in HTMLDialogElement.prototype) return
+  if (e.target !== e.currentTarget) return
+  const r = e.currentTarget.getBoundingClientRect()
+  const inside =
+    e.clientX >= r.left &&
+    e.clientX <= r.right &&
+    e.clientY >= r.top &&
+    e.clientY <= r.bottom
+  if (!inside) e.currentTarget.close()
+}
+
+const LIGHT_DISMISS = { closedby: 'any' } as Record<string, string>
+
 export function CommandPalette({
   items,
   onClose,
@@ -132,39 +148,20 @@ export function CommandPalette({
   }
   const [query, setQuery] = React.useState('')
   const [activeIdx, setActiveIdx] = React.useState(0)
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const dialogRef = React.useRef<HTMLDialogElement>(null)
   const router = useRouter()
 
   const results = filterItems(items, query)
 
   React.useEffect(() => {
-    inputRef.current?.focus()
+    const dialog = dialogRef.current
+    if (dialog && !dialog.open) dialog.showModal()
   }, [])
 
+  // The dialog's `close` event (Esc, light dismiss, close()) calls onClose.
+  const close = () => dialogRef.current?.close()
+
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Escape') {
-      onClose()
-      return
-    }
-    if (e.key === 'Tab') {
-      // Trap focus inside the dialog.
-      const dialog = e.currentTarget as HTMLElement
-      const focusable = Array.from(
-        dialog.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        )
-      )
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault()
-        last?.focus()
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault()
-        first?.focus()
-      }
-      return
-    }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setActiveIdx((i) => Math.min(i + 1, results.length - 1))
@@ -175,7 +172,7 @@ export function CommandPalette({
       const href = itemHref(results[activeIdx])
       const localePrefix = locale === 'en' ? '' : `/${locale}`
       router.push(localePrefix + href)
-      onClose()
+      close()
     }
   }
 
@@ -190,89 +187,83 @@ export function CommandPalette({
   const flat = grouped.flatMap((g) => g.items)
 
   return (
-    <div
-      className={styles.overlay}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
-      }}
-      role='presentation'
+    <dialog
+      ref={dialogRef}
+      className={styles.dialog}
+      aria-label={t('dialogAria')}
+      {...LIGHT_DISMISS}
+      onClose={onClose}
+      onClick={closeOnBackdropClick}
+      onKeyDown={handleKeyDown}
     >
-      <div
-        className={styles.modal}
-        role='dialog'
-        aria-modal='true'
-        aria-label={t('dialogAria')}
-        onKeyDown={handleKeyDown}
-      >
-        <div className={styles.inputWrapper}>
-          <input
-            ref={inputRef}
-            type='search'
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value)
-              setActiveIdx(0)
-            }}
-            className={styles.input}
-            placeholder={t('placeholder')}
-            aria-label={t('inputAria')}
-            autoComplete='off'
-            spellCheck={false}
-          />
-        </div>
-
-        {query.trim() && (
-          <div
-            className={styles.results}
-            role='listbox'
-            aria-label={t('resultsAria')}
-          >
-            {grouped.length === 0 ? (
-              <div className={styles.noResults}>
-                <span aria-hidden='true' className={styles.noResultsLabel}>
-                  {t('errata')}
-                </span>
-                <p className={styles.noResultsBody}>{t('noResults')}</p>
-              </div>
-            ) : (
-              grouped.map(({ group, items: gItems }) => (
-                <div key={group} className={styles.group}>
-                  <p className={styles.groupLabel}>{GROUP_LABELS[group]}</p>
-                  {gItems.map((item, localIdx) => {
-                    const globalIdx = flat.indexOf(item)
-                    const href = itemHref(item)
-                    const localePrefix = locale === 'en' ? '' : `/${locale}`
-                    return (
-                      <a
-                        key={`${item.type}-${item.slug}-${localIdx}`}
-                        href={localePrefix + href}
-                        className={
-                          globalIdx === activeIdx
-                            ? `${styles.result} ${styles.resultActive}`
-                            : styles.result
-                        }
-                        role='option'
-                        aria-selected={globalIdx === activeIdx}
-                        onClick={onClose}
-                        onMouseEnter={() => setActiveIdx(globalIdx)}
-                      >
-                        <span className={styles.resultLabel}>
-                          {itemLabel(item)}
-                        </span>
-                        {itemMeta(item) && (
-                          <span className={styles.resultMeta}>
-                            {itemMeta(item)}
-                          </span>
-                        )}
-                      </a>
-                    )
-                  })}
-                </div>
-              ))
-            )}
-          </div>
-        )}
+      <div className={styles.inputWrapper}>
+        <input
+          autoFocus
+          type='search'
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setActiveIdx(0)
+          }}
+          className={styles.input}
+          placeholder={t('placeholder')}
+          aria-label={t('inputAria')}
+          autoComplete='off'
+          spellCheck={false}
+        />
       </div>
-    </div>
+
+      {query.trim() && (
+        <div
+          className={styles.results}
+          role='listbox'
+          aria-label={t('resultsAria')}
+        >
+          {grouped.length === 0 ? (
+            <div className={styles.noResults}>
+              <span aria-hidden='true' className={styles.noResultsLabel}>
+                {t('errata')}
+              </span>
+              <p className={styles.noResultsBody}>{t('noResults')}</p>
+            </div>
+          ) : (
+            grouped.map(({ group, items: gItems }) => (
+              <div key={group} className={styles.group}>
+                <p className={styles.groupLabel}>{GROUP_LABELS[group]}</p>
+                {gItems.map((item, localIdx) => {
+                  const globalIdx = flat.indexOf(item)
+                  const href = itemHref(item)
+                  const localePrefix = locale === 'en' ? '' : `/${locale}`
+                  return (
+                    <a
+                      key={`${item.type}-${item.slug}-${localIdx}`}
+                      href={localePrefix + href}
+                      className={
+                        globalIdx === activeIdx
+                          ? `${styles.result} ${styles.resultActive}`
+                          : styles.result
+                      }
+                      role='option'
+                      aria-selected={globalIdx === activeIdx}
+                      onClick={close}
+                      onMouseEnter={() => setActiveIdx(globalIdx)}
+                    >
+                      <span className={styles.resultLabel}>
+                        {itemLabel(item)}
+                      </span>
+                      {itemMeta(item) && (
+                        <span className={styles.resultMeta}>
+                          {itemMeta(item)}
+                        </span>
+                      )}
+                    </a>
+                  )
+                })}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </dialog>
   )
 }

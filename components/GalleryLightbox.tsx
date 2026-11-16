@@ -32,27 +32,29 @@ interface Props {
   items: GalleryItem[]
 }
 
+// Fallback for browsers without `closedby` (Safari): a click that lands on the
+// dialog element itself and outside its box is a backdrop click.
+function closeOnBackdropClick(e: React.MouseEvent<HTMLDialogElement>) {
+  if ('closedBy' in HTMLDialogElement.prototype) return
+  if (e.target !== e.currentTarget) return
+  const r = e.currentTarget.getBoundingClientRect()
+  const inside =
+    e.clientX >= r.left &&
+    e.clientX <= r.right &&
+    e.clientY >= r.top &&
+    e.clientY <= r.bottom
+  if (!inside) e.currentTarget.close()
+}
+
+const LIGHT_DISMISS = { closedby: 'any' } as Record<string, string>
+
 export function GalleryLightbox({ items }: Props) {
   const t = useTranslations('accessibility')
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null)
-  const closeRef = React.useRef<HTMLButtonElement>(null)
-  const triggerRefs = React.useRef<Array<HTMLDivElement | null>>([])
-  const moreRef = React.useRef<HTMLButtonElement>(null)
+  const dialogRef = React.useRef<HTMLDialogElement>(null)
 
   const total = items.length
   const isOpen = activeIndex !== null
-
-  const handleClose = React.useCallback(() => {
-    const prev = activeIndex
-    setActiveIndex(null)
-    requestAnimationFrame(() => {
-      if (prev === null) return
-      // A photo hidden by the phone preview can't take focus: use the button.
-      if (prev >= PREVIEW && moreRef.current?.offsetParent)
-        moreRef.current.focus()
-      else triggerRefs.current[prev]?.focus()
-    })
-  }, [activeIndex])
 
   const goNext = React.useCallback(() => {
     setActiveIndex((i) => (i === null ? 0 : (i + 1) % total))
@@ -63,20 +65,14 @@ export function GalleryLightbox({ items }: Props) {
   }, [total])
 
   React.useEffect(() => {
-    if (!isOpen) return
-    closeRef.current?.focus()
-    document.body.style.overflow = 'hidden'
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose()
-      else if (e.key === 'ArrowRight') goNext()
-      else if (e.key === 'ArrowLeft') goPrev()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [isOpen, handleClose, goNext, goPrev])
+    const dialog = dialogRef.current
+    if (isOpen && dialog && !dialog.open) dialog.showModal()
+  }, [isOpen])
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'ArrowRight') goNext()
+    else if (e.key === 'ArrowLeft') goPrev()
+  }
 
   const current = activeIndex !== null ? items[activeIndex] : null
 
@@ -92,9 +88,6 @@ export function GalleryLightbox({ items }: Props) {
           return (
             <div
               key={`${item.src}-${i}`}
-              ref={(el) => {
-                triggerRefs.current[i] = el
-              }}
               className={
                 total > PREVIEW && i >= PREVIEW
                   ? `${styles.trigger} ${styles.beyondPreview}`
@@ -126,7 +119,6 @@ export function GalleryLightbox({ items }: Props) {
       </div>
       {total > PREVIEW && (
         <button
-          ref={moreRef}
           type='button'
           className={styles.more}
           onClick={() => setActiveIndex(PREVIEW)}
@@ -135,24 +127,26 @@ export function GalleryLightbox({ items }: Props) {
         </button>
       )}
 
-      {isOpen && current && (
-        <div
-          className={styles.overlay}
-          role='dialog'
-          aria-modal='true'
-          aria-label={t('photoDialogOf', {
-            index: (activeIndex ?? 0) + 1,
-            total
-          })}
-          onClick={handleClose}
-        >
-          <div className={styles.frame} onClick={(e) => e.stopPropagation()}>
+      <dialog
+        ref={dialogRef}
+        className={styles.dialog}
+        aria-label={t('photoDialogOf', {
+          index: (activeIndex ?? 0) + 1,
+          total
+        })}
+        {...LIGHT_DISMISS}
+        onClose={() => setActiveIndex(null)}
+        onClick={closeOnBackdropClick}
+        onKeyDown={handleKeyDown}
+      >
+        {isOpen && current && (
+          <>
             <button
-              ref={closeRef}
+              autoFocus
               type='button'
               className={styles.close}
               aria-label={t('close')}
-              onClick={handleClose}
+              onClick={() => dialogRef.current?.close()}
             >
               ✕
             </button>
@@ -237,9 +231,9 @@ export function GalleryLightbox({ items }: Props) {
                 <span className={styles.credit}>{current.credit}</span>
               )}
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </dialog>
     </>
   )
 }
