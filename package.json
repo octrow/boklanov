@@ -6,7 +6,7 @@
   "description": "boklanov.com / boklanov.ru - site for theatre director Roman Boklanov.",
   "license": "MIT",
   "engines": {
-    "node": "22.x"
+    "node": "22.23.4"
   },
   "browserslist": [
     "chrome >= 110",
