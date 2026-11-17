@@ -40,18 +40,14 @@ export function PosterLightbox({ src, alt, children }: Props) {
 
   return (
     <>
-      <div
+      <button
+        type='button'
         className={styles.trigger}
-        role='button'
-        tabIndex={0}
         aria-label={t('viewFullPoster')}
         onClick={() => setOpen(true)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') setOpen(true)
-        }}
       >
         {children}
-      </div>
+      </button>
 
       <dialog
         ref={dialogRef}

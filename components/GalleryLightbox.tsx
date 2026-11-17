@@ -86,20 +86,16 @@ export function GalleryLightbox({ items }: Props) {
           // can't activate the trigger by reading what they see.
           const indexLabel = `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
           return (
-            <div
+            <button
+              type='button'
               key={`${item.src}-${i}`}
               className={
                 total > PREVIEW && i >= PREVIEW
                   ? `${styles.trigger} ${styles.beyondPreview}`
                   : styles.trigger
               }
-              role='button'
-              tabIndex={0}
               aria-label={`${indexLabel} — ${t('viewPhotoOf', { index: i + 1, total })}`}
               onClick={() => setActiveIndex(i)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') setActiveIndex(i)
-              }}
             >
               <SpecimenPlate
                 src={item.src}
@@ -113,7 +109,7 @@ export function GalleryLightbox({ items }: Props) {
                 sizes='(min-width: 1024px) 240px, (min-width: 768px) 25vw, 50vw'
                 quality={70}
               />
-            </div>
+            </button>
           )
         })}
       </div>

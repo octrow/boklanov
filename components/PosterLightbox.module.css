@@ -1,5 +1,13 @@
 .trigger {
-  display: contents;
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
 }
 
 .dialog {

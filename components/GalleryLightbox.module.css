@@ -13,9 +13,18 @@
   }
 }
 
-/* Trigger wrapper — display:contents so SpecimenPlate is the column flow unit */
+/* Trigger button — block, unbreakable so each plate stays whole in the column flow */
 .trigger {
-  display: contents;
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  break-inside: avoid;
 }
 
 /* Phone preview: photos after the third wait in the lightbox. */
