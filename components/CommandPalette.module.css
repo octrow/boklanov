@@ -145,3 +145,16 @@
   letter-spacing: var(--letter-spacing-meta);
   color: var(--ink-mute);
 }
+
+/* Visually hidden, still announced (aria-live status). */
+.srOnly {
+  position: absolute;
+  clip-path: inset(50%);
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+}

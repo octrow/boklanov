@@ -200,7 +200,8 @@
     "errata": "ERRATA",
     "dialogAria": "Suche",
     "inputAria": "Suche",
-    "resultsAria": "Suchergebnisse"
+    "resultsAria": "Suchergebnisse",
+    "resultsCount": "{count, plural, one {# Ergebnis} other {# Ergebnisse}}"
   },
   "accessibility": {
     "close": "Schließen",

@@ -150,6 +150,10 @@ export function CommandPalette({
   const [activeIdx, setActiveIdx] = React.useState(0)
   const dialogRef = React.useRef<HTMLDialogElement>(null)
   const router = useRouter()
+  const uid = React.useId()
+  const listboxId = `${uid}-listbox`
+  const optionId = (i: number) => `${uid}-opt-${i}`
+  const scrollToActive = React.useRef(false)
 
   const results = filterItems(items, query)
 
@@ -161,12 +165,22 @@ export function CommandPalette({
   // The dialog's `close` event (Esc, light dismiss, close()) calls onClose.
   const close = () => dialogRef.current?.close()
 
+  React.useEffect(() => {
+    if (!scrollToActive.current) return
+    scrollToActive.current = false
+    document
+      .getElementById(`${uid}-opt-${activeIdx}`)
+      ?.scrollIntoView({ block: 'nearest' })
+  }, [activeIdx, uid])
+
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
+      scrollToActive.current = true
       setActiveIdx((i) => Math.min(i + 1, results.length - 1))
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
+      scrollToActive.current = true
       setActiveIdx((i) => Math.max(i - 1, 0))
     } else if (e.key === 'Enter' && results[activeIdx]) {
       const href = itemHref(results[activeIdx])
@@ -185,6 +199,14 @@ export function CommandPalette({
 
   // Flat index for keyboard navigation
   const flat = grouped.flatMap((g) => g.items)
+  const hasQuery = query.trim() !== ''
+  const expanded = hasQuery && flat.length > 0
+  const activeOption = expanded && activeIdx < flat.length
+  const status = !hasQuery
+    ? ''
+    : flat.length > 0
+      ? t('resultsCount', { count: flat.length })
+      : t('noResults')
 
   return (
     <dialog
@@ -200,6 +222,11 @@ export function CommandPalette({
         <input
           autoFocus
           type='search'
+          role='combobox'
+          aria-expanded={expanded}
+          aria-controls={expanded ? listboxId : undefined}
+          aria-autocomplete='list'
+          aria-activedescendant={activeOption ? optionId(activeIdx) : undefined}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
@@ -213,55 +240,70 @@ export function CommandPalette({
         />
       </div>
 
-      {query.trim() && (
+      <div className={styles.srOnly} role='status' aria-live='polite'>
+        {status}
+      </div>
+
+      {hasQuery && !expanded && (
+        <div className={styles.results}>
+          <div className={styles.noResults}>
+            <span aria-hidden='true' className={styles.noResultsLabel}>
+              {t('errata')}
+            </span>
+            <p className={styles.noResultsBody}>{t('noResults')}</p>
+          </div>
+        </div>
+      )}
+
+      {expanded && (
         <div
+          id={listboxId}
           className={styles.results}
           role='listbox'
           aria-label={t('resultsAria')}
         >
-          {grouped.length === 0 ? (
-            <div className={styles.noResults}>
-              <span aria-hidden='true' className={styles.noResultsLabel}>
-                {t('errata')}
-              </span>
-              <p className={styles.noResultsBody}>{t('noResults')}</p>
-            </div>
-          ) : (
-            grouped.map(({ group, items: gItems }) => (
-              <div key={group} className={styles.group}>
-                <p className={styles.groupLabel}>{GROUP_LABELS[group]}</p>
-                {gItems.map((item, localIdx) => {
-                  const globalIdx = flat.indexOf(item)
-                  const href = itemHref(item)
-                  const localePrefix = locale === 'en' ? '' : `/${locale}`
-                  return (
-                    <a
-                      key={`${item.type}-${item.slug}-${localIdx}`}
-                      href={localePrefix + href}
-                      className={
-                        globalIdx === activeIdx
-                          ? `${styles.result} ${styles.resultActive}`
-                          : styles.result
-                      }
-                      role='option'
-                      aria-selected={globalIdx === activeIdx}
-                      onClick={close}
-                      onMouseEnter={() => setActiveIdx(globalIdx)}
-                    >
-                      <span className={styles.resultLabel}>
-                        {itemLabel(item)}
+          {grouped.map(({ group, items: gItems }) => (
+            <div
+              key={group}
+              className={styles.group}
+              role='group'
+              aria-labelledby={`${uid}-group-${group}`}
+            >
+              <p id={`${uid}-group-${group}`} className={styles.groupLabel}>
+                {GROUP_LABELS[group]}
+              </p>
+              {gItems.map((item, localIdx) => {
+                const globalIdx = flat.indexOf(item)
+                const href = itemHref(item)
+                const localePrefix = locale === 'en' ? '' : `/${locale}`
+                return (
+                  <a
+                    key={`${item.type}-${item.slug}-${localIdx}`}
+                    id={optionId(globalIdx)}
+                    href={localePrefix + href}
+                    className={
+                      globalIdx === activeIdx
+                        ? `${styles.result} ${styles.resultActive}`
+                        : styles.result
+                    }
+                    role='option'
+                    aria-selected={globalIdx === activeIdx}
+                    onClick={close}
+                    onMouseEnter={() => setActiveIdx(globalIdx)}
+                  >
+                    <span className={styles.resultLabel}>
+                      {itemLabel(item)}
+                    </span>
+                    {itemMeta(item) && (
+                      <span className={styles.resultMeta}>
+                        {itemMeta(item)}
                       </span>
-                      {itemMeta(item) && (
-                        <span className={styles.resultMeta}>
-                          {itemMeta(item)}
-                        </span>
-                      )}
-                    </a>
-                  )
-                })}
-              </div>
-            ))
-          )}
+                    )}
+                  </a>
+                )
+              })}
+            </div>
+          ))}
         </div>
       )}
     </dialog>

@@ -200,7 +200,8 @@
     "errata": "ERRATA",
     "dialogAria": "Search",
     "inputAria": "Search",
-    "resultsAria": "Search results"
+    "resultsAria": "Search results",
+    "resultsCount": "{count, plural, one {# result} other {# results}}"
   },
   "accessibility": {
     "close": "Close",

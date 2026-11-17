@@ -200,7 +200,8 @@
     "errata": "ERRATA",
     "dialogAria": "Поиск",
     "inputAria": "Поиск",
-    "resultsAria": "Результаты поиска"
+    "resultsAria": "Результаты поиска",
+    "resultsCount": "{count, plural, one {# результат} few {# результата} many {# результатов} other {# результата}}"
   },
   "accessibility": {
     "close": "Закрыть",
