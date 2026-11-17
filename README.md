@@ -30,10 +30,11 @@ More detail: [docs/features.md](docs/features.md).
 
 ## Run it locally
 
-Node 22 and Docker. This starts the site on an empty database, the same way CI builds it.
+Node 22.23.4 (pinned in `.nvmrc`) and Docker. This starts the site on an empty database, the same way CI builds it.
 
 ```bash
 git clone https://github.com/octrow/boklanov.git && cd boklanov
+nvm install && nvm use            # Node version from .nvmrc
 npm install
 cp .env.example .env              # set PAYLOAD_SECRET: openssl rand -base64 48
 docker compose up -d db           # Postgres 17 on localhost:5433

@@ -30,10 +30,11 @@ Next.js 15 (App Router) и Payload CMS 3 в одном процессе, Postgre
 
 ## Запуск локально
 
-Нужны Node 22 и Docker. Так сайт поднимается на пустой базе, так же его собирает CI.
+Нужны Node 22.23.4 (зафиксирован в `.nvmrc`) и Docker. Так сайт поднимается на пустой базе, так же его собирает CI.
 
 ```bash
 git clone https://github.com/octrow/boklanov.git && cd boklanov
+nvm install && nvm use            # версия Node из .nvmrc
 npm install
 cp .env.example .env              # задай PAYLOAD_SECRET: openssl rand -base64 48
 docker compose up -d db           # Postgres 17 на localhost:5433
