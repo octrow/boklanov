@@ -88,6 +88,10 @@ export function FilteredProductionsPanel({
   const pathname = usePathname()
   const [countryOpen, setCountryOpen] = React.useState(false)
   const countryRef = React.useRef<HTMLDivElement | null>(null)
+  const countryPopoverRef = React.useRef<HTMLDivElement | null>(null)
+  const countryId = `country-${React.useId().replace(/:/g, '')}`
+  // Unique per instance so anchors never collide.
+  const countryAnchor = `--${countryId}`
   // Mobile (<768px) only: the toolbar sits behind a disclosure button.
   const [filtersOpen, setFiltersOpen] = React.useState(false)
   const toggleRef = React.useRef<HTMLButtonElement | null>(null)
@@ -109,22 +113,6 @@ export function FilteredProductionsPanel({
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [filtersOpen])
-
-  React.useEffect(() => {
-    if (!countryOpen) return
-    function onDocClick(e: MouseEvent) {
-      if (!countryRef.current?.contains(e.target as Node)) setCountryOpen(false)
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setCountryOpen(false)
-    }
-    document.addEventListener('mousedown', onDocClick)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDocClick)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [countryOpen])
 
   // ── Parse URL params (safe with null — hooks must run before any return) ─
   // `role` default = 'director' (brief D5 curator default)
@@ -386,10 +374,10 @@ export function FilteredProductionsPanel({
                 <button
                   type='button'
                   className={`${styles.chip} ${styles.countryTrigger} ${activeCountry !== null ? styles.chipActive : ''}`}
-                  aria-haspopup='true'
                   aria-expanded={countryOpen}
-                  aria-controls={countryOpen ? 'country-popover' : undefined}
-                  onClick={() => setCountryOpen((v) => !v)}
+                  aria-controls={countryId}
+                  popoverTarget={countryId}
+                  style={{ anchorName: countryAnchor } as React.CSSProperties}
                 >
                   <span className={styles.countryTriggerLabel}>
                     {countryName(activeCountry, locale) ??
@@ -399,16 +387,29 @@ export function FilteredProductionsPanel({
                     ▾
                   </span>
                 </button>
-                {countryOpen && (
+                <div
+                  id={countryId}
+                  ref={countryPopoverRef}
+                  popover='auto'
+                  className={styles.countryPopover}
+                  style={
+                    { positionAnchor: countryAnchor } as React.CSSProperties
+                  }
+                  onToggle={(e) =>
+                    setCountryOpen(
+                      (e.nativeEvent as ToggleEvent).newState === 'open'
+                    )
+                  }
+                >
                   <div
-                    id='country-popover'
-                    className={styles.countryPopover}
+                    className={styles.countryOptions}
                     role='radiogroup'
                     aria-label={labels.groupLabelCountry}
                   >
                     {availableCountries.map((code) => (
                       <button
                         key={code}
+                        type='button'
                         className={`${styles.chip} ${activeCountry === code ? styles.chipActive : ''}`}
                         role='radio'
                         aria-checked={activeCountry === code}
@@ -417,14 +418,14 @@ export function FilteredProductionsPanel({
                             'country',
                             activeCountry === code ? null : code
                           )
-                          setCountryOpen(false)
+                          countryPopoverRef.current?.hidePopover()
                         }}
                       >
                         {countryName(code, locale)}
                       </button>
                     ))}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </>
